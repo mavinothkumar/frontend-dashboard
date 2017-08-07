@@ -1,0 +1,538 @@
+/**
+Fed User Profile Layout
+ */
+.bc_fed .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover,
+.bc_fed .bg-primary,
+.bc_fed .btn-primary,
+.bc_fed .nav-pills > li.active > a,
+.bc_fed .nav-pills > li.active > a:focus,
+.bc_fed .nav-pills > li.active > a:hover,
+.bc_fed .list-group-item.active,
+.bc_fed .list-group-item.active:focus,
+.bc_fed .list-group-item.active:hover,
+.bc_fed .panel-primary > .panel-heading,
+.bc_fed .btn-primary.focus, .btn-primary:focus,
+.bc_fed .btn-primary:hover,
+.bc_fed .btn.active, .btn:active,
+.bc_fed input[type="button"]:hover, input[type="button"]:focus, input[type="submit"]:hover,
+.bc_fed input[type="submit"]:focus,
+.bc_fed .popover-title {
+    background-color: #00B5AD !important;
+    background-image: none !important;
+    border-color: #00B5AD !important;
+    color: #ffffff !important;
+}
+
+.bc_fed .nav-tabs {
+    border-bottom: 1px solid #00B5AD !important;
+}
+
+.bc_fed .panel-primary {
+    border-color: #00B5AD !important;
+}
+
+.bc_fed .nav-pills > li.active > a {
+    border-radius: 0;
+}
+
+.bc_fed .fed_paypal_live_keys_container,
+.bc_fed .fed_paypal_secret_keys_container {
+    border: 1px solid rgba(113, 109, 109, 0.45);
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.bc_fed.fed_tabs_container .nav.nav-pills.nav-stacked li {
+    background-color: #3b4e57 !important;
+    border-bottom: 1px solid #ffffff;
+    margin-bottom: 0 !important;
+    border-radius: 0 !important;
+
+}
+
+.bc_fed.fed_tabs_container .nav > li > a {
+    color: #ffffff;
+}
+
+.bc_fed.fed_tabs_container .nav > li > a:focus,
+.bc_fed.fed_tabs_container .nav > li > a:hover {
+    background-color: transparent;
+    color: #ffffff;
+}
+
+.bc_fed form.fed_admin_user_role_delete {
+    padding-top: 0 !important;
+}
+
+.bc_fed .fed_admin_user_role_delete_container {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.bc_fed .fed_admin_user_role_delete button {
+    background-color: transparent;
+    border: none;
+}
+
+.bc_fed .nav-tabs > li > a {
+    color: #000 !important;
+}
+
+.bc_fed .list-group-item {
+    background-color: #3b4e57 !important;
+    border-color: #ffffff !important;
+    color: #ffffff !important;
+}
+
+.bc_fed .list-group-item .fa,
+.bc_fed .panel-title .fa,
+.bc_fed .fed_menu_slug a .fa {
+    padding-right: 10px;
+}
+
+.bc_fed .fed_UPL_header {
+    display: flex;
+    align-items: center;
+}
+
+.bc_fed .fed_UPL_layout_options_container {
+    padding-left: 20px;
+    padding-top: 10px;
+}
+
+.bc_fed.fed_add_page_profile_container,
+.bc_fed .fed_alert_danger {
+    padding-top: 20px;
+}
+
+.bc_fed.fed_add_page_profile_container {
+    text-align: center;
+}
+
+.bc_fed .fed_dashboard_item_field {
+    padding-bottom: 20px;
+}
+
+.bc_fed .fed_add_page_profile_container a {
+    margin-right: 20px;
+}
+
+.bc_fed .fed_header_font_color {
+    color: #337ab7;
+    font-weight: bolder;
+}
+
+.bc_fed .bg-primary-font {
+    color: #00B5AD;
+}
+
+.bc_fed .bg-info-font {
+    color: #ff8216;
+}
+
+.bc_fed .bg-danger-font {
+    color: #e4b9b9;
+}
+.bc_fed .bg-red-font {
+    color: #FF0000;
+}
+
+.bc_fed .fa-info.bg-info-font {
+    background-color: #e0e0e0;
+    border-radius: 50%;
+    padding: 5px;
+}
+
+.bc_fed .fed_UPL_layout {
+    padding-top: 30px;
+}
+
+.bc_fed .fed_UPL_layout .fed_UPL_sidebar,
+.bc_fed .fed_UPL_layout .fed_UPL_body {
+    border: 2px solid #E0E0E0;
+}
+
+.bc_fed .fed_UP_select_container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 10px;
+}
+
+.bc_fed .fed_show_user_profile {
+    padding-top: 25px;
+}
+
+.bc_fed .fed_single_fa {
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid #E0E0E0;
+}
+
+.bc_fed .fed_admin_menu label {
+    font-size: 14px !important;
+}
+
+.bc_fed .fed_fa_container .fa {
+    font-size: 20px !important;
+}
+
+.bc_fed .fed_menu_save_button {
+    padding-top: 20px;
+}
+
+.bc_fed .popover > .arrow {
+    margin-left: 0 !important;
+}
+
+/**
+Upload Image
+ */
+.bc_fed .fed_upload_container {
+    border: 1px solid #E0E0E0;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.bc_fed input[type=color] {
+    width: 40px !important;
+    height: 40px !important;
+    padding: 0 !important;
+}
+
+.bc_fed .fed_UP_input_select {
+    padding: 10px 0 0 20px;
+}
+
+.bc_fed .fed_enable {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: green;
+}
+
+.bc_fed .fed_disable {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: red;
+}
+
+.bc_fed label.form-control {
+    border: none;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.bc_fed #footer-left, #footer-upgrade {
+    display: none;
+}
+
+.bc_fed .padd_5 {
+    padding: 5px;
+}
+
+.bc_fed .fed_dashboard_menu_single_item {
+    background-color: #E0E1E2;
+    margin: 5px;
+    padding: 5px 10px;
+}
+
+.bc_fed .fed_add_button {
+    padding-bottom: 20px;
+}
+
+.bc_fed .fed_key_value_eg_container {
+    margin: 20px;
+    background-color: #CCCCCC;
+    padding: 20px;
+}
+
+.bc_fed .fed_input_text {
+    /*border: 2px solid rgba(128, 128, 128, 0.27);*/
+    padding: 10px;
+}
+
+.bc_fed h3.panel-title b {
+    font-size: 23px;
+    font-weight: 900;
+}
+
+.bc_fed .fed_single_profile {
+    padding: 10px;
+}
+
+.bc_fed .fed_admin_panel_content_wrapper div,
+.bc_fed .fed_admin_panel_title_wrapper {
+    padding-bottom: 10px;
+}
+
+.bc_fed .wp-editor-wrap div {
+    padding-bottom: 0 !important;
+}
+
+.bc_fed .fed_admin_menu {
+    font-size: 15px;
+    font-weight: 500;
+    padding-top: 10px;
+}
+
+.bc_fed .fed_dashboard_menu_items_container hr {
+    margin: 0 !important;
+}
+
+.bc_fed .tab-content .tab-pane {
+    padding-top: 10px;
+}
+
+.bc_fed .nav-tabs li a {
+    font-size: 15px;
+}
+
+.bc_fed input[type=number] {
+    height: 34px !important;
+}
+
+.bc_fed .fed_admin_up_select {
+    padding-top: 20px;
+}
+
+.bc_fed .fed_single_profile {
+    border-bottom: 1px solid #e0e0e0;
+}
+.fed_admin_profile_container .panel-body {
+    padding:0 15px !important;
+}
+.bc_fed .fed_single_profile:hover {
+    background-color: #EDEDED;
+}
+/*.bc_fed .fed_user_profile_delete:nth-child(even) {*/
+    /*background-color: #e4e4e4;*/
+/*}*/
+
+/*.bc_fed .fed_user_profile_delete:nth-child(odd) {*/
+    /*background-color: #ffffff;*/
+/*}*/
+
+.bc_fed .fed_admin_up_role_based {
+    padding-bottom: 10px;
+}
+
+.bc_fed .fed_order_heading, .fed_single_order {
+    padding: 10px;
+}
+
+.bc_fed .fed_order_heading {
+    font-weight: 600;
+}
+
+.bc_fed .fed_single_order:nth-child(even) {
+    background-color: #e4e4e4;
+}
+
+.bc_fed .fed_flex {
+    display: flex;
+}
+
+.bc_fed .flex_between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.bc_fed .flex_between .bc_item {
+    cursor: pointer;
+    padding: 20px;
+}
+
+.fed_message_delete, .fed_message_hide {
+    float: right;
+    background-color: red;
+    padding: 1px 10px;
+    color: #ffffff;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.bc_fed .fed_order {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.bc_fed .order_delete form {
+    padding: 0 !important;
+}
+
+.bc_fed .order_customize_container div {
+    display: inline-block;
+}
+
+.bc_fed .fed_fa_container{
+    max-height: 500px !important;
+    overflow-y: auto;
+}
+
+.bc_fed .fed_order_search_container select.form-control {
+    height: 35px !important;
+}
+
+.bc_fed .fed_support_permission_wrapper {
+    border-bottom: 1px solid white;
+}
+
+.bc_fed .fed_order_search_container {
+    display: flex;
+}
+
+.bc_fed .padd_top_10 {
+    padding-top: 10px;
+}
+
+.bc_fed .padd_top_20 {
+    padding-top: 20px;
+}
+
+.padd_bot_20 {
+    padding-bottom: 20px;
+}
+
+.bc_fed .padd_bot_10 {
+    padding-bottom: 10px;
+}
+
+.bc_fed .fed_admin_up_display_permission {
+    padding: 20px 0;
+}
+
+.bc_fed .fed_admin_up_role_based .col-md-12 {
+    padding-bottom: 5px;
+}
+
+.bc_fed .fed_form_post label {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/**
+Loader
+**/
+.bc_fed #preview-area {
+    width: 60px;
+    height: 60px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 99999;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+}
+
+.bc_fed .spinner_circle {
+    width: 60px;
+    height: 60px;
+    /*z-index: 999;*/
+    position: relative;
+    margin: 100px auto;
+}
+
+.bc_fed .double-bounce1,
+.bc_fed .double-bounce2 {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #333;
+    opacity: 0.6;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+    animation: sk-bounce 2.0s infinite ease-in-out;
+}
+
+.bc_fed .double-bounce2 {
+    -webkit-animation-delay: -1.0s;
+    animation-delay: -1.0s;
+}
+
+@-webkit-keyframes sk-bounce {
+    0%, 100% {
+        -webkit-transform: scale(0.0)
+    }
+    50% {
+        -webkit-transform: scale(1.0)
+    }
+}
+
+@keyframes sk-bounce {
+    0%, 100% {
+        transform: scale(0.0);
+        -webkit-transform: scale(0.0);
+    }
+    50% {
+        transform: scale(1.0);
+        -webkit-transform: scale(1.0);
+    }
+}
+
+.bc_fed .bc_height_5px {
+    height: 5px
+}
+
+
+.bc_fed .p-t-20 {
+    padding-top: 20px;
+}
+
+
+.bc_fed .p-r-10 {
+    padding-right:10px !important;
+}
+
+.bc_fed .p-r-20 {
+    padding-right:20px !important;
+}
+
+.bc_fed .p-r-40 {
+    padding-right:40px !important;
+}
+.bc_fed .p-l-5 {
+    padding-left: 5px !important;
+}
+.bc_fed .p-t-10 {
+    padding-top: 10px;
+}
+.bc_fed .p-l-20 {
+    padding-left:20px !important;
+}
+.bc_fed .p-l-40 {
+    padding-left:40px !important;
+}
+
+.bc_fed .fed_buttons_container {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    flex-wrap: wrap;
+}
+.bc_fed .fed_buttons_container .fed_button {
+    padding:5px 15px;
+    border: 1px solid #e0e0e0;
+    cursor: pointer;
+}
+.bc_fed .fed_buttons_container .fed_button.active {
+    background-color: #00B5AD;
+    color: white;
+}
+.bc_fed .fed_buttons_container .fed_button_text {
+    font-weight: 500;
+    padding-top:10px;
+}

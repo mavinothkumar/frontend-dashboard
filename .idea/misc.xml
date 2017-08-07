@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ComposerJsonPluginSettings">
+    <unboundedVersionInspectionSettings>
+      <excludedPackages>
+        <pattern pattern="vendor/*" />
+      </excludedPackages>
+    </unboundedVersionInspectionSettings>
+    <customRepositories />
+  </component>
+  <component name="LaravelPluginSettings">
+    <option name="pluginEnabled" value="true" />
+    <option name="useAutoPopup" value="true" />
+  </component>
+</project>
