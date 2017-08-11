@@ -24,7 +24,7 @@ function fed_admin_register_settings_tab( $fed_login_register ) {
 		<div class="fed_admin_panel_container">
 			<div class="fed_admin_panel_content_wrapper">
 				<div class="row">
-					<div class="col-md-4 fed_menu_title">Menu Name</div>
+					<div class="col-md-4 fed_menu_title"><?php _e( 'Menu Name', 'fed' ) ?></div>
 					<div class="col-md-8">
 						<div class="col-md-6">
 							<?php echo fed_input_box( 'fed_login_register_name', array(
@@ -35,7 +35,7 @@ function fed_admin_register_settings_tab( $fed_login_register ) {
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-md-4 fed_menu_title">Menu Name Order</div>
+					<div class="col-md-4 fed_menu_title"><?php _e( 'Menu Name Order', 'fed' ) ?></div>
 					<div class="col-md-8">
 						<div class="col-md-6">
 							<?php echo fed_input_box( 'fed_login_register_position', array(
@@ -46,10 +46,10 @@ function fed_admin_register_settings_tab( $fed_login_register ) {
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-md-4 fed_menu_title">Show User Role(s) in Register Form</div>
+					<div class="col-md-4 fed_menu_title"><?php _e( 'Show User Role(s) in Register Form', 'fed' ) ?></div>
 					<div class="col-md-8">
 						<?php foreach ( $user_roles as $key => $role ) {
-							$c_value = in_array( $key, $user_role ) ? 'Enable' : 'Disable';
+							$c_value = in_array( $key, $user_role,false ) ? 'Enable' : 'Disable';
 							?>
 							<div class="col-md-6">
 								<?php echo fed_input_box( 'fed_login_register', array(
@@ -67,7 +67,7 @@ function fed_admin_register_settings_tab( $fed_login_register ) {
 			</div>
 		</div>
 
-		<?php do_action( 'fed_admin_settings_login_template', $fed_login_register ) ?>
+		<?php do_action( 'fed_admin_login_register_template', $fed_login_register ) ?>
 
 		<div class="row">
 			<div class="col-md-12">

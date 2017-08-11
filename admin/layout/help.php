@@ -102,25 +102,33 @@ function fed_admin_help() {
 							<div class="panel-body">
 								<b>Note: This is not completely documented</b>
 								<ol>
-									<li>fed_admin_input_item_options</li>
-									<li>fed_admin_input_items</li>
-									<li>fed_empty_value_for_user_profile</li>
-									<li>fed_no_update_fields</li>
-									<li>fed_payment_sources</li>
-									<li>fed_plugin_versions</li>
-									<li>fed_input_mandatory_required_fields</li>
-									<li>fed_login_form_filter</li>
-									<li>fed_registration_mandatory_fields</li>
-									<li>fed_login_mandatory_fields</li>
-									<li>fed_admin_dashboard_settings_menu_header</li>
-									<li>fed_frontend_main_menu</li>
-									<li>fed_admin_settings_upl</li>
-									<li>fed_restrictive_menu_names</li>
-									<li>fed_admin_login</li>
-									<li>fed_admin_settings_post</li>
-									<li>fed_register_form_submit</li>
-									<li>fed_user_extra_fields_registration</li>
-									<li>fed_get_date_formats_filter</li>
+									<li class="col-md-4">fed_admin_input_item_options</li>
+									<li class="col-md-4">fed_admin_input_items</li>
+									<li class="col-md-4">fed_empty_value_for_user_profile</li>
+									<li class="col-md-4">fed_no_update_fields</li>
+									<li class="col-md-4">fed_payment_sources</li>
+									<li class="col-md-4">fed_plugin_versions</li>
+									<li class="col-md-4">fed_input_mandatory_required_fields</li>
+									<li class="col-md-4">fed_login_form_filter</li>
+									<li class="col-md-4">fed_registration_mandatory_fields</li>
+									<li class="col-md-4">fed_login_mandatory_fields</li>
+									<li class="col-md-4">fed_admin_dashboard_settings_menu_header</li>
+									<li class="col-md-4">fed_frontend_main_menu</li>
+									<li class="col-md-4">fed_admin_settings_upl</li>
+									<li class="col-md-4">fed_restrictive_menu_names</li>
+									<li class="col-md-4">fed_admin_login</li>
+									<li class="col-md-4">fed_admin_settings_post</li>
+									<li class="col-md-4">fed_register_form_submit</li>
+									<li class="col-md-4">fed_user_extra_fields_registration</li>
+									<li class="col-md-4">fed_get_date_formats_filter</li>
+									<li class="col-md-4">fed_default_extended_fields</li>
+									<li class="col-md-4">fed_admin_script_loading_pages</li>
+									<li class="col-md-4">fed_update_post_status</li>
+									<li class="col-md-4">fed_extend_country_code</li>
+									<li class="col-md-4">fed_customize_admin_post_options</li>
+									<li class="col-md-4">fed_customize_admin_login_options</li>
+									<li class="col-md-4">fed_customize_admin_user_options</li>
+									<li class="col-md-4">fed_customize_admin_user_profile_layout_options</li>
 								</ol>
 							</div>
 						</div>
@@ -137,27 +145,27 @@ function fed_admin_help() {
 							<div class="panel-body">
 								<b>Note: This is not completely documented</b>
 								<ol>
-									<li>fed_admin_settings_login_action</li>
-									<li>fed_before_dashboard_container</li>
-									<li>fed_after_dashboard_container</li>
-									<li>fed_before_login_only_form</li>
-									<li>fed_after_login_only_form</li>
-									<li>fed_add_main_sub_menu</li>
-									<li>fed_show_support_button_at_user_profile</li>
-									<li>fed_user_profile_below</li>
-									<li>fed_before_login_form</li>
-									<li>fed_after_login_form</li>
-									<li>fed_before_forgot_password_only_form</li>
-									<li>fed_after_forgot_password_only_form</li>
-									<li>fed_login_form_submit_custom</li>
-									<li>fed_before_register_only_form</li>
-									<li>fed_after_register_only_form</li>
-									<li>fed_admin_settings_login_template</li>
-									<li>fed_admin_input_fields_container_extra</li>
-									<li>fed_admin_settings_login_template</li>
-									<li>fed_admin_menu_status_version_below</li>
-									<li>fed_admin_menu_status_database_below</li>
-									<li>fed_admin_menu_status_below</li>
+									<li class="col-md-4">fed_admin_settings_login_action</li>
+									<li class="col-md-4">fed_before_dashboard_container</li>
+									<li class="col-md-4">fed_after_dashboard_container</li>
+									<li class="col-md-4">fed_before_login_only_form</li>
+									<li class="col-md-4">fed_after_login_only_form</li>
+									<li class="col-md-4">fed_add_main_sub_menu</li>
+									<li class="col-md-4">fed_show_support_button_at_user_profile</li>
+									<li class="col-md-4">fed_user_profile_below</li>
+									<li class="col-md-4">fed_before_login_form</li>
+									<li class="col-md-4">fed_after_login_form</li>
+									<li class="col-md-4">fed_before_forgot_password_only_form</li>
+									<li class="col-md-4">fed_after_forgot_password_only_form</li>
+									<li class="col-md-4">fed_login_form_submit_custom</li>
+									<li class="col-md-4">fed_before_register_only_form</li>
+									<li class="col-md-4">fed_after_register_only_form</li>
+									<li class="col-md-4">fed_admin_login_settings_template</li>
+									<li class="col-md-4">fed_admin_input_fields_container_extra</li>
+									<li class="col-md-4">fed_admin_login_settings_template</li>
+									<li class="col-md-4">fed_admin_menu_status_version_below</li>
+									<li class="col-md-4">fed_admin_menu_status_database_below</li>
+									<li class="col-md-4">fed_admin_menu_status_below</li>
 								</ol>
 							</div>
 						</div>

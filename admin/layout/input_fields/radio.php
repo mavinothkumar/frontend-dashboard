@@ -13,7 +13,7 @@ function fed_admin_input_fields_radio($row, $action ) {
             <div class="col-md-12">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><b>Radio</b></h3>
+                        <h3 class="panel-title"><b><?php _e( 'Radio', 'fed' ) ?></b></h3>
                     </div>
                     <div class="panel-body">
                         <div class="fed_input_text">
@@ -24,13 +24,11 @@ function fed_admin_input_fields_radio($row, $action ) {
 								<?php fed_get_admin_up_input_meta( $row ) ?>
 
                                 <div class="form-group col-md-3">
-                                    <label for="">Class Name</label>
-									<?php echo fed_input_box( 'class_name', array( 'value' => $row['class_name'] ), 'text' ); ?>
+                                    <?php fed_get_class_field( $row) ?>
                                 </div>
 
                                 <div class="form-group col-md-3">
-                                    <label for="">ID Name</label>
-									<?php echo fed_input_box( 'id_name', array( 'value' => $row['id_name'] ), 'text' ); ?>
+                                    <?php fed_get_id_field( $row) ?>
                                 </div>
 
                             </div>
@@ -42,9 +40,9 @@ function fed_admin_input_fields_radio($row, $action ) {
 
                             <div class="row fed_key_value_paid">
                                 <div class="col-md-5">
-                                    <label for="">Values</label>
+                                    <label for=""><?php _e( 'Values', 'fed' ) ?></label>
 									<?php echo fed_input_box( 'input_value', array(
-										'placeholder' => 'Please enter the value by key,value',
+										'placeholder' => __('Please enter the value by key,value','fed'),
 										'rows'        => 10,
 										'value'       => $row['input_value']
 									), 'textarea' ); ?>
@@ -52,14 +50,14 @@ function fed_admin_input_fields_radio($row, $action ) {
                                 <div class="col-md-7">
                                     <div class="row fed_key_value_eg_container">
                                         <div class="col-md-5">
-                                            <label for="">Examples:</label>
+                                            <label for=""><?php _e( 'Examples:', 'fed' ) ?></label>
                                             <p>key,value</p>
                                             <p>one,One</p>
                                             <p>two,Two</p>
                                             <p>five-category,Five Category</p>
                                         </div>
                                         <div class="col-md-7">
-                                            <b>This will be output as</b>
+                                            <b><?php _e( 'This will be output as', 'fed' ) ?></b>
 											<?php
 											$value = array(
 												'key'           => 'Value',

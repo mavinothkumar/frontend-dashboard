@@ -13,7 +13,7 @@ function fed_admin_input_fields_number($row, $action ) {
             <div class="col-md-12">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><b>Number</b></h3>
+                        <h3 class="panel-title"><b><?php _e( 'Number', 'fed' ) ?></b></h3>
                     </div>
                     <div class="panel-body">
                         <div class="fed_input_text">
@@ -24,34 +24,31 @@ function fed_admin_input_fields_number($row, $action ) {
 			                    <?php fed_get_admin_up_input_meta($row) ?>
 
                                 <div class="form-group col-md-6">
-                                    <label for="">Placeholder Text</label>
-				                    <?php echo fed_input_box( 'placeholder', array( 'value' => $row['placeholder'] ), 'text' ); ?>
+                                    <?php fed_get_placeholder_field( $row) ?>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-6">
-                                    <label for="">Class Name</label>
-				                    <?php echo fed_input_box( 'class_name', array( 'value' => $row['class_name'] ), 'text' ); ?>
+                                    <?php fed_get_class_field( $row) ?>
                                 </div>
 
                                 <div class="form-group col-md-6">
-                                    <label for="">ID Name</label>
-				                    <?php echo fed_input_box( 'id_name', array( 'value' => $row['id_name'] ), 'text' ); ?>
+                                   <?php fed_get_id_field( $row) ?>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-4">
-                                    <label for="">Min Value</label>
+                                    <label for=""><?php _e( 'Min Value', 'fed' ) ?></label>
 				                    <?php echo fed_input_box( 'input_min', array( 'value' => $row['input_min'] ), 'number' ); ?>
                                 </div>
 
                                 <div class="form-group col-md-4">
-                                    <label for="">Max Value</label>
+                                    <label for=""><?php _e( 'Max Value', 'fed' ) ?></label>
 				                    <?php echo fed_input_box( 'input_max', array( 'value' => $row['input_max'] ), 'number' ); ?>
                                 </div>
 
                                 <div class="form-group col-md-4">
-                                    <label for="">Step [Increment by Step]</label>
+                                    <label for=""><?php _e( 'Step [Increment by Step]', 'fed' ) ?></label>
 				                    <?php echo fed_input_box( 'input_step', array( 'value' => $row['input_step'] ), 'number' ); ?>
                                 </div>
                             </div>
