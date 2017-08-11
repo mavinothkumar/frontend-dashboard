@@ -44,7 +44,6 @@ function fed_post_fields_layout( $profiles ) {
 			</div>
 		</div>
 		<?php
-		exit();
 	} else {
 		usort( $profiles, 'fed_sort_by_order' );
 		$menu = fed_get_public_post_types();

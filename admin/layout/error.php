@@ -1,9 +1,5 @@
 <?php
 /**
- * Developer Comment
- * esc, translate => done
- */
-/**
  * 404 | Some misuse action caught.
  */
 function fed_landed_wrongly() {

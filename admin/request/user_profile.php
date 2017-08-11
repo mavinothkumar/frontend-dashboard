@@ -11,8 +11,6 @@ function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
 	global $wpdb;
 	$input_meta = $request['input_meta'];
 
-
-
 	if ( $action === 'profile' ) {
 		$table_name = $wpdb->prefix . BC_FED_USER_PROFILE_DB;
 	} elseif ( $action === 'post' ) {

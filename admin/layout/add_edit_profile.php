@@ -192,7 +192,7 @@ function fed_get_admin_up_role_based( $row, $action ) {
 				<label><?php _e( 'Menu Location', 'fed' ) ?></label>
 				<?php echo fed_input_box( 'menu', array(
 					'default_value' => 'Enable',
-					'label'         => 'Menu Location',
+					'label'         => __('Menu Location','fed'),
 					'value'         => $row['menu'],
 					'options'       => $options
 				), 'select' ); ?>
@@ -202,7 +202,7 @@ function fed_get_admin_up_role_based( $row, $action ) {
 				<div class="form-group col-md-4 fed_show_user_profile">
 					<?php echo fed_input_box( 'show_user_profile', array(
 						'default_value' => 'Disable',
-						'label'         => 'Disable in User Profile?',
+						'label'         => __('Disable in User Profile?','fed'),
 						'value'         => $row['show_user_profile'],
 					), 'checkbox' ); ?>
 				</div>
@@ -237,7 +237,7 @@ function fed_get_admin_up_display_permission( $row, $action, $type = '' ) {
 			<div class="form-group col-md-4">
 				<?php echo fed_input_box( 'show_register', array(
 						'default_value' => 'Enable',
-						'label'         => 'Show this field on Register Form'.$notification,
+						'label'         => __('Show this field on Register Form','fed').$notification,
 						'value'         => $value,
 						'disabled'      => $others
 					), 'checkbox' );
@@ -291,7 +291,7 @@ function fed_get_admin_up_label_input_order( $row ) {
 	?>
 	<div class="row">
 		<div class="form-group col-md-6">
-			<label for="">Label Name *</label>
+			<label for=""><?php _e( 'Label Name *', 'fed' ) ?></label>
 			<?php echo fed_input_box( 'label_name', array(
 				'class' => 'form-control ' . $change . ' ',
 				'value' => $row['label_name']

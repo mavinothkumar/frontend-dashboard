@@ -68,7 +68,7 @@ function fed_save_meta_boxes_display( $post_id, $post ) {
 	 * Check with post meta to save the meta
 	 */
 	foreach ( $_POST['fed_meta'] as $key => $meta ) {
-		if ( in_array( $key, array_keys( $post_meta ) ) ) {
+		if ( array_key_exists( $key, $post_meta ) ) {
 			$meta_value = isset( $_POST['fed_meta'][ $key ] ) ? esc_attr( $_POST['fed_meta'][ $key ] ) : '';
 			update_post_meta( $post_id, $key, $meta_value );
 		} else {

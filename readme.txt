@@ -3,8 +3,8 @@ Contributors: vinoth06, buffercode
 Tags: dashboard, frontend dashboard, custom login, custom register, custom role, custom profile, custom post type
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7DHAEMST475BY
 Requires at least: 4.3
-Tested up to: 4.8
-Stable tag: 1.0
+Tested up to: 4.8.1
+Stable tag: 1.1
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -118,12 +118,17 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 6. [fed_user role=user_role] to generate the role based user page
 
 == Changelog ==
+= v1.1 [2017 August 11] =
+* Added more filter and action hooks for developers
+* Minor: Bug fixed
+
 = v1.0 [04-August-2017] =
 * Public release
 
 == Upgrade Notice ==
-= v1.0 [2017 July 28] =
-* Public release
+= v1.1 [2017 August 11] =
+* Added more filter and action hooks for developers
+* Minor: Bug fixed
 
 == Screenshots ==
 1. Frontend Dashboard Settings | Login | Settings

@@ -415,21 +415,21 @@ jQuery(document).ready(function ($) {
 
     var fedAdminAlert = {
         adminSettings: function (results) {
-
             if (results.success) {
                 swal({
                     title: results.data.message || 'Something Went Wrong',
                     type: "success",
                     confirmButtonColor: '#00b5ad'
-                }).then(function () {
-                    if (results.data.reload) {
-                        if (window.location == results.data.reload) {
-                            location.reload();
-                        } else {
-                            window.location = results.data.reload
+                }).then(
+                    function () {
+                        if (results.data.reload) {
+                            if (window.location == results.data.reload) {
+                                window.location.reload();
+                            } else {
+                                window.location = results.data.reload
+                            }
                         }
-                    }
-                });
+                    });
             }
             else if ((results.success) === false) {
                 swal({
@@ -497,4 +497,16 @@ jQuery(document).ready(function ($) {
 
         }
     };
+
+    $(function(){
+        var hash = window.location.hash;
+        hash && $('ul.nav a[href="' + hash + '"]').tab('show');
+
+        $('.nav-tabs a').click(function (e) {
+            $(this).tab('show');
+            var scrollmem = $('body').scrollTop() || $('html').scrollTop();
+            window.location.hash = this.hash;
+            $('html,body').scrollTop(scrollmem);
+        });
+    });
 });

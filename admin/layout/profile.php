@@ -60,7 +60,7 @@ function fed_show_admin_profile_page( $profiles ) {
 								<div class="<?php echo $isActive; ?> tab-pane fade in" id="<?php echo $index; ?>">
 									<div class="panel panel-primary">
 										<div class="panel-heading">
-											<h3 class="panel-title"><?php echo $menu[$index]; ?></h3>
+											<h3 class="panel-title"><?php echo $menu[ $index ]; ?></h3>
 										</div>
 										<div class="panel-body">
 											<?php
@@ -92,11 +92,24 @@ function fed_show_admin_profile_page( $profiles ) {
 														</div>
 
 														<div class="col-md-6 p-t-20">
-															<span class="fa fa-sign-in btn <?php echo $register['button']; ?>" data-toggle="popover" data-trigger="hover" title="" data-content="<?php echo $register['content']; ?>" data-original-title="<?php echo $register['title']; ?>"></span>
+															<?php echo fed_show_help_message( array(
+																'icon'    => 'fa fa-sign-in btn '.$register['button'],
+																'title'   => $register['title'],
+																'content' => $register['content']
+															) ) ?>
 
-															<span class="fa fa-dashboard btn <?php echo $dashboard['button']; ?>" data-toggle="popover" data-trigger="hover" title="" data-content="<?php echo $dashboard['content']; ?>" data-original-title="<?php echo $dashboard['title']; ?>"></span>
+															<?php echo fed_show_help_message( array(
+																'icon'    => 'fa fa-dashboard btn '.$dashboard['button'],
+																'title'   => $dashboard['title'],
+																'content' => $dashboard['content']
+															) ) ?>
 
-															<span class="fa fa-user btn <?php echo $user_profile['button']; ?>" data-toggle="popover" data-trigger="hover" title="" data-content="<?php echo $user_profile['content']; ?>" data-original-title="<?php echo $user_profile['title']; ?>"></span>
+															<?php echo fed_show_help_message( array(
+																'icon'    => 'fa fa-user btn '.$user_profile['button'],
+																'title'   => $user_profile['title'],
+																'content' => $user_profile['content']
+															) ) ?>
+
 															<span class="p-l-40">
 													<a class="btn btn-primary"
 													   href="<?php echo menu_page_url( 'fed_add_user_profile', false ) . '&fed_input_id=' . $profile['id'] . '&fed_action=profile' ?>">

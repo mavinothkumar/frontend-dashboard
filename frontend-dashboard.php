@@ -3,7 +3,7 @@
  * Plugin Name: Frontend Dashboard
  * Plugin URI: https://buffercode.com/plugin/frontend-dashboard
  * Description: Front end dashboard provide high flexible way to customize the user dashboard on front end rather than WordPress wp-admin dashboard.
- * Version: 1.0
+ * Version: 1.1
  * Author: vinoth06
  * Author URI: http://buffercode.com/
  * License: GPLv2
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Version Number
  */
-define( 'BC_FED_PLUGIN_VERSION', '1.0' );
+define( 'BC_FED_PLUGIN_VERSION', '1.1' );
 define( 'BC_FED_PLUGIN_VERSION_TYPE', 'FREE' );
 
 /**
@@ -144,9 +144,7 @@ require_once BC_FED_PLUGIN_DIR . '/admin/layout/input_fields/select.php';
 require_once BC_FED_PLUGIN_DIR . '/admin/layout/input_fields/text.php';
 require_once BC_FED_PLUGIN_DIR . '/admin/layout/input_fields/textarea.php';
 require_once BC_FED_PLUGIN_DIR . '/admin/layout/input_fields/url.php';
-require_once BC_FED_PLUGIN_DIR . '/admin/layout/input_fields/date.php';
-require_once BC_FED_PLUGIN_DIR . '/admin/layout/input_fields/file.php';
-require_once BC_FED_PLUGIN_DIR . '/admin/layout/input_fields/color.php';
+require_once BC_FED_PLUGIN_DIR . '/admin/layout/input_fields/common.php';
 
 
 require_once BC_FED_PLUGIN_DIR . '/admin/layout/admin.php';

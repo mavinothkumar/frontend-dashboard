@@ -15,15 +15,42 @@ function fed_admin_user_profile_select( $selected = '' ) {
 	$attr = array(
 		'class'   => 'fed_admin_input_items',
 		'options' => apply_filters( 'fed_admin_input_item_options', array(
-			'single_line'     => array('name'=>'Single Line','image'=>plugins_url( 'admin/assets/images/inputs/single_line.png', BC_FED_PLUGIN )),
-			'multi_line' => array('name'=>'Multi-Line','image'=>plugins_url( 'admin/assets/images/inputs/multi_line.png', BC_FED_PLUGIN )),
-			'number'   => array('name'=>'Number','image'=>plugins_url( 'admin/assets/images/inputs/number.png', BC_FED_PLUGIN )),
-			'email'    => array('name'=>'Email','image'=>plugins_url( 'admin/assets/images/inputs/email.png', BC_FED_PLUGIN )),
-			'checkbox' => array('name'=>'Checkbox','image'=>plugins_url( 'admin/assets/images/inputs/checkbox.png', BC_FED_PLUGIN )),
-			'select'   => array('name'=>'Select','image'=>plugins_url( 'admin/assets/images/inputs/select.png', BC_FED_PLUGIN )),
-			'radio'    => array('name'=>'Radio','image'=>plugins_url( 'admin/assets/images/inputs/radio.png', BC_FED_PLUGIN )),
-			'password' => array('name'=>'Password','image'=>plugins_url( 'admin/assets/images/inputs/password.png', BC_FED_PLUGIN )),
-			'url'      => array('name'=>'URL','image'=>plugins_url( 'admin/assets/images/inputs/url.png', BC_FED_PLUGIN )),
+			'single_line' => array(
+				'name'  => 'Single Line',
+				'image' => plugins_url( 'admin/assets/images/inputs/single_line.png', BC_FED_PLUGIN )
+			),
+			'multi_line'  => array(
+				'name'  => 'Multi-Line',
+				'image' => plugins_url( 'admin/assets/images/inputs/multi_line.png', BC_FED_PLUGIN )
+			),
+			'number'      => array(
+				'name'  => 'Number',
+				'image' => plugins_url( 'admin/assets/images/inputs/number.png', BC_FED_PLUGIN )
+			),
+			'email'       => array(
+				'name'  => 'Email',
+				'image' => plugins_url( 'admin/assets/images/inputs/email.png', BC_FED_PLUGIN )
+			),
+			'checkbox'    => array(
+				'name'  => 'Checkbox',
+				'image' => plugins_url( 'admin/assets/images/inputs/checkbox.png', BC_FED_PLUGIN )
+			),
+			'select'      => array(
+				'name'  => 'Select',
+				'image' => plugins_url( 'admin/assets/images/inputs/select.png', BC_FED_PLUGIN )
+			),
+			'radio'       => array(
+				'name'  => 'Radio',
+				'image' => plugins_url( 'admin/assets/images/inputs/radio.png', BC_FED_PLUGIN )
+			),
+			'password'    => array(
+				'name'  => 'Password',
+				'image' => plugins_url( 'admin/assets/images/inputs/password.png', BC_FED_PLUGIN )
+			),
+			'url'         => array(
+				'name'  => 'URL',
+				'image' => plugins_url( 'admin/assets/images/inputs/url.png', BC_FED_PLUGIN )
+			),
 		) ),
 		'value'   => $selected,
 	);
@@ -63,6 +90,7 @@ function fed_is_true_false( $condition = '' ) {
 }
 
 function fed_profile_enable_disable( $condition = '', $type = '' ) {
+	$content = ' this field';
 	if ( $type === 'register' ) {
 		$content = 'Show Register Form';
 	}
@@ -102,15 +130,12 @@ function fed_get_input_details( $attr ) {
 	$name        = isset( $attr['input_meta'] ) && $attr['input_meta'] != '' ? esc_attr( $attr['input_meta'] ) : $attr['input_meta'];
 	$value       = isset( $attr['user_value'] ) && $attr['user_value'] != '' ? $attr['user_value'] : '';
 	$required    = isset( $attr['is_required'] ) && $attr['is_required'] == 'true' ? 'required="required"' : '';
-	//$required = isset( $attr['is_required'] ) && $attr['is_required'] == 'true' ? '' : '';
+//	$required = isset( $attr['is_required'] ) && $attr['is_required'] == 'true' ? '' : '';
 	$id       = isset( $attr['id_name'] ) && $attr['id_name'] != '' ? $attr['id_name'] : '';
 	$input    = '';
 	$readonly = isset( $attr['readonly'] ) && $attr['readonly'] != '' ? esc_attr( $attr['readonly'] ) : '';
 
-	//var_dump($attr);
-
 	$attr['extended'] = isset( $attr['extended'] ) ? ( is_string( $attr['extended'] ) ? unserialize( $attr['extended'] ) : $attr['extended'] ) : array();
-
 
 	$altFormat = isset( $attr['extended']['date_format'] ) && $attr['extended']['date_format'] != '' ? esc_attr( $attr['extended']['date_format'] ) : 'm-d-Y';
 
@@ -223,7 +248,7 @@ function fed_get_input_details( $attr ) {
 
 	}
 
-	return $input;
+	return apply_filters( 'fed_custom_input_fields', $input, $attr );
 }
 
 /**
@@ -293,7 +318,7 @@ function fed_get_empty_value_for_user_profile( $action ) {
 		'user_role'      => array_keys( fed_get_user_roles() )
 	);
 
-	$default['extended'] = fed_default_date_fields();
+	$default['extended'] = fed_default_extended_fields();
 
 	$user_profile = array(
 		'show_register'     => '',
@@ -369,7 +394,7 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 				}
 			}
 		} else {
-			$default['extended'] = fed_default_date_fields();
+			$default['extended'] = fed_default_extended_fields();
 		}
 	}
 
@@ -467,7 +492,7 @@ add_filter( 'admin_footer_text', 'fed_update_footer' );
  * @return string
  */
 function fed_update_footer( $text ) {
-	if ( isset( $_GET['page'] ) && ( $_GET['page'] == 'fed_settings_menu' || $_GET['page'] == 'fed_user_profile' || $_GET['page'] == 'fed_add_user_profile' ) ) {
+	if ( isset( $_GET['page'] ) && ( $_GET['page'] === 'fed_settings_menu' || $_GET['page'] === 'fed_user_profile' || $_GET['page'] === 'fed_add_user_profile' ) ) {
 		$text = '<span id="footer-thankyou">' . BC_FED_APP_NAME . ' V' . BC_FED_PLUGIN_VERSION . '</span>';
 	}
 
@@ -487,7 +512,6 @@ function fed_no_update_fields() {
 	return apply_filters( 'fed_no_update_fields', $fields );
 }
 
-
 /**
  * Changing Archive page author
  *
@@ -498,7 +522,7 @@ function fed_no_update_fields() {
 function get_custom_post_type_archive_template( $single_template ) {
 	global $post;
 
-	if ( $post->post_type == 'post' && is_author() ) {
+	if ( $post->post_type === 'post' && is_author() ) {
 		$single_template = BC_FED_PLUGIN_DIR . '/templates/author.php';
 
 	}
@@ -1114,7 +1138,7 @@ function fed_yes_no( $sort = 'DESC' ) {
 		'no'  => 'No'
 	);
 
-	if ( $sort == 'ASC' ) {
+	if ( 'ASC' === $sort ) {
 		asort( $value );
 	}
 
@@ -1134,7 +1158,7 @@ function fed_filter_show_register( $row ) {
 		/**
 		 * un-register user should not upload the file
 		 */
-		if ( $row['input_type'] === 'file' ) {
+		if ( 'file' === $row['input_type'] ) {
 			$required = 'Disable';
 		} else {
 			$required = esc_attr( $row['show_register'] );
@@ -1149,21 +1173,19 @@ function fed_filter_show_register( $row ) {
 /**
  * Allow user role to upload files
  */
-
 function fed_enable_file_uploads_by_role() {
 	$current_user = wp_get_current_user();
 	$user         = get_userdata( $current_user->ID );
 	$role         = $user->roles[0];
 
-	$fed_admin_options     = get_option( 'fed_admin_settings_post', array() );
-	$fed_upload_permission = array_keys( $fed_admin_options['permissions']['fed_upload_permission'] );
-	if ( in_array( $role, $fed_upload_permission, false ) ) {
-		$contributor = get_role( $role );
-		$contributor->add_cap( 'upload_files' );
+	$fed_admin_options = get_option( 'fed_admin_settings_post', array() );
+	if ( isset( $fed_admin_options['permissions']['fed_upload_permission'] ) ) {
+		$fed_upload_permission = array_keys( $fed_admin_options['permissions']['fed_upload_permission'] );
+		if ( in_array( $role, $fed_upload_permission, false ) ) {
+			$contributor = get_role( $role );
+			$contributor->add_cap( 'upload_files' );
+		}
 	}
-
-	return;
-
 }
 
 add_action( 'admin_init', 'fed_enable_file_uploads_by_role' );
@@ -1193,31 +1215,29 @@ function fed_restrict_user_profile_picture( $wp_query_obj ) {
 		$wp_query_obj->set( 'author', $current_user->ID );
 	}
 
-
-	return;
-
 }
 
 /**
+ * TODO: Captcha
  * Get Captcha form
  *
  * @param string $location Captcha Location.
  *
- * @return string | empty
+ * @return string
  */
 function fed_get_captcha_form( $location = '' ) {
 	$fed_captcha = get_option( 'fed_admin_settings_captcha' );
 
 	if ( $location === 'login' &&
 	     isset( $fed_captcha['fed_captcha_in_login_form'] ) &&
-	     $fed_captcha['fed_captcha_in_login_form'] === 'Enable'
+	     'Enable' === $fed_captcha['fed_captcha_in_login_form']
 
 	) {
 		return '<div id="fedLoginCaptcha"></div>';
 	}
 	if ( $location === 'register' &&
 	     isset( $fed_captcha['fed_captcha_in_register_form'] ) &&
-	     $fed_captcha['fed_captcha_in_register_form'] === 'Enable'
+	     'Enable' === $fed_captcha['fed_captcha_in_register_form']
 	) {
 		return '<div id="fedRegisterCaptcha"></div>';
 	}
@@ -1228,6 +1248,7 @@ function fed_get_captcha_form( $location = '' ) {
 
 /**
  * Get Captcha Site Key
+ * * TODO: Captcha
  */
 function fed_get_captcha_details() {
 	$fed_captcha = get_option( 'fed_admin_settings_captcha' );
@@ -1242,10 +1263,10 @@ function fed_get_captcha_details() {
 	}
 
 	if ( ( isset( $fed_captcha['fed_captcha_in_login_form'] ) &&
-	       $fed_captcha['fed_captcha_in_login_form'] == 'Enable' )
+	       $fed_captcha['fed_captcha_in_login_form'] === 'Enable' )
 	     ||
 	     ( isset( $fed_captcha['fed_captcha_in_register_form'] ) &&
-	       $fed_captcha['fed_captcha_in_register_form'] == 'Enable' )
+	       $fed_captcha['fed_captcha_in_register_form'] === 'Enable' )
 	) {
 		$details['fed_captcha_enable'] = 'Enable';
 	}
@@ -1259,7 +1280,7 @@ function fed_get_captcha_details() {
  * @return  array
  */
 function fed_get_script_loading_pages() {
-	return array(
+	return apply_filters( 'fed_admin_script_loading_pages', array(
 		'fed_settings_menu',
 		'fed_user_profile',
 		'fed_add_user_profile',
@@ -1269,7 +1290,7 @@ function fed_get_script_loading_pages() {
 		'fed_orders',
 		'fed_help',
 		'fed_status',
-	);
+	) );
 }
 
 /**
@@ -1278,10 +1299,10 @@ function fed_get_script_loading_pages() {
  * @return array
  */
 function fed_get_post_status() {
-	return array(
+	return apply_filters( 'fed_update_post_status', array(
 		'pending' => 'Pending',
 		'publish' => 'Publish',
-	);
+	) );
 }
 
 /**
@@ -1290,6 +1311,8 @@ function fed_get_post_status() {
  * @param string $postid Post ID
  *
  * @return array | null
+ *
+ * TODO: DB
  */
 function fed_get_all_post_meta( $postid ) {
 	global $wpdb;
@@ -1337,6 +1360,8 @@ function fed_check_extension_loaded( $extension ) {
  * @param array $options Options.
  *
  * @return array
+ *
+ * TODO: PayPal
  */
 function fed_get_paypal_admin_options( $options ) {
 	if ( ! $options || ! isset( $options['paypal'] ) ) {
@@ -1444,7 +1469,7 @@ function fed_currency_type() {
  * @return array
  */
 function fed_get_country_code() {
-	return array(
+	return apply_filters('fed_extend_country_code',array(
 		'empty' => 'Select Country',
 		'AF'    => 'AFGHANISTAN',
 		'AX'    => 'ÅLAND ISLANDS',
@@ -1689,7 +1714,7 @@ function fed_get_country_code() {
 		'YE'    => 'YEMEN',
 		'ZM'    => 'ZAMBIA',
 		'ZW'    => 'ZIMBABWE',
-	);
+	));
 }
 
 /**
@@ -1754,6 +1779,8 @@ function fed_get_current_user_role_key() {
  * Get Amount Based on User Role.
  *
  * @return float
+ *
+ * TODO:Payment
  */
 function fed_get_amount_based_on_user_role() {
 	$current_user_role = fed_get_current_user_role();
@@ -1773,6 +1800,7 @@ function fed_get_amount_based_on_user_role() {
 add_action( 'template_redirect', 'fed_paypal' );
 /**
  * PayPal Request Process.
+ * TODO: PayPal
  */
 function fed_paypal() {
 	if ( isset( $_REQUEST['fed_paypal'], $_REQUEST['fed_display_user_not_paid'] ) ) {
@@ -1792,6 +1820,7 @@ function fed_paypal() {
 /**
  * PayPal Payment Success and Cancel URL
  *
+ *  TODO: PayPal
  * @return array
  */
 function fed_paypal_payment_success_cancel_url() {
@@ -1802,17 +1831,17 @@ function fed_paypal_payment_success_cancel_url() {
 }
 
 /**
- * Default Date Fields.
+ * Default extended Fields.
  *
  * @return array
  */
-function fed_default_date_fields() {
-	return array(
+function fed_default_extended_fields() {
+	return apply_filters( 'fed_default_extended_fields', array(
 		'date_format' => 'd-m-Y',
 		'enable_time' => 'no',
 		'date_mode'   => 'single',
 		'time_24hr'   => '24_hours',
-	);
+	) );
 }
 
 /**
@@ -1882,6 +1911,7 @@ function fed_get_default_profile_items() {
  * Get Payment Cycles.
  *
  * @return array
+ * TODO: Payment
  */
 function fed_get_payment_cycles() {
 	return array(
@@ -1909,6 +1939,8 @@ function fed_compare_two_array( $array1, $array2 ) {
  * @param array $payment_cycle Payment Cycle.
  *
  * @return int|string
+ *
+ * TODO: Payment
  */
 function fed_convert_payment_cycles_to_days( $payment_cycle ) {
 	$days = 30;
@@ -1967,6 +1999,10 @@ function fed_redirect_to_404() {
 
 /**
  * Show helper message
+ *
+ * @param array $message
+ *
+ * @return string
  */
 function fed_show_help_message( array $message ) {
 	$icon    = isset( $message['icon'] ) ? $message['icon'] : 'fa fa-info-circle';
@@ -1974,12 +2010,18 @@ function fed_show_help_message( array $message ) {
 	$content = isset( $message['content'] ) ? $message['content'] : '';
 
 	return '
-	<span class="' . $icon . '" data-toggle="popover" data-trigger="hover" title="' . $title . '" data-content="' . $content . '"></span>
+	<span class="' . $icon . '" data-toggle="popover" data-trigger="hover" title="' . $title . '" data-content="' . $content . '" data-original-title="'.$title.'"></span>
 	';
 }
 
 /**
  * Convert to pricing
+ * TODO: Payment
+ *
+ * @param string $cycle
+ * @param string $custom
+ *
+ * @return string
  */
 function fed_convert_to_price( $cycle, $custom ) {
 	switch ( $cycle ) {
