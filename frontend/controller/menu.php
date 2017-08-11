@@ -10,7 +10,7 @@ function fed_get_all_dashboard_display_menus() {
 	$post_menu    = fed_get_post_menu();
 	$logout       = fed_get_logout_menu();
 
-	$all_menus = apply_filters('fed_frontend_main_menu',array_merge( $profile_menu, $post_menu, $logout ));
+	$all_menus = apply_filters( 'fed_frontend_main_menu', array_merge( $profile_menu, $post_menu, $logout ) );
 
 	uasort( $all_menus, 'fed_sort_by_order' );
 
@@ -60,7 +60,6 @@ function fed_get_post_menu() {
 }
 
 
-
 /**
  * Logout Menu
  * @return array
@@ -80,7 +79,6 @@ function fed_get_logout_menu() {
 }
 
 
-
 /**
  * Dashboard Menu
  *
@@ -98,9 +96,34 @@ function fed_display_dashboard_menu( $first_element ) {
 		<a href="#<?php echo $menu['menu_slug']; ?>"
 		   class="list-group-item fed_menu_slug <?php echo $active ?>"
 		   data-menu="<?php echo $menu['menu_slug']; ?>">
-			<span class="<?php echo $menu['menu_image_id'] ?>"></span>
-			<?php echo ucwords( $menu['menu'] ) ?>
+			<div class="flex">
+				<div class="fed_menu_icon">
+					<span class="<?php echo $menu['menu_image_id'] ?>"></span>
+				</div>
+				<div class="fed_menu_title"><?php echo ucwords( $menu['menu'] ) ?></div>
+			</div>
+
 		</a>
 		<?php
 	}
+	?>
+
+	<?php
+}
+
+/**
+ * Collapse Menu
+ */
+function fed_get_collapse_menu() {
+	?>
+	<div class="list-group-item fed_collapse_menu">
+		<div class="flex">
+			<div class="fed_menu_icon fed_collapse_menu_icon">
+				<span class="fa fa-arrow-circle-left"></span>
+			</div>
+			<div class="fed_menu_title fed_collapse_menu_item"><?php _e( 'Collapse Menu', 'fed' ) ?></div>
+		</div>
+
+	</div>
+	<?php
 }

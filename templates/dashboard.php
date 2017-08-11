@@ -30,6 +30,7 @@ fed_get_payment_notification();
 					fed_display_dashboard_menu( $first_element );
 					?>
 				</div>
+				<?php fed_get_collapse_menu() ?>
 			</div>
 			<div class="col-md-9 fed_dashboard_items">
 				<?php

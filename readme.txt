@@ -118,7 +118,11 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 6. [fed_user role=user_role] to generate the role based user page
 
 == Changelog ==
-= v1.1 [2017 August 11] =
+= v1.2 [17-August-2017]=
+* Collapse/Expand the frontend dashboard menu
+
+
+= v1.1 [11-August-2017] =
 * Added more filter and action hooks for developers
 * Minor: Bug fixed
 
@@ -126,7 +130,7 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 * Public release
 
 == Upgrade Notice ==
-= v1.1 [2017 August 11] =
+= v1.1 [11-August-2017] =
 * Added more filter and action hooks for developers
 * Minor: Bug fixed
 
