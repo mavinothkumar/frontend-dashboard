@@ -1,6 +1,7 @@
 jQuery(document).ready(function ($) {
 
         var b = $('body');
+        var dashboard_menu = $('.fed_dashboard_menus');
 
         b.popover({
             selector: '[data-toggle="popover"]',
@@ -136,7 +137,7 @@ jQuery(document).ready(function ($) {
          * Dashboard Post Operations
          */
         // Dashboard Menu Selection
-        $('.fed_dashboard_menus').on('click', '.fed_menu_slug', function (e) {
+        dashboard_menu.on('click', '.fed_menu_slug', function (e) {
             var menu = $(this);
             var value = menu.data('menu');
             var closest = menu.closest('.fed_dashboard_wrapper').find('.fed_dashboard_items');
@@ -255,15 +256,15 @@ jQuery(document).ready(function ($) {
             var root = click.closest('.fed_dashboard_item_field_wrapper');
             $('#preview-area').find('.spinner_circle').removeClass('hide');
             swal({
-                    title: "Are you sure?",
-                    text: "You to delete this Menu!",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Yes, delete it!",
-                    cancelButtonText: "No, cancel it!",
-                    showLoaderOnConfirm: true
-                }).then(
+                title: "Are you sure?",
+                text: "You to delete this Menu!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel it!",
+                showLoaderOnConfirm: true
+            }).then(
                 function () {
                     $.ajax({
                         type: method,
@@ -380,6 +381,30 @@ jQuery(document).ready(function ($) {
             e.preventDefault();
         });
 
+        dashboard_menu.on('click', '.fed_collapse_menu', function (e) {
+            var click = $(this);
+            var parent = click.closest('.fed_dashboard_wrapper');
+            var menu = parent.find('.fed_dashboard_menus');
+            var content = parent.find('.fed_dashboard_items');
+            if (click.find('.fed_collapse_menu_icon .fa').hasClass('fa-arrow-circle-left')){
+                click.find('.fed_collapse_menu_icon .fa').removeClass('fa-arrow-circle-left').addClass('fa-arrow-circle-right');
+                menu.find('.fed_menu_title').addClass('hide');
+                menu.removeClass('col-md-3').addClass('col-md-1');
+                content.removeClass('col-md-9').addClass('col-md-11');
+                parent.find('.flex').addClass('flex_center');
+                parent.find('.flex').removeClass('flex');
+            } else {
+                click.find('.fed_collapse_menu_icon .fa').removeClass('fa-arrow-circle-right').addClass('fa-arrow-circle-left');
+                menu.find('.fed_menu_title').removeClass('hide');
+                menu.removeClass('col-md-1').addClass('col-md-3');
+                content.removeClass('col-md-11').addClass('col-md-9');
+                parent.find('.flex_center').addClass('flex');
+                parent.find('.flex_center').removeClass('flex_center');
+            }
+
+            e.preventDefault();
+        });
+
 
         var fedAlert = {
             loginStatus: function (results) {
@@ -391,12 +416,13 @@ jQuery(document).ready(function ($) {
                         type: "success",
                         showConfirmButton: false,
                         timer: 1000,
-                        confirmButtonColor:'#00b5ad'
+                        confirmButtonColor: '#00b5ad'
                     }).then(
-                        function () {},
                         function () {
-                        window.location.href = results.data.url;
-                    });
+                        },
+                        function () {
+                            window.location.href = results.data.url;
+                        });
                 } else {
                     if (fed.fed_captcha_details.fed_captcha_enable == 'Enable') {
                         grecaptcha.reset();
@@ -420,7 +446,7 @@ jQuery(document).ready(function ($) {
                     swal({
                         title: results.data.message || 'Something Went Wrong',
                         type: "success",
-                        confirmButtonColor:'#00b5ad'
+                        confirmButtonColor: '#00b5ad'
                     });
                 } else {
                     swal({
@@ -438,7 +464,7 @@ jQuery(document).ready(function ($) {
                     swal({
                         title: results.data.message || 'Something Went Wrong',
                         type: "success",
-                        confirmButtonColor:'#00b5ad'
+                        confirmButtonColor: '#00b5ad'
                     });
                 } else if (results.success == false) {
                     if (results.data.user instanceof Array) {
@@ -473,7 +499,7 @@ jQuery(document).ready(function ($) {
                     swal({
                         title: results.data.message || 'Something Went Wrong',
                         type: "success",
-                        confirmButtonColor:'#00b5ad'
+                        confirmButtonColor: '#00b5ad'
                     });
                 } else if (results.success == false) {
                     if (results.data.message instanceof Array) {

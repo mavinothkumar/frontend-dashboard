@@ -76,10 +76,10 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 5. [fed_dashboard] to generate the dashboard page
 6. [fed_user role=user_role] to generate the role based user page
 
-###Changelog
+### Changelog
 **v1.0 [04-August-2017]**
 - Public release
 
-###Upgrade Notice
+### Upgrade Notice
 **v1.0 [04-August-2017]**
 - Public release
