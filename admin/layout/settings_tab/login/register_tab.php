@@ -30,7 +30,7 @@ function fed_admin_register_settings_tab( $fed_login_register ) {
 							<?php echo fed_input_box( 'fed_login_register_name', array(
 								'name'  => 'fed_admin_login[name]',
 								'value' => $name,
-							), 'text' ); ?>
+							), 'single_line' ); ?>
 						</div>
 					</div>
 				</div>

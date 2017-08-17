@@ -9,140 +9,173 @@
  *
  * @return string
  */
+//function fed_input_box( $meta_key, $attr = array(), $type = 'text' ) {
+//	$placeholder = isset( $attr['placeholder'] ) ? esc_attr( $attr['placeholder'] ) : '';
+//	//$class         = isset( $attr['class'] ) ? esc_attr( $attr['class'] ) : '';
+//	$class         = isset( $attr['class'] ) && $attr['class'] != '' ? 'form-control ' . esc_attr( $attr['class'] ) : 'form-control';
+//	$name          = isset( $attr['name'] ) ? esc_attr( $attr['name'] ) : $meta_key;
+//	$value         = isset( $attr['value'] ) ? $attr['value'] : '';
+//	$required      = isset( $attr['required'] ) && $attr['required'] == 'true' ? 'required="required"' : '';
+//	$id            = isset( $attr['id'] ) ? $attr['id'] : '';
+//	$default_value = isset( $attr['default_value'] ) && $attr['default_value'] != '' ? $attr['default_value'] : 'yes';
+//	$input         = '';
+//	$disabled      = isset( $attr['disabled'] ) && $attr['disabled'] == 'disabled' ? 'disabled=disabled' : '';
+//	$readonly      = isset( $attr['readonly'] ) && $attr['readonly'] == 'readonly' ? 'readonly=readonly' : '';
+//
+//	$extra     = isset( $attr['extra'] ) ? ( $attr['extra'] ) : '';
+//	$mode      = isset( $attr['extended']['date_mode'] ) && $attr['extended']['date_mode'] != '' ? esc_attr( $attr['extended']['date_mode'] ) : 'range';
+//	$image_wxh = isset( $attr['image_wxh'] ) && count( $attr['image_wxh'] ) == 2 ? $attr['image_wxh'] : 'thumbnail';
+//	$content   = isset( $attr['content'] ) ? $attr['content'] : '';
+//
+//	switch ( $type ) {
+//
+//		case 'text':
+//			$input .= '<input ' . $required . ' type="text" name="' . $name . '"  value="' . esc_attr( $value ) . '" class="' . $class . '" placeholder="' . $placeholder . '" id="' . $id . '" ' . $extra . '>';
+//			break;
+//
+//		case 'hidden':
+//			$input .= '<input type="hidden" name="' . $name . '"  value="' . esc_attr( $value ) . '" class="' . $class . '" id="' . $id . '">';
+//			break;
+//
+//		case 'readonly':
+//			$input .= '<input readonly type="text" name="' . $name . '"  value="' . esc_attr( $value ) . '" class="' . $class . '" id="' . $id . '">';
+//			break;
+//
+//		case 'email':
+//			$input .= '<input ' . $required . ' type="email" name="' . $name . '"   value="' . esc_attr( $value ) . '" class="' . $class . '" placeholder="' . $placeholder . '" id="' . $id . '">';
+//			break;
+//
+//		case 'password':
+//			$input .= '<input ' . $required . ' type="password" name="' . $name . '"    class="' . $class . '" placeholder="' . $placeholder . '" id="' . $id . '">';
+//			break;
+//
+//		case 'url':
+//			$input .= '<input ' . $required . ' type="url"  placeholder="' . $placeholder . '"  name=" ' . $name . '"    class="' . $class . '"  id="' . $id . '" value="' . esc_attr( $value ) . '" >';
+//			break;
+//
+//		case 'date':
+//			$input .= '<input ' . $required . ' type="text" name="' . $name . '"  data-date-format="F j, Y h:i K" data-alt-input="true" data-mode="' . $mode . '"    class="flatpickr ' . $class . '"  id="' . $id . '" value="' . esc_attr( $value ) . '">';
+//			break;
+//
+//		case 'color':
+//			if ( $value == '' ) {
+//				$value = '#000000';
+//			}
+//			$input .= '<input ' . $required . ' type="text" name="' . $name . '"    class="jscolor {hash:true} ' . $class . '"  id="' . $id . '"  value="' . esc_attr( $value ) . '" >';
+//			break;
+//
+//		case 'file':
+//			if ( is_array( $image_wxh ) ) {
+//				$width_height = 'style="width:' . $image_wxh[0] . 'px; height:' . $image_wxh[1] . 'px"';
+//			} else {
+//				$width_height = '';
+//			}
+//			if ( $value != '' ) {
+//				$value = (int) $value;
+//				$img   = wp_get_attachment_image( $value, $image_wxh );
+//				if ( $img == '' ) {
+//					$img = '<span class="fed_upload_icon fa-2x fa fa-upload" ></span>';
+//				}
+//			} else {
+//				$value = '';
+//				$img   = '<span class="fed_upload_icon fa-2x fa fa-upload"></span>';
+//			}
+//
+//			$input .= '<div ' . $width_height . ' class="fed_upload_container text-center ' . $class . '" id="' . $id . '">
+//<div class="fed_upload_image_container">' . $img . '</div>
+//<input type="hidden" name=" ' . $name . '" class="fed_upload_input" value="' . (int) $value . '"  />
+//						</div>';
+//			break;
+//
+//		case 'textarea':
+//			$rows = isset( $attr['rows'] ) ? absint( $attr['rows'] ) : 4;
+//
+//			$input .= '<textarea name="' . $name . '"   rows="' . $rows . '"
+//			          class="' . $class . '" placeholder="' . $placeholder . '" id="' . $id . '">' . esc_textarea( $value ) . '</textarea>';
+//			break;
+//
+//		case 'checkbox':
+//			$label = isset( $attr['label'] ) ? $attr['label'] : '';
+//			$class = $class == 'form-control' ? '' : $class;
+//
+//			$input .= '<div class=""><label class="' . $class . '" for="' . $name . '"><input ' . $disabled . '  class="' . $class . '" name="' . $name . '"  value="' . $default_value . '" type="checkbox"  id="' . $id . '" ' . checked( $value, $default_value, false ) . '/> ' . $label . '</label></div>';
+//
+//			break;
+//
+//		case 'select':
+//			$options = is_array( $attr['options'] ) ? $attr['options'] : array();
+//			$input   .= '<select name="' . $name . '"  class="' . $class . '" id="' . $id . '">';
+//			foreach ( $options as $key => $label ) {
+//				$input .= '<option
+//						value="' . esc_attr( $key ) . '" ' . selected( $value, $key, false ) . '>' . $label . '</option>';
+//			}
+//			$input .= '</select>';
+//			break;
+//
+//		case 'number':
+//			$min  = isset( $attr['min'] ) ? $attr['min'] : 0;
+//			$max  = isset( $attr['max'] ) ? $attr['max'] : '';
+//			$step = isset( $attr['step'] ) ? $attr['step'] : 'any';
+//
+//			$input .= '<input ' . $required . ' type="number" name="' . $name . '"
+//			                                value="' . esc_attr( $value ) . '" class="' . $class . '"
+//			                                placeholder="' . $placeholder . '"
+//			                                min="' . esc_attr( $min ) . '"
+//			                                max="' . esc_attr( $max ) . '"
+//			                                step="' . esc_attr( $step ) . '"
+//			                                id="' . $id . '">';
+//			break;
+//
+//		case 'radio':
+//			$options = is_array( $attr['options'] ) ? $attr['options'] : array();
+//			$class   = $class == 'form-control' ? '' : $class;
+//			foreach ( $options as $key => $label ) {
+//				$input .= '<label class="' . $class . '" for="' . $key . '">
+//					<input name="' . $name . '"  value="' . $key . '"
+//					       type="radio"' . checked( $value, $key, false ) . '>
+//					' . $label . '
+//				</label>';
+//			}
+//			break;
+//
+//		case 'content':
+//			$input .= $content;
+//	}
+//
+//	return $input;
+//}
 function fed_input_box( $meta_key, $attr = array(), $type = 'text' ) {
-	$placeholder = isset( $attr['placeholder'] ) ? esc_attr( $attr['placeholder'] ) : '';
-	//$class         = isset( $attr['class'] ) ? esc_attr( $attr['class'] ) : '';
-	$class         = isset( $attr['class'] ) && $attr['class'] != '' ? 'form-control ' . esc_attr( $attr['class'] ) : 'form-control';
-	$name          = isset( $attr['name'] ) ? esc_attr( $attr['name'] ) : $meta_key;
-	$value         = isset( $attr['value'] ) ? $attr['value'] : '';
-	$required      = isset( $attr['required'] ) && $attr['required'] == 'true' ? 'required="required"' : '';
-	$id            = isset( $attr['id'] ) ? $attr['id'] : '';
-	$default_value = isset( $attr['default_value'] ) && $attr['default_value'] != '' ? $attr['default_value'] : 'yes';
-	$input         = '';
-	$disabled      = isset( $attr['disabled'] ) && $attr['disabled'] == 'disabled' ? 'disabled=disabled' : '';
-	$readonly      = isset( $attr['readonly'] ) && $attr['readonly'] == 'readonly' ? 'readonly=readonly' : '';
-
-	$extra     = isset( $attr['extra'] ) ? ( $attr['extra'] ) : '';
-	$mode      = isset( $attr['extended']['date_mode'] ) && $attr['extended']['date_mode'] != '' ? esc_attr( $attr['extended']['date_mode'] ) : 'range';
-	$image_wxh = isset( $attr['image_wxh'] ) && count( $attr['image_wxh'] ) == 2 ? $attr['image_wxh'] : 'thumbnail';
-	$content   = isset( $attr['content'] ) ? $attr['content'] : '';
-
-	switch ( $type ) {
-
-		case 'text':
-			$input .= '<input ' . $required . ' type="text" name="' . $name . '"  value="' . esc_attr( $value ) . '" class="' . $class . '" placeholder="' . $placeholder . '" id="' . $id . '" ' . $extra . '>';
-			break;
-
-		case 'hidden':
-			$input .= '<input type="hidden" name="' . $name . '"  value="' . esc_attr( $value ) . '" class="' . $class . '" id="' . $id . '">';
-			break;
-
-		case 'readonly':
-			$input .= '<input readonly type="text" name="' . $name . '"  value="' . esc_attr( $value ) . '" class="' . $class . '" id="' . $id . '">';
-			break;
-
-		case 'email':
-			$input .= '<input ' . $required . ' type="email" name="' . $name . '"   value="' . esc_attr( $value ) . '" class="' . $class . '" placeholder="' . $placeholder . '" id="' . $id . '">';
-			break;
-
-		case 'password':
-			$input .= '<input ' . $required . ' type="password" name="' . $name . '"    class="' . $class . '" placeholder="' . $placeholder . '" id="' . $id . '">';
-			break;
-
-		case 'url':
-			$input .= '<input ' . $required . ' type="url"  placeholder="' . $placeholder . '"  name=" ' . $name . '"    class="' . $class . '"  id="' . $id . '" value="' . esc_attr( $value ) . '" >';
-			break;
-
-		case 'date':
-			$input .= '<input ' . $required . ' type="text" name="' . $name . '"  data-date-format="F j, Y h:i K" data-alt-input="true" data-mode="' . $mode . '"    class="flatpickr ' . $class . '"  id="' . $id . '" value="' . esc_attr( $value ) . '">';
-			break;
-
-		case 'color':
-			if ( $value == '' ) {
-				$value = '#000000';
-			}
-			$input .= '<input ' . $required . ' type="text" name="' . $name . '"    class="jscolor {hash:true} ' . $class . '"  id="' . $id . '"  value="' . esc_attr( $value ) . '" >';
-			break;
-
-		case 'file':
-			if ( is_array( $image_wxh ) ) {
-				$width_height = 'style="width:' . $image_wxh[0] . 'px; height:' . $image_wxh[1] . 'px"';
-			} else {
-				$width_height = '';
-			}
-			if ( $value != '' ) {
-				$value = (int) $value;
-				$img   = wp_get_attachment_image( $value, $image_wxh );
-				if ( $img == '' ) {
-					$img = '<span class="fed_upload_icon fa-2x fa fa-upload" ></span>';
-				}
-			} else {
-				$value = '';
-				$img   = '<span class="fed_upload_icon fa-2x fa fa-upload"></span>';
-			}
-
-			$input .= '<div ' . $width_height . ' class="fed_upload_container text-center ' . $class . '" id="' . $id . '">
-<div class="fed_upload_image_container">' . $img . '</div>
-<input type="hidden" name=" ' . $name . '" class="fed_upload_input" value="' . (int) $value . '"  />
-						</div>';
-			break;
-
-		case 'textarea':
-			$rows = isset( $attr['rows'] ) ? absint( $attr['rows'] ) : 4;
-
-			$input .= '<textarea name="' . $name . '"   rows="' . $rows . '"
-			          class="' . $class . '" placeholder="' . $placeholder . '" id="' . $id . '">' . esc_textarea( $value ) . '</textarea>';
-			break;
-
-		case 'checkbox':
-			$label = isset( $attr['label'] ) ? $attr['label'] : '';
-			$class = $class == 'form-control' ? '' : $class;
-
-			$input .= '<div class=""><label class="' . $class . '" for="' . $name . '"><input ' . $disabled . '  class="' . $class . '" name="' . $name . '"  value="' . $default_value . '" type="checkbox"  id="' . $id . '" ' . checked( $value, $default_value, false ) . '/> ' . $label . '</label></div>';
-
-			break;
-
-		case 'select':
-			$options = is_array( $attr['options'] ) ? $attr['options'] : array();
-			$input   .= '<select name="' . $name . '"  class="' . $class . '" id="' . $id . '">';
-			foreach ( $options as $key => $label ) {
-				$input .= '<option
-						value="' . esc_attr( $key ) . '" ' . selected( $value, $key, false ) . '>' . $label . '</option>';
-			}
-			$input .= '</select>';
-			break;
-
-		case 'number':
-			$min  = isset( $attr['min'] ) ? $attr['min'] : 0;
-			$max  = isset( $attr['max'] ) ? $attr['max'] : '';
-			$step = isset( $attr['step'] ) ? $attr['step'] : 'any';
-
-			$input .= '<input ' . $required . ' type="number" name="' . $name . '" 
-			                                value="' . esc_attr( $value ) . '" class="' . $class . '"
-			                                placeholder="' . $placeholder . '"
-			                                min="' . esc_attr( $min ) . '"
-			                                max="' . esc_attr( $max ) . '"
-			                                step="' . esc_attr( $step ) . '"
-			                                id="' . $id . '">';
-			break;
-
-		case 'radio':
-			$options = is_array( $attr['options'] ) ? $attr['options'] : array();
-			$class   = $class == 'form-control' ? '' : $class;
-			foreach ( $options as $key => $label ) {
-				$input .= '<label class="' . $class . '" for="' . $key . '">
-					<input name="' . $name . '"  value="' . $key . '"
-					       type="radio"' . checked( $value, $key, false ) . '>
-					' . $label . '
-				</label>';
-			}
-			break;
-
-		case 'content':
-			$input .= $content;
+	/**
+	 * Break it, if the input meta doesn't exist
+	 */
+	if ( empty( $meta_key ) ) {
+		wp_die( 'Please add input meta key' );
 	}
 
-	return $input;
+	$values                = array();
+	$values['placeholder'] = isset( $attr['placeholder'] ) && ! empty( $attr['placeholder'] ) ? esc_attr( $attr['placeholder'] ) : '';
+	$values['label']       = isset( $attr['label'] ) && ! empty( $attr['label'] ) ? strip_tags( $attr['label'],'<i><b>' ) : '';
+	$values['class_name']  = isset( $attr['class'] ) && ! empty( $attr['class'] ) ? esc_attr( $attr['class'] ) : '';
+
+	$values['user_value'] = isset( $attr['value'] ) && ! empty( $attr['value'] ) ? esc_attr( $attr['value'] ) : '';
+	$values['input_min']  = isset( $attr['min'] ) && ! empty( $attr['min'] ) ? esc_attr( $attr['min'] ) : 0;
+	$values['input_max']  = isset( $attr['max'] ) && ! empty( $attr['max'] ) ? esc_attr( $attr['max'] ) : 99999;
+	$values['input_step'] = isset( $attr['step'] ) && ! empty( $attr['step'] ) ? esc_attr( $attr['step'] ) : 'any';
+
+	$values['is_required']   = isset( $attr['is_required'] ) && $attr['required'] == 'true' ? 'required="required"' : '';
+	$values['id_name']       = isset( $attr['id'] ) && ! empty( $attr['id'] ) ? esc_attr( $attr['id'] ) : '';
+	$values['readonly']      = isset( $attr['readonly'] ) && $attr['readonly'] === true ? true : '';
+	$values['user_value']    = isset( $attr['value'] ) && ! empty( $attr['value'] ) ? esc_attr( $attr['value'] ) : '';
+	$values['input_value']   = isset( $attr['options'] ) && ! empty( $attr['options'] ) ? $attr['options'] : '';
+	$values['disabled']      = isset( $attr['disabled'] ) && ! empty( $attr['disabled'] ) ? esc_attr( $attr['disabled'] ) : '';
+	$values['default_value'] = isset( $attr['default_value'] ) && ! empty( $attr['default_value'] ) ? esc_attr( $attr['default_value'] ) : 'yes';
+	$values['extra']         = isset( $attr['extra'] ) ? $attr['extra'] : '';
+	$values['extended']      = isset( $attr['extended'] ) && ! empty( $attr['extended'] ) ? esc_attr( $attr['extended'] ) : array();
+	$values['input_type']    = $type;
+	$values['input_meta']    = isset( $attr['name'] ) ? $attr['name'] : $meta_key;
+	$values['content']       = isset( $attr['content'] ) ? $attr['content'] : '';
+
+	return fed_get_input_details( $values );
 }
 
 /**

@@ -37,7 +37,7 @@ function fed_admin_input_fields_multi_line($row, $action ) {
 
                                 <div class="form-group col-md-4">
                                     <label for=""><?php _e( 'Textarea Row', 'fed' ) ?></label>
-				                    <?php echo fed_input_box( 'input_row', array( 'value' => $row['input_row'] ), 'text' ); ?>
+				                    <?php echo fed_input_box( 'input_row', array( 'value' => $row['input_row'] ), 'single_line' ); ?>
                                 </div>
                             </div>
 		                    <?php
@@ -45,7 +45,7 @@ function fed_admin_input_fields_multi_line($row, $action ) {
 
 		                    fed_get_admin_up_role_based($row, $action );
 
-		                    fed_get_input_type_and_submit_btn( 'textarea', $action );
+		                    fed_get_input_type_and_submit_btn( 'multi_line', $action );
 		                    ?>
                         </div>
                     </div>

@@ -87,8 +87,7 @@ function fed_add_new_user_input() {
 			}
 			$row      = fed_process_user_profile( $rows, $action );
 			$selected = $row['input_type'];
-		}
-		else {
+		} else {
 			$row = fed_get_empty_value_for_user_profile( $action );
 		}
 	}
@@ -173,8 +172,10 @@ function fed_get_admin_up_role_based( $row, $action ) {
 		<div class="col-md-12">
 			<label><?php _e( 'Select user role to show this input field', 'fed' ) ?></label>
 		</div>
-		<?php foreach ( $all_roles as $key => $role ) {
-			$c_value = in_array( $key, $row['user_role'] ) ? 'Enable' : 'Disable';
+		<?php
+
+		foreach ( $all_roles as $key => $role ) {
+			$c_value = in_array( $key, $row['user_role'],false ) ? 'Enable' : 'Disable';
 			?>
 			<div class="col-md-2">
 				<?php echo fed_input_box( 'user_role', array(
@@ -192,7 +193,7 @@ function fed_get_admin_up_role_based( $row, $action ) {
 				<label><?php _e( 'Menu Location', 'fed' ) ?></label>
 				<?php echo fed_input_box( 'menu', array(
 					'default_value' => 'Enable',
-					'label'         => __('Menu Location','fed'),
+					'label'         => __( 'Menu Location', 'fed' ),
 					'value'         => $row['menu'],
 					'options'       => $options
 				), 'select' ); ?>
@@ -202,7 +203,7 @@ function fed_get_admin_up_role_based( $row, $action ) {
 				<div class="form-group col-md-4 fed_show_user_profile">
 					<?php echo fed_input_box( 'show_user_profile', array(
 						'default_value' => 'Disable',
-						'label'         => __('Disable in User Profile?','fed'),
+						'label'         => __( 'Disable in User Profile?', 'fed' ),
 						'value'         => $row['show_user_profile'],
 					), 'checkbox' ); ?>
 				</div>
@@ -224,8 +225,8 @@ function fed_get_admin_up_display_permission( $row, $action, $type = '' ) {
 	?>
 	<div class="row fed_admin_up_display_permission">
 		<?php
-		if ( $action == 'profile' ) {
-			if ( $type == 'file' ) {
+		if ( $action === 'profile' ) {
+			if ( $type === 'file' ) {
 				$value        = 'Disable';
 				$others       = 'disabled';
 				$notification = '<i class="fa fa-info bg-info-font" data-toggle="popover" data-trigger="hover" title=" Status" data-content="Only registered user can upload the files."></i>';
@@ -236,11 +237,11 @@ function fed_get_admin_up_display_permission( $row, $action, $type = '' ) {
 			} ?>
 			<div class="form-group col-md-4">
 				<?php echo fed_input_box( 'show_register', array(
-						'default_value' => 'Enable',
-						'label'         => __('Show this field on Register Form','fed').$notification,
-						'value'         => $value,
-						'disabled'      => $others
-					), 'checkbox' );
+					'default_value' => 'Enable',
+					'label'         => __( 'Show this field on Register Form', 'fed' ) .' ' .$notification,
+					'value'         => $value,
+					'disabled'      => $others
+				), 'checkbox' );
 
 				?>
 
@@ -295,7 +296,7 @@ function fed_get_admin_up_label_input_order( $row ) {
 			<?php echo fed_input_box( 'label_name', array(
 				'class' => 'form-control ' . $change . ' ',
 				'value' => $row['label_name']
-			), 'text' ); ?>
+			), 'single_line' ); ?>
 		</div>
 
 		<div class="form-group col-md-6">
@@ -342,9 +343,10 @@ function fed_get_admin_up_input_meta( $row ) {
 		<?php
 		if ( fed_check_field_is_belongs_to_extra( $row['input_meta'] ) ) {
 			echo fed_input_box( 'input_meta', array(
-				'class' => 'fed_admin_input_meta form-control',
-				'value' => $row['input_meta'],
-			), 'readonly' );
+				'class'    => 'fed_admin_input_meta form-control',
+				'value'    => $row['input_meta'],
+				'readonly' => true,
+			), 'single_line' );
 
 			echo fed_input_box( 'fed_extra', array(
 				'value' => $row['input_meta'],
@@ -353,7 +355,7 @@ function fed_get_admin_up_input_meta( $row ) {
 			echo fed_input_box( 'input_meta', array(
 				'class' => 'fed_admin_input_meta form-control',
 				'value' => $row['input_meta']
-			), 'text' );
+			), 'single_line' );
 		}
 		?>
 	</div>

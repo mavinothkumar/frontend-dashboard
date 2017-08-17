@@ -40,7 +40,7 @@ function fed_admin_input_fields_single_line($row, $action ) {
 
 		                    fed_get_admin_up_role_based( $row, $action );
 
-		                    fed_get_input_type_and_submit_btn( 'text', $action );
+		                    fed_get_input_type_and_submit_btn( 'single_line', $action );
 		                    ?>
                         </div>
                     </div>

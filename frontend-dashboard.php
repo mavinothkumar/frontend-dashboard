@@ -53,6 +53,10 @@ define( 'BC_FED_MENU_DB', 'fed_menu' );
  * Post Fields
  */
 define( 'BC_FED_POST_DB', 'fed_post' );
+/**
+ * Plugin URL
+ */
+define('BC_FED_API_PLUGIN_LIST','https://buffercode/api/v1/fed/plugin_list');
 
 
 require_once BC_FED_PLUGIN_DIR . '/admin/install/install.php';
@@ -158,6 +162,7 @@ require_once BC_FED_PLUGIN_DIR . '/admin/layout/error.php';
 require_once BC_FED_PLUGIN_DIR . '/admin/layout/dashboard_menu.php';
 require_once BC_FED_PLUGIN_DIR . '/admin/layout/help.php';
 require_once BC_FED_PLUGIN_DIR . '/admin/layout/status.php';
+require_once BC_FED_PLUGIN_DIR . '/admin/layout/plugins.php';
 
 
 
