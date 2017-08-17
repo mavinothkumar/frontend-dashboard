@@ -20,24 +20,42 @@ function fed_admin_help() {
 								<div class="row">
 									<div class="col-md-12">
 										<h4>Please follow the below steps to configure the frontend dashboard.</h4>
-												<p>Please create the pages for all in one login or for individual [login, register, forgot password and dashboard]</p>
-										<p><b>If you want to create all in one login page then </b></p>
+										<p>Please create the pages for all in one login or for individual [login,
+											register, forgot password and dashboard]
+										</p>
+										<p>
+											<b>If you want to create all in one login page then</b>
+										</p>
 										<p>1. Please go to Admin Dashboard | Pages | Add New Pages</p>
 										<p>2. Give appropriate title</p>
 										<p>3. Add shortcode in content area [fed_login]</p>
 										<p>4. Change Page Attributes Template to FED Login [In Right Column]</p>
-										<p><b>If you are want to create single page for login, register and forgot password then</b></p>
+										<p>
+											<b>If you are want to create single page for login, register and forgot
+												password then
+											</b>
+										</p>
 										<p>1. Please go to Admin Dashboard | Pages | Add New Pages</p>
 										<p>2. Give appropriate title [As we are creating for Login Page]</p>
 										<p>3. Add shortcode in content area [fed_login_only]</p>
 										<p>4. Change Page Attributes Template to FED Login [In Right Column]</p>
-										<p>5. For Register and Forgot Password, create the pages similar to above mentioned instruction and add the shortcode for Register [fed_register_only] and for Forgot password [fed_forgot_password_only] and save.</p>
-										<p><b>To create the dashboard page</b></p>
+										<p>5. For Register and Forgot Password, create the pages similar to above
+											mentioned instruction and add the shortcode for Register [fed_register_only]
+											and for Forgot password [fed_forgot_password_only] and save.
+										</p>
+										<p>
+											<b>To create the dashboard page</b>
+										</p>
 										<p>1. Please go to Admin Dashboard | Pages | Add New Pages</p>
 										<p>2. Give appropriate title</p>
 										<p>3. Add shortcode in content area [fed_dashboard]</p>
 										<p>4. Change Page Attributes Template to FED Login [In Right Column]</p>
-										<p><b>Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settings (Tab) | Please change the appropriate pages for the settings and do save.</b></p>
+										<p>
+											<b>Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) |
+												Settings (Tab) | Please change the appropriate pages for the settings
+												and do save.
+											</b>
+										</p>
 
 
 									</div>
@@ -101,35 +119,51 @@ function fed_admin_help() {
 						<div id="filters" class="panel-collapse collapse" role="tabpanel" aria-labelledby="fed_filters">
 							<div class="panel-body">
 								<b>Note: This is not completely documented</b>
-								<ol>
-									<li class="col-md-4">fed_admin_input_item_options</li>
-									<li class="col-md-4">fed_admin_input_items</li>
-									<li class="col-md-4">fed_empty_value_for_user_profile</li>
-									<li class="col-md-4">fed_no_update_fields</li>
-									<li class="col-md-4">fed_payment_sources</li>
-									<li class="col-md-4">fed_plugin_versions</li>
-									<li class="col-md-4">fed_input_mandatory_required_fields</li>
-									<li class="col-md-4">fed_login_form_filter</li>
-									<li class="col-md-4">fed_registration_mandatory_fields</li>
-									<li class="col-md-4">fed_login_mandatory_fields</li>
-									<li class="col-md-4">fed_admin_dashboard_settings_menu_header</li>
-									<li class="col-md-4">fed_frontend_main_menu</li>
-									<li class="col-md-4">fed_admin_settings_upl</li>
-									<li class="col-md-4">fed_restrictive_menu_names</li>
-									<li class="col-md-4">fed_admin_login</li>
-									<li class="col-md-4">fed_admin_settings_post</li>
-									<li class="col-md-4">fed_register_form_submit</li>
-									<li class="col-md-4">fed_user_extra_fields_registration</li>
-									<li class="col-md-4">fed_get_date_formats_filter</li>
-									<li class="col-md-4">fed_default_extended_fields</li>
-									<li class="col-md-4">fed_admin_script_loading_pages</li>
-									<li class="col-md-4">fed_update_post_status</li>
-									<li class="col-md-4">fed_extend_country_code</li>
-									<li class="col-md-4">fed_customize_admin_post_options</li>
-									<li class="col-md-4">fed_customize_admin_login_options</li>
-									<li class="col-md-4">fed_customize_admin_user_options</li>
-									<li class="col-md-4">fed_customize_admin_user_profile_layout_options</li>
-								</ol>
+								<div class="row">
+									<div class="col-md-12">
+										<b>From version 1.0</b>
+									</div>
+									<div class="col-md-4">fed_admin_input_item_options</div>
+									<div class="col-md-4">fed_admin_input_items</div>
+									<div class="col-md-4">fed_empty_value_for_user_profile</div>
+									<div class="col-md-4">fed_no_update_fields</div>
+									<div class="col-md-4">fed_payment_sources</div>
+									<div class="col-md-4">fed_plugin_versions</div>
+									<div class="col-md-4">fed_input_mandatory_required_fields</div>
+									<div class="col-md-4">fed_login_form_filter</div>
+									<div class="col-md-4">fed_registration_mandatory_fields</div>
+									<div class="col-md-4">fed_login_mandatory_fields</div>
+									<div class="col-md-4">fed_admin_dashboard_settings_menu_header</div>
+									<div class="col-md-4">fed_frontend_main_menu</div>
+									<div class="col-md-4">fed_admin_settings_upl</div>
+									<div class="col-md-4">fed_restrictive_menu_names</div>
+									<div class="col-md-4">fed_admin_login</div>
+									<div class="col-md-4">fed_admin_settings_post</div>
+									<div class="col-md-4">fed_register_form_submit</div>
+									<div class="col-md-4">fed_user_extra_fields_registration</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-md-12">
+										<b>From version 1.1</b>
+									</div>
+									<div class="col-md-4">fed_get_date_formats_filter</div>
+									<div class="col-md-4">fed_default_extended_fields</div>
+									<div class="col-md-4">fed_admin_script_loading_pages</div>
+									<div class="col-md-4">fed_update_post_status</div>
+									<div class="col-md-4">fed_extend_country_code</div>
+									<div class="col-md-4">fed_customize_admin_post_options</div>
+									<div class="col-md-4">fed_customize_admin_login_options</div>
+									<div class="col-md-4">fed_customize_admin_user_options</div>
+									<div class="col-md-4">fed_customize_admin_user_profile_layout_options</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-md-12">
+										<b>From version 1.1.2</b>
+									</div>
+									<div class="col-md-4">fed_process_author_custom_details</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -144,29 +178,33 @@ function fed_admin_help() {
 						<div id="actions" class="panel-collapse collapse" role="tabpanel" aria-labelledby="fed_actions">
 							<div class="panel-body">
 								<b>Note: This is not completely documented</b>
-								<ol>
-									<li class="col-md-4">fed_admin_settings_login_action</li>
-									<li class="col-md-4">fed_before_dashboard_container</li>
-									<li class="col-md-4">fed_after_dashboard_container</li>
-									<li class="col-md-4">fed_before_login_only_form</li>
-									<li class="col-md-4">fed_after_login_only_form</li>
-									<li class="col-md-4">fed_add_main_sub_menu</li>
-									<li class="col-md-4">fed_show_support_button_at_user_profile</li>
-									<li class="col-md-4">fed_user_profile_below</li>
-									<li class="col-md-4">fed_before_login_form</li>
-									<li class="col-md-4">fed_after_login_form</li>
-									<li class="col-md-4">fed_before_forgot_password_only_form</li>
-									<li class="col-md-4">fed_after_forgot_password_only_form</li>
-									<li class="col-md-4">fed_login_form_submit_custom</li>
-									<li class="col-md-4">fed_before_register_only_form</li>
-									<li class="col-md-4">fed_after_register_only_form</li>
-									<li class="col-md-4">fed_admin_login_settings_template</li>
-									<li class="col-md-4">fed_admin_input_fields_container_extra</li>
-									<li class="col-md-4">fed_admin_login_settings_template</li>
-									<li class="col-md-4">fed_admin_menu_status_version_below</li>
-									<li class="col-md-4">fed_admin_menu_status_database_below</li>
-									<li class="col-md-4">fed_admin_menu_status_below</li>
-								</ol>
+								<div class="row">
+									<div class="col-md-12">
+										<b>From version 1.0</b>
+									</div>
+									<div class="col-md-4">fed_admin_settings_login_action</div>
+									<div class="col-md-4">fed_before_dashboard_container</div>
+									<div class="col-md-4">fed_after_dashboard_container</div>
+									<div class="col-md-4">fed_before_login_only_form</div>
+									<div class="col-md-4">fed_after_login_only_form</div>
+									<div class="col-md-4">fed_add_main_sub_menu</div>
+									<div class="col-md-4">fed_show_support_button_at_user_profile</div>
+									<div class="col-md-4">fed_user_profile_below</div>
+									<div class="col-md-4">fed_before_login_form</div>
+									<div class="col-md-4">fed_after_login_form</div>
+									<div class="col-md-4">fed_before_forgot_password_only_form</div>
+									<div class="col-md-4">fed_after_forgot_password_only_form</div>
+									<div class="col-md-4">fed_login_form_submit_custom</div>
+									<div class="col-md-4">fed_before_register_only_form</div>
+									<div class="col-md-4">fed_after_register_only_form</div>
+									<div class="col-md-4">fed_admin_login_settings_template</div>
+									<div class="col-md-4">fed_admin_input_fields_container_extra</div>
+									<div class="col-md-4">fed_admin_login_settings_template</div>
+									<div class="col-md-4">fed_admin_menu_status_version_below</div>
+									<div class="col-md-4">fed_admin_menu_status_database_below</div>
+									<div class="col-md-4">fed_admin_menu_status_below</div>
+								</div>
+
 							</div>
 						</div>
 					</div>
