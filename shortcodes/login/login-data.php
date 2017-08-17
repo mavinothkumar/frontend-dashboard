@@ -24,7 +24,7 @@ function fed_login_only() {
 		'content'  => array(
 			'user_login'    => array(
 				'name'        => 'User Name',
-				'input'       => fed_input_box( 'user_login', array( 'placeholder' => 'User Name' ), 'text' ),
+				'input'       => fed_input_box( 'user_login', array( 'placeholder' => 'User Name' ), 'single_line' ),
 				'input_order' => 7
 			),
 			'user_password' => array(
@@ -90,7 +90,7 @@ function fed_forgot_password_only() {
 		'content'  => array(
 			'user_email' => array(
 				'name'        => 'User Name / Email Address',
-				'input'       => fed_input_box( 'user_login', array( 'placeholder' => 'User Name / Email Address' ), 'text' ),
+				'input'       => fed_input_box( 'user_login', array( 'placeholder' => 'User Name / Email Address' ), 'single_line' ),
 				'input_order' => 7
 			),
 		),

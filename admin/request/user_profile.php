@@ -30,7 +30,6 @@ function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
 
 		if ( null !== $duplicate ) {
 			wp_send_json_error( array( 'message' => 'Sorry, you have previously added ' . strtoupper( $duplicate->label_name ) . ' with input type ' . strtoupper( $duplicate->input_type ) ) );
-			exit();
 		}
 
 		/**
@@ -40,11 +39,9 @@ function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
 
 		if ( $status === false ) {
 			wp_send_json_error( array( 'message' => __( 'Sorry no record found to update your new details', 'fed' ) ) );
-			exit();
 		}
 
 		wp_send_json_success( array( 'message' => $request['label_name'] . ' has been successfully updated' ) );
-		exit();
 	} else {
 		/**
 		 * Check for input meta already exist

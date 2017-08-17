@@ -528,6 +528,12 @@ Loader
     border: 1px solid #e0e0e0;
     cursor: pointer;
 }
+.bc_fed.fed_plugins .thumbnail > img, .bc_fed.fed_plugins .thumbnail a > img {
+    width: 100% !important;
+}
+.bc_fed.fed_plugins .thumbnail {
+    padding:0 !important;
+}
 .bc_fed .fed_buttons_container .fed_button.active {
     background-color: #00B5AD;
     color: white;

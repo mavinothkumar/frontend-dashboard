@@ -137,7 +137,7 @@ function fed_display_dashboard_add_new_post( $post ) {
     <div class="row fed_dashboard_item_field">
         <div class="col-md-12">
         <div class="fed_header_font_color">' . __( 'Post Title' ) . '</div>
-            ' . fed_input_box( 'post_title', array( 'placeholder' => 'Post Title' ), 'text' ) . '
+            ' . fed_input_box( 'post_title', array( 'placeholder' => 'Post Title' ), 'single_line' ) . '
         </div>
 
     </div>
@@ -472,7 +472,7 @@ function fed_display_dashboard_edit_post_by_id( $post ) {
             ' . fed_input_box( 'post_title', array(
 			'value'       => esc_attr( $post->post_title ),
 			'placeholder' => 'Post Title'
-		), 'text' ) . '
+		), 'single_line' ) . '
         </div>
 
     </div>

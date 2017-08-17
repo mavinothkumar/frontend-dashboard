@@ -26,7 +26,7 @@ function fed_admin_post_menu_tab( $fed_admin_options ) {
 							'name'        => 'fed_post_options[menu][rename_post]',
 							'placeholder' => __( 'Please enter new name for Post' ),
 							'value'       => isset( $fed_admin_options['menu']['rename_post'] ) ? $fed_admin_options['menu']['rename_post'] : 'Post'
-						), 'text' ) ?>
+						), 'single_line' ) ?>
                     </div>
                 </div>
                 <div class="row">
@@ -48,7 +48,7 @@ function fed_admin_post_menu_tab( $fed_admin_options ) {
 							'value'       => isset( $fed_admin_options['menu']['post_menu_icon'] ) ? $fed_admin_options['menu']['post_menu_icon'] : 'fa fa-file-text',
 							'class'       => 'post_menu_icon',
 							'extra'       => 'data-toggle="modal" data-target=".fed_show_fa_list" placeholder="Menu Icon" data-fed_menu_box_id="post_menu_icon"'
-						), 'text' ) ?>
+						), 'single_line' ) ?>
                     </div>
                 </div>
             </div>

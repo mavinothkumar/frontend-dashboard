@@ -250,7 +250,7 @@ jQuery(document).ready(function ($) {
 
 
         }
-        e.preventDefault;
+        e.preventDefault();
     });
 
     $('.fed_add_edit_input_container .fed_button.active').trigger('click');

@@ -124,123 +124,90 @@ function fed_profile_enable_disable( $condition = '', $type = '' ) {
  * @return string
  */
 function fed_get_input_details( $attr ) {
+	$values                  = array();
+	$values['placeholder']   = isset( $attr['placeholder'] ) && $attr['placeholder'] != '' ? esc_attr( $attr['placeholder'] ) : '';
+	$values['input_type']    = isset( $attr['input_type'] ) && $attr['input_type'] != '' ? esc_attr( $attr['input_type'] ) : 'text';
+	$values['class']         = isset( $attr['class_name'] ) && $attr['class_name'] != '' ? 'form-control ' . esc_attr( $attr['class_name'] ) : 'form-control';
+	$values['name']          = isset( $attr['input_meta'] ) && $attr['input_meta'] != '' ? esc_attr( $attr['input_meta'] ) : 'BUG';
+	$values['value']         = isset( $attr['user_value'] ) && $attr['user_value'] != '' ? $attr['user_value'] : '';
+	$values['required']      = isset( $attr['is_required'] ) && $attr['is_required'] == 'true' ? 'required="required"' : '';
+	$values['id']            = isset( $attr['id_name'] ) && $attr['id_name'] != '' ? $attr['id_name'] : '';
+	$values['default_value'] = isset( $attr['default_value'] ) && $attr['default_value'] != '' ? $attr['default_value'] : 'yes';
+	$input                   = '';
+	$values['readonly']      = isset( $attr['readonly'] ) && $attr['readonly'] === true ? 'readonly=readonly' : '';
+	$values['disabled']      = isset( $attr['disabled'] ) && $attr['disabled'] === true ? 'disabled=disabled' : '';
 
-	$placeholder = isset( $attr['placeholder'] ) && $attr['placeholder'] != '' ? esc_attr( $attr['placeholder'] ) : '';
-	$class       = isset( $attr['class_name'] ) && $attr['class_name'] != '' ? 'form-control ' . esc_attr( $attr['class_name'] ) : 'form-control';
-	$name        = isset( $attr['input_meta'] ) && $attr['input_meta'] != '' ? esc_attr( $attr['input_meta'] ) : $attr['input_meta'];
-	$value       = isset( $attr['user_value'] ) && $attr['user_value'] != '' ? $attr['user_value'] : '';
-	$required    = isset( $attr['is_required'] ) && $attr['is_required'] == 'true' ? 'required="required"' : '';
-//	$required = isset( $attr['is_required'] ) && $attr['is_required'] == 'true' ? '' : '';
-	$id       = isset( $attr['id_name'] ) && $attr['id_name'] != '' ? $attr['id_name'] : '';
-	$input    = '';
-	$readonly = isset( $attr['readonly'] ) && $attr['readonly'] != '' ? esc_attr( $attr['readonly'] ) : '';
+	$label              = isset( $attr['label'] ) ? $attr['label'] : '';
+	$values['extended'] = isset( $attr['extended'] ) ? ( is_string( $attr['extended'] ) ? unserialize( $attr['extended'] ) : $attr['extended'] ) : array();
 
-	$attr['extended'] = isset( $attr['extended'] ) ? ( is_string( $attr['extended'] ) ? unserialize( $attr['extended'] ) : $attr['extended'] ) : array();
+	$values['extra'] = isset( $attr['extra'] ) ? $attr['extra'] : '';
 
-	$altFormat = isset( $attr['extended']['date_format'] ) && $attr['extended']['date_format'] != '' ? esc_attr( $attr['extended']['date_format'] ) : 'm-d-Y';
-
-	$dateFormat = isset( $attr['extended']['date_format'] ) && $attr['extended']['date_format'] != '' ? esc_attr( $attr['extended']['date_format'] ) : 'm-d-Y';
-
-	$mode = isset( $attr['extended']['date_mode'] ) && $attr['extended']['date_mode'] != '' ? esc_attr( $attr['extended']['date_mode'] ) : 'single';
-
-	$enableTime = isset( $attr['extended']['enable_time'] ) && $attr['extended']['enable_time'] != '' ? esc_attr( $attr['extended']['enable_time'] ) : false;
-
-	$time_24hr = isset( $attr['extended']['time_24hr'] ) && $attr['extended']['time_24hr'] != '' ? esc_attr( $attr['extended']['time_24hr'] ) : false;
-
-	switch ( $attr['input_type'] ) {
+	switch ( $values['input_type'] ) {
 		case 'single_line':
-			$input .= '<input ' . $readonly . ' ' . $required . ' type="text" name=" ' . $name . '"  value="' . esc_attr( $value ) . '" class="' . $class . '" placeholder="' . $placeholder . '" id="' . $id . '">';
+			$input .= '<input ' . $values['disabled'] . $values['extra'] . $values['readonly'] . ' ' . $values['required'] . ' type="text" name=" ' . $values['name'] . '"  value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '" id="' . $values['id'] . '">';
 			break;
+
 		case 'hidden':
-			$input .= '<input ' . $readonly . ' ' . $required . ' type="hidden" name=" ' . $name . '"  value="' . esc_attr( $value ) . '" class="' . $class . '" placeholder="' . $placeholder . '" id="' . $id . '">';
+			$input .= '<input ' . $values['disabled'] . $values['extra'] . $values['readonly'] . ' ' . $values['required'] . ' type="hidden" name=" ' . $values['name'] . '"  value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '" id="' . $values['id'] . '">';
 			break;
+
 		case 'email':
-			$input .= '<input ' . $readonly . ' ' . $required . ' type="email" name=" ' . $name . '"   value="' . esc_attr( $value ) . '" class="' . $class . '" placeholder="' . $placeholder . '" id="' . $id . '">';
+			$input .= '<input ' . $values['disabled'] . $values['extra'] . $values['readonly'] . ' ' . $values['required'] . ' type="email" name=" ' . $values['name'] . '"   value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '" id="' . $values['id'] . '">';
 			break;
+
 		case 'password':
-			$input .= '<input ' . $required . ' type="password" name=" ' . $name . '"    class="' . $class . '" placeholder="' . $placeholder . '" id="' . $id . '">';
+			$input .= '<input ' . $values['disabled'] . $values['extra'] . $values['required'] . ' type="password" name=" ' . $values['name'] . '"    class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '" id="' . $values['id'] . '">';
 			break;
-		case 'date':
-			$input .= '<input type="text" ' . $required . ' data-date-format="F j, Y h:i K" data-alt-format="' . $dateFormat . '" data-alt-input="true" data-mode="' . $mode . '" placeholder="' . $altFormat . '" data-enable-time="' . $enableTime . '" data-time_24hr="' . $time_24hr . '" type="text" name=" ' . $name . '"    class="flatpickr ' . $class . '"  id="' . $id . '" value="' . $value . '" >';
-			break;
+
 
 		case 'url':
-			$input .= '<input ' . $required . ' type="url"  placeholder="' . $placeholder . '"  name=" ' . $name . '"    class="' . $class . '"  id="' . $id . '" value="' . esc_attr( $value ) . '" >';
-			break;
-
-		case 'color':
-			if ( $value == '' ) {
-				$value = '#000000';
-			}
-			$input .= '<input ' . $required . ' type="text" name=" ' . $name . '"    class="jscolor {hash:true} ' . $class . '"  id="' . $id . '"  value="' . esc_attr( $value ) . '" >';
-			break;
-
-		case 'file':
-			if ( $value != '' ) {
-				$value = (int) $value;
-				$img   = wp_get_attachment_image( $value, array( 100, 100 ) );
-				if ( $img == '' ) {
-					$img = '<span class="fed_upload_icon fa fa-2x fa fa fa-upload"></span>';
-				}
-			} else {
-				$value = '';
-				$img   = '<span class="fed_upload_icon fa fa-2x fa fa fa-upload"></span>';
-			}
-			$input .= '<div class="fed_upload_container text-center ' . $class . '" id="' . $id . '">	
-<div class="fed_upload_image_container">' . $img . '</div>
-<input type="hidden" name=" ' . $name . '" class="fed_upload_input" value="' . $value . '"  />
-						</div>';
+			$input .= '<input ' . $values['disabled'] . $values['extra'] . $values['required'] . ' type="url"  placeholder="' . $values['placeholder'] . '"  name=" ' . $values['name'] . '"    class="' . $values['class'] . '"  id="' . $values['id'] . '" value="' . esc_attr( $values['value'] ) . '" >';
 			break;
 
 		case 'multi_line':
 			$rows = isset( $attr['rows'] ) ? absint( $attr['rows'] ) : 4;
 
-			$input .= '<textarea name="' . $name . '"   rows="' . $rows . '"
-			          class="' . $class . '" placeholder="' . $placeholder . '" id="' . $id . '">' . esc_textarea( $value ) . '</textarea>';
+			$input .= '<textarea ' . $values['disabled'] . $values['extra'] . ' name="' . $values['name'] . '"   rows="' . $rows . '"
+			          class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '" id="' . $values['id'] . '">' . esc_textarea( $values['value'] ) . '</textarea>';
 			break;
 
 		case 'checkbox':
-			$label = isset( $attr['label'] ) ? $attr['label'] : '';
-			$class = $class == 'form-control' ? '' : $class;
-			$input .= '<label class="' . $class . '" for="' . $name . '">
-				<input ' . $required . '  name="' . $name . '"  value="yes"
-				       type="checkbox"  id="' . $id . '" ' . checked( $value, 'yes', false ) . '>
-				' . $label . '</label>';
+			$values['class'] = $values['class'] == 'form-control' ? '' : $values['class'];
+			$input           .= '<label class="' . $values['class'] . '">
+			<input ' . $values['disabled'] . $values['extra'] . $values['required'] . '  name="' . $values['name'] . '"  value="'.$values['default_value'].'" type="checkbox"  id="' . $values['id'] . '" ' . checked( $values['value'], $values['default_value'], false ) . '>' . $label . '</label>';
 
 			break;
 
 		case 'select':
-			//$options = is_array( $attr['input_value'] ) ? $attr['input_value'] : array();
-			$options = strlen( $attr['input_value'] ) > 0 ? fed_convert_comma_separated_key_value( $attr['input_value'] ) : array();
-			$input   .= '<select name="' . $name . '"  class="' . $class . '" id="' . $id . '">';
+			$options = fed_get_select_option_value( $attr['input_value'] );
+			$input   .= '<select ' . $values['disabled'] . $values['extra'] . ' name="' . $values['name'] . '"  class="' . $values['class'] . '" id="' . $values['id'] . '">';
 			foreach ( $options as $key => $label ) {
 				$input .= '<option
-						value="' . esc_attr( $key ) . '" ' . selected( $value, $key, false ) . '>' . $label . '</option>';
+						value="' . esc_attr( $key ) . '" ' . selected( $values['value'], $key, false ) . '>' . $label . '</option>';
 			}
 			$input .= '</select>';
 			break;
 
 		case 'number':
 			$min  = isset( $attr['input_min'] ) ? $attr['input_min'] : 0;
-			$max  = isset( $attr['input_max'] ) ? $attr['input_max'] : 0;
+			$max  = isset( $attr['input_max'] ) ? $attr['input_max'] : 999999;
 			$step = isset( $attr['input_step'] ) ? $attr['input_step'] : 'any';
 
-			$input .= '<input ' . $required . ' type="number" name="' . $name . '" 
-			                                value="' . esc_attr( $value ) . '" class="' . $class . '"
-			                                placeholder="' . $placeholder . '"
+			$input .= '<input ' . $values['disabled'] . $values['extra'] . $values['required'] . ' type="number" name="' . $values['name'] . '" 
+			                                value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '"
+			                                placeholder="' . $values['placeholder'] . '"
 			                                min="' . esc_attr( $min ) . '"
 			                                max="' . esc_attr( $max ) . '"
-			                                step="' . esc_attr( $step ) . '" id="' . $id . '">';
+			                                step="' . esc_attr( $step ) . '" id="' . $values['id'] . '">';
 			break;
 
 		case 'radio':
-//			$options = is_array( $attr['options'] ) ? $attr['options'] : array();
-			$class   = $class == 'form-control' ? '' : $class;
-			$options = strlen( $attr['input_value'] ) > 0 ? fed_convert_comma_separated_key_value( $attr['input_value'] ) : array();
+			$values['class'] = $values['class'] == 'form-control' ? '' : $values['class'];
+			$options         = strlen( $attr['input_value'] ) > 0 ? fed_convert_comma_separated_key_value( $attr['input_value'] ) : array();
 			foreach ( $options as $key => $label ) {
-				$input .= '<label class="' . $class . '" for="' . $key . '">
-					<input name="' . $name . '"  value="' . $key . '" 
-					       type="radio"' . checked( $value, $key, false ) . $required . '>
+				$input .= '<label class="' . $values['class'] . '" for="' . $key . '">
+					<input ' . $values['disabled'] . $values['extra'] . ' name="' . $values['name'] . '"  value="' . $key . '" 
+					       type="radio"' . checked( $values['value'], $key, false ) . $values['required'] . '>
 					' . $label . '
 				</label>';
 			}
@@ -248,7 +215,17 @@ function fed_get_input_details( $attr ) {
 
 	}
 
-	return apply_filters( 'fed_custom_input_fields', $input, $attr );
+	return apply_filters( 'fed_custom_input_fields', $input, $values, $attr );
+}
+
+function fed_get_select_option_value( $input_value ) {
+	if ( is_string( $input_value ) ) {
+		return strlen( $input_value ) > 0 ? fed_convert_comma_separated_key_value( $input_value ) : array();
+	}
+	if ( is_array( $input_value ) ) {
+		return count( $input_value ) > 0 ? $input_value : array();
+	}
+
 }
 
 /**
@@ -1290,6 +1267,7 @@ function fed_get_script_loading_pages() {
 		'fed_orders',
 		'fed_help',
 		'fed_status',
+		'fed_plugin_pages'
 	) );
 }
 
@@ -1469,7 +1447,7 @@ function fed_currency_type() {
  * @return array
  */
 function fed_get_country_code() {
-	return apply_filters('fed_extend_country_code',array(
+	return apply_filters( 'fed_extend_country_code', array(
 		'empty' => 'Select Country',
 		'AF'    => 'AFGHANISTAN',
 		'AX'    => 'ÅLAND ISLANDS',
@@ -1714,7 +1692,7 @@ function fed_get_country_code() {
 		'YE'    => 'YEMEN',
 		'ZM'    => 'ZAMBIA',
 		'ZW'    => 'ZIMBABWE',
-	));
+	) );
 }
 
 /**
@@ -2010,7 +1988,7 @@ function fed_show_help_message( array $message ) {
 	$content = isset( $message['content'] ) ? $message['content'] : '';
 
 	return '
-	<span class="' . $icon . '" data-toggle="popover" data-trigger="hover" title="' . $title . '" data-content="' . $content . '" data-original-title="'.$title.'"></span>
+	<span class="' . $icon . '" data-toggle="popover" data-trigger="hover" title="' . $title . '" data-content="' . $content . '" data-original-title="' . $title . '"></span>
 	';
 }
 

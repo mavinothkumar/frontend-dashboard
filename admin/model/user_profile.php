@@ -231,3 +231,17 @@ function fed_role_with_pricing_flat( $fed_admin_login = '' ) {
 
 	return $new_array;
 }
+
+function fed_fetch_user_profile_columns($value ) {
+	global $wpdb;
+	$table_name = $wpdb->prefix . BC_FED_USER_PROFILE_DB;
+
+	$columns =  $wpdb->get_results( "SELECT input_meta FROM $table_name WHERE menu = '{$value}' AND show_dashboard = 'Enable' AND extra = 'yes' ", ARRAY_A );
+	$new_col = array();
+
+	foreach($columns as $index=>$col) {
+		$new_col[] = $col['input_meta'];
+	}
+	return $new_col;
+
+}

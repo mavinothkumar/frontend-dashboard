@@ -77,6 +77,12 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 6. [fed_user role=user_role] to generate the role based user page
 
 ### Changelog
+
+**v1.1 [11-August-2017]**
+* Added more filter and action hooks for developers
+* Minor: Bug fixed
+
+
 **v1.0 [04-August-2017]**
 - Public release
 

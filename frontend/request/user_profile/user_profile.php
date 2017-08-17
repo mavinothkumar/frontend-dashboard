@@ -63,10 +63,9 @@ function fed_process_update_user_profile( $post ) {
 		return new WP_Error( 'invalid_user_id', __( 'Invalid user ID.' ) );
 	}
 
-	$new_value       = array();
-	$new_value['ID'] = $current_user->ID;
+	$new_value               = array();
+	$new_value['ID']         = $current_user->ID;
 	$new_value['user_login'] = $current_user->user_login;
-
 
 	foreach ( $site_options as $site_option ) {
 		if ( $site_option == 'user_pass' || $site_option == 'confirmation_password' ) {
@@ -75,9 +74,8 @@ function fed_process_update_user_profile( $post ) {
 			} else {
 				$new_value[ $site_option ] = '';
 			}
-		}
-		else {
-			if(in_array( $site_option, array_keys( $post ) )){
+		} else {
+			if ( array_key_exists( $site_option, $post ) ) {
 				$new_value[ $site_option ] = esc_attr( $post[ $site_option ] );
 			} else {
 				$new_value[ $site_option ] = $user_obj->has_prop( $site_option ) ? $user_obj->get( $site_option ) : '';

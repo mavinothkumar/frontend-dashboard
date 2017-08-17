@@ -143,3 +143,21 @@ function fed_insert_new_row( $table, $data ) {
 		$data
 	);
 }
+
+function fed_fetch_table_rows_by_key_value_column( $table, array $conditions ) {
+	global $wpdb;
+	$table_name = $wpdb->prefix . $table;
+	$key = isset( $conditions['key']) ? $conditions['key'] : false;
+	$value = isset( $conditions['value']) ? $conditions['value'] : false;
+	$condition = isset( $conditions['condition']) ? $conditions['condition'] : '=';
+	$column = isset( $conditions['column']) ? $conditions['column'] : '*';
+
+	$columns =  $wpdb->get_results( "SELECT {$column} FROM $table_name WHERE {$key} $condition '{$value}' ", ARRAY_A );
+	$new_col = array();
+
+	foreach($columns as $index=>$col) {
+		$new_col[] = $col[$column];
+	}
+	return $new_col;
+
+}

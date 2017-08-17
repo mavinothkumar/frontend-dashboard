@@ -43,7 +43,7 @@ function fed_admin_input_fields_select($row, $action ) {
 										'placeholder' => __('Please enter the value by key,value','fed'),
 										'rows'        => 10,
 										'value'       => $row['input_value']
-									), 'textarea' ); ?>
+									), 'multi_line' ); ?>
                                 </div>
                                 <div class="col-md-7">
                                     <div class="row fed_key_value_eg_container">
