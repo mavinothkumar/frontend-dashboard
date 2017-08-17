@@ -32,7 +32,7 @@ function fed_admin_user_role_tab( $fed_admin_options ) {
 									'id'          => 'fed_admin_post_user_role_name',
 									'placeholder' => __( 'Role Name' ),
 									'required'    => 'true'
-								), 'text' ) ?>
+								), 'single_line' ) ?>
 							</div>
 							<div class="col-md-4">
 								<label>
@@ -43,7 +43,7 @@ function fed_admin_user_role_tab( $fed_admin_options ) {
 									'id'          => 'fed_admin_post_user_role_slug',
 									'placeholder' => __( 'Role Slug' ),
 									'required'    => 'true'
-								), 'text' ) ?>
+								), 'single_line' ) ?>
 							</div>
 							<div class="col-md-2 padd_top_20">
 								<button class="btn btn-primary">
