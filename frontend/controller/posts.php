@@ -403,9 +403,7 @@ function fed_process_dashboard_add_new_post( $post ) {
 	}
 
 	foreach ( $extras as $index => $extra ) {
-		if ( isset( $post[ $index ] ) ) {
-			$default['meta_input'][ $index ] = sanitize_text_field( $post[ $index ] );
-		}
+		$default['meta_input'][ $index ] = isset( $post[ $index ] ) ? sanitize_text_field( $post[ $index ] ) : '';
 	}
 
 	$success = wp_insert_post( $default );
