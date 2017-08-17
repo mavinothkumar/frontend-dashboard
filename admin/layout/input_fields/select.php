@@ -49,10 +49,7 @@ function fed_admin_input_fields_select($row, $action ) {
                                     <div class="row fed_key_value_eg_container">
                                         <div class="col-md-5">
                                             <label for=""><?php _e( 'Examples:', 'fed' ) ?></label>
-                                            <p>key,value</p>
-                                            <p>one,One</p>
-                                            <p>two,Two</p>
-                                            <p>five-category,Five Category</p>
+											<p>key,value|one,One|two,Two|five-category,Five Category</p>
                                         </div>
                                         <div class="col-md-7">
                                             <b><?php _e( 'This will be output as', 'fed' ) ?></b>

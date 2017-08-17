@@ -228,7 +228,7 @@ function fed_get_admin_up_display_permission( $row, $action, $type = '' ) {
 		if ( $action === 'profile' ) {
 			if ( $type === 'file' ) {
 				$value        = 'Disable';
-				$others       = 'disabled';
+				$others       = true;
 				$notification = '<i class="fa fa-info bg-info-font" data-toggle="popover" data-trigger="hover" title=" Status" data-content="Only registered user can upload the files."></i>';
 			} else {
 				$value        = $row['show_register'];

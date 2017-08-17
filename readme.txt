@@ -4,7 +4,7 @@ Tags: dashboard, frontend dashboard, custom login, custom register, custom role,
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7DHAEMST475BY
 Requires at least: 4.3
 Tested up to: 4.8.1
-Stable tag: 1.1
+Stable tag: 1.1.1
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -118,9 +118,10 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 6. [fed_user role=user_role] to generate the role based user page
 
 == Changelog ==
-= v1.2 [17-August-2017]=
+= v1.1.1 [17-August-2017]=
 * Collapse/Expand the frontend dashboard menu
-
+* Bug fixes
+* Refactored for developers comfort
 
 = v1.1 [11-August-2017] =
 * Added more filter and action hooks for developers
@@ -130,9 +131,10 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 * Public release
 
 == Upgrade Notice ==
-= v1.1 [11-August-2017] =
-* Added more filter and action hooks for developers
-* Minor: Bug fixed
+= v1.1.1 [17-August-2017]=
+* Collapse/Expand the frontend dashboard menu
+* Bug fixes
+* Refactored for developers comfort
 
 == Screenshots ==
 1. Frontend Dashboard Settings | Login | Settings

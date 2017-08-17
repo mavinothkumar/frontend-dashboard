@@ -68,7 +68,7 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 4. Fill the input fields and submit to save
 
 
-**List of shortcodes**
+**List of Shortcodes**
 1. [fed_login] to generate login, registration, and reset forms
 2. [fed_login_only] to show only login page
 3. [fed_register_only] to show only register page
@@ -77,6 +77,11 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 6. [fed_user role=user_role] to generate the role based user page
 
 ### Changelog
+
+**v1.1.1 [17-August-2017]**
+* Collapse/Expand the frontend dashboard menu
+* Bug fixes
+* Refactored for developers comfort
 
 **v1.1 [11-August-2017]**
 * Added more filter and action hooks for developers
@@ -87,5 +92,7 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 - Public release
 
 ### Upgrade Notice
-**v1.0 [04-August-2017]**
-- Public release
+**v1.1.1 [17-August-2017]**
+* Collapse/Expand the frontend dashboard menu
+* Bug fixes
+* Refactored for developers comfort

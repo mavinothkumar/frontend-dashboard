@@ -174,7 +174,7 @@ function fed_get_input_details( $attr ) {
 		case 'checkbox':
 			$values['class'] = $values['class'] == 'form-control' ? '' : $values['class'];
 			$input           .= '<label class="' . $values['class'] . '">
-			<input ' . $values['disabled'] . $values['extra'] . $values['required'] . '  name="' . $values['name'] . '"  value="'.$values['default_value'].'" type="checkbox"  id="' . $values['id'] . '" ' . checked( $values['value'], $values['default_value'], false ) . '>' . $label . '</label>';
+			<input ' . $values['disabled'] . $values['extra'] . $values['required'] . '  name="' . $values['name'] . '"  value="' . $values['default_value'] . '" type="checkbox"  id="' . $values['id'] . '" ' . checked( $values['value'], $values['default_value'], false ) . '>' . $label . '</label>';
 
 			break;
 
@@ -193,7 +193,7 @@ function fed_get_input_details( $attr ) {
 			$max  = isset( $attr['input_max'] ) ? $attr['input_max'] : 999999;
 			$step = isset( $attr['input_step'] ) ? $attr['input_step'] : 'any';
 
-			$input .= '<input ' . $values['disabled'] . $values['extra'] . $values['required'] . ' type="number" name="' . $values['name'] . '" 
+			$input .= '<input ' . $values['disabled'] . $values['readonly'] . $values['extra'] . $values['required'] . ' type="number" name="' . $values['name'] . '" 
 			                                value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '"
 			                                placeholder="' . $values['placeholder'] . '"
 			                                min="' . esc_attr( $min ) . '"
@@ -202,11 +202,11 @@ function fed_get_input_details( $attr ) {
 			break;
 
 		case 'radio':
-			$values['class'] = $values['class'] == 'form-control' ? '' : $values['class'];
-			$options         = strlen( $attr['input_value'] ) > 0 ? fed_convert_comma_separated_key_value( $attr['input_value'] ) : array();
+			$values['class'] = $values['class'] === 'form-control' ? '' : $values['class'];
+			$options         = fed_get_select_option_value( $attr['input_value'] );
 			foreach ( $options as $key => $label ) {
 				$input .= '<label class="' . $values['class'] . '" for="' . $key . '">
-					<input ' . $values['disabled'] . $values['extra'] . ' name="' . $values['name'] . '"  value="' . $key . '" 
+					<input ' . $values['disabled'] . $values['extra'] . $values['readonly'] . ' name="' . $values['name'] . '"  value="' . $key . '" 
 					       type="radio"' . checked( $values['value'], $key, false ) . $values['required'] . '>
 					' . $label . '
 				</label>';
@@ -327,20 +327,20 @@ function fed_get_empty_value_for_user_profile( $action ) {
 function fed_process_user_profile( $row, $action, $update = 'no' ) {
 
 	$default = array(
-		'label_name'     => isset( $row['label_name'] ) ? esc_attr( $row['label_name'] ) : '',
-		'input_order'    => isset( $row['input_order'] ) ? esc_attr( $row['input_order'] ) : '',
-		'is_required'    => isset( $row['is_required'] ) ? esc_attr( $row['is_required'] ) : 'false',
-		'placeholder'    => isset( $row['placeholder'] ) ? esc_attr( $row['placeholder'] ) : '',
-		'class_name'     => isset( $row['class_name'] ) ? esc_attr( $row['class_name'] ) : '',
-		'id_name'        => isset( $row['id_name'] ) ? esc_attr( $row['id_name'] ) : '',
-		'input_value'    => isset( $row['input_value'] ) ? esc_attr( preg_replace( '/^\h*\v+/m', '', $row['input_value'] ) ) : '',
-		'input_location' => isset( $row['location'] ) ? esc_attr( $row['location'] ) : '',
-		'input_min'      => isset( $row['input_min'] ) ? esc_attr( $row['input_min'] ) : '',
-		'input_max'      => isset( $row['input_max'] ) ? esc_attr( $row['input_max'] ) : '',
-		'input_step'     => isset( $row['input_step'] ) ? esc_attr( $row['input_step'] ) : '',
-		'input_row'      => isset( $row['input_row'] ) ? esc_attr( $row['input_row'] ) : '',
-		'input_type'     => isset( $row['input_type'] ) ? esc_attr( $row['input_type'] ) : '',
-		'input_meta'     => isset( $row['input_meta'] ) ? esc_attr( $row['input_meta'] ) : '',
+		'label_name'     => isset( $row['label_name'] ) ? sanitize_text_field( $row['label_name'] ) : '',
+		'input_order'    => isset( $row['input_order'] ) ? sanitize_text_field( $row['input_order'] ) : '',
+		'is_required'    => isset( $row['is_required'] ) ? sanitize_text_field( $row['is_required'] ) : 'false',
+		'placeholder'    => isset( $row['placeholder'] ) ? sanitize_text_field( $row['placeholder'] ) : '',
+		'class_name'     => isset( $row['class_name'] ) ? sanitize_text_field( $row['class_name'] ) : '',
+		'id_name'        => isset( $row['id_name'] ) ? sanitize_text_field( $row['id_name'] ) : '',
+		'input_value'    => isset( $row['input_value'] ) ? sanitize_text_field( $row['input_value'] ) : '',
+		'input_location' => isset( $row['location'] ) ? sanitize_text_field( $row['location'] ) : '',
+		'input_min'      => isset( $row['input_min'] ) ? sanitize_text_field( $row['input_min'] ) : '',
+		'input_max'      => isset( $row['input_max'] ) ? sanitize_text_field( $row['input_max'] ) : '',
+		'input_step'     => isset( $row['input_step'] ) ? sanitize_text_field( $row['input_step'] ) : '',
+		'input_row'      => isset( $row['input_row'] ) ? sanitize_text_field( $row['input_row'] ) : '',
+		'input_type'     => isset( $row['input_type'] ) ? sanitize_text_field( $row['input_type'] ) : '',
+		'input_meta'     => isset( $row['input_meta'] ) ? sanitize_text_field( $row['input_meta'] ) : '',
 
 //		'extra'          => isset( $row['extra'] ) ? esc_attr( $row['extra'] ) : '',
 
@@ -422,7 +422,7 @@ function fed_process_menu( $row ) {
  * @return array
  */
 function fed_convert_comma_separated_key_value( $text ) {
-	$n = ( explode( "\n", $text ) );
+	$n = explode( '|', $text );
 	$s = array();
 	foreach ( $n as $m ) {
 		$mm          = explode( ',', $m );

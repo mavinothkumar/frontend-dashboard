@@ -34,10 +34,10 @@ function fed_process_dashboard_display_profile() {
  * @param string $first_element Check First Element
  */
 function fed_display_dashboard_profile( $first_element ) {
-	//var_dump( $profiles );
 	$profiles  = fed_process_dashboard_display_profile();
 	$user  = get_userdata( get_current_user_id() );
 	$menus = fed_process_dashboard_display_menu();
+
 	foreach ( $profiles as $index => $item ) {
 		if ( $index == $first_element ) {
 			$active = '';
@@ -49,7 +49,7 @@ function fed_display_dashboard_profile( $first_element ) {
             <div class="panel-heading">
                 <h3 class="panel-title">
                     <span class="<?php echo $menus[ $index ]['menu_image_id'] ?>"></span>
-					<?php echo ucwords( $menus[ $index ]['menu_slug'] ) ?>
+					<?php echo ucwords( $menus[ $index ]['menu'] ) ?>
                 </h3>
             </div>
             <div class="panel-body">
@@ -78,17 +78,17 @@ function fed_display_dashboard_profile( $first_element ) {
 
 							?>
                             <div class="row fed_dashboard_item_field">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="pull-right">
 										<?php echo esc_attr( $single_item['label_name']) ?>
                                     </div>
                                 </div>
-                                <div class="col-md-5">
+                                <div class="col-md-7">
 									<?php
 									echo fed_get_input_details( $single_item );
 									?>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
 
                                 </div>
                             </div>
@@ -101,9 +101,6 @@ function fed_display_dashboard_profile( $first_element ) {
                                 <i class="fa fa-floppy-o"></i> Save
                             </button>
                         </div>
-						<?php
-
-						?>
 
                     </form>
 				<?php } else {

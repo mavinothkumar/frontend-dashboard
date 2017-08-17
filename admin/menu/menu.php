@@ -34,8 +34,8 @@ function fed_menu() {
 	add_submenu_page( 'fed_settings_menu', __( 'Add Profile / Post Fields', 'fed' ), __( 'Add Profile / Post Fields', 'fed' ),
 		'manage_options', 'fed_add_user_profile', 'fed_add_user_profile' );
 
-	add_submenu_page( 'fed_settings_menu', __( 'Plugins', 'fed' ), __( 'Plugins', 'fed' ),
-		'manage_options', 'fed_plugin_pages', 'fed_plugin_pages' );
+//	add_submenu_page( 'fed_settings_menu', __( 'Plugins', 'fed' ), __( 'Plugins', 'fed' ),
+//		'manage_options', 'fed_plugin_pages', 'fed_plugin_pages' );
 
 	add_submenu_page( 'fed_settings_menu', __( 'Status', 'fed' ), __( 'Status', 'fed' ),
 		'manage_options', 'fed_status', 'fed_status' );
