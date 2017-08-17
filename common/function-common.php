@@ -154,7 +154,7 @@ function fed_input_box( $meta_key, $attr = array(), $type = 'text' ) {
 
 	$values                = array();
 	$values['placeholder'] = isset( $attr['placeholder'] ) && ! empty( $attr['placeholder'] ) ? esc_attr( $attr['placeholder'] ) : '';
-	$values['label']       = isset( $attr['label'] ) && ! empty( $attr['label'] ) ? strip_tags( $attr['label'],'<i><b>' ) : '';
+	$values['label']       = isset( $attr['label'] ) && ! empty( $attr['label'] ) ? strip_tags( $attr['label'], '<i><b>' ) : '';
 	$values['class_name']  = isset( $attr['class'] ) && ! empty( $attr['class'] ) ? esc_attr( $attr['class'] ) : '';
 
 	$values['user_value'] = isset( $attr['value'] ) && ! empty( $attr['value'] ) ? esc_attr( $attr['value'] ) : '';
@@ -167,7 +167,7 @@ function fed_input_box( $meta_key, $attr = array(), $type = 'text' ) {
 	$values['readonly']      = isset( $attr['readonly'] ) && $attr['readonly'] === true ? true : '';
 	$values['user_value']    = isset( $attr['value'] ) && ! empty( $attr['value'] ) ? esc_attr( $attr['value'] ) : '';
 	$values['input_value']   = isset( $attr['options'] ) && ! empty( $attr['options'] ) ? $attr['options'] : '';
-	$values['disabled']      = isset( $attr['disabled'] ) && ! empty( $attr['disabled'] ) ? esc_attr( $attr['disabled'] ) : '';
+	$values['disabled']      = isset( $attr['disabled'] ) && $attr['disabled'] === true ? true : '';
 	$values['default_value'] = isset( $attr['default_value'] ) && ! empty( $attr['default_value'] ) ? esc_attr( $attr['default_value'] ) : 'yes';
 	$values['extra']         = isset( $attr['extra'] ) ? $attr['extra'] : '';
 	$values['extended']      = isset( $attr['extended'] ) && ! empty( $attr['extended'] ) ? esc_attr( $attr['extended'] ) : array();

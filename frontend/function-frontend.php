@@ -153,7 +153,7 @@ function fed_process_user_profile_required_by_menu( $menu ) {
  *
  * @return string
  */
-function fed_process_author_details( $user, $single_item ) {
+function fed_process_author_details( $user, array $single_item ) {
 	/**
 	 * 'text'     => 'Text Box',
 	 * 'number'   => 'Number Box',
@@ -168,18 +168,34 @@ function fed_process_author_details( $user, $single_item ) {
 	 * 'file'     => 'File',
 	 * 'color'    => 'Color'
 	 */
-	if ( $single_item['input_type'] == 'file' ) {
-		return wp_get_attachment_image( intval( $user->get( $single_item['input_meta'] ) ), 'thumbnail' );
+	if ( $single_item['input_type'] === 'file' ) {
+		return wp_get_attachment_image( (int) $user->get( $single_item['input_meta'] ), 'thumbnail' );
 	}
 
-	if ( $single_item['input_type'] == 'url' ) {
+	if ( $single_item['input_type'] === 'url' ) {
 		return make_clickable( $user->get( $single_item['input_meta'] ) );
 	}
-	if ( $single_item['input_type'] == 'color' ) {
-		return fed_input_box( $single_item['input_meta'], array( 'value' => $user->get( $single_item['input_meta'] ) ), 'color' );
+
+	if ( $single_item['input_type'] === 'color' ) {
+		return fed_input_box( $single_item['input_meta'], array(
+			'value'    => $user->get( $single_item['input_meta'] ),
+			'readonly' => true
+		), 'color' );
 	}
 
-	if ( $single_item['input_type'] == 'date' ) {
+	if ( $single_item['input_type'] === 'checkbox' ) {
+		return fed_input_box( $single_item['input_meta'], array(
+			'value'    => $user->get( $single_item['input_meta'] ),
+			'disabled' => true,
+		), 'checkbox' );
+	}
+
+	if ( $single_item['input_type'] === 'radio' ) {
+		$input_value = fed_convert_comma_separated_key_value( $single_item['input_value'] );
+		return $input_value[ $user->get( $single_item['input_meta'] ) ];
+	}
+
+	if ( $single_item['input_type'] === 'date' ) {
 		$user_date = $user->get( $single_item['input_meta'] );
 		$extended  = is_string( $single_item['extended'] ) ? unserialize( $single_item['extended'] ) : $single_item['extended'];
 		$format    = $extended['enable_time'] == 'true' ? '%e %B %Y -  %I:%M %p' : '%e %B %Y';
@@ -203,6 +219,8 @@ function fed_process_author_details( $user, $single_item ) {
 
 		return ucfirst( strftime( $format, strtotime( $user_date ) ) );
 	}
+
+
 
 	return $user->get( $single_item['input_meta'] );
 }
@@ -652,7 +670,7 @@ function fed_show_user_profile_page( $user ) {
 										if ( $single_item['input_meta'] === 'user_pass' || $single_item['input_meta'] === 'confirmation_password' ) {
 											continue;
 										}
-										if ( in_array( $single_item['input_meta'], fed_no_update_fields() ) ) {
+										if ( in_array( $single_item['input_meta'], fed_no_update_fields(), false ) ) {
 											$single_item['readonly'] = 'readonly';
 										}
 										if ( count( array_intersect( $user->roles, unserialize( $single_item['user_role'] ) ) ) <= 0 ) {
@@ -670,7 +688,6 @@ function fed_show_user_profile_page( $user ) {
 
 										</div>
 										<?php
-										//var_dump($single_item);
 									} ?>
 								</div>
 							</div>

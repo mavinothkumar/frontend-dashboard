@@ -40,7 +40,7 @@ function fed_admin_input_fields_url($row, $action ) {
 
 		                    fed_get_admin_up_role_based($row, $action  );
 
-		                    fed_get_input_type_and_submit_btn( 'text', $action );
+		                    fed_get_input_type_and_submit_btn( 'url', $action );
 		                    ?>
                         </div>
                     </div>

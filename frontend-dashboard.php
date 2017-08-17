@@ -3,7 +3,7 @@
  * Plugin Name: Frontend Dashboard
  * Plugin URI: https://buffercode.com/plugin/frontend-dashboard
  * Description: Front end dashboard provide high flexible way to customize the user dashboard on front end rather than WordPress wp-admin dashboard.
- * Version: 1.1
+ * Version: 1.1.1
  * Author: vinoth06
  * Author URI: http://buffercode.com/
  * License: GPLv2
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Version Number
  */
-define( 'BC_FED_PLUGIN_VERSION', '1.1' );
+define( 'BC_FED_PLUGIN_VERSION', '1.1.1' );
 define( 'BC_FED_PLUGIN_VERSION_TYPE', 'FREE' );
 
 /**
