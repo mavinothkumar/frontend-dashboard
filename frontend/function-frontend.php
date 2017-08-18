@@ -192,6 +192,7 @@ function fed_process_author_details( $user, array $single_item ) {
 
 	if ( $single_item['input_type'] === 'radio' ) {
 		$input_value = fed_convert_comma_separated_key_value( $single_item['input_value'] );
+
 		return $input_value[ $user->get( $single_item['input_meta'] ) ];
 	}
 
@@ -220,9 +221,9 @@ function fed_process_author_details( $user, array $single_item ) {
 		return ucfirst( strftime( $format, strtotime( $user_date ) ) );
 	}
 
+	$value = $user->get( $single_item['input_meta'] );
 
-
-	return $user->get( $single_item['input_meta'] );
+	return apply_filters( 'fed_process_author_custom_details', $value, $user, $single_item );
 }
 
 /**
