@@ -82,7 +82,7 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 6. [fed_user role**user_role] to generate the role based user page
 
 ### Changelog
-**v1.1.4.6.1 [02-November-2017]=
+**v1.1.4.6.1 [02-November-2017]**
 * New: Added Register Redirect after registration
 * New: Post content can be disabled
 * Bug: While Login and Register loading icon missing
