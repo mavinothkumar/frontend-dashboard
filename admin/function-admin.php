@@ -126,7 +126,7 @@ function fed_profile_enable_disable( $condition = '', $type = '' ) {
 function fed_get_input_details( $attr ) {
 	$values                  = array();
 	$values['placeholder']   = isset( $attr['placeholder'] ) && $attr['placeholder'] != '' ? esc_attr( $attr['placeholder'] ) : '';
-	$values['input_type']    = isset( $attr['input_type'] ) && $attr['input_type'] != '' ? esc_attr( $attr['input_type'] ) : 'text';
+	$values['input_type']    = isset( $attr['input_type'] ) && $attr['input_type'] != '' ? esc_attr( $attr['input_type'] ) : 'single_line';
 	$values['class']         = isset( $attr['class_name'] ) && $attr['class_name'] != '' ? 'form-control ' . esc_attr( $attr['class_name'] ) : 'form-control';
 	$values['name']          = isset( $attr['input_meta'] ) && $attr['input_meta'] != '' ? esc_attr( $attr['input_meta'] ) : 'BUG';
 	$values['value']         = isset( $attr['user_value'] ) && $attr['user_value'] != '' ? $attr['user_value'] : '';
@@ -144,7 +144,7 @@ function fed_get_input_details( $attr ) {
 
 	switch ( $values['input_type'] ) {
 		case 'single_line':
-			$input .= '<input ' . $values['disabled'] . $values['extra'] . $values['readonly'] . ' ' . $values['required'] . ' type="text" name=" ' . $values['name'] . '"  value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '" id="' . $values['id'] . '">';
+			$input .= '<input ' . $values['disabled'] . $values['extra'] . $values['readonly'] . ' ' . $values['required'] . ' type="text" name="' . $values['name'] . '"  value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '" id="' . $values['id'] . '">';
 			break;
 
 		case 'hidden':
@@ -174,7 +174,7 @@ function fed_get_input_details( $attr ) {
 		case 'checkbox':
 			$values['class'] = $values['class'] == 'form-control' ? '' : $values['class'];
 			$input           .= '<label class="' . $values['class'] . '">
-			<input ' . $values['disabled'] . $values['extra'] . $values['required'] . '  name="' . $values['name'] . '"  value="' . $values['default_value'] . '" type="checkbox"  id="' . $values['id'] . '" ' . checked( $values['value'], $values['default_value'], false ) . '>' . $label . '</label>';
+			<input ' . $values['disabled'] . $values['extra'] . $values['required'] . '  name="' . $values['name'] . '"  value="' . $values['default_value'] . '" type="checkbox"  id="' . $values['id'] . '" ' . checked( $values['value'], $values['default_value'], false ) . '> ' . $label . '</label>';
 
 			break;
 
@@ -190,7 +190,7 @@ function fed_get_input_details( $attr ) {
 
 		case 'number':
 			$min  = isset( $attr['input_min'] ) ? $attr['input_min'] : 0;
-			$max  = isset( $attr['input_max'] ) ? $attr['input_max'] : 999999;
+			$max  = isset( $attr['input_max'] ) ? $attr['input_max'] : 99999999999999999999999999999999999999999999999999;
 			$step = isset( $attr['input_step'] ) ? $attr['input_step'] : 'any';
 
 			$input .= '<input ' . $values['disabled'] . $values['readonly'] . $values['extra'] . $values['required'] . ' type="number" name="' . $values['name'] . '" 
@@ -408,10 +408,11 @@ function fed_process_menu( $row ) {
 		'show_user_profile' => isset( $row['show_user_profile'] ) ? esc_attr( $row['show_user_profile'] ) : 'Enable',
 		'menu_order'        => isset( $row['fed_menu_order'] ) ? esc_attr( $row['fed_menu_order'] ) : '9',
 		'user_role'         => ( isset( $row['user_role'] ) && ! empty( $row['user_role'] ) ) ? ( is_string( $row['user_role'] ) ) ? unserialize( $row['user_role'] ) : serialize( array_keys( $row['user_role'] ) ) : array(),
+		'extended'          => isset( $row['extended'] ) ? esc_attr( $row['extended'] ) : '',
 
 	);
 
-	return $default_value;
+	return apply_filters( 'fed_process_menu', $default_value, $row );
 }
 
 /**
@@ -469,8 +470,15 @@ add_filter( 'admin_footer_text', 'fed_update_footer' );
  * @return string
  */
 function fed_update_footer( $text ) {
-	if ( isset( $_GET['page'] ) && ( $_GET['page'] === 'fed_settings_menu' || $_GET['page'] === 'fed_user_profile' || $_GET['page'] === 'fed_add_user_profile' ) ) {
-		$text = '<span id="footer-thankyou">' . BC_FED_APP_NAME . ' V' . BC_FED_PLUGIN_VERSION . '</span>';
+	if ( isset( $_GET['page'] ) && fed_get_script_loading_pages() ) {
+		$text = '<span id="footer-thankyou">If you like <strong>Frontend Dashboard (v' . BC_FED_PLUGIN_VERSION . ')</strong>, Please leave us a rating <a 
+href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#new-post">
+<i class="fa fa-star fa-2x" aria-hidden="true"></i>
+<i class="fa fa-star fa-2x" aria-hidden="true"></i>
+<i class="fa fa-star fa-2x" aria-hidden="true"></i>
+<i class="fa fa-star fa-2x" aria-hidden="true"></i>
+<i class="fa fa-star fa-2x" aria-hidden="true"></i>
+</a>. A huge thanks in advance <i class="fa fa-smile-o" aria-hidden="true"></i>';
 	}
 
 	return $text;
@@ -1151,16 +1159,18 @@ function fed_filter_show_register( $row ) {
  * Allow user role to upload files
  */
 function fed_enable_file_uploads_by_role() {
-	$current_user = wp_get_current_user();
-	$user         = get_userdata( $current_user->ID );
-	$role         = $user->roles[0];
+	global $current_user;
+	$user = get_userdata( $current_user->ID );
+	$role = isset( $user->roles[0] ) ? $user->roles[0] : null;
 
-	$fed_admin_options = get_option( 'fed_admin_settings_post', array() );
-	if ( isset( $fed_admin_options['permissions']['fed_upload_permission'] ) ) {
-		$fed_upload_permission = array_keys( $fed_admin_options['permissions']['fed_upload_permission'] );
-		if ( in_array( $role, $fed_upload_permission, false ) ) {
-			$contributor = get_role( $role );
-			$contributor->add_cap( 'upload_files' );
+	if ( $role ) {
+		$fed_admin_options = get_option( 'fed_admin_settings_post', array() );
+		if ( isset( $fed_admin_options['permissions']['fed_upload_permission'] ) ) {
+			$fed_upload_permission = array_keys( $fed_admin_options['permissions']['fed_upload_permission'] );
+			if ( in_array( $role, $fed_upload_permission, false ) ) {
+				$contributor = get_role( $role );
+				$contributor->add_cap( 'upload_files' );
+			}
 		}
 	}
 }
@@ -1194,62 +1204,6 @@ function fed_restrict_user_profile_picture( $wp_query_obj ) {
 
 }
 
-/**
- * TODO: Captcha
- * Get Captcha form
- *
- * @param string $location Captcha Location.
- *
- * @return string
- */
-function fed_get_captcha_form( $location = '' ) {
-	$fed_captcha = get_option( 'fed_admin_settings_captcha' );
-
-	if ( $location === 'login' &&
-	     isset( $fed_captcha['fed_captcha_in_login_form'] ) &&
-	     'Enable' === $fed_captcha['fed_captcha_in_login_form']
-
-	) {
-		return '<div id="fedLoginCaptcha"></div>';
-	}
-	if ( $location === 'register' &&
-	     isset( $fed_captcha['fed_captcha_in_register_form'] ) &&
-	     'Enable' === $fed_captcha['fed_captcha_in_register_form']
-	) {
-		return '<div id="fedRegisterCaptcha"></div>';
-	}
-
-
-	return false;
-}
-
-/**
- * Get Captcha Site Key
- * * TODO: Captcha
- */
-function fed_get_captcha_details() {
-	$fed_captcha = get_option( 'fed_admin_settings_captcha' );
-
-	$details = array(
-		'fed_captcha_site_key' => '',
-		'fed_captcha_enable'   => 'Disable'
-	);
-
-	if ( isset( $fed_captcha['fed_captcha_site_key'] ) ) {
-		$details['fed_captcha_site_key'] = $fed_captcha['fed_captcha_site_key'];
-	}
-
-	if ( ( isset( $fed_captcha['fed_captcha_in_login_form'] ) &&
-	       $fed_captcha['fed_captcha_in_login_form'] === 'Enable' )
-	     ||
-	     ( isset( $fed_captcha['fed_captcha_in_register_form'] ) &&
-	       $fed_captcha['fed_captcha_in_register_form'] === 'Enable' )
-	) {
-		$details['fed_captcha_enable'] = 'Enable';
-	}
-
-	return $details;
-}
 
 /**
  * Script loading Pages
@@ -1984,7 +1938,7 @@ function fed_redirect_to_404() {
  */
 function fed_show_help_message( array $message ) {
 	$icon    = isset( $message['icon'] ) ? $message['icon'] : 'fa fa-info-circle';
-	$title   = isset( $message['title'] ) ? $message['title'] : '';
+	$title   = isset( $message['title'] ) ? $message['title'] : 'Note';
 	$content = isset( $message['content'] ) ? $message['content'] : '';
 
 	return '
@@ -2037,8 +1991,190 @@ function fed_get_current_screen_id() {
 }
 
 function fed_plugin_versions() {
-	$versions = apply_filters( 'fed_plugin_versions', array( 'free' => 'Free' ) );
+	$versions = apply_filters( 'fed_plugin_versions', array( 'core' => 'Core' ) );
 
-	return implode( ', ', $versions );
+	return implode( ' | ', $versions );
 }
 
+function fed_convert_this_to_that( $source, $_this, $that ) {
+	return str_replace( $_this, $that, $source );
+}
+
+/**
+ * Show Menu Icons Popup
+ */
+function fed_menu_icons_popup() {
+	?>
+	<div class="bc_fed">
+		<div class="modal fade fed_show_fa_list"
+			 tabindex="-1"
+			 role="dialog"
+		>
+			<div class="modal-dialog modal-lg"
+				 role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button"
+								class="close"
+								data-dismiss="modal"
+								aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title"><?php _e( 'Please Select one Image', 'fed' ) ?></h4>
+					</div>
+					<div class="modal-body">
+						<input type="hidden"
+							   id="fed_menu_box_id"
+							   name="fed_menu_box_id"
+							   value=""/>
+						<div class="row fed_fa_container">
+							<?php foreach ( fed_font_awesome_list() as $key => $list ) {
+								echo '<div class="col-md-1 fed_single_fa" 
+							data-dismiss="modal"
+							data-id="' . $key . '"
+							data-toggle="popover"
+							title="' . $list . '"
+							data-trigger="hover"
+							data-viewport=""
+							data-content="' . $list . '"
+							>
+							<span class="' . $key . '"  data-id="' . $key . '" id="' . $key . '"></span>
+							</div>';
+							} ?>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<?php
+}
+
+/**
+ * Compare two array and get the second array value
+ *
+ * @param array $array1
+ * @param array $array2
+ *
+ * @return array
+ */
+function fed_compare_two_arrays_get_second_value( array $array1, array $array2 ) {
+	foreach ( $array2 as $index => $key ) {
+		if ( isset( $array1[ $index ] ) ) {
+			continue;
+		}
+		unset( $array2[ $index ] );
+	}
+
+	return $array2;
+}
+
+function fed_get_key_value_array( array $array, $key, $value = null ) {
+	$new_array = array();
+	foreach ( $array as $index => $item ) {
+		if ( is_object( $item ) ) {
+			if ( isset( $item->$key, $item->$value ) ) {
+				$new_array[ $item->$key ] = $item->$value;
+			}
+			if ( null === $value && isset( $item->$key ) ) {
+				$new_array[ $item->$key ] = $item;
+			}
+		}
+		if ( is_array( $item ) ) {
+			if ( isset( $item[ $key ], $item[ $value ] ) ) {
+				$new_array[ $item[ $key ] ] = $item[ $value ];
+			}
+			if ( null === $value && isset( $item[ $key ] ) ) {
+				$new_array[ $item[ $key ] ] = $item;
+			}
+		}
+
+	}
+
+	return $new_array;
+}
+
+function fed_get_category_tag_post_format( $post_type = 'post' ) {
+	$taxonomies = get_object_taxonomies( $post_type, 'object' );
+	$new_array  = array();
+	foreach ( $taxonomies as $index => $taxonomy ) {
+		if ( $taxonomy->public && $taxonomy->show_ui ) {
+			if ( $index === 'post_format' ) {
+				$new_array['post_format'][ $index ] = $taxonomy;
+				continue;
+			}
+			if ( $taxonomy->hierarchical === false ) {
+				$new_array['tag'][ $index ] = $taxonomy;
+			} else {
+				$new_array['category'][ $index ] = $taxonomy;
+			}
+		}
+	}
+
+	return $new_array;
+}
+
+function fed_array_sort( $array, $on, $order = SORT_ASC ) {
+
+	$new_array      = array();
+	$sortable_array = array();
+
+	if ( count( $array ) > 0 ) {
+		foreach ( $array as $k => $v ) {
+			if ( is_array( $v ) ) {
+				foreach ( $v as $k2 => $v2 ) {
+					if ( $k2 == $on ) {
+						$sortable_array[ $k ] = $v2;
+					}
+				}
+			} else {
+				$sortable_array[ $k ] = $v;
+			}
+		}
+
+		switch ( $order ) {
+			case SORT_ASC:
+				asort( $sortable_array );
+				break;
+			case SORT_DESC:
+				arsort( $sortable_array );
+				break;
+		}
+
+		foreach ( $sortable_array as $k => $v ) {
+			$new_array[ $k ] = $array[ $k ];
+		}
+	}
+
+	return $new_array;
+}
+
+function fed_request_empty( $request ) {
+	if ( '' == trim( $request ) ) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * Check for Nonce
+ *
+ * @param string $nonce Nonce
+ * @param string $key Key
+ * @param null | array | string $permission
+ */
+function fed_nonce_check( $nonce, $key, $permission = null ) {
+	if ( ! wp_verify_nonce( $nonce, $key ) ) {
+		wp_send_json_error( array( 'message' => 'Invalid Request' ) );
+	}
+	if ( null !== $permission ) {
+		$user_role = fed_get_current_user_role_key();
+		if ( is_string( $permission ) && $user_role !== $permission ) {
+			wp_send_json_error( array( 'message' => 'Invalid Request' ) );
+		}
+		if ( is_array( $permission ) && ! in_array( $user_role, $permission, true ) ) {
+			wp_send_json_error( array( 'message' => 'Invalid Request' ) );
+		}
+	}
+}

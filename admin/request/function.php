@@ -42,6 +42,20 @@ function fed_get_logout_redirect_url() {
 	return false;
 }
 
+/**
+ * Get Registration Redirect URL
+ *
+ * @return bool|false|string
+ */
+function fed_get_register_redirect_url() {
+	$fed_admin_options = get_option( 'fed_admin_login' );
+	if ( $fed_admin_options && isset( $fed_admin_options['settings']['fed_redirect_register_url'] ) && $fed_admin_options['settings']['fed_redirect_register_url'] != '' ) {
+		return get_permalink( $fed_admin_options['settings']['fed_redirect_register_url'] );
+	}
+
+	return false;
+}
+
 
 /**
  * Get Dashboard URL

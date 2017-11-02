@@ -1,4 +1,4 @@
-# frontend-dashboard
+# Frontend Dashboard
 Frontend Dashboard is bundled with huge list of custom features which can easily customise the User profile, Posts, Login, Register, Custom roles on custom front page.
 
 [Help | Frontend Dashboard Home](https://buffercode.com/plugin/frontend-dashboard)
@@ -14,6 +14,11 @@ Frontend Dashboard is bundled with the huge list of custom features which can ea
 6. Enable/Disable the post default fields.
 7. Show user role based custom profile page
 8. Restrict the number of posts to show in the custom profile page.
+
+### Frontend Dashboard Plugins
+* [Frontend Dashboard Captcha](https://buffercode.com/plugin/frontend-dashboard-captcha)
+* [Frontend Dashboard Extra](https://buffercode.com/plugin/frontend-dashboard-extra)
+* [Frontend Dashboard Pages](https://buffercode.com/plugin/frontend-dashboard-pages)
 
 ### Installation
 1. Upload the “frontend-dashboard” directory to the plugins directory.
@@ -74,9 +79,46 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 3. [fed_register_only] to show only register page
 4. [fed_forgot_password_only] to generate the forgot password page
 5. [fed_dashboard] to generate the dashboard page
-6. [fed_user role=user_role] to generate the role based user page
+6. [fed_user role**user_role] to generate the role based user page
 
 ### Changelog
+**v1.1.4.6.1 [02-November-2017]=
+* New: Added Register Redirect after registration
+* New: Post content can be disabled
+* Bug: While Login and Register loading icon missing
+* Bug: Email not sending to new register
+* Bug: Input type number can't able to add more than 6 six digits
+* Enhanced: Dashboard Settings
+* Enhanced: Dashboard Main Menu
+* Enhanced: Add-Ons
+
+**v1.1.4.5 [16-October-2017]**
+* New action hooks added
+* Bug fixes
+
+**v1.1.4.4 [09-October-2017]**
+* Main menu search box added to search the menu by its name
+* Login failed and more bug fixes
+
+
+**v1.1.4.3 [27-September-2017]**
+* Customize the Frontend Dashboard Layout Color
+* Bug fixes
+
+
+**v1.1.4.2 [17-September-2017]**
+* Major Bug fixes
+* Document updated
+
+**v1.1.4 [10-September-2017]**
+* Plugin page update
+* Bug fixes
+* Added new filter and action hooks
+
+**v1.1.3 [06-September-2017]**
+* Plugin page added
+* Bug fixes
+* Added new filter and action hooks
 
 **v1.1.1 [17-August-2017]**
 * Collapse/Expand the frontend dashboard menu
@@ -90,9 +132,3 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 **v1.0 [04-August-2017]**
 - Public release
-
-### Upgrade Notice
-**v1.1.1 [17-August-2017]**
-* Collapse/Expand the frontend dashboard menu
-* Bug fixes
-* Refactored for developers comfort

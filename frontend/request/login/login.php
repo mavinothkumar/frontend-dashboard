@@ -1,18 +1,16 @@
 <?php
 
 
-
 function fed_login_form_submit( $post ) {
+	do_action( 'fed_login_before_validation', $post );
 
-	fed_validate_captcha($post,'login');
-
-	$credentials       = array(
+	$credentials = array(
 		'user_login'    => $post['user_login'],
 		'user_password' => $post['user_password'],
 		'remember'      => isset( $post['remember'] ) ? true : false,
 	);
 
-	$redirect_url      = fed_get_login_redirect_url();
+	$redirect_url = fed_get_login_redirect_url();
 
 	$errors = fed_validate_login_form( $post );
 

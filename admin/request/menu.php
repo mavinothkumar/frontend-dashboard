@@ -10,10 +10,14 @@ function fed_admin_menu_save( $request, $post_id = '' ) {
 	global $wpdb;
 	$menu_slug = $request['menu_slug'];
 
-	$table_name = $wpdb->prefix . BC_FED_MENU_DB;
+	/**
+	 * TODO: changed prefix to get_blog_prefix() for multisite check.
+	 */
+	$table_name = $wpdb->get_blog_prefix() . BC_FED_MENU_DB;
 
 	fed_admin_menu_restrictive_words_check( $request['menu_slug'] );
 
+	// Update
 	if ( '' != $post_id ) {
 		/**
 		 * Check for input meta already exist
@@ -28,19 +32,18 @@ function fed_admin_menu_save( $request, $post_id = '' ) {
 		/**
 		 * No duplicate found, so we can update the record.
 		 */
-
+		unset($request['menu_slug']);
 		$status = $wpdb->update( $table_name, $request, array( 'id' => (int) $post_id ) );
 
 		if ( $status === false ) {
 			wp_send_json_error( array( 'message' => 'Sorry no record found to update your new details' ) );
-			exit();
 		}
 
 		wp_send_json_success( array(
 			'message' => $request['menu'] . ' has been successfully updated'
 		) );
-		exit();
-	} else {
+	}
+	else {
 		/**
 		 * Check for input meta already exist
 		 */
@@ -52,7 +55,6 @@ function fed_admin_menu_save( $request, $post_id = '' ) {
 			exit();
 		}
 
-
 		/**
 		 * Now we are free to insert the row
 		 */
@@ -63,7 +65,6 @@ function fed_admin_menu_save( $request, $post_id = '' ) {
 
 		if ( false === $status ) {
 			wp_send_json_error( array( 'message' => 'Sorry, Something went wrong in storing values in DB, please try again later or contact support' ) );
-			exit();
 		}
 
 
@@ -71,8 +72,6 @@ function fed_admin_menu_save( $request, $post_id = '' ) {
 			'message' => $request['menu'] . ' has been Successfully added',
 			'reload'  => admin_url() . 'admin.php?page=fed_dashboard_menu',
 		) );
-		exit();
-
 	}
 }
 
@@ -84,13 +83,14 @@ function fed_admin_menu_save( $request, $post_id = '' ) {
 function fed_admin_menu_restrictive_words_check( $slug ) {
 	$restrictive_menu = array(
 		'payment',
+		'chat',
 		'post'
 	);
 
-	apply_filters( 'fed_restrictive_menu_names', $restrictive_menu );
+	$restrictive_menu = apply_filters( 'fed_restrictive_menu_names', $restrictive_menu );
+	//var_dump($restrictive_menu);
 
 	if ( in_array( $slug, $restrictive_menu, false ) ) {
 		wp_send_json_error( array( 'message' => 'Sorry, You cannot use the restrictive slug name "' . $slug . '"' ) );
-		exit();
 	}
 }

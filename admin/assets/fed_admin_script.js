@@ -1,5 +1,5 @@
 jQuery(document).ready(function ($) {
-
+    var bc_fed = $('.bc_fed');
     /**
      * Admin Page / User Profile Setting Save/Edit
      */
@@ -310,7 +310,6 @@ jQuery(document).ready(function ($) {
 
     body.on("click", "div[data-id].fed_single_fa ", function () {
         var menu_name = $(this).closest('.modal-body').find('#fed_menu_box_id').val();
-        console.log(menu_name);
         body.find("." + menu_name).val($(this).data("id"));
     });
 
@@ -407,98 +406,48 @@ jQuery(document).ready(function ($) {
     });
 
     /**
+     * Admin Main Menu Search
+     */
+    $('#fed_menu_search').on('input', function (e) {
+        var input = $(this);
+        var parent = input.closest('.fed_dashboard_menu_items_container');
+        var item = $(parent).find('.fed_dashboard_menu_single_item');
+        var filter = input.val().toLowerCase();
+        if (input.val().length > 0) {
+            input.closest('.fed_search_box').find('.fed_menu_search_clear').removeClass('hide');
+        } else {
+            input.closest('.fed_search_box').find('.fed_menu_search_clear').addClass('hide');
+        }
+        item.each(function () {
+            if (!$(this).hasClassRegEx(filter) && input.val().length > 0) {
+                $(this).fadeOut();
+            } else {
+                $(this).show();
+            }
+        });
+        e.preventDefault();
+    });
+
+    /**
+     * Admin Main Menu Clear
+     */
+    $('.fed_menu_search_clear').on('click', function (e) {
+        $(this).closest('.fed_search_box').find('input').val('');
+        $('#fed_menu_search').trigger('input');
+        e.preventDefault();
+    });
+
+
+
+    /**
      * Single line executions
      */
-    $('[data-toggle="popover"]').popover();
+    $('[data-toggle="popover"]').popover({
+        trigger : 'hover'
+    });
     $(".flatpickr").flatpickr({});
 
-
-    var fedAdminAlert = {
-        adminSettings: function (results) {
-            if (results.success) {
-                swal({
-                    title: results.data.message || 'Something Went Wrong',
-                    type: "success",
-                    confirmButtonColor: '#00b5ad'
-                }).then(
-                    function () {
-                        if (results.data.reload) {
-                            if (window.location == results.data.reload) {
-                                window.location.reload();
-                            } else {
-                                window.location = results.data.reload
-                            }
-                        }
-                    });
-            }
-            else if ((results.success) === false) {
-                swal({
-                    title: results.data.message || 'Something Went Wrong',
-                    type: "error",
-                    confirmButtonColor: "#DD6B55"
-                }).then(function () {
-                    if (results.data.reload) {
-                        if (window.location == results.data.reload) {
-                            location.reload();
-                        } else {
-                            window.location = results.data.reload
-                        }
-                    }
-                });
-            }
-            else {
-                swal({
-                    title: "Invalid form submission",
-                    text: "Please try again",
-                    type: "error",
-                    confirmButtonColor: "#DD6B55"
-                }).then(function () {
-                    if (results.data.reload) {
-                        if (window.location == results.data.reload) {
-                            location.reload();
-                        } else {
-                            window.location = results.data.reload
-                        }
-                    }
-                });
-            }
-
-        },
-        adminOrderAdd: function (results) {
-            if (results.success) {
-                swal({
-                    title: results.data.message || 'Something Went Wrong',
-                    type: "success",
-                    confirmButtonColor: '#00b5ad'
-                });
-            } else if (results.success === false) {
-                var error;
-                if (results.data.message instanceof Array) {
-                    error = results.data.message.join('</br>');
-                } else {
-                    error = results.data.message;
-                }
-                swal({
-                    title: error,
-                    type: "error",
-                    confirmButtonColor: "#DD6B55",
-                    html: true
-
-                });
-            }
-            else {
-                swal({
-                    title: "Invalid form submission",
-                    text: "Please try again",
-                    type: "error",
-                    confirmButtonColor: "#DD6B55"
-                });
-            }
-
-        }
-    };
-
-    $(function(){
+    $(function () {
         var hash = window.location.hash;
         hash && $('ul.nav a[href="' + hash + '"]').tab('show');
 
@@ -510,3 +459,109 @@ jQuery(document).ready(function ($) {
         });
     });
 });
+
+var fedAdminAlert = {
+    adminSettings: function (results) {
+        if (results.success) {
+            swal({
+                title: results.data.message || 'Something Went Wrong',
+                type: "success",
+                confirmButtonColor: '#00b5ad'
+            }).then(
+                function () {
+                    if (results.data.reload) {
+                        if (window.location == results.data.reload) {
+                            window.location.reload();
+                        } else {
+                            window.location = results.data.reload
+                        }
+                    }
+                });
+        }
+        else if ((results.success) === false) {
+            swal({
+                title: results.data.message || 'Something Went Wrong',
+                type: "error",
+                confirmButtonColor: "#DD6B55"
+            }).then(function () {
+                if (results.data.reload) {
+                    if (window.location == results.data.reload) {
+                        location.reload();
+                    } else {
+                        window.location = results.data.reload
+                    }
+                }
+            });
+        }
+        else {
+            swal({
+                title: "Invalid form submission",
+                text: "Please try again",
+                type: "error",
+                confirmButtonColor: "#DD6B55"
+            }).then(function () {
+                if (results.data.reload) {
+                    if (window.location == results.data.reload) {
+                        location.reload();
+                    } else {
+                        window.location = results.data.reload
+                    }
+                }
+            });
+        }
+
+    },
+    adminOrderAdd: function (results) {
+        if (results.success) {
+            swal({
+                title: results.data.message || 'Something Went Wrong',
+                type: "success",
+                confirmButtonColor: '#00b5ad'
+            });
+        } else if (results.success === false) {
+            var error;
+            if (results.data.message instanceof Array) {
+                error = results.data.message.join('</br>');
+            } else {
+                error = results.data.message;
+            }
+            swal({
+                title: error,
+                type: "error",
+                confirmButtonColor: "#DD6B55",
+                html: true
+
+            });
+        }
+        else {
+            swal({
+                title: "Invalid form submission",
+                text: "Please try again",
+                type: "error",
+                confirmButtonColor: "#DD6B55"
+            });
+        }
+
+    }
+};
+
+(function ($) {
+    $.fn.hasClassRegEx = function (regex) {
+        var classes = $(this).attr('class');
+
+        if (!classes || !regex) {
+            return false;
+        }
+
+        classes = classes.split(' ');
+        var len = classes.length;
+
+        for (var i = 0; i < len; i++) {
+            if (classes[i].toLowerCase().match(regex)) {
+                return true;
+            }
+        }
+
+        return false;
+    };
+})(jQuery);

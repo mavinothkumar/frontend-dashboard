@@ -1,10 +1,8 @@
 <?php
 
 function fed_register_form_submit( $post ) {
-
-	fed_validate_captcha( $post, 'register' );
-
-	$redirect_url = home_url();
+	do_action( 'fed_register_before_validation',$post);
+	$redirect_url = fed_registration_redirect();
 
 	$errors = fed_validate_registration_form( $post );
 
@@ -21,6 +19,8 @@ function fed_register_form_submit( $post ) {
 		wp_send_json_error( array( 'user' => $status->get_error_messages() ) );
 		exit();
 	}
+
+	wp_send_new_user_notifications($status);
 
 	wp_send_json_success( array(
 		'user'    => $status,

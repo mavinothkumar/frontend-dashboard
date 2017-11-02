@@ -22,21 +22,20 @@ function fed_admin_post_dashboard_tab($fed_admin_options) {
 
 			<div class="fed_admin_panel_container">
 				<div class="fed_admin_panel_content_wrapper">
-<!--					<div class="row">-->
-<!--						<div class="col-md-3 fed_menu_title">Disable Post Content</div>-->
-<!--						<div class="col-md-4">-->
-<!--								--><?php //echo fed_input_box( 'fed_post_dashboard_content', array(
-//									'name'    => 'dashboard[fed_post_dashboard_content]',
-//									'value'   => isset( $fed_admin_options['dashboard']['fed_post_dashboard_content'] ) ? $fed_admin_options['dashboard']['fed_post_dashboard_content'] : '',
-//									'default_value' => 'Disable',
-//								), 'checkbox' ); ?>
-<!--						</div>-->
-<!--					</div>-->
+					<div class="row">
+						<div class="col-md-3 fed_menu_title">Disable Post Content</div>
+						<div class="col-md-4">
+								<?php echo fed_input_box( 'fed_post_dashboard_content', array(
+									'name'    => 'dashboard[fed_post_dashboard_content]',
+									'value'   => isset( $fed_admin_options['dashboard']['fed_post_dashboard_content'] ) ? $fed_admin_options['dashboard']['fed_post_dashboard_content'] : '',
+									'default_value' => 'Enable',
+								), 'checkbox' ); ?>
+						</div>
+					</div>
 
 					<div class="row">
 						<div class="col-md-3 fed_menu_title">Disable Post Category</div>
 						<div class="col-md-4">
-
 								<?php echo fed_input_box( 'fed_post_dashboard_category', array(
 									'name'    => 'dashboard[fed_post_dashboard_category]',
 									'value'   => isset( $fed_admin_options['dashboard']['fed_post_dashboard_category'] ) ? $fed_admin_options['dashboard']['fed_post_dashboard_category'] : '',

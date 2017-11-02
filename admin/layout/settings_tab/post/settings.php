@@ -38,19 +38,6 @@ function fed_admin_post_settings_tab( $fed_admin_options ) {
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-4 fed_menu_title">Post Menu Position</div>
-                        <div class="col-md-4">
-                            <div class="col-md-6">
-								<?php echo fed_input_box( 'fed_post_position', array(
-									'name'    => 'settings[fed_post_position]',
-									'value'       => $fed_post_position,
-									'placeholder' => __( 'Post Menu Position' ),
-								), 'number' ); ?>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
 

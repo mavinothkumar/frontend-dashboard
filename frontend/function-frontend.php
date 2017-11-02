@@ -263,11 +263,16 @@ function fed_get_wp_editor( $content = '', $id, array $options ) {
  *
  * @return string
  */
-function fed_get_dashboard_display_categories( $post_id = '' ) {
-	$fed_get_categories = get_categories();
-	$categories         = fed_get_categories_id_by_post_id( $post_id );
+function fed_get_dashboard_display_categories( $post = '', $cpt = '' ) {
+	$categories         = '';
+	$fed_get_categories = get_terms( array(
+		'taxonomy' => $cpt->name
+	) );
+	if ( isset( $post->ID ) ) {
+		$categories = wp_get_post_terms( $post->ID, $cpt->name, array( 'fields' => 'ids' ) );
+	}
 
-	return fed_convert_array_to_id_name( $fed_get_categories, 'term_id', 'post_category', $categories );
+	return fed_convert_array_to_id_name( $fed_get_categories, 'term_id', 'tax_input[' . $cpt->name . ']', $categories );
 }
 
 /**
@@ -275,11 +280,16 @@ function fed_get_dashboard_display_categories( $post_id = '' ) {
  *
  * @return string
  */
-function fed_get_dashboard_display_tags( $pos_id = '' ) {
-	$fed_get_tags = get_tags();
-	$tags         = fed_get_tags_id_by_post_id( $pos_id );
+function fed_get_dashboard_display_tags( $post = '', $cpt = '' ) {
+	$tags         = '';
+	$fed_get_tags = get_terms( array(
+		'taxonomy' => $cpt->name
+	) );
+	if ( isset( $post->ID ) ) {
+		$tags = wp_get_post_terms( $post->ID, $cpt->name, array( 'fields' => 'slugs' ) );
+	}
 
-	return fed_convert_array_to_id_name( $fed_get_tags, 'slug', 'tags_input', $tags );
+	return fed_convert_array_to_id_name( $fed_get_tags, 'slug', 'tax_input[' . $cpt->name . ']', $tags );
 }
 
 /**
@@ -290,40 +300,35 @@ function fed_get_dashboard_display_tags( $pos_id = '' ) {
  *
  * @return string
  */
-function fed_convert_array_to_id_name( $array, $key = 'term_id', $type = '', $compare = array() ) {
+function fed_convert_array_to_id_name( array $array, $key = 'term_id', $type = '', $compare = array() ) {
 	$new_category = array();
 	$html         = '';
 
-	foreach ( $array as $value ) {
-		$new_category[ $value->$key ] = $value->name;
-	}
-
-	foreach ( $new_category as $index => $new_value ) {
-		$actual_value = '';
-		if ( count( $compare ) > 0 && $key == 'term_id' ) {
-			if ( in_array( $index, $compare ) ) {
-				$actual_value = $index;
-			}
+	if ( $array ) {
+		foreach ( $array as $value ) {
+			$new_category[ $value->$key ] = $value->name;
 		}
 
-		if ( count( $compare ) > 0 && $key == 'slug' ) {
-			if ( in_array( $index, array_keys( $compare ) ) ) {
+		foreach ( $new_category as $index => $new_value ) {
+			$actual_value = '';
+			if ( count( $compare ) > 0 && in_array( $index, $compare, false ) ) {
 				$actual_value = $index;
 			}
+
+			$html .= fed_input_box( $type,
+				array(
+					'name'          => $type . '[]',
+					'default_value' => $index,
+					'label'         => $new_value,
+					'value'         => $actual_value
+				), 'checkbox' );
 		}
 
-		//var_dump($index . ' <=> ' . $actual_value);
-
-		$html .= fed_input_box( $type,
-			array(
-				'name'          => $type . '[]',
-				'default_value' => $index,
-				'label'         => $new_value,
-				'value'         => $actual_value
-			), 'checkbox' );
+		return $html;
 	}
+	$temp = $key === 'term_id' ? 'Category' : 'Tag';
 
-	return $html;
+	return 'Sorry! there is no field associated to this ' . $temp;
 }
 
 /**
@@ -459,12 +464,12 @@ function fed_get_payment_notification() {
 function fed_show_users_by_role( $fed_user_attr ) {
 	$user_roles    = fed_get_user_roles();
 	$get_user_role = $fed_user_attr->role;
-	$current_url   = fed_get_current_page_url();
+	$current_url   = get_site_url() . '/' . $get_user_role . '/';
 	?>
-<div class="bc_fed container fed_user_roles_container <?php echo $get_user_role; ?>">
+<div class="bc_fed fed_user_roles_container <?php echo $get_user_role; ?>">
 
 	<?php
-	if ( ! in_array( $get_user_role, array_keys( $user_roles ) ) ) {
+	if ( ! array_key_exists( $get_user_role, $user_roles ) ) {
 		?>
 		<div class="alert alert-danger">
 			<button type="button"
@@ -511,7 +516,7 @@ function fed_show_users_by_role( $fed_user_attr ) {
 								</div>
 								<div class="panel-footer bg-primary">
 									<h3 class="panel-title">
-										<a href="<?php echo $current_url . '?user=' . absint( $get_all_user->ID ); ?>">
+										<a target="_blank" href="<?php echo $current_url . '?user=' . absint( $get_all_user->ID ); ?>">
 											<?php echo $name; ?>
 										</a>
 									</h3>
@@ -716,7 +721,7 @@ function fed_show_user_profile_page( $user ) {
 					<div class="fed_post_excerpt">
 						<?php the_excerpt() ?>
 					</div>
-					<?php
+				<?php
 				endwhile;
 				?>
 

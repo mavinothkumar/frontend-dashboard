@@ -71,6 +71,17 @@ function fed_admin_login_settings_tab( $fed_login_settings ) {
 					</div>
 				</div>
 				<div class="row">
+					<div class="col-md-4 fed_menu_title"><?php _e( 'Redirect After Register URL', 'fed' ) ?></div>
+					<div class="col-md-4">
+						<?php wp_dropdown_pages( array(
+							'name'             => 'fed_admin_login[settings][fed_redirect_register_url]',
+							'selected'         => isset( $fed_login_settings['settings']['fed_redirect_register_url'] ) ? $fed_login_settings['settings']['fed_redirect_register_url'] : '',
+							'show_option_none' => 'Let it be default',
+							'class'            => 'form-control'
+						) ); ?>
+					</div>
+				</div>
+				<div class="row">
 					<div class="col-md-4 fed_menu_title"><?php _e( 'Redirect After Logged in URL', 'fed' ) ?></div>
 					<div class="col-md-4">
 						<?php wp_dropdown_pages( array(

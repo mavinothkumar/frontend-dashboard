@@ -12,12 +12,13 @@ jQuery(document).ready(function ($) {
         $('.fed_login_menus').on('click', '.fed_tab_menus', function () {
             var click = $(this);
             var click_id = click.attr('id');
+            var fed_login_content = $('.fed_login_content');
 
             click.closest('.fed_login_wrapper').find('.fed_tab_menus').removeClass('fed_selected');
             click.addClass('fed_selected');
 
-            $('.fed_login_content').find('.fed_tab_content').addClass('hide ').animateCss('pulse');
-            $('.fed_login_content').find("[data-id='" + click_id + "']").removeClass('hide');
+            fed_login_content.find('.fed_tab_content').addClass('hide ').animateCss('pulse');
+            fed_login_content.find("[data-id='" + click_id + "']").removeClass('hide');
         });
 
         // All Front End submission
@@ -27,11 +28,13 @@ jQuery(document).ready(function ($) {
             var data = click.serialize();
             var url = fed.fed_login_form_post;
             var method = click.attr('method') || 'post';
+            $('#preview-area').find('.spinner_circle').removeClass('hide');
             $.ajax({
                 type: method,
                 data: data,
                 url: url,
                 success: function (results) {
+                    $('#preview-area').find('.spinner_circle').addClass('hide');
                     fedAlert.loginStatus(results);
                 }
             });
@@ -48,7 +51,6 @@ jQuery(document).ready(function ($) {
                 url: form.attr('action'),
                 data: form.serialize(),
                 success: function (results) {
-                    console.log(results);
                     $('#preview-area').find('.spinner_circle').addClass('hide');
                     fedAlert.dashboardPostCommon(results);
                 }
@@ -166,6 +168,7 @@ jQuery(document).ready(function ($) {
                 data: data,
                 url: url,
                 success: function (results) {
+                    console.log(results);
                     fedAlert.dashboardPostCommon(results);
                     $('#preview-area').find('.spinner_circle').addClass('hide');
                 }
@@ -187,6 +190,7 @@ jQuery(document).ready(function ($) {
                 async: false,
                 url: url,
                 success: function (results) {
+                    console.log(results);
                     $('#preview-area').find('.spinner_circle').addClass('hide');
                     root.html(results);
                 },
@@ -216,12 +220,15 @@ jQuery(document).ready(function ($) {
                     // tinyMCE.remove('#post_content');
                 },
                 success: function (results) {
+                    // console.log(results);
                     $('#preview-area').find('.spinner_circle').addClass('hide');
                     root.html(results);
                 },
                 complete: function () {
                     //tinyMCE.remove('#post_content');
-                    jQuery(".flatpickr").flatpickr({});
+                    if ($('.flatpickr').length) {
+                        $('.flatpickr').flatpickr({});
+                    }
                 }
             });
             e.preventDefault();
@@ -240,6 +247,7 @@ jQuery(document).ready(function ($) {
                 data: data,
                 url: url,
                 success: function (results) {
+                    console.log(results);
                     fedAlert.dashboardPostCommon(results);
                     //$('#preview-area').find('.spinner_circle').addClass('hide');
                 }
@@ -306,9 +314,12 @@ jQuery(document).ready(function ($) {
                 data: data,
                 url: url,
                 beforeSend: function () {
-                    tinyMCE.remove('#post_content');
+                    if (typeof tinyMCE !== 'undefined') {
+                        tinyMCE.remove('#post_content');
+                    }
                 },
                 success: function (results) {
+                    // console.log(results);
                     $('#preview-area').find('.spinner_circle').addClass('hide');
                     root.html(results);
                 }
@@ -386,7 +397,7 @@ jQuery(document).ready(function ($) {
             var parent = click.closest('.fed_dashboard_wrapper');
             var menu = parent.find('.fed_dashboard_menus');
             var content = parent.find('.fed_dashboard_items');
-            if (click.find('.fed_collapse_menu_icon .fa').hasClass('fa-arrow-circle-left')){
+            if (click.find('.fed_collapse_menu_icon .fa').hasClass('fa-arrow-circle-left')) {
                 click.find('.fed_collapse_menu_icon .fa').removeClass('fa-arrow-circle-left').addClass('fa-arrow-circle-right');
                 menu.find('.fed_menu_title').addClass('hide');
                 menu.removeClass('col-md-3').addClass('col-md-1');
@@ -424,7 +435,7 @@ jQuery(document).ready(function ($) {
                             window.location.href = results.data.url;
                         });
                 } else {
-                    if (fed.fed_captcha_details.fed_captcha_enable == 'Enable') {
+                    if (fed.fed_captcha_details && fed.fed_captcha_details.fed_captcha_enable === 'Enable') {
                         grecaptcha.reset();
                     }
 
@@ -436,8 +447,7 @@ jQuery(document).ready(function ($) {
                     swal({
                         title: error,
                         type: "error",
-                        confirmButtonColor: "#DD6B55",
-                        html: true
+                        confirmButtonColor: "#DD6B55"
                     });
                 }
             },

@@ -1,8 +1,4 @@
 <?php
-/**
- * Developer Comment
- * translate => done
- */
 
 /**
  * Get all content have registration enables
@@ -55,6 +51,7 @@ function fed_fetch_user_profile_extra_fields() {
 	$table_name = $wpdb->prefix . BC_FED_USER_PROFILE_DB;
 
 	$result = $wpdb->get_results( "SELECT * FROM $table_name WHERE extra LIKE 'yes'", ARRAY_A );
+
 	if ( $result === null || count( $result ) <= 0 ) {
 		return false;
 	}

@@ -30,22 +30,23 @@ function fed_admin_setting_login_request() {
 }
 
 function fed_admin_login_settings_save( $request ) {
-	return   array(
-		'fed_login_url'           => isset( $request['settings']['fed_login_url'] ) ? (int) $request['settings']['fed_login_url'] : '',
-		'fed_register_url'           => isset( $request['settings']['fed_register_url'] ) ? (int) $request['settings']['fed_register_url'] : '',
-		'fed_forgot_password_url'           => isset( $request['settings']['fed_forgot_password_url'] ) ? (int) $request['settings']['fed_forgot_password_url'] : '',
-		'fed_redirect_login_url'  => isset( $request['settings']['fed_redirect_login_url'] ) ? (int) $request['settings']['fed_redirect_login_url'] : '',
-		'fed_redirect_logout_url' => isset( $request['settings']['fed_redirect_logout_url'] ) ? (int) $request['settings']['fed_redirect_logout_url'] : '',
-		'fed_dashboard_url'       => isset( $request['settings']['fed_dashboard_url'] ) ? (int) $request['settings']['fed_dashboard_url'] : '',
+	return array(
+		'fed_login_url'             => isset( $request['settings']['fed_login_url'] ) ? (int) $request['settings']['fed_login_url'] : '',
+		'fed_register_url'          => isset( $request['settings']['fed_register_url'] ) ? (int) $request['settings']['fed_register_url'] : '',
+		'fed_forgot_password_url'   => isset( $request['settings']['fed_forgot_password_url'] ) ? (int) $request['settings']['fed_forgot_password_url'] : '',
+		'fed_redirect_login_url'    => isset( $request['settings']['fed_redirect_login_url'] ) ? (int) $request['settings']['fed_redirect_login_url'] : '',
+		'fed_redirect_register_url' => isset( $request['settings']['fed_redirect_register_url'] ) ? (int) $request['settings']['fed_redirect_register_url'] : '',
+		'fed_redirect_logout_url'   => isset( $request['settings']['fed_redirect_logout_url'] ) ? (int) $request['settings']['fed_redirect_logout_url'] : '',
+		'fed_dashboard_url'         => isset( $request['settings']['fed_dashboard_url'] ) ? (int) $request['settings']['fed_dashboard_url'] : '',
 	);
 
 }
 
 function fed_admin_login_register_save( $request ) {
 	return array(
-		'role'           => isset( $request['role'] ) ? $request['role'] : array(),
-		'name'           => isset( $request['name'] ) ? $request['name'] : 'User Role',
-		'position'           => isset( $request['position'] ) ? $request['position'] : 999,
+		'role'     => isset( $request['role'] ) ? $request['role'] : array(),
+		'name'     => isset( $request['name'] ) ? $request['name'] : 'User Role',
+		'position' => isset( $request['position'] ) ? $request['position'] : 999,
 	);
 }
 
@@ -110,5 +111,14 @@ function fed_logout_redirect( $logout_url, $redirect, $user ) {
 	return $logout_url;
 }
 
+/**
+ * Register Redirect
+ */
+function fed_registration_redirect( ) {
+	$register_redirect_url = fed_get_register_redirect_url();
+	$register_url          = false === $register_redirect_url ? home_url() : $register_redirect_url;
+
+	return $register_url;
+}
 
 

@@ -1,5 +1,27 @@
 <?php
 
+add_action( 'admin_init', 'fed_upgrade' );
+function fed_upgrade() {
+
+	$new_version = BC_FED_PLUGIN_VERSION;
+	$old_version = get_option( 'fed_plugin_version', '0' );
+
+	if ( $old_version == $new_version ) {
+		return;
+	}
+
+	do_action( 'fed_upgrade_action', $new_version, $old_version );
+
+	update_option( 'fed_plugin_version', $new_version );
+}
+
+add_action('fed_upgrade_action','fed_upgrade_actions',10,2);
+function fed_upgrade_actions($new_version, $old_version) {
+	fed_plugin_activation();
+	fed_plugin_data();
+	fed_plugin_meta_data();
+}
+
 /**
  * Plugin Activation.
  */
@@ -134,9 +156,9 @@ function fed_plugin_data() {
 
 }
 
-register_activation_hook( BC_FED_PLUGIN, 'fed_plugin_activation' );
-register_activation_hook( BC_FED_PLUGIN, 'fed_plugin_data' );
-register_activation_hook( BC_FED_PLUGIN, 'fed_plugin_meta_data' );
+//register_activation_hook( BC_FED_PLUGIN, 'fed_plugin_activation' );
+//register_activation_hook( BC_FED_PLUGIN, 'fed_plugin_data' );
+//register_activation_hook( BC_FED_PLUGIN, 'fed_plugin_meta_data' );
 
 
 /**
@@ -340,6 +362,12 @@ function fed_admin_notice() {
 		if ( ! $get_notification ) {
 			?>
 			<div class="notice notice-success">
+				<p>
+					<b><?php _e( 'If you need help in configuring the frontend dashboard, please watch the videos here','fed');
+					?>
+					</b>
+					<a href="https://buffercode.com/category/name/frontend-dashboard"><?php _e('Frontend Dashboard Instructions','fed') ?></a>
+				</p>
 				<p>
 					<?php _e( 'Notice: Please check your default settings','fed');
 					?>

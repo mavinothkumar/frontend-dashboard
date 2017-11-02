@@ -3,8 +3,8 @@ Contributors: vinoth06, buffercode
 Tags: dashboard, frontend dashboard, custom login, custom register, custom role, custom profile, custom post type
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7DHAEMST475BY
 Requires at least: 4.3
-Tested up to: 4.8.1
-Stable tag: 1.1.2
+Tested up to: 4.8.3
+Stable tag: 1.1.4.6.1
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -22,6 +22,38 @@ Frontend Dashboard is bundled with the huge list of custom features which can ea
 7. Show user role based custom profile page
 8. Restrict the number of posts to show in the custom profile page.
 
+= Frontend Dashboard Plugins List =
+* [Frontend Dashboard Captcha](https://buffercode.com/plugin/frontend-dashboard-captcha)
+* [Frontend Dashboard Extra](https://buffercode.com/plugin/frontend-dashboard-extra)
+* [Frontend Dashboard Pages](https://buffercode.com/plugin/frontend-dashboard-pages)
+
+= Videos =
+
+For more video : [Frontend Dashboard](https://buffercode.com/category/name/frontend-dashboard)
+
+* [How to create custom login for Frontend Dashboard](https://buffercode.com/post/how-to-create-custom-login-for-frontend-dashboard-wordpress-plugin)
+
+* [How to create Dashboard for Frontend Dashboard](https://buffercode.com/post/how-to-create-dashboard-for-frontend-dashboard-wordpress-plugin)
+
+* [How to set Redirect on Login for Frontend Dashboard](https://buffercode.com/post/how-to-set-redirect-on-login-for-frontend-dashboard-wordpress-plugin)
+
+* [How to set Widget for Frontend Dashboard](https://buffercode.com/post/how-to-set-widget-for-frontend-dashboard-wordpress-plugin)
+
+* [How to Create Custom User Role in Frontend Dashboard](https://buffercode.com/post/how-to-create-custom-user-role-in-frontend-dashboard-wordpress-plugin)
+
+* [How to create a page for Users, based on their User Role](https://buffercode.com/post/how-to-create-a-page-for-users-based-on-their-user-role)
+
+* [How new user can select user role on registration](https://buffercode.com/post/how-new-user-can-select-user-role-on-registration)
+
+* [How to customise the layout colours in Frontend Dashboard](https://buffercode.com/post/how-to-customise-the-layout-colours-in-frontend-dashboard)
+
+* [How to manage post options in Frontend Dashboard](https://buffercode.com/post/how-to-manage-post-options-in-frontend-dashboard)
+
+* [How to create custom menu in Frontend Dashboard](https://buffercode.com/post/how-to-create-custom-menu-in-frontend-dashboard)
+
+For more video : [Frontend Dashboard](https://buffercode.com/category/name/frontend-dashboard)
+
+
 == Installation ==
 1. Upload the “frontend-dashboard” directory to the plugins directory.
 2. Go to the plugins setting page and activate “Frontend Dashboard”
@@ -31,15 +63,23 @@ Frontend Dashboard is bundled with the huge list of custom features which can ea
 == Frequently Asked Questions ==
 = How to create all in one login page [login, register, forgot password and dashboard] =
 
-1. Please go to Admin Dashboard | Pages | Add New Pages
+1. First we need to create a new page for custom login.
 
-2. Give appropriate title
+2. Please go to Admin Dashboard | Pages | Add New Pages
 
-3. Add shortcode in content area [fed_login]
+3. Give appropriate title
 
-4. Change Page Attributes Template to FED Login [In Right Column]
+4. Add shortcode in content area [fed_login]
 
-5. Publish the page.
+5. Change Page Attributes Template to FED Login [In Right Column]
+
+6. Publish the page.
+
+7. Navigate to Frontend Dashboard | Frontend Dashboard | Login |  Settings
+
+8. Change the Login Page URL to newly created custom login page.
+
+9. Save the settings.
 
 = How to create single page for login, register and forgot password =
 
@@ -55,6 +95,16 @@ Frontend Dashboard is bundled with the huge list of custom features which can ea
 
 6. Publish the page.
 
+= How to set Widget =
+
+1.	Navigate to Appearance | Widgets
+
+2.	Add the “Text Widget” to the appropriate location.
+
+3.	Add shortcode "[fed_login]" in to the textarea [without double quotation]
+
+4.	Save the settings.
+
 = How to create the dashboard page =
 
 1. Please go to Admin Dashboard | Pages | Add New Pages
@@ -68,6 +118,17 @@ Frontend Dashboard is bundled with the huge list of custom features which can ea
 5. Publish the page.
 
 Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settings (Tab) | Please change the appropriate pages for the settings.
+
+
+= Redirect on Login =
+
+1. Navigate to Frontend Dashboard | Frontend Dashboard | Login |  Settings
+
+2. Change the "Redirect After Logged in URL" to your desired page.
+
+3. Change the "Redirect After Logged out URL" to your desired page.
+
+4. Save the settings.
 
 
 = How to create dashboard menu =
@@ -102,6 +163,25 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 4. Fill the input fields and submit to save
 
+= How to Create Custom User Role =
+
+1. Navigate to Frontend Dashboard | Frontend Dashboard | User | Add/Delete Custom Role
+
+2. Enter the Role Name and press tab to generate the Role slug automatically.
+
+3. Click Add.
+
+= How to create a page for User Role =
+
+1. Create a new page, Pages | Add New
+
+2. Add fed_user role=user_role] in the content area, the user_role may be a default or custom user role, eg subscriber, editor.
+
+3. Change the Page Attributes | Template | to FED Dashboard
+
+4. Click Publish
+
+5. Now you can have that particular user role page in that created page URL.
 
 = List of shortcodes =
 
@@ -118,6 +198,45 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 6. [fed_user role=user_role] to generate the role based user page
 
 == Changelog ==
+
+= v1.1.4.6.1 [02-November-2017]=
+* New: Added Register Redirect after registration
+* New: Post content can be disabled
+* Bug: While Login and Register loading icon missing
+* Bug: Email not sending to new register
+* Bug: Input type number can't able to add more than 6 six digits
+* Enhanced: Dashboard Settings
+* Enhanced: Dashboard Main Menu
+* Enhanced: Add-Ons
+
+= v1.1.4.5 [16-October-2017]=
+* New action hooks added
+* Bug fixes
+
+= v1.1.4.4 [09-October-2017]=
+* Main menu search box added to search the menu by its name
+* Login failed and more bug fixes
+
+
+= v1.1.4.3 [27-September-2017]=
+* Customize the Frontend Dashboard Layout Color
+* Bug fixes
+
+
+= v1.1.4.2 [17-September-2017]=
+* Major Bug fixes
+* Document updated
+
+= v1.1.4 [10-September-2017]=
+* Plugin page update
+* Bug fixes
+* Added new filter and action hooks
+
+= v1.1.3 [06-September-2017]=
+* Plugin page added
+* Bug fixes
+* Added new filter and action hooks
+
 = v1.1.2 [18-August-2017]=
 * Changed the way of representing the Radio and Select input field.
 * Bug fixes
@@ -136,10 +255,9 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 * Public release
 
 == Upgrade Notice ==
-= v1.1.1 [17-August-2017]=
-* Collapse/Expand the frontend dashboard menu
+= v1.1.4.5 [16-October-2017]=
+* New action hooks added
 * Bug fixes
-* Refactored for developers comfort
 
 == Screenshots ==
 1. Frontend Dashboard Settings | Login | Settings
@@ -160,3 +278,4 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 16. Reset Password
 17. User Profiles
 18. User Profile
+19. Frontend Dashboard Settings | User Profile Layout | Color

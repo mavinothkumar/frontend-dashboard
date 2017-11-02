@@ -8,6 +8,7 @@ $details = fed_login_only();
 do_action( 'fed_before_login_only_form' );
 ?>
 	<div class="bc_fed container fed_login_container">
+		<?php echo fed_loader(); ?>
 		<div class="row">
 			<div class="col-md-6 col-md-offset-3">
 				<div class="panel panel-primary">

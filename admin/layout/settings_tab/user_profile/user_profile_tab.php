@@ -60,5 +60,11 @@ function fed_user_profile_layout_options($fed_admin_options) {
 			'callable'  => 'fed_admin_user_profile_settings_tab',
 			'arguments' => $fed_admin_options
 		),
+		'fed_admin_user_profile_layout_colors'    => array(
+			'icon'      => 'fa fa-paint-brush',
+			'name'      => __( 'Colors', 'fed' ),
+			'callable'  => 'fed_admin_user_profile_colors_tab',
+			'arguments' => $fed_admin_options
+		),
 	) );
 }

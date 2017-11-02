@@ -105,26 +105,3 @@ function fed_validate_forgot_password( $post ) {
 	return $user_data;
 }
 
-/**
- * Validate Captcha
- */
-function fed_validate_captcha( $request, $page ) {
-	$fed_captcha = get_option( 'fed_admin_settings_captcha' );
-	if (
-		( $page == 'login' && $fed_captcha['fed_captcha_in_login_form'] == 'Enable' ) ||
-		( $page == 'register' && $fed_captcha['fed_captcha_in_register_form'] == 'Enable' )
-	) {
-		$secret    = $fed_captcha['fed_captcha_secrete_key'];
-		$recaptcha = new \ReCaptcha\ReCaptcha( $secret, new \ReCaptcha\RequestMethod\SocketPost() );
-		$resp      = $recaptcha->verify( $request['g-recaptcha-response'], $_SERVER['REMOTE_ADDR'] );
-
-		if ( $resp->isSuccess() ) {
-			return true;
-		}
-		wp_send_json_error( array( 'user' => array( 'Invalid Captcha, Please try again' ) ) );
-		exit();
-	}
-
-	return true;
-
-}

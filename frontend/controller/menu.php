@@ -33,27 +33,30 @@ function fed_process_dashboard_display_menu() {
  */
 function fed_get_post_menu() {
 	$all_roles          = fed_get_user_roles();
-	$admin_post_options = get_option( 'fed_admin_settings_post', fed_get_default_post_options( $all_roles ) );
-	$user               = get_userdata( get_current_user_id() );
-	$menu_position      = ( isset( $admin_post_options['menu']['post_position'] ) && $admin_post_options['menu']['post_position'] != '' ) ? (int) $admin_post_options['menu']['post_position'] : 2;
-
-	$menu_name = ( isset( $admin_post_options['menu']['rename_post'] ) && $admin_post_options['menu']['rename_post'] != '' ) ? esc_attr( $admin_post_options['menu']['rename_post'] ) : 'Post';
-	$menu_icon = ( isset( $admin_post_options['menu']['post_menu_icon'] ) && $admin_post_options['menu']['post_menu_icon'] != '' ) ? esc_attr( $admin_post_options['menu']['post_menu_icon'] ) : 'fa fa-file-text';
+	$admin_post_options = array(
+		'post' => get_option( 'fed_admin_settings_post', fed_get_default_post_options(
+			$all_roles
+		) )
+	);
 
 	$default = array();
+	$user    = get_userdata( get_current_user_id() );
+	foreach ( $admin_post_options as $key => $options ) {
+		$menu_position = ( isset( $options['menu']['post_position'] ) && $options['menu']['post_position'] != '' ) ? (int) $options['menu']['post_position'] : 99;
 
-	if ( count( array_intersect( $user->roles, array_keys( $admin_post_options['permissions']['fed_post_permission'] ) ) ) > 0 ) {
-		$default = array(
-			'post' =>
-				array(
-					'id'                => '20',
-					'menu_slug'         => 'post',
-					'menu'              => $menu_name,
-					'menu_order'        => $menu_position,
-					'menu_image_id'     => $menu_icon,
-					'show_user_profile' => 'disable',
-				)
-		);
+		$menu_name = ( isset( $options['menu']['rename_post'] ) && $options['menu']['rename_post'] != '' ) ? esc_attr( $options['menu']['rename_post'] ) : 'Post';
+		$menu_icon = ( isset( $options['menu']['post_menu_icon'] ) && $options['menu']['post_menu_icon'] != '' ) ? esc_attr( $options['menu']['post_menu_icon'] ) : 'fa fa-file-text';
+
+		if ( count( array_intersect( $user->roles, array_keys( $options['permissions']['fed_post_permission'] ) ) ) > 0 ) {
+			$default[ $key ] = array(
+				'id'                => '20',
+				'menu_slug'         => 'post',
+				'menu'              => $menu_name,
+				'menu_order'        => $menu_position,
+				'menu_image_id'     => $menu_icon,
+				'show_user_profile' => 'disable',
+			);
+		}
 	}
 
 	return $default;
@@ -86,6 +89,7 @@ function fed_get_logout_menu() {
  */
 function fed_display_dashboard_menu( $first_element ) {
 	$menus = fed_get_all_dashboard_display_menus();
+
 	foreach ( $menus as $index => $menu ) {
 		if ( $index == $first_element ) {
 			$active = 'active';
@@ -93,9 +97,9 @@ function fed_display_dashboard_menu( $first_element ) {
 			$active = '';
 		}
 		?>
-		<a href="#<?php echo $menu['menu_slug']; ?>"
+		<a href="#<?php echo $index; ?>"
 		   class="list-group-item fed_menu_slug <?php echo $active ?>"
-		   data-menu="<?php echo $menu['menu_slug']; ?>">
+		   data-menu="<?php echo $index; ?>">
 			<div class="flex">
 				<div class="fed_menu_icon">
 					<span class="<?php echo $menu['menu_image_id'] ?>"></span>

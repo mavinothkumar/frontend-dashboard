@@ -5,19 +5,19 @@
  *
  * @return array
  */
-function fed_fetch_menu_with_key_value() {
+function fed_fetch_menu() {
 	$results         = fed_fetch_rows_by_table( BC_FED_MENU_DB );
 
 	if ( count( $results ) <= 0 ) {
-		new WP_Error( 'fed_default_value_not_installed', __('There is some trouble in installing the default value, please try to deactivate and activate the plugin or contact us on ','fed') . make_clickable( 'https://ifecho.com/' ) );
+		new WP_Error( 'fed_default_value_not_installed', __('There is some trouble in installing the default value, please try to deactivate and activate the plugin or contact us on ','fed') . make_clickable( 'https://buffercode.com/' ) );
 	}
 
-	$result_with_key = array();
-	foreach ( $results as $result ) {
-		$result_with_key[ $result['menu_slug'] ] = $result['menu'];
-	}
+//	$result_with_key = array();
+//	foreach ( $results as $result ) {
+//		$result_with_key[ $result['menu_slug'] ] = $result;
+//	}
 
-	return $result_with_key;
+	return $results;
 }
 
 /**

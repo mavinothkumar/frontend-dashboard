@@ -4,7 +4,7 @@
  */
 
 add_action( 'admin_enqueue_scripts', 'fed_script_admin' );
-add_action( 'wp_enqueue_scripts', 'fed_script_front_end' );
+add_action( 'wp_enqueue_scripts', 'fed_script_front_end', 99 );
 /**
  * Admin Scripts.
  *
@@ -49,6 +49,8 @@ function fed_script_admin( $hook ) {
 			plugins_url( 'admin/assets/fed_admin_style.css', BC_FED_PLUGIN ),
 			array(), BC_FED_PLUGIN_VERSION, 'all' );
 
+		do_action( 'fed_enqueue_script_style_admin');
+
 		$translation_array = array(
 			'plugin_url'          => plugins_url( BC_FED_PLUGIN_NAME ),
 			'payment_info'        => get_option( 'fed_payment_info', 'no' ),
@@ -59,6 +61,10 @@ function fed_script_admin( $hook ) {
 
 		wp_enqueue_media();
 	}
+
+	wp_enqueue_style( 'fed_global_admin_style',
+		plugins_url( 'admin/assets/fed_global_admin_style.css', BC_FED_PLUGIN ),
+		array(), BC_FED_PLUGIN_VERSION, 'all' );
 }
 
 /**
@@ -99,36 +105,21 @@ function fed_script_front_end() {
 		plugins_url( '/common/assets/css/common-style.css', BC_FED_PLUGIN ),
 		array(), BC_FED_PLUGIN_VERSION, 'all' );
 
-	wp_enqueue_script( 'recaptcha', 'https://www.google.com/recaptcha/api.js?onload=CaptchaCallback&render=explicit&hl=en', array(), BC_FED_PLUGIN_VERSION, 'all' );
+	wp_enqueue_style( 'fed_global_admin_style',
+		plugins_url( 'admin/assets/fed_global_admin_style.css', BC_FED_PLUGIN ),
+		array(), BC_FED_PLUGIN_VERSION, 'all' );
+
+	do_action( 'fed_enqueue_script_style_frontend');
 
 	// Pass PHP value to JavaScript
-	$translation_array = array(
+	$translation_array = apply_filters('fed_convert_php_js_var',array(
 		'plugin_url'          => plugins_url( BC_FED_PLUGIN_NAME ),
 		'payment_info'        => get_option( 'fed_payment_info', 'no' ),
-		'fed_login_form_post' => admin_url( 'admin-ajax.php?action=fed_login_form_post&nonce=' . wp_create_nonce( "fed_login_form_post" ) ),
-		'fed_captcha_details' => fed_get_captcha_details(),
-	);
+		'fed_login_form_post' => admin_url( 'admin-ajax.php?action=fed_login_form_post&nonce=' . wp_create_nonce( "fed_login_form_post" ) )
+	) );
 
 	wp_localize_script( 'fed_script', 'fed', $translation_array );
 
 	wp_enqueue_media();
 
 }
-
-/**
- * Add Async Attribute
- *
- * @param string $tag Tag
- * @param string $handle Handle
- *
- * @return mixed
- */
-function fed_add_async_attribute( $tag, $handle ) {
-	if ( 'recaptcha' !== $handle ) {
-		return $tag;
-	}
-
-	return str_replace( ' src', ' defer="defer" async="async" src', $tag );
-}
-
-add_filter( 'script_loader_tag', 'fed_add_async_attribute', 10, 2 );

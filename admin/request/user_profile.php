@@ -20,7 +20,7 @@ function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
 		exit();
 	}
 
-	if ( ! empty($post_id )) {
+	if ( ! empty( $post_id ) ) {
 
 		/**
 		 * Check for input meta already exist
@@ -29,7 +29,7 @@ function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
 		$duplicate = $wpdb->get_row( "SELECT * FROM $table_name WHERE input_meta LIKE '{$input_meta}' AND NOT id = $post_id " );
 
 		if ( null !== $duplicate ) {
-			wp_send_json_error( array( 'message' => 'Sorry, you have previously added ' . strtoupper( $duplicate->label_name ) . ' with input type ' . strtoupper( $duplicate->input_type ) ) );
+			wp_send_json_error( array( 'message' => 'Sorry, you have previously added ' . strtoupper( $duplicate->label_name ) . ' with input type ' . strtoupper( fed_convert_this_to_that( $duplicate->input_type, '_', ' ' ) ) ) );
 		}
 
 		/**
@@ -50,7 +50,8 @@ function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
 		$duplicate = $wpdb->get_row( "SELECT * FROM $table_name WHERE input_meta LIKE '{$input_meta}'" );
 
 		if ( null !== $duplicate ) {
-			wp_send_json_error( array( 'message' => 'Sorry, you have previously added ' . strtoupper( $duplicate->label_name ) . ' with input type ' . strtoupper( $duplicate->input_type ) ) );
+			$error_message = fed_convert_this_to_that($duplicate->input_type ,'_',' ');
+			wp_send_json_error( array( 'message' => 'Sorry, you have previously added "' . strtoupper( $duplicate->label_name ) . '" with input type "' . $error_message . '" on Post Type "' . $duplicate->post_type. '"'));
 			exit();
 		}
 		/**
@@ -62,7 +63,7 @@ function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
 		);
 
 		if ( $status === false ) {
-			wp_send_json_error( array( 'message' => __('Sorry, Something went wrong in storing values in DB, please try again later or contact support','fed') ) );
+			wp_send_json_error( array( 'message' => __( 'Sorry, Something went wrong in storing values in DB, please try again later or contact support', 'fed' ) ) );
 			exit();
 		}
 

@@ -43,7 +43,7 @@ class FED_Page_Template {
 		$this->templates = array(
 			'include/page-template/layouts/fed_login.php'     => 'FED Login',
 			'include/page-template/layouts/fed_dashboard.php' => 'FED Dashboard',
-			'include/page-template/layouts/fed_invoice.php'   => 'FED Invoice'
+//			'include/page-template/layouts/fed_invoice.php'   => 'FED Invoice'
 		);
 
 	}

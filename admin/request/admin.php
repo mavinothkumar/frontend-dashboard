@@ -40,11 +40,8 @@ function fed_admin_setting_form_function() {
 		exit();
 	}
 
-	/**
-	 * Process Admin User Profile Captcha Page
-	 */
-	if ( isset( $request['fed_admin_unique'] ) && 'fed_admin_settings_captcha' == $request['fed_admin_unique'] ) {
-		fed_admin_setting_captcha_request();
+	if ( isset( $request['fed_admin_unique'] ) && 'fed_admin_setting_upl_color' == $request['fed_admin_unique'] ) {
+		fed_admin_setting_upl_color_request();
 		exit();
 	}
 
@@ -91,8 +88,6 @@ function fed_admin_setting_form_function() {
 	 */
 
 	do_action( 'fed_admin_settings_login_action', $request );
-
-
 }
 
 /**
@@ -177,7 +172,6 @@ function fed_admin_setting_form_dashboard_menu_function() {
 		}
 
 		$values = fed_process_menu( $post );
-
 
 		fed_admin_menu_save( $values, $post_id );
 	}

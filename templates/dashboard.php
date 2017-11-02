@@ -6,16 +6,14 @@
  */
 
 $menu = fed_get_all_dashboard_display_menus();
+//var_dump($menu);
+//wp_die();
 
 /**
  * To identify the first element to make active
  */
 $first_element_key = array_keys( $menu );
 $first_element     = $first_element_key[0];
-
-//$a = new FEDSupport();
-//var_dump($a->showUserQuestionAnswers());
-
 
 do_action( 'fed_before_dashboard_container' );
 
@@ -60,6 +58,8 @@ fed_get_payment_notification();
 				if ( isset( $menu['logout'] ) ) {
 					fed_logout_process($first_element);
 				}
+
+				do_action('fed_frontend_dashboard_menu_container',$first_element);
 
 				?>
 			</div>

@@ -45,21 +45,12 @@ function fed_login_only() {
 		'selected' => true,
 		'button'   => 'Login'
 	);
-	if ( $captcha = fed_get_captcha_form( 'login' ) ) {
-		$login['content']['captcha'] = array(
-			'name'        => '',
-			'input'       =>  fed_input_box( 'login', array(
-				'content'        => $captcha
-			), 'content' ),
-			'input_order' => 999
-		);
-	}
 
-	return $login;
+	return apply_filters( 'fed_login_only_filter', $login );
 }
 
 function fed_register_only() {
-	$register =  array(
+	$register = array(
 		'menu'     => array(
 			'id'   => 'fed_register_tab',
 			'name' => 'Register',
@@ -69,16 +60,9 @@ function fed_register_only() {
 		'button'   => 'Register'
 	);
 
-	if ( $captcha = fed_get_captcha_form( 'register' ) ) {
-		$register['content']['captcha'] = array(
-			'name'        => '',
-			'input'       => fed_input_box( 'register', array(
-				'content'        => $captcha
-			), 'content' ),
-			'input_order' => 999
-		);
-	}
-	return $register;
+
+
+	return apply_filters('fed_register_only_filter',$register);
 }
 
 function fed_forgot_password_only() {
