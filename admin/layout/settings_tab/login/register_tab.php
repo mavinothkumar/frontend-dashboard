@@ -4,76 +4,72 @@ function fed_admin_register_settings_tab( $fed_login_register ) {
 	$name       = isset( $fed_login_register['register']['name'] ) ? $fed_login_register['register']['name'] : 'User Role';
 	$position   = isset( $fed_login_register['register']['position'] ) ? $fed_login_register['register']['position'] : 999;
 	$user_roles = fed_get_user_roles();
-	?>
-	<form method="post"
-		  class="fed_admin_menu fed_ajax"
-		  action="<?php echo admin_url( 'admin-ajax.php?action=fed_admin_setting_form' ) ?>">
 
-		<?php wp_nonce_field( 'fed_admin_setting_nonce', 'fed_admin_setting_nonce' ) ?>
+	$array = array(
+		'form'   => array(
+			'method' => '',
+			'class'  => 'fed_admin_menu fed_ajax',
+			'attr'   => '',
+			'action' => array( 'url' => '', 'action' => 'fed_admin_setting_form' ),
+			'nonce'  => array( 'action' => '', 'name' => '' ),
+			'loader' => '',
+		),
+		'hidden' => array(
+			'fed_admin_unique'       => array(
+				'input_type' => 'hidden',
+				'user_value' => 'fed_login_details',
+				'input_meta' => 'fed_admin_unique',
+			),
+			'fed_admin_unique_login' => array(
+				'input_type' => 'hidden',
+				'user_value' => 'fed_register_settings',
+				'input_meta' => 'fed_admin_unique_login',
+			),
+		),
+		'input'  => array(
+			'Menu Name'       => array(
+				'col'   => 'col-md-6',
+				'name'  => 'Menu Name',
+				'input' => fed_get_input_details( array(
+					'placeholder' => '(eg) User Role',
+					'input_meta'  => 'fed_admin_login[name]',
+					'user_value'  => $name,
+					'input_type'  => 'single_line',
+					'required'    => true
+				) )
+			),
+			'Menu Name Order' => array(
+				'col'   => 'col-md-6',
+				'name'  => 'Menu Name Order',
+				'input' => fed_get_input_details( array(
+					'placeholder' => '(eg) 40',
+					'input_meta'  => 'fed_admin_login[position]',
+					'user_value'  => $position,
+					'input_type'  => 'number',
+					'required'    => true
+				) )
+			),
+			'sur'             => array(
+				'col'     => 'col-md-12',
+				'header'  => 'Show User Role(s) in Register Form',
+				'sub_col' => 'col-md-4'
+			),
+		),
+		'note'   => array( 'header' => '', 'footer' => '' ),
+	);
 
-		<?php echo fed_loader(); ?>
+	foreach ( $user_roles as $key => $role ) {
+		$c_value                                         = in_array( $key, $user_role, false ) ? 'Enable' : 'Disable';
+		$array['input']['sur']['extra']['input'][ $key ] = array(
+			'input_meta'    => 'fed_admin_login[role][' . $key . ']',
+			'user_value'    => $c_value,
+			'input_type'    => 'checkbox',
+			'label'         => $role,
+			'default_value' => 'Enable',
+		);
+	}
 
-		<input type="hidden"
-			   name="fed_admin_unique"
-			   value="fed_login_details"/>
+	do_action( 'fed_admin_login_register_template', $array, $fed_login_register );
 
-		<input type="hidden"
-			   name="fed_admin_unique_login"
-			   value="fed_register_settings"/>
-
-		<div class="fed_admin_panel_container">
-			<div class="fed_admin_panel_content_wrapper">
-				<div class="row">
-					<div class="col-md-4 fed_menu_title"><?php _e( 'Menu Name', 'fed' ) ?></div>
-					<div class="col-md-8">
-						<div class="col-md-6">
-							<?php echo fed_input_box( 'fed_login_register_name', array(
-								'name'  => 'fed_admin_login[name]',
-								'value' => $name,
-							), 'single_line' ); ?>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-4 fed_menu_title"><?php _e( 'Menu Name Order', 'fed' ) ?></div>
-					<div class="col-md-8">
-						<div class="col-md-6">
-							<?php echo fed_input_box( 'fed_login_register_position', array(
-								'name'  => 'fed_admin_login[position]',
-								'value' => $position,
-							), 'number' ); ?>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-4 fed_menu_title"><?php _e( 'Show User Role(s) in Register Form', 'fed' ) ?></div>
-					<div class="col-md-8">
-						<?php foreach ( $user_roles as $key => $role ) {
-							$c_value = in_array( $key, $user_role,false ) ? 'Enable' : 'Disable';
-							?>
-							<div class="col-md-6">
-								<?php echo fed_input_box( 'fed_login_register', array(
-									'default_value' => 'Enable',
-									'name'          => 'fed_admin_login[role][' . $key . ']',
-									'label'         => $role,
-									'value'         => $c_value,
-								), 'checkbox' ); ?>
-							</div>
-							<?php
-						} ?>
-					</div>
-				</div>
-
-			</div>
-		</div>
-
-		<?php do_action( 'fed_admin_login_register_template', $fed_login_register ) ?>
-
-		<div class="row">
-			<div class="col-md-12">
-				<input type="submit" class="btn btn-primary" value="Submit"/>
-			</div>
-		</div>
-	</form>
-	<?php
+	fed_common_simple_layout( $array );
 }

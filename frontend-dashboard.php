@@ -3,7 +3,7 @@
  * Plugin Name: Frontend Dashboard
  * Plugin URI: https://buffercode.com/plugin/frontend-dashboard
  * Description: Front end dashboard provide high flexible way to customize the user dashboard on front end rather than WordPress wp-admin dashboard.
- * Version: 1.1.4.6.1
+ * Version: 1.1.4.7
  * Author: vinoth06
  * Author URI: https://buffercode.com/
  * License: GPLv2
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Version Number
  */
-define( 'BC_FED_PLUGIN_VERSION', '1.1.4.6.1' );
+define( 'BC_FED_PLUGIN_VERSION', '1.1.4.7' );
 define( 'BC_FED_PLUGIN_VERSION_TYPE', 'FREE' );
 
 /**
@@ -154,6 +154,7 @@ require_once BC_FED_PLUGIN_DIR . '/admin/layout/settings_tab/user_profile/settin
 
 require_once BC_FED_PLUGIN_DIR . '/admin/layout/settings_tab/user/user_tab.php';
 require_once BC_FED_PLUGIN_DIR . '/admin/layout/settings_tab/user/role.php';
+require_once BC_FED_PLUGIN_DIR . '/admin/layout/settings_tab/user/user_upload.php';
 
 require_once BC_FED_PLUGIN_DIR . '/admin/layout/settings_tab/post/permissions.php';
 require_once BC_FED_PLUGIN_DIR . '/admin/layout/settings_tab/post/dashboard.php';
@@ -166,6 +167,7 @@ require_once BC_FED_PLUGIN_DIR . '/admin/layout/settings_tab/login/register_tab.
 require_once BC_FED_PLUGIN_DIR . '/admin/layout/settings_tab/login/settings.php';
 
 require_once BC_FED_PLUGIN_DIR . '/admin/layout/custom_layout/FEDCustomCSS.php';
+require_once BC_FED_PLUGIN_DIR . '/admin/layout/custom_layout/helper.php';
 
 require_once BC_FED_PLUGIN_DIR . '/config/config.php';
 

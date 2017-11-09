@@ -5,6 +5,20 @@
  */
 
 /**
+ * Verify Nonce
+ *
+ * @param array $request
+ */
+function fed_verify_nonce( $request ) {
+	if ( isset( $request['fed_admin_setting_nonce'] ) && ! wp_verify_nonce( $request['fed_admin_setting_nonce'], 'fed_admin_setting_nonce' ) ) {
+		wp_send_json_error( array( 'message' => 'Invalid Request' ) );
+	}
+	if ( isset( $request['fed_nonce'] ) && ! wp_verify_nonce( $request['fed_nonce'], 'fed_nonce' ) ) {
+		wp_send_json_error( array( 'message' => 'Invalid Request' ) );
+	}
+}
+
+/**
  * Show form fields on admin dashboard
  *
  * @param string $selected Selected.
@@ -73,6 +87,11 @@ function fed_enable_disable( $condition = '' ) {
 	return '<div class="fed_disable"></div>';
 }
 
+/**
+ * @param string $condition
+ *
+ * @return string
+ */
 function fed_is_required( $condition = '' ) {
 	if ( $condition === true || $condition === 'true' || $condition === 'enable' || $condition === 'Enable' ) {
 		return '<span class="bg-red-font">*</span>';
@@ -148,11 +167,11 @@ function fed_get_input_details( $attr ) {
 			break;
 
 		case 'hidden':
-			$input .= '<input ' . $values['disabled'] . $values['extra'] . $values['readonly'] . ' ' . $values['required'] . ' type="hidden" name=" ' . $values['name'] . '"  value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '" id="' . $values['id'] . '">';
+			$input .= '<input ' . $values['disabled'] . $values['extra'] . $values['readonly'] . ' ' . $values['required'] . ' type="hidden" name="' . $values['name'] . '"  value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '" id="' . $values['id'] . '">';
 			break;
 
 		case 'email':
-			$input .= '<input ' . $values['disabled'] . $values['extra'] . $values['readonly'] . ' ' . $values['required'] . ' type="email" name=" ' . $values['name'] . '"   value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '" id="' . $values['id'] . '">';
+			$input .= '<input ' . $values['disabled'] . $values['extra'] . $values['readonly'] . ' ' . $values['required'] . ' type="email" name="' . $values['name'] . '"   value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '" id="' . $values['id'] . '">';
 			break;
 
 		case 'password':
@@ -161,7 +180,7 @@ function fed_get_input_details( $attr ) {
 
 
 		case 'url':
-			$input .= '<input ' . $values['disabled'] . $values['extra'] . $values['required'] . ' type="url"  placeholder="' . $values['placeholder'] . '"  name=" ' . $values['name'] . '"    class="' . $values['class'] . '"  id="' . $values['id'] . '" value="' . esc_attr( $values['value'] ) . '" >';
+			$input .= '<input ' . $values['disabled'] . $values['extra'] . $values['required'] . ' type="url"  placeholder="' . $values['placeholder'] . '"  name="' . $values['name'] . '"    class="' . $values['class'] . '"  id="' . $values['id'] . '" value="' . esc_attr( $values['value'] ) . '" >';
 			break;
 
 		case 'multi_line':
@@ -1162,11 +1181,10 @@ function fed_enable_file_uploads_by_role() {
 	global $current_user;
 	$user = get_userdata( $current_user->ID );
 	$role = isset( $user->roles[0] ) ? $user->roles[0] : null;
-
 	if ( $role ) {
-		$fed_admin_options = get_option( 'fed_admin_settings_post', array() );
-		if ( isset( $fed_admin_options['permissions']['fed_upload_permission'] ) ) {
-			$fed_upload_permission = array_keys( $fed_admin_options['permissions']['fed_upload_permission'] );
+		$fed_admin_options = get_option( 'fed_admin_settings_user', array() );
+		if ( isset( $fed_admin_options['user']['upload_permission'] ) ) {
+			$fed_upload_permission = array_keys( $fed_admin_options['user']['upload_permission'] );
 			if ( in_array( $role, $fed_upload_permission, false ) ) {
 				$contributor = get_role( $role );
 				$contributor->add_cap( 'upload_files' );
@@ -1176,6 +1194,18 @@ function fed_enable_file_uploads_by_role() {
 }
 
 add_action( 'admin_init', 'fed_enable_file_uploads_by_role' );
+
+function remove_medialibrary_tab( $tabs ) {
+//	if ( ! current_user_can( 'administrator' ) ) {
+//		unset( $tabs['library'] );
+//	}
+//	var_dump($tabs);
+	unset( $tabs['library'] );
+
+	return $tabs;
+}
+
+add_filter( 'media_upload_tabs', 'remove_medialibrary_tab' );
 
 /**
  * Restricting users to view their own media files
@@ -2099,15 +2129,15 @@ function fed_get_category_tag_post_format( $post_type = 'post' ) {
 	$new_array  = array();
 	foreach ( $taxonomies as $index => $taxonomy ) {
 		if ( $taxonomy->public && $taxonomy->show_ui ) {
-			if ( $index === 'post_format' ) {
-				$new_array['post_format'][ $index ] = $taxonomy;
-				continue;
-			}
 			if ( $taxonomy->hierarchical === false ) {
 				$new_array['tag'][ $index ] = $taxonomy;
 			} else {
 				$new_array['category'][ $index ] = $taxonomy;
 			}
+		}
+		if ( $index === 'post_format' ) {
+			$new_array['post_format'][ $index ] = $taxonomy;
+			continue;
 		}
 	}
 

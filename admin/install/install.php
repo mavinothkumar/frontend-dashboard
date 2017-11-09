@@ -15,11 +15,24 @@ function fed_upgrade() {
 	update_option( 'fed_plugin_version', $new_version );
 }
 
-add_action('fed_upgrade_action','fed_upgrade_actions',10,2);
-function fed_upgrade_actions($new_version, $old_version) {
+add_action( 'fed_upgrade_action', 'fed_upgrade_actions', 10, 2 );
+function fed_upgrade_actions( $new_version, $old_version ) {
 	fed_plugin_activation();
 	fed_plugin_data();
 	fed_plugin_meta_data();
+	fed_next_updates();
+}
+
+/**
+ * Merge post to custom post options to handle everything globally
+ */
+function fed_next_updates() {
+	$cp_admin_settings = get_option( 'fed_cp_admin_settings', array() );
+	if ( ! isset( $cp_admin_settings['post'] ) ) {
+		$admin_settings = array( 'post' => get_option( 'fed_admin_settings_post', array() ) );
+		$merge          = array_merge( $cp_admin_settings, $admin_settings );
+		update_option( 'fed_cp_admin_settings', $merge );
+	}
 }
 
 /**
@@ -363,17 +376,17 @@ function fed_admin_notice() {
 			?>
 			<div class="notice notice-success">
 				<p>
-					<b><?php _e( 'If you need help in configuring the frontend dashboard, please watch the videos here','fed');
-					?>
+					<b><?php _e( 'If you need help in configuring the frontend dashboard, please watch the videos here', 'fed' );
+						?>
 					</b>
-					<a href="https://buffercode.com/category/name/frontend-dashboard"><?php _e('Frontend Dashboard Instructions','fed') ?></a>
+					<a href="https://buffercode.com/category/name/frontend-dashboard"><?php _e( 'Frontend Dashboard Instructions', 'fed' ) ?></a>
 				</p>
 				<p>
-					<?php _e( 'Notice: Please check your default settings','fed');
+					<?php _e( 'Notice: Please check your default settings', 'fed' );
 					?>
-					<a href="<?php menu_page_url( 'fed_status' ) ?>"><?php _e('Here','fed') ?></a>
+					<a href="<?php menu_page_url( 'fed_status' ) ?>"><?php _e( 'Here', 'fed' ) ?></a>
 					<?php
-					_e('if everything is good, please  click Don\'t show again button', 'fed' ); ?>
+					_e( 'if everything is good, please  click Don\'t show again button', 'fed' ); ?>
 
 					<span class="fed_message_hide">Hide</span>
 					<span class="fed_message_delete" data-url="<?php echo admin_url( 'admin-ajax.php?action=fed_message_form&fed_message_nonce=' . wp_create_nonce( 'fed_message_nonce' ) ) ?>">Don't show again</span>

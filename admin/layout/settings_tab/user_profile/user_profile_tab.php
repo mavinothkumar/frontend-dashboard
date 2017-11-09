@@ -42,9 +42,18 @@ function fed_user_profile_layout_design() {
 						<div role="tabpanel"
 							 class="tab-pane <?php echo $active; ?>"
 							 id="<?php echo $index; ?>">
-			                <?php
-			                call_user_func( $tab['callable'], $tab['arguments'] )
-			                ?>
+							<div class="panel panel-primary">
+								<div class="panel-heading">
+									<span class="<?php echo $tab['icon']; ?>"></span>
+									<?php echo $tab['name']; ?>
+								</div>
+								<div class="panel-body">
+									<?php
+									call_user_func( $tab['callable'], $tab['arguments'] )
+									?>
+								</div>
+							</div>
+
 						</div>
 	                <?php } ?>
                 </div>

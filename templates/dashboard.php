@@ -6,8 +6,6 @@
  */
 
 $menu = fed_get_all_dashboard_display_menus();
-//var_dump($menu);
-//wp_die();
 
 /**
  * To identify the first element to make active
@@ -16,6 +14,7 @@ $first_element_key = array_keys( $menu );
 $first_element     = $first_element_key[0];
 
 do_action( 'fed_before_dashboard_container' );
+//var_dump(get_option( 'fed_admin_settings_user', array() ));
 
 fed_get_payment_notification();
 ?>
@@ -36,10 +35,12 @@ fed_get_payment_notification();
 
 				/**
 				 * Show Post options only on enabled users
+				 * As this as been append to custom post plugin
+				 * from v 1.1.4.7
 				 */
-				if ( isset( $menu['post'] ) ) {
-					fed_display_dashboard_post( $first_element );
-				}
+//				if ( isset( $menu['post'] ) ) {
+//					fed_display_dashboard_post( $first_element );
+//				}
 
 				/**
 				 * Show Payment Options only for enabled users

@@ -45,7 +45,7 @@ function fed_admin_setting_post_options_request() {
 
 function fed_process_admin_settings_post_permissions( $request ) {
 	return array(
-		'fed_post_permission'   => isset( $request['fed_post_permission'] ) ? $request['fed_post_permission'] : array(),
+		'post_permission'   => isset( $request['post_permission'] ) ? $request['post_permission'] : array(),
 		'fed_upload_permission' => isset( $request['fed_upload_permission'] ) ? $request['fed_upload_permission'] : array(),
 	);
 }
@@ -66,11 +66,11 @@ function fed_process_admin_settings_post_menu( $request ) {
 
 function fed_process_admin_settings_post_dashboard( $request ) {
 	return array(
-		'fed_post_dashboard_content'                  => isset( $request['fed_post_dashboard_content'] ) ? sanitize_text_field( $request['fed_post_dashboard_content'] ) : '',
+		'post_content'                  => isset( $request['post_content'] ) ? sanitize_text_field( $request['post_content'] ) : '',
 		'fed_post_dashboard_category'       => isset( $request['fed_post_dashboard_category'] ) ? sanitize_text_field( $request['fed_post_dashboard_category'] ) : '',
 		'fed_post_dashboard_tag'            => isset( $request['fed_post_dashboard_tag'] ) ? sanitize_text_field( $request['fed_post_dashboard_tag'] ) : '',
-		'fed_post_dashboard_featured_image' => isset( $request['fed_post_dashboard_featured_image'] ) ? sanitize_text_field( $request['fed_post_dashboard_featured_image'] ) : '',
-		'fed_post_dashboard_post_format'    => isset( $request['fed_post_dashboard_post_format'] ) ? sanitize_text_field( $request['fed_post_dashboard_post_format'] ) : '',
-		'fed_post_dashboard_allow_comments' => isset( $request['fed_post_dashboard_allow_comments'] ) ? sanitize_text_field( $request['fed_post_dashboard_allow_comments'] ) : '',
+		'featured_image' => isset( $request['featured_image'] ) ? sanitize_text_field( $request['featured_image'] ) : '',
+		'post_format'    => isset( $request['post_format'] ) ? sanitize_text_field( $request['post_format'] ) : '',
+		'allow_comments' => isset( $request['allow_comments'] ) ? sanitize_text_field( $request['allow_comments'] ) : '',
 	);
 }

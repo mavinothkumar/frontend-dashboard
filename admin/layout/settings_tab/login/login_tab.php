@@ -40,9 +40,20 @@ function fed_admin_login_tab() {
 					<div role="tabpanel"
 						 class="tab-pane <?php echo $active; ?>"
 						 id="<?php echo $index; ?>">
-						<?php
-						call_user_func( $tab['callable'], $tab['arguments'] )
-						?>
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<h3 class="panel-title">
+									<span class="<?php echo $tab['icon']; ?>"></span>
+									<?php echo $tab['name']; ?>
+								</h3>
+							</div>
+							<div class="panel-body">
+								<?php
+								call_user_func( $tab['callable'], $tab['arguments'] )
+								?>
+							</div>
+						</div>
+
 					</div>
 				<?php } ?>
 			</div>

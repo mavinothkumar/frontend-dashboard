@@ -86,7 +86,6 @@ jQuery(document).ready(function ($) {
                 url: form.attr('action'),
                 data: form.serialize(),
                 success: function (results) {
-                    console.log(results);
                     $('#preview-area').find('.spinner_circle').addClass('hide');
                     $('body').find('#fed_qa_container').html(results.data.message);
                 }
@@ -397,17 +396,27 @@ jQuery(document).ready(function ($) {
             var parent = click.closest('.fed_dashboard_wrapper');
             var menu = parent.find('.fed_dashboard_menus');
             var content = parent.find('.fed_dashboard_items');
-            if (click.find('.fed_collapse_menu_icon .fa').hasClass('fa-arrow-circle-left')) {
-                click.find('.fed_collapse_menu_icon .fa').removeClass('fa-arrow-circle-left').addClass('fa-arrow-circle-right');
+            if (click.find('.fed_collapse_menu_icon').hasClass('menu_open')) {
+                click.find('.fed_collapse_menu_icon').removeClass('menu_open').addClass('menu_closed');
+                click.find('.fed_collapse_menu_icon .closed').removeClass('hide');
+                click.find('.fed_collapse_menu_icon .open').addClass('hide');
+
+                menu.find('.fed_menu_slug').removeClass('fednc');
+
                 menu.find('.fed_menu_title').addClass('hide');
                 menu.removeClass('col-md-3').addClass('col-md-1');
                 content.removeClass('col-md-9').addClass('col-md-11');
                 parent.find('.flex').addClass('flex_center');
                 parent.find('.flex').removeClass('flex');
             } else {
-                click.find('.fed_collapse_menu_icon .fa').removeClass('fa-arrow-circle-right').addClass('fa-arrow-circle-left');
+                click.find('.fed_collapse_menu_icon').removeClass('menu_closed').addClass('menu_open');
+                click.find('.fed_collapse_menu_icon .open').removeClass('hide');
+                click.find('.fed_collapse_menu_icon .closed').addClass('hide');
                 menu.find('.fed_menu_title').removeClass('hide');
                 menu.removeClass('col-md-1').addClass('col-md-3');
+
+                menu.find('.fed_menu_slug').addClass('fednc');
+
                 content.removeClass('col-md-11').addClass('col-md-9');
                 parent.find('.flex_center').addClass('flex');
                 parent.find('.flex_center').removeClass('flex_center');

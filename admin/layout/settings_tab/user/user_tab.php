@@ -59,5 +59,11 @@ function fed_get_admin_user_options($fed_admin_options) {
 			'callable'  => 'fed_admin_user_role_tab',
 			'arguments' => $fed_admin_options
 		),
+		'fed_admin_user_upload_permission'    => array(
+			'icon'      => 'fa fa-upload',
+			'name'      => __( 'User Upload Permission', 'fed' ),
+			'callable'  => 'fed_admin_user_upload_permission_tab',
+			'arguments' => $fed_admin_options
+		),
 	) );
 }

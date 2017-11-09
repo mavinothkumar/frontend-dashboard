@@ -20,26 +20,27 @@ function fed_add_meta_boxes_display() {
 	$extra_fields = fed_fetch_table_rows_with_key( BC_FED_POST_DB, 'input_meta' );
 	global $post;
 	$post_meta = fed_get_all_post_meta_key( $post->ID );
+	?>
+	<div class="bc_fed">
+		<?php
+		foreach ( $extra_fields as $item ) {
+			$temp               = $item;
+			$temp['user_value'] = isset( $post_meta[ $item['input_meta'] ] ) ? $post_meta[ $item['input_meta'] ]['meta_value'] : '';
+			$temp['input_meta'] = 'fed_meta[' . $item['input_meta'] . ']';
 
-	foreach ( $extra_fields as $item ) {
-		$temp               = $item;
-		$temp['user_value'] = isset( $post_meta[ $item['input_meta'] ] ) ? $post_meta[ $item['input_meta'] ]['meta_value'] : '';
-		$temp['input_meta'] = 'fed_meta[' . $item['input_meta'] . ']';
-
-		if ( fed_get_current_screen_id() === $item['post_type'] ) {
-			echo '<div class="row fed_dashboard_item_field">
-                    <div class="col-md-3">
-                        <div class="pull-right fed_header_font_color">' . __( $temp['label_name'] ) . '</div>
-                    </div>
-                    <div class="col-md-9">
+			if ( fed_get_current_screen_id() === $item['post_type'] ) {
+				echo '<div class="row fed_dashboard_item_field p-b-20">
+                    <div class="col-md-6">
+                    <div class="fed_header_font_color">' . __( $temp['label_name'] ) . '</div>
                     ' . fed_get_input_details( $temp ) . '
                     </div>
               </div>
              
               ';
+			}
 		}
-	}
-	?>
+		?>
+	</div>
 	<?php
 
 }

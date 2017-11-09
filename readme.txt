@@ -4,7 +4,7 @@ Tags: dashboard, frontend dashboard, custom login, custom register, custom role,
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7DHAEMST475BY
 Requires at least: 4.3
 Tested up to: 4.8.3
-Stable tag: 1.1.4.6.1
+Stable tag: 1.1.4.7
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -21,9 +21,11 @@ Frontend Dashboard is bundled with the huge list of custom features which can ea
 6. Enable/Disable the post default fields.
 7. Show user role based custom profile page
 8. Restrict the number of posts to show in the custom profile page.
+9. Manage custom Post type and Taxonomies
 
 = Frontend Dashboard Plugins List =
 * [Frontend Dashboard Captcha](https://buffercode.com/plugin/frontend-dashboard-captcha)
+* [Frontend Dashboard Custom Post and Taxonomies](https://buffercode.com/plugin/frontend-dashboard-custom-post-and-taxonomies)
 * [Frontend Dashboard Extra](https://buffercode.com/plugin/frontend-dashboard-extra)
 * [Frontend Dashboard Pages](https://buffercode.com/plugin/frontend-dashboard-pages)
 
@@ -198,6 +200,12 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 6. [fed_user role=user_role] to generate the role based user page
 
 == Changelog ==
+= v1.1.4.7 [07-November-2017]=
+* Enhanced: Dashboard main menu collapse/un collapse icon added
+* Enhanced: Admin Dashboard settings changed
+* Bug: Disabled menu slug on edit
+* Bug: Post page custom fields alignment fixed
+
 
 = v1.1.4.6.1 [02-November-2017]=
 * New: Added Register Redirect after registration

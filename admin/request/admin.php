@@ -18,12 +18,8 @@ function fed_admin_setting_form_function() {
 	/**
 	 * Check for Nonce
 	 */
-	if ( ! wp_verify_nonce( $request['fed_admin_setting_nonce'], 'fed_admin_setting_nonce' ) ) {
-		wp_send_json_error( array( 'message' => 'Invalid Request' ) );
-		exit();
-	}
-
-
+	fed_verify_nonce( $request );
+	
 	/**
 	 * Process the Admin page request.
 	 */

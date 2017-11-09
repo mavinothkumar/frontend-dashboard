@@ -249,11 +249,22 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 									</div>
 									<div class="panel-group" id="fedmenu" role="tablist" aria-multiselectable="true">
 										<?php
+										$collapse = 0;
 										foreach ( $menus as $index => $menu ) {
+											if ( $collapse === 0 ) {
+												$collapsed = '';
+												$in        = 'in';
+											} else {
+												$collapsed = 'collapsed';
+												$in        = '';
+											}
+
+											$collapse ++;
 											?>
 											<div class="fed_dashboard_menu_single_item <?php echo $index ?>">
 												<div class="panel panel-default">
-													<div class="panel-heading panel-secondary" role="tab" id="<?php echo $index ?>" data-toggle="collapse" data-parent="#fedmenu" href="#collapse<?php echo $index ?>" aria-expanded="true" aria-controls="collapse<?php echo $index ?>">
+													<div class="panel-heading panel-secondary <?php echo $collapsed; ?>" role="tab" id="<?php echo $index ?>" data-toggle="collapse" data-parent="#fedmenu" href="#collapse<?php echo $index ?>" aria-expanded="true" aria-controls="collapse<?php echo $index
+													?>">
 														<h4 class="panel-title">
 															<a>
 																<?php echo '<span class="' . $menu["menu_image_id"] . '"></span>' .
@@ -261,7 +272,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 															</a>
 														</h4>
 													</div>
-													<div id="collapse<?php echo $index ?>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="<?php echo $index ?>">
+													<div id="collapse<?php echo $index ?>" class="panel-collapse collapse <?php echo $in ?>" role="tabpanel" aria-labelledby="<?php echo $index ?>">
 														<div class="panel-body">
 															<form method="post"
 																  class="fed_admin_menu fed_menu_ajax"
@@ -1118,11 +1129,11 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 			/**
 			 * Post
 			 */
-			$fed_post             = get_option( 'fed_admin_settings_post', array() );
-			$fed_post_settings    = isset( $fed_post['settings'] ) ? fed_enable_disable( true ) : fed_enable_disable( false );
-			$fed_post_dashboard   = isset( $fed_post['dashboard'] ) ? fed_enable_disable( true ) : fed_enable_disable( false );
-			$fed_post_menu        = isset( $fed_post['menu'] ) ? fed_enable_disable( true ) : fed_enable_disable( false );
-			$fed_post_permissions = isset( $fed_post['permissions'] ) ? fed_enable_disable( true ) : fed_enable_disable( false );
+			$fed_post             = get_option( 'fed_cp_admin_settings', array() );
+			$fed_post_settings    = isset( $fed_post['post']['settings'] ) ? fed_enable_disable( true ) : fed_enable_disable( false );
+			$fed_post_dashboard   = isset( $fed_post['post']['dashboard'] ) ? fed_enable_disable( true ) : fed_enable_disable( false );
+			$fed_post_menu        = isset( $fed_post['post']['menu'] ) ? fed_enable_disable( true ) : fed_enable_disable( false );
+			$post_permissions = isset( $fed_post['post']['permissions'] ) ? fed_enable_disable( true ) : fed_enable_disable( false );
 
 			/**
 			 * User Profile Layout
@@ -1234,7 +1245,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 											</tr>
 											<tr>
 												<td class="fed_header_font_color">Permissions</td>
-												<td><?php echo $fed_post_permissions; ?></td>
+												<td><?php echo $post_permissions; ?></td>
 											</tr>
 											</tbody>
 										</table>
@@ -1380,11 +1391,6 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 					'name'       => 'Login',
 					'callable'   => 'fed_admin_login_tab',
 				),
-				'post_options'        => array(
-					'icon_class' => 'fa fa-envelope',
-					'name'       => 'Post',
-					'callable'   => 'fed_admin_post_options_tab',
-				),
 				'user'                => array(
 					'icon_class' => 'fa fa-user',
 					'name'       => 'User',
@@ -1396,6 +1402,14 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 					'callable'   => 'fed_user_profile_layout_design',
 				)
 			);
+
+			if ( ! defined( 'FED_CP_PLUGIN_VERSION' ) ) {
+				$menu['post_options'] = array(
+					'icon_class' => 'fa fa-envelope',
+					'name'       => 'Post',
+					'callable'   => 'fed_admin_post_options_tab',
+				);
+			}
 
 			return apply_filters( 'fed_admin_dashboard_settings_menu_header', $menu );
 		}

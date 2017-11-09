@@ -1,7 +1,7 @@
 <?php
 function fed_admin_post_permissions_tab( $fed_admin_options ) {
 	$all_roles             = fed_get_user_roles();
-	$fed_post_permission   = isset( $fed_admin_options['permissions']['fed_post_permission'] ) ? array_keys( $fed_admin_options['permissions']['fed_post_permission'] ) : array();
+	$post_permission   = isset( $fed_admin_options['permissions']['post_permission'] ) ? array_keys( $fed_admin_options['permissions']['post_permission'] ) : array();
 
 	$fed_upload_permission = isset( $fed_admin_options['permissions']['fed_upload_permission'] ) ? array_keys( $fed_admin_options['permissions']['fed_upload_permission'] ) : array();
 	?>
@@ -27,12 +27,12 @@ function fed_admin_post_permissions_tab( $fed_admin_options ) {
                         <div class="col-md-4 fed_menu_title">Allow User Roles to Add/Edit/Delete Posts</div>
                         <div class="col-md-8">
 							<?php foreach ( $all_roles as $key => $role ) {
-								$c_value = in_array( $key, $fed_post_permission ) ? 'Enable' : 'Disable';
+								$c_value = in_array( $key, $post_permission ) ? 'Enable' : 'Disable';
 								?>
                                 <div class="col-md-6">
-									<?php echo fed_input_box( 'fed_post_permission', array(
+									<?php echo fed_input_box( 'post_permission', array(
 										'default_value' => 'Enable',
-										'name'          => 'permissions[fed_post_permission][' . $key . ']',
+										'name'          => 'permissions[post_permission][' . $key . ']',
 										'label'         => $role,
 										'value'         => $c_value,
 									), 'checkbox' ); ?>
@@ -83,7 +83,7 @@ function fed_admin_post_permissions_tab( $fed_admin_options ) {
 function fed_get_default_post_options( $all_roles ) {
 	$default = array();
 	foreach ( $all_roles as $key => $all_role ) {
-		$default['permissions']['fed_post_permission'][ $key ] = 'Enable';
+		$default['permissions']['post_permission'][ $key ] = 'Enable';
 		$default['permissions']['fed_upload_permission'][ $key ] = 'Enable';
 	}
 	$default['settings']['fed_post_status']   = 'publish';

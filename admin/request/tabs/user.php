@@ -6,6 +6,12 @@ function fed_admin_user_options_request() {
 	//fed_admin_settings_user = get_option( 'fed_admin_settings_user' );
 
 	/**
+	 * User Upload
+	 */
+	if ( isset( $request['fed_admin_unique_user'] ) && 'fed_admin_user_upload' == $request['fed_admin_unique_user'] ) {
+		fed_admin_tab_user_upload( $request );
+	}
+	/**
 	 * Add User Role
 	 */
 	if ( isset( $request['fed_admin_unique_user'] ) && 'fed_admin_setting_role' == $request['fed_admin_unique_user'] ) {
@@ -79,8 +85,6 @@ function fed_admin_tab_post_role( $request ) {
 		'message' => __( $role_name . ' User Role Added Successfully ' ),
 		'reload'  => admin_url() . 'admin.php?page=fed_settings_menu#user'
 	) );
-	exit();
-
 }
 
 function fed_admin_tab_post_role_delete( $request ) {
@@ -120,4 +124,33 @@ function fed_admin_tab_post_role_delete( $request ) {
 	) );
 	exit();
 
+}
+
+function fed_admin_tab_user_upload( $request ) {
+	$user_options         = get_option( 'fed_admin_settings_user' );
+	$user_options['user'] = array(
+		'upload_permission' => isset( $request['user']['upload_permission'] ) ? $request['user']['upload_permission'] : array(),
+	);
+
+	/**
+	 * Unset User Roles
+	 */
+	$all_users = fed_get_user_roles();
+	foreach ( $all_users as $keys => $user_roles ) {
+		$contributor = get_role( $keys );
+		if ( array_key_exists( $keys, $user_options['user']['upload_permission'] ) ) {
+			$contributor->add_cap( 'upload_files' );
+		} else {
+			if ( $keys === 'administrator' ) {
+				$contributor->add_cap( 'upload_files' );
+			} else {
+				$contributor->remove_cap( 'upload_files' );
+			}
+		}
+	}
+
+	update_option( 'fed_admin_settings_user', $user_options );
+	wp_send_json_success( array(
+		'message' => __( 'User Upload Permission Updated Successfully ' )
+	) );
 }

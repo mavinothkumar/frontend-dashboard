@@ -1,3 +1,44 @@
 #wp-admin-bar-frontend-dashboard-main img.ab-icon {
     padding: 0 !important;
 }
+
+.fa {
+    display: inline-block;
+    font-family: FontAwesome;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.bc_fed .panel-heading[data-toggle='collapse'] h4:after {
+    font-family: FontAwesome;
+    content: "\f077";
+    float: right;
+    color: #FFFFFF;
+    font-size: 20px;
+}
+
+.bc_fed .panel-heading[data-toggle='collapse'].collapsed h4:after {
+    font-family: FontAwesome;
+    content: "\f078";
+    float: right;
+    color: #FFFFFF;
+    font-size: 20px;
+}
+.bc_fed .nav.nav-pills.nav-stacked .active a:after,
+.bc_fed .fed_dashboard_menus .fed_menu_slug.fednc.active:after{
+    font-family: FontAwesome;
+    content: "\f054";
+    float: right;
+    color: #FFFFFF;
+    font-size: 20px;
+}
+
+.bc_fed .panel .panel-heading {
+    cursor: pointer;
+}
+.p-10 {
+    padding:10px !important;
+}
+.p-20 {
+    padding:20px !important;
+}

@@ -25,9 +25,9 @@ function fed_admin_post_dashboard_tab($fed_admin_options) {
 					<div class="row">
 						<div class="col-md-3 fed_menu_title">Disable Post Content</div>
 						<div class="col-md-4">
-								<?php echo fed_input_box( 'fed_post_dashboard_content', array(
-									'name'    => 'dashboard[fed_post_dashboard_content]',
-									'value'   => isset( $fed_admin_options['dashboard']['fed_post_dashboard_content'] ) ? $fed_admin_options['dashboard']['fed_post_dashboard_content'] : '',
+								<?php echo fed_input_box( 'fed_admin_login_settings_template', array(
+									'name'    => 'dashboard[fed_admin_login_settings_template]',
+									'value'   => isset( $fed_admin_options['dashboard']['post_content'] ) ? $fed_admin_options['dashboard']['post_content'] : '',
 									'default_value' => 'Enable',
 								), 'checkbox' ); ?>
 						</div>
@@ -58,9 +58,9 @@ function fed_admin_post_dashboard_tab($fed_admin_options) {
 						<div class="col-md-3 fed_menu_title">Disable Featured Image</div>
 						<div class="col-md-4">
 
-								<?php echo fed_input_box( 'fed_post_dashboard_featured_image', array(
-									'name'    => 'dashboard[fed_post_dashboard_featured_image]',
-									'value'   => isset( $fed_admin_options['dashboard']['fed_post_dashboard_featured_image'] ) ? $fed_admin_options['dashboard']['fed_post_dashboard_featured_image'] : '',
+								<?php echo fed_input_box( 'featured_image', array(
+									'name'    => 'dashboard[featured_image]',
+									'value'   => isset( $fed_admin_options['dashboard']['featured_image'] ) ? $fed_admin_options['dashboard']['featured_image'] : '',
 									'default_value' => 'Enable',
 								), 'checkbox' ); ?>
 							</div>
@@ -70,9 +70,9 @@ function fed_admin_post_dashboard_tab($fed_admin_options) {
 						<div class="col-md-3 fed_menu_title">Disable Post Format</div>
 						<div class="col-md-4">
 
-								<?php echo fed_input_box( 'fed_post_dashboard_post_format', array(
-									'name'    => 'dashboard[fed_post_dashboard_post_format]',
-									'value'   => isset( $fed_admin_options['dashboard']['fed_post_dashboard_post_format'] ) ? $fed_admin_options['dashboard']['fed_post_dashboard_post_format'] : '',
+								<?php echo fed_input_box( 'post_format', array(
+									'name'    => 'dashboard[post_format]',
+									'value'   => isset( $fed_admin_options['dashboard']['post_format'] ) ? $fed_admin_options['dashboard']['post_format'] : '',
 									'default_value' => 'Enable',
 								), 'checkbox' ); ?>
 							</div>
@@ -82,9 +82,9 @@ function fed_admin_post_dashboard_tab($fed_admin_options) {
 						<div class="col-md-3 fed_menu_title">Disable Allow Comments</div>
 						<div class="col-md-4">
 
-								<?php echo fed_input_box( 'fed_post_dashboard_allow_comments', array(
-									'name'    => 'dashboard[fed_post_dashboard_allow_comments]',
-									'value'   => isset( $fed_admin_options['dashboard']['fed_post_dashboard_allow_comments'] ) ? $fed_admin_options['dashboard']['fed_post_dashboard_allow_comments'] : '',
+								<?php echo fed_input_box( 'allow_comments', array(
+									'name'    => 'dashboard[allow_comments]',
+									'value'   => isset( $fed_admin_options['dashboard']['allow_comments'] ) ? $fed_admin_options['dashboard']['allow_comments'] : '',
 									'default_value' => 'Enable',
 								), 'checkbox' ); ?>
 						</div>

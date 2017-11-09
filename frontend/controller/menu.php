@@ -7,10 +7,9 @@
  */
 function fed_get_all_dashboard_display_menus() {
 	$profile_menu = fed_process_dashboard_display_menu();
-	$post_menu    = fed_get_post_menu();
 	$logout       = fed_get_logout_menu();
 
-	$all_menus = apply_filters( 'fed_frontend_main_menu', array_merge( $profile_menu, $post_menu, $logout ) );
+	$all_menus = apply_filters( 'fed_frontend_main_menu', array_merge( $profile_menu, $logout ) );
 
 	uasort( $all_menus, 'fed_sort_by_order' );
 
@@ -33,11 +32,9 @@ function fed_process_dashboard_display_menu() {
  */
 function fed_get_post_menu() {
 	$all_roles          = fed_get_user_roles();
-	$admin_post_options = array(
-		'post' => get_option( 'fed_admin_settings_post', fed_get_default_post_options(
-			$all_roles
-		) )
-	);
+	$admin_post_options = get_option( 'fed_cp_admin_settings', fed_get_default_post_options(
+		$all_roles
+	) );
 
 	$default = array();
 	$user    = get_userdata( get_current_user_id() );
@@ -47,7 +44,7 @@ function fed_get_post_menu() {
 		$menu_name = ( isset( $options['menu']['rename_post'] ) && $options['menu']['rename_post'] != '' ) ? esc_attr( $options['menu']['rename_post'] ) : 'Post';
 		$menu_icon = ( isset( $options['menu']['post_menu_icon'] ) && $options['menu']['post_menu_icon'] != '' ) ? esc_attr( $options['menu']['post_menu_icon'] ) : 'fa fa-file-text';
 
-		if ( count( array_intersect( $user->roles, array_keys( $options['permissions']['fed_post_permission'] ) ) ) > 0 ) {
+		if ( isset( $options['permissions']['post_permission'] ) && count( array_intersect( $user->roles, array_keys( $options['permissions']['post_permission'] ) ) ) > 0 ) {
 			$default[ $key ] = array(
 				'id'                => '20',
 				'menu_slug'         => 'post',
@@ -98,7 +95,7 @@ function fed_display_dashboard_menu( $first_element ) {
 		}
 		?>
 		<a href="#<?php echo $index; ?>"
-		   class="list-group-item fed_menu_slug <?php echo $active ?>"
+		   class="list-group-item fed_menu_slug fednc <?php echo $active ?>"
 		   data-menu="<?php echo $index; ?>">
 			<div class="flex">
 				<div class="fed_menu_icon">
@@ -119,15 +116,27 @@ function fed_display_dashboard_menu( $first_element ) {
  * Collapse Menu
  */
 function fed_get_collapse_menu() {
+	$collapse = fed_get_collapse_menu_content();
 	?>
 	<div class="list-group-item fed_collapse_menu">
 		<div class="flex">
-			<div class="fed_menu_icon fed_collapse_menu_icon">
-				<span class="fa fa-arrow-circle-left"></span>
+			<div class="fed_menu_icon fed_collapse_menu_icon menu_open">
+				<span class="open <?php echo $collapse['open_icon'] ?>"></span>
+				<span class="closed hide <?php echo $collapse['close_icon'] ?>"></span>
 			</div>
-			<div class="fed_menu_title fed_collapse_menu_item"><?php _e( 'Collapse Menu', 'fed' ) ?></div>
+			<div class="fed_menu_title fed_collapse_menu_item">
+				<?php _e( $collapse['name'], 'fed' ) ?>
+			</div>
 		</div>
 
 	</div>
 	<?php
+}
+
+function fed_get_collapse_menu_content() {
+	return apply_filters( 'fed_collapse_menu_content', array(
+		'open_icon'  => 'fa fa-arrow-right',
+		'close_icon' => 'fa fa-arrow-left',
+		'name'       => 'Collapse Menu',
+	) );
 }

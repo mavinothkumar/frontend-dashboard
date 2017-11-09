@@ -38,7 +38,6 @@ function fed_process_dashboard_display_post( $post_type = 'post' ) {
  */
 function fed_display_dashboard_post( $first_element ) {
 	$fed_posts = fed_process_dashboard_display_post();
-
 	$menus = fed_get_post_menu();
 	foreach ( $fed_posts as $index => $post ) {
 		if ( $index == $first_element ) {
@@ -50,7 +49,7 @@ function fed_display_dashboard_post( $first_element ) {
 		<div class="panel panel-primary fed_dashboard_item <?php echo $active . ' ' . $index ?>">
 			<div class="panel-heading">
 				<h3 class="panel-title">
-					<span class="fa <?php echo $menus[ $index ]['menu_image_id'] ?>"></span>
+					<span class="fa <?php echo $menus[ $index ]['post_menu_icon'] ?>"></span>
 					<?php echo ucwords( $menus[ $index ]['menu'] ) ?>
 				</h3>
 			</div>
@@ -104,7 +103,7 @@ function fed_display_dashboard_add_new_post( $post_type ) {
 	$post_settings = fed_get_post_settings_by_type( $post_type );
 	$menu          = isset( $post_settings['menu']['rename_post'] ) ? $post_settings['menu']['rename_post'] : strtoupper( $post_type );
 	$html          = '';
-
+//	var_dump($post_settings);
 	$html .= '
 <div class="row">
     <div class="col-md-5">
@@ -157,7 +156,7 @@ function fed_display_dashboard_add_new_post( $post_type ) {
 	/**
 	 * Post Content
 	 */
-	if ( isset( $post_settings['dashboard']['fed_post_dashboard_content'] ) && $post_settings['dashboard']['fed_post_dashboard_content'] != 'Enable' ) {
+	if ( ! isset( $post_settings['dashboard']['post_content'] ) ) {
 		$html .= '
     <div class="row fed_dashboard_item_field">
         <div class="col-md-12">
@@ -175,7 +174,7 @@ function fed_display_dashboard_add_new_post( $post_type ) {
 	 * Featured Image
 	 * _thumbnail_id
 	 */
-	if ( isset( $post_settings['dashboard']['fed_post_dashboard_featured_image'] ) && $post_settings['dashboard']['fed_post_dashboard_featured_image'] != 'Enable' ) {
+	if ( ! isset( $post_settings['dashboard']['featured_image'] )) {
 		$html .= '
     <div class="row fed_dashboard_item_field">
         <div class="col-md-12">
@@ -192,7 +191,7 @@ function fed_display_dashboard_add_new_post( $post_type ) {
 	/**
 	 * Comment Status
 	 */
-	if ( isset( $post_settings['dashboard']['fed_post_dashboard_allow_comments'] ) && $post_settings['dashboard']['fed_post_dashboard_allow_comments'] != 'Enable' ) {
+	if ( ! isset( $post_settings['dashboard']['allow_comments'] )) {
 		$html .= '
     <div class="row fed_dashboard_item_field">
         <div class="col-md-12">
@@ -337,7 +336,7 @@ function fed_process_dashboard_add_new_post( $post ) {
 	 */
 	$fed_admin_options = fed_get_post_settings_by_type( $post['fed_post_type'] );
 	$user_role         = fed_get_current_user_role();
-	if ( count( array_intersect( $user_role, array_keys( $fed_admin_options['permissions']['fed_post_permission'] ) ) ) > 0 ) {
+	if ( count( array_intersect( $user_role, array_keys( $fed_admin_options['permissions']['post_permission'] ) ) ) > 0 ) {
 		$extras      = fed_fetch_table_rows_with_key( BC_FED_POST_DB, 'input_meta' );
 		$post_status = isset( $fed_admin_options['settings']['fed_post_status'] ) ? sanitize_text_field( $fed_admin_options['settings']['fed_post_status'] ) : 'publish';
 
@@ -462,7 +461,7 @@ function fed_display_dashboard_edit_post_by_id( $post ) {
 	/**
 	 * Post Content
 	 */
-	if ( isset( $post_settings['dashboard']['fed_post_dashboard_content'] ) && $post_settings['dashboard']['fed_post_dashboard_content'] != 'Enable' ) {
+	if ( ! isset( $post_settings['dashboard']['post_content'] )  ) {
 		$html .= '
     <div class="row fed_dashboard_item_field">
         <div class="col-md-12">
@@ -481,7 +480,7 @@ function fed_display_dashboard_edit_post_by_id( $post ) {
 	 * Featured Image
 	 * _thumbnail_id
 	 */
-	if ( isset( $post_settings['dashboard']['fed_post_dashboard_featured_image'] ) && $post_settings['dashboard']['fed_post_dashboard_featured_image'] != 'Enable' ) {
+	if ( ! isset( $post_settings['dashboard']['featured_image'] ) ) {
 		$html .= '
     <div class="row fed_dashboard_item_field">
         <div class="col-md-12">
@@ -496,7 +495,7 @@ function fed_display_dashboard_edit_post_by_id( $post ) {
 	/**
 	 * Comment Status
 	 */
-	if ( isset( $post_settings['dashboard']['fed_post_dashboard_allow_comments'] ) && $post_settings['dashboard']['fed_post_dashboard_allow_comments'] != 'Enable' ) {
+	if ( ! isset( $post_settings['dashboard']['allow_comments'] )) {
 		$html .= '
     <div class="row fed_dashboard_item_field">
         <div class="col-md-12">
@@ -545,9 +544,6 @@ function fed_display_dashboard_edit_post_by_id( $post ) {
 }
 
 function fed_get_post_settings_by_type( $post_type ) {
-	if ( $post_type === 'post' ) {
-		return get_option( 'fed_admin_settings_post' );
-	}
 
 	return apply_filters( 'fed_get_custom_post_settings_by_type', array(), $post_type );
 }
@@ -557,14 +553,15 @@ function fed_show_category_tag_post_format( $post, $post_settings ) {
 	$html      = '';
 	$post_type = is_object( $post ) ? $post->post_type : $post;
 	$ctps      = fed_get_category_tag_post_format( $post_type );
-	
+	$user_role = fed_get_current_user_role_key();
+
 	foreach ( $ctps as $index => $ctp ) {
 		if ( $index === 'category' ) {
 			foreach ( $ctp as $cindex => $category ) {
-				if ( isset( $post_settings['dashboard']['fed_post_dashboard_category'] ) && $post_settings['dashboard']['fed_post_dashboard_category'] != 'Enable'  ) {
+				if ( ! isset( $post_settings['taxonomies'][$cindex][$user_role] )) {
 					$html .= '<div class="row fed_dashboard_item_field">
 						<div class="col-md-12">
-						<div class="fed_header_font_color">' .  $category->label . '</div>
+						<div class="fed_header_font_color">' . $category->label . '</div>
 								' . fed_get_dashboard_display_categories( $post, $category ) . '
 						</div>
 						</div>';
@@ -573,10 +570,10 @@ function fed_show_category_tag_post_format( $post, $post_settings ) {
 		}
 		if ( $index === 'tag' ) {
 			foreach ( $ctp as $tindex => $tag ) {
-				if (  isset( $post_settings['dashboard']['fed_post_dashboard_tag'] ) && $post_settings['dashboard']['fed_post_dashboard_tag'] != 'Enable' ) {
+				if ( ! isset( $post_settings['taxonomies'][$tindex][$user_role] )) {
 					$html .= '<div class="row fed_dashboard_item_field">
 						<div class="col-md-12">
-						<div class="fed_header_font_color">' .  $tag->label . '</div>
+						<div class="fed_header_font_color">' . $tag->label . '</div>
 								' . fed_get_dashboard_display_tags( $post, $tag ) . '
 						</div>
 						</div>';
@@ -584,15 +581,14 @@ function fed_show_category_tag_post_format( $post, $post_settings ) {
 			}
 		}
 		if ( $index === 'post_format' ) {
-			if ( isset( $post_settings['dashboard']['fed_post_dashboard_post_format'] ) && $post_settings['dashboard']['fed_post_dashboard_post_format'] != 'Enable' ) {
+				if ( ! isset( $post_settings['taxonomies']['post_format'][$user_role])) {
 				$post_format = fed_dashboard_get_post_format();
-
 				if ( is_array( $post_format ) ) {
 					$post_format = array_combine( $post_format, $post_format );
 					$html        .= '
 					<div class="row fed_dashboard_item_field">
 						<div class="col-md-12">
-						<div class="pull-right fed_header_font_color">' . __( 'Post Format' ) . '</div>
+						<div class="fed_header_font_color">' . __( 'Post Format' ) . '</div>
 							' . fed_input_box( 'tax_input[post_format][]', array(
 							'options' => $post_format,
 							'value'   => esc_attr( get_post_format( $post->ID ) ) ?: 'standard'
