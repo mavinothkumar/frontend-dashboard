@@ -79,9 +79,15 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 3. [fed_register_only] to show only register page
 4. [fed_forgot_password_only] to generate the forgot password page
 5. [fed_dashboard] to generate the dashboard page
-6. [fed_user role**user_role] to generate the role based user page
+6. [fed_user role=user_role] to generate the role based user page
 
 ### Changelog
+**v1.1.4.7 [07-November-2017]**
+* Enhanced: Dashboard main menu collapse/un collapse icon added
+* Enhanced: Admin Dashboard settings changed
+* Bug: Disabled menu slug on edit
+* Bug: Post page custom fields alignment fixed
+
 **v1.1.4.6.1 [02-November-2017]**
 * New: Added Register Redirect after registration
 * New: Post content can be disabled
