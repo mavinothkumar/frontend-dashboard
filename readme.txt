@@ -1,10 +1,10 @@
 === Frontend Dashboard ===
 Contributors: vinoth06, buffercode
-Tags: dashboard, frontend dashboard, custom login, custom register, custom role, custom profile, custom post type
+Tags: dashboard, frontend dashboard, custom login, custom register, custom roles, custom profile, custom post type, custom taxonomies, custom dashboard
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7DHAEMST475BY
 Requires at least: 4.3
 Tested up to: 4.8.3
-Stable tag: 1.1.4.7
+Stable tag: 1.1.4.8.1
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -24,10 +24,10 @@ Frontend Dashboard is bundled with the huge list of custom features which can ea
 9. Manage custom Post type and Taxonomies
 
 = Frontend Dashboard Plugins List =
-* [Frontend Dashboard Captcha](https://buffercode.com/plugin/frontend-dashboard-captcha)
-* [Frontend Dashboard Custom Post and Taxonomies](https://buffercode.com/plugin/frontend-dashboard-custom-post-and-taxonomies)
 * [Frontend Dashboard Extra](https://buffercode.com/plugin/frontend-dashboard-extra)
 * [Frontend Dashboard Pages](https://buffercode.com/plugin/frontend-dashboard-pages)
+* [Frontend Dashboard Captcha](https://buffercode.com/plugin/frontend-dashboard-captcha)
+* [Frontend Dashboard Custom Post and Taxonomies](https://buffercode.com/plugin/frontend-dashboard-custom-post-and-taxonomies)
 
 = Videos =
 
@@ -200,14 +200,22 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 6. [fed_user role=user_role] to generate the role based user page
 
 == Changelog ==
-= v1.1.4.7 [07-November-2017]=
+= v1.1.4.8.1 [15-November-2017] =
+* New: Restrict user role(s) to access the WP Admin area.
+* Bug: Missing file fixed
+
+= v1.1.4.7.1 [09-November-2017] =
+* Bug: Action and Filter hooks with same name conflict.
+* Enhanced: Admin dashboard settings | login paged refactored
+
+= v1.1.4.7 [07-November-2017] =
 * Enhanced: Dashboard main menu collapse/un collapse icon added
 * Enhanced: Admin Dashboard settings changed
 * Bug: Disabled menu slug on edit
 * Bug: Post page custom fields alignment fixed
 
 
-= v1.1.4.6.1 [02-November-2017]=
+= v1.1.4.6.1 [02-November-2017] =
 * New: Added Register Redirect after registration
 * New: Post content can be disabled
 * Bug: While Login and Register loading icon missing
@@ -217,40 +225,40 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 * Enhanced: Dashboard Main Menu
 * Enhanced: Add-Ons
 
-= v1.1.4.5 [16-October-2017]=
+= v1.1.4.5 [16-October-2017] =
 * New action hooks added
 * Bug fixes
 
-= v1.1.4.4 [09-October-2017]=
+= v1.1.4.4 [09-October-2017] =
 * Main menu search box added to search the menu by its name
 * Login failed and more bug fixes
 
 
-= v1.1.4.3 [27-September-2017]=
+= v1.1.4.3 [27-September-2017] =
 * Customize the Frontend Dashboard Layout Color
 * Bug fixes
 
 
-= v1.1.4.2 [17-September-2017]=
+= v1.1.4.2 [17-September-2017] =
 * Major Bug fixes
 * Document updated
 
-= v1.1.4 [10-September-2017]=
+= v1.1.4 [10-September-2017] =
 * Plugin page update
 * Bug fixes
 * Added new filter and action hooks
 
-= v1.1.3 [06-September-2017]=
+= v1.1.3 [06-September-2017] =
 * Plugin page added
 * Bug fixes
 * Added new filter and action hooks
 
-= v1.1.2 [18-August-2017]=
+= v1.1.2 [18-August-2017] =
 * Changed the way of representing the Radio and Select input field.
 * Bug fixes
 * Added few filters.
 
-= v1.1.1 [17-August-2017]=
+= v1.1.1 [17-August-2017] =
 * Collapse/Expand the frontend dashboard menu
 * Bug fixes
 * Refactored for developers comfort
@@ -287,3 +295,4 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 17. User Profiles
 18. User Profile
 19. Frontend Dashboard Settings | User Profile Layout | Color
+20. Frontend Dashboard Settings | Login | Restrict WP Admin Area

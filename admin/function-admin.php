@@ -8,13 +8,24 @@
  * Verify Nonce
  *
  * @param array $request
+ * @param null | string | array $permission
  */
-function fed_verify_nonce( $request ) {
+function fed_verify_nonce( $request, $permission = null ) {
 	if ( isset( $request['fed_admin_setting_nonce'] ) && ! wp_verify_nonce( $request['fed_admin_setting_nonce'], 'fed_admin_setting_nonce' ) ) {
 		wp_send_json_error( array( 'message' => 'Invalid Request' ) );
 	}
 	if ( isset( $request['fed_nonce'] ) && ! wp_verify_nonce( $request['fed_nonce'], 'fed_nonce' ) ) {
 		wp_send_json_error( array( 'message' => 'Invalid Request' ) );
+	}
+
+	if ( null !== $permission ) {
+		$user_role = fed_get_current_user_role_key();
+		if ( is_string( $permission ) && $user_role !== $permission ) {
+			wp_send_json_error( array( 'message' => 'Invalid Request' ) );
+		}
+		if ( is_array( $permission ) && ! in_array( $user_role, $permission, true ) ) {
+			wp_send_json_error( array( 'message' => 'Invalid Request' ) );
+		}
 	}
 }
 
@@ -270,6 +281,13 @@ function fed_get_extra_user_roles() {
 	$user_roles = fed_get_user_roles();
 
 	return array_diff( $user_roles, fed_default_user_roles() );
+}
+
+function fed_get_user_roles_without_admin() {
+	$user_roles = fed_get_user_roles();
+	unset( $user_roles['administrator'] );
+
+	return $user_roles;
 }
 
 /**

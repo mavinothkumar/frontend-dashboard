@@ -24,7 +24,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 					$menu['capability'], $index, $menu['callback'] );
 			}
 
-			do_action( 'fed_add_main_sub_menu' );
+			do_action( 'fed_add_main_sub_menu_action' );
 
 		}
 
@@ -920,6 +920,15 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 										<br>
 										<div class="row">
 											<div class="col-md-12">
+												<b>From version 1.1.4.8</b>
+											</div>
+											<div class="col-md-4">fed_admin_login_wp_restrict_template</div>
+											<div class="col-md-4">fed_admin_login_register_template</div>
+											<div class="col-md-4">fed_admin_login_settings_template</div>
+										</div>
+										<hr>
+										<div class="row">
+											<div class="col-md-12">
 												<b>From version 1.1.4.6</b>
 											</div>
 											<div class="col-md-4">fed_add_main_sub_menu</div>
@@ -1020,6 +1029,16 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 										<br>
 										<div class="row">
 											<div class="col-md-12">
+												<b>From version 1.1.4.7</b>
+											</div>
+											<div class="col-md-4">
+												<del>fed_add_main_sub_menu</del>
+												to
+												fed_add_main_sub_menu_action
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-12">
 												<b>From version 1.1.4.4</b>
 											</div>
 											<div class="col-md-4">fed_frontend_dashboard_menu_container</div>
@@ -1063,7 +1082,10 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 											<div class="col-md-4">fed_after_dashboard_container</div>
 											<div class="col-md-4">fed_before_login_only_form</div>
 											<div class="col-md-4">fed_after_login_only_form</div>
-											<div class="col-md-4">fed_add_main_sub_menu</div>
+											<div class="col-md-4">
+												<del>fed_add_main_sub_menu</del>
+												(in 1.1.4.7)
+											</div>
 											<div class="col-md-4">fed_show_support_button_at_user_profile</div>
 											<div class="col-md-4">fed_user_profile_below</div>
 											<div class="col-md-4">fed_before_login_form</div>
@@ -1073,9 +1095,9 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 											<div class="col-md-4">fed_login_form_submit_custom</div>
 											<div class="col-md-4">fed_before_register_only_form</div>
 											<div class="col-md-4">fed_after_register_only_form</div>
-											<div class="col-md-4">fed_admin_login_settings_template</div>
 											<div class="col-md-4">fed_admin_input_fields_container_extra</div>
-											<div class="col-md-4">fed_admin_login_settings_template</div>
+											<div class="col-md-4"><del>fed_admin_login_settings_template</del>(in 1.1
+												.4.8)</div>
 											<div class="col-md-4">fed_admin_menu_status_version_below</div>
 											<div class="col-md-4">fed_admin_menu_status_database_below</div>
 											<div class="col-md-4">fed_admin_menu_status_below</div>
@@ -1129,11 +1151,11 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 			/**
 			 * Post
 			 */
-			$fed_post             = get_option( 'fed_cp_admin_settings', array() );
-			$fed_post_settings    = isset( $fed_post['post']['settings'] ) ? fed_enable_disable( true ) : fed_enable_disable( false );
-			$fed_post_dashboard   = isset( $fed_post['post']['dashboard'] ) ? fed_enable_disable( true ) : fed_enable_disable( false );
-			$fed_post_menu        = isset( $fed_post['post']['menu'] ) ? fed_enable_disable( true ) : fed_enable_disable( false );
-			$post_permissions = isset( $fed_post['post']['permissions'] ) ? fed_enable_disable( true ) : fed_enable_disable( false );
+			$fed_post           = get_option( 'fed_cp_admin_settings', array() );
+			$fed_post_settings  = isset( $fed_post['post']['settings'] ) ? fed_enable_disable( true ) : fed_enable_disable( false );
+			$fed_post_dashboard = isset( $fed_post['post']['dashboard'] ) ? fed_enable_disable( true ) : fed_enable_disable( false );
+			$fed_post_menu      = isset( $fed_post['post']['menu'] ) ? fed_enable_disable( true ) : fed_enable_disable( false );
+			$post_permissions   = isset( $fed_post['post']['permissions'] ) ? fed_enable_disable( true ) : fed_enable_disable( false );
 
 			/**
 			 * User Profile Layout
@@ -1721,7 +1743,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 		/**
 		 * @return array
 		 */
-		private function fed_get_main_sub_menu() {
+		protected function fed_get_main_sub_menu() {
 			$menu = array(
 				'fed_dashboard_menu'   => array(
 					'page_title' => __( 'Dashboard Menu', 'fed' ),

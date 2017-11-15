@@ -82,6 +82,9 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 6. [fed_user role=user_role] to generate the role based user page
 
 ### Changelog
+**v1.1.4.8.1 [15-November-2017]**
+* New: Restrict user role(s) to access the WP Admin area.
+* Bug: Missing file fixed
 **v1.1.4.7 [07-November-2017]**
 * Enhanced: Dashboard main menu collapse/un collapse icon added
 * Enhanced: Admin Dashboard settings changed

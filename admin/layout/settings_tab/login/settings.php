@@ -118,9 +118,10 @@ function fed_admin_login_settings_tab( $fed_login_settings ) {
 		),
 		'note'   => array( 'header' => '', 'footer' => '' ),
 	);
-
-	do_action( 'fed_admin_login_settings_template', $array, $fed_login_settings );
+	apply_filters( 'fed_admin_login_settings_template', $array, $fed_login_settings );
 
 	fed_common_simple_layout( $array );
+
+
 }
 

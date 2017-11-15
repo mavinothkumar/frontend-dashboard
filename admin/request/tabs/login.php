@@ -17,6 +17,10 @@ function fed_admin_setting_login_request() {
 		$fed_admin_login['register'] = fed_admin_login_register_save( $request );
 		$message                     = 'Register ';
 	}
+	if ( isset( $requests['fed_admin_unique_login'] ) && 'fed_wp_restrict_settings' === $requests['fed_admin_unique_login'] ) {
+		$fed_admin_login['restrict_wp'] = fed_admin_login_restrict_wp_save( $request );
+		$message                        = 'Restrict WP Admin ';
+	}
 
 	apply_filters( 'fed_admin_login', $fed_admin_login );
 
@@ -47,6 +51,16 @@ function fed_admin_login_register_save( $request ) {
 		'role'     => isset( $request['role'] ) ? $request['role'] : array(),
 		'name'     => isset( $request['name'] ) ? $request['name'] : 'User Role',
 		'position' => isset( $request['position'] ) ? $request['position'] : 999,
+	);
+}
+
+function fed_admin_login_restrict_wp_save( $request ) {
+	if ( isset( $request['role']['administrator'] ) ) {
+		unset( $request['role']['administrator'] );
+	}
+
+	return array(
+		'role' => isset( $request['role'] ) ? $request['role'] : array(),
 	);
 }
 
@@ -114,11 +128,25 @@ function fed_logout_redirect( $logout_url, $redirect, $user ) {
 /**
  * Register Redirect
  */
-function fed_registration_redirect( ) {
+function fed_registration_redirect() {
 	$register_redirect_url = fed_get_register_redirect_url();
 	$register_url          = false === $register_redirect_url ? home_url() : $register_redirect_url;
 
 	return $register_url;
 }
+
+/**
+ * Restrict WP Admin area
+ */
+function fed_restrict_admin_area() {
+	$restrict_admin_area = get_option( 'fed_admin_login' );
+	$current_user_role   = fed_get_current_user_role_key();
+
+	if ( $restrict_admin_area && isset( $restrict_admin_area['restrict_wp']['role'] ) && array_key_exists( $current_user_role, $restrict_admin_area['restrict_wp']['role']) ) {
+		wp_redirect( fed_get_dashboard_url() );
+	}
+}
+
+add_action( 'admin_init', 'fed_restrict_admin_area' );
 
 

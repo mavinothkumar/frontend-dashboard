@@ -77,5 +77,11 @@ function fed_get_admin_login_options( $fed_login ) {
 			'callable'  => 'fed_admin_register_settings_tab',
 			'arguments' => $fed_login
 		),
+		'fed_admin_restrict_wp_admin' => array(
+			'icon'      => 'fa fa-user-secret',
+			'name'      => __( 'Restrict WP Admin Area', 'fed' ),
+			'callable'  => 'fed_admin_restrict_wp_admin_tab',
+			'arguments' => $fed_login
+		),
 	) );
 }

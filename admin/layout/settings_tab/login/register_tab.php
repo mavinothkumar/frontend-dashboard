@@ -69,7 +69,10 @@ function fed_admin_register_settings_tab( $fed_login_register ) {
 		);
 	}
 
-	do_action( 'fed_admin_login_register_template', $array, $fed_login_register );
+	apply_filters( 'fed_admin_login_register_template', $array, $fed_login_register );
 
 	fed_common_simple_layout( $array );
+
+
+
 }
