@@ -5,13 +5,13 @@ jQuery(document).ready(function ($) {
      */
     $('.fed_ajax').on('submit', function (e) {
         var form = $(this);
-        $('#preview-area').find('.spinner_circle').removeClass('hide');
+        fed_toggle_loader();
         $.ajax({
             type: 'POST',
             url: form.attr('action'),
             data: form.serialize(),
             success: function (results) {
-                $('#preview-area').find('.spinner_circle').addClass('hide');
+                fed_toggle_loader();
                 fedAdminAlert.adminSettings(results);
             }
 
@@ -36,13 +36,13 @@ jQuery(document).ready(function ($) {
             cancelButtonText: "No, Cancel it"
         }).then(
             function () {
-                $('#preview-area').find('.spinner_circle').removeClass('hide');
+                fed_toggle_loader();
                 $.ajax({
                     type: 'POST',
                     url: form.attr('action'),
                     data: form.serialize(),
                     success: function (results) {
-                        $('#preview-area').find('.spinner_circle').addClass('hide');
+                        fed_toggle_loader();
                         fedAdminAlert.adminSettings(results);
                     }
 
@@ -52,7 +52,7 @@ jQuery(document).ready(function ($) {
                     swal({
                             title: "Cancelled",
                             type: "error",
-                            confirmButtonColor: '#00b5ad'
+                            confirmButtonColor: '#0AAAAA'
                         }
                     );
                 }
@@ -88,14 +88,14 @@ jQuery(document).ready(function ($) {
 
     fed_menu_ajax.on('click', '.fed_menu_save', function (e) {
         var form = $(this).closest('form');
-        $('#preview-area').find('.spinner_circle').removeClass('hide');
+        fed_toggle_loader();
         $.ajax({
             type: 'POST',
             url: form.attr('action'),
             data: {'fed_action': 'save', 'data': form.serialize()},
             success: function (results) {
-                console.log(results);
-                $('#preview-area').find('.spinner_circle').addClass('hide');
+                // console.log(results);
+                fed_toggle_loader();
                 fedAdminAlert.adminSettings(results);
             }
 
@@ -135,12 +135,12 @@ jQuery(document).ready(function ($) {
                     swal({
                             title: "Cancelled",
                             type: "error",
-                            confirmButtonColor: '#00b5ad'
+                            confirmButtonColor: '#0AAAAA'
                         }
                     );
                 }
             });
-        $('#preview-area').find('.spinner_circle').addClass('hide');
+        fed_toggle_loader();
         e.preventDefault();
     });
 
@@ -148,7 +148,7 @@ jQuery(document).ready(function ($) {
      * Delete User Profile
      */
     $('form.fed_profile_ajax').on('click', '.fed_profile_delete', function (e) {
-        console.log('delete');
+        //console.log('delete');
         var form = $(this).closest('form');
         swal({
             title: "Are you sure?",
@@ -180,7 +180,7 @@ jQuery(document).ready(function ($) {
                     )
                 }
             });
-        $('#preview-area').find('.spinner_circle').addClass('hide');
+        fed_toggle_loader();
         e.preventDefault();
     });
 
@@ -298,8 +298,8 @@ jQuery(document).ready(function ($) {
      */
     $('#fed_LSRB').on('click', function (e) {
         $('#fed_UPL_layout_container').html(fed.fed_LSRB);
-        console.log(fed.fed_LSRB);
-        console.log('yys');
+        //console.log(fed.fed_LSRB);
+        //console.log('yys');
         e.preventDefault();
     });
 
@@ -316,7 +316,7 @@ jQuery(document).ready(function ($) {
     $('.fed_show_fa_list').on('show.bs.modal', function (e) {
         var click = $(e.relatedTarget).data('fed_menu_box_id');
         body.find('#fed_menu_box_id').val(click);
-        console.log(click);
+        //console.log(click);
     });
 
     body.on('click', '.fed_menu_save_button_toggle', function (e) {
@@ -351,7 +351,7 @@ jQuery(document).ready(function ($) {
             url: form.attr('action'),
             data: form.serialize(),
             success: function (results) {
-                console.log(results);
+                //console.log(results);
                 fedAdminAlert.adminSettings(results);
                 if (results.data.extra) {
                     $('#email').val(results.data.extra.email);
@@ -366,14 +366,14 @@ jQuery(document).ready(function ($) {
 
     $('form.fed_admin_add_orders').on('submit', function (e) {
         var form = $(this).closest('form');
-        $('#preview-area').find('.spinner_circle').removeClass('hide');
+        fed_toggle_loader();
         $.ajax({
             type: 'POST',
             url: form.attr('action'),
             data: form.serialize(),
             success: function (results) {
-                console.log(results);
-                $('#preview-area').find('.spinner_circle').addClass('hide');
+                //console.log(results);
+                fed_toggle_loader();
                 fedAdminAlert.adminOrderAdd(results);
             }
 
@@ -437,8 +437,6 @@ jQuery(document).ready(function ($) {
         e.preventDefault();
     });
 
-
-
     /**
      * Single line executions
      */
@@ -458,6 +456,10 @@ jQuery(document).ready(function ($) {
             $('html,body').scrollTop(scrollmem);
         });
     });
+
+    function fed_toggle_loader() {
+        $('.preview-area').toggleClass('hide');
+    }
 });
 
 var fedAdminAlert = {
@@ -466,7 +468,7 @@ var fedAdminAlert = {
             swal({
                 title: results.data.message || 'Something Went Wrong',
                 type: "success",
-                confirmButtonColor: '#00b5ad'
+                confirmButtonColor: '#0AAAAA'
             }).then(
                 function () {
                     if (results.data.reload) {
@@ -516,7 +518,7 @@ var fedAdminAlert = {
             swal({
                 title: results.data.message || 'Something Went Wrong',
                 type: "success",
-                confirmButtonColor: '#00b5ad'
+                confirmButtonColor: '#0AAAAA'
             });
         } else if (results.success === false) {
             var error;

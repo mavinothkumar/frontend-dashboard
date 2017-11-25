@@ -82,17 +82,15 @@ function fed_display_dashboard_profile( $first_element ) {
 								}
 								?>
 								<div class="row fed_dashboard_item_field">
-									<div class="col-md-3">
-										<div class="pull-right">
+									<div class="col-md-7 fo">
+										<label>
 											<?php echo esc_attr( $single_item['label_name'] ) ?>
-										</div>
-									</div>
-									<div class="col-md-7">
+										</label>
 										<?php
 										echo fed_get_input_details( $single_item );
 										?>
 									</div>
-									<div class="col-md-2">
+									<div class="col-md-5">
 
 									</div>
 								</div>

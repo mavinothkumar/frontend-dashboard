@@ -14,53 +14,37 @@ $first_element_key = array_keys( $menu );
 $first_element     = $first_element_key[0];
 
 do_action( 'fed_before_dashboard_container' );
-//var_dump(get_option( 'fed_admin_settings_user', array() ));
 
 fed_get_payment_notification();
 ?>
 	<div class="bc_fed fed_dashboard_container">
 		<?php echo fed_loader() ?>
 		<div class="row fed_dashboard_wrapper">
-			<div class="col-md-3 fed_dashboard_menus">
-				<div class="list-group">
-					<?php
-					fed_display_dashboard_menu( $first_element );
-					?>
+			<div class="col-md-3 fed_dashboard_menus default_template">
+				<div class="custom-collapse fed_menu_items">
+					<button class="bg_secondary collapse-toggle visible-xs collapsed" type="button" data-toggle="collapse" data-parent="custom-collapse" data-target="#fed_default_template">
+						<span class=""><i class="fa fa-bars"></i></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<ul class="list-group fed_menu_ul collapse" id="fed_default_template">
+						<?php
+						fed_display_dashboard_menu( $first_element );
+						?>
+						<?php fed_get_collapse_menu() ?>
+					</ul>
 				</div>
-				<?php fed_get_collapse_menu() ?>
 			</div>
 			<div class="col-md-9 fed_dashboard_items">
 				<?php
 				fed_display_dashboard_profile( $first_element );
 
-				/**
-				 * Show Post options only on enabled users
-				 * As this as been append to custom post plugin
-				 * from v 1.1.4.7
-				 */
-//				if ( isset( $menu['post'] ) ) {
-//					fed_display_dashboard_post( $first_element );
-//				}
-
-				/**
-				 * Show Payment Options only for enabled users
-				 */
-				if ( isset( $menu['payment'] ) ) {
-					fed_display_dashboard_payment( $first_element );
-				}
-
-				/**
-				 * Show Support Options only for enabled users
-				 */
-				if ( isset( $menu['support'] ) ) {
-					fed_display_dashboard_support( $first_element );
-				}
-
 				if ( isset( $menu['logout'] ) ) {
-					fed_logout_process($first_element);
+					fed_logout_process( $first_element );
 				}
 
-				do_action('fed_frontend_dashboard_menu_container',$first_element);
+				do_action( 'fed_frontend_dashboard_menu_container', $first_element );
 
 				?>
 			</div>

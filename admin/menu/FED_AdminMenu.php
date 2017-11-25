@@ -465,7 +465,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 
 		public function add_user_profile() {
 			$id              = '';
-			$add_edit_action = 'Add New ';
+			$add_edit_action = __( 'Add New ', 'fed' );
 			$selected        = '';
 			$action          = isset( $_GET['fed_action'] ) ? esc_attr( $_GET['fed_action'] ) : '';
 			if ( isset( $_GET['fed_input_id'] ) ) {
@@ -676,7 +676,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 				'date'    => date( 'Y-m-d H:i:s' )
 			);
 			if ( false === ( $api = get_transient( 'fed_plugin_list_api' ) ) ) {
-				$api = $this->get_plugin_list();
+				$api = get_plugin_list();
 				set_transient( 'fed_plugin_list_api', $api, 12 * HOUR_IN_SECONDS );
 			}
 			if ( $api ) {
@@ -1096,8 +1096,11 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 											<div class="col-md-4">fed_before_register_only_form</div>
 											<div class="col-md-4">fed_after_register_only_form</div>
 											<div class="col-md-4">fed_admin_input_fields_container_extra</div>
-											<div class="col-md-4"><del>fed_admin_login_settings_template</del>(in 1.1
-												.4.8)</div>
+											<div class="col-md-4">
+												<del>fed_admin_login_settings_template</del>
+												(in 1.1
+												.4.8)
+											</div>
 											<div class="col-md-4">fed_admin_menu_status_version_below</div>
 											<div class="col-md-4">fed_admin_menu_status_database_below</div>
 											<div class="col-md-4">fed_admin_menu_status_below</div>
@@ -1729,16 +1732,6 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 			<?php
 		}
 
-		private function get_plugin_list() {
-			$config     = fed_config();
-			$plugin_api = wp_remote_get( $config['plugin_api'], array( 'timeout' => 120, 'httpversion' => '1.1' ) );
-
-			if ( is_array( $plugin_api ) && isset( $plugin_api['body'] ) ) {
-				return $plugin_api['body'];
-			}
-
-			return false;
-		}
 
 		/**
 		 * @return array

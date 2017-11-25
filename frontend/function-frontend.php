@@ -28,16 +28,16 @@ function fed_get_avatar( $id_or_email, $alt = '', $class = '', $extra = '', $siz
 
 		if ( $gavatar_id != '' ) {
 			return wp_get_attachment_image( (int) $gavatar_id, $size, $icon = false, $attr );
-		} else {
-			// send the default image
-			return sprintf(
-				"<img alt='%s' src='%s' class='%s' %s />",
-				esc_attr( $alt ),
-				esc_url( 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y&s=600' ),
-				esc_attr( $class ),
-				$extra
-			);
 		}
+
+		// send the default image
+		return sprintf(
+			"<img alt='%s' src='%s' class='%s' %s />",
+			esc_attr( $alt ),
+			esc_url( 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y&s=600' ),
+			esc_attr( $class ),
+			$extra
+		);
 	}
 
 	$get_avatar = get_avatar_data( $id_or_email, array( 'size' => 600 ) );

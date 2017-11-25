@@ -372,6 +372,36 @@ function fed_plugin_meta_data() {
 function fed_admin_notice() {
 	if ( isset( $_GET, $_GET['page'] ) && in_array( $_GET['page'], fed_get_script_loading_pages(), false ) ) {
 		$get_notification = get_option( 'fed_admin_message_notification' );
+		/**
+		 * Plugin update notifications
+		 */
+		if ( false === ( $api = get_transient( 'fed_plugin_list_api' ) ) ) {
+			$api = get_plugin_list();
+			set_transient( 'fed_plugin_list_api', $api, 12 * HOUR_IN_SECONDS );
+		}
+		if ( $api ) {
+			$plugins = json_decode( $api );
+			//bcdump($plugins);
+			foreach ( $plugins->plugins as $plugin ) {
+				if ( defined( $plugin->id ) ) {
+					if ( constant( $plugin->id . '_VERSION' ) < $plugin->version ) {
+						?>
+						<div class="notice notice-info">
+							<div class="fed_flex_start_center">
+								<img width="50px" src="<?php echo $plugin->thumbnail; ?>"/>
+								<h2 class="fed_p_l_20">
+									<?php echo $plugin->title . ' has been updated to newer version ' . $plugin->version . ' kindly <a href="' . $plugin->download_url . '">Update</a>'; ?>
+								</h2>
+							</div>
+						</div>
+						<?php
+					}
+				}
+			}
+		}
+		/**
+		 * Common Notification to watch videos
+		 */
 		if ( ! $get_notification ) {
 			?>
 			<div class="notice notice-success">
@@ -394,8 +424,22 @@ function fed_admin_notice() {
 			</div>
 			<?php
 		}
+
+
+		do_action( 'fed_admin_notice' );
 	}
 }
 
 add_action( 'all_admin_notices', 'fed_admin_notice' );
 
+
+function get_plugin_list() {
+	$config     = fed_config();
+	$plugin_api = wp_remote_get( $config['plugin_api'], array( 'timeout' => 120, 'httpversion' => '1.1' ) );
+
+	if ( is_array( $plugin_api ) && isset( $plugin_api['body'] ) ) {
+		return $plugin_api['body'];
+	}
+
+	return false;
+}

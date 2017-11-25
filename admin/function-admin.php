@@ -498,29 +498,6 @@ function fed_check_field_is_belongs_to_extra( $meta_key = '' ) {
 	return false;
 }
 
-add_filter( 'admin_footer_text', 'fed_update_footer' );
-/**
- * Update Footer.
- *
- * @param string $text Footer Notes
- *
- * @return string
- */
-function fed_update_footer( $text ) {
-	if ( isset( $_GET['page'] ) && fed_get_script_loading_pages() ) {
-		$text = '<span id="footer-thankyou">If you like <strong>Frontend Dashboard (v' . BC_FED_PLUGIN_VERSION . ')</strong>, Please leave us a rating <a 
-href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#new-post">
-<i class="fa fa-star fa-2x" aria-hidden="true"></i>
-<i class="fa fa-star fa-2x" aria-hidden="true"></i>
-<i class="fa fa-star fa-2x" aria-hidden="true"></i>
-<i class="fa fa-star fa-2x" aria-hidden="true"></i>
-<i class="fa fa-star fa-2x" aria-hidden="true"></i>
-</a>. A huge thanks in advance <i class="fa fa-smile-o" aria-hidden="true"></i>';
-	}
-
-	return $text;
-}
-
 /**
  * Validation to No Update Fields
  *
@@ -1752,7 +1729,7 @@ function fed_get_current_user_role() {
 function fed_get_current_user_role_key() {
 	$user = get_userdata( get_current_user_id() );
 
-	return $user->roles[0];
+	return $user ? $user->roles[0] : false;
 }
 
 /**

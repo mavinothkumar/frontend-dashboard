@@ -103,7 +103,7 @@ function fed_display_dashboard_add_new_post( $post_type ) {
 	$post_settings = fed_get_post_settings_by_type( $post_type );
 	$menu          = isset( $post_settings['menu']['rename_post'] ) ? $post_settings['menu']['rename_post'] : strtoupper( $post_type );
 	$html          = '';
-//	var_dump($post_settings);
+
 	$html .= '
 <div class="row">
     <div class="col-md-5">
@@ -276,8 +276,8 @@ function fed_display_dashboard_view_post_list( $post_type = 'post' ) {
 			$html .= '
     <div class="fed_dashboard_item_field_wrapper">
         <div class="row fed_dashboard_item_field">
-            <div class="col-md-1"> ' . (int) $single_post->ID . '</div>
-            <div class="col-md-9">
+            <div class="col-md-1 col-xs-1 col-sm-2"> ' . (int) $single_post->ID . '</div>
+            <div class="col-md-9 col-xs-10 col-sm-8">
                 ' . fed_get_post_status_symbol( $single_post->post_status ) . ' ' . esc_attr( $single_post->post_title ) . '
             </div>
             <div class="col-md-2 flex-space-around">
@@ -344,7 +344,7 @@ function fed_process_dashboard_add_new_post( $post ) {
 			$error = new WP_Error( 'fed_dashboard_add_post_title_missing', 'Please fill post title' );
 
 			wp_send_json_error( array( 'message' => $error->get_error_messages() ) );
-			exit();
+
 		}
 
 		$default = array(

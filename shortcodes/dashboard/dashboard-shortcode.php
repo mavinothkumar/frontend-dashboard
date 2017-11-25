@@ -14,6 +14,7 @@ if ( ! shortcode_exists( 'fed_dashboard' ) && ! function_exists( 'fed_fn_dashboa
 	function fed_fn_dashboard() {
 
 		$templates = new FED_Template_Loader;
+
 		ob_start();
 
 		$templates->get_template_part( 'dashboard' );

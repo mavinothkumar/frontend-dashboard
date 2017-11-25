@@ -94,17 +94,17 @@ function fed_display_dashboard_menu( $first_element ) {
 			$active = '';
 		}
 		?>
-		<a href="#<?php echo $index; ?>"
-		   class="list-group-item fed_menu_slug fednc <?php echo $active ?>"
-		   data-menu="<?php echo $index; ?>">
-			<div class="flex">
-				<div class="fed_menu_icon">
-					<span class="<?php echo $menu['menu_image_id'] ?>"></span>
+		<li class="fed_menu_slug <?php echo $active ?> list-group-item" data-menu="<?php echo $index; ?>">
+			<a href="#<?php echo $index; ?>">
+				<div class="flex">
+					<div class="fed_menu_icon">
+						<span class="<?php echo $menu['menu_image_id'] ?>"></span>
+					</div>
+					<div class="fed_menu_title"><?php echo ucwords( $menu['menu'] ) ?></div>
 				</div>
-				<div class="fed_menu_title"><?php echo ucwords( $menu['menu'] ) ?></div>
-			</div>
 
-		</a>
+			</a>
+		</li>
 		<?php
 	}
 	?>
@@ -118,7 +118,7 @@ function fed_display_dashboard_menu( $first_element ) {
 function fed_get_collapse_menu() {
 	$collapse = fed_get_collapse_menu_content();
 	?>
-	<div class="list-group-item fed_collapse_menu">
+	<li class="fed_menu_slug list-group-item visible-lg visibile-md">
 		<div class="flex">
 			<div class="fed_menu_icon fed_collapse_menu_icon menu_open">
 				<span class="open <?php echo $collapse['open_icon'] ?>"></span>
@@ -128,8 +128,7 @@ function fed_get_collapse_menu() {
 				<?php _e( $collapse['name'], 'fed' ) ?>
 			</div>
 		</div>
-
-	</div>
+	</li>
 	<?php
 }
 

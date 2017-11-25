@@ -28,13 +28,13 @@ jQuery(document).ready(function ($) {
             var data = click.serialize();
             var url = fed.fed_login_form_post;
             var method = click.attr('method') || 'post';
-            $('#preview-area').find('.spinner_circle').removeClass('hide');
+            fed_toggle_loader();
             $.ajax({
                 type: method,
                 data: data,
                 url: url,
                 success: function (results) {
-                    $('#preview-area').find('.spinner_circle').addClass('hide');
+                    fed_toggle_loader();
                     fedAlert.loginStatus(results);
                 }
             });
@@ -45,13 +45,13 @@ jQuery(document).ready(function ($) {
 
         $('form.fed_ajax').on('submit', function (e) {
             var form = $(this);
-            $('#preview-area').find('.spinner_circle').removeClass('hide');
+            fed_toggle_loader();
             $.ajax({
                 type: 'POST',
                 url: form.attr('action'),
                 data: form.serialize(),
                 success: function (results) {
-                    $('#preview-area').find('.spinner_circle').addClass('hide');
+                    fed_toggle_loader();
                     fedAlert.dashboardPostCommon(results);
                 }
 
@@ -62,14 +62,14 @@ jQuery(document).ready(function ($) {
 
         $('form.fed_get_qa_ajax').on('click', function (e) {
             var form = $(this);
-            $('#preview-area').find('.spinner_circle').removeClass('hide');
+            fed_toggle_loader();
             $.ajax({
                 type: 'POST',
                 url: form.attr('action'),
                 data: form.serialize(),
                 success: function (results) {
                     form.find('.fed_support_badge').html('');
-                    $('#preview-area').find('.spinner_circle').addClass('hide');
+                    fed_toggle_loader();
                     $('body').find('#fed_qa_container').html(results.data.message);
                 }
 
@@ -80,13 +80,13 @@ jQuery(document).ready(function ($) {
 
         b.on('submit', 'form.fed_add_new_answer', function (e) {
             var form = $(this);
-            $('#preview-area').find('.spinner_circle').removeClass('hide');
+            fed_toggle_loader();
             $.ajax({
                 type: 'POST',
                 url: form.attr('action'),
                 data: form.serialize(),
                 success: function (results) {
-                    $('#preview-area').find('.spinner_circle').addClass('hide');
+                    fed_toggle_loader();
                     $('body').find('#fed_qa_container').html(results.data.message);
                 }
 
@@ -132,7 +132,7 @@ jQuery(document).ready(function ($) {
          * Payment loading
          */
         $('form.fed_user_not_paid_form').on('submit', function () {
-            $('#preview-area').find('.spinner_circle').removeClass('hide');
+            fed_toggle_loader();
         });
         /**
          * Dashboard Post Operations
@@ -161,15 +161,15 @@ jQuery(document).ready(function ($) {
             var data = click.serialize();
             var url = click.attr('action');
             var method = click.attr('method') || 'post';
-            $('#preview-area').find('.spinner_circle').removeClass('hide');
+            fed_toggle_loader();
             $.ajax({
                 type: method,
                 data: data,
                 url: url,
                 success: function (results) {
-                    console.log(results);
+                    // console.log(results);
                     fedAlert.dashboardPostCommon(results);
-                    $('#preview-area').find('.spinner_circle').addClass('hide');
+                    fed_toggle_loader();
                 }
             });
             e.preventDefault();
@@ -182,15 +182,15 @@ jQuery(document).ready(function ($) {
             var url = click.attr('action');
             var method = click.attr('method') || 'post';
             var root = click.closest('.fed_panel_body_container');
-            $('#preview-area').find('.spinner_circle').removeClass('hide');
+            fed_toggle_loader();
             $.ajax({
                 type: method,
                 data: data,
                 async: false,
                 url: url,
                 success: function (results) {
-                    console.log(results);
-                    $('#preview-area').find('.spinner_circle').addClass('hide');
+                    // console.log(results);
+                    fed_toggle_loader();
                     root.html(results);
                 },
                 complete: function () {
@@ -208,7 +208,7 @@ jQuery(document).ready(function ($) {
             var url = click.attr('action');
             var method = click.attr('method') || 'post';
             var root = click.closest('.fed_panel_body_container');
-            $('#preview-area').find('.spinner_circle').removeClass('hide');
+            fed_toggle_loader();
             $.ajax({
                 type: method,
                 data: data,
@@ -220,7 +220,7 @@ jQuery(document).ready(function ($) {
                 },
                 success: function (results) {
                     // console.log(results);
-                    $('#preview-area').find('.spinner_circle').addClass('hide');
+                    fed_toggle_loader();
                     root.html(results);
                 },
                 complete: function () {
@@ -240,15 +240,15 @@ jQuery(document).ready(function ($) {
             var url = click.attr('action');
             var method = click.attr('method') || 'post';
             var root = click.closest('.fed_panel_body_container');
-            //$('#preview-area').find('.spinner_circle').removeClass('hide');
+            fed_toggle_loader();
             $.ajax({
                 type: method,
                 data: data,
                 url: url,
                 success: function (results) {
-                    console.log(results);
+                    // console.log(results);
                     fedAlert.dashboardPostCommon(results);
-                    //$('#preview-area').find('.spinner_circle').addClass('hide');
+                    fed_toggle_loader();
                 }
             });
             e.preventDefault();
@@ -261,7 +261,7 @@ jQuery(document).ready(function ($) {
             var url = click.attr('action');
             var method = click.attr('method') || 'post';
             var root = click.closest('.fed_dashboard_item_field_wrapper');
-            $('#preview-area').find('.spinner_circle').removeClass('hide');
+            fed_toggle_loader();
             swal({
                 title: "Are you sure?",
                 text: "You to delete this Menu!",
@@ -289,25 +289,24 @@ jQuery(document).ready(function ($) {
                         swal({
                                 title: "Cancelled",
                                 type: "error",
-                                confirmButtonColor: '#00b5ad'
+                                confirmButtonColor: '#0AAAAA'
                             }
                         );
                     }
                 });
-            $('#preview-area').find('.spinner_circle').addClass('hide');
+            fed_toggle_loader();
 
             e.preventDefault();
         });
 
         // Show Post List Request
         b.on('submit', '.fed_dashboard_show_post_list_request', function (e) {
-
             var click = $(this);
             var data = click.serialize();
             var url = click.attr('action');
             var method = click.attr('method') || 'post';
             var root = click.closest('.fed_panel_body_container');
-            $('#preview-area').find('.spinner_circle').removeClass('hide');
+            fed_toggle_loader();
             $.ajax({
                 type: method,
                 data: data,
@@ -319,7 +318,7 @@ jQuery(document).ready(function ($) {
                 },
                 success: function (results) {
                     // console.log(results);
-                    $('#preview-area').find('.spinner_circle').addClass('hide');
+                    fed_toggle_loader();
                     root.html(results);
                 }
             });
@@ -333,10 +332,10 @@ jQuery(document).ready(function ($) {
             var method = 'get';
             var root = click.closest('.fed_panel_body_container');
 
-            $('#preview-area').find('.spinner_circle').removeClass('hide');
+            fed_toggle_loader();
 
             if (click.hasClass('active')) {
-                $('#preview-area').find('.spinner_circle').addClass('hide');
+                fed_toggle_loader();
                 return false;
             }
             $.ajax({
@@ -344,7 +343,7 @@ jQuery(document).ready(function ($) {
                 data: data,
                 url: url,
                 success: function (results) {
-                    $('#preview-area').find('.spinner_circle').addClass('hide');
+                    fed_toggle_loader();
                     root.html(results);
                 }
             });
@@ -391,37 +390,18 @@ jQuery(document).ready(function ($) {
             e.preventDefault();
         });
 
-        dashboard_menu.on('click', '.fed_collapse_menu', function (e) {
+        $('.default_template').on('click', '.fed_collapse_menu', function (e) {
             var click = $(this);
             var parent = click.closest('.fed_dashboard_wrapper');
-            var menu = parent.find('.fed_dashboard_menus');
-            var content = parent.find('.fed_dashboard_items');
-            if (click.find('.fed_collapse_menu_icon').hasClass('menu_open')) {
-                click.find('.fed_collapse_menu_icon').removeClass('menu_open').addClass('menu_closed');
-                click.find('.fed_collapse_menu_icon .closed').removeClass('hide');
-                click.find('.fed_collapse_menu_icon .open').addClass('hide');
+            parent.find('.fed_dashboard_menus').toggleClass('fed_collapse');
+            parent.find('.fed_dashboard_menus').toggleClass('col-md-3').toggleClass('col-md-1');
+            parent.find('.fed_dashboard_items').toggleClass('col-md-9').toggleClass('col-md-11');
+            parent.find('.flex').toggleClass('flex_center');
+            e.preventDefault();
+        });
 
-                menu.find('.fed_menu_slug').removeClass('fednc');
-
-                menu.find('.fed_menu_title').addClass('hide');
-                menu.removeClass('col-md-3').addClass('col-md-1');
-                content.removeClass('col-md-9').addClass('col-md-11');
-                parent.find('.flex').addClass('flex_center');
-                parent.find('.flex').removeClass('flex');
-            } else {
-                click.find('.fed_collapse_menu_icon').removeClass('menu_closed').addClass('menu_open');
-                click.find('.fed_collapse_menu_icon .open').removeClass('hide');
-                click.find('.fed_collapse_menu_icon .closed').addClass('hide');
-                menu.find('.fed_menu_title').removeClass('hide');
-                menu.removeClass('col-md-1').addClass('col-md-3');
-
-                menu.find('.fed_menu_slug').addClass('fednc');
-
-                content.removeClass('col-md-11').addClass('col-md-9');
-                parent.find('.flex_center').addClass('flex');
-                parent.find('.flex_center').removeClass('flex_center');
-            }
-
+        $('.fed_menu_slug ').on('click', function (e) {
+            $(this).closest('.fed_menu_ul').toggleClass('in');
             e.preventDefault();
         });
 
@@ -436,7 +416,7 @@ jQuery(document).ready(function ($) {
                         type: "success",
                         showConfirmButton: false,
                         timer: 1000,
-                        confirmButtonColor: '#00b5ad'
+                        confirmButtonColor: '#0AAAAA'
                     }).then(
                         function () {
                         },
@@ -465,7 +445,7 @@ jQuery(document).ready(function ($) {
                     swal({
                         title: results.data.message || 'Something Went Wrong',
                         type: "success",
-                        confirmButtonColor: '#00b5ad'
+                        confirmButtonColor: '#0AAAAA'
                     });
                 } else {
                     swal({
@@ -483,7 +463,7 @@ jQuery(document).ready(function ($) {
                     swal({
                         title: results.data.message || 'Something Went Wrong',
                         type: "success",
-                        confirmButtonColor: '#00b5ad'
+                        confirmButtonColor: '#0AAAAA'
                     });
                 } else if (results.success == false) {
                     if (results.data.user instanceof Array) {
@@ -518,7 +498,7 @@ jQuery(document).ready(function ($) {
                     swal({
                         title: results.data.message || 'Something Went Wrong',
                         type: "success",
-                        confirmButtonColor: '#00b5ad'
+                        confirmButtonColor: '#0AAAAA'
                     });
                 } else if (results.success == false) {
                     if (results.data.message instanceof Array) {
@@ -545,6 +525,10 @@ jQuery(document).ready(function ($) {
             },
 
         };
+
+        function fed_toggle_loader() {
+            $('.preview-area').toggleClass('hide');
+        }
 
         // var hash = document.location.hash;
         // if (hash) {

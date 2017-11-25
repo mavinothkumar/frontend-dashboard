@@ -3,8 +3,8 @@ Contributors: vinoth06, buffercode
 Tags: dashboard, frontend dashboard, custom login, custom register, custom roles, custom profile, custom post type, custom taxonomies, custom dashboard
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7DHAEMST475BY
 Requires at least: 4.3
-Tested up to: 4.8.3
-Stable tag: 1.1.4.8.1
+Tested up to: 4.9
+Stable tag: 1.1.5.1
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -22,11 +22,13 @@ Frontend Dashboard is bundled with the huge list of custom features which can ea
 7. Show user role based custom profile page
 8. Restrict the number of posts to show in the custom profile page.
 9. Manage custom Post type and Taxonomies
+10. Customize templates
 
 = Frontend Dashboard Plugins List =
-* [Frontend Dashboard Extra](https://buffercode.com/plugin/frontend-dashboard-extra)
 * [Frontend Dashboard Pages](https://buffercode.com/plugin/frontend-dashboard-pages)
+* [Frontend Dashboard Extra](https://buffercode.com/plugin/frontend-dashboard-extra)
 * [Frontend Dashboard Captcha](https://buffercode.com/plugin/frontend-dashboard-captcha)
+* [Frontend Dashboard Templates](https://buffercode.com/plugin/frontend-dashboard-templates)
 * [Frontend Dashboard Custom Post and Taxonomies](https://buffercode.com/plugin/frontend-dashboard-custom-post-and-taxonomies)
 
 = Videos =
@@ -200,6 +202,19 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 6. [fed_user role=user_role] to generate the role based user page
 
 == Changelog ==
+= 1.1.5.1 =
+* Bug: Improper styling
+
+= 1.1.5 =
+* Bug: Updated admin footer text shown in all plugin page.
+* Bug: WP Admin area restriction block ajax request.
+* Enhanced: Frontend Dashboard for mobile view.
+* Enhanced: Code refactored
+
+= v1.1.4.9 [16-November-2017] =
+* Support 4.9
+* Bug: File loading problem
+
 = v1.1.4.8.1 [15-November-2017] =
 * New: Restrict user role(s) to access the WP Admin area.
 * Bug: Missing file fixed

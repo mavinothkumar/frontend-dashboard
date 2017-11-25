@@ -51,8 +51,8 @@ function fed_input_box( $meta_key, $attr = array(), $type = 'text' ) {
  * @return string
  */
 function fed_loader( $hide = 'hide' ) {
-	return '<div id="preview-area">
-        <div class="spinner_circle ' . $hide . '">
+	return '<div class="preview-area ' . $hide . '">
+        <div class="spinner_circle">
             <div class="double-bounce1"></div>
             <div class="double-bounce2"></div>
         </div>

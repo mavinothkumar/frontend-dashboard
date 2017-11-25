@@ -26,6 +26,7 @@ function fed_dashboard_add_new_post_request_fn() {
 	}
 
 	$post_type = isset($request['fed_post_type']) ? $request['fed_post_type'] : 'post';
+
 	echo fed_display_dashboard_add_new_post( $post_type );
 
 	exit();

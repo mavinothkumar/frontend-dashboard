@@ -40,11 +40,12 @@ class FED_Page_Template {
 			array( $this, 'view_project_template' )
 		);
 		// Add your templates to this array.
-		$this->templates = array(
+		$this->templates = apply_filters( 'fed_add_new_page_template_url', array(
 			'include/page-template/layouts/fed_login.php'     => 'FED Login',
 			'include/page-template/layouts/fed_dashboard.php' => 'FED Dashboard',
 //			'include/page-template/layouts/fed_invoice.php'   => 'FED Invoice'
-		);
+		) );
+		//var_dump($this->templates);
 
 	}
 
@@ -52,7 +53,7 @@ class FED_Page_Template {
 	 * Returns an instance of this class.
 	 */
 	public static function get_instance() {
-		if ( null == self::$instance ) {
+		if ( null === self::$instance ) {
 			self::$instance = new FED_Page_Template();
 		}
 

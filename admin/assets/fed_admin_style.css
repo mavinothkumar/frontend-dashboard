@@ -17,18 +17,18 @@ Fed User Profile Layout
 .bc_fed input[type="button"]:hover, input[type="button"]:focus, input[type="submit"]:hover,
 .bc_fed input[type="submit"]:focus,
 .bc_fed .popover-title {
-    background-color: #00B5AD !important;
+    background-color: #0AAAAA !important;
     background-image: none !important;
-    border-color: #00B5AD !important;
+    border-color: #0AAAAA !important;
     color: #ffffff !important;
 }
 
 .bc_fed .nav-tabs {
-    border-bottom: 1px solid #00B5AD !important;
+    border-bottom: 1px solid #0AAAAA !important;
 }
 
 .bc_fed .panel-primary {
-    border-color: #00B5AD !important;
+    border-color: #0AAAAA !important;
 }
 
 .bc_fed .nav-pills > li.active > a {
@@ -43,7 +43,7 @@ Fed User Profile Layout
 }
 
 .bc_fed .nav.nav-pills.nav-stacked li {
-    background-color: #3b4e57 !important;
+    background-color: #033333 !important;
     border-bottom: 1px solid #ffffff;
     margin-bottom: 0 !important;
     border-radius: 0 !important;
@@ -81,7 +81,7 @@ Fed User Profile Layout
 
 .bc_fed .nav-tabs > li,
 .bc_fed .nav-tabs > li:hover {
-    background: #3b4e57 !important;
+    background: #033333 !important;
     margin: 0 1px !important;
 }
 
@@ -90,7 +90,7 @@ Fed User Profile Layout
 }
 
 .bc_fed .list-group-item {
-    background-color: #3b4e57 !important;
+    background-color: #033333 !important;
     border-color: #ffffff !important;
     color: #ffffff !important;
     border-radius: 0 !important;
@@ -136,7 +136,7 @@ Fed User Profile Layout
 }
 
 .bc_fed .bg-primary-font {
-    color: #00B5AD;
+    color: #0AAAAA;
 }
 
 .bc_fed .bg-info-font {
@@ -455,10 +455,12 @@ Upload Image
     justify-content: flex-start;
 }
 
+
+
 /**
 Loader
 **/
-.bc_fed #preview-area {
+.bc_fed .preview-area {
     width: 60px;
     height: 60px;
     position: fixed;
@@ -577,7 +579,7 @@ Loader
 }
 
 .bc_fed .fed_buttons_container .fed_button.active {
-    background-color: #00B5AD;
+    background-color: #0AAAAA;
     color: white;
 }
 
@@ -592,20 +594,20 @@ Loader
 }
 
 .bc_fed .panel-secondary {
-    background-color: #3b4e57 !important;
-    border-color: #3b4e57 !important;
-    background-image: -webkit-linear-gradient(top, #3b4e57 0%, #3b4e57 100%) !important;
-    background-image: -o-linear-gradient(top, #3b4e57 0%, #3b4e57 100%) !important;
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#3b4e57), to(#3b4e57)) !important;
-    background-image: linear-gradient(to bottom, #3b4e57 0%, #3b4e57 100%) !important;
+    background-color: #033333 !important;
+    border-color: #033333 !important;
+    background-image: -webkit-linear-gradient(top, #033333 0%, #033333 100%) !important;
+    background-image: -o-linear-gradient(top, #033333 0%, #033333 100%) !important;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#033333), to(#033333)) !important;
+    background-image: linear-gradient(to bottom, #033333 0%, #033333 100%) !important;
     background-repeat: repeat-x !important;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', endColorstr='#ffe8e8e8', GradientType=0) !important;
     color: white !important;
 }
 
 .bc_fed .bg_secondary {
-    background-color: #3b4e57 !important;
-    border-color: #3b4e57 !important;
+    background-color: #033333 !important;
+    border-color: #033333 !important;
 }
 
 .bc_fed .t-m-20 {
@@ -653,7 +655,7 @@ Loader
 }
 
 .fed_add_new_custom_post {
-    background-color: #3b4e57 !important;
+    background-color: #033333 !important;
     padding: 8px !important;
     color: #ffffff !important;
 }

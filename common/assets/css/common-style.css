@@ -1,5 +1,5 @@
 /*Common CSS
-#00B5AD
+#0AAAAA
 */
 
 /**
@@ -16,9 +16,6 @@ body {
     font-family: "Open Sans Regular" !important;
 }
 
-.bc_fed .fa {
-    cursor: pointer;
-}
 
 .bc_fed.fed_dashboard_container .list-group-item:first-child,
 .bc_fed.fed_dashboard_container .list-group-item:last-child {
@@ -96,10 +93,12 @@ body {
 }
 
 .bc_fed .fed_header_font_color {
-    color: #00B5AD;
+    color: #0AAAAA;
     font-weight: bolder;
 }
-
+.bc_fed .panel-body {
+    background: #f3f3f3;
+}
 .bc_fed #fedLoginCaptcha, #fedRegisterCaptcha {
     transform: scale(0.9);
     -webkit-transform: scale(0.9);
@@ -162,35 +161,35 @@ body {
 .bc_fed input[type="submit"]:hover,
 .bc_fed input[type="submit"]:focus,
 .bc_fed .popover-title {
-    background-color: #00B5AD !important;
+    background-color: #0AAAAA !important;
     background-image: none !important;
-    border-color: #00B5AD !important;
+    border-color: #0AAAAA !important;
     color: #ffffff !important;
 }
 
 .bc_fed .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover,
 .bc_fed .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
-    background-color: #00B5AD !important;
-    border-color: #00B5AD !important;
+    background-color: #0AAAAA !important;
+    border-color: #0AAAAA !important;
     color: #ffffff !important;
 }
 
 .bc_fed .nav-tabs {
-    border-bottom: 1px solid #00B5AD !important;
+    border-bottom: 1px solid #0AAAAA !important;
 }
 
 .bc_fed .flex-space-around {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
 }
 
 .bc_fed .panel-primary {
-    border-color: #00B5AD !important;
+    border-color: #0AAAAA !important;
 }
 
 .bc_fed .bg-primary-font {
-    color: #00B5AD;
+    color: #0AAAAA;
 }
 
 .bc_fed .bg-info-font {
@@ -202,7 +201,7 @@ body {
 }
 
 .bc_fed .list-group-item {
-    background-color: #3b4e57 !important;
+    background-color: #033333 !important;
     border-color: #ffffff !important;
     color: #ffffff !important;
 }
@@ -212,6 +211,11 @@ body {
     border: 1px solid #ddd !important;
     color: #000 !important;
     padding: 0 10px 0 10px !important;
+}
+
+.bc_fed .bg_secondary {
+    background: #033333;
+    color: #ffffff;
 }
 
 .bc_fed .fed_support_display_name {
@@ -316,7 +320,7 @@ body {
 .bc_fed .fed_support_badge .fed_badge {
     width: 10px;
     height: 10px;
-    background-color: #00b5ad;
+    background-color: #0AAAAA;
     top: 5px;
     right: 5px;
     position: absolute;
@@ -335,11 +339,12 @@ body {
     padding: 10px 10px 5px 20px;
 }
 
+
 .bc_fed .list-group-item.active:after {
     left: 91%;
     top: 50%;
     border-width: 21px 21px 21px 0;
-    margin-top: -21px;
+    margin-top: -17px;
     content: " ";
     height: 0;
     width: 0;
@@ -351,8 +356,12 @@ body {
 
 .bc_fed .list-group-item .fa,
 .bc_fed .panel-title .fa,
-.bc_fed .fed_menu_slug a .fa {
+.bc_fed .fed_menu_slug a .fa,
+.bc_fed .fed_menu_slug .dashicons {
     padding-right: 10px;
+}
+.bc_fed .fed_menu_slug .dashicons {
+    width: inherit;
 }
 
 .bc_fed .panel-title {
@@ -477,7 +486,7 @@ Upload Image
 /**
 Loader
 **/
-.bc_fed #preview-area {
+.bc_fed .preview-area {
     width: 60px;
     height: 60px;
     position: fixed;
@@ -561,12 +570,12 @@ Loader
 }
 
 .bc_fed .fed_login_menus {
-    background-color: #00b5ad;
+    background-color: #0AAAAA;
     color: #ffffff;
 }
 
 .bc_fed .fed_login_content {
-    border: 1px solid #00b5ad;
+    border: 1px solid #0AAAAA;
     padding: 20px 40px;
 }
 
@@ -787,4 +796,51 @@ Pricing
 
 .bc_fed .fed_collapse_menu{
     cursor: pointer;
+}
+.bc_fed .fed_dashboard_menus.fed_collapse .fed_menu_title{
+    display: none;
+}
+.bc_fed .fed_menu_title,
+.bc_fed .fed_menu_icon{
+    color: #ffffff;
+}
+.bc_fed .m-t-10 {
+    margin-top: 10px !important;
+}
+.bc_fed .m-t-5 {
+    margin-top: 5px !important;
+}
+
+.bc_fed .p-b-20 {
+    padding-bottom: 20px !important;
+}
+
+.bc_fed .p-b-10 {
+    padding-bottom: 10px !important;
+}
+
+.bc_fed .p-t-10 {
+    padding-top: 10px !important;
+}
+.bc_fed .p-t-20 {
+    padding-top: 20px !important;
+}
+
+.bc_fed .padding {
+    padding: 20px !important;
+}
+
+.bc_fed .p-t-b-20 {
+    padding: 20px 0 !important;
+}
+
+.bc_fed .fed_menu_slug a:focus {
+    outline: none;
+    text-decoration: none;
+}
+
+@media screen and (min-width: 768px) {
+    .bc_fed .custom-collapse .collapse{
+        display:block;
+    }
 }

@@ -107,7 +107,8 @@ function fed_script_front_end() {
 
 	wp_enqueue_style( 'fed_global_admin_style',
 		plugins_url( 'admin/assets/fed_global_admin_style.css', BC_FED_PLUGIN ),
-		array(), BC_FED_PLUGIN_VERSION, 'all' );
+		array('dashicons'), BC_FED_PLUGIN_VERSION, 'all' );
+	
 
 	do_action( 'fed_enqueue_script_style_frontend');
 
