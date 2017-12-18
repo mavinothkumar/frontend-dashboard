@@ -99,8 +99,8 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 								<form method="post"
 									  class="fed_admin_menu fed_menu_ajax"
 									  action="<?php echo admin_url( 'admin-ajax.php?action=fed_admin_setting_form_dashboard_menu' ) ?>">
+									<?php wp_nonce_field( 'fed_nonce', 'fed_nonce' ) ?>
 
-									<?php wp_nonce_field( 'fed_admin_setting_form_dashboard_menu', 'fed_admin_setting_form_dashboard_menu' ) ?>
 									<div class="row">
 										<div class="col-md-10">
 											<div class="row">
@@ -170,11 +170,11 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 													</div>
 												</div>
 											</div>
-											<div class="row">
-												<div class="col-md-12 padd_top_20">
+											<div class="row padd_top_20">
+												<div class="col-md-12">
 													<label>Select user role to show this input field</label>
 												</div>
-												<div class="col-md-12 padd_top_20">
+												<div class="col-md-12 ">
 													<?php
 													foreach ( $user_roles as $key => $user_role ) {
 														?>
@@ -278,7 +278,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 																  class="fed_admin_menu fed_menu_ajax"
 																  action="<?php echo admin_url( 'admin-ajax.php?action=fed_admin_setting_form_dashboard_menu' ) ?>">
 
-																<?php wp_nonce_field( 'fed_admin_setting_form_dashboard_menu', 'fed_admin_setting_form_dashboard_menu' ) ?>
+																<?php wp_nonce_field( 'fed_nonce', 'fed_nonce' ) ?>
 																<input type="hidden"
 																	   name="menu_id"
 																	   value="<?php echo $menu['id'] ?>"/>
@@ -373,7 +373,11 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 																				</div>
 																				<?php
 																				foreach ( $user_roles as $key => $user_role ) {
-																					$c_value = in_array( $key, unserialize( $menu['user_role'] ) ) ? 'Enable' : 'Disable';
+																					$res     = isset( $menu['user_role'] ) ? $menu['user_role'] : false;
+																					$c_value = 'Disable';
+																					if ( $res ) {
+																						$c_value = in_array( $key, unserialize( $res ), false ) ? 'Enable' : 'Disable';
+																					}
 
 																					?>
 																					<div class="col-md-2">
@@ -1533,7 +1537,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 															<form method="post"
 																  class="fed_user_profile_delete fed_profile_ajax"
 																  action="<?php echo admin_url( 'admin-ajax.php?action=fed_user_profile_delete' ) ?>">
-																<?php wp_nonce_field( 'fed_user_profile_delete', 'fed_user_profile_delete' ) ?>
+																<?php wp_nonce_field( 'fed_nonce', 'fed_nonce' ) ?>
 																<input type="hidden"
 																	   name="profile_id"
 																	   value="<?php echo $profile['id'] ?>">
@@ -1663,7 +1667,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 														<form method="post"
 															  class="fed_user_profile_delete fed_profile_ajax"
 															  action="<?php echo admin_url( 'admin-ajax.php?action=fed_user_profile_delete' ) ?>">
-															<?php wp_nonce_field( 'fed_user_profile_delete', 'fed_user_profile_delete' ) ?>
+															<?php wp_nonce_field( 'fed_nonce', 'fed_nonce' ) ?>
 															<input type="hidden"
 																   name="profile_id"
 																   value="<?php echo $profile['id'] ?>">

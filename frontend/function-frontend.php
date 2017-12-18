@@ -22,6 +22,7 @@ function fed_get_avatar( $id_or_email, $alt = '', $class = '', $extra = '', $siz
 	if ( $fed_upl['settings']['fed_upl_change_profile_pic'] != '' ) {
 		//$current_user = wp_get_current_user();
 		$user_obj   = get_userdata( $user_data );
+
 		$gavatar_id = $user_obj->has_prop( $fed_upl['settings']['fed_upl_change_profile_pic'] ) ?
 			$user_obj->get( $fed_upl['settings']['fed_upl_change_profile_pic'] ) :
 			'';
@@ -259,12 +260,13 @@ function fed_get_wp_editor( $content = '', $id, array $options ) {
 }
 
 /**
- * @param string $post_id
+ * @param string $post
+ * @param string $cpt
  *
  * @return string
  */
 function fed_get_dashboard_display_categories( $post = '', $cpt = '' ) {
-	$categories         = '';
+	$categories         = array();
 	$fed_get_categories = get_terms( array(
 		'taxonomy' => $cpt->name
 	) );
@@ -281,7 +283,7 @@ function fed_get_dashboard_display_categories( $post = '', $cpt = '' ) {
  * @return string
  */
 function fed_get_dashboard_display_tags( $post = '', $cpt = '' ) {
-	$tags         = '';
+	$tags         = array();
 	$fed_get_tags = get_terms( array(
 		'taxonomy' => $cpt->name
 	) );
@@ -733,6 +735,23 @@ function fed_show_user_profile_page( $user ) {
 	</div>
 	<?php do_action( 'fed_user_profile_below' );
 
+}
+
+function fed_get_403_error_page() {
+	?>
+	<div class="panel panel-primary fed_dashboard_item active">
+		<div class="panel-heading">
+			<h3 class="panel-title">
+				<span class="fa fa-exclamation-triangle"></span>
+				Error (403)
+			</h3>
+		</div>
+		<div class="panel-body">
+			<h2>Unauthorised Access</h2>
+			<a class="btn btn-primary" href="<?php echo fed_get_dashboard_url(); ?>">Click here to visit Dashboard</a>
+		</div>
+	</div>
+	<?php
 }
 
 

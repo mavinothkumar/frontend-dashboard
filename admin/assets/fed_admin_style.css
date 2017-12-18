@@ -455,7 +455,17 @@ Upload Image
     justify-content: flex-start;
 }
 
-
+.fed_initial_setup_container {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    background: #ffffff;
+    z-index: 99999;
+    min-height: 100%;
+}
+.fed_hide {
+    display: none;
+}
 
 /**
 Loader

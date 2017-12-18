@@ -14,6 +14,32 @@ function fed_get_login_url() {
 	return false;
 }
 
+
+/**
+ * Get Registration URL
+ */
+function fed_get_registration_url() {
+	$fed_admin_options = get_option( 'fed_admin_login', false );
+	if ( $fed_admin_options && isset( $fed_admin_options['settings']['fed_register_url'] ) && $fed_admin_options['settings']['fed_register_url'] != '' ) {
+		return get_permalink( $fed_admin_options['settings']['fed_register_url'] );
+	}
+
+	return false;
+}
+
+/**
+ * Get Forgot password URL
+ * @return bool|false|string
+ */
+function fed_get_forgot_password_url() {
+	$fed_admin_options = get_option( 'fed_admin_login', false );
+	if ( $fed_admin_options && isset( $fed_admin_options['settings']['fed_forgot_password_url'] ) && $fed_admin_options['settings']['fed_forgot_password_url'] != '' ) {
+		return get_permalink( $fed_admin_options['settings']['fed_forgot_password_url'] );
+	}
+
+	return false;
+}
+
 /**
  * Get Login Redirect URL
  *

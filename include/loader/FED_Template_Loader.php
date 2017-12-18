@@ -247,7 +247,7 @@ if ( ! class_exists( 'FED_Template_Loader' ) ) {
 		 *
 		 * @since 1.0.0
 		 *
-		 * @return mixed|void
+		 * @return mixed
 		 */
 		protected function get_template_paths() {
 			$theme_directory = trailingslashit( $this->theme_template_directory );

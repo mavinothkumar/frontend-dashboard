@@ -441,9 +441,18 @@ jQuery(document).ready(function ($) {
      * Single line executions
      */
     $('[data-toggle="popover"]').popover({
-        trigger : 'hover'
+        trigger: 'hover'
     });
     $(".flatpickr").flatpickr({});
+
+    /**
+     * Initial Setup
+     */
+    body.on('click', '.fed_initial_setup_close', function (e) {
+        var close = $(this);
+        close.closest('.fed_initial_setup_container').toggleClass('fed_hide');
+        e.preventDefault();
+    });
 
     $(function () {
         var hash = window.location.hash;

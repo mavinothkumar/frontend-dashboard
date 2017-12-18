@@ -1,7 +1,7 @@
 <?php
 
 add_action( 'wp_ajax_fed_dashboard_add_new_post', 'fed_dashboard_add_new_post_fn' );
-add_action( 'wp_ajax_fed_dashboard_add_new_post_request', 'fed_dashboard_add_new_post_request_fn' );
+//add_action( 'wp_ajax_fed_dashboard_add_new_post_request', 'fed_dashboard_add_new_post_request_fn' );
 
 add_action( 'wp_ajax_fed_dashboard_show_post_list_request', 'fed_dashboard_show_post_list_request_fn' );
 
@@ -19,28 +19,19 @@ add_action( 'wp_ajax_nopriv_fed_dashboard_process_edit_post_request', 'fed_block
 
 function fed_dashboard_add_new_post_request_fn() {
 	$request = $_REQUEST;
+	fed_nonce_check( $request );
+	$post_type = isset( $request['fed_post_type'] ) ? $request['fed_post_type'] : 'post';
 
-	if ( ! wp_verify_nonce( $request['fed_dashboard_add_new_post_request'], 'fed_dashboard_add_new_post_request' ) ) {
-		wp_send_json_error( array( 'message' => 'Invalid Request, Please reload the page and try again' ) );
-		exit();
-	}
-
-	$post_type = isset($request['fed_post_type']) ? $request['fed_post_type'] : 'post';
-
-	echo fed_display_dashboard_add_new_post( $post_type );
-
+	fed_display_dashboard_add_new_post( $post_type );
 	exit();
 
 }
 
 function fed_dashboard_add_new_post_fn() {
-	$post = $_REQUEST;
+	$request = $_REQUEST;
+	fed_nonce_check( $request );
 
-	if ( ! wp_verify_nonce( $post['fed_dashboard_add_new_post'], 'fed_dashboard_add_new_post' ) ) {
-		wp_send_json_error( array( 'message' => 'Invalid Request, Please reload the page and try again' ) );
-	}
-
-	fed_process_dashboard_add_new_post( $post );
+	fed_process_dashboard_add_new_post( $request );
 	exit();
 }
 
@@ -100,14 +91,12 @@ function fed_dashboard_process_edit_post_request_fn() {
 
 	if ( ! wp_verify_nonce( $post['fed_dashboard_process_edit_post_request'], 'fed_dashboard_process_edit_post_request' ) ) {
 		wp_send_json_error( array( 'message' => 'Invalid Request, Please reload the page and try again' ) );
-		exit();
 	}
 
 	$success = fed_process_dashboard_add_new_post( $post );
 
 	if ( $success instanceof WP_Error ) {
 		wp_send_json_error( $success->get_error_messages() );
-		exit();
 	}
 
 	echo $success;

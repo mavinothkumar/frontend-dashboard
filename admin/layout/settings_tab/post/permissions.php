@@ -10,7 +10,7 @@ function fed_admin_post_permissions_tab( $fed_admin_options ) {
           class="fed_admin_menu fed_ajax"
           action="<?php echo admin_url( 'admin-ajax.php?action=fed_admin_setting_form' ) ?>">
 
-		<?php wp_nonce_field( 'fed_admin_setting_nonce', 'fed_admin_setting_nonce' ) ?>
+		<?php wp_nonce_field( 'fed_nonce', 'fed_nonce' ) ?>
 
 		<?php echo fed_loader(); ?>
 

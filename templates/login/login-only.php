@@ -33,8 +33,21 @@ do_action( 'fed_before_login_only_form' );
 								}
 								?>
 								<div class="row">
-									<div class="col-md-12">
-										<input type="hidden" name="submit" value="<?php echo $details['button'] ?>" /><button class="btn btn-primary" type="submit"><?php echo $details['button'] ?></button>
+									<div class="col-md-12 text-center">
+										<input type="hidden" name="submit" value="<?php echo $details['button'] ?>"/>
+										<button class="btn btn-primary" type="submit"><?php echo $details['button'] ?></button>
+									</div>
+									<div class="col-md-12 padd_top_20 text-center">
+										<?php if ( $registration = fed_get_registration_url() ) { ?>
+											<a href="<?php echo $registration; ?>">Create an account</a> |
+										<?php } ?>
+										<?php if ( $forgot = fed_get_forgot_password_url() ) {
+											?>
+											<a href="<?php echo $forgot; ?>">
+												Lost Password?
+											</a>
+											<?php
+										} ?>
 									</div>
 								</div>
 							</form>

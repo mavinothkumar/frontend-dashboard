@@ -41,7 +41,6 @@
     color: #ffffff;
     border-radius: 21px;
     width: 22px;
-    z-index: 99999;
     text-align: center;
     cursor: pointer;
     font-size: 14px;
@@ -70,5 +69,10 @@
 .fed_flex_start_center {
     display: flex;
     justify-content: flex-start;
+    align-items: center;
+}
+.fed_flex {
+    display: flex;
+    justify-content: center;
     align-items: center;
 }

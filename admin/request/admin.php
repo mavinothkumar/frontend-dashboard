@@ -19,7 +19,7 @@ function fed_admin_setting_form_function() {
 	 * Check for Nonce
 	 */
 	fed_verify_nonce( $request );
-	
+
 	/**
 	 * Process the Admin page request.
 	 */
@@ -99,10 +99,7 @@ function fed_admin_setting_up_form_function() {
 	/**
 	 * Check for Nonce
 	 */
-	if ( ! wp_verify_nonce( $post['fed_admin_setting_up_nonce'], 'fed_admin_setting_up_nonce' ) ) {
-		wp_send_json_error( array( 'message' => 'Invalid Request, Please reload the page and try again' ) );
-		exit();
-	}
+	fed_nonce_check( $post );
 
 
 	if ( ! isset( $post['label_name'] ) || empty( $post['label_name'] )
@@ -151,10 +148,7 @@ function fed_admin_setting_form_dashboard_menu_function() {
 	/**
 	 * Check for Nonce
 	 */
-	if ( ! wp_verify_nonce( $post['fed_admin_setting_form_dashboard_menu'], 'fed_admin_setting_form_dashboard_menu' ) ) {
-		wp_send_json_error( array( 'message' => 'Invalid Request, Please reload the page and try again' ) );
-		exit();
-	}
+	fed_nonce_check( $post );
 
 	if ( 'save' === $action ) {
 		if ( empty( $post['fed_menu_name'] )
@@ -231,10 +225,7 @@ function fed_user_profile_delete_function() {
 	/**
 	 * Check for Nonce
 	 */
-	if ( ! wp_verify_nonce( $post['fed_user_profile_delete'], 'fed_user_profile_delete' ) ) {
-		wp_send_json_error( array( 'message' => 'Invalid Request' ) );
-		exit();
-	}
+	fed_nonce_check( $post);
 
 	if ( 'delete' === $action ) {
 		$check_up_id = $is_delete = $reload = '';

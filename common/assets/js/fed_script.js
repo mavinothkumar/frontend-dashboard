@@ -325,31 +325,6 @@ jQuery(document).ready(function ($) {
             e.preventDefault();
         });
 
-        b.on('click', '.fed_post_pagination li', function (e) {
-            var click = $(this);
-            var data = {'question_id': click.data('id')};
-            var url = click.closest('.fed_post_pagination').data('href');
-            var method = 'get';
-            var root = click.closest('.fed_panel_body_container');
-
-            fed_toggle_loader();
-
-            if (click.hasClass('active')) {
-                fed_toggle_loader();
-                return false;
-            }
-            $.ajax({
-                type: method,
-                data: data,
-                url: url,
-                success: function (results) {
-                    fed_toggle_loader();
-                    root.html(results);
-                }
-            });
-            e.preventDefault();
-        });
-
         /**
          * Upload
          *
@@ -390,6 +365,7 @@ jQuery(document).ready(function ($) {
             e.preventDefault();
         });
 
+
         $('.default_template').on('click', '.fed_collapse_menu', function (e) {
             var click = $(this);
             var parent = click.closest('.fed_dashboard_wrapper');
@@ -399,6 +375,7 @@ jQuery(document).ready(function ($) {
             parent.find('.flex').toggleClass('flex_center');
             e.preventDefault();
         });
+
 
         $('.fed_menu_slug ').on('click', function (e) {
             $(this).closest('.fed_menu_ul').toggleClass('in');
@@ -463,6 +440,7 @@ jQuery(document).ready(function ($) {
                     swal({
                         title: results.data.message || 'Something Went Wrong',
                         type: "success",
+                        text: '',
                         confirmButtonColor: '#0AAAAA'
                     });
                 } else if (results.success == false) {
@@ -477,7 +455,7 @@ jQuery(document).ready(function ($) {
                     swal({
                         title: error,
                         type: "error",
-                        html: true,
+                        text: '',
                         confirmButtonColor: "#DD6B55"
 
                     });
@@ -493,23 +471,24 @@ jQuery(document).ready(function ($) {
 
             },
             dashboardPostCommon: function (results) {
-                var error;
                 if (results.success) {
                     swal({
                         title: results.data.message || 'Something Went Wrong',
                         type: "success",
+                        text: '',
                         confirmButtonColor: '#0AAAAA'
                     });
                 } else if (results.success == false) {
+                    var error = '';
                     if (results.data.message instanceof Array) {
                         error = results.data.message.join('</br>');
                     } else {
                         error = results.data.message;
                     }
+                    console.log(results.data.message);
                     swal({
                         title: error,
                         type: "error",
-                        html: true,
                         confirmButtonColor: "#DD6B55"
                     });
                 }

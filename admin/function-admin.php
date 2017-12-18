@@ -11,10 +11,11 @@
  * @param null | string | array $permission
  */
 function fed_verify_nonce( $request, $permission = null ) {
-	if ( isset( $request['fed_admin_setting_nonce'] ) && ! wp_verify_nonce( $request['fed_admin_setting_nonce'], 'fed_admin_setting_nonce' ) ) {
+	if ( ! isset( $request['fed_nonce'] ) ) {
 		wp_send_json_error( array( 'message' => 'Invalid Request' ) );
 	}
-	if ( isset( $request['fed_nonce'] ) && ! wp_verify_nonce( $request['fed_nonce'], 'fed_nonce' ) ) {
+
+	if ( ! wp_verify_nonce( $request['fed_nonce'], 'fed_nonce' ) ) {
 		wp_send_json_error( array( 'message' => 'Invalid Request' ) );
 	}
 
@@ -174,24 +175,25 @@ function fed_get_input_details( $attr ) {
 
 	switch ( $values['input_type'] ) {
 		case 'single_line':
-			$input .= '<input ' . $values['disabled'] . $values['extra'] . $values['readonly'] . ' ' . $values['required'] . ' type="text" name="' . $values['name'] . '"  value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '" id="' . $values['id'] . '">';
+			$input .= '<input ' . $values['disabled'] . ' ' . $values['extra'] . ' ' . $values['readonly'] . ' ' . $values['required'] . ' type="text" name="' . $values['name'] . '"  value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '" id="' . $values['id'] . '">';
 			break;
 
 		case 'hidden':
-			$input .= '<input ' . $values['disabled'] . $values['extra'] . $values['readonly'] . ' ' . $values['required'] . ' type="hidden" name="' . $values['name'] . '"  value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '" id="' . $values['id'] . '">';
+			$input .= '<input ' . $values['disabled'] . ' ' . $values['extra'] . ' ' . $values['readonly'] . ' ' . $values['required'] . ' type="hidden" name="' . $values['name'] . '"  value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '" id="' . $values['id'] . '">';
 			break;
 
 		case 'email':
-			$input .= '<input ' . $values['disabled'] . $values['extra'] . $values['readonly'] . ' ' . $values['required'] . ' type="email" name="' . $values['name'] . '"   value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '" id="' . $values['id'] . '">';
+			$input .= '<input ' . $values['disabled'] . ' ' . $values['extra'] . ' ' . $values['readonly'] . ' ' . $values['required'] . ' type="email" name="' . $values['name'] . '"   value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '" id="' . $values['id'] . '">';
 			break;
 
 		case 'password':
-			$input .= '<input ' . $values['disabled'] . $values['extra'] . $values['required'] . ' type="password" name=" ' . $values['name'] . '"    class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '" id="' . $values['id'] . '">';
+			$input .= '<input ' . $values['disabled'] . ' ' . $values['extra'] . ' ' . $values['required'] . ' type="password"
+			name=" ' . $values['name'] . '"    class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '" id="' . $values['id'] . '">';
 			break;
 
 
 		case 'url':
-			$input .= '<input ' . $values['disabled'] . $values['extra'] . $values['required'] . ' type="url"  placeholder="' . $values['placeholder'] . '"  name="' . $values['name'] . '"    class="' . $values['class'] . '"  id="' . $values['id'] . '" value="' . esc_attr( $values['value'] ) . '" >';
+			$input .= '<input ' . $values['disabled'] . ' ' . $values['extra'] . ' ' . $values['required'] . ' type="url"  placeholder="' . $values['placeholder'] . '"  name="' . $values['name'] . '"    class="' . $values['class'] . '"  id="' . $values['id'] . '" value="' . esc_attr( $values['value'] ) . '" >';
 			break;
 
 		case 'multi_line':
@@ -204,7 +206,7 @@ function fed_get_input_details( $attr ) {
 		case 'checkbox':
 			$values['class'] = $values['class'] == 'form-control' ? '' : $values['class'];
 			$input           .= '<label class="' . $values['class'] . '">
-			<input ' . $values['disabled'] . $values['extra'] . $values['required'] . '  name="' . $values['name'] . '"  value="' . $values['default_value'] . '" type="checkbox"  id="' . $values['id'] . '" ' . checked( $values['value'], $values['default_value'], false ) . '> ' . $label . '</label>';
+			<input ' . $values['disabled'] . ' ' . $values['extra'] . ' ' . $values['required'] . '  name="' . $values['name'] . '"  value="' . $values['default_value'] . '" type="checkbox"  id="' . $values['id'] . '" ' . checked( $values['value'], $values['default_value'], false ) . '> ' . $label . '</label>';
 
 			break;
 
@@ -236,7 +238,7 @@ function fed_get_input_details( $attr ) {
 			$options         = fed_get_select_option_value( $attr['input_value'] );
 			foreach ( $options as $key => $label ) {
 				$input .= '<label class="' . $values['class'] . '" for="' . $key . '">
-					<input ' . $values['disabled'] . $values['extra'] . $values['readonly'] . ' name="' . $values['name'] . '"  value="' . $key . '" 
+					<input ' . $values['disabled'] . ' ' . $values['extra'] . ' ' . $values['readonly'] . ' name="' . $values['name'] . '"  value="' . $key . '" 
 					       type="radio"' . checked( $values['value'], $key, false ) . $values['required'] . '>
 					' . $label . '
 				</label>';
@@ -2185,14 +2187,20 @@ function fed_request_empty( $request ) {
 /**
  * Check for Nonce
  *
- * @param string $nonce Nonce
- * @param string $key Key
+ * @param $request
  * @param null | array | string $permission
+ *
+ * @internal param string $nonce Nonce
+ * @internal param string $key Key
  */
-function fed_nonce_check( $nonce, $key, $permission = null ) {
-	if ( ! wp_verify_nonce( $nonce, $key ) ) {
+function fed_nonce_check( $request, $permission = null ) {
+	if ( ! isset( $request['fed_nonce'] ) ) {
 		wp_send_json_error( array( 'message' => 'Invalid Request' ) );
 	}
+	if ( ! wp_verify_nonce( $request['fed_nonce'], 'fed_nonce' ) ) {
+		wp_send_json_error( array( 'message' => 'Invalid Request' ) );
+	}
+
 	if ( null !== $permission ) {
 		$user_role = fed_get_current_user_role_key();
 		if ( is_string( $permission ) && $user_role !== $permission ) {

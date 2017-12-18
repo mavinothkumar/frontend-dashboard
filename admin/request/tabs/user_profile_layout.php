@@ -9,7 +9,9 @@ function fed_admin_setting_upl_request() {
 		'fed_upl_change_profile_pic' => isset( $request['settings']['fed_upl_change_profile_pic'] ) ? sanitize_text_field( $request['settings']['fed_upl_change_profile_pic'] ) : '',
 		'fed_upl_disable_desc'       => isset( $request['settings']['fed_upl_disable_desc'] ) ? sanitize_text_field( $request['settings']['fed_upl_disable_desc'] ) : '',
 		'fed_upl_no_recent_post'     => isset( $request['settings']['fed_upl_no_recent_post'] ) ? (int) $request['settings']['fed_upl_no_recent_post'] : '5',
-		'fed_upl_website_logo'     => isset( $request['settings']['fed_upl_website_logo'] ) ? (int) $request['settings']['fed_upl_website_logo'] : null,
+		'fed_upl_collapse_menu'     => isset( $request['settings']['fed_upl_collapse_menu'] ) ?  $request['settings']['fed_upl_collapse_menu'] : null,
+		'fed_upl_disable_logout'     => isset( $request['settings']['fed_upl_disable_logout'] ) ?  $request['settings']['fed_upl_disable_logout'] : null,
+		'fed_upl_disable_collapse_menu'     => isset( $request['settings']['fed_upl_disable_collapse_menu'] ) ? $request['settings']['fed_upl_disable_collapse_menu'] : null,
 	);
 
 	$new_settings = apply_filters( 'fed_admin_settings_upl', $fed_admin_settings_upl, $request );

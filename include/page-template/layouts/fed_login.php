@@ -1,7 +1,7 @@
 <?php
 get_header(); ?>
 
-<div id="primary fed_login" class="content-area container-fluid">
+<div id="primary fed_login" class="container-fluid">
 	<main id="main" class="site-main" role="main">
 		<?php
 		while ( have_posts() ) : the_post();

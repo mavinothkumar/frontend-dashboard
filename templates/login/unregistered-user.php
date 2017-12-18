@@ -5,9 +5,6 @@
 
 $details = fed_login_form();
 
-//$details = fed_get_registration_content_fields();
-
-//var_dump( fed_get_registration_content_fields());
 
 do_action( 'fed_before_login_form' );
 ?>
@@ -73,7 +70,9 @@ do_action( 'fed_before_login_form' );
 							<form method="post"
 								  class="fed_form_post"
 							>
+
 								<?php
+								wp_nonce_field('fed_nonce','fed_nonce');
 								$contents = $detail['content'];
 								uasort( $contents, 'fed_sort_by_order' );
 								foreach ( $contents as $content ) {

@@ -370,7 +370,7 @@ function fed_plugin_meta_data() {
  * Admin Notice
  */
 function fed_admin_notice() {
-	if ( isset( $_GET, $_GET['page'] ) && in_array( $_GET['page'], fed_get_script_loading_pages(), false ) ) {
+	if ( isset( $_GET['page'] ) && in_array( $_GET['page'], fed_get_script_loading_pages(), false ) ) {
 		$get_notification = get_option( 'fed_admin_message_notification' );
 		/**
 		 * Plugin update notifications
@@ -381,7 +381,6 @@ function fed_admin_notice() {
 		}
 		if ( $api ) {
 			$plugins = json_decode( $api );
-			//bcdump($plugins);
 			foreach ( $plugins->plugins as $plugin ) {
 				if ( defined( $plugin->id ) ) {
 					if ( constant( $plugin->id . '_VERSION' ) < $plugin->version ) {
@@ -403,6 +402,7 @@ function fed_admin_notice() {
 		 * Common Notification to watch videos
 		 */
 		if ( ! $get_notification ) {
+			//fed_initial_setup();
 			?>
 			<div class="notice notice-success">
 				<p>
@@ -424,8 +424,6 @@ function fed_admin_notice() {
 			</div>
 			<?php
 		}
-
-
 		do_action( 'fed_admin_notice' );
 	}
 }
@@ -443,3 +441,21 @@ function get_plugin_list() {
 
 	return false;
 }
+
+/**
+ * Auto update the Frontend Dashboard dependent plugins
+ * @param bool $update
+ * @param object $item
+ *
+ * @return bool
+ */
+function fed_update_all_dependent_plugins( $update, $item ) {
+
+	if ( in_array( $item->slug, fed_get_dependent_plugins(), true ) ) {
+		return true;
+	}
+
+	return $update;
+}
+
+add_filter( 'auto_update_plugin', 'fed_update_all_dependent_plugins', 10, 2 );

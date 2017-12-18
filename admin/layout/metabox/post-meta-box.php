@@ -15,7 +15,7 @@ function fed_add_meta_boxes() {
  * Show Custom Post Meta on Admin Post Page.
  */
 function fed_add_meta_boxes_display() {
-	wp_nonce_field( 'fed_add_meta_boxes_display', 'fed_add_meta_boxes_display' );
+	wp_nonce_field( 'fed_nonce', 'fed_nonce' );
 
 	$extra_fields = fed_fetch_table_rows_with_key( BC_FED_POST_DB, 'input_meta' );
 	global $post;
@@ -49,7 +49,7 @@ add_action( 'save_post', 'fed_save_meta_boxes_display', 10, 2 );
 
 function fed_save_meta_boxes_display( $post_id, $post ) {
 	/* Verify the nonce before proceeding */
-	if ( ! isset( $_POST['fed_add_meta_boxes_display'] ) || ! wp_verify_nonce( $_POST['fed_add_meta_boxes_display'], 'fed_add_meta_boxes_display' ) ) {
+	if ( ! isset( $_POST['fed_nonce'] ) || ! wp_verify_nonce( $_POST['fed_nonce'], 'fed_nonce' ) ) {
 		return $post_id;
 	}
 	/* Get the post type object. */
@@ -68,15 +68,17 @@ function fed_save_meta_boxes_display( $post_id, $post ) {
 	/**
 	 * Check with post meta to save the meta
 	 */
-	foreach ( $_POST['fed_meta'] as $key => $meta ) {
-		if ( array_key_exists( $key, $post_meta ) ) {
-			$meta_value = isset( $_POST['fed_meta'][ $key ] ) ? esc_attr( $_POST['fed_meta'][ $key ] ) : '';
-			update_post_meta( $post_id, $key, $meta_value );
-		} else {
-			/**
-			 * Delete the unwanted post metas
-			 */
-			delete_post_meta( $post_id, $key );
+	if ( isset( $_POST['fed_meta'] ) ) {
+		foreach ( $_POST['fed_meta'] as $key => $meta ) {
+			if ( array_key_exists( $key, $post_meta ) ) {
+				$meta_value = isset( $_POST['fed_meta'][ $key ] ) ? esc_attr( $_POST['fed_meta'][ $key ] ) : '';
+				update_post_meta( $post_id, $key, $meta_value );
+			} else {
+				/**
+				 * Delete the unwanted post metas
+				 */
+				delete_post_meta( $post_id, $key );
+			}
 		}
 	}
 }

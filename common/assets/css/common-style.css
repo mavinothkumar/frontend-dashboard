@@ -838,6 +838,9 @@ Pricing
     outline: none;
     text-decoration: none;
 }
+.bc_fed .pagination:before, .bc_fed .pagination:after {
+    content: none;
+}
 
 @media screen and (min-width: 768px) {
     .bc_fed .custom-collapse .collapse{

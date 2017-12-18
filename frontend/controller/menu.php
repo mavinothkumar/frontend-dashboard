@@ -7,10 +7,16 @@
  */
 function fed_get_all_dashboard_display_menus() {
 	$profile_menu = fed_process_dashboard_display_menu();
-	$logout       = fed_get_logout_menu();
+
+	$settings = get_option( 'fed_admin_settings_upl' );
+	if ( isset( $settings['settings']['fed_upl_disable_logout'] ) && 'yes' === $settings['settings']['fed_upl_disable_logout']
+	) {
+		$logout = array();
+	} else {
+		$logout = fed_get_logout_menu();
+	}
 
 	$all_menus = apply_filters( 'fed_frontend_main_menu', array_merge( $profile_menu, $logout ) );
-
 	uasort( $all_menus, 'fed_sort_by_order' );
 
 	return $all_menus;
@@ -74,6 +80,7 @@ function fed_get_logout_menu() {
 				'menu_order'        => '900000',
 				'menu_image_id'     => 'fa fa-sign-out',
 				'show_user_profile' => 'disable',
+				'menu_type'         => 'logout',
 			)
 	);
 }
@@ -84,25 +91,43 @@ function fed_get_logout_menu() {
  *
  * @param $first_element
  */
-function fed_display_dashboard_menu( $first_element ) {
-	$menus = fed_get_all_dashboard_display_menus();
+function fed_display_dashboard_menu( $menus ) {
+	$first_element_key = array_keys( $menus['menu_items'] );
+	$first_element     = $first_element_key[0];
+	$dashboard_url     = fed_get_dashboard_url();
+	foreach ( $menus['menu_items'] as $index => $menu ) {
+		$active    = '';
+		$menu_type = isset( $menu['menu_type'] ) ? $menu['menu_type'] : 'custom';
+		$menu_slug = is_string( $index ) ? $index : 'fed_slug_error';
+		$menu_url  = $dashboard_url . '?menu_type=' . $menu_type . '&' . 'menu_slug=' . $menu_slug . '&fed_nonce=' . wp_create_nonce( 'fed_nonce' );
+		$menu_url  = apply_filters( 'fed_convert_dashboard_menu_url', $menu_url, $menu );
+		$target    = '_self';
+		/*
+		 * This check for menu to be open in new or same window
+		 */
+		if ( is_array( $menu_url ) && isset( $menu_url['url'] ) ) {
+			$target   = isset( $menu_url['target'] ) ? $menu_url['target'] : '_self';
+			$menu_url = $menu_url['url'];
+		}
 
-	foreach ( $menus as $index => $menu ) {
-		if ( $index == $first_element ) {
-			$active = 'active';
+		if ( isset( $_GET['menu_slug'] ) ) {
+			if ( $index === $_GET['menu_slug'] ) {
+				$active = 'active';
+			}
 		} else {
-			$active = '';
+			if ( $index === $first_element ) {
+				$active = 'active';
+			}
 		}
 		?>
-		<li class="fed_menu_slug <?php echo $active ?> list-group-item" data-menu="<?php echo $index; ?>">
-			<a href="#<?php echo $index; ?>">
+		<li class=" <?php echo $active ?> list-group-item" data-menu="<?php echo $index; ?>">
+			<a href="<?php echo $menu_url; ?>" target="<?php echo $target; ?>">
 				<div class="flex">
 					<div class="fed_menu_icon">
 						<span class="<?php echo $menu['menu_image_id'] ?>"></span>
 					</div>
 					<div class="fed_menu_title"><?php echo ucwords( $menu['menu'] ) ?></div>
 				</div>
-
 			</a>
 		</li>
 		<?php
@@ -116,9 +141,27 @@ function fed_display_dashboard_menu( $first_element ) {
  * Collapse Menu
  */
 function fed_get_collapse_menu() {
+	$settings = get_option( 'fed_admin_settings_upl' );
+	if ( isset( $settings['settings']['fed_upl_disable_collapse_menu'] ) && 'yes' === $settings['settings']['fed_upl_disable_collapse_menu']
+	) {
+		return true;
+	}
+
+	if ( isset( $settings['settings']['fed_upl_collapse_menu'] ) && 'yes' === $settings['settings']['fed_upl_collapse_menu']
+	) {
+		?>
+		<script>
+            jQuery(document).ready(function ($) {
+                if ($('.fed_dashboard_menus').length) {
+                    $('.fed_collapse_menu').trigger('click');
+                }
+            })
+		</script>
+		<?php
+	}
 	$collapse = fed_get_collapse_menu_content();
 	?>
-	<li class="fed_menu_slug list-group-item visible-lg visibile-md">
+	<li class="fed_collapse_menu list-group-item visible-lg visibile-md">
 		<div class="flex">
 			<div class="fed_menu_icon fed_collapse_menu_icon menu_open">
 				<span class="open <?php echo $collapse['open_icon'] ?>"></span>

@@ -3,8 +3,8 @@ Contributors: vinoth06, buffercode
 Tags: dashboard, frontend dashboard, custom login, custom register, custom roles, custom profile, custom post type, custom taxonomies, custom dashboard
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7DHAEMST475BY
 Requires at least: 4.3
-Tested up to: 4.9
-Stable tag: 1.1.5.1
+Tested up to: 4.9.1
+Stable tag: 1.2.2
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -202,6 +202,20 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 6. [fed_user role=user_role] to generate the role based user page
 
 == Changelog ==
+
+= 1.2.2 [16-December-2017] =
+* Add Register and Forgot password link for login only page
+* Added Login link for Register page
+
+= 1.2.1 [08-December-2017] =
+* Bug: Fixed on post meta error if no custom post meta added
+
+= 1.2 [06-December-2017] =
+* Completely changed the frontend dashboard from AJAX request to normal page reload request.
+
+= 1.1.5.2 =
+* Bug: Collapse menu not working properly
+
 = 1.1.5.1 =
 * Bug: Improper styling
 
@@ -286,9 +300,8 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 * Public release
 
 == Upgrade Notice ==
-= v1.1.4.5 [16-October-2017]=
-* New action hooks added
-* Bug fixes
+= v1.2 [06-November-2017]=
+* Kindly update all Frontend Dashboard relevant plugins.
 
 == Screenshots ==
 1. Frontend Dashboard Settings | Login | Settings

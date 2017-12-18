@@ -11,11 +11,7 @@ function fed_user_profile_save_fn() {
 
 	$post = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
 
-	if ( ! wp_verify_nonce( $post['fed_user_profile_save'], 'fed_user_profile_save' ) ) {
-		wp_send_json_error( array( 'message' => 'Invalid Request' ) );
-		exit();
-	}
-
+	fed_nonce_check( $post);
 
 	/**
 	 * TODO :

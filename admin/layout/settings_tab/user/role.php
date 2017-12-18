@@ -6,7 +6,7 @@ function fed_admin_user_role_tab( $fed_admin_options ) {
 	<form method="post"
 		  class="fed_admin_menu fed_ajax"
 		  action="<?php echo admin_url( 'admin-ajax.php?action=fed_admin_setting_form' ) ?>">
-		<?php wp_nonce_field( 'fed_admin_setting_nonce', 'fed_admin_setting_nonce' ) ?>
+		<?php wp_nonce_field( 'fed_nonce', 'fed_nonce' ) ?>
 
 		<?php echo fed_loader(); ?>
 
@@ -72,7 +72,7 @@ function fed_admin_user_role_tab( $fed_admin_options ) {
 							<form method="post"
 								  class="fed_admin_user_role_delete fed_ajax_confirmation"
 								  action="<?php echo admin_url( 'admin-ajax.php?action=fed_admin_setting_form' ) ?>">
-								<?php wp_nonce_field( 'fed_admin_setting_nonce', 'fed_admin_setting_nonce' ) ?>
+								<?php wp_nonce_field( 'fed_nonce', 'fed_nonce' ) ?>
 
 								<input type="hidden"
 									   name="fed_admin_unique"

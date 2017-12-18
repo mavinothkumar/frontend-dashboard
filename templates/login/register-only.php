@@ -37,13 +37,17 @@ do_action( 'fed_before_register_only_form' );
 								}
 								?>
 								<div class="row">
-									<div class="col-md-3"></div>
-									<div class="col-md-9">
+									<div class="col-md-12 text-center">
 										<input type="hidden"
 											   name="submit"
 											   value="<?php echo $details['button'] ?>"/>
 										<button class="btn btn-primary" type="submit"><?php echo $details['button'] ?></button>
 									</div>
+									<?php if ( $login = fed_get_login_url() ) { ?>
+										<div class="col-md-12 padd_top_20 text-center">
+											<a href="<?php echo $login ?>">Already have an account?</a>
+										</div>
+									<?php } ?>
 								</div>
 							</form>
 						</div>

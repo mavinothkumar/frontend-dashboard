@@ -122,6 +122,21 @@ function fed_fetch_user_profile_by_dashboard() {
 	return $results;
 }
 
+function fed_fetch_user_profile_by_menu_slug($menu_slug = '') {
+	global $wpdb;
+	$table_name = $wpdb->prefix . BC_FED_USER_PROFILE_DB;
+
+	$results = $wpdb->get_results( "SELECT * FROM $table_name WHERE show_dashboard LIKE 'Enable' AND menu LIKE '{$menu_slug}' ", ARRAY_A );
+
+	if ( count( $results ) <= 0 ) {
+		return false;
+	}
+
+
+
+	return $results;
+}
+
 /**
  * Array Group By Key
  *

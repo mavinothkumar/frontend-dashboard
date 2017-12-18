@@ -1,6 +1,5 @@
 <?php
 function fed_admin_user_profile_settings_tab( $fed_admin_options ) {
-
 	$fed_upef = array_merge( fed_fetch_user_profile_extra_fields_key_value(), array( '' => 'Let it be default' ) );
 
 	$array = array(
@@ -49,6 +48,36 @@ function fed_admin_user_profile_settings_tab( $fed_admin_options ) {
 					'input_meta'  => 'settings[fed_upl_no_recent_post]',
 					'user_value'  => isset( $fed_admin_options['settings']['fed_upl_no_recent_post'] ) ? $fed_admin_options['settings']['fed_upl_no_recent_post'] : '5',
 					'input_type'  => 'number'
+				) )
+			),
+			'Collapse Menu Always'           => array(
+				'col'   => 'col-md-6',
+				'name'  => 'Collapse Menu Always',
+				'input' => fed_get_input_details( array(
+					'input_value' => fed_yes_no( 'ASC' ),
+					'input_meta'  => 'settings[fed_upl_collapse_menu]',
+					'user_value'  => isset( $fed_admin_options['settings']['fed_upl_collapse_menu'] ) ? $fed_admin_options['settings']['fed_upl_collapse_menu'] : '',
+					'input_type'  => 'select'
+				) )
+			),
+			'Disable Logout'           => array(
+				'col'   => 'col-md-6',
+				'name'  => 'Disable Logout',
+				'input' => fed_get_input_details( array(
+					'input_value' => fed_yes_no( 'ASC' ),
+					'input_meta'  => 'settings[fed_upl_disable_logout]',
+					'user_value'  => isset( $fed_admin_options['settings']['fed_upl_disable_logout'] ) ? $fed_admin_options['settings']['fed_upl_disable_logout'] : '',
+					'input_type'  => 'select'
+				) )
+			),
+			'Disable Collapse Menu'           => array(
+				'col'   => 'col-md-6',
+				'name'  => 'Disable Collapse Menu',
+				'input' => fed_get_input_details( array(
+					'input_value' => fed_yes_no( 'ASC' ),
+					'input_meta'  => 'settings[fed_upl_disable_collapse_menu]',
+					'user_value'  => isset( $fed_admin_options['settings']['fed_upl_disable_collapse_menu'] ) ? $fed_admin_options['settings']['fed_upl_disable_collapse_menu'] : '',
+					'input_type'  => 'select'
 				) )
 			),
 		)
