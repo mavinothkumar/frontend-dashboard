@@ -23,16 +23,16 @@ function fed_forgot_form_submit( $post ) {
 
 	$redirect_url = $redirect_url == false ? get_admin_url() : $redirect_url;
 
-	$message = __( 'Someone has requested a password reset for the following account:' ) . "\r\n\r\n";
+	$message = __( 'Someone has requested a password reset for the following account:','frontend-dashboard' ) . "\r\n\r\n";
 	$message .= network_home_url( '/' ) . "\r\n\r\n";
-	$message .= sprintf( __( 'Username: %s' ), $user_login ) . "\r\n\r\n";
-	$message .= __( 'If this was a mistake, just ignore this email and nothing will happen.' ) . "\r\n\r\n";
-	$message .= __( 'To reset your password, visit the following address:' ) . "\r\n\r\n";
+	$message .= sprintf( __( 'Username: %s','frontend-dashboard'  ), $user_login ) . "\r\n\r\n";
+	$message .= __( 'If this was a mistake, just ignore this email and nothing will happen.','frontend-dashboard' ) . "\r\n\r\n";
+	$message .= __( 'To reset your password, visit the following address:','frontend-dashboard' ) . "\r\n\r\n";
 	$message .= '<a href="' . $redirect_url . '?action=fed_reset&key=' . $key . '&login=' . rawurlencode( $user_login ) .'">' . $redirect_url . '</a>' . "\r\n\r\n";
 
 
 	wp_die($message);
-	
+
 	if ( is_multisite() ) {
 		$blogname = $GLOBALS['current_site']->site_name;
 	} else {
@@ -44,11 +44,11 @@ function fed_forgot_form_submit( $post ) {
 		'From: ' . $blogname . ' <' . get_bloginfo( 'admin_email' ) . '>'
 	);
 
-	$title = sprintf( __( '[%s] Password Reset' ), $blogname );
+	$title = sprintf( __( '[%s] Password Reset','frontend-dashboard' ), $blogname );
 
 	if ( $message && ! wp_mail( $user_email, wp_specialchars_decode( $title ), $message, $headers ) ) {
 		wp_send_json_error( array(
-			'user'    => __( 'The email could not be sent. Possible reason: your host may have disabled the mail() function.' ),
+			'user'    => __( 'The email could not be sent. Possible reason: your host may have disabled the mail() function.','frontend-dashboard' ),
 			'message' => '',
 			'url'     => ''
 		) );

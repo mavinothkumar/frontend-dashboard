@@ -54,7 +54,7 @@ function fed_get_avatar( $id_or_email, $alt = '', $class = '', $extra = '', $siz
 }
 
 /**
- * @return string|void
+ * @return string
  */
 function fed_get_current_page_url() {
 	global $wp;

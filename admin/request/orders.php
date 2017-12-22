@@ -32,11 +32,11 @@ function fed_admin_orders_function() {
 	$status = $wpdb->update( $table_name, $orders, array( 'id' => $id ) );
 
 	if ( $status === false ) {
-		wp_send_json_error( array( 'message' => __( 'Sorry no record found to update your details', 'fed' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Sorry no record found to update your details', 'frontend-dashboard' ) ) );
 		exit();
 	}
 
-	wp_send_json_success( array( 'message' => __( 'Orders has been successfully updated', 'fed' ) ) );
+	wp_send_json_success( array( 'message' => __( 'Orders has been successfully updated', 'frontend-dashboard' ) ) );
 	exit();
 
 }
@@ -57,13 +57,13 @@ function fed_admin_order_delete_function() {
 
 	if ( $verify ) {
 		wp_send_json_success( array(
-			'message' => __( 'Transaction ID: ' . $order['transaction_id'] . ' has been deleted successfully', 'fed' ),
+			'message' => __( 'Transaction ID: ' . $order['transaction_id'] . ' has been deleted successfully', 'frontend-dashboard' ),
 			'reload'  => admin_url() . 'admin.php?page=fed_orders',
 		) );
 		exit();
 	}
 
-	wp_send_json_error( array( 'message' => __( 'Something went wrong, please refresh the page and delete it again.', 'fed' ) ) );
+	wp_send_json_error( array( 'message' => __( 'Something went wrong, please refresh the page and delete it again.', 'frontend-dashboard' ) ) );
 	exit();
 }
 
@@ -87,7 +87,7 @@ function fed_admin_order_id_validation( $request ) {
 	}
 	$order = fed_fetch_table_row_by_id( BC_FED_PAYMENT_DB, $id );
 	if ( $order instanceof WP_Error ) {
-		wp_send_json_error( array( 'message' => __( 'The Order ID not available now, please refresh the page and try again.', 'fed' ) ) );
+		wp_send_json_error( array( 'message' => __( 'The Order ID not available now, please refresh the page and try again.', 'frontend-dashboard' ) ) );
 		exit();
 	}
 
@@ -100,18 +100,18 @@ function fed_admin_order_id_validation( $request ) {
 function fed_order_search_add_function() {
 	$request = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
 	if ( ! isset( $request['fed_order_search'] ) || '' == $request['fed_order_search'] ) {
-		wp_send_json_error( array( 'message' => __( 'Please fill the search field', 'fed' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Please fill the search field', 'frontend-dashboard' ) ) );
 		exit();
 	}
 	$user = get_user_by( sanitize_text_field( $request['order_search_key'] ), sanitize_text_field( $request['fed_order_search'] ) );
 
 	if ( ! $user ) {
-		wp_send_json_error( array( 'message' => __( 'Sorry! No user found', 'fed' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Sorry! No user found', 'frontend-dashboard' ) ) );
 		exit();
 	}
 
 	wp_send_json_success( array(
-		'message' => __( 'Great! You have found an user', 'fed' ),
+		'message' => __( 'Great! You have found an user', 'frontend-dashboard' ),
 		'extra'   => array(
 			'user_id'    => $user->ID,
 			'email'      => $user->user_email,
@@ -169,11 +169,11 @@ function fed_admin_add_orders_function() {
 	);
 
 	if ( $status === false ) {
-		wp_send_json_error( array( 'message' => __( 'Sorry, Something went wrong in storing values in DB, please try again later or contact support', 'fed' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Sorry, Something went wrong in storing values in DB, please try again later or contact support', 'frontend-dashboard' ) ) );
 		exit();
 	}
 
-	wp_send_json_success( array( 'message' => __( 'New Transaction ID ' . $orders['transaction_id'] . ' successfully added', 'fed' ) ) );
+	wp_send_json_success( array( 'message' => __( 'New Transaction ID ' . $orders['transaction_id'] . ' successfully added', 'frontend-dashboard' ) ) );
 	exit();
 }
 

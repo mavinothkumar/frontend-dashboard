@@ -123,8 +123,8 @@ function fed_registration_mandatory_fields() {
 
 function fed_login_mandatory_fields() {
 	$fields = array(
-		'user_login'    => __( 'Please enter user name', 'fed' ),
-		'user_password' => __( 'Please enter user password', 'fed' )
+		'user_login'    => __( 'Please enter user name', 'frontend-dashboard' ),
+		'user_password' => __( 'Please enter user password', 'frontend-dashboard' )
 	);
 
 	return apply_filters( 'fed_login_mandatory_fields', $fields );

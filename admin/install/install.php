@@ -406,17 +406,17 @@ function fed_admin_notice() {
 			?>
 			<div class="notice notice-success">
 				<p>
-					<b><?php _e( 'If you need help in configuring the frontend dashboard, please watch the videos here', 'fed' );
+					<b><?php _e( 'If you need help in configuring the frontend dashboard, please watch the videos here', 'frontend-dashboard' );
 						?>
 					</b>
-					<a href="https://buffercode.com/category/name/frontend-dashboard"><?php _e( 'Frontend Dashboard Instructions', 'fed' ) ?></a>
+					<a href="https://buffercode.com/category/name/frontend-dashboard"><?php _e( 'Frontend Dashboard Instructions', 'frontend-dashboard' ) ?></a>
 				</p>
 				<p>
-					<?php _e( 'Notice: Please check your default settings', 'fed' );
+					<?php _e( 'Notice: Please check your default settings', 'frontend-dashboard' );
 					?>
-					<a href="<?php menu_page_url( 'fed_status' ) ?>"><?php _e( 'Here', 'fed' ) ?></a>
+					<a href="<?php menu_page_url( 'fed_status' ) ?>"><?php _e( 'Here', 'frontend-dashboard' ) ?></a>
 					<?php
-					_e( 'if everything is good, please  click Don\'t show again button', 'fed' ); ?>
+					_e( 'if everything is good, please  click Don\'t show again button', 'frontend-dashboard' ); ?>
 
 					<span class="fed_message_hide">Hide</span>
 					<span class="fed_message_delete" data-url="<?php echo admin_url( 'admin-ajax.php?action=fed_message_form&fed_message_nonce=' . wp_create_nonce( 'fed_message_nonce' ) ) ?>">Don't show again</span>

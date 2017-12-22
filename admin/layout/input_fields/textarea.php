@@ -14,7 +14,7 @@ function fed_admin_input_fields_multi_line($row, $action ) {
             <div class="col-md-12">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><b><?php _e( 'Multi-Line', 'fed' ) ?></b></h3>
+                        <h3 class="panel-title"><b><?php _e( 'Multi-Line', 'frontend-dashboard' ) ?></b></h3>
                     </div>
                     <div class="panel-body">
                         <div class="fed_input_text">
@@ -36,7 +36,7 @@ function fed_admin_input_fields_multi_line($row, $action ) {
                                 </div>
 
                                 <div class="form-group col-md-4">
-                                    <label for=""><?php _e( 'Textarea Row', 'fed' ) ?></label>
+                                    <label for=""><?php _e( 'Textarea Row', 'frontend-dashboard' ) ?></label>
 				                    <?php echo fed_input_box( 'input_row', array( 'value' => $row['input_row'] ), 'single_line' ); ?>
                                 </div>
                             </div>

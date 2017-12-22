@@ -39,7 +39,7 @@ function fed_admin_login_settings_tab( $fed_login_settings ) {
 			),
 			'Register Page URL'             => array(
 				'col'          => 'col-md-6',
-				'name'         => __( 'Register Page URL', 'fed' ),
+				'name'         => __( 'Register Page URL', 'frontend-dashboard' ),
 				'input'        => wp_dropdown_pages( array(
 					'name'             => 'fed_admin_login[settings][fed_register_url]',
 					'selected'         => isset( $fed_login_settings['settings']['fed_register_url'] ) ? $fed_login_settings['settings']['fed_register_url'] : '',
@@ -53,7 +53,7 @@ function fed_admin_login_settings_tab( $fed_login_settings ) {
 			),
 			'Forgot Password Page URL'      => array(
 				'col'          => 'col-md-6',
-				'name'         => __( 'Forgot Password Page URL', 'fed' ),
+				'name'         => __( 'Forgot Password Page URL', 'frontend-dashboard' ),
 				'input'        => wp_dropdown_pages( array(
 					'name'             => 'fed_admin_login[settings][fed_forgot_password_url]',
 					'selected'         => isset( $fed_login_settings['settings']['fed_forgot_password_url'] ) ? $fed_login_settings['settings']['fed_forgot_password_url'] : '',
@@ -67,7 +67,7 @@ function fed_admin_login_settings_tab( $fed_login_settings ) {
 			),
 			'Redirect After Register URL'   => array(
 				'col'          => 'col-md-6',
-				'name'         => __( 'Redirect After Register URL', 'fed' ),
+				'name'         => __( 'Redirect After Register URL', 'frontend-dashboard' ),
 				'input'        => wp_dropdown_pages( array(
 					'name'             => 'fed_admin_login[settings][fed_redirect_register_url]',
 					'selected'         => isset( $fed_login_settings['settings']['fed_redirect_register_url'] ) ? $fed_login_settings['settings']['fed_redirect_register_url'] : '',
@@ -81,7 +81,7 @@ function fed_admin_login_settings_tab( $fed_login_settings ) {
 			),
 			'Redirect After Logged in URL'  => array(
 				'col'   => 'col-md-6',
-				'name'  => __( 'Redirect After Logged in URL', 'fed' ),
+				'name'  => __( 'Redirect After Logged in URL', 'frontend-dashboard' ),
 				'input' => wp_dropdown_pages( array(
 					'name'             => 'fed_admin_login[settings][fed_redirect_login_url]',
 					'selected'         => isset( $fed_login_settings['settings']['fed_redirect_login_url'] ) ? $fed_login_settings['settings']['fed_redirect_login_url'] : '',
@@ -92,7 +92,7 @@ function fed_admin_login_settings_tab( $fed_login_settings ) {
 			),
 			'Redirect After Logged out URL' => array(
 				'col'   => 'col-md-6',
-				'name'  => __( 'Redirect After Logged out URL', 'fed' ),
+				'name'  => __( 'Redirect After Logged out URL', 'frontend-dashboard' ),
 				'input' => wp_dropdown_pages( array(
 					'name'             => 'fed_admin_login[settings][fed_redirect_logout_url]',
 					'selected'         => isset( $fed_login_settings['settings']['fed_redirect_logout_url'] ) ? $fed_login_settings['settings']['fed_redirect_logout_url'] : '',
@@ -103,7 +103,7 @@ function fed_admin_login_settings_tab( $fed_login_settings ) {
 			),
 			'Dashboard'                     => array(
 				'col'          => 'col-md-6',
-				'name'         => __( 'Dashboard', 'fed' ),
+				'name'         => __( 'Dashboard', 'frontend-dashboard' ),
 				'input'        => wp_dropdown_pages( array(
 					'name'             => 'fed_admin_login[settings][fed_dashboard_url]',
 					'selected'         => isset( $fed_login_settings['settings']['fed_dashboard_url'] ) ? $fed_login_settings['settings']['fed_dashboard_url'] : '',

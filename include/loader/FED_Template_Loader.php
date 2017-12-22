@@ -9,7 +9,7 @@ if ( ! class_exists( 'FED_Template_Loader' ) ) {
 		 *
 		 * @var string
 		 */
-		protected $filter_prefix = 'fed';
+		protected $filter_prefix = 'frontend-dashboard';
 
 		/**
 		 * Directory name where custom templates for this plugin should be found in the theme.

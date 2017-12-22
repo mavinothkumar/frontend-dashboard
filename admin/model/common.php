@@ -92,7 +92,7 @@ function fed_fetch_table_rows_with_key( $table, $key ) {
 	$results = fed_fetch_rows_by_table( $table );
 
 	if ( count( $results ) <= 0 && BC_FED_POST_DB !== $table ) {
-		return new WP_Error( 'fed_default_value_not_installed', __('There is some trouble in installing the default value, please try to deactivate and activate the plugin or contact us on','fed') . make_clickable( 'https://ifecho.com/' ) );
+		return new WP_Error( 'fed_default_value_not_installed', __('There is some trouble in installing the default value, please try to deactivate and activate the plugin or contact us on','frontend-dashboard') . make_clickable( 'https://ifecho.com/' ) );
 	}
 	$result_with_key = array();
 	foreach ( $results as $result ) {

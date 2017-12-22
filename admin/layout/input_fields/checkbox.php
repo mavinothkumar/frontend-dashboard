@@ -14,7 +14,7 @@ function fed_admin_input_fields_checkbox( $row, $action ) {
 				<div class="panel panel-primary">
 					<div class="panel-heading">
 						<h3 class="panel-title">
-							<b><?php _e( 'Checkbox', 'fed' ) ?></b>
+							<b><?php _e( 'Checkbox', 'frontend-dashboard' ) ?></b>
 						</h3>
 					</div>
 					<div class="panel-body">

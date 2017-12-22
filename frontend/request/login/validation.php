@@ -18,7 +18,7 @@ function fed_validate_registration_form( $post ) {
 
 
 	if ( $post['user_pass'] !== $post['confirmation_password'] ) {
-		$fed_error->add( 'password_not_match', __( 'Password not match','fed' ) );
+		$fed_error->add( 'password_not_match', __( 'Password not match','frontend-dashboard' ) );
 	}
 
 	foreach ( $mandatory_fields as $key => $mandatory_field ) {
@@ -28,11 +28,11 @@ function fed_validate_registration_form( $post ) {
 	}
 
 	if ( $role && ! array_key_exists( $post['role'], $role ) ) {
-		$fed_error->add( 'invalid_role', __('Invalid Role','fed') );
+		$fed_error->add( 'invalid_role', __('Invalid Role','frontend-dashboard') );
 	}
 
 	if ( ! $role && isset($post['role'])){
-		$fed_error->add( 'invalid_role', __('You are trying to hack the user role','fed') );
+		$fed_error->add( 'invalid_role', __('You are trying to hack the user role','frontend-dashboard') );
 	}
 
 

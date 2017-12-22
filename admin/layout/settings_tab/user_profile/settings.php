@@ -44,7 +44,7 @@ function fed_admin_user_profile_settings_tab( $fed_admin_options ) {
 				'col'   => 'col-md-6',
 				'name'  => 'Number of Recent Post to show',
 				'input' => fed_get_input_details( array(
-					'placeholder' => __( 'Number of Recent Post to show on User Profile', 'fed' ),
+					'placeholder' => __( 'Number of Recent Post to show on User Profile', 'frontend-dashboard' ),
 					'input_meta'  => 'settings[fed_upl_no_recent_post]',
 					'user_value'  => isset( $fed_admin_options['settings']['fed_upl_no_recent_post'] ) ? $fed_admin_options['settings']['fed_upl_no_recent_post'] : '5',
 					'input_type'  => 'number'

@@ -168,7 +168,7 @@ function fed_get_collapse_menu() {
 				<span class="closed hide <?php echo $collapse['close_icon'] ?>"></span>
 			</div>
 			<div class="fed_menu_title fed_collapse_menu_item">
-				<?php _e( $collapse['name'], 'fed' ) ?>
+				<?php _e( $collapse['name'], 'frontend-dashboard' ) ?>
 			</div>
 		</div>
 	</li>

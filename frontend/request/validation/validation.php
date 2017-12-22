@@ -44,7 +44,7 @@ function fed_order_add_validation( $request ) {
 	$fed_error = new WP_Error();
 
 	if ( empty( $request['user_id'] ) || ! isset( $request['user_id'] ) ) {
-		wp_send_json_error( array( 'message' => __( 'You can able to add only the registered user, So please use the search functionality to find the user', 'fed' ) ));
+		wp_send_json_error( array( 'message' => __( 'You can able to add only the registered user, So please use the search functionality to find the user', 'frontend-dashboard' ) ));
 		exit();
 	}
 

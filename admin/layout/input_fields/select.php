@@ -13,7 +13,7 @@ function fed_admin_input_fields_select($row, $action ) {
             <div class="col-md-12">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><b><?php _e( 'Select / Dropdown', 'fed' ) ?></b></h3>
+                        <h3 class="panel-title"><b><?php _e( 'Select / Dropdown', 'frontend-dashboard' ) ?></b></h3>
                     </div>
                     <div class="panel-body">
                         <div class="fed_input_text">
@@ -38,9 +38,9 @@ function fed_admin_input_fields_select($row, $action ) {
 
                             <div class="row fed_key_value_paid">
                                 <div class="col-md-5">
-                                    <label for=""><?php _e( 'Values', 'fed' ) ?></label>
+                                    <label for=""><?php _e( 'Values', 'frontend-dashboard' ) ?></label>
 									<?php echo fed_input_box( 'input_value', array(
-										'placeholder' => __('Please enter the value by key,value','fed'),
+										'placeholder' => __('Please enter the value by key,value','frontend-dashboard'),
 										'rows'        => 10,
 										'value'       => $row['input_value']
 									), 'multi_line' ); ?>
@@ -48,11 +48,11 @@ function fed_admin_input_fields_select($row, $action ) {
                                 <div class="col-md-7">
                                     <div class="row fed_key_value_eg_container">
                                         <div class="col-md-5">
-                                            <label for=""><?php _e( 'Examples:', 'fed' ) ?></label>
+                                            <label for=""><?php _e( 'Examples:', 'frontend-dashboard' ) ?></label>
 											<p>key,value|one,One|two,Two|five-category,Five Category</p>
                                         </div>
                                         <div class="col-md-7">
-                                            <b><?php _e( 'This will be output as', 'fed' ) ?></b>
+                                            <b><?php _e( 'This will be output as', 'frontend-dashboard' ) ?></b>
 											<?php
 											$value = array(
 												'key'           => 'Value',

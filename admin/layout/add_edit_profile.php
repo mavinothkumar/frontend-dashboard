@@ -13,7 +13,7 @@ function fed_get_admin_up_role_based( $row, $action ) {
 	?>
 	<div class="row fed_admin_up_role_based">
 		<div class="col-md-12">
-			<label><?php _e( 'Select user role to show this input field', 'fed' ) ?></label>
+			<label><?php _e( 'Select user role to show this input field', 'frontend-dashboard' ) ?></label>
 		</div>
 		<?php
 
@@ -33,10 +33,10 @@ function fed_get_admin_up_role_based( $row, $action ) {
 	<?php if ( $action == 'profile' ) { ?>
 		<div class="row padd_top_10">
 			<div class="form-group col-md-4">
-				<label><?php _e( 'Menu Location', 'fed' ) ?></label>
+				<label><?php _e( 'Menu Location', 'frontend-dashboard' ) ?></label>
 				<?php echo fed_input_box( 'menu', array(
 					'default_value' => 'Enable',
-					'label'         => __( 'Menu Location', 'fed' ),
+					'label'         => __( 'Menu Location', 'frontend-dashboard' ),
 					'value'         => $row['menu'],
 					'options'       => $options
 				), 'select' ); ?>
@@ -46,7 +46,7 @@ function fed_get_admin_up_role_based( $row, $action ) {
 				<div class="form-group col-md-4 fed_show_user_profile">
 					<?php echo fed_input_box( 'show_user_profile', array(
 						'default_value' => 'Disable',
-						'label'         => __( 'Disable in User Profile?', 'fed' ),
+						'label'         => __( 'Disable in User Profile?', 'frontend-dashboard' ),
 						'value'         => $row['show_user_profile'],
 					), 'checkbox' ); ?>
 				</div>
@@ -81,7 +81,7 @@ function fed_get_admin_up_display_permission( $row, $action, $type = '' ) {
 			<div class="form-group col-md-4">
 				<?php echo fed_input_box( 'show_register', array(
 					'default_value' => 'Enable',
-					'label'         => __( 'Show this field on Register Form', 'fed' ) . ' ' . $notification,
+					'label'         => __( 'Show this field on Register Form', 'frontend-dashboard' ) . ' ' . $notification,
 					'value'         => $value,
 					'disabled'      => $others
 				), 'checkbox' );
@@ -102,7 +102,7 @@ function fed_get_admin_up_display_permission( $row, $action, $type = '' ) {
 		<?php if ( $action == 'post' ) {
 			?>
 			<div class="form-group col-md-4">
-				<label><?php _e( 'Post Type', 'fed' ) ?></label>
+				<label><?php _e( 'Post Type', 'frontend-dashboard' ) ?></label>
 				<?php echo fed_input_box( 'post_type', array(
 					'default_value' => 'Post',
 					'value'         => $row['post_type'],
@@ -135,7 +135,7 @@ function fed_get_admin_up_label_input_order( $row ) {
 	?>
 	<div class="row">
 		<div class="form-group col-md-6">
-			<label for=""><?php _e( 'Label Name *', 'fed' ) ?></label>
+			<label for=""><?php _e( 'Label Name *', 'frontend-dashboard' ) ?></label>
 			<?php echo fed_input_box( 'label_name', array(
 				'class' => 'form-control ' . $change . ' ',
 				'value' => $row['label_name']
@@ -143,7 +143,7 @@ function fed_get_admin_up_label_input_order( $row ) {
 		</div>
 
 		<div class="form-group col-md-6">
-			<label for=""><?php _e( 'Input Order', 'fed' ) ?> *</label>
+			<label for=""><?php _e( 'Input Order', 'frontend-dashboard' ) ?> *</label>
 			<?php
 			echo fed_input_box( 'input_order', array( 'value' => $row['input_order'] ), 'number' ); ?>
 		</div>
@@ -169,7 +169,7 @@ function fed_get_input_type_and_submit_btn( $input_type, $action ) {
 	</div>
 
 	<button type="submit"
-			class="btn btn-primary"><?php _e( 'Submit', 'fed' ) ?>
+			class="btn btn-primary"><?php _e( 'Submit', 'frontend-dashboard' ) ?>
 	</button>
 	<?php
 }
@@ -182,7 +182,7 @@ function fed_get_input_type_and_submit_btn( $input_type, $action ) {
 function fed_get_admin_up_input_meta( $row ) {
 	?>
 	<div class="form-group col-md-6">
-		<label for=""><?php _e( 'Input Meta * [Alpha Numeric and underscore only]', 'fed' ) ?></label>
+		<label for=""><?php _e( 'Input Meta * [Alpha Numeric and underscore only]', 'frontend-dashboard' ) ?></label>
 		<?php
 		if ( fed_check_field_is_belongs_to_extra( $row['input_meta'] ) ) {
 			echo fed_input_box( 'input_meta', array(

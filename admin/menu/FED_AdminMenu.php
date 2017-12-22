@@ -8,8 +8,8 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 
 		public function menu() {
 			add_menu_page(
-				__( 'Frontend Dashboard', 'fed' ),
-				__( 'Frontend Dashboard', 'fed' ),
+				__( 'Frontend Dashboard', 'frontend-dashboard' ),
+				__( 'Frontend Dashboard', 'frontend-dashboard' ),
 				'manage_options',
 				'fed_settings_menu',
 				array( $this, 'common_settings' ),
@@ -20,8 +20,12 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 			$main_menu = $this->fed_get_main_sub_menu();
 
 			foreach ( $main_menu as $index => $menu ) {
-				add_submenu_page( 'fed_settings_menu', $menu['page_title'], $menu['menu_title'],
-					$menu['capability'], $index, $menu['callback'] );
+				add_submenu_page( 'fed_settings_menu',
+					sprintf( __( '%s', 'frontend-dashboard' ), $menu['page_title'] ),
+					sprintf( __( '%s', 'frontend-dashboard' ), $menu['menu_title'] ),
+					$menu['capability'],
+					$index,
+					$menu['callback'] );
 			}
 
 			do_action( 'fed_add_main_sub_menu_action' );
@@ -50,7 +54,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 									   role="tab"
 									   data-toggle="tab">
 										<i class="<?php echo $item['icon_class'] ?>"></i>
-										<?php _e( $item['name'], 'fed' ) ?>
+										<?php _e( $item['name'], 'frontend-dashboard' ) ?>
 									</a>
 								</li>
 								<?php
@@ -92,7 +96,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<h3 class="panel-title">
-									<b><?php _e( 'Add New Menu', 'fed' ) ?></b>
+									<b><?php _e( 'Add New Menu', 'frontend-dashboard' ) ?></b>
 								</h3>
 							</div>
 							<div class="panel-body">
@@ -198,7 +202,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 													<button type="submit"
 															class="btn btn-primary fed_menu_save">
 														<i class="fa fa-plus"></i>
-														<?php _e( 'Add New Menu', 'fed' ) ?>
+														<?php _e( 'Add New Menu', 'frontend-dashboard' ) ?>
 													</button>
 												</div>
 											</div>
@@ -218,7 +222,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<h3 class="panel-title">
-									<b><?php _e( 'Menu Lists', 'fed' ) ?></b>
+									<b><?php _e( 'Menu Lists', 'frontend-dashboard' ) ?></b>
 								</h3>
 							</div>
 							<div class="panel-body">
@@ -230,7 +234,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 														role="link"
 														class="btn btn-primary fed_menu_save fed_menu_save_button_toggle">
 													<i class="fa fa-plus"></i>
-													<?php _e( 'Add New Menu', 'fed' ) ?>
+													<?php _e( 'Add New Menu', 'frontend-dashboard' ) ?>
 												</button>
 											</div>
 										</div>
@@ -267,7 +271,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 													?>">
 														<h4 class="panel-title">
 															<a>
-																<?php echo '<span class="' . $menu["menu_image_id"] . '"></span>' .
+																<?php echo '<span class="' . $menu['menu_image_id'] . '"></span>' .
 																           $menu['menu']; ?>
 															</a>
 														</h4>
@@ -292,7 +296,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 																			<div class="col-md-12">
 																				<div class="col-md-4">
 																					<div class="form-group">
-																						<label><?php _e( 'Menu Name', 'fed' ) ?></label>
+																						<label><?php _e( 'Menu Name', 'frontend-dashboard' ) ?></label>
 																						<input type="text"
 																							   name="fed_menu_name"
 																							   class="form-control fed_menu_name"
@@ -304,7 +308,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 																				</div>
 																				<div class="col-md-3">
 																					<div class="form-group">
-																						<label><?php _e( 'Menu Icon', 'fed' ) ?></label>
+																						<label><?php _e( 'Menu Icon', 'frontend-dashboard' ) ?></label>
 																						<input type="text"
 																							   name="menu_image_id"
 																							   class="form-control <?php echo esc_attr( $menu['menu_slug'] ) ?>"
@@ -318,7 +322,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 																				</div>
 																				<div class="col-md-2">
 																					<div class="form-group">
-																						<label><?php _e( 'Menu Order', 'fed' ) ?></label>
+																						<label><?php _e( 'Menu Order', 'frontend-dashboard' ) ?></label>
 																						<input type="number"
 																							   name="fed_menu_order"
 																							   class="form-control fed_menu_order"
@@ -334,7 +338,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 																						<?php
 																						echo fed_input_box( 'show_user_profile', array(
 																							'default_value' => 'Disable',
-																							'label'         => __( 'Disable User Profile', 'fed' ),
+																							'label'         => __( 'Disable User Profile', 'frontend-dashboard' ),
 																							'value'         => esc_attr( $menu['show_user_profile'] ),
 																						), 'checkbox' );
 																						?>
@@ -469,7 +473,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 
 		public function add_user_profile() {
 			$id              = '';
-			$add_edit_action = __( 'Add New ', 'fed' );
+			$add_edit_action = __( 'Add New ', 'frontend-dashboard' );
 			$selected        = '';
 			$action          = isset( $_GET['fed_action'] ) ? esc_attr( $_GET['fed_action'] ) : '';
 			if ( isset( $_GET['fed_input_id'] ) ) {
@@ -483,12 +487,12 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 					<a class="btn btn-primary"
 					   href="<?php echo menu_page_url( 'fed_add_user_profile', false ) . '&fed_action=post' ?>">
 						<i class="fa fa-envelope"></i>
-						<?php _e( 'Add Extra Post Field', 'fed' ) ?>
+						<?php _e( 'Add Extra Post Field', 'frontend-dashboard' ) ?>
 					</a>
 					<a class="btn btn-primary"
 					   href="<?php echo menu_page_url( 'fed_add_user_profile', false ) . '&fed_action=profile' ?>">
 						<i class="fa fa-user-plus"></i>
-						<?php _e( 'Add Extra User Profile Field', 'fed' ) ?>
+						<?php _e( 'Add Extra User Profile Field', 'frontend-dashboard' ) ?>
 					</a>
 				</div>
 				<?php
@@ -564,7 +568,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 						<a class="btn btn-primary"
 						   href="<?php echo $url; ?>">
 							<i class="fa fa-mail-reply"></i>
-							<?php _e( 'Back to', 'fed' ) ?> <?php echo $page ?>
+							<?php _e( 'Back to', 'frontend-dashboard' ) ?> <?php echo $page ?>
 						</a>
 					</div>
 					<div class="col-md-3 col-lg-offset-1 text-center">
@@ -745,7 +749,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 															<a href="<?php echo $single->download_url; ?>" class="btn btn-primary"
 															   role="button">
 																<i class="fa fa-download" aria-hidden="true"></i>
-																<?php _e( 'Download', 'fed' ) ?>
+																<?php _e( 'Download', 'frontend-dashboard' ) ?>
 															</a>
 														<?php }
 														if ( $single->pricing->type === 'Pro' ) {
@@ -1150,25 +1154,25 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 			 * Login
 			 */
 			$fed_login           = get_option( 'fed_admin_login', array() );
-			$login_settings      = isset( $fed_login['settings']['fed_login_url'] ) ? fed_enable_disable( true ) : fed_enable_disable( false );
-			$redirect_login_url  = isset( $fed_login['settings']['fed_redirect_login_url'] ) ? fed_enable_disable( true ) : fed_enable_disable( false );
-			$redirect_logout_url = isset( $fed_login['settings']['fed_redirect_logout_url'] ) ? fed_enable_disable( true ) : fed_enable_disable( false );
-			$dashboard           = isset( $fed_login['settings']['fed_dashboard_url'] ) ? fed_enable_disable( true ) : fed_enable_disable( false );
+			$login_settings      = fed_enable_disable( isset( $fed_login['settings']['fed_login_url'] ) ? true : false );
+			$redirect_login_url  = fed_enable_disable( isset( $fed_login['settings']['fed_redirect_login_url'] ) ? true : false );
+			$redirect_logout_url = fed_enable_disable( isset( $fed_login['settings']['fed_redirect_logout_url'] ) ? true : false );
+			$dashboard           = fed_enable_disable( isset( $fed_login['settings']['fed_dashboard_url'] ) ? true : false );
 
 			/**
 			 * Post
 			 */
 			$fed_post           = get_option( 'fed_cp_admin_settings', array() );
-			$fed_post_settings  = isset( $fed_post['post']['settings'] ) ? fed_enable_disable( true ) : fed_enable_disable( false );
-			$fed_post_dashboard = isset( $fed_post['post']['dashboard'] ) ? fed_enable_disable( true ) : fed_enable_disable( false );
-			$fed_post_menu      = isset( $fed_post['post']['menu'] ) ? fed_enable_disable( true ) : fed_enable_disable( false );
-			$post_permissions   = isset( $fed_post['post']['permissions'] ) ? fed_enable_disable( true ) : fed_enable_disable( false );
+			$fed_post_settings  = fed_enable_disable(isset( $fed_post['post']['settings'] ) ? true : false);
+			$fed_post_dashboard = fed_enable_disable(isset( $fed_post['post']['dashboard'] ) ? true : false);
+			$fed_post_menu      = fed_enable_disable(isset( $fed_post['post']['menu'] ) ? true : false);
+			$post_permissions   = fed_enable_disable(isset( $fed_post['post']['permissions'] ) ? true : false);
 
 			/**
 			 * User Profile Layout
 			 */
 			$fed_upl          = get_option( 'fed_admin_settings_upl', array() );
-			$fed_upl_settings = isset( $fed_upl['settings'] ) ? fed_enable_disable( true ) : fed_enable_disable( false );
+			$fed_upl_settings = fed_enable_disable(isset( $fed_upl['settings'] ) ? true : false)
 
 
 			?>
@@ -1459,7 +1463,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 				<div class="row">
 					<div class="col-md-6">
 						<div class="fed_UP_page_header">
-							<h3 class="fed_header_font_color"><?php _e( 'Post Fields', 'fed' ) ?></h3>
+							<h3 class="fed_header_font_color"><?php _e( 'Post Fields', 'frontend-dashboard' ) ?></h3>
 						</div>
 					</div>
 					<div class="col-md-6">
@@ -1468,7 +1472,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 								<a class="btn btn-primary"
 								   href="<?php echo menu_page_url( 'fed_add_user_profile', false ) . '&fed_action=post' ?>">
 									<i class="fa fa-plus"></i>
-									<?php _e( 'Add New Custom Post Field', 'fed' ) ?>
+									<?php _e( 'Add New Custom Post Field', 'frontend-dashboard' ) ?>
 								</a>
 							</div>
 						</div>
@@ -1486,7 +1490,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 										aria-hidden="true">&times;
 								</button>
 								<strong>
-									<?php _e( 'Sorry! there are no custom post fields added!', 'fed' ) ?>
+									<?php _e( 'Sorry! there are no custom post fields added!', 'frontend-dashboard' ) ?>
 								</strong>
 							</div>
 						</div>
@@ -1599,7 +1603,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 					<div class="col-md-6">
 						<div class="fed_UP_page_header">
 							<h3 class="fed_header_font_color">
-								<?php _e( 'User Profile', 'fed' ) ?>
+								<?php _e( 'User Profile', 'frontend-dashboard' ) ?>
 							</h3>
 						</div>
 					</div>
@@ -1609,7 +1613,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 								<a class="btn btn-primary"
 								   href="<?php echo menu_page_url( 'fed_add_user_profile', false ) . '&fed_action=profile' ?>">
 									<i class="fa fa-plus"></i>
-									<?php _e( 'Add New Extra User Profile Field', 'fed' ) ?>
+									<?php _e( 'Add New Extra User Profile Field', 'frontend-dashboard' ) ?>
 								</a>
 							</div>
 						</div>
@@ -1629,7 +1633,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 										?>
 										<li class="<?php echo $isActive; ?>">
 											<a href="#<?php echo $index ?>" role="tab" data-toggle="tab">
-												<?php echo '<span class="' . $menu[ $index ]["menu_image_id"] . '"></span> ' . $menu[ $index ]['menu'] ?>
+												<?php echo '<span class="' . $menu[ $index ]['menu_image_id'] . '"></span> ' . $menu[ $index ]['menu'] ?>
 											</a>
 										</li>
 										<?php
@@ -1654,7 +1658,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 										<div class="<?php echo $isActive; ?> tab-pane fade in" id="<?php echo $index; ?>">
 											<div class="panel panel-primary">
 												<div class="panel-heading">
-													<h3 class="panel-title"><?php echo '<span class="' . $menu[ $index ]["menu_image_id"] . '"></span> ' . $menu[ $index ]['menu']; ?></h3>
+													<h3 class="panel-title"><?php echo '<span class="' . $menu[ $index ]['menu_image_id'] . '"></span> ' . $menu[ $index ]['menu']; ?></h3>
 												</div>
 												<div class="panel-body">
 													<?php
@@ -1743,51 +1747,51 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 		protected function fed_get_main_sub_menu() {
 			$menu = array(
 				'fed_dashboard_menu'   => array(
-					'page_title' => __( 'Dashboard Menu', 'fed' ),
-					'menu_title' => __( 'Dashboard Menu', 'fed' ),
+					'page_title' => __( 'Dashboard Menu', 'frontend-dashboard' ),
+					'menu_title' => __( 'Dashboard Menu', 'frontend-dashboard' ),
 					'capability' => 'manage_options',
 					'callback'   => array( $this, 'dashboard_menu' ),
 					'position'   => 7
 				),
 				'fed_user_profile'     => array(
-					'page_title' => __( 'User Profile', 'fed' ),
-					'menu_title' => __( 'User Profile', 'fed' ),
+					'page_title' => __( 'User Profile', 'frontend-dashboard' ),
+					'menu_title' => __( 'User Profile', 'frontend-dashboard' ),
 					'capability' => 'manage_options',
 					'callback'   => array( $this, 'user_profile' ),
 					'position'   => 20
 				),
 				'fed_post_fields'      => array(
-					'page_title' => __( 'Post Fields', 'fed' ),
-					'menu_title' => __( 'Post Fields', 'fed' ),
+					'page_title' => __( 'Post Fields', 'frontend-dashboard' ),
+					'menu_title' => __( 'Post Fields', 'frontend-dashboard' ),
 					'capability' => 'manage_options',
 					'callback'   => array( $this, 'post_fields' ),
 					'position'   => 25
 				),
 				'fed_add_user_profile' => array(
-					'page_title' => __( 'Add Profile / Post Fields', 'fed' ),
-					'menu_title' => __( 'Add Profile / Post Fields', 'fed' ),
+					'page_title' => __( 'Add Profile / Post Fields', 'frontend-dashboard' ),
+					'menu_title' => __( 'Add Profile / Post Fields', 'frontend-dashboard' ),
 					'capability' => 'manage_options',
 					'callback'   => array( $this, 'add_user_profile' ),
 					'position'   => 30
 
 				),
 				'fed_plugin_pages'     => array(
-					'page_title' => __( 'Add-Ons', 'fed' ),
-					'menu_title' => __( 'Add-Ons', 'fed' ),
+					'page_title' => __( 'Add-Ons', 'frontend-dashboard' ),
+					'menu_title' => __( 'Add-Ons', 'frontend-dashboard' ),
 					'capability' => 'manage_options',
 					'callback'   => array( $this, 'plugin_pages' ),
 					'position'   => 50
 				),
 				'fed_status'           => array(
-					'page_title' => __( 'Status', 'fed' ),
-					'menu_title' => __( 'Status', 'fed' ),
+					'page_title' => __( 'Status', 'frontend-dashboard' ),
+					'menu_title' => __( 'Status', 'frontend-dashboard' ),
 					'capability' => 'manage_options',
 					'callback'   => array( $this, 'status' ),
 					'position'   => 70
 				),
 				'fed_help'             => array(
-					'page_title' => __( 'Help', 'fed' ),
-					'menu_title' => __( 'Help', 'fed' ),
+					'page_title' => __( 'Help', 'frontend-dashboard' ),
+					'menu_title' => __( 'Help', 'frontend-dashboard' ),
 					'capability' => 'manage_options',
 					'callback'   => array( $this, 'help' ),
 					'position'   => 100

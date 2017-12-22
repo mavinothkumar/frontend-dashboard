@@ -12,7 +12,7 @@ $dashboard_title = apply_filters( 'fed_frontend_dashboard_title_btn', 'Visit Das
 ?>
 <div class="bc_fed">
 	<a href="<?php echo $dashboard; ?>">
-		<button class="btn btn-primary"><?php _e( $dashboard_title, 'fed' ) ?></button>
+		<button class="btn btn-primary"><?php _e( $dashboard_title, 'frontend-dashboard' ) ?></button>
 	</a>
 </div>
 

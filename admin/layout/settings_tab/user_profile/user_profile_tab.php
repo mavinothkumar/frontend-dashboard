@@ -65,13 +65,13 @@ function fed_user_profile_layout_options($fed_admin_options) {
 	return apply_filters( 'fed_customize_admin_user_profile_layout_options', array(
 		'fed_admin_user_profile_layout_settings'    => array(
 			'icon'      => 'fa fa-cogs',
-			'name'      => __( 'Settings', 'fed' ),
+			'name'      => __( 'Settings', 'frontend-dashboard' ),
 			'callable'  => 'fed_admin_user_profile_settings_tab',
 			'arguments' => $fed_admin_options
 		),
 		'fed_admin_user_profile_layout_colors'    => array(
 			'icon'      => 'fa fa-paint-brush',
-			'name'      => __( 'Colors', 'fed' ),
+			'name'      => __( 'Colors', 'frontend-dashboard' ),
 			'callable'  => 'fed_admin_user_profile_colors_tab',
 			'arguments' => $fed_admin_options
 		),

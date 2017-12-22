@@ -17,7 +17,7 @@ if ( ! class_exists( 'FED_AdminUserProfile' ) ) {
 		 * @param WP_User $user User Profile Fields.
 		 */
 		public function fed_show_user_profile( $user ) { ?>
-			<h3><?php _e( 'Frontend Dashboard', 'fed' ) ?></h3>
+			<h3><?php _e( 'Frontend Dashboard', 'frontend-dashboard' ) ?></h3>
 			<table class="form-table">
 				<?php
 				$fields = fed_fetch_user_profile_extra_fields();

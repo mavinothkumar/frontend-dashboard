@@ -19,9 +19,9 @@ function fed_user_contact_fn() {
 	$response = $support->addNewQuestion( $request );
 
 	if ( $response ) {
-		wp_send_json_success( array( 'message' => __( 'Your question has been successfully sent', 'fed' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Your question has been successfully sent', 'frontend-dashboard' ) ) );
 	}
-	wp_send_json_error( array( 'message' => __( 'Sorry Something went wrong!, please try again later', 'fed' ) ) );
+	wp_send_json_error( array( 'message' => __( 'Sorry Something went wrong!, please try again later', 'frontend-dashboard' ) ) );
 }
 
 function fed_fed_support_get_qa_fn() {

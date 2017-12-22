@@ -20,25 +20,25 @@ function fed_get_admin_post_options( $fed_admin_options ) {
 	return apply_filters( 'fed_customize_admin_post_options', array(
 		'fed_admin_post_settings'    => array(
 			'icon'      => 'fa fa-cogs',
-			'name'      => __( 'Settings', 'fed' ),
+			'name'      => __( 'Settings', 'frontend-dashboard' ),
 			'callable'  => 'fed_admin_post_settings_tab',
 			'arguments' => $fed_admin_options
 		),
 		'fed_admin_post_dashboard'   => array(
 			'icon'      => 'fa fa-cog',
-			'name'      => __( 'Dashboard Settings', 'fed' ),
+			'name'      => __( 'Dashboard Settings', 'frontend-dashboard' ),
 			'callable'  => 'fed_admin_post_dashboard_tab',
 			'arguments' => $fed_admin_options
 		),
 		'fed_admin_post_menu'        => array(
 			'icon'      => 'fa fa-list',
-			'name'      => __( 'Menu', 'fed' ),
+			'name'      => __( 'Menu', 'frontend-dashboard' ),
 			'callable'  => 'fed_admin_post_menu_tab',
 			'arguments' => $fed_admin_options
 		),
 		'fed_admin_post_permissions' => array(
 			'icon'      => 'fa fa-universal-access',
-			'name'      => __( 'Permissions', 'fed' ),
+			'name'      => __( 'Permissions', 'frontend-dashboard' ),
 			'callable'  => 'fed_admin_post_permissions_tab',
 			'arguments' => $fed_admin_options
 		),

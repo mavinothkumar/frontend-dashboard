@@ -1874,9 +1874,9 @@ function fed_get_default_profile_items() {
  */
 function fed_get_payment_cycles() {
 	return array(
-		'annually' => __( 'Annually', 'fed' ),
-		'monthly'  => __( 'Monthly', 'fed' ),
-		'custom'   => __( 'Custom Days', 'fed' ),
+		'annually' => __( 'Annually', 'frontend-dashboard' ),
+		'monthly'  => __( 'Monthly', 'frontend-dashboard' ),
+		'custom'   => __( 'Custom Days', 'frontend-dashboard' ),
 	);
 }
 
@@ -2047,7 +2047,7 @@ function fed_menu_icons_popup() {
 								aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
-						<h4 class="modal-title"><?php _e( 'Please Select one Image', 'fed' ) ?></h4>
+						<h4 class="modal-title"><?php _e( 'Please Select one Image', 'frontend-dashboard' ) ?></h4>
 					</div>
 					<div class="modal-body">
 						<input type="hidden"

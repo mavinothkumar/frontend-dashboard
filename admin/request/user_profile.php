@@ -16,7 +16,7 @@ function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
 	} elseif ( $action === 'post' ) {
 		$table_name = $wpdb->prefix . BC_FED_POST_DB;
 	} else {
-		wp_send_json_error( array( 'message' => __( 'Hey, you are trying something naughty', 'fed' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Hey, you are trying something naughty', 'frontend-dashboard' ) ) );
 		exit();
 	}
 
@@ -38,7 +38,7 @@ function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
 		$status = $wpdb->update( $table_name, $request, array( 'id' => (int) $post_id ) );
 
 		if ( $status === false ) {
-			wp_send_json_error( array( 'message' => __( 'Sorry no record found to update your new details', 'fed' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Sorry no record found to update your new details', 'frontend-dashboard' ) ) );
 		}
 
 		wp_send_json_success( array( 'message' => $request['label_name'] . ' has been successfully updated' ) );
@@ -63,7 +63,7 @@ function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
 		);
 
 		if ( $status === false ) {
-			wp_send_json_error( array( 'message' => __( 'Sorry, Something went wrong in storing values in DB, please try again later or contact support', 'fed' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Sorry, Something went wrong in storing values in DB, please try again later or contact support', 'frontend-dashboard' ) ) );
 			exit();
 		}
 

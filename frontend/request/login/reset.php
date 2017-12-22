@@ -8,11 +8,11 @@ function fed_reset_form_submit( $request ) {
 	}
 
 	if ( empty( $request['user_password'] ) || empty( $request['confirmation_password'] ) ) {
-		wp_send_json_error( array( 'user' => __( 'Please enter the Password', 'fed' ) ) );
+		wp_send_json_error( array( 'user' => __( 'Please enter the Password', 'frontend-dashboard' ) ) );
 	}
 
 	if ( $request['user_password'] !== $request['confirmation_password'] ) {
-		wp_send_json_error( array( 'user' => __( 'Password not matched', 'fed' ) ) );
+		wp_send_json_error( array( 'user' => __( 'Password not matched', 'frontend-dashboard' ) ) );
 	}
 	$rp_key   = wp_unslash( $request['key'] );
 	$rp_login = wp_unslash( $request['login'] );
@@ -26,9 +26,9 @@ function fed_reset_form_submit( $request ) {
 		) );
 	} else {
 		if ( $user instanceof WP_Error ) {
-			wp_send_json_error( array( 'user' => __( 'Invalid Key, Please try resetting the password again', 'fed' ) ) );
+			wp_send_json_error( array( 'user' => __( 'Invalid Key, Please try resetting the password again', 'frontend-dashboard' ) ) );
 		} else {
-			wp_send_json_error( array( 'user' => __( 'Something went wrong, Please try again later', 'fed' ) ) );
+			wp_send_json_error( array( 'user' => __( 'Something went wrong, Please try again later', 'frontend-dashboard' ) ) );
 		}
 	}
 }

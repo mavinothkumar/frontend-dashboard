@@ -13,7 +13,7 @@ function fed_admin_input_fields_number($row, $action ) {
             <div class="col-md-12">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><b><?php _e( 'Number', 'fed' ) ?></b></h3>
+                        <h3 class="panel-title"><b><?php _e( 'Number', 'frontend-dashboard' ) ?></b></h3>
                     </div>
                     <div class="panel-body">
                         <div class="fed_input_text">
@@ -38,17 +38,17 @@ function fed_admin_input_fields_number($row, $action ) {
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-4">
-                                    <label for=""><?php _e( 'Min Value', 'fed' ) ?></label>
+                                    <label for=""><?php _e( 'Min Value', 'frontend-dashboard' ) ?></label>
 				                    <?php echo fed_input_box( 'input_min', array( 'value' => $row['input_min'] ), 'number' ); ?>
                                 </div>
 
                                 <div class="form-group col-md-4">
-                                    <label for=""><?php _e( 'Max Value', 'fed' ) ?></label>
+                                    <label for=""><?php _e( 'Max Value', 'frontend-dashboard' ) ?></label>
 				                    <?php echo fed_input_box( 'input_max', array( 'value' => $row['input_max'] ), 'number' ); ?>
                                 </div>
 
                                 <div class="form-group col-md-4">
-                                    <label for=""><?php _e( 'Step [Increment by Step]', 'fed' ) ?></label>
+                                    <label for=""><?php _e( 'Step [Increment by Step]', 'frontend-dashboard' ) ?></label>
 				                    <?php echo fed_input_box( 'input_step', array( 'value' => $row['input_step'] ), 'number' ); ?>
                                 </div>
                             </div>
