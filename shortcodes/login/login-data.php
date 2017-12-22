@@ -61,8 +61,7 @@ function fed_register_only() {
 	);
 
 
-
-	return apply_filters('fed_register_only_filter',$register);
+	return apply_filters( 'fed_register_only_filter', $register );
 }
 
 function fed_forgot_password_only() {
@@ -99,6 +98,16 @@ function fed_reset_password_only() {
 				'name'        => 'Confirmation Password',
 				'input'       => fed_input_box( 'confirmation_password', array( 'placeholder' => 'Confirmation Password' ), 'password' ),
 				'input_order' => 10
+			),
+			'key'                   => array(
+				'name'        => '',
+				'input'       => fed_input_box( 'key', array( 'value' => isset( $_GET['key'] ) ? $_GET['key'] : '' ), 'hidden' ),
+				'input_order' => 30
+			),
+			'login'                 => array(
+				'name'        => '',
+				'input'       => fed_input_box( 'login', array( 'value' => isset( $_GET['login'] ) ? $_GET['login'] : '' ), 'hidden' ),
+				'input_order' => 30
 			),
 		),
 		'selected' => false,

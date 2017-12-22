@@ -4,7 +4,7 @@ Tags: dashboard, frontend dashboard, custom login, custom register, custom roles
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7DHAEMST475BY
 Requires at least: 4.3
 Tested up to: 4.9.1
-Stable tag: 1.2.2
+Stable tag: 1.2.4
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -203,6 +203,15 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Changelog ==
 
+= 1.2.4 [22-December-2017] =
+
+* Bug: Reset password not working
+
+= 1.2.3 [20-December-2017] =
+
+* Bug: No proper redirect for Restrict WP Admin Area
+* Bug: fixed and enhanced supportive plugins.
+
 = 1.2.2 [16-December-2017] =
 * Add Register and Forgot password link for login only page
 * Added Login link for Register page
@@ -300,8 +309,9 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 * Public release
 
 == Upgrade Notice ==
-= v1.2 [06-November-2017]=
-* Kindly update all Frontend Dashboard relevant plugins.
+= 1.2.4 [22-December-2017] =
+
+* Bug: Reset password not working
 
 == Screenshots ==
 1. Frontend Dashboard Settings | Login | Settings

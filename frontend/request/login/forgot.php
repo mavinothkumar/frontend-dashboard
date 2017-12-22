@@ -28,9 +28,11 @@ function fed_forgot_form_submit( $post ) {
 	$message .= sprintf( __( 'Username: %s' ), $user_login ) . "\r\n\r\n";
 	$message .= __( 'If this was a mistake, just ignore this email and nothing will happen.' ) . "\r\n\r\n";
 	$message .= __( 'To reset your password, visit the following address:' ) . "\r\n\r\n";
-	$message .= '<' . $redirect_url . '"?action=fed_reset&key=' . $key . '&login="' . rawurlencode( $user_login ) . ">\r\n";
+	$message .= '<a href="' . $redirect_url . '?action=fed_reset&key=' . $key . '&login=' . rawurlencode( $user_login ) .'">' . $redirect_url . '</a>' . "\r\n\r\n";
 
 
+	wp_die($message);
+	
 	if ( is_multisite() ) {
 		$blogname = $GLOBALS['current_site']->site_name;
 	} else {

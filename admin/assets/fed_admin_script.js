@@ -76,8 +76,7 @@ jQuery(document).ready(function ($) {
         });
         //When a file is selected, grab the URL and set it as the text field's value
         custom_uploader.on('select', function () {
-            attachment = custom_uploader.state().get('selection').first().toJSON();
-            // console.log(attachment);
+            var attachment = custom_uploader.state().get('selection').first().toJSON();
             button_click.find('.fed_upload_icon').addClass('hide');
             button_click.find('.fed_upload_input').val(attachment.id);
             button_click.find('.fed_upload_image_container').html("<img width=100 height=100 src=" + attachment.url + ">");

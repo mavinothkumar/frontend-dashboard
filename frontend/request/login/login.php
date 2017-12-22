@@ -18,7 +18,7 @@ function fed_login_form_submit( $post ) {
 		wp_send_json_error( array( 'user' => $errors->get_error_messages() ) );
 	}
 
-	$result = wp_signon( $credentials, false );
+	$result = wp_signon( $credentials);
 
 	//var_dump( $result);
 

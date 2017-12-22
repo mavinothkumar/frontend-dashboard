@@ -833,7 +833,9 @@ Pricing
 .bc_fed .p-t-b-20 {
     padding: 20px 0 !important;
 }
-
+.bc_fed .fed_upload_image_container img {
+    height: inherit;
+}
 .bc_fed .fed_menu_slug a:focus {
     outline: none;
     text-decoration: none;

@@ -188,7 +188,7 @@ function fed_get_input_details( $attr ) {
 
 		case 'password':
 			$input .= '<input ' . $values['disabled'] . ' ' . $values['extra'] . ' ' . $values['required'] . ' type="password"
-			name=" ' . $values['name'] . '"    class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '" id="' . $values['id'] . '">';
+			name="' . $values['name'] . '"    class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '" id="' . $values['id'] . '">';
 			break;
 
 

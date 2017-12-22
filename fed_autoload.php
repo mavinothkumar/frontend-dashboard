@@ -53,6 +53,7 @@ require_once BC_FED_PLUGIN_DIR . '/frontend/menu/menus.php';
 require_once BC_FED_PLUGIN_DIR . '/frontend/request/login/login.php';
 require_once BC_FED_PLUGIN_DIR . '/frontend/request/login/index.php';
 require_once BC_FED_PLUGIN_DIR . '/frontend/request/login/forgot.php';
+require_once BC_FED_PLUGIN_DIR . '/frontend/request/login/reset.php';
 require_once BC_FED_PLUGIN_DIR . '/frontend/request/login/register.php';
 require_once BC_FED_PLUGIN_DIR . '/frontend/request/login/validation.php';
 

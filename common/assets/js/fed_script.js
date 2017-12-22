@@ -343,11 +343,18 @@ jQuery(document).ready(function ($) {
             });
             //When a file is selected, grab the URL and set it as the text field's value
             custom_uploader.on('select', function () {
+                // var regex_image_type = /(image)/g;
                 attachment = custom_uploader.state().get('selection').first().toJSON();
-                // console.log(attachment);
+                console.log(attachment);
                 button_click.find('.fed_upload_icon').addClass('hide');
                 button_click.find('.fed_upload_input').val(attachment.id);
-                button_click.find('.fed_upload_image_container').html("<img width=100 height=100 src=" + attachment.url + ">");
+
+                if ((attachment.mime).indexOf('image') > -1 ){
+                    button_click.find('.fed_upload_image_container').html("<img width=100 height=100 src=" + attachment.url + ">");
+                } else {
+                    button_click.find('.fed_upload_image_container').html("<img width=100 height=100 src=" + attachment.icon + ">");
+                }
+
             });
             //Open the uploader dialog
             custom_uploader.open();
