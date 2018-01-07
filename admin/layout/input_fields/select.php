@@ -6,7 +6,7 @@ function fed_admin_input_fields_select($row, $action ) {
               class="fed_admin_menu fed_ajax"
               action="<?php echo admin_url( 'admin-ajax.php?action=fed_admin_setting_up_form' ) ?>">
 
-			<?php wp_nonce_field( 'fed_nonce', 'fed_nonce' ) ?>
+			<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ) ?>
 
 			<?php echo fed_loader(); ?>
 

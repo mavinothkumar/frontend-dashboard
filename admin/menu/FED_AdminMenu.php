@@ -39,7 +39,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 			?>
 
 			<div class="bc_fed container fed_tabs_container">
-				<h3 class="fed_header_font_color">Dashboard Settings</h3>
+				<h3 class="fed_header_font_color"><?php _e( 'Dashboard Settings', 'frontend-dashboard' ) ?></h3>
 				<div class="row">
 					<div class="col-md-12">
 						<ul class="nav nav-tabs"
@@ -54,7 +54,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 									   role="tab"
 									   data-toggle="tab">
 										<i class="<?php echo $item['icon_class'] ?>"></i>
-										<?php _e( $item['name'], 'frontend-dashboard' ) ?>
+										<?php printf( __( '%s', 'frontend-dashboard' ), $item['name'] ) ?>
 									</a>
 								</li>
 								<?php
@@ -103,14 +103,14 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 								<form method="post"
 									  class="fed_admin_menu fed_menu_ajax"
 									  action="<?php echo admin_url( 'admin-ajax.php?action=fed_admin_setting_form_dashboard_menu' ) ?>">
-									<?php wp_nonce_field( 'fed_nonce', 'fed_nonce' ) ?>
+									<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ) ?>
 
 									<div class="row">
 										<div class="col-md-10">
 											<div class="row">
 												<div class="col-md-3">
 													<div class="form-group">
-														<label>Menu Name</label>
+														<label><?php _e( 'Menu Name', 'frontend-dashboard' ) ?></label>
 														<input type="text"
 															   title="Menu Name"
 															   name="fed_menu_name"
@@ -122,12 +122,14 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 
 												<div class="col-md-2">
 													<div class="form-group">
-														<label>Menu
-															Slug <?php echo fed_show_help_message( array(
+														<label>
+															<?php _e( 'Menu Slug', 'frontend-dashboard' ) ?>
+															<?php echo fed_show_help_message( array(
 																'title'   => 'Info',
 																'content' => 'Please do not change the Slug until its mandatory'
 															) );
-															?></label>
+															?>
+														</label>
 														<input type="text"
 															   title="Menu Slug"
 															   name="fed_menu_slug"
@@ -139,7 +141,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 
 												<div class="col-md-2">
 													<div class="form-group">
-														<label>Menu Icon</label>
+														<label><?php _e( 'Menu Icon', 'frontend-dashboard' ) ?></label>
 														<input type="text"
 															   name="menu_image_id"
 															   class="form-control menu_image_id"
@@ -154,7 +156,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 
 												<div class="col-md-2">
 													<div class="form-group">
-														<label>Menu Order</label>
+														<label><?php _e( 'Menu Order', 'frontend-dashboard' ) ?></label>
 														<input type="number"
 															   name="fed_menu_order"
 															   class="form-control fed_menu_order"
@@ -165,7 +167,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 
 												<div class="col-md-3">
 													<div class="form-group">
-														<label>Disable User Profile</label>
+														<label><?php _e( 'Disable User Profile', 'frontend-dashboard' ) ?></label>
 														<br>
 														<input title="Disable User Profile" type="checkbox"
 															   name="show_user_profile"
@@ -176,7 +178,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 											</div>
 											<div class="row padd_top_20">
 												<div class="col-md-12">
-													<label>Select user role to show this input field</label>
+													<label><?php _e( 'Select user role to show this input field', 'frontend-dashboard' ) ?></label>
 												</div>
 												<div class="col-md-12 ">
 													<?php
@@ -186,7 +188,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 															<?php echo fed_input_box( 'user_role', array(
 																'default_value' => 'Enable',
 																'name'          => 'user_role[' . $key . ']',
-																'label'         => esc_attr( $user_role ),
+																'label'         => esc_attr( sprintf( __( '%s', 'frontend-dashboard' ), $user_role ) ),
 																'value'         => 'Enable'
 															), 'checkbox' ); ?>
 														</div>
@@ -241,8 +243,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 										<div class="col-md-6">
 											<div class="input-group fed_search_box  col-md-10">
 												<input id="fed_menu_search" type="text" class="form-control
-												fed_menu_search"
-													   placeholder="Search Menu Name...">
+												fed_menu_search" placeholder="<?php _e( 'Search Menu Name...', 'frontend-dashboard' ) ?>">
 												<span class="input-group-btn">
 										        <button class="btn btn-danger fed_menu_search_clear hide" type="button">
 													<i class="fa fa-times-circle" aria-hidden="true"></i>
@@ -271,8 +272,9 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 													?>">
 														<h4 class="panel-title">
 															<a>
-																<?php echo '<span class="' . $menu['menu_image_id'] . '"></span>' .
-																           $menu['menu']; ?>
+																<?php
+																echo '<span class="' . $menu['menu_image_id'] . '"></span>'; ?>
+																<?php printf( __( '%s', 'frontend-dashboard' ), $menu['menu'] ) ?>
 															</a>
 														</h4>
 													</div>
@@ -282,7 +284,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 																  class="fed_admin_menu fed_menu_ajax"
 																  action="<?php echo admin_url( 'admin-ajax.php?action=fed_admin_setting_form_dashboard_menu' ) ?>">
 
-																<?php wp_nonce_field( 'fed_nonce', 'fed_nonce' ) ?>
+																<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ) ?>
 																<input type="hidden"
 																	   name="menu_id"
 																	   value="<?php echo $menu['id'] ?>"/>
@@ -478,7 +480,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 			$action          = isset( $_GET['fed_action'] ) ? esc_attr( $_GET['fed_action'] ) : '';
 			if ( isset( $_GET['fed_input_id'] ) ) {
 				$id              = (int) $_GET['fed_input_id'];
-				$add_edit_action = 'Edit ';
+				$add_edit_action = __( 'Edit ', 'frontend-dashboard' );
 			}
 
 			if ( $action !== 'profile' && $action !== 'post' ) {
@@ -500,7 +502,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 			}
 
 			if ( $action === 'profile' ) {
-				$page = 'Profile';
+				$page = __( 'Profile', 'frontend-dashboard' );
 				$url  = menu_page_url( 'fed_user_profile', false );
 				if ( is_int( $id ) ) {
 					$rows = fed_fetch_table_row_by_id( BC_FED_USER_PROFILE_DB, $id );
@@ -530,7 +532,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 				}
 			}
 			if ( $action === 'post' ) {
-				$page = 'Post';
+				$page = __( 'Post', 'frontend-dashboard' );
 				$url  = menu_page_url( 'fed_post_fields', false );
 				if ( is_int( $id ) ) {
 					$rows = fed_fetch_table_row_by_id( BC_FED_POST_DB, $id );
@@ -573,7 +575,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 					</div>
 					<div class="col-md-3 col-lg-offset-1 text-center">
 						<h4 class="fed_header_font_color text-uppercase">
-							<?php echo $add_edit_action; ?> <?php echo $page ?> field
+							<?php echo $add_edit_action; ?> <?php echo $page ?> <?php _e( 'field', 'frontend-dashboard' ) ?>
 						</h4>
 					</div>
 				</div>
@@ -691,7 +693,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 				$plugins = json_decode( $api );
 				?>
 				<div class="bc_fed container fed_plugins">
-					<h3 class="fed_header_font_color">Add-Ons</h3>
+					<h3 class="fed_header_font_color"><?php _e( 'Add-Ons', 'frontend-dashboard' ) ?></h3>
 					<div class="row">
 						<?php foreach ( $plugins->plugins as $single ) { ?>
 							<div class="col-md-6 col-xs-12 col-sm-12">
@@ -778,7 +780,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 				<div class="bc_fed container fed_plugins">
 					<div class="alert alert-danger">
 						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-						<strong>Sorry there is some issue in internet connectivity.</strong>
+						<strong><?php _e( 'Sorry there is some issue in internet connectivity.', 'frontend-dashboard' ) ?></strong>
 					</div>
 					<?php echo fed_loader( '' ); ?>
 				</div>
@@ -790,15 +792,13 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 			?>
 			<div class="bc_fed container">
 				<div class="row">
-					<h3 class="fed_header_font_color">We will help you in better ways</h3>
+					<h3 class="fed_header_font_color"><?php _e( 'We will help you in better ways', 'frontend-dashboard' ) ?></h3>
 					<div class="col-md-12 padd_top_20">
 						<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 							<div class="panel panel-primary">
 								<div class="panel-heading" role="tab" id="fed_install">
 									<h5 class="panel-title">
-										<a role="button" data-toggle="collapse" data-parent="#accordion" href="#install" aria-controls="install">
-											How to Install and Configure
-										</a>
+										<a role="button" data-toggle="collapse" data-parent="#accordion" href="#install" aria-controls="install"><?php _e( 'How to Install and Configure', 'frontend-dashboard' ) ?></a>
 									</h5>
 								</div>
 								<div id="install" class="collapse" role="tabpanel" aria-labelledby="fed_install">
@@ -861,7 +861,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 								<div class="panel-heading" role="tab" id="headingOne">
 									<h5 class="panel-title">
 										<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-controls="collapseOne">
-											How to Contact Us
+											<?php _e( 'How to Contact Us', 'frontend-dashboard' ) ?>
 										</a>
 									</h5>
 								</div>
@@ -873,19 +873,19 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 													<a href="https://buffercode.com/plugin/frontend-dashboard">
 														<img src="<?php echo plugins_url( 'admin/assets/images/chat.png', BC_FED_PLUGIN ) ?>"/>
 													</a>
-													<h5 class="text-center">Chat</h5>
+													<h5 class="text-center"><?php _e( 'Chat', 'frontend-dashboard' ) ?></h5>
 												</div>
 												<div class="bc_item">
 													<a href="mailto:support@buffercode.com">
 														<img src="<?php echo plugins_url( 'admin/assets/images/mail.png', BC_FED_PLUGIN ) ?>"/>
 													</a>
-													<h5 class="text-center">Mail</h5>
+													<h5 class="text-center"><?php _e( 'Mail', 'frontend-dashboard' ) ?></h5>
 												</div>
 												<div class="bc_item">
 													<a href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#new-post">
 														<img src="<?php echo plugins_url( 'admin/assets/images/rate.png', BC_FED_PLUGIN ) ?>"/>
 													</a>
-													<h5 class="text-center">Rate us</h5>
+													<h5 class="text-center"><?php _e( 'Rate us', 'frontend-dashboard' ) ?></h5>
 												</div>
 											</div>
 										</div>
@@ -897,7 +897,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 								<div class="panel-heading" role="tab" id="headingFive">
 									<h4 class="panel-title">
 										<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-											Shortcodes
+											<?php _e( 'Shortcodes', 'frontend-dashboard' ) ?>
 										</a>
 									</h4>
 								</div>
@@ -917,13 +917,13 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 								<div class="panel-heading" role="tab" id="fed_filters">
 									<h4 class="panel-title">
 										<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#filters" aria-expanded="false" aria-controls="filters">
-											Filter Hooks [Developers]
+											<?php _e( 'Filter Hooks [Developers]', 'frontend-dashboard' ) ?>
 										</a>
 									</h4>
 								</div>
 								<div id="filters" class="panel-collapse collapse" role="tabpanel" aria-labelledby="fed_filters">
 									<div class="panel-body">
-										<b>Note: This is not completely documented</b>
+										<b><?php _e( 'Note: This is not completely documented', 'frontend-dashboard' ) ?></b>
 										<br>
 										<br>
 										<div class="row">
@@ -1026,13 +1026,13 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 								<div class="panel-heading" role="tab" id="fed_actions">
 									<h4 class="panel-title">
 										<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#actions" aria-expanded="false" aria-controls="actions">
-											Action Hooks [Developers]
+											<?php _e( 'Action Hooks [Developers]', 'frontend-dashboard' ) ?>
 										</a>
 									</h4>
 								</div>
 								<div id="actions" class="panel-collapse collapse" role="tabpanel" aria-labelledby="fed_actions">
 									<div class="panel-body">
-										<b>Note: This is not completely documented</b>
+										<b><?php _e( 'Note: This is not completely documented', 'frontend-dashboard' ) ?></b>
 										<br>
 										<br>
 										<div class="row">
@@ -1163,21 +1163,21 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 			 * Post
 			 */
 			$fed_post           = get_option( 'fed_cp_admin_settings', array() );
-			$fed_post_settings  = fed_enable_disable(isset( $fed_post['post']['settings'] ) ? true : false);
-			$fed_post_dashboard = fed_enable_disable(isset( $fed_post['post']['dashboard'] ) ? true : false);
-			$fed_post_menu      = fed_enable_disable(isset( $fed_post['post']['menu'] ) ? true : false);
-			$post_permissions   = fed_enable_disable(isset( $fed_post['post']['permissions'] ) ? true : false);
+			$fed_post_settings  = fed_enable_disable( isset( $fed_post['post']['settings'] ) ? true : false );
+			$fed_post_dashboard = fed_enable_disable( isset( $fed_post['post']['dashboard'] ) ? true : false );
+			$fed_post_menu      = fed_enable_disable( isset( $fed_post['post']['menu'] ) ? true : false );
+			$post_permissions   = fed_enable_disable( isset( $fed_post['post']['permissions'] ) ? true : false );
 
 			/**
 			 * User Profile Layout
 			 */
 			$fed_upl          = get_option( 'fed_admin_settings_upl', array() );
-			$fed_upl_settings = fed_enable_disable(isset( $fed_upl['settings'] ) ? true : false)
+			$fed_upl_settings = fed_enable_disable( isset( $fed_upl['settings'] ) ? true : false )
 
 
 			?>
 			<div class="bc_fed container">
-				<h3 class="fed_header_font_color">Status</h3>
+				<h3 class="fed_header_font_color"><?php _e( 'Status', 'frontend-dashboard' ) ?></h3>
 				<div class="row">
 					<div class="col-md-6">
 						<div class="col-md-12">
@@ -1210,7 +1210,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 						<div class="col-md-12">
 							<div class="panel panel-primary">
 								<div class="panel-heading">
-									<h3 class="panel-title">Versions</h3>
+									<h3 class="panel-title"><?php _e( 'Versions', 'frontend-dashboard' ) ?></h3>
 								</div>
 								<div class="panel-body">
 									<div class="table-responsive">
@@ -1291,7 +1291,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 						<div class="col-md-12">
 							<div class="panel panel-primary">
 								<div class="panel-heading">
-									<h3 class="panel-title">PHP Extensions</h3>
+									<h3 class="panel-title"><?php _e( 'PHP Extensions', 'frontend-dashboard' ) ?></h3>
 								</div>
 								<div class="panel-body">
 									<div class="table-responsive">
@@ -1336,7 +1336,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 						<div class="col-md-12">
 							<div class="panel panel-primary">
 								<div class="panel-heading">
-									<h3 class="panel-title">Database</h3>
+									<h3 class="panel-title"><?php _e( 'Database', 'frontend-dashboard' ) ?></h3>
 								</div>
 								<div class="panel-body">
 									<div class="table-responsive">
@@ -1421,17 +1421,17 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 			$menu = array(
 				'login'               => array(
 					'icon_class' => 'fa fa-sign-in',
-					'name'       => 'Login',
+					'name'       => __( 'Login', 'frontend-dashboard' ),
 					'callable'   => 'fed_admin_login_tab',
 				),
 				'user'                => array(
 					'icon_class' => 'fa fa-user',
-					'name'       => 'User',
+					'name'       => __( 'User', 'frontend-dashboard' ),
 					'callable'   => 'fed_admin_user_options_tab',
 				),
 				'user_profile_layout' => array(
 					'icon_class' => 'fa fa-user-secret',
-					'name'       => 'User Profile Layout',
+					'name'       => __( 'User Profile Layout', 'frontend-dashboard' ),
 					'callable'   => 'fed_user_profile_layout_design',
 				)
 			);
@@ -1439,7 +1439,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 			if ( ! defined( 'FED_CP_PLUGIN_VERSION' ) ) {
 				$menu['post_options'] = array(
 					'icon_class' => 'fa fa-envelope',
-					'name'       => 'Post',
+					'name'       => __( 'Post', 'frontend-dashboard' ),
 					'callable'   => 'fed_admin_post_options_tab',
 				);
 			}
@@ -1453,7 +1453,12 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 			} elseif ( is_array( $item['callable'] ) && method_exists( $item['callable']['object'], $item['callable']['method'] ) ) {
 				call_user_func( array( $item['callable']['object'], $item['callable']['method'] ) );
 			} else {
-				echo '<div class="container fed_add_page_profile_container text-center">OOPS! You have not add the callable function, please add ' . $item['callable'] . '() to show the body container</div>';
+				?>
+				<div class="container fed_add_page_profile_container text-center">
+					<?php printf( __( 'OOPS! You have not add the callable function, please add %s() to show the
+					body container', 'frontend-dashboard' ), $item['callable'] ) ?>
+				</div>
+				<?php
 			}
 		}
 
@@ -1541,7 +1546,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 															<form method="post"
 																  class="fed_user_profile_delete fed_profile_ajax"
 																  action="<?php echo admin_url( 'admin-ajax.php?action=fed_user_profile_delete' ) ?>">
-																<?php wp_nonce_field( 'fed_nonce', 'fed_nonce' ) ?>
+																<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ) ?>
 																<input type="hidden"
 																	   name="profile_id"
 																	   value="<?php echo $profile['id'] ?>">
@@ -1633,7 +1638,9 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 										?>
 										<li class="<?php echo $isActive; ?>">
 											<a href="#<?php echo $index ?>" role="tab" data-toggle="tab">
-												<?php echo '<span class="' . $menu[ $index ]['menu_image_id'] . '"></span> ' . $menu[ $index ]['menu'] ?>
+												<?php echo '<span class="' . $menu[ $index ]['menu_image_id'] . '"></span>' ?>
+												<?php printf( __( '%s', 'frontend-dashboard' ), $menu[ $index ]['menu']
+												); ?>
 											</a>
 										</li>
 										<?php
@@ -1643,7 +1650,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 									<li class="t-m-20">
 										<a href="<?php menu_page_url( 'fed_dashboard_menu' ); ?>">
 											<i class="fa fa-plus"></i>
-											Add New Menu
+											<?php _e( 'Add New Menu', 'frontend-dashboard' ) ?>
 										</a>
 									</li>
 								</ul>
@@ -1658,7 +1665,10 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 										<div class="<?php echo $isActive; ?> tab-pane fade in" id="<?php echo $index; ?>">
 											<div class="panel panel-primary">
 												<div class="panel-heading">
-													<h3 class="panel-title"><?php echo '<span class="' . $menu[ $index ]['menu_image_id'] . '"></span> ' . $menu[ $index ]['menu']; ?></h3>
+													<h3 class="panel-title">
+														<?php echo '<span class="' . $menu[ $index ]['menu_image_id'] . '"></span>' ?>
+														<?php printf( __( '%s', 'frontend-dashboard' ), $menu[ $index ]['menu'] ); ?>
+													</h3>
 												</div>
 												<div class="panel-body">
 													<?php
@@ -1671,7 +1681,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 														<form method="post"
 															  class="fed_user_profile_delete fed_profile_ajax"
 															  action="<?php echo admin_url( 'admin-ajax.php?action=fed_user_profile_delete' ) ?>">
-															<?php wp_nonce_field( 'fed_nonce', 'fed_nonce' ) ?>
+															<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ) ?>
 															<input type="hidden"
 																   name="profile_id"
 																   value="<?php echo $profile['id'] ?>">
@@ -1684,7 +1694,8 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 																<div class="col-md-6">
 																	<label class="control-label">
 																		<?php
-																		echo $profile['label_name'] . fed_is_required( $profile['is_required'] ); ?>
+																		printf( __( $profile['label_name'], 'frontend-dashboard' ), $profile['label_name'] );
+																		echo fed_is_required( $profile['is_required'] ); ?>
 																	</label>
 																	<?php echo fed_get_input_details( $profile ) ?>
 																</div>
@@ -1692,19 +1703,19 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 																<div class="col-md-6 p-t-20">
 																	<?php echo fed_show_help_message( array(
 																		'icon'    => 'fa fa-sign-in btn ' . $register['button'],
-																		'title'   => $register['title'],
+																		'title'   => sprintf( __( '%s', 'frontend-dashboard' ), $register['title'] ),
 																		'content' => $register['content']
 																	) ) ?>
 
 																	<?php echo fed_show_help_message( array(
 																		'icon'    => 'fa fa-dashboard btn ' . $dashboard['button'],
-																		'title'   => $dashboard['title'],
+																		'title'   => sprintf( __( '%s', 'frontend-dashboard' ), $dashboard['title'] ),
 																		'content' => $dashboard['content']
 																	) ) ?>
 
 																	<?php echo fed_show_help_message( array(
 																		'icon'    => 'fa fa-user btn ' . $user_profile['button'],
-																		'title'   => $user_profile['title'],
+																		'title'   => sprintf( __( '%s', 'frontend-dashboard' ), $user_profile['title'] ),
 																		'content' => $user_profile['content']
 																	) ) ?>
 

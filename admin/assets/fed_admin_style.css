@@ -467,6 +467,12 @@ Upload Image
     display: none;
 }
 
+.bc_fed .flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 /**
 Loader
 **/

@@ -57,7 +57,7 @@ function fed_script_admin( $hook ) {
 			'fed_admin_form_post' => admin_url( 'admin-ajax.php?action=fed_admin_form_post&nonce=' . wp_create_nonce( "fed_admin_form_post" ) ),
 		);
 
-		wp_localize_script( 'fed_admin_script', 'frontend-dashboard', $translation_array );
+		wp_localize_script( 'fed_admin_script', 'frontend_dashboard', $translation_array );
 
 		wp_enqueue_media();
 	}

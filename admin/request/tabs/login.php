@@ -141,9 +141,8 @@ function fed_registration_redirect() {
 function fed_restrict_admin_area() {
 	$restrict_admin_area = get_option( 'fed_admin_login' );
 	$current_user_role   = fed_get_current_user_role_key();
-	if ( $restrict_admin_area && $current_user_role && ! ( defined( 'DOING_AJAX' ) && DOING_AJAX ) && isset( $restrict_admin_area['restrict_wp']['role'] ) && array_key_exists( $current_user_role, $restrict_admin_area['restrict_wp']['role'] )) {
+	if ( $restrict_admin_area && $current_user_role && ! ( defined( 'DOING_AJAX' ) && DOING_AJAX ) && isset( $restrict_admin_area['restrict_wp']['role'] ) && array_key_exists( $current_user_role, $restrict_admin_area['restrict_wp']['role'] ) && is_admin()) {
 		wp_redirect( fed_get_dashboard_url() );
-		exit;
 	}
 }
 

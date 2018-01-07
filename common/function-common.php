@@ -90,3 +90,16 @@ function fed_sort_by_desc( $a, $b ) {
 
 	return 199;
 }
+
+function fed_wp_nonce_field( $action = -1, $name = "_wpnonce", $referer = true , $echo = true ) {
+	$name = esc_attr( $name );
+	$nonce_field = '<input type="hidden" name="' . $name . '" value="' . wp_create_nonce( $action ) . '" />';
+
+	if ( $referer )
+		$nonce_field .= wp_referer_field( false );
+
+	if ( $echo )
+		echo $nonce_field;
+
+	return $nonce_field;
+}

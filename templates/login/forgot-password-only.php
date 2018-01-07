@@ -38,7 +38,7 @@ do_action( 'fed_before_forgot_password_only_form' );
 									<div class="col-md-9">
 										<input type="hidden"
 											   name="submit"
-											   value="<?php echo $details['button'] ?>"/>
+											   value="Forgot Password"/>
 										<button class="btn btn-primary" type="submit"><?php echo $details['button'] ?></button>
 									</div>
 								</div>

@@ -25,8 +25,9 @@ function fed_display_dashboard_profile( $menu_item ) {
 	$user     = get_userdata( get_current_user_id() );
 	$menus    = fed_process_dashboard_display_menu();
 	//bcdump( $profiles );
+	
 	$index             = $menu_item['menu_slug'];
-	$menu_title        = ucwords( $menus[ $index ]['menu'] );
+	$menu_title        = ucwords( __( $menus[ $index ]['menu'], 'frontend-dashboard' ) );
 	$menu_title_value  = apply_filters( 'fed_menu_title', $menu_title, $menus, $index );
 	$menu_default_page = apply_filters( 'fed_menu_default_page', true, $menus, $index );
 	?>
@@ -34,7 +35,7 @@ function fed_display_dashboard_profile( $menu_item ) {
 		<div class="panel-heading">
 			<h3 class="panel-title">
 				<span class="<?php echo $menus[ $index ]['menu_image_id'] ?>"></span>
-				<?php echo $menu_title_value ?>
+				<?php esc_attr_e( $menus[ $index ]['menu'], 'frontend-dashboard') ?>
 			</h3>
 		</div>
 		<div class="panel-body">
@@ -45,7 +46,7 @@ function fed_display_dashboard_profile( $menu_item ) {
 					<form method="post"
 						  class="fed_user_profile_save"
 						  action="<?php echo admin_url( 'admin-ajax.php?action=fed_user_profile_save' ) ?>">
-						<?php wp_nonce_field( 'fed_nonce', 'fed_nonce' ) ?>
+						<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ) ?>
 						<input type="hidden"
 							   name="tab_id"
 							   value="<?php echo $index ?>">
@@ -67,14 +68,15 @@ function fed_display_dashboard_profile( $menu_item ) {
 							<div class="row fed_dashboard_item_field">
 								<div class="col-md-7 fo">
 									<label>
-										<?php echo esc_attr( $single_item['label_name'] ) ?>
+										<?php
+										esc_attr_e( $single_item['label_name'], 'frontend-dashboard' );
+										?>
 									</label>
 									<?php
 									echo fed_get_input_details( $single_item );
 									?>
 								</div>
 								<div class="col-md-5">
-
 								</div>
 							</div>
 							<?php
@@ -83,7 +85,7 @@ function fed_display_dashboard_profile( $menu_item ) {
 						<div class="row text-center">
 							<button class="btn btn-primary">
 								<i class="fa fa-floppy-o"></i>
-								Save
+								<?php _e( 'Save', 'frontend-dashboard' ) ?>
 							</button>
 						</div>
 
@@ -91,7 +93,7 @@ function fed_display_dashboard_profile( $menu_item ) {
 					<?php
 				} else {
 					?>
-					<h4>Sorry! there is no field associated to this menu</h4>
+					<h4><?php _e( 'Sorry! there is no field associated to this menu', 'frontend-dashboard' ) ?></h4>
 					<?php
 				}
 			} else {

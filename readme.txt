@@ -2,9 +2,9 @@
 Contributors: vinoth06, buffercode
 Tags: dashboard, frontend dashboard, custom login, custom register, custom roles, custom profile, custom post type, custom taxonomies, custom dashboard
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7DHAEMST475BY
-Requires at least: 4.3
+Requires at least: 4.6
 Tested up to: 4.9.1
-Stable tag: 1.2.4
+Stable tag: 1.2.7.5
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -203,6 +203,22 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Changelog ==
 
+= 1.2.7.5 [28-December-2017] =
+
+* Bug: Dashboard redirect after wp admin restrict.
+* Bug: Minor bug fixes
+
+= 1.2.7.2 [27-December-2017] =
+
+* More translation strings added
+* Bug fixes.
+
+= 1.2.6 [23-December-2017] =
+
+* New: .POT Language file added
+* New:  Translation added for Hebrew - Thanks to @Ronena100
+* Removed: Now Minimum WordPress version required is 4.6 and above
+
 = 1.2.4 [22-December-2017] =
 
 * Bug: Reset password not working
@@ -309,9 +325,11 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 * Public release
 
 == Upgrade Notice ==
-= 1.2.4 [22-December-2017] =
+= 1.2.5 [23-December-2017] =
 
-* Bug: Reset password not working
+* New: .POT Language file added
+* New:  Translation added for Hebrew - Thanks to @Ronena100
+* Removed: Now Minimum WordPress version required is 4.6 and above
 
 == Screenshots ==
 1. Frontend Dashboard Settings | Login | Settings

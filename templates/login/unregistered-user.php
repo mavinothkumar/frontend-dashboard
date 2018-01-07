@@ -71,7 +71,8 @@ do_action( 'fed_before_login_form' );
 							>
 
 								<?php
-								wp_nonce_field('fed_nonce','fed_nonce');
+								fed_wp_nonce_field('fed_nonce','fed_nonce');
+
 								$contents = $detail['content'];
 								uasort( $contents, 'fed_sort_by_order' );
 								foreach ( $contents as $content ) {
@@ -83,11 +84,12 @@ do_action( 'fed_before_login_form' );
 								}
 								?>
 								<div class="row">
-									<div class="col-md-9">
+									<div class="text-center">
 										<input type="hidden"
 											   name="submit"
-											   value="<?php echo $detail['button'] ?>"/>
-										<button class="btn btn-primary" type="submit"><?php echo $detail['button'] ?></button>
+											   value="<?php echo $key ?>"/>
+										<button class="btn btn-primary" type="submit">
+											<?php echo $detail['button'] ?></button>
 									</div>
 								</div>
 							</form>

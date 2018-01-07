@@ -50,7 +50,8 @@ function fed_plugin_activation() {
 
 	$charset_collate = $wpdb->get_charset_collate();
 
-	$user_profile = "CREATE TABLE IF NOT EXISTS $user_profile_table (
+	if ( $wpdb->get_var( "SHOW TABLES LIKE '{$user_profile_table}'" ) != $user_profile_table ) {
+		$user_profile = "CREATE TABLE `" .$user_profile_table ."` (
 		  id BIGINT(20) NOT NULL AUTO_INCREMENT,
 		  input_meta char(32) NOT NULL,
 		  label_name VARCHAR(255) NOT NULL,
@@ -80,7 +81,10 @@ function fed_plugin_activation() {
   		  UNIQUE KEY input_meta (input_meta)
 		  ) $charset_collate;";
 
-	$post = "CREATE TABLE IF NOT EXISTS $post_table (
+		dbDelta( $user_profile );
+	}
+	if ( $wpdb->get_var( "SHOW TABLES LIKE '{$post_table}'" ) != $post_table ) {
+		$post = "CREATE TABLE `" .$post_table ."` (
 		  id BIGINT(20) NOT NULL AUTO_INCREMENT,
 		  input_meta char(32) NOT NULL,
 		  label_name VARCHAR(255) NOT NULL,
@@ -105,8 +109,10 @@ function fed_plugin_activation() {
 		  PRIMARY KEY  (id),
   		  UNIQUE KEY input_meta (input_meta)
 		  ) $charset_collate;";
-
-	$menu = "CREATE TABLE IF NOT EXISTS $menu_table (
+		dbDelta( $post );
+	}
+	if ( $wpdb->get_var( "SHOW TABLES LIKE '{$menu_table}'" ) != $menu_table ) {
+		$menu = "CREATE TABLE `".$menu_table ."` (
 		  id BIGINT(20) NOT NULL AUTO_INCREMENT,
 		  menu_slug char(32) NOT NULL,
 		  menu VARCHAR (255) NOT NULL,
@@ -120,9 +126,8 @@ function fed_plugin_activation() {
   		  UNIQUE KEY menu_slug (menu_slug)
 		  ) $charset_collate;";
 
-	dbDelta( $user_profile );
-	dbDelta( $post );
-	dbDelta( $menu );
+		dbDelta( $menu );
+	}
 
 	update_option( 'fed_plugin_version', BC_FED_PLUGIN_VERSION );
 
@@ -444,6 +449,7 @@ function get_plugin_list() {
 
 /**
  * Auto update the Frontend Dashboard dependent plugins
+ *
  * @param bool $update
  * @param object $item
  *

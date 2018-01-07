@@ -62,7 +62,7 @@ function fed_show_add_answers( $question_id, $responses ) {
 	$html        .= '<div class="fed_qa_wrapper">
         <div class="fed_qa_textarea_container">
 	        <form method="post" class="fed_add_new_answer" action="' . admin_url( 'admin-ajax.php?action=fed_add_answer' ) . '">
-									' . wp_nonce_field( 'fed_add_answer', 'fed_add_answer', true, false ) . '
+									' . fed_wp_nonce_field( 'fed_add_answer', 'fed_add_answer', true, false ) . '
             <div class="fed_qa_textarea">
             	<input type="hidden" name="question_id" value="' . $question_id . '" />
                 <textarea name = "answer" rows = "3"></textarea>

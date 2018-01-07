@@ -32,7 +32,7 @@ function fed_common_simple_layout( $form ) {
 		?>
 		<form method="<?php echo $form_method ?>" class="<?php echo $form_class; ?>" <?php echo $form_attr; ?> action="<?php echo $form_action ?>">
 
-			<?php wp_nonce_field( $form_nonce_action, $form_nonce_name ) ?>
+			<?php fed_wp_nonce_field( $form_nonce_action, $form_nonce_name ) ?>
 
 			<?php echo $form_loader; ?>
 

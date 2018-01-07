@@ -126,7 +126,7 @@ function fed_display_dashboard_menu( $menus ) {
 					<div class="fed_menu_icon">
 						<span class="<?php echo $menu['menu_image_id'] ?>"></span>
 					</div>
-					<div class="fed_menu_title"><?php echo ucwords( $menu['menu'] ) ?></div>
+					<div class="fed_menu_title"><?php printf( esc_attr__( '%s', 'frontend-dashboard' ), ucwords( $menu['menu'] ) ) ?></div>
 				</div>
 			</a>
 		</li>
@@ -168,7 +168,7 @@ function fed_get_collapse_menu() {
 				<span class="closed hide <?php echo $collapse['close_icon'] ?>"></span>
 			</div>
 			<div class="fed_menu_title fed_collapse_menu_item">
-				<?php _e( $collapse['name'], 'frontend-dashboard' ) ?>
+				<?php printf( __( '%s', 'frontend-dashboard' ), $collapse['name'] ) ?>
 			</div>
 		</div>
 	</li>
@@ -179,6 +179,6 @@ function fed_get_collapse_menu_content() {
 	return apply_filters( 'fed_collapse_menu_content', array(
 		'open_icon'  => 'fa fa-arrow-right',
 		'close_icon' => 'fa fa-arrow-left',
-		'name'       => 'Collapse Menu',
+		'name'       => __( 'Collapse Menu', 'frontend-dashboard' ),
 	) );
 }

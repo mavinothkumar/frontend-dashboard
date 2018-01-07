@@ -31,7 +31,7 @@ function fed_forgot_form_submit( $post ) {
 	$message .= '<a href="' . $redirect_url . '?action=fed_reset&key=' . $key . '&login=' . rawurlencode( $user_login ) .'">' . $redirect_url . '</a>' . "\r\n\r\n";
 
 
-	wp_die($message);
+//	wp_die($message);
 
 	if ( is_multisite() ) {
 		$blogname = $GLOBALS['current_site']->site_name;
@@ -44,7 +44,7 @@ function fed_forgot_form_submit( $post ) {
 		'From: ' . $blogname . ' <' . get_bloginfo( 'admin_email' ) . '>'
 	);
 
-	$title = sprintf( __( '[%s] Password Reset','frontend-dashboard' ), $blogname );
+	$title = sprintf( __( '[ %s ] Password Reset','frontend-dashboard' ), $blogname );
 
 	if ( $message && ! wp_mail( $user_email, wp_specialchars_decode( $title ), $message, $headers ) ) {
 		wp_send_json_error( array(

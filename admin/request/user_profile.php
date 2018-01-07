@@ -17,7 +17,6 @@ function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
 		$table_name = $wpdb->prefix . BC_FED_POST_DB;
 	} else {
 		wp_send_json_error( array( 'message' => __( 'Hey, you are trying something naughty', 'frontend-dashboard' ) ) );
-		exit();
 	}
 
 	if ( ! empty( $post_id ) ) {

@@ -103,7 +103,7 @@ function fed_display_user_not_paid( $payment_rbp ) {
 				  role="form"
 				  class="fed_user_not_paid_form"
 			>
-				<?php wp_nonce_field( 'fed_display_user_not_paid', 'fed_display_user_not_paid' ) ?>
+				<?php fed_wp_nonce_field( 'fed_display_user_not_paid', 'fed_display_user_not_paid' ) ?>
 				<input type="hidden"
 					   name="fed_paypal"
 					   value=""/>

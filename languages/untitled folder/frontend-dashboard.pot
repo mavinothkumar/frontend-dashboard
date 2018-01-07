@@ -42,8 +42,6 @@ msgid "Radio"
 msgstr ""
 
 #: admin/function-admin.php:73 admin/layout/input_fields/password.php:18
-#: shortcodes\login\login-data.php:31 shortcodes\login\login-data.php:32
-#: shortcodes\login\login-data.php:93 shortcodes\login\login-data.php:95
 msgid "Password"
 msgstr ""
 
@@ -237,7 +235,6 @@ msgid "Front-end Dashboard Custom Fields"
 msgstr ""
 
 #: admin/layout/settings_tab/login/login_tab.php:76
-#: shortcodes\login\login-data.php:10 shortcodes\login\login-data.php:56
 msgid "Register"
 msgstr ""
 
@@ -776,41 +773,6 @@ msgstr ""
 msgid ""
 "You can able to add only the registered user, So please use the search "
 "functionality to find the user"
-msgstr ""
-
-#: shortcodes\login\login-data.php:9 shortcodes\login\login-data.php:22
-#: shortcodes\login\login-data.php:46
-msgid "login"
-msgstr ""
-
-#: shortcodes\login\login-data.php:10 shortcodes\login\login-data.php:56
-msgid "Register"
-msgstr ""
-
-#: shortcodes\login\login-data.php:11 shortcodes\login\login-data.php:71
-#: shortcodes\login\login-data.php:81
-msgid "Forgot Password"
-msgstr ""
-
-#: shortcodes\login\login-data.php:12 shortcodes\login\login-data.php:89
-#: shortcodes\login\login-data.php:114
-msgid "Reset Password"
-msgstr ""
-
-#: shortcodes\login\login-data.php:26
-msgid "User Name"
-msgstr ""
-
-#: shortcodes\login\login-data.php:40
-msgid "Remember Me"
-msgstr ""
-
-#: shortcodes\login\login-data.php:75 shortcodes\login\login-data.php:76
-msgid "User Name / Email Address"
-msgstr ""
-
-#: shortcodes\login\login-data.php:98 shortcodes\login\login-data.php:99
-msgid "Confirmation Password"
 msgstr ""
 
 #: shortcodes/login/login-data.php:126

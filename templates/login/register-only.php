@@ -40,12 +40,12 @@ do_action( 'fed_before_register_only_form' );
 									<div class="col-md-12 text-center">
 										<input type="hidden"
 											   name="submit"
-											   value="<?php echo $details['button'] ?>"/>
+											   value="Register"/>
 										<button class="btn btn-primary" type="submit"><?php echo $details['button'] ?></button>
 									</div>
 									<?php if ( $login = fed_get_login_url() ) { ?>
 										<div class="col-md-12 padd_top_20 text-center">
-											<a href="<?php echo $login ?>">Already have an account?</a>
+											<a href="<?php echo $login ?>"><?php _e( 'Already have an account?', 'frontend-dashboard' ) ?></a>
 										</div>
 									<?php } ?>
 								</div>

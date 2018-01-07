@@ -8,14 +8,14 @@ add_action( 'admin_init', 'fed_add_meta_boxes', 1 );
  * Add Post Meta Boxes
  */
 function fed_add_meta_boxes() {
-	add_meta_box( 'fed_meta_boxes', esc_html__( 'Front-end Dashboard Custom Fields' ), 'fed_add_meta_boxes_display', array_keys( fed_get_public_post_types() ), 'normal', 'high' );
+	add_meta_box( 'fed_meta_boxes', esc_html__( 'Front-end Dashboard Custom Fields','frontend-dashboard' ), 'fed_add_meta_boxes_display', array_keys( fed_get_public_post_types() ), 'normal', 'high' );
 }
 
 /**
  * Show Custom Post Meta on Admin Post Page.
  */
 function fed_add_meta_boxes_display() {
-	wp_nonce_field( 'fed_nonce', 'fed_nonce' );
+	fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' );
 
 	$extra_fields = fed_fetch_table_rows_with_key( BC_FED_POST_DB, 'input_meta' );
 	global $post;

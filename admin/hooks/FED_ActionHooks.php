@@ -5,6 +5,7 @@ if ( ! class_exists( 'FED_ActionHooks' ) ) {
 	class FED_ActionHooks {
 		public function __construct() {
 			add_action( 'admin_bar_menu', array( $this, 'fed_admin_bar_menu' ) );
+			add_action( 'init', array( $this, 'fed_load_text_domain' ) );
 			add_action( 'fed_add_inline_css_at_head', array( $this, 'fed_add_inline_css_at_head_color' ) );
 			add_action( 'wp_before_admin_bar_render', array( $this, 'fed_wp_before_admin_bar_render' ) );
 			add_action( 'plugin_row_meta', array( $this, 'fed_plugin_row_meta' ), 10, 2 );
@@ -13,6 +14,10 @@ if ( ! class_exists( 'FED_ActionHooks' ) ) {
 				$this,
 				'fed_plugin_action_links'
 			), 10, 2 );
+		}
+
+		public function fed_load_text_domain(  ) {
+			load_plugin_textdomain( 'frontend-dashboard', false, BC_FED_PLUGIN_NAME . '/languages' );
 		}
 
 		public function fed_add_inline_css_at_head_color() {

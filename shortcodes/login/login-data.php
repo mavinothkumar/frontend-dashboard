@@ -19,31 +19,30 @@ function fed_login_only() {
 	$login = array(
 		'menu'     => array(
 			'id'   => 'fed_login_tab',
-			'name' => 'Login',
+			'name' => __( 'Login', 'frontend-dashboard' ),
 		),
 		'content'  => array(
 			'user_login'    => array(
-				'name'        => 'User Name',
-				'input'       => fed_input_box( 'user_login', array( 'placeholder' => 'User Name' ), 'single_line' ),
+				'name'        => __( 'User Name', 'frontend-dashboard' ),
+				'input'       => fed_input_box( 'user_login', array( 'placeholder' => __( 'User Name', 'frontend-dashboard' ) ), 'single_line' ),
 				'input_order' => 7
 			),
 			'user_password' => array(
-				'name'        => 'Password',
-				'input'       => fed_input_box( 'user_password', array( 'placeholder' => 'Password' ), 'password' ),
+				'name'        => __( 'Password', 'frontend-dashboard' ),
+				'input'       => fed_input_box( 'user_password', array( 'placeholder' => __( 'Password', 'frontend-dashboard' ) ), 'password' ),
 				'input_order' => 9
 			),
 			'remember'      => array(
 				'name'        => '',
 				'input'       => fed_input_box( 'remember', array(
 					'name'        => 'remember',
-					'placeholder' => 'Password',
-					'label'       => 'Remember Me'
+					'label'       => __( 'Remember Me', 'frontend-dashboard' )
 				), 'checkbox' ),
 				'input_order' => 15
 			),
 		),
 		'selected' => true,
-		'button'   => 'Login'
+		'button'   => __( 'Login', 'frontend-dashboard' )
 	);
 
 	return apply_filters( 'fed_login_only_filter', $login );
@@ -53,11 +52,11 @@ function fed_register_only() {
 	$register = array(
 		'menu'     => array(
 			'id'   => 'fed_register_tab',
-			'name' => 'Register',
+			'name' => __( 'Register', 'frontend-dashboard' ),
 		),
 		'content'  => fed_get_registration_content_fields(),
 		'selected' => false,
-		'button'   => 'Register'
+		'button'   => __( 'Register', 'frontend-dashboard' )
 	);
 
 
@@ -68,17 +67,17 @@ function fed_forgot_password_only() {
 	return array(
 		'menu'     => array(
 			'id'   => 'fed_forgot_password_tab',
-			'name' => 'Forgot Password',
+			'name' => __( 'Forgot Password', 'frontend-dashboard' ),
 		),
 		'content'  => array(
 			'user_email' => array(
-				'name'        => 'User Name / Email Address',
-				'input'       => fed_input_box( 'user_login', array( 'placeholder' => 'User Name / Email Address' ), 'single_line' ),
+				'name'        => __( 'User Name / Email Address', 'frontend-dashboard' ),
+				'input'       => fed_input_box( 'user_login', array( 'placeholder' => __( 'User Name / Email Address', 'frontend-dashboard' ) ), 'single_line' ),
 				'input_order' => 7
 			),
 		),
 		'selected' => false,
-		'button'   => 'Forgot Password'
+		'button'   => __( 'Forgot Password', 'frontend-dashboard' )
 	);
 }
 
@@ -86,17 +85,17 @@ function fed_reset_password_only() {
 	return array(
 		'menu'     => array(
 			'id'   => 'fed_reset_password_tab',
-			'name' => 'Reset Password',
+			'name' => __( 'Reset Password', 'frontend-dashboard' ),
 		),
 		'content'  => array(
 			'user_password'         => array(
-				'name'        => 'Password',
-				'input'       => fed_input_box( 'user_password', array( 'placeholder' => 'Password' ), 'password' ),
+				'name'        => __( 'Password', 'frontend-dashboard' ),
+				'input'       => fed_input_box( 'user_password', array( 'placeholder' => __( 'Password', 'frontend-dashboard' ) ), 'password' ),
 				'input_order' => 7
 			),
 			'confirmation_password' => array(
-				'name'        => 'Confirmation Password',
-				'input'       => fed_input_box( 'confirmation_password', array( 'placeholder' => 'Confirmation Password' ), 'password' ),
+				'name'        => __( 'Confirmation Password', 'frontend-dashboard' ),
+				'input'       => fed_input_box( 'confirmation_password', array( 'placeholder' => __( 'Confirmation Password', 'frontend-dashboard' ) ), 'password' ),
 				'input_order' => 10
 			),
 			'key'                   => array(
@@ -111,7 +110,7 @@ function fed_reset_password_only() {
 			),
 		),
 		'selected' => false,
-		'button'   => 'Reset Password'
+		'button'   => __( 'Reset Password', 'frontend-dashboard' )
 	);
 }
 

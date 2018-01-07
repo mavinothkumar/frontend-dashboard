@@ -21,7 +21,7 @@ function fed_get_avatar( $id_or_email, $alt = '', $class = '', $extra = '', $siz
 	//var_dump($fed_upl);
 	if ( $fed_upl['settings']['fed_upl_change_profile_pic'] != '' ) {
 		//$current_user = wp_get_current_user();
-		$user_obj   = get_userdata( $user_data );
+		$user_obj = get_userdata( $user_data );
 
 		$gavatar_id = $user_obj->has_prop( $fed_upl['settings']['fed_upl_change_profile_pic'] ) ?
 			$user_obj->get( $fed_upl['settings']['fed_upl_change_profile_pic'] ) :
@@ -75,7 +75,7 @@ function fed_get_registration_content_fields() {
 
 
 	if ( $details instanceof WP_Error ) {
-		wp_die( 'Default Tables not installed, please contact support' );
+		wp_die( __( 'Default Tables not installed, please contact support', 'frontend-dashboard' ) );
 	}
 
 	$registration = array();
@@ -556,8 +556,8 @@ function fed_show_user_by_role( $fed_user_attr, $user_id ) {
 					data-dismiss="alert"
 					aria-hidden="true">&times;
 			</button>
-			<strong>Sorry!</strong>
-			No user found...
+			<strong><?php _e( 'Sorry!', 'frontend-dashboard' ) ?></strong>
+			<?php _e( 'No user found...', 'frontend-dashboard' ) ?>
 		</div>
 		<?php
 	} else {
@@ -600,7 +600,9 @@ function fed_show_user_profile_page( $user ) {
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								<div class="fed_profile_full_name text-center">
-									<h3 class="panel-title"><?php echo $user->get( 'display_name' ) ?></h3>
+									<h3 class="panel-title">
+										<?php esc_attr_e( $user->get( 'display_name' ), 'frontend-dashboard' ) ?>
+									</h3>
 								</div>
 							</div>
 							<div class="panel-body">
@@ -615,7 +617,7 @@ function fed_show_user_profile_page( $user ) {
 								if ( $upl_options['settings']['fed_upl_disable_desc'] === 'no' ) { ?>
 									<div class="row">
 										<div class="col-md-12 fed_profile_description">
-											<?php echo $user->get( 'description' ); ?>
+											<?php esc_attr_e( $user->get( 'description' ), 'frontend-dashboard' ) ?>
 										</div>
 									</div>
 								<?php } ?>
@@ -646,7 +648,7 @@ function fed_show_user_profile_page( $user ) {
 								>
 									<a href="#<?php echo $menus[ $index ]['menu_slug']; ?>">
 										<span class="<?php echo $menus[ $index ]['menu_image_id'] ?>"></span>
-										<?php echo ucwords( $menus[ $index ]['menu'] ) ?>
+										<?php esc_attr_e( ucwords( $menus[ $index ]['menu'] ), 'frontend-dashboard' ) ?>
 									</a>
 								</li>
 								<?php
@@ -688,7 +690,7 @@ function fed_show_user_profile_page( $user ) {
 										?>
 										<div class="row fed_dashboard_item_field">
 											<div class="fed_dashboard_label_name fed_header_font_color col-md-4 text-right-md text-right-not-sm text-right-not-xs">
-												<?php echo $single_item['label_name'] ?>
+												<?php esc_attr_e( $single_item['label_name'], 'frontend-dashboard' ) ?>
 											</div>
 											<div class="col-md-8">
 												<?php echo fed_process_author_details( $user, $single_item ) ?>
@@ -707,7 +709,7 @@ function fed_show_user_profile_page( $user ) {
 		</div>
 		<div class="row fed_user_posts_container">
 			<div class="col-md-12">
-				<h2>Recent Post by <?php echo $user->get( 'display_name' ) ?></h2>
+				<h2><?php _e( 'Recent Post by', 'frontend-dashboard' ) ?> <?php echo $user->get( 'display_name' ) ?></h2>
 			</div>
 			<div class="col-md-8 fed_posts">
 				<?php
@@ -743,12 +745,12 @@ function fed_get_403_error_page() {
 		<div class="panel-heading">
 			<h3 class="panel-title">
 				<span class="fa fa-exclamation-triangle"></span>
-				Error (403)
+				<?php _e( 'Error (403)', 'frontend-dashboard' ) ?>
 			</h3>
 		</div>
 		<div class="panel-body">
-			<h2>Unauthorised Access</h2>
-			<a class="btn btn-primary" href="<?php echo fed_get_dashboard_url(); ?>">Click here to visit Dashboard</a>
+			<h2><?php _e( 'Unauthorised Access', 'frontend-dashboard' ) ?></h2>
+			<a class="btn btn-primary" href="<?php echo fed_get_dashboard_url(); ?>"><?php _e( 'Click here to visit Dashboard', 'frontend-dashboard' ) ?></a>
 		</div>
 	</div>
 	<?php

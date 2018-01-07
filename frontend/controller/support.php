@@ -84,7 +84,7 @@ function fed_questions_lists( $questions ) {
 								  class="fed_admin_menu fed_get_qa_ajax <?php echo $display_name; ?>"
 								  action="<?php echo admin_url( 'admin-ajax.php?action=fed_support_get_qa' ) ?>">
 
-								<?php wp_nonce_field( 'fed_support_get_qa', 'fed_support_get_qa' ) ?>
+								<?php fed_wp_nonce_field( 'fed_support_get_qa', 'fed_support_get_qa' ) ?>
 
 								<input type="hidden"
 									   name="question_id"

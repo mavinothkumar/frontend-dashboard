@@ -42,39 +42,39 @@ function fed_admin_user_profile_select( $selected = '' ) {
 		'class'   => 'fed_admin_input_items',
 		'options' => apply_filters( 'fed_admin_input_item_options', array(
 			'single_line' => array(
-				'name'  => 'Single Line',
+				'name'  => __( 'Single Line', 'frontend-dashboard' ),
 				'image' => plugins_url( 'admin/assets/images/inputs/single_line.png', BC_FED_PLUGIN )
 			),
 			'multi_line'  => array(
-				'name'  => 'Multi-Line',
+				'name'  => __( 'Multi-Line', 'frontend-dashboard' ),
 				'image' => plugins_url( 'admin/assets/images/inputs/multi_line.png', BC_FED_PLUGIN )
 			),
 			'number'      => array(
-				'name'  => 'Number',
+				'name'  => __( 'Number', 'frontend-dashboard' ),
 				'image' => plugins_url( 'admin/assets/images/inputs/number.png', BC_FED_PLUGIN )
 			),
 			'email'       => array(
-				'name'  => 'Email',
+				'name'  => __( 'Email', 'frontend-dashboard' ),
 				'image' => plugins_url( 'admin/assets/images/inputs/email.png', BC_FED_PLUGIN )
 			),
 			'checkbox'    => array(
-				'name'  => 'Checkbox',
+				'name'  => __( 'Checkbox', 'frontend-dashboard' ),
 				'image' => plugins_url( 'admin/assets/images/inputs/checkbox.png', BC_FED_PLUGIN )
 			),
 			'select'      => array(
-				'name'  => 'Select',
+				'name'  => __( 'Select', 'frontend-dashboard' ),
 				'image' => plugins_url( 'admin/assets/images/inputs/select.png', BC_FED_PLUGIN )
 			),
 			'radio'       => array(
-				'name'  => 'Radio',
+				'name'  => __( 'Radio', 'frontend-dashboard' ),
 				'image' => plugins_url( 'admin/assets/images/inputs/radio.png', BC_FED_PLUGIN )
 			),
 			'password'    => array(
-				'name'  => 'Password',
+				'name'  => __( 'Password', 'frontend-dashboard' ),
 				'image' => plugins_url( 'admin/assets/images/inputs/password.png', BC_FED_PLUGIN )
 			),
 			'url'         => array(
-				'name'  => 'URL',
+				'name'  => __( 'URL', 'frontend-dashboard' ),
 				'image' => plugins_url( 'admin/assets/images/inputs/url.png', BC_FED_PLUGIN )
 			),
 		) ),
@@ -162,7 +162,7 @@ function fed_get_input_details( $attr ) {
 	$values['name']          = isset( $attr['input_meta'] ) && $attr['input_meta'] != '' ? esc_attr( $attr['input_meta'] ) : 'BUG';
 	$values['value']         = isset( $attr['user_value'] ) && $attr['user_value'] != '' ? $attr['user_value'] : '';
 	$values['required']      = isset( $attr['is_required'] ) && $attr['is_required'] == 'true' ? 'required="required"' : '';
-	$values['id']            = isset( $attr['id_name'] ) && $attr['id_name'] != '' ? $attr['id_name'] : '';
+	$values['id']            = isset( $attr['id_name'] ) && $attr['id_name'] != '' ? 'id="' . $attr['id_name'] . '"' : '';
 	$values['default_value'] = isset( $attr['default_value'] ) && $attr['default_value'] != '' ? $attr['default_value'] : 'yes';
 	$input                   = '';
 	$values['readonly']      = isset( $attr['readonly'] ) && $attr['readonly'] === true ? 'readonly=readonly' : '';
@@ -175,44 +175,44 @@ function fed_get_input_details( $attr ) {
 
 	switch ( $values['input_type'] ) {
 		case 'single_line':
-			$input .= '<input ' . $values['disabled'] . ' ' . $values['extra'] . ' ' . $values['readonly'] . ' ' . $values['required'] . ' type="text" name="' . $values['name'] . '"  value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '" id="' . $values['id'] . '">';
+			$input .= '<input ' . $values['disabled'] . ' ' . $values['extra'] . ' ' . $values['id'] . ' ' . $values['readonly'] . ' ' . $values['required'] . ' type="text" name="' . $values['name'] . '"  value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '" >';
 			break;
 
 		case 'hidden':
-			$input .= '<input ' . $values['disabled'] . ' ' . $values['extra'] . ' ' . $values['readonly'] . ' ' . $values['required'] . ' type="hidden" name="' . $values['name'] . '"  value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '" id="' . $values['id'] . '">';
+			$input .= '<input ' . $values['disabled'] . ' ' . $values['extra']. ' ' . $values['id'] . ' ' . $values['readonly'] . ' ' . $values['required'] . ' type="hidden" name="' . $values['name'] . '"  value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '">';
 			break;
 
 		case 'email':
-			$input .= '<input ' . $values['disabled'] . ' ' . $values['extra'] . ' ' . $values['readonly'] . ' ' . $values['required'] . ' type="email" name="' . $values['name'] . '"   value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '" id="' . $values['id'] . '">';
+			$input .= '<input ' . $values['disabled'] . ' ' . $values['extra']. ' ' . $values['id'] . ' ' . $values['readonly'] . ' ' . $values['required'] . ' type="email" name="' . $values['name'] . '"   value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '">';
 			break;
 
 		case 'password':
-			$input .= '<input ' . $values['disabled'] . ' ' . $values['extra'] . ' ' . $values['required'] . ' type="password"
-			name="' . $values['name'] . '"    class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '" id="' . $values['id'] . '">';
+			$input .= '<input ' . $values['disabled'] . ' ' . $values['extra']. ' ' . $values['id'] . ' ' . $values['required'] . ' type="password"
+			name="' . $values['name'] . '"    class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '">';
 			break;
 
 
 		case 'url':
-			$input .= '<input ' . $values['disabled'] . ' ' . $values['extra'] . ' ' . $values['required'] . ' type="url"  placeholder="' . $values['placeholder'] . '"  name="' . $values['name'] . '"    class="' . $values['class'] . '"  id="' . $values['id'] . '" value="' . esc_attr( $values['value'] ) . '" >';
+			$input .= '<input ' . $values['disabled'] . ' ' . $values['extra']. ' ' . $values['id'] . ' ' . $values['required'] . ' type="url"  placeholder="' . $values['placeholder'] . '"  name="' . $values['name'] . '"    class="' . $values['class'] . '" value="' . esc_attr( $values['value'] ) . '" >';
 			break;
 
 		case 'multi_line':
 			$rows = isset( $attr['rows'] ) ? absint( $attr['rows'] ) : 4;
 
-			$input .= '<textarea ' . $values['disabled'] . $values['extra'] . ' name="' . $values['name'] . '"   rows="' . $rows . '"
-			          class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '" id="' . $values['id'] . '">' . esc_textarea( $values['value'] ) . '</textarea>';
+			$input .= '<textarea ' . $values['disabled']. ' ' . $values['id'] . ' ' . $values['extra'] . ' name="' . $values['name'] . '"   rows="' . $rows . '"
+			          class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '">' . esc_textarea( $values['value'] ) . '</textarea>';
 			break;
 
 		case 'checkbox':
 			$values['class'] = $values['class'] == 'form-control' ? '' : $values['class'];
 			$input           .= '<label class="' . $values['class'] . '">
-			<input ' . $values['disabled'] . ' ' . $values['extra'] . ' ' . $values['required'] . '  name="' . $values['name'] . '"  value="' . $values['default_value'] . '" type="checkbox"  id="' . $values['id'] . '" ' . checked( $values['value'], $values['default_value'], false ) . '> ' . $label . '</label>';
+			<input ' . $values['disabled'] . ' ' . $values['extra']. ' ' . $values['id'] . ' ' . $values['required'] . '  name="' . $values['name'] . '"  value="' . $values['default_value'] . '" type="checkbox" ' . checked( $values['value'], $values['default_value'], false ) . '> ' . $label . '</label>';
 
 			break;
 
 		case 'select':
 			$options = fed_get_select_option_value( $attr['input_value'] );
-			$input   .= '<select ' . $values['disabled'] . $values['extra'] . ' name="' . $values['name'] . '"  class="' . $values['class'] . '" id="' . $values['id'] . '">';
+			$input   .= '<select ' . $values['disabled']. ' ' . $values['id'] . ' ' . $values['extra'] . ' name="' . $values['name'] . '"  class="' . $values['class'] . '">';
 			foreach ( $options as $key => $label ) {
 				$input .= '<option
 						value="' . esc_attr( $key ) . '" ' . selected( $values['value'], $key, false ) . '>' . $label . '</option>';
@@ -225,12 +225,12 @@ function fed_get_input_details( $attr ) {
 			$max  = isset( $attr['input_max'] ) ? $attr['input_max'] : 99999999999999999999999999999999999999999999999999;
 			$step = isset( $attr['input_step'] ) ? $attr['input_step'] : 'any';
 
-			$input .= '<input ' . $values['disabled'] . $values['readonly'] . $values['extra'] . $values['required'] . ' type="number" name="' . $values['name'] . '" 
+			$input .= '<input ' . $values['disabled']. ' ' . $values['id'] . ' ' . $values['readonly'] . ' ' . $values['extra'] . ' ' .$values['required'] . ' type="number" name="' . $values['name'] . '" 
 			                                value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '"
 			                                placeholder="' . $values['placeholder'] . '"
 			                                min="' . esc_attr( $min ) . '"
 			                                max="' . esc_attr( $max ) . '"
-			                                step="' . esc_attr( $step ) . '" id="' . $values['id'] . '">';
+			                                step="' . esc_attr( $step ) . '">';
 			break;
 
 		case 'radio':
@@ -239,7 +239,7 @@ function fed_get_input_details( $attr ) {
 			foreach ( $options as $key => $label ) {
 				$input .= '<label class="' . $values['class'] . '" for="' . $key . '">
 					<input ' . $values['disabled'] . ' ' . $values['extra'] . ' ' . $values['readonly'] . ' name="' . $values['name'] . '"  value="' . $key . '" 
-					       type="radio"' . checked( $values['value'], $key, false ) . $values['required'] . '>
+					       type="radio" ' . checked( $values['value'], $key, false ) . ' ' . $values['required'] . ' >
 					' . $label . '
 				</label>';
 			}
@@ -1765,7 +1765,6 @@ function fed_paypal() {
 	if ( isset( $_REQUEST['fed_paypal'], $_REQUEST['fed_display_user_not_paid'] ) ) {
 		if ( ! wp_verify_nonce( $_REQUEST['fed_display_user_not_paid'], 'fed_display_user_not_paid' ) ) {
 			wp_die( 'Something Went Wrong, Please go back and refresh the page.' );
-			exit();
 		}
 		$paypal = new paypal_payment();
 		$paypal->process_paypal();

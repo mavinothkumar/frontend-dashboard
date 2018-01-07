@@ -1,8 +1,9 @@
 <?php
-
+/**
+ * Autoload Files
+ */
 require_once BC_FED_PLUGIN_DIR . '/admin/install/install.php';
 require_once BC_FED_PLUGIN_DIR . '/admin/install/initial_setup.php';
-
 /**
  * Loader
  */

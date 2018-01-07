@@ -92,7 +92,6 @@ function fed_validate_forgot_password( $post ) {
 
 	if ( $errors->get_error_code() ) {
 		wp_send_json_error( array( 'user' => $errors->get_error_messages() ) );
-		exit();
 	}
 
 	if ( ! $user_data ) {

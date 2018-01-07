@@ -128,7 +128,7 @@ function fed_display_dashboard_add_new_post( $post_type ) {
 		  class="fed_dashboard_add_new_post"
 		  action="<?php echo admin_url( 'admin-ajax.php?action=fed_dashboard_add_new_post' ); ?>">
 
-		<?php wp_nonce_field( 'fed_nonce', 'fed_nonce' ) ?>
+		<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ) ?>
 
 		<input type="hidden"
 			   name="post_type"
@@ -256,7 +256,7 @@ function fed_process_dashboard_add_new_post( $post ) {
 		$post_status = isset( $fed_admin_options['settings']['fed_post_status'] ) ? sanitize_text_field( $fed_admin_options['settings']['fed_post_status'] ) : 'publish';
 
 		if ( $post['post_title'] == '' ) {
-			$error = new WP_Error( 'fed_dashboard_add_post_title_missing', 'Please fill post title' );
+			$error = new WP_Error( 'fed_dashboard_add_post_title_missing', __( 'Please fill post title', 'frontend-dashboard' ) );
 			wp_send_json_error( array( 'message' => $error->get_error_messages() ) );
 		}
 
@@ -295,9 +295,9 @@ function fed_process_dashboard_add_new_post( $post ) {
 			wp_send_json_error( $success->get_error_messages() );
 		}
 
-		wp_send_json_success( array( 'message' => $post['post_title'] . __( ' Successfully saved' ) ) );
+		wp_send_json_success( array( 'message' => $post['post_title'] . __( ' Successfully saved' , 'frontend-dashboard' ) ) );
 	}
-	$error = new WP_Error( 'fed_action_not_allowed', 'Sorry! your are not allowed to do this action' );
+	$error = new WP_Error( 'fed_action_not_allowed', __( 'Sorry! your are not allowed to do this action', 'frontend-dashboard' ) );
 
 	wp_send_json_error( array( 'message' => $error->get_error_messages() ) );
 }
@@ -321,7 +321,7 @@ function fed_display_dashboard_edit_post_by_id( $post ) {
 		<form method="post"
 			  class="fed_dashboard_show_post_list_request"
 			  action=" ' . admin_url( 'admin-ajax.php?action=fed_dashboard_show_post_list_request' ) . '">';
-	$html .= wp_nonce_field( 'fed_dashboard_show_post_list_request', 'fed_dashboard_show_post_list_request', '',
+	$html .= fed_wp_nonce_field( 'fed_dashboard_show_post_list_request', 'fed_dashboard_show_post_list_request', '',
 		false );
 
 	$html .= fed_get_input_details( array(
@@ -345,7 +345,7 @@ function fed_display_dashboard_edit_post_by_id( $post ) {
 	  class="fed_dashboard_process_edit_post_request"
 	  action="' . admin_url( 'admin-ajax.php?action=fed_dashboard_process_edit_post_request' ) . '">';
 
-	$html .= wp_nonce_field( "fed_dashboard_process_edit_post_request", "fed_dashboard_process_edit_post_request", true,
+	$html .= fed_wp_nonce_field( "fed_dashboard_process_edit_post_request", "fed_dashboard_process_edit_post_request", true,
 		false );
 
 	$html .= fed_input_box( 'ID', array( 'value' => (int) $post->ID ), 'hidden' );
