@@ -24,7 +24,7 @@ Frontend Dashboard is bundled with the huge list of custom features which can ea
 * [Frontend Dashboard Templates](https://buffercode.com/plugin/frontend-dashboard-templates)
 * [Frontend Dashboard Custom Post and Taxonomies](https://buffercode.com/plugin/frontend-dashboard-custom-post-and-taxonomies)
 
-###Videos
+### Videos
 
 For more video : [Frontend Dashboard](https://buffercode.com/category/name/frontend-dashboard)
 
