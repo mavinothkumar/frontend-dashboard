@@ -1,4 +1,4 @@
-# Frontend Dashboard
+# Frontend Dashboard WordPress Plugin
 Frontend Dashboard is bundled with huge list of custom features which can easily customise the User profile, Posts, Login, Register, Custom roles on custom front page.
 
 [Help | Frontend Dashboard Home](https://buffercode.com/plugin/frontend-dashboard)
@@ -14,11 +14,33 @@ Frontend Dashboard is bundled with the huge list of custom features which can ea
 6. Enable/Disable the post default fields.
 7. Show user role based custom profile page
 8. Restrict the number of posts to show in the custom profile page.
+9. Manage custom Post type and Taxonomies
+10. Customize templates
 
 ### Frontend Dashboard Plugins
-* [Frontend Dashboard Captcha](https://buffercode.com/plugin/frontend-dashboard-captcha)
-* [Frontend Dashboard Extra](https://buffercode.com/plugin/frontend-dashboard-extra)
 * [Frontend Dashboard Pages](https://buffercode.com/plugin/frontend-dashboard-pages)
+* [Frontend Dashboard Extra](https://buffercode.com/plugin/frontend-dashboard-extra)
+* [Frontend Dashboard Captcha](https://buffercode.com/plugin/frontend-dashboard-captcha)
+* [Frontend Dashboard Templates](https://buffercode.com/plugin/frontend-dashboard-templates)
+* [Frontend Dashboard Custom Post and Taxonomies](https://buffercode.com/plugin/frontend-dashboard-custom-post-and-taxonomies)
+
+###Videos
+
+For more video : [Frontend Dashboard](https://buffercode.com/category/name/frontend-dashboard)
+
+* [How to create custom login for Frontend Dashboard](https://buffercode.com/post/how-to-create-custom-login-for-frontend-dashboard-wordpress-plugin)
+* [How to create Dashboard for Frontend Dashboard](https://buffercode.com/post/how-to-create-dashboard-for-frontend-dashboard-wordpress-plugin)
+* [How to set Redirect on Login for Frontend Dashboard](https://buffercode.com/post/how-to-set-redirect-on-login-for-frontend-dashboard-wordpress-plugin)
+* [How to set Widget for Frontend Dashboard](https://buffercode.com/post/how-to-set-widget-for-frontend-dashboard-wordpress-plugin)
+* [How to Create Custom User Role in Frontend Dashboard](https://buffercode.com/post/how-to-create-custom-user-role-in-frontend-dashboard-wordpress-plugin)
+* [How to create a page for Users, based on their User Role](https://buffercode.com/post/how-to-create-a-page-for-users-based-on-their-user-role)
+* [How new user can select user role on registration](https://buffercode.com/post/how-new-user-can-select-user-role-on-registration)
+* [How to customise the layout colours in Frontend Dashboard](https://buffercode.com/post/how-to-customise-the-layout-colours-in-frontend-dashboard)
+* [How to manage post options in Frontend Dashboard](https://buffercode.com/post/how-to-manage-post-options-in-frontend-dashboard)
+* [How to create custom menu in Frontend Dashboard](https://buffercode.com/post/how-to-create-custom-menu-in-frontend-dashboard)
+
+For more video : [Frontend Dashboard](https://buffercode.com/category/name/frontend-dashboard)
+
 
 ### Installation
 1. Upload the “frontend-dashboard” directory to the plugins directory.
@@ -82,6 +104,66 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 6. [fed_user role=user_role] to generate the role based user page
 
 ### Changelog
+
+**1.2.9 [16-January-2018]**
+
+* Bug: Support to Template and Custom Post
+
+**1.2.8 [12-January-2018]**
+
+* Bug: Post field not able to delete
+
+**1.2.7.5 [28-December-2017]**
+
+* Bug: Dashboard redirect after wp admin restrict.
+* Bug: Minor bug fixes
+
+**1.2.7.2 [27-December-2017]**
+
+* More translation strings added
+* Bug fixes.
+
+**1.2.6 [23-December-2017]**
+
+* New: .POT Language file added
+* New:  Translation added for Hebrew - Thanks to @Ronena100
+* Removed: Now Minimum WordPress version required is 4.6 and above
+
+**1.2.4 [22-December-2017]**
+
+* Bug: Reset password not working
+
+**1.2.3 [20-December-2017]**
+
+* Bug: No proper redirect for Restrict WP Admin Area
+* Bug: fixed and enhanced supportive plugins.
+
+**1.2.2 [16-December-2017]**
+* Add Register and Forgot password link for login only page
+* Added Login link for Register page
+
+**1.2.1 [08-December-2017]**
+* Bug: Fixed on post meta error if no custom post meta added
+
+**1.2 [06-December-2017]**
+* Completely changed the frontend dashboard from AJAX request to normal page reload request.
+
+**1.1.5.2**
+* Bug: Collapse menu not working properly
+
+**1.1.5.1**
+* Bug: Improper styling
+
+**1.1.5**
+* Bug: Updated admin footer text shown in all plugin page.
+* Bug: WP Admin area restriction block ajax request.
+* Enhanced: Frontend Dashboard for mobile view.
+* Enhanced: Code refactored
+
+**v1.1.4.9 [16-November-2017]**
+* Support 4.9
+* Bug: File loading problem
+
 **v1.1.4.8.1 [15-November-2017]**
 * New: Restrict user role(s) to access the WP Admin area.
 * Bug: Missing file fixed
