@@ -1548,7 +1548,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 																  action="<?php echo admin_url( 'admin-ajax.php?action=fed_user_profile_delete' ) ?>">
 																<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ) ?>
 																<input type="hidden"
-																	   name="profile_id"
+																	   name="post_id"
 																	   value="<?php echo $profile['id'] ?>">
 
 																<input type="hidden"

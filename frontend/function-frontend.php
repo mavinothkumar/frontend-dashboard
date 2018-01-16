@@ -268,7 +268,8 @@ function fed_get_wp_editor( $content = '', $id, array $options ) {
 function fed_get_dashboard_display_categories( $post = '', $cpt = '' ) {
 	$categories         = array();
 	$fed_get_categories = get_terms( array(
-		'taxonomy' => $cpt->name
+		'taxonomy' => $cpt->name,
+		'hide_empty' => false,
 	) );
 	if ( isset( $post->ID ) ) {
 		$categories = wp_get_post_terms( $post->ID, $cpt->name, array( 'fields' => 'ids' ) );
@@ -285,7 +286,8 @@ function fed_get_dashboard_display_categories( $post = '', $cpt = '' ) {
 function fed_get_dashboard_display_tags( $post = '', $cpt = '' ) {
 	$tags         = array();
 	$fed_get_tags = get_terms( array(
-		'taxonomy' => $cpt->name
+		'taxonomy' => $cpt->name,
+		'hide_empty' => false,
 	) );
 	if ( isset( $post->ID ) ) {
 		$tags = wp_get_post_terms( $post->ID, $cpt->name, array( 'fields' => 'slugs' ) );

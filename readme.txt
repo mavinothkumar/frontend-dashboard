@@ -4,7 +4,7 @@ Tags: dashboard, frontend dashboard, custom login, custom register, custom roles
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7DHAEMST475BY
 Requires at least: 4.6
 Tested up to: 4.9.1
-Stable tag: 1.2.7.5
+Stable tag: 1.2.9
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -202,6 +202,14 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 6. [fed_user role=user_role] to generate the role based user page
 
 == Changelog ==
+
+= 1.2.9 [16-January-2018] =
+
+* Bug: Support to Template and Custom Post
+
+= 1.2.8 [12-January-2018] =
+
+* Bug: Post field not able to delete
 
 = 1.2.7.5 [28-December-2017] =
 
