@@ -83,7 +83,7 @@ function fed_display_dashboard_profile( $menu_item ) {
 						}
 						?>
 						<div class="row text-center">
-							<button class="btn btn-primary">
+							<button type="submit" class="btn btn-primary">
 								<i class="fa fa-floppy-o"></i>
 								<?php _e( 'Save', 'frontend-dashboard' ) ?>
 							</button>

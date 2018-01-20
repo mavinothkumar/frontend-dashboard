@@ -3,8 +3,8 @@ Contributors: vinoth06, buffercode
 Tags: dashboard, frontend dashboard, custom login, custom register, custom roles, custom profile, custom post type, custom taxonomies, custom dashboard
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7DHAEMST475BY
 Requires at least: 4.6
-Tested up to: 4.9.1
-Stable tag: 1.2.9
+Tested up to: 4.9.2
+Stable tag: 1.2.9.1
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -202,6 +202,10 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 6. [fed_user role=user_role] to generate the role based user page
 
 == Changelog ==
+
+= 1.2.9.1 [20-January-2018] =
+
+* Bug: Frontend Dashboard menu not loading proper items.
 
 = 1.2.9 [16-January-2018] =
 

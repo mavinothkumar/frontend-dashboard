@@ -16,6 +16,7 @@ if ( ! class_exists( 'FED_Routes' ) ) {
 		}
 
 		public function getDashboardContent( $menu ) {
+
 			if ( $menu['menu_request']['menu_type'] === 'user' ) {
 				fed_display_dashboard_profile( $menu['menu_request'] );
 			}
@@ -40,7 +41,7 @@ if ( ! class_exists( 'FED_Routes' ) ) {
 				$menu_items = array(
 					'menu_request' => array(
 						'menu_type' => $menu[ $first_element ]['menu_type'],
-						'menu_slug' => $menu[ $first_element ]['menu_slug'],
+						'menu_slug' => $first_element,
 						'fed_nonce' => wp_create_nonce( 'fed_nonce' )
 					)
 				);

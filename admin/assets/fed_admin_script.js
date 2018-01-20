@@ -246,6 +246,9 @@ jQuery(document).ready(function ($) {
             case 'color':
                 closest.find('.fed_input_color_container').removeClass('hide');
                 break;
+            case 'wysiwyg':
+                closest.find('.fed_input_wysiwyg_container').removeClass('hide');
+                break;
 
 
         }

@@ -246,7 +246,7 @@ function fed_input_mandatory_required_fields() {
  *
  * @return string
  */
-function fed_get_wp_editor( $content = '', $id, array $options ) {
+function fed_get_wp_editor( $content = '', $id, array $options = array() ) {
 	ob_start();
 
 	wp_editor( $content, $id, $options );
