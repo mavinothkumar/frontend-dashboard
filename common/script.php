@@ -12,7 +12,7 @@ add_action( 'wp_enqueue_scripts', 'fed_script_front_end', 99 );
  */
 function fed_script_admin( $hook ) {
 	
-	if ( ($hook === 'post.php' || $hook === 'post-new.php' || $hook === 'profile.php') || (isset( $_GET['page'] ) && in_array( $_GET['page'], fed_get_script_loading_pages(),false ) )) {
+	if ( ($hook === 'post.php' || $hook=== 'user-edit.php' || $hook === 'post-new.php' || $hook === 'profile.php') || (isset( $_GET['page'] ) && in_array( $_GET['page'], fed_get_script_loading_pages(),false ) )) {
 
 		wp_enqueue_script( 'jquery' );
 

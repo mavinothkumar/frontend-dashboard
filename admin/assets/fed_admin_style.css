@@ -467,6 +467,10 @@ Upload Image
     display: none;
 }
 
+.bc_fed.fed_profile_table td, .bc_fed.fed_profile_table th {
+    padding: 20px !important;
+}
+
 .bc_fed .flex-center {
     display: flex;
     justify-content: center;

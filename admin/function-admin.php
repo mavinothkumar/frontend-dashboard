@@ -179,40 +179,40 @@ function fed_get_input_details( $attr ) {
 			break;
 
 		case 'hidden':
-			$input .= '<input ' . $values['disabled'] . ' ' . $values['extra']. ' ' . $values['id'] . ' ' . $values['readonly'] . ' ' . $values['required'] . ' type="hidden" name="' . $values['name'] . '"  value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '">';
+			$input .= '<input ' . $values['disabled'] . ' ' . $values['extra'] . ' ' . $values['id'] . ' ' . $values['readonly'] . ' ' . $values['required'] . ' type="hidden" name="' . $values['name'] . '"  value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '">';
 			break;
 
 		case 'email':
-			$input .= '<input ' . $values['disabled'] . ' ' . $values['extra']. ' ' . $values['id'] . ' ' . $values['readonly'] . ' ' . $values['required'] . ' type="email" name="' . $values['name'] . '"   value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '">';
+			$input .= '<input ' . $values['disabled'] . ' ' . $values['extra'] . ' ' . $values['id'] . ' ' . $values['readonly'] . ' ' . $values['required'] . ' type="email" name="' . $values['name'] . '"   value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '">';
 			break;
 
 		case 'password':
-			$input .= '<input ' . $values['disabled'] . ' ' . $values['extra']. ' ' . $values['id'] . ' ' . $values['required'] . ' type="password"
+			$input .= '<input ' . $values['disabled'] . ' ' . $values['extra'] . ' ' . $values['id'] . ' ' . $values['required'] . ' type="password"
 			name="' . $values['name'] . '"    class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '">';
 			break;
 
 
 		case 'url':
-			$input .= '<input ' . $values['disabled'] . ' ' . $values['extra']. ' ' . $values['id'] . ' ' . $values['required'] . ' type="url"  placeholder="' . $values['placeholder'] . '"  name="' . $values['name'] . '"    class="' . $values['class'] . '" value="' . esc_attr( $values['value'] ) . '" >';
+			$input .= '<input ' . $values['disabled'] . ' ' . $values['extra'] . ' ' . $values['id'] . ' ' . $values['required'] . ' type="url"  placeholder="' . $values['placeholder'] . '"  name="' . $values['name'] . '"    class="' . $values['class'] . '" value="' . esc_attr( $values['value'] ) . '" >';
 			break;
 
 		case 'multi_line':
 			$rows = isset( $attr['rows'] ) ? absint( $attr['rows'] ) : 4;
 
-			$input .= '<textarea ' . $values['disabled']. ' ' . $values['id'] . ' ' . $values['extra'] . ' name="' . $values['name'] . '"   rows="' . $rows . '"
+			$input .= '<textarea ' . $values['disabled'] . ' ' . $values['id'] . ' ' . $values['extra'] . ' name="' . $values['name'] . '"   rows="' . $rows . '"
 			          class="' . $values['class'] . '" placeholder="' . $values['placeholder'] . '">' . esc_textarea( $values['value'] ) . '</textarea>';
 			break;
 
 		case 'checkbox':
 			$values['class'] = $values['class'] == 'form-control' ? '' : $values['class'];
 			$input           .= '<label class="' . $values['class'] . '">
-			<input ' . $values['disabled'] . ' ' . $values['extra']. ' ' . $values['id'] . ' ' . $values['required'] . '  name="' . $values['name'] . '"  value="' . $values['default_value'] . '" type="checkbox" ' . checked( $values['value'], $values['default_value'], false ) . '> ' . $label . '</label>';
+			<input ' . $values['disabled'] . ' ' . $values['extra'] . ' ' . $values['id'] . ' ' . $values['required'] . '  name="' . $values['name'] . '"  value="' . $values['default_value'] . '" type="checkbox" ' . checked( $values['value'], $values['default_value'], false ) . '> ' . $label . '</label>';
 
 			break;
 
 		case 'select':
 			$options = fed_get_select_option_value( $attr['input_value'] );
-			$input   .= '<select ' . $values['disabled']. ' ' . $values['id'] . ' ' . $values['extra'] . ' name="' . $values['name'] . '"  class="' . $values['class'] . '">';
+			$input   .= '<select ' . $values['disabled'] . ' ' . $values['id'] . ' ' . $values['extra'] . ' name="' . $values['name'] . '"  class="' . $values['class'] . '">';
 			foreach ( $options as $key => $label ) {
 				$input .= '<option
 						value="' . esc_attr( $key ) . '" ' . selected( $values['value'], $key, false ) . '>' . $label . '</option>';
@@ -225,7 +225,7 @@ function fed_get_input_details( $attr ) {
 			$max  = isset( $attr['input_max'] ) ? $attr['input_max'] : 99999999999999999999999999999999999999999999999999;
 			$step = isset( $attr['input_step'] ) ? $attr['input_step'] : 'any';
 
-			$input .= '<input ' . $values['disabled']. ' ' . $values['id'] . ' ' . $values['readonly'] . ' ' . $values['extra'] . ' ' .$values['required'] . ' type="number" name="' . $values['name'] . '" 
+			$input .= '<input ' . $values['disabled'] . ' ' . $values['id'] . ' ' . $values['readonly'] . ' ' . $values['extra'] . ' ' . $values['required'] . ' type="number" name="' . $values['name'] . '" 
 			                                value="' . esc_attr( $values['value'] ) . '" class="' . $values['class'] . '"
 			                                placeholder="' . $values['placeholder'] . '"
 			                                min="' . esc_attr( $min ) . '"
@@ -524,7 +524,7 @@ function get_custom_post_type_archive_template( $single_template ) {
 	global $post;
 
 	if ( $post->post_type === 'post' && is_author() ) {
-		$single_template = BC_FED_PLUGIN_DIR . '/templates/author.php';
+		$single_template = apply_filters( 'fed_change_author_frontend_page', BC_FED_PLUGIN_DIR ) . '/templates/author.php';
 
 	}
 

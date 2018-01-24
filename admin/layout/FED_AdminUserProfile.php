@@ -18,7 +18,7 @@ if ( ! class_exists( 'FED_AdminUserProfile' ) ) {
 		 */
 		public function fed_show_user_profile( $user ) { ?>
 			<h3><?php _e( 'Frontend Dashboard', 'frontend-dashboard' ) ?></h3>
-			<table class="form-table">
+			<table class="form-table bc_fed fed_profile_table">
 				<?php
 				$fields = fed_fetch_user_profile_extra_fields();
 				if ( null === $fields || false === $fields ) {

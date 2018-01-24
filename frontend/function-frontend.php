@@ -180,7 +180,7 @@ function fed_process_author_details( $user, array $single_item ) {
 	if ( $single_item['input_type'] === 'color' ) {
 		return fed_input_box( $single_item['input_meta'], array(
 			'value'    => $user->get( $single_item['input_meta'] ),
-			'readonly' => true
+			'disabled' => true
 		), 'color' );
 	}
 

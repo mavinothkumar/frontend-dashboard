@@ -4,7 +4,7 @@ Tags: dashboard, frontend dashboard, custom login, custom register, custom roles
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7DHAEMST475BY
 Requires at least: 4.6
 Tested up to: 4.9.2
-Stable tag: 1.2.9.1
+Stable tag: 1.2.9.2
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -203,6 +203,10 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Changelog ==
 
+= 1.2.9.2 [24-January-2018] =
+
+* Bug: Admin profile not showing properly
+
 = 1.2.9.1 [20-January-2018] =
 
 * Bug: Frontend Dashboard menu not loading proper items.
@@ -337,11 +341,9 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 * Public release
 
 == Upgrade Notice ==
-= 1.2.5 [23-December-2017] =
+= 1.2.9.2 [24-January-2018] =
 
-* New: .POT Language file added
-* New:  Translation added for Hebrew - Thanks to @Ronena100
-* Removed: Now Minimum WordPress version required is 4.6 and above
+* Bug: Admin profile not showing properly
 
 == Screenshots ==
 1. Frontend Dashboard Settings | Login | Settings

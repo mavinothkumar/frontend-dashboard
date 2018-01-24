@@ -1,6 +1,6 @@
 <?php
 /**
- * Dashboard Page
+ * Author Page
  *
  * @package frontend-dashboard
  */
