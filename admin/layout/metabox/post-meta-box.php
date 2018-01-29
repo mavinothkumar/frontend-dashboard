@@ -8,7 +8,7 @@ add_action( 'admin_init', 'fed_add_meta_boxes', 1 );
  * Add Post Meta Boxes
  */
 function fed_add_meta_boxes() {
-	add_meta_box( 'fed_meta_boxes', esc_html__( 'Front-end Dashboard Custom Fields','frontend-dashboard' ), 'fed_add_meta_boxes_display', array_keys( fed_get_public_post_types() ), 'normal', 'high' );
+	add_meta_box( 'fed_meta_boxes', esc_html__( 'Frontend Dashboard Custom Fields', 'frontend-dashboard' ), 'fed_add_meta_boxes_display', array_keys( fed_get_public_post_types() ), 'normal', 'high' );
 }
 
 /**
@@ -20,10 +20,14 @@ function fed_add_meta_boxes_display() {
 	$extra_fields = fed_fetch_table_rows_with_key( BC_FED_POST_DB, 'input_meta' );
 	global $post;
 	$post_meta = fed_get_all_post_meta_key( $post->ID );
+//	bcdump( $post_meta);
 	?>
 	<div class="bc_fed">
 		<?php
 		foreach ( $extra_fields as $item ) {
+//			var_dump($item);
+//			var_dump($post_meta);
+
 			$temp               = $item;
 			$temp['user_value'] = isset( $post_meta[ $item['input_meta'] ] ) ? $post_meta[ $item['input_meta'] ]['meta_value'] : '';
 			$temp['input_meta'] = 'fed_meta[' . $item['input_meta'] . ']';
@@ -64,23 +68,42 @@ function fed_save_meta_boxes_display( $post_id, $post ) {
 	 * Get all post meta key
 	 */
 	$post_meta = fed_fetch_table_rows_with_key( BC_FED_POST_DB, 'input_meta' );
-
 	/**
 	 * Check with post meta to save the meta
 	 */
-	if ( isset( $_POST['fed_meta'] ) ) {
-		foreach ( $_POST['fed_meta'] as $key => $meta ) {
-			if ( array_key_exists( $key, $post_meta ) ) {
-				$meta_value = isset( $_POST['fed_meta'][ $key ] ) ? esc_attr( $_POST['fed_meta'][ $key ] ) : '';
-				update_post_meta( $post_id, $key, $meta_value );
+//	if ( isset( $_POST['fed_meta'] ) ) {
+	if ( count( $post_meta ) > 0 ) {
+		foreach ( $post_meta as $index => $extra ) {
+			if ( isset( $_POST['fed_meta'] ) ) {
+				if ( array_key_exists( $index, $_POST['fed_meta'] ) ) {
+					$meta_value = isset( $_POST['fed_meta'][ $index ] ) ? sanitize_text_field( $_POST['fed_meta'][ $index ] ) : '';
+					update_post_meta( $post_id, $index, $meta_value );
+				} else {
+					/**
+					 * Delete the unwanted post metas
+					 */
+					delete_post_meta( $post_id, $index );
+				}
 			} else {
-				/**
-				 * Delete the unwanted post metas
-				 */
-				delete_post_meta( $post_id, $key );
+				delete_post_meta( $post_id, $index );
 			}
 		}
 	}
+//	}
+//			$default['meta_input'][ $index ] = isset( $post[ $index ] ) ? sanitize_text_field( $post[ $index ] ) : '';
+//		}
+//
+//		foreach ( $_POST['fed_meta'] as $key => $meta ) {
+//			if ( array_key_exists( $key, $post_meta ) ) {
+//				$meta_value = isset( $_POST['fed_meta'][ $key ] ) ? esc_attr( $_POST['fed_meta'][ $key ] ) : '';
+//				update_post_meta( $post_id, $key, $meta_value );
+//			} else {
+//				/**
+//				 * Delete the unwanted post metas
+//				 */
+//				delete_post_meta( $post_id, $key );
+//			}
+//		}
 }
 
 /**

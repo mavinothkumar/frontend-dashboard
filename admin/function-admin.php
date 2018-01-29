@@ -521,9 +521,7 @@ function fed_no_update_fields() {
  * @return string
  */
 function get_custom_post_type_archive_template( $single_template ) {
-	global $post;
-
-	if ( $post->post_type === 'post' && is_author() ) {
+	if ( isset($_GET['fed_user_profile']) || is_author() ) {
 		$single_template = apply_filters( 'fed_change_author_frontend_page', BC_FED_PLUGIN_DIR ) . '/templates/author.php';
 
 	}

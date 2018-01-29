@@ -4,7 +4,7 @@ Tags: dashboard, frontend dashboard, custom login, custom register, custom roles
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7DHAEMST475BY
 Requires at least: 4.6
 Tested up to: 4.9.2
-Stable tag: 1.2.9.2
+Stable tag: 1.2.10
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -203,6 +203,14 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Changelog ==
 
+= 1.2.10 [29-January-2018] =
+
+* Bug fixes for multiple user in single page on Shortcode.
+
+= 1.2.9.3 [25-January-2018] =
+
+* Bug: Post section checkbox not saving.
+
 = 1.2.9.2 [24-January-2018] =
 
 * Bug: Admin profile not showing properly
@@ -341,9 +349,9 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 * Public release
 
 == Upgrade Notice ==
-= 1.2.9.2 [24-January-2018] =
+= 1.2.10 [29-January-2018] =
 
-* Bug: Admin profile not showing properly
+* Bug fixes for multiple user in single page on Shortcode.
 
 == Screenshots ==
 1. Frontend Dashboard Settings | Login | Settings

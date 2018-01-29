@@ -268,7 +268,7 @@ function fed_get_wp_editor( $content = '', $id, array $options = array() ) {
 function fed_get_dashboard_display_categories( $post = '', $cpt = '' ) {
 	$categories         = array();
 	$fed_get_categories = get_terms( array(
-		'taxonomy' => $cpt->name,
+		'taxonomy'   => $cpt->name,
 		'hide_empty' => false,
 	) );
 	if ( isset( $post->ID ) ) {
@@ -286,7 +286,7 @@ function fed_get_dashboard_display_categories( $post = '', $cpt = '' ) {
 function fed_get_dashboard_display_tags( $post = '', $cpt = '' ) {
 	$tags         = array();
 	$fed_get_tags = get_terms( array(
-		'taxonomy' => $cpt->name,
+		'taxonomy'   => $cpt->name,
 		'hide_empty' => false,
 	) );
 	if ( isset( $post->ID ) ) {
@@ -520,7 +520,7 @@ function fed_show_users_by_role( $fed_user_attr ) {
 								</div>
 								<div class="panel-footer bg-primary">
 									<h3 class="panel-title">
-										<a target="_blank" href="<?php echo $current_url . '?user=' . absint( $get_all_user->ID ); ?>">
+										<a target="_blank" href="<?php echo get_permalink() . '?fed_user_profile=' . $get_all_user->ID; ?>">
 											<?php echo $name; ?>
 										</a>
 									</h3>
@@ -711,7 +711,7 @@ function fed_show_user_profile_page( $user ) {
 		</div>
 		<div class="row fed_user_posts_container">
 			<div class="col-md-12">
-				<h2><?php _e( 'Recent Post by', 'frontend-dashboard' ) ?> <?php echo $user->get( 'display_name' ) ?></h2>
+				<h2><?php _e( 'Recent Post by', 'frontend-dashboard' ) ?><?php echo $user->get( 'display_name' ) ?></h2>
 			</div>
 			<div class="col-md-8 fed_posts">
 				<?php
