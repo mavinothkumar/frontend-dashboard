@@ -349,7 +349,7 @@ jQuery(document).ready(function ($) {
                 button_click.find('.fed_upload_icon').addClass('hide');
                 button_click.find('.fed_upload_input').val(attachment.id);
 
-                if ((attachment.mime).indexOf('image') > -1 ){
+                if ((attachment.mime).indexOf('image') > -1) {
                     button_click.find('.fed_upload_image_container').html("<img width=100 height=100 src=" + attachment.url + ">");
                 } else {
                     button_click.find('.fed_upload_image_container').html("<img width=100 height=100 src=" + attachment.icon + ">");
@@ -443,6 +443,7 @@ jQuery(document).ready(function ($) {
             },
             userProfileSave: function (results) {
                 var error;
+                // console.log(results);
                 if (results.success) {
                     swal({
                         title: results.data.message || 'Something Went Wrong',
@@ -464,7 +465,6 @@ jQuery(document).ready(function ($) {
                         type: "error",
                         text: '',
                         confirmButtonColor: "#DD6B55"
-
                     });
                 }
                 else {

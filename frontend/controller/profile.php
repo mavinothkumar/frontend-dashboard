@@ -24,8 +24,7 @@ function fed_display_dashboard_profile( $menu_item ) {
 	$profiles = fed_process_dashboard_display_profile( $menu_item['menu_slug'] );
 	$user     = get_userdata( get_current_user_id() );
 	$menus    = fed_process_dashboard_display_menu();
-	//bcdump( $profiles );
-	
+
 	$index             = $menu_item['menu_slug'];
 	$menu_title        = ucwords( __( $menus[ $index ]['menu'], 'frontend-dashboard' ) );
 	$menu_title_value  = apply_filters( 'fed_menu_title', $menu_title, $menus, $index );
@@ -35,17 +34,17 @@ function fed_display_dashboard_profile( $menu_item ) {
 		<div class="panel-heading">
 			<h3 class="panel-title">
 				<span class="<?php echo $menus[ $index ]['menu_image_id'] ?>"></span>
-				<?php esc_attr_e( $menus[ $index ]['menu'], 'frontend-dashboard') ?>
+				<?php esc_attr_e( $menus[ $index ]['menu'], 'frontend-dashboard' ) ?>
 			</h3>
 		</div>
 		<div class="panel-body">
 			<?php
 			if ( $menu_default_page ) {
 				if ( $profiles ) {
+					echo fed_show_alert( 'fed_profile_save_message' );
 					?>
 					<form method="post"
-						  class="fed_user_profile_save"
-						  action="<?php echo admin_url( 'admin-ajax.php?action=fed_user_profile_save' ) ?>">
+						  action="">
 						<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ) ?>
 						<input type="hidden"
 							   name="tab_id"

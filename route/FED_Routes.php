@@ -27,11 +27,6 @@ if ( ! class_exists( 'FED_Routes' ) ) {
 			do_action( 'fed_frontend_dashboard_menu_container', $this->request, $menu );
 		}
 
-		private function validateNonce( $menu ) {
-			fed_nonce_check( $menu );
-
-		}
-
 		public function setDashboardMenuQuery() {
 			$menu              = fed_get_all_dashboard_display_menus();
 			$first_element_key = array_keys( $menu );
@@ -50,7 +45,7 @@ if ( ! class_exists( 'FED_Routes' ) ) {
 					'menu_request' => array(
 						'menu_type' => $this->request['menu_type'],
 						'menu_slug' => $this->request['menu_slug'],
-						'fed_nonce' => $this->request['fed_nonce']
+						'fed_nonce' => wp_create_nonce( 'fed_nonce' )
 					)
 				);
 			}
@@ -60,7 +55,9 @@ if ( ! class_exists( 'FED_Routes' ) ) {
 			/**
 			 * Check for Nonce
 			 */
-			$this->validateNonce( $menu_items['menu_request'] );
+			if ( $this->validateNonce( $menu_items['menu_request'] ) instanceof WP_Error ) {
+				return $this->validateNonce( $menu_items['menu_request'] );
+			}
 
 			/**
 			 * Check the Menu type is valid
@@ -93,6 +90,17 @@ if ( ! class_exists( 'FED_Routes' ) ) {
 				'collapse',
 				'custom'
 			) );
+		}
+
+		private function validateNonce( $request ) {
+			if ( ! isset( $request['fed_nonce'] ) ) {
+				return new WP_Error( 'invalid_request', 'Invalid Request' );
+			}
+			if ( ! wp_verify_nonce( $request['fed_nonce'], 'fed_nonce' ) ) {
+				return new WP_Error( 'invalid_request', 'Invalid Request' );
+			}
+
+			return true;
 		}
 	}
 }

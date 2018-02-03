@@ -203,6 +203,10 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Changelog ==
 
+= 1.2.11 [03-Feb-2018] =
+
+* Bug fixes: Values not storing on custom field while registration
+
 = 1.2.10 [29-January-2018] =
 
 * Bug fixes for multiple user in single page on Shortcode.
@@ -349,9 +353,9 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 * Public release
 
 == Upgrade Notice ==
-= 1.2.10 [29-January-2018] =
+= 1.2.11 [03-Feb-2018] =
 
-* Bug fixes for multiple user in single page on Shortcode.
+* Bug fixes: Values not storing on custom field while registration
 
 == Screenshots ==
 1. Frontend Dashboard Settings | Login | Settings

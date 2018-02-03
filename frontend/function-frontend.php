@@ -62,6 +62,11 @@ function fed_get_current_page_url() {
 	return home_url( add_query_arg( array(), $wp->request ) );
 }
 
+function fed_current_page_url() {
+	global $wp;
+
+	return add_query_arg( $_SERVER['QUERY_STRING'], '', home_url( $wp->request ) );
+}
 
 /**
  * Get Registration content
@@ -93,7 +98,7 @@ function fed_get_registration_content_fields() {
 					'min'         => $detail['input_min'],
 					'max'         => $detail['input_max'],
 					'rows'        => $detail['input_row'],
-					'input_value' => $detail['input_value'],
+					'user_value' => $detail['input_value'],
 					'input_type'  => $detail['input_type'],
 				)
 			),
@@ -108,6 +113,29 @@ function fed_get_registration_content_fields() {
 			'input_order' => $fed_admin_login['register']['position']
 		);
 	}
+
+	/**
+	 * Hidden text to make sure its a registration form
+	 */
+	$registration[ 'fed_registration_form' ] = array(
+		'name'        => '',
+		'input'       => fed_get_input_details(
+			array(
+				'input_meta'  => 'fed_registration_form',
+				'placeholder' => '',
+				'class'       => '',
+				'id'          => '',
+				'is_required' => 'true',
+				'step'        => '',
+				'min'         => '',
+				'max'         => '',
+				'rows'        => '',
+				'user_value' => 'frf',
+				'input_type'  => 'hidden',
+			)
+		),
+		'input_order' => 9999
+	);
 
 	return $registration;
 
@@ -742,6 +770,7 @@ function fed_show_user_profile_page( $user ) {
 }
 
 function fed_get_403_error_page() {
+	$url = explode( '?', esc_url_raw( add_query_arg( array() ) ) );
 	?>
 	<div class="panel panel-primary fed_dashboard_item active">
 		<div class="panel-heading">
@@ -752,12 +781,32 @@ function fed_get_403_error_page() {
 		</div>
 		<div class="panel-body">
 			<h2><?php _e( 'Unauthorised Access', 'frontend-dashboard' ) ?></h2>
-			<a class="btn btn-primary" href="<?php echo fed_get_dashboard_url(); ?>"><?php _e( 'Click here to visit Dashboard', 'frontend-dashboard' ) ?></a>
+			<a class="btn btn-primary" href="<?php echo $url[0]; ?>"><?php _e( 'Click here to visit Dashboard', 'frontend-dashboard' ) ?></a>
 		</div>
 	</div>
 	<?php
 }
 
+function fed_set_alert( $key, $message ) {
+	set_transient( $key, $message, MINUTE_IN_SECONDS );
+}
+
+function fed_show_alert( $key ) {
+	$value = get_transient( $key );
+	$html  = '';
+	if ( $value ) {
+		if ( is_array( $value ) ) {
+			$value = $value[0];
+		}
+		$html .= '<div class="alert alert-success">
+							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+							<strong>' . $value . '</strong>
+						</div>';
+		delete_transient( $key );
+	}
+
+	return $html;
+}
 
 /**
  * Disabled for future release

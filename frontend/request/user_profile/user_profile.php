@@ -3,45 +3,36 @@
  * Save the User Profile data
  */
 
+add_action( 'template_redirect', 'fed_store_user_profile_save' );
 
-add_action( 'wp_ajax_fed_user_profile_save', 'fed_user_profile_save_fn' );
-add_action( 'wp_ajax_nopriv_fed_user_profile_save', 'fed_block_the_action' );
+function fed_store_user_profile_save() {
+	$post    = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	$message = 'Something Went Wrong';
+	if ( isset( $_REQUEST, $post['tab_id'] ) && $_REQUEST['menu_type'] === 'user' ) {
 
-function fed_user_profile_save_fn() {
+		fed_nonce_check( $post );
 
-	$post = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+		/**
+		 * TODO :
+		 * 1. check for mandatory fields - Done
+		 * 2. check for fed_no_update_fields
+		 * 3. collect the respect tab fields
+		 * 4. save the appropriate fields
+		 */
 
-	fed_nonce_check( $post);
+		$validation = fed_validate_user_profile_form( $post );
 
-	/**
-	 * TODO :
-	 * 1. check for mandatory fields - Done
-	 * 2. check for fed_no_update_fields
-	 * 3. collect the respect tab fields
-	 * 4. save the appropriate fields
-	 */
+		if ( $validation instanceof WP_Error ) {
+			$message = $validation->get_error_messages();
+		} else {
+			$user_data = fed_process_update_user_profile( $post );
 
-	$validation = fed_validate_user_profile_form( $post );
-
-	if ( $validation instanceof WP_Error ) {
-		wp_send_json_error( array( 'user' => $validation->get_error_messages() ) );
-		exit();
+			if ( wp_update_user( $user_data ) ) {
+				$message = 'Successfully Updated';
+			}
+		}
+		fed_set_alert('fed_profile_save_message',$message);
 	}
-
-	$user_data = fed_process_update_user_profile( $post );
-
-	$status = wp_update_user( $user_data );
-
-	if ( $status instanceof WP_Error ) {
-		wp_send_json_error( array( 'user' => $status->get_error_messages() ) );
-		exit();
-	}
-
-	wp_send_json_success( array(
-		'user'    => $status,
-		'message' => 'Successfully Updated'
-	) );
-
 }
 
 function fed_block_the_action() {
