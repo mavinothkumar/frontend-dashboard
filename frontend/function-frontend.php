@@ -658,7 +658,7 @@ function fed_show_user_profile_page( $user ) {
 			</div>
 			<div class="col-md-9 fed_dashboard_container">
 				<div class="row fed_dashboard_wrapper">
-					<div class="col-md-12 fed_dashboard_menus">
+					<div class="col-md-12 fed_dashboard_menus fed_collapse">
 						<ul class="nav nav-pills nav-justified list-group ">
 							<?php
 							$first = true;

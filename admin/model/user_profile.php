@@ -122,6 +122,11 @@ function fed_fetch_user_profile_by_dashboard() {
 	return $results;
 }
 
+/**
+ * @param string $menu_slug
+ *
+ * @return array|bool|null|object
+ */
 function fed_fetch_user_profile_by_menu_slug($menu_slug = '') {
 	global $wpdb;
 	$table_name = $wpdb->prefix . BC_FED_USER_PROFILE_DB;
@@ -220,6 +225,11 @@ function fed_role_with_pricing( $fed_admin_login = '' ) {
 	return $new_array;
 }
 
+/**
+ * @param string $fed_admin_login
+ *
+ * @return array
+ */
 function fed_role_with_pricing_flat( $fed_admin_login = '' ) {
 	if ( $fed_admin_login === '' ) {
 		$fed_admin_login = get_option( 'fed_admin_login' );
@@ -244,6 +254,11 @@ function fed_role_with_pricing_flat( $fed_admin_login = '' ) {
 	return $new_array;
 }
 
+/**
+ * @param $value
+ *
+ * @return array
+ */
 function fed_fetch_user_profile_columns($value ) {
 	global $wpdb;
 	$table_name = $wpdb->prefix . BC_FED_USER_PROFILE_DB;

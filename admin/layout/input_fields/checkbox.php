@@ -1,5 +1,5 @@
 <?php
-function fed_admin_input_fields_checkbox( $row, $action ) {
+function fed_admin_input_fields_checkbox( $row, $action,$menu_options ) {
 	?>
 	<div class="row fed_input_type_container fed_input_checkbox_container hide">
 		<form method="post"
@@ -34,7 +34,7 @@ function fed_admin_input_fields_checkbox( $row, $action ) {
 							<?php
 							fed_get_admin_up_display_permission( $row, $action );
 
-							fed_get_admin_up_role_based( $row, $action );
+							fed_get_admin_up_role_based( $row, $action,$menu_options );
 
 							fed_get_input_type_and_submit_btn( 'checkbox', $action );
 							?>

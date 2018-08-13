@@ -75,9 +75,6 @@ function fed_admin_login_settings_tab( $fed_login_settings ) {
 					'class'            => 'form-control',
 					'echo'             => false,
 				) ),
-				'help_message' => fed_show_help_message( array(
-					'content' => 'Please add shortcode [fed_forgot_password_only] to this page'
-				) )
 			),
 			'Redirect After Logged in URL'  => array(
 				'col'   => 'col-md-6',

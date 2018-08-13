@@ -1,9 +1,11 @@
 jQuery(document).ready(function ($) {
     var bc_fed = $('.bc_fed');
+    var body = $('body');
+    var fed_menu_ajax = $('form.fed_menu_ajax');
     /**
      * Admin Page / User Profile Setting Save/Edit
      */
-    $('.fed_ajax').on('submit', function (e) {
+    body.on('submit', '.fed_ajax', function (e) {
         var form = $(this);
         fed_toggle_loader();
         $.ajax({
@@ -60,8 +62,6 @@ jQuery(document).ready(function ($) {
         e.preventDefault();
     });
 
-    var body = $('body');
-    var fed_menu_ajax = $('form.fed_menu_ajax');
 
     body.on('click', '.fed_upload_container', function (e) {
         var custom_uploader;
@@ -376,7 +376,7 @@ jQuery(document).ready(function ($) {
             success: function (results) {
                 //console.log(results);
                 fed_toggle_loader();
-                fedAdminAlert.adminOrderAdd(results);
+                fedAdminAlert.adminAlertSettings(results);
             }
 
         });
@@ -442,8 +442,9 @@ jQuery(document).ready(function ($) {
     /**
      * Single line executions
      */
-    $('[data-toggle="popover"]').popover({
-        trigger: 'hover'
+    body.popover({
+        selector: '[data-toggle="popover"]',
+        trigger: 'focus'
     });
     $(".flatpickr").flatpickr({});
 
@@ -470,11 +471,13 @@ jQuery(document).ready(function ($) {
 
     function fed_toggle_loader() {
         $('.preview-area').toggleClass('hide');
+        // $('body').toggleClass('fed_bg_gray');
     }
 });
 
 var fedAdminAlert = {
     adminSettings: function (results) {
+        console.log(results);
         if (results.success) {
             swal({
                 title: results.data.message || 'Something Went Wrong',
@@ -524,14 +527,15 @@ var fedAdminAlert = {
         }
 
     },
-    adminOrderAdd: function (results) {
+    adminAlertSettings: function (results) {
         if (results.success) {
             swal({
                 title: results.data.message || 'Something Went Wrong',
                 type: "success",
                 confirmButtonColor: '#0AAAAA'
             });
-        } else if (results.success === false) {
+        }
+        else if (results.success === false) {
             var error;
             if (results.data.message instanceof Array) {
                 error = results.data.message.join('</br>');
@@ -555,6 +559,15 @@ var fedAdminAlert = {
             });
         }
 
+    }
+};
+
+jQuery.fed_toggle_loader = function () {
+    $('.preview-area').toggleClass('hide');
+    if ($('.fed_loader_message').length) {
+        window.setTimeout(function () {
+            $('.fed_loader_message').toggleClass('hide');
+        }, 2000);
     }
 };
 

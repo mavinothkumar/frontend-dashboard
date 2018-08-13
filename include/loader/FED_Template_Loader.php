@@ -1,7 +1,10 @@
 <?php
 if ( ! class_exists( 'FED_Template_Loader' ) ) {
 
-	class FED_Template_Loader {
+    /**
+     * Class FED_Template_Loader
+     */
+    class FED_Template_Loader {
 		/**
 		 * Prefix for filter names.
 		 *

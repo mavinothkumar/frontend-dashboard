@@ -144,6 +144,12 @@ function fed_insert_new_row( $table, $data ) {
 	);
 }
 
+/**
+ * @param $table
+ * @param array $conditions
+ *
+ * @return array
+ */
 function fed_fetch_table_rows_by_key_value_column( $table, array $conditions ) {
 	global $wpdb;
 	$table_name = $wpdb->prefix . $table;

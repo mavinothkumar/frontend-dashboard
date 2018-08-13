@@ -84,11 +84,11 @@ function fed_get_post_pagination( $post_object, $menu ) {
 			}
 			?>
 			<li <?php echo $class; ?>>
-				<a href="<?php echo esc_url( site_url() . add_query_arg(
-						array(
-							'page_number' => $i
-						)
-					) ); ?>">
+				<a href="<?php echo esc_url( add_query_arg(
+					array(
+						'page_number' => $i
+					)
+				), site_url() ); ?>">
 					<span><?php echo $i; ?></span>
 				</a>
 			</li>
@@ -112,13 +112,13 @@ function fed_display_dashboard_add_new_post( $post_type ) {
 	?>
 	<div class="row">
 		<div class="col-md-5">
-			<a class="btn btn-primary" href="<?php echo esc_url( site_url() . add_query_arg(
-					array(
-						'menu_type' => $menu_item['menu_type'],
-						'menu_slug' => $menu_item['menu_slug'],
-						'fed_nonce' => wp_create_nonce( 'fed_nonce' )
-					)
-				) ); ?>">
+			<a class="btn btn-primary" href="<?php echo esc_url( add_query_arg(
+				array(
+					'menu_type' => $menu_item['menu_type'],
+					'menu_slug' => $menu_item['menu_slug'],
+					'fed_nonce' => wp_create_nonce( 'fed_nonce' )
+				)
+			), site_url() ); ?>">
 				<i class="fa fa-mail-reply"></i>
 				Back to <?php echo $menu; ?>
 			</a>
@@ -250,12 +250,12 @@ function fed_process_dashboard_add_new_post( $post ) {
 	 */
 	$fed_admin_options = fed_get_post_settings_by_type( $post['fed_post_type'] );
 
-	$user_role         = fed_get_current_user_role();
+	$user_role = fed_get_current_user_role();
 	if ( count( array_intersect( $user_role, array_keys( $fed_admin_options['permissions']['post_permission'] ) ) ) > 0 ) {
 		$extras      = fed_fetch_table_rows_with_key( BC_FED_POST_DB, 'input_meta' );
 		$post_status = isset( $fed_admin_options['settings']['fed_post_status'] ) ? sanitize_text_field( $fed_admin_options['settings']['fed_post_status'] ) : 'publish';
 
-		if ( $post['post_title'] == '' ) {
+		if ( empty( $post['post_title'] ) ) {
 			$error = new WP_Error( 'fed_dashboard_add_post_title_missing', __( 'Please fill post title', 'frontend-dashboard' ) );
 			wp_send_json_error( array( 'message' => $error->get_error_messages() ) );
 		}
@@ -275,7 +275,7 @@ function fed_process_dashboard_add_new_post( $post ) {
 		}
 
 		if ( isset( $post['_thumbnail_id'] ) ) {
-			$default['_thumbnail_id'] = $post['_thumbnail_id'] == '' ? -1 : (int) $post['_thumbnail_id'];
+			$default['_thumbnail_id'] = $post['_thumbnail_id'] == '' ? - 1 : (int) $post['_thumbnail_id'];
 		}
 
 //        if ( isset( $post['post_format'] ) ) {
@@ -295,7 +295,7 @@ function fed_process_dashboard_add_new_post( $post ) {
 			wp_send_json_error( $success->get_error_messages() );
 		}
 
-		wp_send_json_success( array( 'message' => $post['post_title'] . __( ' Successfully saved' , 'frontend-dashboard' ) ) );
+		wp_send_json_success( array( 'message' => $post['post_title'] . __( ' Successfully saved', 'frontend-dashboard' ) ) );
 	}
 	$error = new WP_Error( 'fed_action_not_allowed', __( 'Sorry! your are not allowed to do this action', 'frontend-dashboard' ) );
 

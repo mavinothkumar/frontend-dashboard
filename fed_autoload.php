@@ -119,3 +119,5 @@ require_once BC_FED_PLUGIN_DIR . '/config/config.php';
 require_once BC_FED_PLUGIN_DIR . '/route/FED_Routes.php';
 
 require_once BC_FED_PLUGIN_DIR . '/admin/hooks/FED_ActionHooks.php';
+
+require_once BC_FED_PLUGIN_DIR . '/log/FED_Log.php';

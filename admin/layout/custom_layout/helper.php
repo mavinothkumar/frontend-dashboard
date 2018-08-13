@@ -1,4 +1,7 @@
 <?php
+/**
+ * @param $form
+ */
 function fed_common_simple_layout( $form ) {
 	$form_method       = isset( $form['form']['method'] ) && ! empty( $form['form']['method'] ) ? esc_attr(
 		$form['form']['method'] ) :
@@ -17,6 +20,7 @@ function fed_common_simple_layout( $form ) {
 			$form['form']['nonce']['action'] ) : 'fed_nonce';
 	$form_nonce_name   = isset( $form['form']['nonce']['name'] ) && ! empty( $form['form']['nonce']['name'] ) ? esc_attr(
 		$form['form']['nonce']['name'] ) : 'fed_nonce';
+
 	if ( isset( $form['form']['action'] ) && is_array( $form['form']['action'] ) ) {
 		$url         = isset( $form['form']['action']['url'] ) && ! empty( $form['form']['action']['url'] ) ? esc_url( $form['form']['action']['url'] ) : admin_url(
 			'admin-ajax.php' );
@@ -105,5 +109,69 @@ function fed_common_simple_layout( $form ) {
 		echo isset( $form['note']['footer'] ) && ! empty( $form['note']['footer'] ) ? $form['note']['footer'] : '';
 		?>
 	</div>
+	<?php
+}
+
+
+/**
+ * @param $fed_admin_options
+ * @param $tabs
+ */
+function fed_common_layouts_admin_settings($fed_admin_options, $tabs){
+	?>
+    <div class="bc_fed row">
+        <div class="col-md-3 padd_top_20">
+            <ul class="nav nav-pills nav-stacked"
+                id="fed_admin_setting_user_profile_layout_tabs"
+                role="tablist">
+				<?php
+				$menu_count = 0;
+				foreach ( $tabs as $index => $tab ) {
+					$active = $menu_count === 0 ? 'active' : '';
+					$menu_count ++;
+					?>
+                    <li role="presentation"
+                        class="<?php echo $active; ?>">
+                        <a href="#<?php echo $index; ?>"
+                           aria-controls="<?php echo $index; ?>"
+                           role="tab"
+                           data-toggle="tab">
+                            <i class="<?php echo $tab['icon']; ?>"></i>
+							<?php echo $tab['name']; ?>
+                        </a>
+                    </li>
+				<?php } ?>
+            </ul>
+        </div>
+        <div class="col-md-9">
+            <!-- Tab panes -->
+            <div class="tab-content">
+				<?php
+				$content_count = 0;
+				foreach ( $tabs as $index => $tab ) {
+					$active = $content_count === 0 ? 'active' : '';
+					$content_count ++;
+					?>
+                    <div role="tabpanel"
+                         class="tab-pane <?php echo $active; ?>"
+                         id="<?php echo $index; ?>">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <span class="<?php echo $tab['icon']; ?>"></span>
+								<?php echo $tab['name']; ?>
+                            </div>
+                            <div class="panel-body">
+								<?php
+								fed_call_function_method($tab);
+//								call_user_func( $tab['callable'], $tab['arguments'] )
+								?>
+                            </div>
+                        </div>
+
+                    </div>
+				<?php } ?>
+            </div>
+        </div>
+    </div>
 	<?php
 }

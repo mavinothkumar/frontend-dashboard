@@ -50,13 +50,20 @@ function fed_input_box( $meta_key, $attr = array(), $type = 'text' ) {
  *
  * @return string
  */
-function fed_loader( $hide = 'hide' ) {
-	return '<div class="preview-area ' . $hide . '">
+function fed_loader( $hide = 'hide', $message = null ) {
+	$html = '<div class="preview-area ' . $hide . '">
         <div class="spinner_circle">
             <div class="double-bounce1"></div>
             <div class="double-bounce2"></div>
-        </div>
-    </div>';
+        </div>';
+
+	if ( $message ) {
+		$html .= '<div class="fed_loader_message hide">'.$message.'</div>';
+	}
+
+	$html .= '</div>';
+
+	return $html;
 }
 
 /**
@@ -84,22 +91,40 @@ function fed_sort_by_order( $a, $b ) {
  * @return int
  */
 function fed_sort_by_desc( $a, $b ) {
-	if ( isset( $a[ 'id' ], $b[ 'id' ] ) ) {
-		return (int) $b[ 'id' ] - (int) $a[ 'id' ];
+	if ( isset( $a['id'], $b['id'] ) ) {
+		return (int) $b['id'] - (int) $a['id'];
 	}
 
 	return 199;
 }
 
-function fed_wp_nonce_field( $action = -1, $name = "_wpnonce", $referer = true , $echo = true ) {
-	$name = esc_attr( $name );
+function fed_wp_nonce_field( $action = - 1, $name = "_wpnonce", $referer = true, $echo = true ) {
+	$name        = esc_attr( $name );
 	$nonce_field = '<input type="hidden" name="' . $name . '" value="' . wp_create_nonce( $action ) . '" />';
 
-	if ( $referer )
+	if ( $referer ) {
 		$nonce_field .= wp_referer_field( false );
+	}
 
-	if ( $echo )
+	if ( $echo ) {
 		echo $nonce_field;
+	}
 
 	return $nonce_field;
+}
+
+/**
+ * Generate Random String
+ * @param int $length
+ *
+ * @return string
+ */
+function fed_get_random_string($length = 10) {
+	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	$charactersLength = strlen($characters);
+	$randomString = '';
+	for ($i = 0; $i < $length; $i++) {
+		$randomString .= $characters[rand(0, $charactersLength - 1)];
+	}
+	return $randomString;
 }

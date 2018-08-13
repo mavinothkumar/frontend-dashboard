@@ -433,7 +433,7 @@ function fed_admin_notice() {
 	}
 }
 
-add_action( 'all_admin_notices', 'fed_admin_notice' );
+//add_action( 'all_admin_notices', 'fed_admin_notice' );
 
 
 function get_plugin_list() {

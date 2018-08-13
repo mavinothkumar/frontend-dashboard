@@ -1,8 +1,13 @@
 <?php
 
 if ( ! class_exists( 'FED_ActionHooks' ) ) {
-
+	/**
+	 * Class FED_ActionHooks
+	 */
 	class FED_ActionHooks {
+		/**
+		 * FED_ActionHooks constructor.
+		 */
 		public function __construct() {
 			add_action( 'admin_bar_menu', array( $this, 'fed_admin_bar_menu' ) );
 			add_action( 'init', array( $this, 'fed_load_text_domain' ) );
@@ -12,17 +17,23 @@ if ( ! class_exists( 'FED_ActionHooks' ) ) {
 			add_action( 'admin_footer_text', array( $this, 'fed_update_footer' ) );
 			add_action( 'plugin_action_links_' . BC_FED_PLUGIN_BASENAME, array(
 				$this,
-				'fed_plugin_action_links'
+				'fed_plugin_action_links',
 			), 10, 2 );
 		}
 
-		public function fed_load_text_domain(  ) {
+		/**
+		 * Loading Text Domain
+		 */
+		public function fed_load_text_domain() {
 			load_plugin_textdomain( 'frontend-dashboard', false, BC_FED_PLUGIN_NAME . '/languages' );
 		}
 
+		/**
+		 * Adding inline Css at Head
+		 */
 		public function fed_add_inline_css_at_head_color() {
 			$fed_colors = get_option( 'fed_admin_setting_upl_color' );
-			if ( $fed_colors !== false ) {
+			if ( false !== $fed_colors ) {
 				$pbg_color      = $fed_colors['color']['fed_upl_color_bg_color'];
 				$pbg_font_color = $fed_colors['color']['fed_upl_color_bg_font_color'];
 				$sbg_color      = $fed_colors['color']['fed_upl_color_sbg_color'];
@@ -110,6 +121,11 @@ if ( ! class_exists( 'FED_ActionHooks' ) ) {
 			}
 		}
 
+		/**
+		 * @param $text
+		 *
+		 * @return string
+		 */
 		public function fed_update_footer( $text ) {
 			if ( isset( $_GET['page'] ) && in_array( $_GET['page'], fed_get_script_loading_pages(), true ) ) {
 				$text = '<span id="footer-thankyou">If you like <strong>Frontend Dashboard (v' . BC_FED_PLUGIN_VERSION . ')</strong>, Please leave us a rating <a 
@@ -125,6 +141,9 @@ href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#
 			return $text;
 		}
 
+		/**
+		 * @param $wp_admin_bar
+		 */
 		public function fed_admin_bar_menu( $wp_admin_bar ) {
 			$dashboard_url = fed_get_dashboard_url();
 			if ( $dashboard_url ) {
@@ -139,6 +158,9 @@ href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#
 			}
 		}
 
+		/**
+		 *
+		 */
 		public function fed_wp_before_admin_bar_render() {
 			global $wp_admin_bar;
 			$dashboard_url = fed_get_dashboard_url();
@@ -146,20 +168,31 @@ href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#
 				$frontend_dashboard = array(
 					'parent' => false,
 					'id'     => 'frontend-dashboard-main',
-					'title'  => __( '<img class="ab-icon" src="' . plugins_url( 'common/assets/images/d.png', BC_FED_PLUGIN ) . '" /> <span class="ab-label">Frontend Dashboard</span>', 'frontend-dashboard' ),
+					'title'  => __( '<img class="ab-icon" src="' . plugins_url( 'common/assets/images/d.png',
+							BC_FED_PLUGIN ) . '" /> <span class="ab-label">Frontend Dashboard</span>',
+						'frontend-dashboard' ),
 					'href'   => $dashboard_url
 				);
 				$wp_admin_bar->add_menu( $frontend_dashboard );
 			}
 		}
 
+		/**
+		 * @param $links
+		 * @param $file
+		 *
+		 * @return array
+		 */
 		public function fed_plugin_row_meta( $links, $file ) {
 			if ( BC_FED_PLUGIN_BASENAME == $file ) {
 				$row_meta = array(
-					'docs/videos' => '<a href="' . esc_url( 'https://buffercode.com/category/name/frontend-dashboard' ) . '">' . esc_html__( 'Docs/Videos', 'frontend-dashboard' ) . '</a>',
-					'donation'    => '<a href="' . esc_url( 'https://www.paypal.me/buffercode' ) . '">' . esc_html__( 'Donation', 'frontend-dashboard' ) . '</a>',
+					'docs/videos' => '<a href="' . esc_url( 'https://buffercode.com/category/name/frontend-dashboard' ) . '">' . esc_html__( 'Docs/Videos',
+							'frontend-dashboard' ) . '</a>',
+					'donation'    => '<a href="' . esc_url( 'https://www.paypal.me/buffercode' ) . '">' . esc_html__( 'Donation',
+							'frontend-dashboard' ) . '</a>',
 
-					'support' => '<a href="mailto:support@buffercode.com">' . esc_html__( 'Support', 'frontend-dashboard' ) . '</a>',
+					'support' => '<a href="mailto:support@buffercode.com">' . esc_html__( 'Support',
+							'frontend-dashboard' ) . '</a>',
 				);
 
 				return array_merge( $links, $row_meta );
@@ -168,9 +201,15 @@ href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#
 			return (array) $links;
 		}
 
+		/**
+		 * @param $links
+		 *
+		 * @return array
+		 */
 		public function fed_plugin_action_links( $links ) {
 			$action_links = array(
-				'settings' => '<a href="' . admin_url( 'admin.php?page=fed_settings_menu' ) . '" aria-label="' . esc_attr__( 'Frontend Dashboard Settings', 'frontend-dashboard' ) . '">' . esc_html__( 'Settings', 'frontend-dashboard' ) . '</a>'
+				'settings' => '<a href="' . admin_url( 'admin.php?page=fed_settings_menu' ) . '" aria-label="' . esc_attr__( 'Frontend Dashboard Settings',
+						'frontend-dashboard' ) . '">' . esc_html__( 'Settings', 'frontend-dashboard' ) . '</a>'
 			);
 
 			return array_merge( $action_links, $links );

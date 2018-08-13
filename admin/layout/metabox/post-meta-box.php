@@ -20,27 +20,23 @@ function fed_add_meta_boxes_display() {
 	$extra_fields = fed_fetch_table_rows_with_key( BC_FED_POST_DB, 'input_meta' );
 	global $post;
 	$post_meta = fed_get_all_post_meta_key( $post->ID );
-//	bcdump( $post_meta);
 	?>
 	<div class="bc_fed">
 		<?php
 		foreach ( $extra_fields as $item ) {
-//			var_dump($item);
-//			var_dump($post_meta);
-
 			$temp               = $item;
 			$temp['user_value'] = isset( $post_meta[ $item['input_meta'] ] ) ? $post_meta[ $item['input_meta'] ]['meta_value'] : '';
 			$temp['input_meta'] = 'fed_meta[' . $item['input_meta'] . ']';
 
 			if ( fed_get_current_screen_id() === $item['post_type'] ) {
-				echo '<div class="row fed_dashboard_item_field p-b-20">
-                    <div class="col-md-6">
-                    <div class="fed_header_font_color">' . __( $temp['label_name'] ) . '</div>
-                    ' . fed_get_input_details( $temp ) . '
-                    </div>
-              </div>
-             
-              ';
+				?>
+				<div class="row fed_dashboard_item_field p-b-20">
+					<div class="col-md-6">
+						<div class="fed_header_font_color"><?php esc_attr_e( $temp['label_name'], 'fed' ); ?></div>
+						<?php echo fed_get_input_details( $temp ); ?>
+					</div>
+				</div>
+				<?php
 			}
 		}
 		?>
@@ -53,7 +49,7 @@ add_action( 'save_post', 'fed_save_meta_boxes_display', 10, 2 );
 
 function fed_save_meta_boxes_display( $post_id, $post ) {
 	/* Verify the nonce before proceeding */
-	if ( ! isset( $_POST['fed_nonce'] ) || ! wp_verify_nonce( $_POST['fed_nonce'], 'fed_nonce' ) ) {
+	if ( ! isset( $_POST['fed_nonce'], $_POST['fed_meta'] ) || ! wp_verify_nonce( $_POST['fed_nonce'], 'fed_nonce' ) ) {
 		return $post_id;
 	}
 	/* Get the post type object. */
@@ -71,7 +67,6 @@ function fed_save_meta_boxes_display( $post_id, $post ) {
 	/**
 	 * Check with post meta to save the meta
 	 */
-//	if ( isset( $_POST['fed_meta'] ) ) {
 	if ( count( $post_meta ) > 0 ) {
 		foreach ( $post_meta as $index => $extra ) {
 			if ( isset( $_POST['fed_meta'] ) ) {
@@ -84,26 +79,9 @@ function fed_save_meta_boxes_display( $post_id, $post ) {
 					 */
 					delete_post_meta( $post_id, $index );
 				}
-			} else {
-				delete_post_meta( $post_id, $index );
 			}
 		}
 	}
-//	}
-//			$default['meta_input'][ $index ] = isset( $post[ $index ] ) ? sanitize_text_field( $post[ $index ] ) : '';
-//		}
-//
-//		foreach ( $_POST['fed_meta'] as $key => $meta ) {
-//			if ( array_key_exists( $key, $post_meta ) ) {
-//				$meta_value = isset( $_POST['fed_meta'][ $key ] ) ? esc_attr( $_POST['fed_meta'][ $key ] ) : '';
-//				update_post_meta( $post_id, $key, $meta_value );
-//			} else {
-//				/**
-//				 * Delete the unwanted post metas
-//				 */
-//				delete_post_meta( $post_id, $key );
-//			}
-//		}
 }
 
 /**

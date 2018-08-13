@@ -12,11 +12,6 @@ function fed_fetch_menu() {
 		new WP_Error( 'fed_default_value_not_installed', __( 'There is some trouble in installing the default value, please try to deactivate and activate the plugin or contact us on ', 'frontend-dashboard' ) . make_clickable( 'https://buffercode.com/' ) );
 	}
 
-//	$result_with_key = array();
-//	foreach ( $results as $result ) {
-//		$result_with_key[ $result['menu_slug'] ] = $result;
-//	}
-
 	return $results;
 }
 

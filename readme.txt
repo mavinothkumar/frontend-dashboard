@@ -3,8 +3,8 @@ Contributors: vinoth06, buffercode
 Tags: dashboard, frontend dashboard, custom login, custom register, custom roles, custom profile, custom post type, custom taxonomies, custom dashboard
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7DHAEMST475BY
 Requires at least: 4.6
-Tested up to: 4.9.2
-Stable tag: 1.2.10
+Tested up to: 4.9.6
+Stable tag: 1.2.14
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -203,6 +203,20 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Changelog ==
 
+= 1.2.14 [23-May-2018] =
+
+* Bug fixes: Reset Password not working when Login only selected.
+
+* Update for FED Extra Plugin: Now the Admin bar can be enable or disable based on the User Role.
+
+= 1.2.13 [13-Apr-2018] =
+
+* Bug fixes: updated to support custom post/taxonomies add-on.
+
+= 1.2.12 [31-March-2018] =
+
+* Bug fixes: Post custom field value not saving.
+
 = 1.2.11 [03-Feb-2018] =
 
 * Bug fixes: Values not storing on custom field while registration
@@ -353,9 +367,11 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 * Public release
 
 == Upgrade Notice ==
-= 1.2.11 [03-Feb-2018] =
+= 1.2.14 [23-May-2018] =
 
-* Bug fixes: Values not storing on custom field while registration
+* Bug fixes: Reset Password not working when Login only selected.
+
+* Update for FED Extra Plugin: Now the Admin bar can be enable or disable based on the User Role.
 
 == Screenshots ==
 1. Frontend Dashboard Settings | Login | Settings

@@ -5,7 +5,7 @@ jQuery(document).ready(function ($) {
 
         b.popover({
             selector: '[data-toggle="popover"]',
-            trigger: 'hover'
+            trigger: 'focus'
         });
 
         // Login, Register, Reset Password TagButton Navigation

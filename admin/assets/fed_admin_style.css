@@ -79,10 +79,26 @@ Fed User Profile Layout
     margin-right: 0 !important;
 }
 
+.bc_fed .min_height_400px {
+    min-height: 400px;
+}
+
+.bc_fed .min_height_500px {
+    min-height: 500px;
+}
+
+.bc_fed .m-r-10 {
+    margin-right: 10px;
+}
+
+.bc_fed .p-20 {
+    padding: 20px
+}
+
 .bc_fed .nav-tabs > li,
 .bc_fed .nav-tabs > li:hover {
     background: #033333 !important;
-    margin: 0 1px !important;
+    margin: 1px 1px !important;
 }
 
 .bc_fed .nav-tabs > li > a:hover {
@@ -463,6 +479,7 @@ Upload Image
     z-index: 99999;
     min-height: 100%;
 }
+
 .fed_hide {
     display: none;
 }
@@ -481,8 +498,8 @@ Upload Image
 Loader
 **/
 .bc_fed .preview-area {
-    width: 60px;
-    height: 60px;
+    width: 300px;
+    height: 300px;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -491,14 +508,32 @@ Loader
     -webkit-transform: translate(-50%, -50%);
     -moz-transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.fed_bg_gray {
+    background: #606060 !important;
+    opacity: 0.7 !important;
+}
+
+.bc_fed .preview-area .fed_loader_message {
+    color: white;
+    background: #000033;
+    padding: 5px 15px;
+    font-size: 14px;
+    text-align: center;
+    z-index: 999;
 }
 
 .bc_fed .spinner_circle {
     width: 60px;
     height: 60px;
-    /*z-index: 999;*/
+    z-index: 999;
     position: relative;
-    margin: 100px auto;
+    /*margin: 100px auto;*/
 }
 
 .bc_fed .double-bounce1,
@@ -506,14 +541,33 @@ Loader
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    background-color: #333;
+    background-color: #000033;
     opacity: 0.6;
     position: absolute;
     top: 0;
     left: 0;
+    z-index: 999;
 
     -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
     animation: sk-bounce 2.0s infinite ease-in-out;
+}
+
+.bc_fed .m-b-10 {
+    margin-bottom: 10px;
+}
+
+.bc_fed .m-b-20 {
+    margin-bottom: 20px;
+}
+
+.bc_fed .m-b-30 {
+    margin-bottom: 30px;
+}
+
+.bc_fed .btn-secondary {
+    background-color: #033333 !important;
+    padding: 8px !important;
+    color: #ffffff !important;
 }
 
 .bc_fed .double-bounce2 {
@@ -613,6 +667,19 @@ Loader
     padding: 10px;
 }
 
+.bc_fed .panel-secondary-heading {
+    border-color: #033333;
+}
+
+.bc_fed .panel-secondary-heading .panel-heading {
+    background-color: #033333;
+    color: #ffffff;
+}
+
+.bc_fed a:focus {
+    outline: none !important;
+}
+
 .bc_fed .panel-secondary {
     background-color: #033333 !important;
     border-color: #033333 !important;
@@ -633,9 +700,11 @@ Loader
 .bc_fed .t-m-20 {
     margin-top: 20px !important;
 }
+
 .bc_fed .m-t-10 {
     margin-top: 10px !important;
 }
+
 .bc_fed .m-t-5 {
     margin-top: 5px !important;
 }

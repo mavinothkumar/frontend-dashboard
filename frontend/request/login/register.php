@@ -50,7 +50,6 @@ function fed_insert_user_meta( $meta, $user, $update ) {
 		$get_profile_meta_by_menu = array_column( $register, 'input_meta' );
 	}
 	if ( count( $get_profile_meta_by_menu ) > 0 ) {
-
 		foreach ( $get_profile_meta_by_menu as $extra_field ) {
 			$meta[ $extra_field ] = isset( $_REQUEST[ $extra_field ] ) ? esc_attr( $_REQUEST[ $extra_field ] ) : '';
 		}

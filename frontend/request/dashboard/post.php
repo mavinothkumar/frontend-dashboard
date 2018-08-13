@@ -5,7 +5,7 @@ add_action( 'wp_ajax_fed_dashboard_add_new_post', 'fed_dashboard_add_new_post_fn
 
 add_action( 'wp_ajax_fed_dashboard_show_post_list_request', 'fed_dashboard_show_post_list_request_fn' );
 
-add_action( 'wp_ajax_fed_dashboard_delete_post_by_id', 'fed_dashboard_delete_post_by_id_fn' );
+//add_action( 'wp_ajax_fed_dashboard_delete_post_by_id', 'fed_dashboard_delete_post_by_id_fn' );
 
 add_action( 'wp_ajax_fed_dashboard_edit_post_by_id', 'fed_dashboard_edit_post_by_id_fn' );
 add_action( 'wp_ajax_fed_dashboard_process_edit_post_request', 'fed_dashboard_process_edit_post_request_fn' );
@@ -44,7 +44,7 @@ function fed_dashboard_delete_post_by_id_fn() {
 	}
 
 	$status = wp_delete_post( $post['post_id'] );
-	if ( $status == false ) {
+	if ( ! $status ) {
 		wp_send_json_error( array( 'message' => 'Something went wrong, please refresh and try again later' ) );
 
 	}
@@ -89,7 +89,8 @@ function fed_dashboard_edit_post_by_id_fn() {
 function fed_dashboard_process_edit_post_request_fn() {
 	$post = $_REQUEST;
 
-	if ( ! wp_verify_nonce( $post['fed_dashboard_process_edit_post_request'], 'fed_dashboard_process_edit_post_request' ) ) {
+	if ( ! wp_verify_nonce( $post['fed_dashboard_process_edit_post_request'],
+		'fed_dashboard_process_edit_post_request' ) ) {
 		wp_send_json_error( array( 'message' => 'Invalid Request, Please reload the page and try again' ) );
 	}
 

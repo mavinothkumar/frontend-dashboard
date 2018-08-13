@@ -4,76 +4,25 @@
  */
 function fed_user_profile_layout_design() {
 	$fed_admin_options = get_option( 'fed_admin_settings_upl' );
-	$tabs = fed_user_profile_layout_options($fed_admin_options);
-	?>
-        <div class="bc_fed row">
-            <div class="col-md-3 padd_top_20">
-                <ul class="nav nav-pills nav-stacked"
-                    id="fed_admin_setting_user_profile_layout_tabs"
-                    role="tablist">
-	                <?php
-	                $menu_count = 0;
-	                foreach ( $tabs as $index => $tab ) {
-		                $active = $menu_count === 0 ? 'active' : '';
-		                $menu_count ++;
-		                ?>
-						<li role="presentation"
-							class="<?php echo $active; ?>">
-							<a href="#<?php echo $index; ?>"
-							   aria-controls="<?php echo $index; ?>"
-							   role="tab"
-							   data-toggle="tab">
-								<i class="<?php echo $tab['icon']; ?>"></i>
-				                <?php echo $tab['name']; ?>
-							</a>
-						</li>
-	                <?php } ?>
-                </ul>
-            </div>
-            <div class="col-md-9">
-                <!-- Tab panes -->
-                <div class="tab-content">
-	                <?php
-	                $content_count = 0;
-	                foreach ( $tabs as $index => $tab ) {
-		                $active = $content_count === 0 ? 'active' : '';
-		                $content_count ++;
-		                ?>
-						<div role="tabpanel"
-							 class="tab-pane <?php echo $active; ?>"
-							 id="<?php echo $index; ?>">
-							<div class="panel panel-primary">
-								<div class="panel-heading">
-									<span class="<?php echo $tab['icon']; ?>"></span>
-									<?php echo $tab['name']; ?>
-								</div>
-								<div class="panel-body">
-									<?php
-									call_user_func( $tab['callable'], $tab['arguments'] )
-									?>
-								</div>
-							</div>
-
-						</div>
-	                <?php } ?>
-                </div>
-            </div>
-        </div>
-	<?php
+	$tabs              = fed_user_profile_layout_options( $fed_admin_options );
+	fed_common_layouts_admin_settings( $fed_admin_options, $tabs );
 }
-function fed_user_profile_layout_options($fed_admin_options) {
-	return apply_filters( 'fed_customize_admin_user_profile_layout_options', array(
-		'fed_admin_user_profile_layout_settings'    => array(
+
+function fed_user_profile_layout_options( $fed_admin_options ) {
+	$options = array(
+		'fed_admin_user_profile_layout_settings' => array(
 			'icon'      => 'fa fa-cogs',
 			'name'      => __( 'Settings', 'frontend-dashboard' ),
 			'callable'  => 'fed_admin_user_profile_settings_tab',
 			'arguments' => $fed_admin_options
 		),
-		'fed_admin_user_profile_layout_colors'    => array(
+		'fed_admin_user_profile_layout_colors'   => array(
 			'icon'      => 'fa fa-paint-brush',
 			'name'      => __( 'Colors', 'frontend-dashboard' ),
 			'callable'  => 'fed_admin_user_profile_colors_tab',
 			'arguments' => $fed_admin_options
 		),
-	) );
+	);
+
+	return apply_filters( 'fed_customize_admin_user_profile_layout_options', $options, $fed_admin_options );
 }

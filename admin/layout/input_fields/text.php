@@ -1,6 +1,6 @@
 <?php
 
-function fed_admin_input_fields_single_line($row, $action ) {
+function fed_admin_input_fields_single_line($row, $action, $menu_options ) {
 	?>
     <div class="row fed_input_type_container fed_input_single_line_container hide">
         <form method="post"
@@ -38,7 +38,7 @@ function fed_admin_input_fields_single_line($row, $action ) {
 		                    <?php
 		                    fed_get_admin_up_display_permission( $row, $action );
 
-		                    fed_get_admin_up_role_based( $row, $action );
+		                    fed_get_admin_up_role_based( $row, $action,$menu_options );
 
 		                    fed_get_input_type_and_submit_btn( 'single_line', $action );
 		                    ?>

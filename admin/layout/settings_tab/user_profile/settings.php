@@ -21,7 +21,7 @@ function fed_admin_user_profile_settings_tab( $fed_admin_options ) {
 		'input'  => array(
 			'Change Profile Picture'        => array(
 				'col'          => 'col-md-6',
-				'name'         => __('Change Profile Picture','frontend-dashboard'),
+				'name'         => __( 'Change Profile Picture', 'frontend-dashboard' ),
 				'input'        => fed_get_input_details( array(
 					'input_meta'  => 'settings[fed_upl_change_profile_pic]',
 					'input_value' => $fed_upef,
@@ -32,7 +32,7 @@ function fed_admin_user_profile_settings_tab( $fed_admin_options ) {
 			),
 			'Disable Description'           => array(
 				'col'   => 'col-md-6',
-				'name'  => __('Disable Description','frontend-dashboard'),
+				'name'  => __( 'Disable Description', 'frontend-dashboard' ),
 				'input' => fed_get_input_details( array(
 					'input_value' => fed_yes_no( 'ASC' ),
 					'input_meta'  => 'settings[fed_upl_disable_desc]',
@@ -42,7 +42,7 @@ function fed_admin_user_profile_settings_tab( $fed_admin_options ) {
 			),
 			'Number of Recent Post to show' => array(
 				'col'   => 'col-md-6',
-				'name'  => __('Number of Recent Post to show','frontend-dashboard'),
+				'name'  => __( 'Number of Recent Post to show', 'frontend-dashboard' ),
 				'input' => fed_get_input_details( array(
 					'placeholder' => __( 'Number of Recent Post to show on User Profile', 'frontend-dashboard' ),
 					'input_meta'  => 'settings[fed_upl_no_recent_post]',
@@ -50,9 +50,9 @@ function fed_admin_user_profile_settings_tab( $fed_admin_options ) {
 					'input_type'  => 'number'
 				) )
 			),
-			'Collapse Menu Always'           => array(
+			'Collapse Menu Always'          => array(
 				'col'   => 'col-md-6',
-				'name'  => __('Collapse Menu Always','frontend-dashboard'),
+				'name'  => __( 'Collapse Menu Always', 'frontend-dashboard' ),
 				'input' => fed_get_input_details( array(
 					'input_value' => fed_yes_no( 'ASC' ),
 					'input_meta'  => 'settings[fed_upl_collapse_menu]',
@@ -60,9 +60,9 @@ function fed_admin_user_profile_settings_tab( $fed_admin_options ) {
 					'input_type'  => 'select'
 				) )
 			),
-			'Disable Logout'           => array(
+			'Disable Logout'                => array(
 				'col'   => 'col-md-6',
-				'name'  => __('Disable Logout','frontend-dashboard'),
+				'name'  => __( 'Disable Logout', 'frontend-dashboard' ),
 				'input' => fed_get_input_details( array(
 					'input_value' => fed_yes_no( 'ASC' ),
 					'input_meta'  => 'settings[fed_upl_disable_logout]',
@@ -70,9 +70,9 @@ function fed_admin_user_profile_settings_tab( $fed_admin_options ) {
 					'input_type'  => 'select'
 				) )
 			),
-			'Disable Collapse Menu'           => array(
+			'Disable Collapse Menu'         => array(
 				'col'   => 'col-md-6',
-				'name'  => __('Disable Collapse Menu','frontend-dashboard'),
+				'name'  => __( 'Disable Collapse Menu', 'frontend-dashboard' ),
 				'input' => fed_get_input_details( array(
 					'input_value' => fed_yes_no( 'ASC' ),
 					'input_meta'  => 'settings[fed_upl_disable_collapse_menu]',
@@ -110,7 +110,7 @@ function fed_admin_user_profile_colors_tab() {
 			'input'  => array(
 				'Primary Background Color'        => array(
 					'col'          => 'col-md-6',
-					'name'         => __('Primary Background Color','frontend-dashboard'),
+					'name'         => __( 'Primary Background Color', 'frontend-dashboard' ),
 					'input'        => fed_get_input_details( array(
 						'input_meta' => 'color[fed_upl_color_bg_color]',
 						'user_value' => isset( $fed_admin_options['color']['fed_upl_color_bg_color'] ) ? $fed_admin_options['color']['fed_upl_color_bg_color'] : '#0AAAAA',
@@ -120,7 +120,7 @@ function fed_admin_user_profile_colors_tab() {
 				),
 				'Primary Background Font Color'   => array(
 					'col'          => 'col-md-6',
-					'name'         => __('Primary Background Font Color','frontend-dashboard'),
+					'name'         => __( 'Primary Background Font Color', 'frontend-dashboard' ),
 					'input'        => fed_get_input_details( array(
 						'input_meta' => 'color[fed_upl_color_bg_font_color]',
 						'user_value' => isset( $fed_admin_options['color']['fed_upl_color_bg_font_color'] ) ? $fed_admin_options['color']['fed_upl_color_bg_font_color'] : '#ffffff',
@@ -130,7 +130,7 @@ function fed_admin_user_profile_colors_tab() {
 				),
 				'Secondary Background Color'      => array(
 					'col'          => 'col-md-6',
-					'name'         => __('Secondary Background Color','frontend-dashboard'),
+					'name'         => __( 'Secondary Background Color', 'frontend-dashboard' ),
 					'input'        => fed_get_input_details( array(
 						'input_meta' => 'color[fed_upl_color_sbg_color]',
 						'user_value' => isset( $fed_admin_options['color']['fed_upl_color_sbg_color'] ) ? $fed_admin_options['color']['fed_upl_color_sbg_color'] : '#033333',
@@ -140,7 +140,7 @@ function fed_admin_user_profile_colors_tab() {
 				),
 				'Secondary Background Font Color' => array(
 					'col'          => 'col-md-6',
-					'name'         => __('Secondary Background Font Color','frontend-dashboard'),
+					'name'         => __( 'Secondary Background Font Color', 'frontend-dashboard' ),
 					'input'        => fed_get_input_details( array(
 						'input_meta' => 'color[fed_upl_color_sbg_font_color]',
 						'user_value' => isset( $fed_admin_options['color']['fed_upl_color_sbg_font_color'] ) ? $fed_admin_options['color']['fed_upl_color_sbg_font_color'] : '#ffffff',
@@ -156,11 +156,11 @@ function fed_admin_user_profile_colors_tab() {
 		fed_common_simple_layout( $new_values );
 	} else {
 		?>
-		<div class="alert alert-info">
-			<strong><?php _e( 'Please install Frontend Dashboard Extra Plugin to activate this section', 'frontend-dashboard' ) ?></strong>
+        <div class="alert alert-info">
+            <strong><?php _e( 'Please install Frontend Dashboard Extra Plugin to activate this section', 'frontend-dashboard' ) ?></strong>
 			<?php _e( 'Download', 'frontend-dashboard' ) ?>
-			<a href="https://buffercode.com/plugin/frontend-dashboard-extra"><?php _e( 'Frontend Dashboard Extra', 'frontend-dashboard' ) ?></a>
-		</div>
+            <a href="https://buffercode.com/plugin/frontend-dashboard-extra"><?php _e( 'Frontend Dashboard Extra', 'frontend-dashboard' ) ?></a>
+        </div>
 		<?php
 	}
 }

@@ -99,6 +99,10 @@ body {
 .bc_fed .panel-body {
     background: #f3f3f3;
 }
+
+.bc_fed a:focus {
+    outline: none !important;
+}
 .bc_fed #fedLoginCaptcha, #fedRegisterCaptcha {
     transform: scale(0.9);
     -webkit-transform: scale(0.9);
@@ -810,7 +814,10 @@ Pricing
 .bc_fed .m-t-5 {
     margin-top: 5px !important;
 }
-
+.fed_bg_gray{
+    background: gray !important;
+    opacity: 0.7 !important;
+}
 .bc_fed .p-b-20 {
     padding-bottom: 20px !important;
 }

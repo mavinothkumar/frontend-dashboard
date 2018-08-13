@@ -5,11 +5,12 @@
  *
  * @param array $row User Profile Details
  * @param string $action Action type
+ * @param $menu_options
  */
-function fed_get_admin_up_role_based( $row, $action ) {
+function fed_get_admin_up_role_based( $row, $action,$menu_options ) {
 	$all_roles = fed_get_user_roles();
-	$options   = fed_fetch_menu();
-	$options   = fed_get_key_value_array( $options, 'menu_slug', 'menu' );
+//	$options   = fed_fetch_menu();
+	$options   = fed_get_key_value_array( $menu_options, 'menu_slug', 'menu' );
 	?>
 	<div class="row fed_admin_up_role_based">
 		<div class="col-md-12">

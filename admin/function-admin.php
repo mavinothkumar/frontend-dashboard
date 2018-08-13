@@ -31,6 +31,19 @@ function fed_verify_nonce( $request, $permission = null ) {
 }
 
 /**
+ * Check for Nonce
+ *
+ * @param $request
+ * @param null | array | string $permission
+ *
+ * @internal param string $nonce Nonce
+ * @internal param string $key Key
+ */
+function fed_nonce_check( $request, $permission = null ) {
+	fed_verify_nonce( $request, $permission );
+}
+
+/**
  * Show form fields on admin dashboard
  *
  * @param string $selected Selected.
@@ -112,6 +125,11 @@ function fed_is_required( $condition = '' ) {
 	return '';
 }
 
+/**
+ * @param string $condition
+ *
+ * @return bool
+ */
 function fed_is_true_false( $condition = '' ) {
 	if ( $condition === true || $condition === 'true' || $condition === 'enable' || $condition === 'Enable' ) {
 		return true;
@@ -120,6 +138,12 @@ function fed_is_true_false( $condition = '' ) {
 	return false;
 }
 
+/**
+ * @param string $condition
+ * @param string $type
+ *
+ * @return array
+ */
 function fed_profile_enable_disable( $condition = '', $type = '' ) {
 	$content = ' this field';
 	if ( $type === 'register' ) {
@@ -250,6 +274,29 @@ function fed_get_input_details( $attr ) {
 	return apply_filters( 'fed_custom_input_fields', $input, $values, $attr );
 }
 
+/**
+ * @param $attr
+ *
+ * @return string
+ */
+function fed_get_input_group( $attr ) {
+	if ( ! isset( $attr[0] ) || ! isset( $attr[1] ) ) {
+		return 'INVALID FORMAT';
+	}
+
+	return '<div class="input-group fed_input_group">
+                      ' . $attr[0] . '
+                      <div class="input-group-btn">
+                      ' . $attr[1] . '
+                      </div>
+                      </div>';
+}
+
+/**
+ * @param $input_value
+ *
+ * @return array
+ */
 function fed_get_select_option_value( $input_value ) {
 	if ( is_string( $input_value ) ) {
 		return strlen( $input_value ) > 0 ? fed_convert_comma_separated_key_value( $input_value ) : array();
@@ -285,6 +332,9 @@ function fed_get_extra_user_roles() {
 	return array_diff( $user_roles, fed_default_user_roles() );
 }
 
+/**
+ * @return array
+ */
 function fed_get_user_roles_without_admin() {
 	$user_roles = fed_get_user_roles();
 	unset( $user_roles['administrator'] );
@@ -521,7 +571,7 @@ function fed_no_update_fields() {
  * @return string
  */
 function get_custom_post_type_archive_template( $single_template ) {
-	if ( isset($_GET['fed_user_profile']) || is_author() ) {
+	if ( isset( $_GET['fed_user_profile'] ) || is_author() ) {
 		$single_template = apply_filters( 'fed_change_author_frontend_page', BC_FED_PLUGIN_DIR ) . '/templates/author.php';
 
 	}
@@ -536,591 +586,1112 @@ add_filter( 'archive_template', 'get_custom_post_type_archive_template' );
  */
 function fed_font_awesome_list() {
 	return array(
-		'fa fa-500px'                  => '500px',
-		'fa fa-adjust'                 => 'Adjust',
-		'fa fa-adn'                    => 'Adn',
-		'fa fa-align-center'           => 'Align center',
-		'fa fa-align-justify'          => 'Align justify',
-		'fa fa-align-left'             => 'Align left',
-		'fa fa-align-right'            => 'Align right',
-		'fa fa-amazon'                 => 'Amazon',
-		'fa fa-ambulance'              => 'Ambulance',
-		'fa fa-anchor'                 => 'Anchor',
-		'fa fa-android'                => 'Android',
-		'fa fa-angellist'              => 'Angellist',
-		'fa fa-angle-double-down'      => 'Angle double down',
-		'fa fa-angle-double-left'      => 'Angle double left',
-		'fa fa-angle-double-right'     => 'Angle double right',
-		'fa fa-angle-double-up'        => 'Angle double up',
-		'fa fa-angle-down'             => 'Angle down',
-		'fa fa-angle-left'             => 'Angle left',
-		'fa fa-angle-right'            => 'Angle right',
-		'fa fa-angle-up'               => 'Angle up',
-		'fa fa-apple'                  => 'Apple',
-		'fa fa-archive'                => 'Archive',
-		'fa fa-area-chart'             => 'Area chart',
-		'fa fa-arrow-circle-down'      => 'Arrow circle down',
-		'fa fa-arrow-circle-left'      => 'Arrow circle left',
-		'fa fa-arrow-circle-o-down'    => 'Arrow circle o down',
-		'fa fa-arrow-circle-o-left'    => 'Arrow circle o left',
-		'fa fa-arrow-circle-o-right'   => 'Arrow circle o right',
-		'fa fa-arrow-circle-o-up'      => 'Arrow circle o up',
-		'fa fa-arrow-circle-right'     => 'Arrow circle right',
-		'fa fa-arrow-circle-up'        => 'Arrow circle up',
-		'fa fa-arrow-down'             => 'Arrow down',
-		'fa fa-arrow-left'             => 'Arrow left',
-		'fa fa-arrow-right'            => 'Arrow right',
-		'fa fa-arrow-up'               => 'Arrow up',
-		'fa fa-arrows'                 => 'Arrows',
-		'fa fa-arrows-alt'             => 'Arrows alt',
-		'fa fa-arrows-h'               => 'Arrows h',
-		'fa fa-arrows-v'               => 'Arrows v',
-		'fa fa-asterisk'               => 'Asterisk',
-		'fa fa-at'                     => 'At',
-		'fa fa-backward'               => 'Backward',
-		'fa fa-balance-scale'          => 'Balance scale',
-		'fa fa-ban'                    => 'Ban',
-		'fa fa-bar-chart'              => 'Bar chart',
-		'fa fa-barcode'                => 'Barcode',
-		'fa fa-bars'                   => 'Bars',
-		'fa fa-battery-empty'          => 'Battery empty',
-		'fa fa-battery-full'           => 'Battery full',
-		'fa fa-battery-half'           => 'Battery half',
-		'fa fa-battery-quarter'        => 'Battery quarter',
-		'fa fa-battery-three-quarters' => 'Battery three quarters',
-		'fa fa-bed'                    => 'Bed',
-		'fa fa-beer'                   => 'Beer',
-		'fa fa-behance'                => 'Behance',
-		'fa fa-behance-square'         => 'Behance square',
-		'fa fa-bell'                   => 'Bell',
-		'fa fa-bell-o'                 => 'Bell o',
-		'fa fa-bell-slash'             => 'Bell slash',
-		'fa fa-bell-slash-o'           => 'Bell slash o',
-		'fa fa-bicycle'                => 'Bicycle',
-		'fa fa-binoculars'             => 'Binoculars',
-		'fa fa-birthday-cake'          => 'Birthday cake',
-		'fa fa-bitbucket'              => 'Bitbucket',
-		'fa fa-bitbucket-square'       => 'Bitbucket square',
-		'fa fa-black-tie'              => 'Black tie',
-		'fa fa-bold'                   => 'Bold',
-		'fa fa-bolt'                   => 'Bolt',
-		'fa fa-bomb'                   => 'Bomb',
-		'fa fa-book'                   => 'Book',
-		'fa fa-bookmark'               => 'Bookmark',
-		'fa fa-bookmark-o'             => 'Bookmark o',
-		'fa fa-briefcase'              => 'Briefcase',
-		'fa fa-btc'                    => 'Btc',
-		'fa fa-bug'                    => 'Bug',
-		'fa fa-building'               => 'Building',
-		'fa fa-building-o'             => 'Building o',
-		'fa fa-bullhorn'               => 'Bullhorn',
-		'fa fa-bullseye'               => 'Bullseye',
-		'fa fa-bus'                    => 'Bus',
-		'fa fa-buysellads'             => 'Buysellads',
-		'fa fa-calculator'             => 'Calculator',
-		'fa fa-calendar'               => 'Calendar',
-		'fa fa-calendar-check-o'       => 'Calendar check o',
-		'fa fa-calendar-minus-o'       => 'Calendar minus o',
-		'fa fa-calendar-o'             => 'Calendar o',
-		'fa fa-calendar-plus-o'        => 'Calendar plus o',
-		'fa fa-calendar-times-o'       => 'Calendar times o',
-		'fa fa-camera'                 => 'Camera',
-		'fa fa-camera-retro'           => 'Camera retro',
-		'fa fa-car'                    => 'Car',
-		'fa fa-caret-down'             => 'Caret down',
-		'fa fa-caret-left'             => 'Caret left',
-		'fa fa-caret-right'            => 'Caret right',
-		'fa fa-caret-square-o-down'    => 'Caret square o down',
-		'fa fa-caret-square-o-left'    => 'Caret square o left',
-		'fa fa-caret-square-o-right'   => 'Caret square o right',
-		'fa fa-caret-square-o-up'      => 'Caret square o up',
-		'fa fa-caret-up'               => 'Caret up',
-		'fa fa-cart-arrow-down'        => 'Cart arrow down',
-		'fa fa-cart-plus'              => 'Cart plus',
-		'fa fa-cc'                     => 'Cc',
-		'fa fa-cc-amex'                => 'Cc amex',
-		'fa fa-cc-diners-club'         => 'Cc diners club',
-		'fa fa-cc-discover'            => 'Cc discover',
-		'fa fa-cc-jcb'                 => 'Cc jcb',
-		'fa fa-cc-mastercard'          => 'Cc mastercard',
-		'fa fa-cc-paypal'              => 'Cc paypal',
-		'fa fa-cc-stripe'              => 'Cc stripe',
-		'fa fa-cc-visa'                => 'Cc visa',
-		'fa fa-certificate'            => 'Certificate',
-		'fa fa-chain-broken'           => 'Chain broken',
-		'fa fa-check'                  => 'Check',
-		'fa fa-check-circle'           => 'Check circle',
-		'fa fa-check-circle-o'         => 'Check circle o',
-		'fa fa-check-square'           => 'Check square',
-		'fa fa-check-square-o'         => 'Check square o',
-		'fa fa-chevron-circle-down'    => 'Chevron circle down',
-		'fa fa-chevron-circle-left'    => 'Chevron circle left',
-		'fa fa-chevron-circle-right'   => 'Chevron circle right',
-		'fa fa-chevron-circle-up'      => 'Chevron circle up',
-		'fa fa-chevron-down'           => 'Chevron down',
-		'fa fa-chevron-left'           => 'Chevron left',
-		'fa fa-chevron-right'          => 'Chevron right',
-		'fa fa-chevron-up'             => 'Chevron up',
-		'fa fa-child'                  => 'Child',
-		'fa fa-chrome'                 => 'Chrome',
-		'fa fa-circle'                 => 'Circle',
-		'fa fa-circle-o'               => 'Circle o',
-		'fa fa-circle-o-notch'         => 'Circle o notch',
-		'fa fa-circle-thin'            => 'Circle thin',
-		'fa fa-clipboard'              => 'Clipboard',
-		'fa fa-clock-o'                => 'Clock o',
-		'fa fa-clone'                  => 'Clone',
-		'fa fa-cloud'                  => 'Cloud',
-		'fa fa-cloud-download'         => 'Cloud download',
-		'fa fa-cloud-upload'           => 'Cloud upload',
-		'fa fa-code'                   => 'Code',
-		'fa fa-code-fork'              => 'Code fork',
-		'fa fa-codepen'                => 'Codepen',
-		'fa fa-coffee'                 => 'Coffee',
-		'fa fa-cog'                    => 'Cog',
-		'fa fa-cogs'                   => 'Cogs',
-		'fa fa-columns'                => 'Columns',
-		'fa fa-comment'                => 'Comment',
-		'fa fa-comment-o'              => 'Comment o',
-		'fa fa-commenting'             => 'Commenting',
-		'fa fa-commenting-o'           => 'Commenting o',
-		'fa fa-comments'               => 'Comments',
-		'fa fa-comments-o'             => 'Comments o',
-		'fa fa-compass'                => 'Compass',
-		'fa fa-compress'               => 'Compress',
-		'fa fa-connectdevelop'         => 'Connectdevelop',
-		'fa fa-contao'                 => 'Contao',
-		'fa fa-copyright'              => 'Copyright',
-		'fa fa-creative-commons'       => 'Creative commons',
-		'fa fa-credit-card'            => 'Credit card',
-		'fa fa-crop'                   => 'Crop',
-		'fa fa-crosshairs'             => 'Crosshairs',
-		'fa fa-css3'                   => 'Css3',
-		'fa fa-cube'                   => 'Cube',
-		'fa fa-cubes'                  => 'Cubes',
-		'fa fa-cutlery'                => 'Cutlery',
-		'fa fa-dashcube'               => 'Dashcube',
-		'fa fa-database'               => 'Database',
-		'fa fa-delicious'              => 'Delicious',
-		'fa fa-desktop'                => 'Desktop',
-		'fa fa-deviantart'             => 'Deviantart',
-		'fa fa-diamond'                => 'Diamond',
-		'fa fa-digg'                   => 'Digg',
-		'fa fa-dot-circle-o'           => 'Dot circle o',
-		'fa fa-download'               => 'Download',
-		'fa fa-dribbble'               => 'Dribbble',
-		'fa fa-dropbox'                => 'Dropbox',
-		'fa fa-drupal'                 => 'Drupal',
-		'fa fa-eject'                  => 'Eject',
-		'fa fa-ellipsis-h'             => 'Ellipsis h',
-		'fa fa-ellipsis-v'             => 'Ellipsis v',
-		'fa fa-empire'                 => 'Empire',
-		'fa fa-envelope'               => 'Envelope',
-		'fa fa-envelope-o'             => 'Envelope o',
-		'fa fa-envelope-square'        => 'Envelope square',
-		'fa fa-eraser'                 => 'Eraser',
-		'fa fa-eur'                    => 'Eur',
-		'fa fa-exchange'               => 'Exchange',
-		'fa fa-exclamation'            => 'Exclamation',
-		'fa fa-exclamation-circle'     => 'Exclamation circle',
-		'fa fa-exclamation-triangle'   => 'Exclamation triangle',
-		'fa fa-expand'                 => 'Expand',
-		'fa fa-expeditedssl'           => 'Expeditedssl',
-		'fa fa-external-link'          => 'External link',
-		'fa fa-external-link-square'   => 'External link square',
-		'fa fa-eye'                    => 'Eye',
-		'fa fa-eye-slash'              => 'Eye slash',
-		'fa fa-eyedropper'             => 'Eyedropper',
-		'fa fa-facebook'               => 'Facebook',
-		'fa fa-facebook-official'      => 'Facebook official',
-		'fa fa-facebook-square'        => 'Facebook square',
-		'fa fa-fast-backward'          => 'Fast backward',
-		'fa fa-fast-forward'           => 'Fast forward',
-		'fa fa-fax'                    => 'Fax',
-		'fa fa-female'                 => 'Female',
-		'fa fa-fighter-jet'            => 'Fighter jet',
-		'fa fa-file'                   => 'File',
-		'fa fa-file-archive-o'         => 'File archive o',
-		'fa fa-file-audio-o'           => 'File audio o',
-		'fa fa-file-code-o'            => 'File code o',
-		'fa fa-file-excel-o'           => 'File excel o',
-		'fa fa-file-image-o'           => 'File image o',
-		'fa fa-file-o'                 => 'File o',
-		'fa fa-file-pdf-o'             => 'File pdf o',
-		'fa fa-file-powerpoint-o'      => 'File powerpoint o',
-		'fa fa-file-text'              => 'File text',
-		'fa fa-file-text-o'            => 'File text o',
-		'fa fa-file-video-o'           => 'File video o',
-		'fa fa-file-word-o'            => 'File word o',
-		'fa fa-files-o'                => 'Files o',
-		'fa fa-film'                   => 'Film',
-		'fa fa-filter'                 => 'Filter',
-		'fa fa-fire'                   => 'Fire',
-		'fa fa-fire-extinguisher'      => 'Fire extinguisher',
-		'fa fa-firefox'                => 'Firefox',
-		'fa fa-flag'                   => 'Flag',
-		'fa fa-flag-checkered'         => 'Flag checkered',
-		'fa fa-flag-o'                 => 'Flag o',
-		'fa fa-flask'                  => 'Flask',
-		'fa fa-flickr'                 => 'Flickr',
-		'fa fa-floppy-o'               => 'Floppy o',
-		'fa fa-folder'                 => 'Folder',
-		'fa fa-folder-o'               => 'Folder o',
-		'fa fa-folder-open'            => 'Folder open',
-		'fa fa-folder-open-o'          => 'Folder open o',
-		'fa fa-font'                   => 'Font',
-		'fa fa-fonticons'              => 'Fonticons',
-		'fa fa-forumbee'               => 'Forumbee',
-		'fa fa-forward'                => 'Forward',
-		'fa fa-foursquare'             => 'Foursquare',
-		'fa fa-frown-o'                => 'Frown o',
-		'fa fa-futbol-o'               => 'Futbol o',
-		'fa fa-gamepad'                => 'Gamepad',
-		'fa fa-gavel'                  => 'Gavel',
-		'fa fa-gbp'                    => 'Gbp',
-		'fa fa-genderless'             => 'Genderless',
-		'fa fa-get-pocket'             => 'Get pocket',
-		'fa fa-gg'                     => 'Gg',
-		'fa fa-gg-circle'              => 'Gg circle',
-		'fa fa-gift'                   => 'Gift',
-		'fa fa-git'                    => 'Git',
-		'fa fa-git-square'             => 'Git square',
-		'fa fa-github'                 => 'Github',
-		'fa fa-github-alt'             => 'Github alt',
-		'fa fa-github-square'          => 'Github square',
-		'fa fa-glass'                  => 'Glass',
-		'fa fa-globe'                  => 'Globe',
-		'fa fa-google'                 => 'Google',
-		'fa fa-google-plus'            => 'Google plus',
-		'fa fa-google-plus-square'     => 'Google plus square',
-		'fa fa-google-wallet'          => 'Google wallet',
-		'fa fa-graduation-cap'         => 'Graduation cap',
-		'fa fa-gratipay'               => 'Gratipay',
-		'fa fa-h-square'               => 'H square',
-		'fa fa-hacker-news'            => 'Hacker news',
-		'fa fa-hand-lizard-o'          => 'Hand lizard o',
-		'fa fa-hand-o-down'            => 'Hand o down',
-		'fa fa-hand-o-left'            => 'Hand o left',
-		'fa fa-hand-o-right'           => 'Hand o right',
-		'fa fa-hand-o-up'              => 'Hand o up',
-		'fa fa-hand-paper-o'           => 'Hand paper o',
-		'fa fa-hand-peace-o'           => 'Hand peace o',
-		'fa fa-hand-pointer-o'         => 'Hand pointer o',
-		'fa fa-hand-rock-o'            => 'Hand rock o',
-		'fa fa-hand-scissors-o'        => 'Hand scissors o',
-		'fa fa-hand-spock-o'           => 'Hand spock o',
-		'fa fa-hdd-o'                  => 'Hdd o',
-		'fa fa-header'                 => 'Header',
-		'fa fa-headphones'             => 'Headphones',
-		'fa fa-heart'                  => 'Heart',
-		'fa fa-heart-o'                => 'Heart o',
-		'fa fa-heartbeat'              => 'Heartbeat',
-		'fa fa-history'                => 'History',
-		'fa fa-home'                   => 'Home',
-		'fa fa-hospital-o'             => 'Hospital o',
-		'fa fa-hourglass'              => 'Hourglass',
-		'fa fa-hourglass-end'          => 'Hourglass end',
-		'fa fa-hourglass-half'         => 'Hourglass half',
-		'fa fa-hourglass-o'            => 'Hourglass o',
-		'fa fa-hourglass-start'        => 'Hourglass start',
-		'fa fa-houzz'                  => 'Houzz',
-		'fa fa-html5'                  => 'Html5',
-		'fa fa-i-cursor'               => 'I cursor',
-		'fa fa-ils'                    => 'Ils',
-		'fa fa-inbox'                  => 'Inbox',
-		'fa fa-indent'                 => 'Indent',
-		'fa fa-industry'               => 'Industry',
-		'fa fa-info'                   => 'Info',
-		'fa fa-info-circle'            => 'Info circle',
-		'fa fa-inr'                    => 'Inr',
-		'fa fa-instagram'              => 'Instagram',
-		'fa fa-internet-explorer'      => 'Internet explorer',
-		'fa fa-ioxhost'                => 'Ioxhost',
-		'fa fa-italic'                 => 'Italic',
-		'fa fa-joomla'                 => 'Joomla',
-		'fa fa-jpy'                    => 'Jpy',
-		'fa fa-jsfiddle'               => 'Jsfiddle',
-		'fa fa-key'                    => 'Key',
-		'fa fa-keyboard-o'             => 'Keyboard o',
-		'fa fa-krw'                    => 'Krw',
-		'fa fa-language'               => 'Language',
-		'fa fa-laptop'                 => 'Laptop',
-		'fa fa-lastfm'                 => 'Lastfm',
-		'fa fa-lastfm-square'          => 'Lastfm square',
-		'fa fa-leaf'                   => 'Leaf',
-		'fa fa-leanpub'                => 'Leanpub',
-		'fa fa-lemon-o'                => 'Lemon o',
-		'fa fa-level-down'             => 'Level down',
-		'fa fa-level-up'               => 'Level up',
-		'fa fa-life-ring'              => 'Life ring',
-		'fa fa-lightbulb-o'            => 'Lightbulb o',
-		'fa fa-line-chart'             => 'Line chart',
-		'fa fa-link'                   => 'Link',
-		'fa fa-linkedin'               => 'Linkedin',
-		'fa fa-linkedin-square'        => 'Linkedin square',
-		'fa fa-linux'                  => 'Linux',
-		'fa fa-list'                   => 'List',
-		'fa fa-list-alt'               => 'List alt',
-		'fa fa-list-ol'                => 'List ol',
-		'fa fa-list-ul'                => 'List ul',
-		'fa fa-location-arrow'         => 'Location arrow',
-		'fa fa-lock'                   => 'Lock',
-		'fa fa-long-arrow-down'        => 'Long arrow down',
-		'fa fa-long-arrow-left'        => 'Long arrow left',
-		'fa fa-long-arrow-right'       => 'Long arrow right',
-		'fa fa-long-arrow-up'          => 'Long arrow up',
-		'fa fa-magic'                  => 'Magic',
-		'fa fa-magnet'                 => 'Magnet',
-		'fa fa-male'                   => 'Male',
-		'fa fa-map'                    => 'Map',
-		'fa fa-map-marker'             => 'Map marker',
-		'fa fa-map-o'                  => 'Map o',
-		'fa fa-map-pin'                => 'Map pin',
-		'fa fa-map-signs'              => 'Map signs',
-		'fa fa-mars'                   => 'Mars',
-		'fa fa-mars-double'            => 'Mars double',
-		'fa fa-mars-stroke'            => 'Mars stroke',
-		'fa fa-mars-stroke-h'          => 'Mars stroke h',
-		'fa fa-mars-stroke-v'          => 'Mars stroke v',
-		'fa fa-maxcdn'                 => 'Maxcdn',
-		'fa fa-meanpath'               => 'Meanpath',
-		'fa fa-medium'                 => 'Medium',
-		'fa fa-medkit'                 => 'Medkit',
-		'fa fa-meh-o'                  => 'Meh o',
-		'fa fa-mercury'                => 'Mercury',
-		'fa fa-microphone'             => 'Microphone',
-		'fa fa-microphone-slash'       => 'Microphone slash',
-		'fa fa-minus'                  => 'Minus',
-		'fa fa-minus-circle'           => 'Minus circle',
-		'fa fa-minus-square'           => 'Minus square',
-		'fa fa-minus-square-o'         => 'Minus square o',
-		'fa fa-mobile'                 => 'Mobile',
-		'fa fa-money'                  => 'Money',
-		'fa fa-moon-o'                 => 'Moon o',
-		'fa fa-motorcycle'             => 'Motorcycle',
-		'fa fa-mouse-pointer'          => 'Mouse pointer',
-		'fa fa-music'                  => 'Music',
-		'fa fa-neuter'                 => 'Neuter',
-		'fa fa-newspaper-o'            => 'Newspaper o',
-		'fa fa-object-group'           => 'Object group',
-		'fa fa-object-ungroup'         => 'Object ungroup',
-		'fa fa-odnoklassniki'          => 'Odnoklassniki',
-		'fa fa-odnoklassniki-square'   => 'Odnoklassniki square',
-		'fa fa-opencart'               => 'Opencart',
-		'fa fa-openid'                 => 'Openid',
-		'fa fa-opera'                  => 'Opera',
-		'fa fa-optin-monster'          => 'Optin monster',
-		'fa fa-outdent'                => 'Outdent',
-		'fa fa-pagelines'              => 'Pagelines',
-		'fa fa-paint-brush'            => 'Paint brush',
-		'fa fa-paper-plane'            => 'Paper plane',
-		'fa fa-paper-plane-o'          => 'Paper plane o',
-		'fa fa-paperclip'              => 'Paperclip',
-		'fa fa-paragraph'              => 'Paragraph',
-		'fa fa-pause'                  => 'Pause',
-		'fa fa-paw'                    => 'Paw',
-		'fa fa-paypal'                 => 'Paypal',
-		'fa fa-pencil'                 => 'Pencil',
-		'fa fa-pencil-square'          => 'Pencil square',
-		'fa fa-pencil-square-o'        => 'Pencil square o',
-		'fa fa-phone'                  => 'Phone',
-		'fa fa-phone-square'           => 'Phone square',
-		'fa fa-picture-o'              => 'Picture o',
-		'fa fa-pie-chart'              => 'Pie chart',
-		'fa fa-pied-piper'             => 'Pied piper',
-		'fa fa-pied-piper-alt'         => 'Pied piper alt',
-		'fa fa-pinterest'              => 'Pinterest',
-		'fa fa-pinterest-p'            => 'Pinterest p',
-		'fa fa-pinterest-square'       => 'Pinterest square',
-		'fa fa-plane'                  => 'Plane',
-		'fa fa-play'                   => 'Play',
-		'fa fa-play-circle'            => 'Play circle',
-		'fa fa-play-circle-o'          => 'Play circle o',
-		'fa fa-plug'                   => 'Plug',
-		'fa fa-plus'                   => 'Plus',
-		'fa fa-plus-circle'            => 'Plus circle',
-		'fa fa-plus-square'            => 'Plus square',
-		'fa fa-plus-square-o'          => 'Plus square o',
-		'fa fa-power-off'              => 'Power off',
-		'fa fa-print'                  => 'Print',
-		'fa fa-puzzle-piece'           => 'Puzzle piece',
-		'fa fa-qq'                     => 'Qq',
-		'fa fa-qrcode'                 => 'Qrcode',
-		'fa fa-question'               => 'Question',
-		'fa fa-question-circle'        => 'Question circle',
-		'fa fa-quote-left'             => 'Quote left',
-		'fa fa-quote-right'            => 'Quote right',
-		'fa fa-random'                 => 'Random',
-		'fa fa-rebel'                  => 'Rebel',
-		'fa fa-recycle'                => 'Recycle',
-		'fa fa-reddit'                 => 'Reddit',
-		'fa fa-reddit-square'          => 'Reddit square',
-		'fa fa-refresh'                => 'Refresh',
-		'fa fa-registered'             => 'Registered',
-		'fa fa-renren'                 => 'Renren',
-		'fa fa-repeat'                 => 'Repeat',
-		'fa fa-reply'                  => 'Reply',
-		'fa fa-reply-all'              => 'Reply all',
-		'fa fa-retweet'                => 'Retweet',
-		'fa fa-road'                   => 'Road',
-		'fa fa-rocket'                 => 'Rocket',
-		'fa fa-rss'                    => 'Rss',
-		'fa fa-rss-square'             => 'Rss square',
-		'fa fa-rub'                    => 'Rub',
-		'fa fa-safari'                 => 'Safari',
-		'fa fa-scissors'               => 'Scissors',
-		'fa fa-search'                 => 'Search',
-		'fa fa-search-minus'           => 'Search minus',
-		'fa fa-search-plus'            => 'Search plus',
-		'fa fa-sellsy'                 => 'Sellsy',
-		'fa fa-server'                 => 'Server',
-		'fa fa-share'                  => 'Share',
-		'fa fa-share-alt'              => 'Share alt',
-		'fa fa-share-alt-square'       => 'Share alt square',
-		'fa fa-share-square'           => 'Share square',
-		'fa fa-share-square-o'         => 'Share square o',
-		'fa fa-shield'                 => 'Shield',
-		'fa fa-ship'                   => 'Ship',
-		'fa fa-shirtsinbulk'           => 'Shirtsinbulk',
-		'fa fa-shopping-cart'          => 'Shopping cart',
-		'fa fa-sign-in'                => 'Sign in',
-		'fa fa-sign-out'               => 'Sign out',
-		'fa fa-signal'                 => 'Signal',
-		'fa fa-simplybuilt'            => 'Simplybuilt',
-		'fa fa-sitemap'                => 'Sitemap',
-		'fa fa-skyatlas'               => 'Skyatlas',
-		'fa fa-skype'                  => 'Skype',
-		'fa fa-slack'                  => 'Slack',
-		'fa fa-sliders'                => 'Sliders',
-		'fa fa-slideshare'             => 'Slideshare',
-		'fa fa-smile-o'                => 'Smile o',
-		'fa fa-sort'                   => 'Sort',
-		'fa fa-sort-alpha-asc'         => 'Sort alpha asc',
-		'fa fa-sort-alpha-desc'        => 'Sort alpha desc',
-		'fa fa-sort-amount-asc'        => 'Sort amount asc',
-		'fa fa-sort-amount-desc'       => 'Sort amount desc',
-		'fa fa-sort-asc'               => 'Sort asc',
-		'fa fa-sort-desc'              => 'Sort desc',
-		'fa fa-sort-numeric-asc'       => 'Sort numeric asc',
-		'fa fa-sort-numeric-desc'      => 'Sort numeric desc',
-		'fa fa-soundcloud'             => 'Soundcloud',
-		'fa fa-space-shuttle'          => 'Space shuttle',
-		'fa fa-spinner'                => 'Spinner',
-		'fa fa-spoon'                  => 'Spoon',
-		'fa fa-spotify'                => 'Spotify',
-		'fa fa-square'                 => 'Square',
-		'fa fa-square-o'               => 'Square o',
-		'fa fa-stack-exchange'         => 'Stack exchange',
-		'fa fa-stack-overflow'         => 'Stack overflow',
-		'fa fa-star'                   => 'Star',
-		'fa fa-star-half'              => 'Star half',
-		'fa fa-star-half-o'            => 'Star half o',
-		'fa fa-star-o'                 => 'Star o',
-		'fa fa-steam'                  => 'Steam',
-		'fa fa-steam-square'           => 'Steam square',
-		'fa fa-step-backward'          => 'Step backward',
-		'fa fa-step-forward'           => 'Step forward',
-		'fa fa-stethoscope'            => 'Stethoscope',
-		'fa fa-sticky-note'            => 'Sticky note',
-		'fa fa-sticky-note-o'          => 'Sticky note o',
-		'fa fa-stop'                   => 'Stop',
-		'fa fa-street-view'            => 'Street view',
-		'fa fa-strikethrough'          => 'Strikethrough',
-		'fa fa-stumbleupon'            => 'Stumbleupon',
-		'fa fa-stumbleupon-circle'     => 'Stumbleupon circle',
-		'fa fa-subscript'              => 'Subscript',
-		'fa fa-subway'                 => 'Subway',
-		'fa fa-suitcase'               => 'Suitcase',
-		'fa fa-sun-o'                  => 'Sun o',
-		'fa fa-superscript'            => 'Superscript',
-		'fa fa-table'                  => 'Table',
-		'fa fa-tablet'                 => 'Tablet',
-		'fa fa-tachometer'             => 'Tachometer',
-		'fa fa-tag'                    => 'Tag',
-		'fa fa-tags'                   => 'Tags',
-		'fa fa-tasks'                  => 'Tasks',
-		'fa fa-taxi'                   => 'Taxi',
-		'fa fa-television'             => 'Television',
-		'fa fa-tencent-weibo'          => 'Tencent weibo',
-		'fa fa-terminal'               => 'Terminal',
-		'fa fa-text-height'            => 'Text height',
-		'fa fa-text-width'             => 'Text width',
-		'fa fa-th'                     => 'Th',
-		'fa fa-th-large'               => 'Th large',
-		'fa fa-th-list'                => 'Th list',
-		'fa fa-thumb-tack'             => 'Thumb tack',
-		'fa fa-thumbs-down'            => 'Thumbs down',
-		'fa fa-thumbs-o-down'          => 'Thumbs o down',
-		'fa fa-thumbs-o-up'            => 'Thumbs o up',
-		'fa fa-thumbs-up'              => 'Thumbs up',
-		'fa fa-ticket'                 => 'Ticket',
-		'fa fa-times'                  => 'Times',
-		'fa fa-times-circle'           => 'Times circle',
-		'fa fa-times-circle-o'         => 'Times circle o',
-		'fa fa-tint'                   => 'Tint',
-		'fa fa-toggle-off'             => 'Toggle off',
-		'fa fa-toggle-on'              => 'Toggle on',
-		'fa fa-trademark'              => 'Trademark',
-		'fa fa-train'                  => 'Train',
-		'fa fa-transgender'            => 'Transgender',
-		'fa fa-transgender-alt'        => 'Transgender alt',
-		'fa fa-trash'                  => 'Trash',
-		'fa fa-trash-o'                => 'Trash o',
-		'fa fa-tree'                   => 'Tree',
-		'fa fa-trello'                 => 'Trello',
-		'fa fa-tripadvisor'            => 'Tripadvisor',
-		'fa fa-trophy'                 => 'Trophy',
-		'fa fa-truck'                  => 'Truck',
-		'fa fa-try'                    => 'Try',
-		'fa fa-tty'                    => 'Tty',
-		'fa fa-tumblr'                 => 'Tumblr',
-		'fa fa-tumblr-square'          => 'Tumblr square',
-		'fa fa-twitch'                 => 'Twitch',
-		'fa fa-twitter'                => 'Twitter',
-		'fa fa-twitter-square'         => 'Twitter square',
-		'fa fa-umbrella'               => 'Umbrella',
-		'fa fa-underline'              => 'Underline',
-		'fa fa-undo'                   => 'Undo',
-		'fa fa-university'             => 'University',
-		'fa fa-unlock'                 => 'Unlock',
-		'fa fa-unlock-alt'             => 'Unlock alt',
-		'fa fa-upload'                 => 'Upload',
-		'fa fa-usd'                    => 'Usd',
-		'fa fa-user'                   => 'User',
-		'fa fa-user-md'                => 'User md',
-		'fa fa-user-plus'              => 'User plus',
-		'fa fa-user-secret'            => 'User secret',
-		'fa fa-user-times'             => 'User times',
-		'fa fa-users'                  => 'Users',
-		'fa fa-venus'                  => 'Venus',
-		'fa fa-venus-double'           => 'Venus double',
-		'fa fa-venus-mars'             => 'Venus mars',
-		'fa fa-viacoin'                => 'Viacoin',
-		'fa fa-video-camera'           => 'Video camera',
-		'fa fa-vimeo'                  => 'Vimeo',
-		'fa fa-vimeo-square'           => 'Vimeo square',
-		'fa fa-vine'                   => 'Vine',
-		'fa fa-vk'                     => 'Vk',
-		'fa fa-volume-down'            => 'Volume down',
-		'fa fa-volume-off'             => 'Volume off',
-		'fa fa-volume-up'              => 'Volume up',
-		'fa fa-weibo'                  => 'Weibo',
-		'fa fa-weixin'                 => 'Weixin',
-		'fa fa-whatsapp'               => 'Whatsapp',
-		'fa fa-wheelchair'             => 'Wheelchair',
-		'fa fa-wifi'                   => 'Wifi',
-		'fa fa-wikipedia-w'            => 'Wikipedia w',
-		'fa fa-windows'                => 'Windows',
-		'fa fa-wordpress'              => 'Wordpress',
-		'fa fa-wrench'                 => 'Wrench',
-		'fa fa-xing'                   => 'Xing',
-		'fa fa-xing-square'            => 'Xing square',
-		'fa fa-y-combinator'           => 'Y combinator',
-		'fa fa-yahoo'                  => 'Yahoo',
-		'fa fa-yelp'                   => 'Yelp',
-		'fa fa-youtube'                => 'Youtube',
-		'fa fa-youtube-play'           => 'Youtube play',
-		'fa fa-youtube-square'         => 'Youtube square',
+		'fas fa-address-book' => 'f2b9',
+		'fas fa-address-card' => 'f2bb',
+		'fas fa-adjust' => 'f042',
+		'fas fa-align-center' => 'f037',
+		'fas fa-align-justify' => 'f039',
+		'fas fa-align-left' => 'f036',
+		'fas fa-align-right' => 'f038',
+		'fas fa-allergies' => 'f461',
+		'fas fa-ambulance' => 'f0f9',
+		'fas fa-american-sign-language-interpreting' => 'f2a3',
+		'fas fa-anchor' => 'f13d',
+		'fas fa-angle-double-down' => 'f103',
+		'fas fa-angle-double-left' => 'f100',
+		'fas fa-angle-double-right' => 'f101',
+		'fas fa-angle-double-up' => 'f102',
+		'fas fa-angle-down' => 'f107',
+		'fas fa-angle-left' => 'f104',
+		'fas fa-angle-right' => 'f105',
+		'fas fa-angle-up' => 'f106',
+		'fas fa-archive' => 'f187',
+		'fas fa-arrow-alt-circle-down' => 'f358',
+		'fas fa-arrow-alt-circle-left' => 'f359',
+		'fas fa-arrow-alt-circle-right' => 'f35a',
+		'fas fa-arrow-alt-circle-up' => 'f35b',
+		'fas fa-arrow-circle-down' => 'f0ab',
+		'fas fa-arrow-circle-left' => 'f0a8',
+		'fas fa-arrow-circle-right' => 'f0a9',
+		'fas fa-arrow-circle-up' => 'f0aa',
+		'fas fa-arrow-down' => 'f063',
+		'fas fa-arrow-left' => 'f060',
+		'fas fa-arrow-right' => 'f061',
+		'fas fa-arrow-up' => 'f062',
+		'fas fa-arrows-alt' => 'f0b2',
+		'fas fa-arrows-alt-h' => 'f337',
+		'fas fa-arrows-alt-v' => 'f338',
+		'fas fa-assistive-listening-systems' => 'f2a2',
+		'fas fa-asterisk' => 'f069',
+		'fas fa-at' => 'f1fa',
+		'fas fa-audio-description' => 'f29e',
+		'fas fa-backward' => 'f04a',
+		'fas fa-balance-scale' => 'f24e',
+		'fas fa-ban' => 'f05e',
+		'fas fa-band-aid' => 'f462',
+		'fas fa-barcode' => 'f02a',
+		'fas fa-bars' => 'f0c9',
+		'fas fa-baseball-ball' => 'f433',
+		'fas fa-basketball-ball' => 'f434',
+		'fas fa-bath' => 'f2cd',
+		'fas fa-battery-empty' => 'f244',
+		'fas fa-battery-full' => 'f240',
+		'fas fa-battery-half' => 'f242',
+		'fas fa-battery-quarter' => 'f243',
+		'fas fa-battery-three-quarters' => 'f241',
+		'fas fa-bed' => 'f236',
+		'fas fa-beer' => 'f0fc',
+		'fas fa-bell' => 'f0f3',
+		'fas fa-bell-slash' => 'f1f6',
+		'fas fa-bicycle' => 'f206',
+		'fas fa-binoculars' => 'f1e5',
+		'fas fa-birthday-cake' => 'f1fd',
+		'fas fa-blender' => 'f517',
+		'fas fa-blind' => 'f29d',
+		'fas fa-bold' => 'f032',
+		'fas fa-bolt' => 'f0e7',
+		'fas fa-bomb' => 'f1e2',
+		'fas fa-book' => 'f02d',
+		'fas fa-book-open' => 'f518',
+		'fas fa-bookmark' => 'f02e',
+		'fas fa-bowling-ball' => 'f436',
+		'fas fa-box' => 'f466',
+		'fas fa-box-open' => 'f49e',
+		'fas fa-boxes' => 'f468',
+		'fas fa-braille' => 'f2a1',
+		'fas fa-briefcase' => 'f0b1',
+		'fas fa-briefcase-medical' => 'f469',
+		'fas fa-broadcast-tower' => 'f519',
+		'fas fa-broom' => 'f51a',
+		'fas fa-bug' => 'f188',
+		'fas fa-building' => 'f1ad',
+		'fas fa-bullhorn' => 'f0a1',
+		'fas fa-bullseye' => 'f140',
+		'fas fa-burn' => 'f46a',
+		'fas fa-bus' => 'f207',
+		'fas fa-calculator' => 'f1ec',
+		'fas fa-calendar' => 'f133',
+		'fas fa-calendar-alt' => 'f073',
+		'fas fa-calendar-check' => 'f274',
+		'fas fa-calendar-minus' => 'f272',
+		'fas fa-calendar-plus' => 'f271',
+		'fas fa-calendar-times' => 'f273',
+		'fas fa-camera' => 'f030',
+		'fas fa-camera-retro' => 'f083',
+		'fas fa-capsules' => 'f46b',
+		'fas fa-car' => 'f1b9',
+		'fas fa-caret-down' => 'f0d7',
+		'fas fa-caret-left' => 'f0d9',
+		'fas fa-caret-right' => 'f0da',
+		'fas fa-caret-square-down' => 'f150',
+		'fas fa-caret-square-left' => 'f191',
+		'fas fa-caret-square-right' => 'f152',
+		'fas fa-caret-square-up' => 'f151',
+		'fas fa-caret-up' => 'f0d8',
+		'fas fa-cart-arrow-down' => 'f218',
+		'fas fa-cart-plus' => 'f217',
+		'fas fa-certificate' => 'f0a3',
+		'fas fa-chalkboard' => 'f51b',
+		'fas fa-chalkboard-teacher' => 'f51c',
+		'fas fa-chart-area' => 'f1fe',
+		'fas fa-chart-bar' => 'f080',
+		'fas fa-chart-line' => 'f201',
+		'fas fa-chart-pie' => 'f200',
+		'fas fa-check' => 'f00c',
+		'fas fa-check-circle' => 'f058',
+		'fas fa-check-square' => 'f14a',
+		'fas fa-chess' => 'f439',
+		'fas fa-chess-bishop' => 'f43a',
+		'fas fa-chess-board' => 'f43c',
+		'fas fa-chess-king' => 'f43f',
+		'fas fa-chess-knight' => 'f441',
+		'fas fa-chess-pawn' => 'f443',
+		'fas fa-chess-queen' => 'f445',
+		'fas fa-chess-rook' => 'f447',
+		'fas fa-chevron-circle-down' => 'f13a',
+		'fas fa-chevron-circle-left' => 'f137',
+		'fas fa-chevron-circle-right' => 'f138',
+		'fas fa-chevron-circle-up' => 'f139',
+		'fas fa-chevron-down' => 'f078',
+		'fas fa-chevron-left' => 'f053',
+		'fas fa-chevron-right' => 'f054',
+		'fas fa-chevron-up' => 'f077',
+		'fas fa-child' => 'f1ae',
+		'fas fa-church' => 'f51d',
+		'fas fa-circle' => 'f111',
+		'fas fa-circle-notch' => 'f1ce',
+		'fas fa-clipboard' => 'f328',
+		'fas fa-clipboard-check' => 'f46c',
+		'fas fa-clipboard-list' => 'f46d',
+		'fas fa-clock' => 'f017',
+		'fas fa-clone' => 'f24d',
+		'fas fa-closed-captioning' => 'f20a',
+		'fas fa-cloud' => 'f0c2',
+		'fas fa-cloud-download-alt' => 'f381',
+		'fas fa-cloud-upload-alt' => 'f382',
+		'fas fa-code' => 'f121',
+		'fas fa-code-branch' => 'f126',
+		'fas fa-coffee' => 'f0f4',
+		'fas fa-cog' => 'f013',
+		'fas fa-cogs' => 'f085',
+		'fas fa-coins' => 'f51e',
+		'fas fa-columns' => 'f0db',
+		'fas fa-comment' => 'f075',
+		'fas fa-comment-alt' => 'f27a',
+		'fas fa-comment-dots' => 'f4ad',
+		'fas fa-comment-slash' => 'f4b3',
+		'fas fa-comments' => 'f086',
+		'fas fa-compact-disc' => 'f51f',
+		'fas fa-compass' => 'f14e',
+		'fas fa-compress' => 'f066',
+		'fas fa-copy' => 'f0c5',
+		'fas fa-copyright' => 'f1f9',
+		'fas fa-couch' => 'f4b8',
+		'fas fa-credit-card' => 'f09d',
+		'fas fa-crop' => 'f125',
+		'fas fa-crosshairs' => 'f05b',
+		'fas fa-crow' => 'f520',
+		'fas fa-crown' => 'f521',
+		'fas fa-cube' => 'f1b2',
+		'fas fa-cubes' => 'f1b3',
+		'fas fa-cut' => 'f0c4',
+		'fas fa-database' => 'f1c0',
+		'fas fa-deaf' => 'f2a4',
+		'fas fa-desktop' => 'f108',
+		'fas fa-diagnoses' => 'f470',
+		'fas fa-dice' => 'f522',
+		'fas fa-dice-five' => 'f523',
+		'fas fa-dice-four' => 'f524',
+		'fas fa-dice-one' => 'f525',
+		'fas fa-dice-six' => 'f526',
+		'fas fa-dice-three' => 'f527',
+		'fas fa-dice-two' => 'f528',
+		'fas fa-divide' => 'f529',
+		'fas fa-dna' => 'f471',
+		'fas fa-dollar-sign' => 'f155',
+		'fas fa-dolly' => 'f472',
+		'fas fa-dolly-flatbed' => 'f474',
+		'fas fa-donate' => 'f4b9',
+		'fas fa-door-closed' => 'f52a',
+		'fas fa-door-open' => 'f52b',
+		'fas fa-dot-circle' => 'f192',
+		'fas fa-dove' => 'f4ba',
+		'fas fa-download' => 'f019',
+		'fas fa-dumbbell' => 'f44b',
+		'fas fa-edit' => 'f044',
+		'fas fa-eject' => 'f052',
+		'fas fa-ellipsis-h' => 'f141',
+		'fas fa-ellipsis-v' => 'f142',
+		'fas fa-envelope' => 'f0e0',
+		'fas fa-envelope-open' => 'f2b6',
+		'fas fa-envelope-square' => 'f199',
+		'fas fa-equals' => 'f52c',
+		'fas fa-eraser' => 'f12d',
+		'fas fa-euro-sign' => 'f153',
+		'fas fa-exchange-alt' => 'f362',
+		'fas fa-exclamation' => 'f12a',
+		'fas fa-exclamation-circle' => 'f06a',
+		'fas fa-exclamation-triangle' => 'f071',
+		'fas fa-expand' => 'f065',
+		'fas fa-expand-arrows-alt' => 'f31e',
+		'fas fa-external-link-alt' => 'f35d',
+		'fas fa-external-link-square-alt' => 'f360',
+		'fas fa-eye' => 'f06e',
+		'fas fa-eye-dropper' => 'f1fb',
+		'fas fa-eye-slash' => 'f070',
+		'fas fa-fast-backward' => 'f049',
+		'fas fa-fast-forward' => 'f050',
+		'fas fa-fax' => 'f1ac',
+		'fas fa-feather' => 'f52d',
+		'fas fa-female' => 'f182',
+		'fas fa-fighter-jet' => 'f0fb',
+		'fas fa-file' => 'f15b',
+		'fas fa-file-alt' => 'f15c',
+		'fas fa-file-archive' => 'f1c6',
+		'fas fa-file-audio' => 'f1c7',
+		'fas fa-file-code' => 'f1c9',
+		'fas fa-file-excel' => 'f1c3',
+		'fas fa-file-image' => 'f1c5',
+		'fas fa-file-medical' => 'f477',
+		'fas fa-file-medical-alt' => 'f478',
+		'fas fa-file-pdf' => 'f1c1',
+		'fas fa-file-powerpoint' => 'f1c4',
+		'fas fa-file-video' => 'f1c8',
+		'fas fa-file-word' => 'f1c2',
+		'fas fa-film' => 'f008',
+		'fas fa-filter' => 'f0b0',
+		'fas fa-fire' => 'f06d',
+		'fas fa-fire-extinguisher' => 'f134',
+		'fas fa-first-aid' => 'f479',
+		'fas fa-flag' => 'f024',
+		'fas fa-flag-checkered' => 'f11e',
+		'fas fa-flask' => 'f0c3',
+		'fas fa-folder' => 'f07b',
+		'fas fa-folder-open' => 'f07c',
+		'fas fa-font' => 'f031',
+		'fas fa-football-ball' => 'f44e',
+		'fas fa-forward' => 'f04e',
+		'fas fa-frog' => 'f52e',
+		'fas fa-frown' => 'f119',
+		'fas fa-futbol' => 'f1e3',
+		'fas fa-gamepad' => 'f11b',
+		'fas fa-gas-pump' => 'f52f',
+		'fas fa-gavel' => 'f0e3',
+		'fas fa-gem' => 'f3a5',
+		'fas fa-genderless' => 'f22d',
+		'fas fa-gift' => 'f06b',
+		'fas fa-glass-martini' => 'f000',
+		'fas fa-glasses' => 'f530',
+		'fas fa-globe' => 'f0ac',
+		'fas fa-golf-ball' => 'f450',
+		'fas fa-graduation-cap' => 'f19d',
+		'fas fa-greater-than' => 'f531',
+		'fas fa-greater-than-equal' => 'f532',
+		'fas fa-h-square' => 'f0fd',
+		'fas fa-hand-holding' => 'f4bd',
+		'fas fa-hand-holding-heart' => 'f4be',
+		'fas fa-hand-holding-usd' => 'f4c0',
+		'fas fa-hand-lizard' => 'f258',
+		'fas fa-hand-paper' => 'f256',
+		'fas fa-hand-peace' => 'f25b',
+		'fas fa-hand-point-down' => 'f0a7',
+		'fas fa-hand-point-left' => 'f0a5',
+		'fas fa-hand-point-right' => 'f0a4',
+		'fas fa-hand-point-up' => 'f0a6',
+		'fas fa-hand-pointer' => 'f25a',
+		'fas fa-hand-rock' => 'f255',
+		'fas fa-hand-scissors' => 'f257',
+		'fas fa-hand-spock' => 'f259',
+		'fas fa-hands' => 'f4c2',
+		'fas fa-hands-helping' => 'f4c4',
+		'fas fa-handshake' => 'f2b5',
+		'fas fa-hashtag' => 'f292',
+		'fas fa-hdd' => 'f0a0',
+		'fas fa-heading' => 'f1dc',
+		'fas fa-headphones' => 'f025',
+		'fas fa-heart' => 'f004',
+		'fas fa-heartbeat' => 'f21e',
+		'fas fa-helicopter' => 'f533',
+		'fas fa-history' => 'f1da',
+		'fas fa-hockey-puck' => 'f453',
+		'fas fa-home' => 'f015',
+		'fas fa-hospital' => 'f0f8',
+		'fas fa-hospital-alt' => 'f47d',
+		'fas fa-hospital-symbol' => 'f47e',
+		'fas fa-hourglass' => 'f254',
+		'fas fa-hourglass-end' => 'f253',
+		'fas fa-hourglass-half' => 'f252',
+		'fas fa-hourglass-start' => 'f251',
+		'fas fa-i-cursor' => 'f246',
+		'fas fa-id-badge' => 'f2c1',
+		'fas fa-id-card' => 'f2c2',
+		'fas fa-id-card-alt' => 'f47f',
+		'fas fa-image' => 'f03e',
+		'fas fa-images' => 'f302',
+		'fas fa-inbox' => 'f01c',
+		'fas fa-indent' => 'f03c',
+		'fas fa-industry' => 'f275',
+		'fas fa-infinity' => 'f534',
+		'fas fa-info' => 'f129',
+		'fas fa-info-circle' => 'f05a',
+		'fas fa-italic' => 'f033',
+		'fas fa-key' => 'f084',
+		'fas fa-keyboard' => 'f11c',
+		'fas fa-kiwi-bird' => 'f535',
+		'fas fa-language' => 'f1ab',
+		'fas fa-laptop' => 'f109',
+		'fas fa-leaf' => 'f06c',
+		'fas fa-lemon' => 'f094',
+		'fas fa-less-than' => 'f536',
+		'fas fa-less-than-equal' => 'f537',
+		'fas fa-level-down-alt' => 'f3be',
+		'fas fa-level-up-alt' => 'f3bf',
+		'fas fa-life-ring' => 'f1cd',
+		'fas fa-lightbulb' => 'f0eb',
+		'fas fa-link' => 'f0c1',
+		'fas fa-lira-sign' => 'f195',
+		'fas fa-list' => 'f03a',
+		'fas fa-list-alt' => 'f022',
+		'fas fa-list-ol' => 'f0cb',
+		'fas fa-list-ul' => 'f0ca',
+		'fas fa-location-arrow' => 'f124',
+		'fas fa-lock' => 'f023',
+		'fas fa-lock-open' => 'f3c1',
+		'fas fa-long-arrow-alt-down' => 'f309',
+		'fas fa-long-arrow-alt-left' => 'f30a',
+		'fas fa-long-arrow-alt-right' => 'f30b',
+		'fas fa-long-arrow-alt-up' => 'f30c',
+		'fas fa-low-vision' => 'f2a8',
+		'fas fa-magic' => 'f0d0',
+		'fas fa-magnet' => 'f076',
+		'fas fa-male' => 'f183',
+		'fas fa-map' => 'f279',
+		'fas fa-map-marker' => 'f041',
+		'fas fa-map-marker-alt' => 'f3c5',
+		'fas fa-map-pin' => 'f276',
+		'fas fa-map-signs' => 'f277',
+		'fas fa-mars' => 'f222',
+		'fas fa-mars-double' => 'f227',
+		'fas fa-mars-stroke' => 'f229',
+		'fas fa-mars-stroke-h' => 'f22b',
+		'fas fa-mars-stroke-v' => 'f22a',
+		'fas fa-medkit' => 'f0fa',
+		'fas fa-meh' => 'f11a',
+		'fas fa-memory' => 'f538',
+		'fas fa-mercury' => 'f223',
+		'fas fa-microchip' => 'f2db',
+		'fas fa-microphone' => 'f130',
+		'fas fa-microphone-alt' => 'f3c9',
+		'fas fa-microphone-alt-slash' => 'f539',
+		'fas fa-microphone-slash' => 'f131',
+		'fas fa-minus' => 'f068',
+		'fas fa-minus-circle' => 'f056',
+		'fas fa-minus-square' => 'f146',
+		'fas fa-mobile' => 'f10b',
+		'fas fa-mobile-alt' => 'f3cd',
+		'fas fa-money-bill' => 'f0d6',
+		'fas fa-money-bill-alt' => 'f3d1',
+		'fas fa-money-bill-wave' => 'f53a',
+		'fas fa-money-bill-wave-alt' => 'f53b',
+		'fas fa-money-check' => 'f53c',
+		'fas fa-money-check-alt' => 'f53d',
+		'fas fa-moon' => 'f186',
+		'fas fa-motorcycle' => 'f21c',
+		'fas fa-mouse-pointer' => 'f245',
+		'fas fa-music' => 'f001',
+		'fas fa-neuter' => 'f22c',
+		'fas fa-newspaper' => 'f1ea',
+		'fas fa-not-equal' => 'f53e',
+		'fas fa-notes-medical' => 'f481',
+		'fas fa-object-group' => 'f247',
+		'fas fa-object-ungroup' => 'f248',
+		'fas fa-outdent' => 'f03b',
+		'fas fa-paint-brush' => 'f1fc',
+		'fas fa-palette' => 'f53f',
+		'fas fa-pallet' => 'f482',
+		'fas fa-paper-plane' => 'f1d8',
+		'fas fa-paperclip' => 'f0c6',
+		'fas fa-parachute-box' => 'f4cd',
+		'fas fa-paragraph' => 'f1dd',
+		'fas fa-parking' => 'f540',
+		'fas fa-paste' => 'f0ea',
+		'fas fa-pause' => 'f04c',
+		'fas fa-pause-circle' => 'f28b',
+		'fas fa-paw' => 'f1b0',
+		'fas fa-pen-square' => 'f14b',
+		'fas fa-pencil-alt' => 'f303',
+		'fas fa-people-carry' => 'f4ce',
+		'fas fa-percent' => 'f295',
+		'fas fa-percentage' => 'f541',
+		'fas fa-phone' => 'f095',
+		'fas fa-phone-slash' => 'f3dd',
+		'fas fa-phone-square' => 'f098',
+		'fas fa-phone-volume' => 'f2a0',
+		'fas fa-piggy-bank' => 'f4d3',
+		'fas fa-pills' => 'f484',
+		'fas fa-plane' => 'f072',
+		'fas fa-play' => 'f04b',
+		'fas fa-play-circle' => 'f144',
+		'fas fa-plug' => 'f1e6',
+		'fas fa-plus' => 'f067',
+		'fas fa-plus-circle' => 'f055',
+		'fas fa-plus-square' => 'f0fe',
+		'fas fa-podcast' => 'f2ce',
+		'fas fa-poo' => 'f2fe',
+		'fas fa-portrait' => 'f3e0',
+		'fas fa-pound-sign' => 'f154',
+		'fas fa-power-off' => 'f011',
+		'fas fa-prescription-bottle' => 'f485',
+		'fas fa-prescription-bottle-alt' => 'f486',
+		'fas fa-print' => 'f02f',
+		'fas fa-procedures' => 'f487',
+		'fas fa-project-diagram' => 'f542',
+		'fas fa-puzzle-piece' => 'f12e',
+		'fas fa-qrcode' => 'f029',
+		'fas fa-question' => 'f128',
+		'fas fa-question-circle' => 'f059',
+		'fas fa-quidditch' => 'f458',
+		'fas fa-quote-left' => 'f10d',
+		'fas fa-quote-right' => 'f10e',
+		'fas fa-random' => 'f074',
+		'fas fa-receipt' => 'f543',
+		'fas fa-recycle' => 'f1b8',
+		'fas fa-redo' => 'f01e',
+		'fas fa-redo-alt' => 'f2f9',
+		'fas fa-registered' => 'f25d',
+		'fas fa-reply' => 'f3e5',
+		'fas fa-reply-all' => 'f122',
+		'fas fa-retweet' => 'f079',
+		'fas fa-ribbon' => 'f4d6',
+		'fas fa-road' => 'f018',
+		'fas fa-robot' => 'f544',
+		'fas fa-rocket' => 'f135',
+		'fas fa-rss' => 'f09e',
+		'fas fa-rss-square' => 'f143',
+		'fas fa-ruble-sign' => 'f158',
+		'fas fa-ruler' => 'f545',
+		'fas fa-ruler-combined' => 'f546',
+		'fas fa-ruler-horizontal' => 'f547',
+		'fas fa-ruler-vertical' => 'f548',
+		'fas fa-rupee-sign' => 'f156',
+		'fas fa-save' => 'f0c7',
+		'fas fa-school' => 'f549',
+		'fas fa-screwdriver' => 'f54a',
+		'fas fa-search' => 'f002',
+		'fas fa-search-minus' => 'f010',
+		'fas fa-search-plus' => 'f00e',
+		'fas fa-seedling' => 'f4d8',
+		'fas fa-server' => 'f233',
+		'fas fa-share' => 'f064',
+		'fas fa-share-alt' => 'f1e0',
+		'fas fa-share-alt-square' => 'f1e1',
+		'fas fa-share-square' => 'f14d',
+		'fas fa-shekel-sign' => 'f20b',
+		'fas fa-shield-alt' => 'f3ed',
+		'fas fa-ship' => 'f21a',
+		'fas fa-shipping-fast' => 'f48b',
+		'fas fa-shoe-prints' => 'f54b',
+		'fas fa-shopping-bag' => 'f290',
+		'fas fa-shopping-basket' => 'f291',
+		'fas fa-shopping-cart' => 'f07a',
+		'fas fa-shower' => 'f2cc',
+		'fas fa-sign' => 'f4d9',
+		'fas fa-sign-in-alt' => 'f2f6',
+		'fas fa-sign-language' => 'f2a7',
+		'fas fa-sign-out-alt' => 'f2f5',
+		'fas fa-signal' => 'f012',
+		'fas fa-sitemap' => 'f0e8',
+		'fas fa-skull' => 'f54c',
+		'fas fa-sliders-h' => 'f1de',
+		'fas fa-smile' => 'f118',
+		'fas fa-smoking' => 'f48d',
+		'fas fa-smoking-ban' => 'f54d',
+		'fas fa-snowflake' => 'f2dc',
+		'fas fa-sort' => 'f0dc',
+		'fas fa-sort-alpha-down' => 'f15d',
+		'fas fa-sort-alpha-up' => 'f15e',
+		'fas fa-sort-amount-down' => 'f160',
+		'fas fa-sort-amount-up' => 'f161',
+		'fas fa-sort-down' => 'f0dd',
+		'fas fa-sort-numeric-down' => 'f162',
+		'fas fa-sort-numeric-up' => 'f163',
+		'fas fa-sort-up' => 'f0de',
+		'fas fa-space-shuttle' => 'f197',
+		'fas fa-spinner' => 'f110',
+		'fas fa-square' => 'f0c8',
+		'fas fa-square-full' => 'f45c',
+		'fas fa-star' => 'f005',
+		'fas fa-star-half' => 'f089',
+		'fas fa-step-backward' => 'f048',
+		'fas fa-step-forward' => 'f051',
+		'fas fa-stethoscope' => 'f0f1',
+		'fas fa-sticky-note' => 'f249',
+		'fas fa-stop' => 'f04d',
+		'fas fa-stop-circle' => 'f28d',
+		'fas fa-stopwatch' => 'f2f2',
+		'fas fa-store' => 'f54e',
+		'fas fa-store-alt' => 'f54f',
+		'fas fa-stream' => 'f550',
+		'fas fa-street-view' => 'f21d',
+		'fas fa-strikethrough' => 'f0cc',
+		'fas fa-stroopwafel' => 'f551',
+		'fas fa-subscript' => 'f12c',
+		'fas fa-subway' => 'f239',
+		'fas fa-suitcase' => 'f0f2',
+		'fas fa-sun' => 'f185',
+		'fas fa-superscript' => 'f12b',
+		'fas fa-sync' => 'f021',
+		'fas fa-sync-alt' => 'f2f1',
+		'fas fa-syringe' => 'f48e',
+		'fas fa-table' => 'f0ce',
+		'fas fa-table-tennis' => 'f45d',
+		'fas fa-tablet' => 'f10a',
+		'fas fa-tablet-alt' => 'f3fa',
+		'fas fa-tablets' => 'f490',
+		'fas fa-tachometer-alt' => 'f3fd',
+		'fas fa-tag' => 'f02b',
+		'fas fa-tags' => 'f02c',
+		'fas fa-tape' => 'f4db',
+		'fas fa-tasks' => 'f0ae',
+		'fas fa-taxi' => 'f1ba',
+		'fas fa-terminal' => 'f120',
+		'fas fa-text-height' => 'f034',
+		'fas fa-text-width' => 'f035',
+		'fas fa-th' => 'f00a',
+		'fas fa-th-large' => 'f009',
+		'fas fa-th-list' => 'f00b',
+		'fas fa-thermometer' => 'f491',
+		'fas fa-thermometer-empty' => 'f2cb',
+		'fas fa-thermometer-full' => 'f2c7',
+		'fas fa-thermometer-half' => 'f2c9',
+		'fas fa-thermometer-quarter' => 'f2ca',
+		'fas fa-thermometer-three-quarters' => 'f2c8',
+		'fas fa-thumbs-down' => 'f165',
+		'fas fa-thumbs-up' => 'f164',
+		'fas fa-thumbtack' => 'f08d',
+		'fas fa-ticket-alt' => 'f3ff',
+		'fas fa-times' => 'f00d',
+		'fas fa-times-circle' => 'f057',
+		'fas fa-tint' => 'f043',
+		'fas fa-toggle-off' => 'f204',
+		'fas fa-toggle-on' => 'f205',
+		'fas fa-toolbox' => 'f552',
+		'fas fa-trademark' => 'f25c',
+		'fas fa-train' => 'f238',
+		'fas fa-transgender' => 'f224',
+		'fas fa-transgender-alt' => 'f225',
+		'fas fa-trash' => 'f1f8',
+		'fas fa-trash-alt' => 'f2ed',
+		'fas fa-tree' => 'f1bb',
+		'fas fa-trophy' => 'f091',
+		'fas fa-truck' => 'f0d1',
+		'fas fa-truck-loading' => 'f4de',
+		'fas fa-truck-moving' => 'f4df',
+		'fas fa-tshirt' => 'f553',
+		'fas fa-tty' => 'f1e4',
+		'fas fa-tv' => 'f26c',
+		'fas fa-umbrella' => 'f0e9',
+		'fas fa-underline' => 'f0cd',
+		'fas fa-undo' => 'f0e2',
+		'fas fa-undo-alt' => 'f2ea',
+		'fas fa-universal-access' => 'f29a',
+		'fas fa-university' => 'f19c',
+		'fas fa-unlink' => 'f127',
+		'fas fa-unlock' => 'f09c',
+		'fas fa-unlock-alt' => 'f13e',
+		'fas fa-upload' => 'f093',
+		'fas fa-user' => 'f007',
+		'fas fa-user-alt' => 'f406',
+		'fas fa-user-alt-slash' => 'f4fa',
+		'fas fa-user-astronaut' => 'f4fb',
+		'fas fa-user-check' => 'f4fc',
+		'fas fa-user-circle' => 'f2bd',
+		'fas fa-user-clock' => 'f4fd',
+		'fas fa-user-cog' => 'f4fe',
+		'fas fa-user-edit' => 'f4ff',
+		'fas fa-user-friends' => 'f500',
+		'fas fa-user-graduate' => 'f501',
+		'fas fa-user-lock' => 'f502',
+		'fas fa-user-md' => 'f0f0',
+		'fas fa-user-minus' => 'f503',
+		'fas fa-user-ninja' => 'f504',
+		'fas fa-user-plus' => 'f234',
+		'fas fa-user-secret' => 'f21b',
+		'fas fa-user-shield' => 'f505',
+		'fas fa-user-slash' => 'f506',
+		'fas fa-user-tag' => 'f507',
+		'fas fa-user-tie' => 'f508',
+		'fas fa-user-times' => 'f235',
+		'fas fa-users' => 'f0c0',
+		'fas fa-users-cog' => 'f509',
+		'fas fa-utensil-spoon' => 'f2e5',
+		'fas fa-utensils' => 'f2e7',
+		'fas fa-venus' => 'f221',
+		'fas fa-venus-double' => 'f226',
+		'fas fa-venus-mars' => 'f228',
+		'fas fa-vial' => 'f492',
+		'fas fa-vials' => 'f493',
+		'fas fa-video' => 'f03d',
+		'fas fa-video-slash' => 'f4e2',
+		'fas fa-volleyball-ball' => 'f45f',
+		'fas fa-volume-down' => 'f027',
+		'fas fa-volume-off' => 'f026',
+		'fas fa-volume-up' => 'f028',
+		'fas fa-walking' => 'f554',
+		'fas fa-wallet' => 'f555',
+		'fas fa-warehouse' => 'f494',
+		'fas fa-weight' => 'f496',
+		'fas fa-wheelchair' => 'f193',
+		'fas fa-wifi' => 'f1eb',
+		'fas fa-window-close' => 'f410',
+		'fas fa-window-maximize' => 'f2d0',
+		'fas fa-window-minimize' => 'f2d1',
+		'fas fa-window-restore' => 'f2d2',
+		'fas fa-wine-glass' => 'f4e3',
+		'fas fa-won-sign' => 'f159',
+		'fas fa-wrench' => 'f0ad',
+		'fas fa-x-ray' => 'f497',
+		'fas fa-yen-sign' => 'f157',
+		'far fa-address-book' => 'f2b9',
+		'far fa-address-card' => 'f2bb',
+		'far fa-arrow-alt-circle-down' => 'f358',
+		'far fa-arrow-alt-circle-left' => 'f359',
+		'far fa-arrow-alt-circle-right' => 'f35a',
+		'far fa-arrow-alt-circle-up' => 'f35b',
+		'far fa-bell' => 'f0f3',
+		'far fa-bell-slash' => 'f1f6',
+		'far fa-bookmark' => 'f02e',
+		'far fa-building' => 'f1ad',
+		'far fa-calendar' => 'f133',
+		'far fa-calendar-alt' => 'f073',
+		'far fa-calendar-check' => 'f274',
+		'far fa-calendar-minus' => 'f272',
+		'far fa-calendar-plus' => 'f271',
+		'far fa-calendar-times' => 'f273',
+		'far fa-caret-square-down' => 'f150',
+		'far fa-caret-square-left' => 'f191',
+		'far fa-caret-square-right' => 'f152',
+		'far fa-caret-square-up' => 'f151',
+		'far fa-chart-bar' => 'f080',
+		'far fa-check-circle' => 'f058',
+		'far fa-check-square' => 'f14a',
+		'far fa-circle' => 'f111',
+		'far fa-clipboard' => 'f328',
+		'far fa-clock' => 'f017',
+		'far fa-clone' => 'f24d',
+		'far fa-closed-captioning' => 'f20a',
+		'far fa-comment' => 'f075',
+		'far fa-comment-alt' => 'f27a',
+		'far fa-comment-dots' => 'f4ad',
+		'far fa-comments' => 'f086',
+		'far fa-compass' => 'f14e',
+		'far fa-copy' => 'f0c5',
+		'far fa-copyright' => 'f1f9',
+		'far fa-credit-card' => 'f09d',
+		'far fa-dot-circle' => 'f192',
+		'far fa-edit' => 'f044',
+		'far fa-envelope' => 'f0e0',
+		'far fa-envelope-open' => 'f2b6',
+		'far fa-eye' => 'f06e',
+		'far fa-eye-slash' => 'f070',
+		'far fa-file' => 'f15b',
+		'far fa-file-alt' => 'f15c',
+		'far fa-file-archive' => 'f1c6',
+		'far fa-file-audio' => 'f1c7',
+		'far fa-file-code' => 'f1c9',
+		'far fa-file-excel' => 'f1c3',
+		'far fa-file-image' => 'f1c5',
+		'far fa-file-pdf' => 'f1c1',
+		'far fa-file-powerpoint' => 'f1c4',
+		'far fa-file-video' => 'f1c8',
+		'far fa-file-word' => 'f1c2',
+		'far fa-flag' => 'f024',
+		'far fa-folder' => 'f07b',
+		'far fa-folder-open' => 'f07c',
+		'far fa-frown' => 'f119',
+		'far fa-futbol' => 'f1e3',
+		'far fa-gem' => 'f3a5',
+		'far fa-hand-lizard' => 'f258',
+		'far fa-hand-paper' => 'f256',
+		'far fa-hand-peace' => 'f25b',
+		'far fa-hand-point-down' => 'f0a7',
+		'far fa-hand-point-left' => 'f0a5',
+		'far fa-hand-point-right' => 'f0a4',
+		'far fa-hand-point-up' => 'f0a6',
+		'far fa-hand-pointer' => 'f25a',
+		'far fa-hand-rock' => 'f255',
+		'far fa-hand-scissors' => 'f257',
+		'far fa-hand-spock' => 'f259',
+		'far fa-handshake' => 'f2b5',
+		'far fa-hdd' => 'f0a0',
+		'far fa-heart' => 'f004',
+		'far fa-hospital' => 'f0f8',
+		'far fa-hourglass' => 'f254',
+		'far fa-id-badge' => 'f2c1',
+		'far fa-id-card' => 'f2c2',
+		'far fa-image' => 'f03e',
+		'far fa-images' => 'f302',
+		'far fa-keyboard' => 'f11c',
+		'far fa-lemon' => 'f094',
+		'far fa-life-ring' => 'f1cd',
+		'far fa-lightbulb' => 'f0eb',
+		'far fa-list-alt' => 'f022',
+		'far fa-map' => 'f279',
+		'far fa-meh' => 'f11a',
+		'far fa-minus-square' => 'f146',
+		'far fa-money-bill-alt' => 'f3d1',
+		'far fa-moon' => 'f186',
+		'far fa-newspaper' => 'f1ea',
+		'far fa-object-group' => 'f247',
+		'far fa-object-ungroup' => 'f248',
+		'far fa-paper-plane' => 'f1d8',
+		'far fa-pause-circle' => 'f28b',
+		'far fa-play-circle' => 'f144',
+		'far fa-plus-square' => 'f0fe',
+		'far fa-question-circle' => 'f059',
+		'far fa-registered' => 'f25d',
+		'far fa-save' => 'f0c7',
+		'far fa-share-square' => 'f14d',
+		'far fa-smile' => 'f118',
+		'far fa-snowflake' => 'f2dc',
+		'far fa-square' => 'f0c8',
+		'far fa-star' => 'f005',
+		'far fa-star-half' => 'f089',
+		'far fa-sticky-note' => 'f249',
+		'far fa-stop-circle' => 'f28d',
+		'far fa-sun' => 'f185',
+		'far fa-thumbs-down' => 'f165',
+		'far fa-thumbs-up' => 'f164',
+		'far fa-times-circle' => 'f057',
+		'far fa-trash-alt' => 'f2ed',
+		'far fa-user' => 'f007',
+		'far fa-user-circle' => 'f2bd',
+		'far fa-window-close' => 'f410',
+		'far fa-window-maximize' => 'f2d0',
+		'far fa-window-minimize' => 'f2d1',
+		'far fa-window-restore' => 'f2d2',
+		'fab fa-500px' => 'f26e',
+		'fab fa-accessible-icon' => 'f368',
+		'fab fa-accusoft' => 'f369',
+		'fab fa-adn' => 'f170',
+		'fab fa-adversal' => 'f36a',
+		'fab fa-affiliatetheme' => 'f36b',
+		'fab fa-algolia' => 'f36c',
+		'fab fa-amazon' => 'f270',
+		'fab fa-amazon-pay' => 'f42c',
+		'fab fa-amilia' => 'f36d',
+		'fab fa-android' => 'f17b',
+		'fab fa-angellist' => 'f209',
+		'fab fa-angrycreative' => 'f36e',
+		'fab fa-angular' => 'f420',
+		'fab fa-app-store' => 'f36f',
+		'fab fa-app-store-ios' => 'f370',
+		'fab fa-apper' => 'f371',
+		'fab fa-apple' => 'f179',
+		'fab fa-apple-pay' => 'f415',
+		'fab fa-asymmetrik' => 'f372',
+		'fab fa-audible' => 'f373',
+		'fab fa-autoprefixer' => 'f41c',
+		'fab fa-avianex' => 'f374',
+		'fab fa-aviato' => 'f421',
+		'fab fa-aws' => 'f375',
+		'fab fa-bandcamp' => 'f2d5',
+		'fab fa-behance' => 'f1b4',
+		'fab fa-behance-square' => 'f1b5',
+		'fab fa-bimobject' => 'f378',
+		'fab fa-bitbucket' => 'f171',
+		'fab fa-bitcoin' => 'f379',
+		'fab fa-bity' => 'f37a',
+		'fab fa-black-tie' => 'f27e',
+		'fab fa-blackberry' => 'f37b',
+		'fab fa-blogger' => 'f37c',
+		'fab fa-blogger-b' => 'f37d',
+		'fab fa-bluetooth' => 'f293',
+		'fab fa-bluetooth-b' => 'f294',
+		'fab fa-btc' => 'f15a',
+		'fab fa-buromobelexperte' => 'f37f',
+		'fab fa-buysellads' => 'f20d',
+		'fab fa-cc-amazon-pay' => 'f42d',
+		'fab fa-cc-amex' => 'f1f3',
+		'fab fa-cc-apple-pay' => 'f416',
+		'fab fa-cc-diners-club' => 'f24c',
+		'fab fa-cc-discover' => 'f1f2',
+		'fab fa-cc-jcb' => 'f24b',
+		'fab fa-cc-mastercard' => 'f1f1',
+		'fab fa-cc-paypal' => 'f1f4',
+		'fab fa-cc-stripe' => 'f1f5',
+		'fab fa-cc-visa' => 'f1f0',
+		'fab fa-centercode' => 'f380',
+		'fab fa-chrome' => 'f268',
+		'fab fa-cloudscale' => 'f383',
+		'fab fa-cloudsmith' => 'f384',
+		'fab fa-cloudversify' => 'f385',
+		'fab fa-codepen' => 'f1cb',
+		'fab fa-codiepie' => 'f284',
+		'fab fa-connectdevelop' => 'f20e',
+		'fab fa-contao' => 'f26d',
+		'fab fa-cpanel' => 'f388',
+		'fab fa-creative-commons' => 'f25e',
+		'fab fa-creative-commons-by' => 'f4e7',
+		'fab fa-creative-commons-nc' => 'f4e8',
+		'fab fa-creative-commons-nc-eu' => 'f4e9',
+		'fab fa-creative-commons-nc-jp' => 'f4ea',
+		'fab fa-creative-commons-nd' => 'f4eb',
+		'fab fa-creative-commons-pd' => 'f4ec',
+		'fab fa-creative-commons-pd-alt' => 'f4ed',
+		'fab fa-creative-commons-remix' => 'f4ee',
+		'fab fa-creative-commons-sa' => 'f4ef',
+		'fab fa-creative-commons-sampling' => 'f4f0',
+		'fab fa-creative-commons-sampling-plus' => 'f4f1',
+		'fab fa-creative-commons-share' => 'f4f2',
+		'fab fa-css3' => 'f13c',
+		'fab fa-css3-alt' => 'f38b',
+		'fab fa-cuttlefish' => 'f38c',
+		'fab fa-d-and-d' => 'f38d',
+		'fab fa-dashcube' => 'f210',
+		'fab fa-delicious' => 'f1a5',
+		'fab fa-deploydog' => 'f38e',
+		'fab fa-deskpro' => 'f38f',
+		'fab fa-deviantart' => 'f1bd',
+		'fab fa-digg' => 'f1a6',
+		'fab fa-digital-ocean' => 'f391',
+		'fab fa-discord' => 'f392',
+		'fab fa-discourse' => 'f393',
+		'fab fa-dochub' => 'f394',
+		'fab fa-docker' => 'f395',
+		'fab fa-draft2digital' => 'f396',
+		'fab fa-dribbble' => 'f17d',
+		'fab fa-dribbble-square' => 'f397',
+		'fab fa-dropbox' => 'f16b',
+		'fab fa-drupal' => 'f1a9',
+		'fab fa-dyalog' => 'f399',
+		'fab fa-earlybirds' => 'f39a',
+		'fab fa-ebay' => 'f4f4',
+		'fab fa-edge' => 'f282',
+		'fab fa-elementor' => 'f430',
+		'fab fa-ember' => 'f423',
+		'fab fa-empire' => 'f1d1',
+		'fab fa-envira' => 'f299',
+		'fab fa-erlang' => 'f39d',
+		'fab fa-ethereum' => 'f42e',
+		'fab fa-etsy' => 'f2d7',
+		'fab fa-expeditedssl' => 'f23e',
+		'fab fa-facebook' => 'f09a',
+		'fab fa-facebook-f' => 'f39e',
+		'fab fa-facebook-messenger' => 'f39f',
+		'fab fa-facebook-square' => 'f082',
+		'fab fa-firefox' => 'f269',
+		'fab fa-first-order' => 'f2b0',
+		'fab fa-first-order-alt' => 'f50a',
+		'fab fa-firstdraft' => 'f3a1',
+		'fab fa-flickr' => 'f16e',
+		'fab fa-flipboard' => 'f44d',
+		'fab fa-fly' => 'f417',
+		'fab fa-font-awesome' => 'f2b4',
+		'fab fa-font-awesome-alt' => 'f35c',
+		'fab fa-font-awesome-flag' => 'f425',
+		'fab fa-fonticons' => 'f280',
+		'fab fa-fonticons-fi' => 'f3a2',
+		'fab fa-fort-awesome' => 'f286',
+		'fab fa-fort-awesome-alt' => 'f3a3',
+		'fab fa-forumbee' => 'f211',
+		'fab fa-foursquare' => 'f180',
+		'fab fa-free-code-camp' => 'f2c5',
+		'fab fa-freebsd' => 'f3a4',
+		'fab fa-fulcrum' => 'f50b',
+		'fab fa-galactic-republic' => 'f50c',
+		'fab fa-galactic-senate' => 'f50d',
+		'fab fa-get-pocket' => 'f265',
+		'fab fa-gg' => 'f260',
+		'fab fa-gg-circle' => 'f261',
+		'fab fa-git' => 'f1d3',
+		'fab fa-git-square' => 'f1d2',
+		'fab fa-github' => 'f09b',
+		'fab fa-github-alt' => 'f113',
+		'fab fa-github-square' => 'f092',
+		'fab fa-gitkraken' => 'f3a6',
+		'fab fa-gitlab' => 'f296',
+		'fab fa-gitter' => 'f426',
+		'fab fa-glide' => 'f2a5',
+		'fab fa-glide-g' => 'f2a6',
+		'fab fa-gofore' => 'f3a7',
+		'fab fa-goodreads' => 'f3a8',
+		'fab fa-goodreads-g' => 'f3a9',
+		'fab fa-google' => 'f1a0',
+		'fab fa-google-drive' => 'f3aa',
+		'fab fa-google-play' => 'f3ab',
+		'fab fa-google-plus' => 'f2b3',
+		'fab fa-google-plus-g' => 'f0d5',
+		'fab fa-google-plus-square' => 'f0d4',
+		'fab fa-google-wallet' => 'f1ee',
+		'fab fa-gratipay' => 'f184',
+		'fab fa-grav' => 'f2d6',
+		'fab fa-gripfire' => 'f3ac',
+		'fab fa-grunt' => 'f3ad',
+		'fab fa-gulp' => 'f3ae',
+		'fab fa-hacker-news' => 'f1d4',
+		'fab fa-hacker-news-square' => 'f3af',
+		'fab fa-hips' => 'f452',
+		'fab fa-hire-a-helper' => 'f3b0',
+		'fab fa-hooli' => 'f427',
+		'fab fa-hotjar' => 'f3b1',
+		'fab fa-houzz' => 'f27c',
+		'fab fa-html5' => 'f13b',
+		'fab fa-hubspot' => 'f3b2',
+		'fab fa-imdb' => 'f2d8',
+		'fab fa-instagram' => 'f16d',
+		'fab fa-internet-explorer' => 'f26b',
+		'fab fa-ioxhost' => 'f208',
+		'fab fa-itunes' => 'f3b4',
+		'fab fa-itunes-note' => 'f3b5',
+		'fab fa-java' => 'f4e4',
+		'fab fa-jedi-order' => 'f50e',
+		'fab fa-jenkins' => 'f3b6',
+		'fab fa-joget' => 'f3b7',
+		'fab fa-joomla' => 'f1aa',
+		'fab fa-js' => 'f3b8',
+		'fab fa-js-square' => 'f3b9',
+		'fab fa-jsfiddle' => 'f1cc',
+		'fab fa-keybase' => 'f4f5',
+		'fab fa-keycdn' => 'f3ba',
+		'fab fa-kickstarter' => 'f3bb',
+		'fab fa-kickstarter-k' => 'f3bc',
+		'fab fa-korvue' => 'f42f',
+		'fab fa-laravel' => 'f3bd',
+		'fab fa-lastfm' => 'f202',
+		'fab fa-lastfm-square' => 'f203',
+		'fab fa-leanpub' => 'f212',
+		'fab fa-less' => 'f41d',
+		'fab fa-line' => 'f3c0',
+		'fab fa-linkedin' => 'f08c',
+		'fab fa-linkedin-in' => 'f0e1',
+		'fab fa-linode' => 'f2b8',
+		'fab fa-linux' => 'f17c',
+		'fab fa-lyft' => 'f3c3',
+		'fab fa-magento' => 'f3c4',
+		'fab fa-mandalorian' => 'f50f',
+		'fab fa-mastodon' => 'f4f6',
+		'fab fa-maxcdn' => 'f136',
+		'fab fa-medapps' => 'f3c6',
+		'fab fa-medium' => 'f23a',
+		'fab fa-medium-m' => 'f3c7',
+		'fab fa-medrt' => 'f3c8',
+		'fab fa-meetup' => 'f2e0',
+		'fab fa-microsoft' => 'f3ca',
+		'fab fa-mix' => 'f3cb',
+		'fab fa-mixcloud' => 'f289',
+		'fab fa-mizuni' => 'f3cc',
+		'fab fa-modx' => 'f285',
+		'fab fa-monero' => 'f3d0',
+		'fab fa-napster' => 'f3d2',
+		'fab fa-nintendo-switch' => 'f418',
+		'fab fa-node' => 'f419',
+		'fab fa-node-js' => 'f3d3',
+		'fab fa-npm' => 'f3d4',
+		'fab fa-ns8' => 'f3d5',
+		'fab fa-nutritionix' => 'f3d6',
+		'fab fa-odnoklassniki' => 'f263',
+		'fab fa-odnoklassniki-square' => 'f264',
+		'fab fa-old-republic' => 'f510',
+		'fab fa-opencart' => 'f23d',
+		'fab fa-openid' => 'f19b',
+		'fab fa-opera' => 'f26a',
+		'fab fa-optin-monster' => 'f23c',
+		'fab fa-osi' => 'f41a',
+		'fab fa-page4' => 'f3d7',
+		'fab fa-pagelines' => 'f18c',
+		'fab fa-palfed' => 'f3d8',
+		'fab fa-patreon' => 'f3d9',
+		'fab fa-paypal' => 'f1ed',
+		'fab fa-periscope' => 'f3da',
+		'fab fa-phabricator' => 'f3db',
+		'fab fa-phoenix-framework' => 'f3dc',
+		'fab fa-phoenix-squadron' => 'f511',
+		'fab fa-php' => 'f457',
+		'fab fa-pied-piper' => 'f2ae',
+		'fab fa-pied-piper-alt' => 'f1a8',
+		'fab fa-pied-piper-hat' => 'f4e5',
+		'fab fa-pied-piper-pp' => 'f1a7',
+		'fab fa-pinterest' => 'f0d2',
+		'fab fa-pinterest-p' => 'f231',
+		'fab fa-pinterest-square' => 'f0d3',
+		'fab fa-playstation' => 'f3df',
+		'fab fa-product-hunt' => 'f288',
+		'fab fa-pushed' => 'f3e1',
+		'fab fa-python' => 'f3e2',
+		'fab fa-qq' => 'f1d6',
+		'fab fa-quinscape' => 'f459',
+		'fab fa-quora' => 'f2c4',
+		'fab fa-r-project' => 'f4f7',
+		'fab fa-ravelry' => 'f2d9',
+		'fab fa-react' => 'f41b',
+		'fab fa-readme' => 'f4d5',
+		'fab fa-rebel' => 'f1d0',
+		'fab fa-red-river' => 'f3e3',
+		'fab fa-reddit' => 'f1a1',
+		'fab fa-reddit-alien' => 'f281',
+		'fab fa-reddit-square' => 'f1a2',
+		'fab fa-rendact' => 'f3e4',
+		'fab fa-renren' => 'f18b',
+		'fab fa-replyd' => 'f3e6',
+		'fab fa-researchgate' => 'f4f8',
+		'fab fa-resolving' => 'f3e7',
+		'fab fa-rocketchat' => 'f3e8',
+		'fab fa-rockrms' => 'f3e9',
+		'fab fa-safari' => 'f267',
+		'fab fa-sass' => 'f41e',
+		'fab fa-schlix' => 'f3ea',
+		'fab fa-scribd' => 'f28a',
+		'fab fa-searchengin' => 'f3eb',
+		'fab fa-sellcast' => 'f2da',
+		'fab fa-sellsy' => 'f213',
+		'fab fa-servicestack' => 'f3ec',
+		'fab fa-shirtsinbulk' => 'f214',
+		'fab fa-simplybuilt' => 'f215',
+		'fab fa-sistrix' => 'f3ee',
+		'fab fa-sith' => 'f512',
+		'fab fa-skyatlas' => 'f216',
+		'fab fa-skype' => 'f17e',
+		'fab fa-slack' => 'f198',
+		'fab fa-slack-hash' => 'f3ef',
+		'fab fa-slideshare' => 'f1e7',
+		'fab fa-snapchat' => 'f2ab',
+		'fab fa-snapchat-ghost' => 'f2ac',
+		'fab fa-snapchat-square' => 'f2ad',
+		'fab fa-soundcloud' => 'f1be',
+		'fab fa-speakap' => 'f3f3',
+		'fab fa-spotify' => 'f1bc',
+		'fab fa-stack-exchange' => 'f18d',
+		'fab fa-stack-overflow' => 'f16c',
+		'fab fa-staylinked' => 'f3f5',
+		'fab fa-steam' => 'f1b6',
+		'fab fa-steam-square' => 'f1b7',
+		'fab fa-steam-symbol' => 'f3f6',
+		'fab fa-sticker-mule' => 'f3f7',
+		'fab fa-strava' => 'f428',
+		'fab fa-stripe' => 'f429',
+		'fab fa-stripe-s' => 'f42a',
+		'fab fa-studiovinari' => 'f3f8',
+		'fab fa-stumbleupon' => 'f1a4',
+		'fab fa-stumbleupon-circle' => 'f1a3',
+		'fab fa-superpowers' => 'f2dd',
+		'fab fa-supple' => 'f3f9',
+		'fab fa-teamspeak' => 'f4f9',
+		'fab fa-telegram' => 'f2c6',
+		'fab fa-telegram-plane' => 'f3fe',
+		'fab fa-tencent-weibo' => 'f1d5',
+		'fab fa-themeisle' => 'f2b2',
+		'fab fa-trade-federation' => 'f513',
+		'fab fa-trello' => 'f181',
+		'fab fa-tripadvisor' => 'f262',
+		'fab fa-tumblr' => 'f173',
+		'fab fa-tumblr-square' => 'f174',
+		'fab fa-twitch' => 'f1e8',
+		'fab fa-twitter' => 'f099',
+		'fab fa-twitter-square' => 'f081',
+		'fab fa-typo3' => 'f42b',
+		'fab fa-uber' => 'f402',
+		'fab fa-uikit' => 'f403',
+		'fab fa-uniregistry' => 'f404',
+		'fab fa-untappd' => 'f405',
+		'fab fa-usb' => 'f287',
+		'fab fa-ussunnah' => 'f407',
+		'fab fa-vaadin' => 'f408',
+		'fab fa-viacoin' => 'f237',
+		'fab fa-viadeo' => 'f2a9',
+		'fab fa-viadeo-square' => 'f2aa',
+		'fab fa-viber' => 'f409',
+		'fab fa-vimeo' => 'f40a',
+		'fab fa-vimeo-square' => 'f194',
+		'fab fa-vimeo-v' => 'f27d',
+		'fab fa-vine' => 'f1ca',
+		'fab fa-vk' => 'f189',
+		'fab fa-vnv' => 'f40b',
+		'fab fa-vuejs' => 'f41f',
+		'fab fa-weibo' => 'f18a',
+		'fab fa-weixin' => 'f1d7',
+		'fab fa-whatsapp' => 'f232',
+		'fab fa-whatsapp-square' => 'f40c',
+		'fab fa-whmcs' => 'f40d',
+		'fab fa-wikipedia-w' => 'f266',
+		'fab fa-windows' => 'f17a',
+		'fab fa-wolf-pack-battalion' => 'f514',
+		'fab fa-wordpress' => 'f19a',
+		'fab fa-wordpress-simple' => 'f411',
+		'fab fa-wpbeginner' => 'f297',
+		'fab fa-wpexplorer' => 'f2de',
+		'fab fa-wpforms' => 'f298',
+		'fab fa-xbox' => 'f412',
+		'fab fa-xing' => 'f168',
+		'fab fa-xing-square' => 'f169',
+		'fab fa-y-combinator' => 'f23b',
+		'fab fa-yahoo' => 'f19e',
+		'fab fa-yandex' => 'f413',
+		'fab fa-yandex-international' => 'f414',
+		'fab fa-yelp' => 'f1e9',
+		'fab fa-yoast' => 'f2b1',
+		'fab fa-youtube' => 'f167',
+		'fab fa-youtube-square' => 'f431'
 	);
 }
 
@@ -1190,6 +1761,11 @@ function fed_enable_file_uploads_by_role() {
 
 add_action( 'admin_init', 'fed_enable_file_uploads_by_role' );
 
+/**
+ * @param $tabs
+ *
+ * @return mixed
+ */
 function remove_medialibrary_tab( $tabs ) {
 //	if ( ! current_user_can( 'administrator' ) ) {
 //		unset( $tabs['library'] );
@@ -1418,6 +1994,17 @@ function fed_currency_type() {
 		'XPF' => array( 'name' => 'CFP Franc', 'symbol' => 'F', 'hex' => '&#x46;' ),
 		'ZAR' => array( 'name' => 'South African Rand', 'symbol' => 'R', 'hex' => '&#x52;' ),
 	);
+}
+
+/**
+ * @param $currency
+ *
+ * @return mixed
+ */
+function fed_get_currency_symbol($currency)
+{
+    $type = fed_currency_type();
+    return isset($type[$currency]['symbol']) ? $type[$currency]['symbol'] : '$$';
 }
 
 /**
@@ -1726,6 +2313,9 @@ function fed_get_current_user_role() {
 	return $user->roles;
 }
 
+/**
+ * @return bool
+ */
 function fed_get_current_user_role_key() {
 	$user = get_userdata( get_current_user_id() );
 
@@ -1964,10 +2554,10 @@ function fed_show_help_message( array $message ) {
 	$icon    = isset( $message['icon'] ) ? $message['icon'] : 'fa fa-info-circle';
 	$title   = isset( $message['title'] ) ? $message['title'] : 'Note';
 	$content = isset( $message['content'] ) ? $message['content'] : '';
+	$class = isset( $message['class'] ) ? $message['class'] : '';
 
 	return '
-	<span class="' . $icon . '" data-toggle="popover" data-trigger="hover" title="' . $title . '" data-content="' . $content . '" data-original-title="' . $title . '"></span>
-	';
+	<span class="'.$class.'" data-toggle="popover" data-trigger="focus" role="button"  tabindex="0"  title="' . $title . '" data-content="' . $content . '" data-original-title="' . $title . '" data-html="true"><i class="' . $icon . '"></i></span>';
 }
 
 /**
@@ -1992,6 +2582,9 @@ function fed_convert_to_price( $cycle, $custom ) {
 	return ' / Year';
 }
 
+/**
+ * @return array
+ */
 function fed_get_public_post_types() {
 	$post_type = get_post_types( array( 'public' => true ), 'objects' );
 	$new_type  = array();
@@ -2002,24 +2595,42 @@ function fed_get_public_post_types() {
 	return $new_type;
 }
 
+/**
+ * @param $post_type
+ *
+ * @return bool
+ */
 function fed_check_post_type( $post_type ) {
 	$post_types = get_post_types( array( 'public' => true ) );
 
 	return isset( $post_types[ $post_type ] ) ? true : false;
 }
 
+/**
+ * @return string
+ */
 function fed_get_current_screen_id() {
 	$screen = get_current_screen();
 
 	return $screen->id;
 }
 
+/**
+ * @return string
+ */
 function fed_plugin_versions() {
 	$versions = apply_filters( 'fed_plugin_versions', array( 'core' => 'Core' ) );
 
 	return implode( ' | ', $versions );
 }
 
+/**
+ * @param $source
+ * @param $_this
+ * @param $that
+ *
+ * @return mixed
+ */
 function fed_convert_this_to_that( $source, $_this, $that ) {
 	return str_replace( $_this, $that, $source );
 }
@@ -2029,29 +2640,29 @@ function fed_convert_this_to_that( $source, $_this, $that ) {
  */
 function fed_menu_icons_popup() {
 	?>
-	<div class="bc_fed">
-		<div class="modal fade fed_show_fa_list"
-			 tabindex="-1"
-			 role="dialog"
-		>
-			<div class="modal-dialog modal-lg"
-				 role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button"
-								class="close"
-								data-dismiss="modal"
-								aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h4 class="modal-title"><?php _e( 'Please Select one Image', 'frontend-dashboard' ) ?></h4>
-					</div>
-					<div class="modal-body">
-						<input type="hidden"
-							   id="fed_menu_box_id"
-							   name="fed_menu_box_id"
-							   value=""/>
-						<div class="row fed_fa_container">
+    <div class="bc_fed">
+        <div class="modal fade fed_show_fa_list"
+             tabindex="-1"
+             role="dialog"
+        >
+            <div class="modal-dialog modal-lg"
+                 role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button"
+                                class="close"
+                                data-dismiss="modal"
+                                aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title"><?php _e( 'Please Select one Image', 'frontend-dashboard' ) ?></h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden"
+                               id="fed_menu_box_id"
+                               name="fed_menu_box_id"
+                               value=""/>
+                        <div class="row fed_fa_container">
 							<?php foreach ( fed_font_awesome_list() as $key => $list ) {
 								echo '<div class="col-md-1 fed_single_fa" 
 							data-dismiss="modal"
@@ -2065,12 +2676,12 @@ function fed_menu_icons_popup() {
 							<span class="' . $key . '"  data-id="' . $key . '" id="' . $key . '"></span>
 							</div>';
 							} ?>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 	<?php
 }
 
@@ -2093,6 +2704,13 @@ function fed_compare_two_arrays_get_second_value( array $array1, array $array2 )
 	return $array2;
 }
 
+/**
+ * @param array $array
+ * @param       $key
+ * @param null  $value
+ *
+ * @return array
+ */
 function fed_get_key_value_array( array $array, $key, $value = null ) {
 	$new_array = array();
 	foreach ( $array as $index => $item ) {
@@ -2118,6 +2736,11 @@ function fed_get_key_value_array( array $array, $key, $value = null ) {
 	return $new_array;
 }
 
+/**
+ * @param string $post_type
+ *
+ * @return array
+ */
 function fed_get_category_tag_post_format( $post_type = 'post' ) {
 	$taxonomies = get_object_taxonomies( $post_type, 'object' );
 	$new_array  = array();
@@ -2138,6 +2761,13 @@ function fed_get_category_tag_post_format( $post_type = 'post' ) {
 	return $new_array;
 }
 
+/**
+ * @param     $array
+ * @param     $on
+ * @param int $order
+ *
+ * @return array
+ */
 function fed_array_sort( $array, $on, $order = SORT_ASC ) {
 
 	$new_array      = array();
@@ -2173,6 +2803,11 @@ function fed_array_sort( $array, $on, $order = SORT_ASC ) {
 	return $new_array;
 }
 
+/**
+ * @param $request
+ *
+ * @return bool
+ */
 function fed_request_empty( $request ) {
 	if ( '' == trim( $request ) ) {
 		return true;
@@ -2181,35 +2816,8 @@ function fed_request_empty( $request ) {
 	return false;
 }
 
-/**
- * Check for Nonce
- *
- * @param $request
- * @param null | array | string $permission
- *
- * @internal param string $nonce Nonce
- * @internal param string $key Key
- */
-function fed_nonce_check( $request, $permission = null ) {
-	if ( ! isset( $request['fed_nonce'] ) ) {
-		wp_send_json_error( array( 'message' => 'Invalid Request' ) );
-	}
-	if ( ! wp_verify_nonce( $request['fed_nonce'], 'fed_nonce' ) ) {
-		wp_send_json_error( array( 'message' => 'Invalid Request' ) );
-	}
 
-	if ( null !== $permission ) {
-		$user_role = fed_get_current_user_role_key();
-		if ( is_string( $permission ) && $user_role !== $permission ) {
-			wp_send_json_error( array( 'message' => 'Invalid Request' ) );
-		}
-		if ( is_array( $permission ) && ! in_array( $user_role, $permission, true ) ) {
-			wp_send_json_error( array( 'message' => 'Invalid Request' ) );
-		}
-	}
-}
-
-if (!function_exists('array_column')) {
+if ( ! function_exists( 'array_column' ) ) {
 	/**
 	 * Returns the values from a single column of the input array, identified by
 	 * the $columnKey.
@@ -2225,77 +2833,207 @@ if (!function_exists('array_column')) {
 	 * @param mixed $indexKey (Optional.) The column to use as the index/keys for
 	 *                        the returned array. This value may be the integer key
 	 *                        of the column, or it may be the string key name.
+	 *
 	 * @return array
 	 */
-	function array_column($input = null, $columnKey = null, $indexKey = null)
-	{
+	function array_column( $input = null, $columnKey = null, $indexKey = null ) {
 		// Using func_get_args() in order to check for proper number of
 		// parameters and trigger errors exactly as the built-in array_column()
 		// does in PHP 5.5.
-		$argc = func_num_args();
+		$argc   = func_num_args();
 		$params = func_get_args();
-		if ($argc < 2) {
-			trigger_error("array_column() expects at least 2 parameters, {$argc} given", E_USER_WARNING);
+		if ( $argc < 2 ) {
+			trigger_error( "array_column() expects at least 2 parameters, {$argc} given", E_USER_WARNING );
+
 			return null;
 		}
-		if (!is_array($params[0])) {
+		if ( ! is_array( $params[0] ) ) {
 			trigger_error(
-				'array_column() expects parameter 1 to be array, ' . gettype($params[0]) . ' given',
+				'array_column() expects parameter 1 to be array, ' . gettype( $params[0] ) . ' given',
 				E_USER_WARNING
 			);
+
 			return null;
 		}
-		if (!is_int($params[1])
-		    && !is_float($params[1])
-		    && !is_string($params[1])
-		    && $params[1] !== null
-		    && !(is_object($params[1]) && method_exists($params[1], '__toString'))
+		if ( ! is_int( $params[1] )
+		     && ! is_float( $params[1] )
+		     && ! is_string( $params[1] )
+		     && $params[1] !== null
+		     && ! ( is_object( $params[1] ) && method_exists( $params[1], '__toString' ) )
 		) {
-			trigger_error('array_column(): The column key should be either a string or an integer', E_USER_WARNING);
+			trigger_error( 'array_column(): The column key should be either a string or an integer', E_USER_WARNING );
+
 			return false;
 		}
-		if (isset($params[2])
-		    && !is_int($params[2])
-		    && !is_float($params[2])
-		    && !is_string($params[2])
-		    && !(is_object($params[2]) && method_exists($params[2], '__toString'))
+		if ( isset( $params[2] )
+		     && ! is_int( $params[2] )
+		     && ! is_float( $params[2] )
+		     && ! is_string( $params[2] )
+		     && ! ( is_object( $params[2] ) && method_exists( $params[2], '__toString' ) )
 		) {
-			trigger_error('array_column(): The index key should be either a string or an integer', E_USER_WARNING);
+			trigger_error( 'array_column(): The index key should be either a string or an integer', E_USER_WARNING );
+
 			return false;
 		}
-		$paramsInput = $params[0];
-		$paramsColumnKey = ($params[1] !== null) ? (string) $params[1] : null;
-		$paramsIndexKey = null;
-		if (isset($params[2])) {
-			if (is_float($params[2]) || is_int($params[2])) {
+		$paramsInput     = $params[0];
+		$paramsColumnKey = ( $params[1] !== null ) ? (string) $params[1] : null;
+		$paramsIndexKey  = null;
+		if ( isset( $params[2] ) ) {
+			if ( is_float( $params[2] ) || is_int( $params[2] ) ) {
 				$paramsIndexKey = (int) $params[2];
 			} else {
 				$paramsIndexKey = (string) $params[2];
 			}
 		}
 		$resultArray = array();
-		foreach ($paramsInput as $row) {
-			$key = $value = null;
+		foreach ( $paramsInput as $row ) {
+			$key    = $value = null;
 			$keySet = $valueSet = false;
-			if ($paramsIndexKey !== null && array_key_exists($paramsIndexKey, $row)) {
+			if ( $paramsIndexKey !== null && array_key_exists( $paramsIndexKey, $row ) ) {
 				$keySet = true;
-				$key = (string) $row[$paramsIndexKey];
+				$key    = (string) $row[ $paramsIndexKey ];
 			}
-			if ($paramsColumnKey === null) {
+			if ( $paramsColumnKey === null ) {
 				$valueSet = true;
-				$value = $row;
-			} elseif (is_array($row) && array_key_exists($paramsColumnKey, $row)) {
+				$value    = $row;
+			} elseif ( is_array( $row ) && array_key_exists( $paramsColumnKey, $row ) ) {
 				$valueSet = true;
-				$value = $row[$paramsColumnKey];
+				$value    = $row[ $paramsColumnKey ];
 			}
-			if ($valueSet) {
-				if ($keySet) {
-					$resultArray[$key] = $value;
+			if ( $valueSet ) {
+				if ( $keySet ) {
+					$resultArray[ $key ] = $value;
 				} else {
 					$resultArray[] = $value;
 				}
 			}
 		}
+
 		return $resultArray;
 	}
 }
+
+/**
+ * @param $item
+ */
+function fed_call_function_method( $item ) {
+	if ( is_string( $item['callable'] ) && function_exists( $item['callable'] ) ) {
+		$parameter = isset( $item['arguments'] ) ? $item['arguments'] : '';
+		call_user_func( $item['callable'], $parameter );
+	} elseif ( is_array( $item['callable'] ) && method_exists( $item['callable']['object'], $item['callable']['method'] ) ) {
+		$parameter = isset( $item['arguments'] ) ? $item['arguments'] : '';
+		call_user_func( array( $item['callable']['object'], $item['callable']['method'] ), $parameter );
+	} else {
+		?>
+        <div class="container fed_add_page_profile_container text-center">
+			<?php printf( __( 'OOPS! You have not add the callable function, please add %s() to show the
+					body container', 'frontend-dashboard' ), is_array( $item['callable']) ? $item['callable']['method'] :  $item['callable']) ?>
+        </div>
+		<?php
+	}
+}
+
+/**
+ * @param      $value
+ * @param null $default
+ *
+ * @return null
+ */
+function fed_isset( $value, $default = null ) {
+	return isset( $value ) && ! empty( $value ) && $value ? $value : $default;
+}
+
+/**
+ * @param      $value
+ * @param null $default
+ *
+ * @return null|string
+ */
+function fed_isset_sanitize( $value, $default = null ) {
+	return isset( $value ) && ! empty( $value ) && $value ? sanitize_text_field( $value ) : $default;
+}
+
+/**
+ * @param $var
+ *
+ * @return array|string
+ */
+function fed_sanitize_text_field( $var ) {
+	if ( is_array( $var ) ) {
+		return array_map( 'fed_sanitize_text_field', $var );
+	}
+
+	return is_scalar( $var ) ? sanitize_text_field( $var ) : $var;
+}
+
+/**
+ * @param      $request
+ * @param      $key
+ * @param null $default
+ *
+ * @return null|string
+ */
+function fed_isset_request( $request, $key, $default = null ) {
+
+	return isset( $request[ $key ] ) && ! empty( $request[ $key ] ) && $request[ $key ] ? sanitize_text_field( $request[ $key ] ) : $default;
+}
+
+/**
+ * @param array $parameters
+ * @param $url
+ */
+function fed_generate_url( array $parameters, $url ) {
+	$parameters = array_merge( $parameters, array( 'fed_nonce' => wp_create_nonce( 'fed_nonce' ) ) );
+
+	return esc_url( add_query_arg( $parameters, $url ) );
+}
+
+/**
+ * @param $a
+ * @param $b
+ *
+ * @return int
+ */
+function fed_array_of_object_sort_key( $a, $b ) {
+	return strcmp( $b->create_time, $a->create_time );
+}
+
+/**
+ * Get Table Status for Status Page
+ * @return mixed
+ */
+function fed_get_table_status() {
+	global $wpdb;
+	$table_status = array();
+	/**
+	 * Check all table exists
+	 */
+	$user_profile = $wpdb->prefix . BC_FED_USER_PROFILE_DB;
+	$menu         = $wpdb->prefix . BC_FED_MENU_DB;
+	$post         = $wpdb->prefix . BC_FED_POST_DB;
+
+	$table_status['user_profile'] = array(
+		'title'       => 'User Profile',
+		'status'      => $wpdb->get_var( "SHOW TABLES LIKE '$user_profile'" ) != $user_profile ? fed_enable_disable( false ) : fed_enable_disable( true ),
+		'plugin_name' => BC_FED_APP_NAME,
+		'position'    => 0,
+	);
+	$table_status['menu']         = array(
+		'title'       => 'Menu',
+		'status'      => $wpdb->get_var( "SHOW TABLES LIKE '$menu'" ) != $menu ? fed_enable_disable( false ) : fed_enable_disable( true ),
+		'plugin_name' => BC_FED_APP_NAME,
+		'position'    => 0,
+	);
+
+	$table_status['post'] = array(
+		'title'       => 'Post',
+		'status'      => $wpdb->get_var( "SHOW TABLES LIKE '$post'" ) != $post ? fed_enable_disable( false ) : fed_enable_disable( true ),
+		'plugin_name' => BC_FED_APP_NAME,
+		'position'    => 0,
+	);
+
+	$tables = apply_filters( 'fed_status_get_table_status', $table_status );
+
+	return $tables;
+}
+
