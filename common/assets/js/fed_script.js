@@ -530,6 +530,15 @@ jQuery(document).ready(function ($) {
     }
 );
 
+jQuery.fed_toggle_loader = function () {
+    $('.preview-area').toggleClass('hide');
+    if ($('.fed_loader_message').length) {
+        window.setTimeout(function () {
+            $('.fed_loader_message').toggleClass('hide');
+        }, 2000);
+    }
+};
+
 
 var CaptchaCallback = function () {
     var fedRegister = document.getElementById('fedRegisterCaptcha');
