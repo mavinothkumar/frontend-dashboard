@@ -2344,24 +2344,7 @@ function fed_get_amount_based_on_user_role() {
 	return (float) $amount;
 }
 
-add_action( 'template_redirect', 'fed_paypal' );
-/**
- * PayPal Request Process.
- * TODO: PayPal
- */
-function fed_paypal() {
-	if ( isset( $_REQUEST['fed_paypal'], $_REQUEST['fed_display_user_not_paid'] ) ) {
-		if ( ! wp_verify_nonce( $_REQUEST['fed_display_user_not_paid'], 'fed_display_user_not_paid' ) ) {
-			wp_die( 'Something Went Wrong, Please go back and refresh the page.' );
-		}
-		$paypal = new paypal_payment();
-		$paypal->process_paypal();
-	}
-	if ( isset( $_REQUEST['paymentId'], $_REQUEST['PayerID'] ) ) {
-		$paypal = new paypal_payment();
-		$paypal->paypal_success( $_REQUEST );
-	}
-}
+
 
 /**
  * PayPal Payment Success and Cancel URL
