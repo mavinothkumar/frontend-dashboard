@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @param $post
+ */
 function fed_register_form_submit( $post ) {
 	do_action( 'fed_register_before_validation', $post );
 	$redirect_url = fed_registration_redirect();
@@ -20,7 +23,7 @@ function fed_register_form_submit( $post ) {
 		exit();
 	}
 
-	wp_send_new_user_notifications( $status );
+	wp_send_new_user_notifications( $status, 'admin' );
 
 	wp_send_json_success( array(
 		'user'    => $status,
