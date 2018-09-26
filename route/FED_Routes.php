@@ -1,7 +1,10 @@
 <?php
 
 if ( ! class_exists( 'FED_Routes' ) ) {
-	class FED_Routes {
+    /**
+     * Class FED_Routes
+     */
+    class FED_Routes {
 
 		public $request;
 
@@ -15,8 +18,10 @@ if ( ! class_exists( 'FED_Routes' ) ) {
 			$this->request = $request;
 		}
 
-		public function getDashboardContent( $menu ) {
-
+        /**
+         * @param $menu
+         */
+        public function getDashboardContent( $menu ) {
 			if ( $menu['menu_request']['menu_type'] === 'user' ) {
 				fed_display_dashboard_profile( $menu['menu_request'] );
 			}
@@ -27,7 +32,10 @@ if ( ! class_exists( 'FED_Routes' ) ) {
 			do_action( 'fed_frontend_dashboard_menu_container', $this->request, $menu );
 		}
 
-		public function setDashboardMenuQuery() {
+        /**
+         * @return array|bool|\WP_Error
+         */
+        public function setDashboardMenuQuery() {
 			$menu              = fed_get_all_dashboard_display_menus();
 			$first_element_key = array_keys( $menu );
 			$first_element     = $first_element_key[0];
@@ -78,11 +86,17 @@ if ( ! class_exists( 'FED_Routes' ) ) {
 			return $menu_items;
 		}
 
-		public function getDefaultMenuQuery() {
+        /**
+         * @return mixed|void
+         */
+        public function getDefaultMenuQuery() {
 			return apply_filters( 'fed_get_default_menu_query', array( 'menu_type', 'menu_slug', 'fed_nonce' ) );
 		}
 
-		public function getDefaultMenuType() {
+        /**
+         * @return mixed|void
+         */
+        public function getDefaultMenuType() {
 			return apply_filters( 'fed_get_default_menu_type', array(
 				'post',
 				'user',
@@ -92,7 +106,12 @@ if ( ! class_exists( 'FED_Routes' ) ) {
 			) );
 		}
 
-		private function validateNonce( $request ) {
+        /**
+         * @param $request
+         *
+         * @return bool|\WP_Error
+         */
+        private function validateNonce( $request ) {
 			if ( ! isset( $request['fed_nonce'] ) ) {
 				return new WP_Error( 'invalid_request', 'Invalid Request' );
 			}

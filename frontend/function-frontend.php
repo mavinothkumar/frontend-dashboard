@@ -64,6 +64,9 @@ function fed_get_current_page_url()
     return home_url(add_query_arg(array(), $wp->request));
 }
 
+/**
+ * @return string
+ */
 function fed_current_page_url()
 {
     global $wp;
@@ -815,11 +818,20 @@ function fed_get_403_error_page()
     <?php
 }
 
+/**
+ * @param $key
+ * @param $message
+ */
 function fed_set_alert($key, $message)
 {
     set_transient($key, $message, MINUTE_IN_SECONDS);
 }
 
+/**
+ * @param $key
+ *
+ * @return string
+ */
 function fed_show_alert($key)
 {
     $value = get_transient($key);

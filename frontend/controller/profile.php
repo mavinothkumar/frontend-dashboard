@@ -13,7 +13,7 @@ function fed_process_dashboard_display_profile( $menu ) {
 /**
  * Get Display Dashboard Profile
  *
- * @param $menu_items
+ * @param $menu_item
  */
 function fed_display_dashboard_profile( $menu_item ) {
 	/**
@@ -49,6 +49,13 @@ function fed_display_dashboard_profile( $menu_item ) {
 						<input type="hidden"
 							   name="tab_id"
 							   value="<?php echo $index ?>">
+                        <input type="hidden"
+							   name="menu_type"
+							   value="<?php echo $menu_item['menu_type'] ?>">
+
+                        <input type="hidden"
+							   name="menu_slug"
+							   value="<?php echo $menu_item['menu_slug'] ?>">
 						<?php
 						foreach ( $profiles as $single_item ) {
 

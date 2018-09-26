@@ -8,17 +8,10 @@ add_action( 'template_redirect', 'fed_store_user_profile_save' );
 function fed_store_user_profile_save() {
 	$post    = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
 	$message = 'Something Went Wrong';
-	if ( isset( $_REQUEST, $post['tab_id'] ) && $_REQUEST['menu_type'] === 'user' ) {
+
+	if ( isset( $_REQUEST, $post['tab_id'] ) && isset($_REQUEST['menu_type']) && $_REQUEST['menu_type'] === 'user' ) {
 
 		fed_nonce_check( $post );
-
-		/**
-		 * TODO :
-		 * 1. check for mandatory fields - Done
-		 * 2. check for fed_no_update_fields
-		 * 3. collect the respect tab fields
-		 * 4. save the appropriate fields
-		 */
 
 		$validation = fed_validate_user_profile_form( $post );
 
@@ -31,14 +24,20 @@ function fed_store_user_profile_save() {
 				$message = 'Successfully Updated';
 			}
 		}
-		fed_set_alert('fed_profile_save_message',$message);
+        fed_set_alert('fed_profile_save_message',$message);
 	}
+
 }
 
 function fed_block_the_action() {
 	wp_die( 'Inappropriate Action' );
 }
 
+/**
+ * @param $post
+ *
+ * @return array|\WP_Error
+ */
 function fed_process_update_user_profile( $post ) {
 	$current_user = wp_get_current_user();
 

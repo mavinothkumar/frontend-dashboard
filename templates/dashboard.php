@@ -12,6 +12,8 @@ do_action( 'fed_before_dashboard_container' );
 ?>
 	<div class="bc_fed fed_dashboard_container">
 		<?php echo fed_loader() ?>
+        <?php do_action( 'fed_inside_dashboard_container_top' ); ?>
+        <?php echo fed_show_alert('fed_dashboard_top_message') ?>
 		<?php if ( ! $menu instanceof WP_Error ) { ?>
 			<div class="row fed_dashboard_wrapper">
 				<div class="col-md-3 fed_dashboard_menus default_template">
@@ -44,6 +46,7 @@ do_action( 'fed_before_dashboard_container' );
 			</div>
 			<?php
 		} ?>
+        <?php do_action( 'fed_inside_dashboard_container_bottom' ); ?>
 	</div>
 <?php
 do_action( 'fed_after_dashboard_container' );

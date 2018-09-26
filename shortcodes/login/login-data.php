@@ -15,6 +15,9 @@ function fed_login_form() {
 	return apply_filters( 'fed_login_form_filter', $form );
 }
 
+/**
+ * @return mixed|void
+ */
 function fed_login_only() {
 	$login = array(
 		'menu'     => array(
@@ -48,6 +51,9 @@ function fed_login_only() {
 	return apply_filters( 'fed_login_only_filter', $login );
 }
 
+/**
+ * @return mixed|void
+ */
 function fed_register_only() {
 	$register = array(
 		'menu'     => array(
@@ -63,6 +69,9 @@ function fed_register_only() {
 	return apply_filters( 'fed_register_only_filter', $register );
 }
 
+/**
+ * @return array
+ */
 function fed_forgot_password_only() {
 	return array(
 		'menu'     => array(
@@ -81,6 +90,9 @@ function fed_forgot_password_only() {
 	);
 }
 
+/**
+ * @return array
+ */
 function fed_reset_password_only() {
 	return array(
 		'menu'     => array(
@@ -114,12 +126,18 @@ function fed_reset_password_only() {
 	);
 }
 
+/**
+ * @return mixed|void
+ */
 function fed_registration_mandatory_fields() {
 	$fields = fed_process_user_profile_required_field();
 
 	return apply_filters( 'fed_registration_mandatory_fields', $fields );
 }
 
+/**
+ * @return mixed|void
+ */
 function fed_login_mandatory_fields() {
 	$fields = array(
 		'user_login'    => __( 'Please enter user name', 'frontend-dashboard' ),

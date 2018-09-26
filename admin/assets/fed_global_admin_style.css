@@ -9,9 +9,19 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
+.bc_fed .modal {
+    overflow: auto !important;
+}
+
+.bc_fed .margin_top_20 {
+    margin-top: 20px !important;
+}
+
 .fed_menu_icon {
     padding-right: 5px;
 }
+
 .bc_fed .panel-heading[data-toggle='collapse'].collapsed h4:after {
     font-family: 'Font Awesome 5 Free';
     content: '\f078';
@@ -23,8 +33,9 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
 .bc_fed .nav.nav-pills.nav-stacked .active a:after,
-.bc_fed .fed_dashboard_menus:not(.fed_collapse) .fed_menu_slug.active:after{
+.bc_fed .fed_dashboard_menus:not(.fed_collapse) .fed_menu_slug.active:after {
     font-family: 'Font Awesome 5 Free';
     content: '\f054';
     float: right;
@@ -33,6 +44,7 @@
     text-rendering: auto;
     font-weight: 900;
 }
+
 .bc_fed .panel-heading[data-toggle='collapse'] h4:after {
     font-family: 'Font Awesome 5 Free';
     content: "\f077";
@@ -49,8 +61,6 @@
 .bc_fed .fed_input_group .input-group-btn {
     width: auto !important;
 }
-
-
 
 .bc_fed .fed_remove_image {
     position: absolute;
@@ -70,26 +80,33 @@
     width: 100px;
     height: 100px;
 }
+
 .bc_fed .fed_menu_slug.list-group-item {
     width: 100%;
 }
+
 .bc_fed .panel .panel-heading {
     cursor: pointer;
 }
+
 .p-10 {
-    padding:10px !important;
+    padding: 10px !important;
 }
+
 .p-20 {
-    padding:20px !important;
+    padding: 20px !important;
 }
+
 .fed_p_l_20 {
     padding-left: 20px !important;
 }
+
 .fed_flex_start_center {
     display: flex;
     justify-content: flex-start;
     align-items: center;
 }
+
 .fed_flex {
     display: flex;
     justify-content: center;
