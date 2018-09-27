@@ -429,7 +429,7 @@ jQuery(document).ready(function ($) {
                     swal({
                         title: results.data.message || 'Something Went Wrong',
                         type: "success",
-                        confirmButtonColor: '#0AAAAA'
+                        confirmButtonColor: '#0AAAAA',
                     });
                 } else {
                     swal({
@@ -483,7 +483,7 @@ jQuery(document).ready(function ($) {
                         title: results.data.message || 'Something Went Wrong',
                         type: "success",
                         text: '',
-                        confirmButtonColor: '#0AAAAA'
+                        confirmButtonColor: '#0AAAAA',
                     });
                 } else if (results.success == false) {
                     var error = '';

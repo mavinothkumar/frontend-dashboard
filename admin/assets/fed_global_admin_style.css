@@ -17,7 +17,9 @@
 .bc_fed .margin_top_20 {
     margin-top: 20px !important;
 }
-
+.bc_fed .fed_red_color {
+    color: red; !important;
+}
 .fed_menu_icon {
     padding-right: 5px;
 }
