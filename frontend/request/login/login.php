@@ -33,6 +33,7 @@ function fed_login_form_submit($post)
             'user'    => $result,
             'message' => __('Successfully Logged in', 'frontend-dashboard'),
             'url'     => $redirect_url,
+            'reload'  => $redirect_url,
     ));
 
 }

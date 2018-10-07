@@ -483,7 +483,6 @@ var fedAdminAlert = {
                 title: results.data.message || 'Something Went Wrong',
                 type: "success",
                 confirmButtonColor: '#0AAAAA',
-                footer: '<a href="" class="fed_alert_rate_btn margin_right_20">Rate the plugin</a> <a class="fed_alert_rate_btn margin_right_20">Donate us</a> <a class="fed_alert_rate_btn margin_right_20">Support</a>'
             }).then(
                 function () {
                     if (results.data.reload) {
@@ -534,7 +533,6 @@ var fedAdminAlert = {
                 title: results.data.message || 'Something Went Wrong',
                 type: "success",
                 confirmButtonColor: '#0AAAAA',
-                footer: '<a href>Rate the plugin</a> | <a href="">Donate us</a> | <a href="">Support</a>'
             });
         }
         else if (results.success === false) {
