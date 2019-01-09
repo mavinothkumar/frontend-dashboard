@@ -57,7 +57,8 @@ function fed_script_admin( $hook ) {
 			plugins_url( 'admin/assets/fed_admin_style.css', BC_FED_PLUGIN ),
 			array(), BC_FED_PLUGIN_VERSION, 'all' );
 
-
+        wp_enqueue_script('jquery-ui-core');
+        wp_enqueue_script('jquery-ui-sortable');
 
 		do_action( 'fed_enqueue_script_style_admin');
 

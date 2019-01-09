@@ -454,7 +454,7 @@ function fed_process_user_profile($row, $action, $update = 'no')
     );
 
     if ($action === 'post') {
-        $default['post_type'] = (isset($row['post_type']) && fed_check_post_type($row['post_type'])) ? esc_attr($row['post_type']) : 'post';
+        $default['post_type'] = (isset($row['post_type']) && fed_check_post_type($row['post_type'])) ? sanitize_text_field($row['post_type']) : 'post';
     }
 
 
@@ -462,10 +462,10 @@ function fed_process_user_profile($row, $action, $update = 'no')
         if (isset($row['extended'])) {
             if ($update === 'yes') {
                 $extended            = array(
-                        'date_format' => isset($row['extended']['date_format']) ? esc_attr($row['extended']['date_format']) : 'd-m-Y',
-                        'enable_time' => isset($row['extended']['enable_time']) ? esc_attr($row['extended']['enable_time']) : 'no',
-                        'date_mode'   => isset($row['extended']['date_mode']) ? esc_attr($row['extended']['date_mode']) : 'single',
-                        'time_24hr'   => isset($row['extended']['time_24hr']) ? esc_attr($row['extended']['time_24hr']) : '24_hours',
+                        'date_format' => isset($row['extended']['date_format']) ? sanitize_text_field($row['extended']['date_format']) : 'd-m-Y',
+                        'enable_time' => isset($row['extended']['enable_time']) ? sanitize_text_field($row['extended']['enable_time']) : 'no',
+                        'date_mode'   => isset($row['extended']['date_mode']) ? sanitize_text_field($row['extended']['date_mode']) : 'single',
+                        'time_24hr'   => isset($row['extended']['time_24hr']) ? sanitize_text_field($row['extended']['time_24hr']) : '24_hours',
                 );
                 $default['extended'] = serialize($extended);
             } else {
@@ -484,9 +484,9 @@ function fed_process_user_profile($row, $action, $update = 'no')
     if ($action === 'profile') {
         $user_profile  = array(
                 'show_register'     => fed_filter_show_register($row),
-                'show_dashboard'    => isset($row['show_dashboard']) ? esc_attr($row['show_dashboard']) : 'Disable',
-                'menu'              => isset($row['menu']) ? esc_attr($row['menu']) : 'profile',
-                'show_user_profile' => isset($row['show_user_profile']) ? esc_attr($row['show_user_profile']) : 'Enable',
+                'show_dashboard'    => isset($row['show_dashboard']) ? sanitize_text_field($row['show_dashboard']) : 'Disable',
+                'menu'              => isset($row['menu']) ? sanitize_text_field($row['menu']) : 'profile',
+                'show_user_profile' => isset($row['show_user_profile']) ? sanitize_text_field($row['show_user_profile']) : 'Enable',
 
         );
         $default_value = array_merge($default, $user_profile);
@@ -507,13 +507,13 @@ function fed_process_user_profile($row, $action, $update = 'no')
 function fed_process_menu($row)
 {
     $default_value = array(
-            'menu_slug'         => isset($row['fed_menu_slug']) ? esc_attr($row['fed_menu_slug']) : 'ERROR',
-            'menu'              => isset($row['fed_menu_name']) ? esc_attr($row['fed_menu_name']) : 'ERROR',
-            'menu_image_id'     => isset($row['menu_image_id']) ? esc_attr($row['menu_image_id']) : 'ERROR',
-            'show_user_profile' => isset($row['show_user_profile']) ? esc_attr($row['show_user_profile']) : 'Enable',
-            'menu_order'        => isset($row['fed_menu_order']) ? esc_attr($row['fed_menu_order']) : '9',
+            'menu_slug'         => isset($row['fed_menu_slug']) ? sanitize_text_field($row['fed_menu_slug']) : 'ERROR',
+            'menu'              => isset($row['fed_menu_name']) ? sanitize_text_field($row['fed_menu_name']) : 'ERROR',
+            'menu_image_id'     => isset($row['menu_image_id']) ? sanitize_text_field($row['menu_image_id']) : 'ERROR',
+            'show_user_profile' => isset($row['show_user_profile']) ? sanitize_text_field($row['show_user_profile']) : 'Enable',
+            'menu_order'        => isset($row['fed_menu_order']) ? sanitize_text_field($row['fed_menu_order']) : '9',
             'user_role'         => (isset($row['user_role']) && ! empty($row['user_role'])) ? (is_string($row['user_role'])) ? unserialize($row['user_role']) : serialize(array_keys($row['user_role'])) : array(),
-            'extended'          => isset($row['extended']) ? esc_attr($row['extended']) : '',
+            'extended'          => isset($row['extended']) ? sanitize_text_field($row['extended']) : '',
 
     );
 
@@ -2777,6 +2777,7 @@ function fed_get_key_value_array(array $array, $key, $value = null)
 
     }
 
+
     return $new_array;
 }
 
@@ -3093,6 +3094,39 @@ function fed_get_table_status()
     $tables = apply_filters('fed_status_get_table_status', $table_status);
 
     return $tables;
+}
+
+
+/**
+ * @return array
+ */
+function fed_get_tables()
+{
+    return apply_filters('fed_get_tables', array(
+            'fed_user_profile' => array('order' => 'input_order'),
+            'fed_post'         => array('order' => 'input_order'),
+            'fed_menu'         => array('order' => 'menu_order'),
+    ));
+}
+
+/**
+ * @param $values
+ * @param $menus
+ *
+ * @return array
+ */
+function fed_get_menu_value($values, $menus)
+{
+    $new_array = array();
+    foreach ($menus as $index => $menu) {
+        foreach ($values as $value) {
+            if ($value['menu'] === $index) {
+                $new_array[$index][] = $value;
+            }
+        }
+    }
+
+    return $new_array;
 }
 
 

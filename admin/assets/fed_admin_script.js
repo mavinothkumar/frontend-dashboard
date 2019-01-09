@@ -479,6 +479,33 @@ jQuery(document).ready(function ($) {
         // $('body').toggleClass('fed_bg_gray');
     }
 
+    $(".fed_sort_menu").sortable({
+        placeholder: "row ui-state-highlight",
+        axis: 'y',
+        opacity: 0.6,
+        cursor: 'move',
+        tolerance: 'pointer',
+        update: function (event, ui) {
+            var data = $(this).sortable('toArray');
+            var url = $(this).closest('.fed_sort_menu').data('url');
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {sort:data},
+                success: function (results) {
+                    if (results.success === false){
+                        swal({
+                            title: results.data.message || 'Something Went Wrong',
+                            type: "error",
+                            confirmButtonColor: '#DD6B55',
+                        })
+                    }
+                }
+            });
+        }
+    });
+    $(".fed_sort_menu").disableSelection();
+
 });
 
 var fedAdminAlert = {

@@ -3,8 +3,8 @@ Contributors: vinoth06, buffercode
 Tags: dashboard, frontend dashboard, custom login, custom register, custom roles, custom profile, custom post type, custom taxonomies, custom dashboard
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7DHAEMST475BY
 Requires at least: 4.6
-Tested up to: 4.9.8
-Stable tag: 1.3
+Tested up to: 5.0.2
+Stable tag: 1.3.1
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -203,6 +203,12 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Changelog ==
 
+= 1.3.1 [09-Jan-2019] =
+
+* Bug fixes: Admin User Profile Menu not sorting in order
+* Bug fixes: Frontend Dashboard menu not sorting in order
+* New: Drag and Drop to sort the menu items in Dashboard Menu, User Profile and Post Fields
+
 = 1.2.14 [23-May-2018] =
 
 * Bug fixes: Reset Password not working when Login only selected.
@@ -367,11 +373,11 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 * Public release
 
 == Upgrade Notice ==
-= 1.2.14 [23-May-2018] =
+= 1.3.1 [09-Jan-2019] =
 
-* Bug fixes: Reset Password not working when Login only selected.
-
-* Update for FED Extra Plugin: Now the Admin bar can be enable or disable based on the User Role.
+* Bug fixes: Admin User Profile Menu not sorting in order
+* Bug fixes: Frontend Dashboard menu not sorting in order
+* New: Drag and Drop to sort the menu items in Dashboard Menu, User Profile and Post Fields
 
 == Screenshots ==
 1. Frontend Dashboard Settings | Login | Settings

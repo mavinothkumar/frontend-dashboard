@@ -264,7 +264,9 @@ if ( ! class_exists('FED_AdminMenu')) {
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="panel-group" id="fedmenu" role="tablist" aria-multiselectable="true">
+                                    <div class="panel-group fed_sort_menu"
+                                         data-url="<?php echo admin_url('admin-ajax.php?action=fed_admin_menu_sorting&table=fed_menu&fed_nonce='.wp_create_nonce('fed_nonce')) ?>"
+                                         id="fedmenu" role="tablist" aria-multiselectable="true">
                                         <?php
                                         $collapse = 0;
                                         foreach ($menus as $index => $menu) {
@@ -278,7 +280,8 @@ if ( ! class_exists('FED_AdminMenu')) {
 
                                             $collapse++;
                                             ?>
-                                            <div class="fed_dashboard_menu_single_item <?php echo $index ?>">
+                                            <div class="fed_dashboard_menu_single_item ui-state-default <?php echo $menu['menu'] ?>"
+                                                 id="<?php echo $menu['id'] ?>">
                                                 <div class="panel panel-secondary-heading">
                                                     <div class="panel-heading <?php echo $collapsed; ?>"
                                                          role="tab" id="<?php echo $index ?>" data-toggle="collapse"
@@ -314,7 +317,7 @@ if ( ! class_exists('FED_AdminMenu')) {
                                                                     <div class="col-md-10">
                                                                         <div class="row">
                                                                             <div class="col-md-12">
-                                                                                <div class="col-md-4">
+                                                                                <div class="col-md-6">
                                                                                     <div class="form-group">
                                                                                         <label><?php _e('Menu Name',
                                                                                                     'frontend-dashboard') ?></label>
@@ -342,20 +345,20 @@ if ( ! class_exists('FED_AdminMenu')) {
                                                                                         />
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="col-md-2">
-                                                                                    <div class="form-group">
-                                                                                        <label><?php _e('Menu Order',
-                                                                                                    'frontend-dashboard') ?></label>
-                                                                                        <input type="number"
-                                                                                               name="fed_menu_order"
-                                                                                               class="form-control fed_menu_order"
-                                                                                               value="<?php echo esc_attr(
-                                                                                                       $menu['menu_order']) ?>"
-                                                                                               required="required"
-                                                                                               placeholder="Menu Order"
-                                                                                        />
-                                                                                    </div>
-                                                                                </div>
+<!--                                                                                <div class="col-md-2">-->
+<!--                                                                                    <div class="form-group">-->
+<!--                                                                                        <label>--><?php //_e('Menu Order',
+//                                                                                                    'frontend-dashboard') ?><!--</label>-->
+<!--                                                                                        <input type="number"-->
+<!--                                                                                               name="fed_menu_order"-->
+<!--                                                                                               class="form-control fed_menu_order"-->
+<!--                                                                                               value="--><?php //echo esc_attr(
+//                                                                                                       $menu['menu_order']) ?><!--"-->
+<!--                                                                                               required="required"-->
+<!--                                                                                               placeholder="Menu Order"-->
+<!--                                                                                        />-->
+<!--                                                                                    </div>-->
+<!--                                                                                </div>-->
                                                                                 <div class="col-md-3">
                                                                                     <div class="form-group text-center">
                                                                                         <?php
@@ -660,7 +663,7 @@ if ( ! class_exists('FED_AdminMenu')) {
 
         public function plugin_pages()
         {
-            $plugins  = array(
+            $plugins = array(
                     'plugins' => array(
                             'fed_extra'   => array(
                                     'id'           => 'BC_FED_EXTRA_PLUGIN',
@@ -736,14 +739,14 @@ if ( ! class_exists('FED_AdminMenu')) {
                                     </h3>
                                 </div>
                                 <div class="panel-body">
-                                        <div class="row">
-                                            <?php foreach ($plugins->plugins as $single) { ?>
-                                                <div class="col-md-6 col-xs-12 col-sm-12">
-                                                    <div class="panel panel-primary">
-                                                        <div class="panel-heading">
-                                                            <h3 class="panel-title">
-                                                                <?php echo $single->title; ?>
-                                                                <span class="pull-right">
+                                    <div class="row">
+                                        <?php foreach ($plugins->plugins as $single) { ?>
+                                            <div class="col-md-6 col-xs-12 col-sm-12">
+                                                <div class="panel panel-primary">
+                                                    <div class="panel-heading">
+                                                        <h3 class="panel-title">
+                                                            <?php echo $single->title; ?>
+                                                            <span class="pull-right">
 											<i class="fa fa-code-fork" aria-hidden="true"></i>
                                                                 <?php
                                                                 if (is_plugin_active($single->directory)) {
@@ -752,80 +755,80 @@ if ( ! class_exists('FED_AdminMenu')) {
                                                                     echo $single->version;
                                                                 } ?>
 										</span>
-                                                            </h3>
-                                                        </div>
-                                                        <div class="panel-body">
-                                                            <div class="row">
-                                                                <div class="col-md-4">
-                                                                    <img class="img-responsive"
-                                                                         src="<?php echo $single->thumbnail; ?>"
-                                                                         alt="">
-                                                                </div>
-                                                                <div class="col-md-8">
-                                                                    <p class="fed_plugin_description">
-                                                                        <?php echo wp_trim_words($single->description,
-                                                                                100); ?>
-                                                                    </p>
-                                                                    <div class="fed_plugin_link">
-                                                                        <a href="<?php echo $single->download_url ?>">
-                                                                            <button class="btn btn-warning">
-                                                                                <i class="fa fa-eye"
-                                                                                   aria-hidden="true"></i>
-                                                                                View
-                                                                            </button>
-                                                                        </a>
+                                                        </h3>
+                                                    </div>
+                                                    <div class="panel-body">
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <img class="img-responsive"
+                                                                     src="<?php echo $single->thumbnail; ?>"
+                                                                     alt="">
+                                                            </div>
+                                                            <div class="col-md-8">
+                                                                <p class="fed_plugin_description">
+                                                                    <?php echo wp_trim_words($single->description,
+                                                                            100); ?>
+                                                                </p>
+                                                                <div class="fed_plugin_link">
+                                                                    <a href="<?php echo $single->download_url ?>">
+                                                                        <button class="btn btn-warning">
+                                                                            <i class="fa fa-eye"
+                                                                               aria-hidden="true"></i>
+                                                                            View
+                                                                        </button>
+                                                                    </a>
+                                                                    <?php
+                                                                    if (is_plugin_active($single->directory)) {
+                                                                        ?>
+                                                                        <button class="btn btn-info">
+                                                                            <i class="fa fa-check"
+                                                                               aria-hidden="true"></i>
+                                                                            Installed
+                                                                        </button>
                                                                         <?php
-                                                                        if (is_plugin_active($single->directory)) {
+                                                                        if ($single->version > constant($single->id.'_VERSION'
+                                                                                )) {
                                                                             ?>
-                                                                            <button class="btn btn-info">
-                                                                                <i class="fa fa-check"
+                                                                            <button class="btn btn-danger">
+                                                                                <i class="fa fa-refresh"
                                                                                    aria-hidden="true"></i>
-                                                                                Installed
+                                                                                Update
                                                                             </button>
                                                                             <?php
-                                                                            if ($single->version > constant($single->id.'_VERSION'
-                                                                                    )) {
-                                                                                ?>
-                                                                                <button class="btn btn-danger">
-                                                                                    <i class="fa fa-refresh"
-                                                                                       aria-hidden="true"></i>
-                                                                                    Update
-                                                                                </button>
-                                                                                <?php
-                                                                            }
-
-                                                                        } else {
-                                                                            if ($single->pricing->type === 'Free') { ?>
-                                                                                <a href="<?php echo $single->download_url; ?>"
-                                                                                   class="btn btn-primary"
-                                                                                   role="button">
-                                                                                    <i class="fa fa-download"
-                                                                                       aria-hidden="true"></i>
-                                                                                    <?php _e('Download',
-                                                                                            'frontend-dashboard') ?>
-                                                                                </a>
-                                                                            <?php }
-                                                                            if ($single->pricing->type === 'Pro') {
-                                                                                ?>
-                                                                                <a href="#" class="btn btn-primary"
-                                                                                   role="button">
-                                                                                    <i class="fa fa-shopping-cart"
-                                                                                       aria-hidden="true"></i>
-                                                                                    <?php echo $single->pricing->currency.$single->pricing->amount; ?>
-                                                                                </a>
-                                                                                <?php
-                                                                            }
-
                                                                         }
-                                                                        ?>
-                                                                    </div>
+
+                                                                    } else {
+                                                                        if ($single->pricing->type === 'Free') { ?>
+                                                                            <a href="<?php echo $single->download_url; ?>"
+                                                                               class="btn btn-primary"
+                                                                               role="button">
+                                                                                <i class="fa fa-download"
+                                                                                   aria-hidden="true"></i>
+                                                                                <?php _e('Download',
+                                                                                        'frontend-dashboard') ?>
+                                                                            </a>
+                                                                        <?php }
+                                                                        if ($single->pricing->type === 'Pro') {
+                                                                            ?>
+                                                                            <a href="#" class="btn btn-primary"
+                                                                               role="button">
+                                                                                <i class="fa fa-shopping-cart"
+                                                                                   aria-hidden="true"></i>
+                                                                                <?php echo $single->pricing->currency.$single->pricing->amount; ?>
+                                                                            </a>
+                                                                            <?php
+                                                                        }
+
+                                                                    }
+                                                                    ?>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            <?php } ?>
-                                        </div>
+                                            </div>
+                                        <?php } ?>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1510,6 +1513,9 @@ if ( ! class_exists('FED_AdminMenu')) {
             <?php
         }
 
+        /**
+         * @return mixed|void
+         */
         private function admin_dashboard_settings_menu_header()
         {
             $menu = array(
@@ -1541,6 +1547,9 @@ if ( ! class_exists('FED_AdminMenu')) {
             return apply_filters('fed_admin_dashboard_settings_menu_header', $menu);
         }
 
+        /**
+         * @param $item
+         */
         private function call_function_method($item)
         {
             $parameter = '';
@@ -1564,6 +1573,9 @@ if ( ! class_exists('FED_AdminMenu')) {
             }
         }
 
+        /**
+         * @param $profiles
+         */
         private function post_fields_layout($profiles)
         {
             ?>
@@ -1643,24 +1655,25 @@ if ( ! class_exists('FED_AdminMenu')) {
                                                     <div class="panel-heading">
                                                         <h3 class="panel-title"><?php echo $menu[$index]; ?></h3>
                                                     </div>
-                                                    <div class="panel-body">
+                                                    <div class="panel-body fed_sort_menu"
+                                                         data-url="<?php echo admin_url('admin-ajax.php?action=fed_admin_menu_sorting&table=fed_post&fed_nonce='.wp_create_nonce('fed_nonce')) ?>">
                                                         <?php
 
                                                         foreach ($group as $profile) {
                                                             ?>
-                                                            <form method="post"
-                                                                  class="fed_user_profile_delete fed_profile_ajax"
-                                                                  action="<?php echo admin_url('admin-ajax.php?action=fed_user_profile_delete') ?>">
-                                                                <?php fed_wp_nonce_field('fed_nonce', 'fed_nonce') ?>
-                                                                <input type="hidden"
-                                                                       name="post_id"
-                                                                       value="<?php echo $profile['id'] ?>">
+                                                            <div class="row fed_single_profile ui-state-default" id="<?php echo $profile['id'] ?>">
+                                                                <form method="post"
+                                                                      class="fed_user_profile_delete fed_profile_ajax"
+                                                                      action="<?php echo admin_url('admin-ajax.php?action=fed_user_profile_delete') ?>">
+                                                                    <?php fed_wp_nonce_field('fed_nonce',
+                                                                            'fed_nonce') ?>
+                                                                    <input type="hidden"
+                                                                           name="post_id"
+                                                                           value="<?php echo $profile['id'] ?>">
 
-                                                                <input type="hidden"
-                                                                       name="profile_name"
-                                                                       value="<?php echo $profile['label_name'] ?>">
-
-                                                                <div class="row fed_single_profile ">
+                                                                    <input type="hidden"
+                                                                           name="profile_name"
+                                                                           value="<?php echo $profile['label_name'] ?>">
                                                                     <div class="col-md-6">
                                                                         <label class="control-label">
                                                                             <?php
@@ -1683,8 +1696,9 @@ if ( ! class_exists('FED_AdminMenu')) {
                                                                             </button>
                                                                         <?php } ?>
                                                                     </div>
-                                                                </div>
-                                                            </form>
+                                                                </form>
+                                                            </div>
+
                                                         <?php }
                                                         ?>
                                                     </div>
@@ -1706,10 +1720,15 @@ if ( ! class_exists('FED_AdminMenu')) {
             <?php
         }
 
+        /**
+         * @param $profiles
+         */
         private function show_admin_profile_page($profiles)
         {
             usort($profiles, 'fed_sort_by_order');
-            $menu     = fed_get_key_value_array(fed_fetch_menu(), 'menu_slug');
+            $_menu = fed_fetch_menu();
+            usort($_menu, 'fed_sort_by_order');
+            $menu     = fed_get_key_value_array($_menu, 'menu_slug');
             $menu_key = fed_get_key_value_array($menu, 'menu_slug', 'menu');
             ?>
             <div class="bc_fed container fed_tabs_container fed_UP_container">
@@ -1740,9 +1759,8 @@ if ( ! class_exists('FED_AdminMenu')) {
                             <div class="col-md-3">
                                 <ul class="nav nav-pills nav-stacked p-t-10" role="tablist">
                                     <?php
-                                    $profilesValue = fed_array_group_by_key($profiles, 'menu');
-                                    $groupBy       = fed_compare_two_arrays_get_second_value($menu_key, $profilesValue);
-                                    $count         = 0;
+                                    $groupBy = fed_get_menu_value($profiles, $menu_key);
+                                    $count   = 0;
                                     foreach ($groupBy as $index => $group) {
                                         $isActive = $count === 0 ? 'active' : '';
                                         ?>
@@ -1782,7 +1800,8 @@ if ( ! class_exists('FED_AdminMenu')) {
                                                                 $menu[$index]['menu']); ?>
                                                     </h3>
                                                 </div>
-                                                <div class="panel-body">
+                                                <div class="panel-body fed_sort_menu"
+                                                     data-url="<?php echo admin_url('admin-ajax.php?action=fed_admin_menu_sorting&table=fed_user_profile&fed_nonce='.wp_create_nonce('fed_nonce')) ?>">
                                                     <?php
 
                                                     foreach ($group as $profile) {
@@ -1793,19 +1812,19 @@ if ( ! class_exists('FED_AdminMenu')) {
                                                         $user_profile = fed_profile_enable_disable($profile['show_user_profile'],
                                                                 'user_profile');
                                                         ?>
-                                                        <form method="post"
-                                                              class="fed_user_profile_delete fed_profile_ajax"
-                                                              action="<?php echo admin_url('admin-ajax.php?action=fed_user_profile_delete') ?>">
-                                                            <?php fed_wp_nonce_field('fed_nonce', 'fed_nonce') ?>
-                                                            <input type="hidden"
-                                                                   name="profile_id"
-                                                                   value="<?php echo $profile['id'] ?>">
+                                                        <div class="row fed_single_profile ui-state-default"
+                                                             id="<?php echo $profile['id'] ?>">
+                                                            <form method="post"
+                                                                  class="fed_user_profile_delete fed_profile_ajax"
+                                                                  action="<?php echo admin_url('admin-ajax.php?action=fed_user_profile_delete') ?>">
+                                                                <?php fed_wp_nonce_field('fed_nonce', 'fed_nonce') ?>
+                                                                <input type="hidden"
+                                                                       name="profile_id"
+                                                                       value="<?php echo $profile['id'] ?>">
 
-                                                            <input type="hidden"
-                                                                   name="profile_name"
-                                                                   value="<?php echo $profile['label_name'] ?>">
-
-                                                            <div class="row fed_single_profile ">
+                                                                <input type="hidden"
+                                                                       name="profile_name"
+                                                                       value="<?php echo $profile['label_name'] ?>">
                                                                 <div class="col-md-6">
                                                                     <label class="control-label">
                                                                         <?php
@@ -1858,8 +1877,10 @@ if ( ! class_exists('FED_AdminMenu')) {
                                                                         <?php } ?>
 													</span>
                                                                 </div>
-                                                            </div>
-                                                        </form>
+
+                                                            </form>
+                                                        </div>
+
                                                     <?php }
                                                     ?>
                                                 </div>
