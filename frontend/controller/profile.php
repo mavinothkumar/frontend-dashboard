@@ -25,6 +25,8 @@ function fed_display_dashboard_profile( $menu_item ) {
 	$user     = get_userdata( get_current_user_id() );
 	$menus    = fed_process_dashboard_display_menu();
 
+    usort($profiles, 'fed_sort_by_order');
+
 	$index             = $menu_item['menu_slug'];
 	$menu_title        = ucwords( __( $menus[ $index ]['menu'], 'frontend-dashboard' ) );
 	$menu_title_value  = apply_filters( 'fed_menu_title', $menu_title, $menus, $index );
