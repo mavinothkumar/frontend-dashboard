@@ -8,6 +8,7 @@ add_action( 'wp_ajax_fed_admin_setting_up_form', 'fed_admin_setting_up_form_func
 add_action( 'wp_ajax_fed_admin_setting_form_dashboard_menu', 'fed_admin_setting_form_dashboard_menu_function' );
 add_action( 'wp_ajax_fed_user_profile_delete', 'fed_user_profile_delete_function' );
 add_action( 'wp_ajax_fed_message_form', 'fed_message_form_function' );
+add_action( 'wp_ajax_fed_is_registered', 'fed_is_registered' );
 
 /**
  * Admin Setting Page
@@ -52,10 +53,10 @@ function fed_admin_setting_form_function() {
 	 * Process Payment Options
 	 */
 
-	if ( isset( $request['fed_admin_unique'] ) && 'fed_payment_options' == $request['fed_admin_unique'] ) {
-		fed_admin_payment_options_request();
-		exit();
-	}
+//	if ( isset( $request['fed_admin_unique'] ) && 'fed_payment_options' == $request['fed_admin_unique'] ) {
+//		fed_admin_payment_options_request();
+//		exit();
+//	}
 	/**
 	 * Process User Options
 	 */
@@ -64,20 +65,20 @@ function fed_admin_setting_form_function() {
 		exit();
 	}
 
-	/**
-	 * Process Invoice Options
-	 */
-	if ( isset( $request['fed_admin_unique'] ) && 'fed_invoice_details' == $request['fed_admin_unique'] ) {
-		fed_admin_invoice_options_request();
-		exit();
-	}
-	/**
-	 * Process Support Options
-	 */
-	if ( isset( $request['fed_admin_unique'] ) && 'fed_admin_settings_support' == $request['fed_admin_unique'] ) {
-		fed_admin_support_options_request();
-		exit();
-	}
+//	/**
+//	 * Process Invoice Options
+//	 */
+//	if ( isset( $request['fed_admin_unique'] ) && 'fed_invoice_details' == $request['fed_admin_unique'] ) {
+//		fed_admin_invoice_options_request();
+//		exit();
+//	}
+//	/**
+//	 * Process Support Options
+//	 */
+//	if ( isset( $request['fed_admin_unique'] ) && 'fed_admin_settings_support' == $request['fed_admin_unique'] ) {
+//		fed_admin_support_options_request();
+//		exit();
+//	}
 
 	/**
 	 * 3rd Party template redirect handle
@@ -90,7 +91,8 @@ function fed_admin_setting_form_function() {
  * Admin User Profile Page
  */
 function fed_admin_setting_up_form_function() {
-	$post = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	//$post = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	$post = $_REQUEST;
 
 	if ( ! isset( $post['fed_action'] ) ) {
 		wp_send_json_error( array( 'message' => 'You are trying some naughty actions, this action has been notified to Admin' ) );

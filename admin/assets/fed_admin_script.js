@@ -249,6 +249,9 @@ jQuery(document).ready(function ($) {
             case 'wysiwyg':
                 closest.find('.fed_input_wysiwyg_container').removeClass('hide');
                 break;
+            case 'label':
+                closest.find('.fed_input_label_container').removeClass('hide');
+                break;
 
 
         }
@@ -263,7 +266,9 @@ jQuery(document).ready(function ($) {
      */
     $('.fed_input_type_container').on('change', '.fed_input_label_for_onchange', function () {
         var value = $(this).val().replace(/[^a-zA-Z0-9 ]/g, "").split(' ').join('_').toLowerCase();
-        $(this).closest('form').find('.row .form-group .fed_admin_input_meta').val(value);
+        if (value.length <= 12) {
+            $(this).closest('form').find('.row .form-group .fed_admin_input_meta').val(value);
+        }
     });
 
     /**
@@ -473,6 +478,7 @@ jQuery(document).ready(function ($) {
         $('.preview-area').toggleClass('hide');
         // $('body').toggleClass('fed_bg_gray');
     }
+
 });
 
 var fedAdminAlert = {
@@ -493,8 +499,7 @@ var fedAdminAlert = {
                         }
                     }
                 });
-        }
-        else if ((results.success) === false) {
+        } else if ((results.success) === false) {
             swal({
                 title: results.data.message || 'Something Went Wrong',
                 type: "error",
@@ -508,8 +513,7 @@ var fedAdminAlert = {
                     }
                 }
             });
-        }
-        else {
+        } else {
             swal({
                 title: "Invalid form submission",
                 text: "Please try again",
@@ -534,8 +538,7 @@ var fedAdminAlert = {
                 type: "success",
                 confirmButtonColor: '#0AAAAA',
             });
-        }
-        else if (results.success === false) {
+        } else if (results.success === false) {
             var error;
             if (results.data.message instanceof Array) {
                 error = results.data.message.join('</br>');
@@ -549,8 +552,7 @@ var fedAdminAlert = {
                 html: true
 
             });
-        }
-        else {
+        } else {
             swal({
                 title: "Invalid form submission",
                 text: "Please try again",

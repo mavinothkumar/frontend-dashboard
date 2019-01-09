@@ -660,7 +660,7 @@ if ( ! class_exists('FED_AdminMenu')) {
 
         public function plugin_pages()
         {
-            $plugins = array(
+            $plugins  = array(
                     'plugins' => array(
                             'fed_extra'   => array(
                                     'id'           => 'BC_FED_EXTRA_PLUGIN',
@@ -721,20 +721,21 @@ if ( ! class_exists('FED_AdminMenu')) {
             );
             if (false === ($api = get_transient('fed_plugin_list_api'))) {
                 $api = get_plugin_list();
-                if ($api) {
-                    set_transient('fed_plugin_list_api', $api, 12 * HOUR_IN_SECONDS);
-                    $plugins = json_decode($api);
-                    ?>
-                    <div class="bc_fed container fed_plugins">
-                        <div class="row  padd_top_20">
-                            <div class="col-md-12">
-                                <div class="panel panel-primary">
-                                    <div class="panel-heading">
-                                        <h3 class="panel-title">
-                                            <?php _e('Add-Ons', 'frontend-dashboard') ?>
-                                        </h3>
-                                    </div>
-                                    <div class="panel-body">
+            }
+            if ($api) {
+                set_transient('fed_plugin_list_api', $api, 12 * HOUR_IN_SECONDS);
+                $plugins = json_decode($api);
+                ?>
+                <div class="bc_fed container fed_plugins">
+                    <div class="row  padd_top_20">
+                        <div class="col-md-12">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        <?php _e('Add-Ons', 'frontend-dashboard') ?>
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
                                         <div class="row">
                                             <?php foreach ($plugins->plugins as $single) { ?>
                                                 <div class="col-md-6 col-xs-12 col-sm-12">
@@ -768,7 +769,8 @@ if ( ! class_exists('FED_AdminMenu')) {
                                                                     <div class="fed_plugin_link">
                                                                         <a href="<?php echo $single->download_url ?>">
                                                                             <button class="btn btn-warning">
-                                                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                                                                <i class="fa fa-eye"
+                                                                                   aria-hidden="true"></i>
                                                                                 View
                                                                             </button>
                                                                         </a>
@@ -824,27 +826,24 @@ if ( ! class_exists('FED_AdminMenu')) {
                                                 </div>
                                             <?php } ?>
                                         </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
-                    <?php
-                }
-                else {
-                    ?>
-                    <div class="bc_fed container fed_plugins">
-                        <div class="alert alert-danger">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            <strong><?php _e('Sorry there is some issue in internet connectivity.',
-                                        'frontend-dashboard') ?></strong>
-                        </div>
-                        <?php echo fed_loader(''); ?>
-                    </div>
-                    <?php
-                }
 
+                </div>
+                <?php
+            } else {
+                ?>
+                <div class="bc_fed container fed_plugins">
+                    <div class="alert alert-danger">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <strong><?php _e('Sorry there is some issue in internet connectivity.',
+                                    'frontend-dashboard') ?></strong>
+                    </div>
+                    <?php echo fed_loader(''); ?>
+                </div>
+                <?php
             }
 
         }

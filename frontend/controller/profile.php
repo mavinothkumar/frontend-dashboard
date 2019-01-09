@@ -75,7 +75,8 @@ function fed_display_dashboard_profile( $menu_item ) {
 								<div class="col-md-7 fo">
 									<label>
 										<?php
-										esc_attr_e( $single_item['label_name'], 'frontend-dashboard' );
+//										_e( $single_item['label_name'], 'frontend-dashboard' );
+                                        echo htmlspecialchars_decode($single_item['label_name'])
 										?>
 									</label>
 									<?php

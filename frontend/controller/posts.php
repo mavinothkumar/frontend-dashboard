@@ -228,7 +228,7 @@ function fed_display_dashboard_add_new_post( $post_type ) {
 				<button class="btn btn-primary"
 						type="submit">
 					<i class="fa fa-floppy-o"></i>
-					Save
+                    <?php _e( 'Save', 'frontend-dashboard' ) ?>
 				</button>
 			</div>
 		</div>
@@ -449,7 +449,7 @@ function fed_display_dashboard_edit_post_by_id( $post ) {
 			<button class="btn btn-primary"
 					type="submit">
 				<i class="fa fa-floppy-o"></i>
-				Save
+				'.__( 'Save', 'frontend-dashboard' ) .'
 			</button>
 		</div>
 	</div>

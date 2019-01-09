@@ -16,7 +16,7 @@ function fed_login_form() {
 }
 
 /**
- * @return mixed|void
+ * @return mixed
  */
 function fed_login_only() {
 	$login = array(

@@ -636,7 +636,7 @@ function fed_show_user_profile_page($user)
     /**
      * Collect Menu, User Information and Menu Items
      */
-    $profiles    = fed_array_group_by_key(fed_fetch_user_profile_by_dashboard(), 'menu');
+     $profiles    = fed_array_group_by_key(fed_fetch_user_profile_by_dashboard(), 'menu');
     $menus       = fed_fetch_table_rows_with_key(BC_FED_MENU_DB, 'menu_slug');
     $upl_options = get_option('fed_admin_settings_upl');
 

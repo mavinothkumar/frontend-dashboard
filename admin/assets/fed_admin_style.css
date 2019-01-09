@@ -748,3 +748,22 @@ Loader
     padding: 8px !important;
     color: #ffffff !important;
 }
+
+/**
+v1.3.1
+ */
+
+.bc_fed .fed_opacity {
+    opacity: 0.4;
+}
+.bc_fed .fed_register_popup_center {
+    width: 50%;
+    padding: 20px 30px;
+    margin-bottom: 10px;
+}
+
+.bc_fed .fed_register_popup_container {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}

@@ -1,0 +1,888 @@
+# Translation of Plugins - Frontend Dashboard - Stable (latest release) in Croatian
+# This file is distributed under the same license as the Plugins - Frontend Dashboard - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2018-10-11 19:30:29+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: GlotPress/2.4.0-alpha\n"
+"Language: hr\n"
+"Project-Id-Version: Plugins - Frontend Dashboard - Stable (latest release)\n"
+
+#: frontend/request/login/login.php:34
+msgid "Successfully Logged in"
+msgstr "Uspješno ste ulogirani"
+
+#: templates/login/registered-user.php:10
+msgid "Visit Dashboard"
+msgstr "Posjeti Dashboard"
+
+#: templates/login/register-only.php:48
+msgid "Already have an account?"
+msgstr "Već imate korisnički račun?"
+
+#: templates/login/login-only.php:54
+msgid "Lost Password?"
+msgstr "Zaboravili ste lozinku?"
+
+#: templates/login/login-only.php:49
+msgid "Create an account"
+msgstr "Izradi korisnički račun"
+
+#: shortcodes/login/login-data.php:109 shortcodes/login/login-data.php:110
+msgid "Confirmation Password"
+msgstr "Potvrda lozinke"
+
+#: shortcodes/login/login-data.php:100 shortcodes/login/login-data.php:125
+msgid "Reset Password"
+msgstr "Resetiranje lozinke"
+
+#: shortcodes/login/login-data.php:83 shortcodes/login/login-data.php:84
+msgid "User Name / Email Address"
+msgstr "Korisničko ime / Email Adresa"
+
+#: shortcodes/login/login-data.php:79 shortcodes/login/login-data.php:89
+msgid "Forgot Password"
+msgstr "Zaboravljena lozinka"
+
+#: shortcodes/login/login-data.php:42
+msgid "Remember Me"
+msgstr "Zapamti me"
+
+#: shortcodes/login/login-data.php:29 shortcodes/login/login-data.php:30
+msgid "User Name"
+msgstr "Korisničko ime"
+
+#: frontend/function-frontend.php:814
+msgid "Click here to visit Dashboard"
+msgstr "Klikni ovdje za odlazak u dashboard"
+
+#: frontend/function-frontend.php:813
+msgid "Unauthorised Access"
+msgstr "Neovlašteni pristup"
+
+#: frontend/function-frontend.php:809
+msgid "Error (403)"
+msgstr "Error (403)"
+
+#: frontend/function-frontend.php:771
+msgid "Recent Post by"
+msgstr "Posljednji članak by"
+
+#: frontend/function-frontend.php:617
+msgid "No user found..."
+msgstr "Nije pronađen korisnik..."
+
+#: frontend/function-frontend.php:616
+msgid "Sorry!"
+msgstr "Oprostite!"
+
+#: frontend/function-frontend.php:90
+msgid "Default Tables not installed, please contact support"
+msgstr "Default tablice nisu instalirane, molimo kontaktirajte korisničku podršku"
+
+#: frontend/controller/profile.php:102
+msgid "Sorry! there is no field associated to this menu"
+msgstr "Ispričavamo se! Ne postoje polja vezana za taj menu."
+
+#: frontend/controller/profile.php:94
+msgid "Save"
+msgstr "Spremi"
+
+#: frontend/controller/posts.php:300
+msgid "Sorry! your are not allowed to do this action"
+msgstr "Žao nam je! Nemate ovlaštenje za to."
+
+#: frontend/controller/posts.php:259
+msgid "Please fill post title"
+msgstr "Molimo popunite naziv"
+
+#: frontend/controller/menu.php:182
+msgid "Collapse Menu"
+msgstr "Uvuci menu"
+
+#: frontend/controller/logout.php:18
+msgid "Please click here to logout"
+msgstr "Kliknite ovdje za logout"
+
+#. Author URI of the plugin/theme
+msgid "https://buffercode.com/"
+msgstr "https://buffercode.com/"
+
+#. Author of the plugin/theme
+msgid "vinoth06"
+msgstr "vinoth06"
+
+#. Description of the plugin/theme
+msgid "Front end dashboard provide high flexible way to customize the user dashboard on front end rather than WordPress wp-admin dashboard."
+msgstr "Front end dashboard provide high flexible way to customize the user dashboard on front end rather than WordPress wp-admin dashboard."
+
+#. Plugin URI of the plugin/theme
+msgid "https://buffercode.com/plugin/frontend-dashboard"
+msgstr "https://buffercode.com/plugin/frontend-dashboard"
+
+#: shortcodes/login/login-data.php:144
+msgid "Please enter user password"
+msgstr "Molimo unesite korisničku lozinku"
+
+#: shortcodes/login/login-data.php:143
+msgid "Please enter user name"
+msgstr "Molimo unesite korisničko ime"
+
+#: frontend/request/validation/validation.php:47
+msgid "You can able to add only the registered user, So please use the search functionality to find the user"
+msgstr "You can able to add only the registered user, So please use the search functionality to find the user"
+
+#: frontend/request/user_profile/user_profile.php:49
+msgid "Invalid user ID."
+msgstr "Neispravan korisnički ID"
+
+#: frontend/request/support/support.php:24
+msgid "Sorry Something went wrong!, please try again later"
+msgstr "Žao nam je, nešto je pošlo po krivu. Probajte opet kasnije."
+
+#: frontend/request/support/support.php:22
+msgid "Your question has been successfully sent"
+msgstr "Vaš upit je uspješno poslan"
+
+#: frontend/request/login/validation.php:98
+msgid "<strong>ERROR</strong>: Invalid username or email."
+msgstr "<strong>ERROR</strong>: Neispravna lozinka ili korisničko ime."
+
+#: frontend/request/login/validation.php:85
+msgid "<strong>ERROR</strong>: There is no user registered with that email address."
+msgstr "<strong>ERROR</strong>: Ne postoji korisnik registriran s tom email adresom."
+
+#: frontend/request/login/validation.php:81
+msgid "<strong>ERROR</strong>: Enter a username or email address."
+msgstr "<strong>ERROR</strong>: Unesite korsničko ime ili email adresu."
+
+#: frontend/request/login/validation.php:35
+msgid "You are trying to hack the user role"
+msgstr "Pokušavate hakirati korisničku ulogu"
+
+#: frontend/request/login/validation.php:31
+msgid "Invalid Role"
+msgstr "Neispravna uloga"
+
+#: frontend/request/login/validation.php:21
+#: frontend/request/validation/validation.php:21
+msgid "Password not match"
+msgstr "Lozinka se ne podudara"
+
+#: frontend/request/login/reset.php:31
+msgid "Something went wrong, Please try again later"
+msgstr "Nešto je pošlo po krivu. Probajte opet kasnije."
+
+#: frontend/request/login/reset.php:29
+msgid "Invalid Key, Please try resetting the password again"
+msgstr "Neispravan ključ Molimo probjate resetirati lozinku ponovno."
+
+#: frontend/request/login/reset.php:15
+msgid "Password not matched"
+msgstr "Lozinka se ne podudara"
+
+#: frontend/request/login/reset.php:11
+msgid "Please enter the Password"
+msgstr "Molimo unesite lozinku"
+
+#: frontend/request/login/forgot.php:51
+msgid "The email could not be sent. Possible reason: your host may have disabled the mail() function."
+msgstr "Email nije mogao biti poslan. Mogući razlog: Vaš host je onemogućio mail() funkciju."
+
+#: frontend/request/login/forgot.php:47
+msgid "[ %s ] Password Reset"
+msgstr "[%s] Lozinka reset"
+
+#: frontend/request/login/forgot.php:30
+msgid "To reset your password, visit the following address:"
+msgstr "Kako biste resetirali lozinku, posjetite sljedeću adresu:"
+
+#: frontend/request/login/forgot.php:29
+msgid "If this was a mistake, just ignore this email and nothing will happen."
+msgstr "Ako je ovo bila pogreška, zanemarite ovaj email i ništa se neće dogoditi."
+
+#: frontend/request/login/forgot.php:28
+msgid "Username: %s"
+msgstr "Korisničko ime: %s"
+
+#: frontend/request/login/forgot.php:26
+msgid "Someone has requested a password reset for the following account:"
+msgstr "Netko je zatražio reset lozinke za sljedeći kroisnički račun:"
+
+#: frontend/controller/support.php:37
+msgid "Sorry! No chat history"
+msgstr "Žao nam je! Nema povijesti chata."
+
+#: frontend/controller/posts.php:512
+msgid "Post Format"
+msgstr "Post Format"
+
+#: frontend/controller/posts.php:298
+msgid " Successfully saved"
+msgstr "Uspješno spremljeno"
+
+#: frontend/controller/posts.php:194 frontend/controller/posts.php:420
+msgid "Allow Comments"
+msgstr "Dopusti komentare"
+
+#: frontend/controller/posts.php:176 frontend/controller/posts.php:405
+msgid "Featured Image"
+msgstr "Featured Image"
+
+#: frontend/controller/posts.php:157 frontend/controller/posts.php:386
+msgid "Content"
+msgstr "Sadržaj"
+
+#: frontend/controller/posts.php:143 frontend/controller/posts.php:370
+msgid "Title"
+msgstr "Naslov"
+
+#: admin/request/user_profile.php:40
+msgid "Sorry no record found to update your new details"
+msgstr "Sorry no record found to update your new details"
+
+#: admin/request/user_profile.php:19
+msgid "Hey, you are trying something naughty"
+msgstr "Hej, pokušavate nešto zločesto"
+
+#: admin/request/tabs/user_profile_layout.php:45
+msgid "Color Settings Updated Successfully "
+msgstr "Postavke boje uspješno ažurirane"
+
+#: admin/request/tabs/user_profile_layout.php:22
+msgid "User Profile Settings Updated Successfully "
+msgstr "Postavke korisničkog profila uspješno ažurirane"
+
+#: admin/request/tabs/user.php:154
+msgid "User Upload Permission Updated Successfully "
+msgstr "User Upload Permission Updated Successfully "
+
+#: admin/request/tabs/user.php:50
+msgid "Please fill all the fields"
+msgstr "Molimo popunite sva polja"
+
+#: admin/request/orders.php:172 admin/request/user_profile.php:65
+msgid "Sorry, Something went wrong in storing values in DB, please try again later or contact support"
+msgstr "Sorry, Something went wrong in storing values in DB, please try again later or contact support"
+
+#: admin/request/orders.php:134
+msgid "Invalid Request"
+msgstr "Neispravan zahtjev"
+
+#: admin/request/orders.php:114
+msgid "Great! You have found an user"
+msgstr "Odlično! Pronašli ste korisnika"
+
+#: admin/request/orders.php:109
+msgid "Sorry! No user found"
+msgstr "Žao nam je! Korisnik nije pronađen."
+
+#: admin/request/orders.php:103
+msgid "Please fill the search field"
+msgstr "Molimo popunite polje za pretraživanje"
+
+#: admin/request/orders.php:90
+msgid "The Order ID not available now, please refresh the page and try again."
+msgstr "The Order ID not available now, please refresh the page and try again."
+
+#: admin/request/orders.php:66
+msgid "Something went wrong, please refresh the page and delete it again."
+msgstr "Nešto je pošlo po zlu, molimo osvježite stranicu i obrišite ponovno"
+
+#: admin/request/orders.php:39
+msgid "Orders has been successfully updated"
+msgstr "Orders has been successfully updated"
+
+#: admin/request/orders.php:35
+msgid "Sorry no record found to update your details"
+msgstr "Sorry no record found to update your details"
+
+#: admin/model/menu.php:12 admin/model/menu.php:31
+msgid "There is some trouble in installing the default value, please try to deactivate and activate the plugin or contact us on "
+msgstr "There is some trouble in installing the default value, please try to deactivate and activate the plugin or contact us on "
+
+#: admin/model/common.php:95
+msgid "There is some trouble in installing the default value, please try to deactivate and activate the plugin or contact us on"
+msgstr "There is some trouble in installing the default value, please try to deactivate and activate the plugin or contact us on"
+
+#: admin/menu/FED_AdminMenu.php:1930 admin/menu/FED_AdminMenu.php:1931
+msgid "Help"
+msgstr "Pomoć"
+
+#: admin/menu/FED_AdminMenu.php:1908 admin/menu/FED_AdminMenu.php:1909
+msgid "Add Profile / Post Fields"
+msgstr "Add Profile / Post Fields"
+
+#: admin/menu/FED_AdminMenu.php:1887 admin/menu/FED_AdminMenu.php:1888
+msgid "Dashboard Menu"
+msgstr "Dashboard Menu"
+
+#: admin/menu/FED_AdminMenu.php:1729
+msgid "Add New Extra User Profile Field"
+msgstr "Add New Extra User Profile Field"
+
+#: admin/menu/FED_AdminMenu.php:1718 admin/menu/FED_AdminMenu.php:1894
+#: admin/menu/FED_AdminMenu.php:1895
+msgid "User Profile"
+msgstr "Profil korisnika"
+
+#: admin/menu/FED_AdminMenu.php:1599
+msgid "Sorry! there are no custom post fields added!"
+msgstr "Sorry! there are no custom post fields added!"
+
+#: admin/menu/FED_AdminMenu.php:1581
+msgid "Add New Custom Post Field"
+msgstr "Add New Custom Post Field"
+
+#: admin/menu/FED_AdminMenu.php:1572 admin/menu/FED_AdminMenu.php:1901
+#: admin/menu/FED_AdminMenu.php:1902
+msgid "Post Fields"
+msgstr "Post Fields"
+
+#: admin/function-admin.php:2912 admin/menu/FED_AdminMenu.php:1558
+msgid ""
+"OOPS! You have not add the callable function, please add %s() to show the\n"
+"\t\t\t\t\tbody container"
+msgstr ""
+"OOPS! You have not add the callable function, please add %s() to show the\n"
+"\t\t\t\t\tbody container"
+
+#: admin/menu/FED_AdminMenu.php:1526
+msgid "User Profile Layout"
+msgstr "User Profile Layout"
+
+#: admin/menu/FED_AdminMenu.php:1521
+msgid "User"
+msgstr "Korisnik"
+
+#: admin/menu/FED_AdminMenu.php:1516 shortcodes/login/login-data.php:25
+#: shortcodes/login/login-data.php:48
+msgid "Login"
+msgstr "Login"
+
+#: admin/menu/FED_AdminMenu.php:1429
+msgid "Database"
+msgstr "Baza podataka"
+
+#: admin/menu/FED_AdminMenu.php:1383
+msgid "PHP Extensions"
+msgstr "PHP Extensions"
+
+#: admin/menu/FED_AdminMenu.php:1300
+msgid "Versions"
+msgstr "Versions"
+
+#: admin/menu/FED_AdminMenu.php:1265 admin/menu/FED_AdminMenu.php:1923
+#: admin/menu/FED_AdminMenu.php:1924
+msgid "Status"
+msgstr "Status"
+
+#: admin/menu/FED_AdminMenu.php:1129
+msgid "Action Hooks [Developers]"
+msgstr "Action Hooks [Developers]"
+
+#: admin/menu/FED_AdminMenu.php:1021 admin/menu/FED_AdminMenu.php:1136
+msgid "Note: This is not completely documented"
+msgstr "Note: This is not completely documented"
+
+#: admin/menu/FED_AdminMenu.php:1014
+msgid "Filter Hooks [Developers]"
+msgstr "Filter Hooks [Developers]"
+
+#: admin/menu/FED_AdminMenu.php:989
+msgid "Shortcodes"
+msgstr "Shortcodes"
+
+#: admin/menu/FED_AdminMenu.php:974
+msgid "Rate us"
+msgstr "Rate us"
+
+#: admin/menu/FED_AdminMenu.php:966
+msgid "Mail"
+msgstr "Mail"
+
+#: admin/menu/FED_AdminMenu.php:958
+msgid "Chat"
+msgstr "Chat"
+
+#: admin/menu/FED_AdminMenu.php:944
+msgid "How to Contact Us"
+msgstr "Kako nas kontaktirati"
+
+#: admin/menu/FED_AdminMenu.php:868
+msgid "How to Install and Configure"
+msgstr "How to Install and Configure"
+
+#: admin/menu/FED_AdminMenu.php:857
+msgid "We will help you in better ways"
+msgstr "We will help you in better ways"
+
+#: admin/menu/FED_AdminMenu.php:840
+msgid "Sorry there is some issue in internet connectivity."
+msgstr "Sorry there is some issue in internet connectivity."
+
+#: admin/menu/FED_AdminMenu.php:735 admin/menu/FED_AdminMenu.php:1916
+#: admin/menu/FED_AdminMenu.php:1917
+msgid "Add-Ons"
+msgstr "Add-Ons"
+
+#: admin/menu/FED_AdminMenu.php:608
+msgid "field"
+msgstr "polje"
+
+#: admin/menu/FED_AdminMenu.php:603
+msgid "Back to"
+msgstr "Back to"
+
+#: admin/menu/FED_AdminMenu.php:565 admin/menu/FED_AdminMenu.php:1534
+msgid "Post"
+msgstr "Post"
+
+#: admin/menu/FED_AdminMenu.php:535
+msgid "Profile"
+msgstr "Profil"
+
+#: admin/menu/FED_AdminMenu.php:527
+msgid "Add Extra User Profile Field"
+msgstr "Add Extra User Profile Field"
+
+#: admin/menu/FED_AdminMenu.php:522
+msgid "Add Extra Post Field"
+msgstr "Add Extra Post Field"
+
+#: admin/menu/FED_AdminMenu.php:513
+msgid "Edit "
+msgstr "Uredi"
+
+#: admin/menu/FED_AdminMenu.php:508
+msgid "Add New "
+msgstr "Dodaj novo"
+
+#: admin/menu/FED_AdminMenu.php:401
+msgid "Select User Role(s)"
+msgstr "Select User Role(s)"
+
+#: admin/menu/FED_AdminMenu.php:257
+msgid "Search Menu Name..."
+msgstr "Search Menu Name..."
+
+#: admin/menu/FED_AdminMenu.php:237
+msgid "Menu Lists"
+msgstr "Menu Lists"
+
+#: admin/menu/FED_AdminMenu.php:177 admin/menu/FED_AdminMenu.php:365
+msgid "Disable User Profile"
+msgstr "Disable User Profile"
+
+#: admin/menu/FED_AdminMenu.php:166 admin/menu/FED_AdminMenu.php:347
+msgid "Menu Order"
+msgstr "Menu Order"
+
+#: admin/menu/FED_AdminMenu.php:151 admin/menu/FED_AdminMenu.php:332
+msgid "Menu Icon"
+msgstr "Menu Icon"
+
+#: admin/menu/FED_AdminMenu.php:133
+msgid "Menu Slug"
+msgstr "Menu Slug"
+
+#: admin/menu/FED_AdminMenu.php:120 admin/menu/FED_AdminMenu.php:319
+msgid "Menu Name"
+msgstr "Menu Name"
+
+#: admin/menu/FED_AdminMenu.php:106 admin/menu/FED_AdminMenu.php:217
+#: admin/menu/FED_AdminMenu.php:249 admin/menu/FED_AdminMenu.php:1761
+msgid "Add New Menu"
+msgstr "Add New Menu"
+
+#: admin/layout/settings_tab/user_profile/user_profile_tab.php:21
+msgid "Colors"
+msgstr "Boje"
+
+#: admin/layout/settings_tab/user_profile/settings.php:162
+msgid "Frontend Dashboard Extra"
+msgstr "Frontend Dashboard Extra"
+
+#: admin/layout/settings_tab/user_profile/settings.php:161
+#: admin/menu/FED_AdminMenu.php:803
+msgid "Download"
+msgstr "Download"
+
+#: admin/layout/settings_tab/user_profile/settings.php:160
+msgid "Please install Frontend Dashboard Extra Plugin to activate this section"
+msgstr "Please install Frontend Dashboard Extra Plugin to activate this section"
+
+#: admin/layout/settings_tab/user_profile/settings.php:143
+msgid "Secondary Background Font Color"
+msgstr "Secondary Background Font Color"
+
+#: admin/layout/settings_tab/user_profile/settings.php:133
+msgid "Secondary Background Color"
+msgstr "Secondary Background Color"
+
+#: admin/layout/settings_tab/user_profile/settings.php:123
+msgid "Primary Background Font Color"
+msgstr "Primary Background Font Color"
+
+#: admin/layout/settings_tab/user_profile/settings.php:113
+msgid "Primary Background Color"
+msgstr "Primary Background Color"
+
+#: admin/layout/settings_tab/user_profile/settings.php:75
+msgid "Disable Collapse Menu"
+msgstr "Disable Collapse Menu"
+
+#: admin/layout/settings_tab/user_profile/settings.php:65
+msgid "Disable Logout"
+msgstr "Disable Logout"
+
+#: admin/layout/settings_tab/user_profile/settings.php:55
+msgid "Collapse Menu Always"
+msgstr "Collapse Menu Always"
+
+#: admin/layout/settings_tab/user_profile/settings.php:47
+msgid "Number of Recent Post to show on User Profile"
+msgstr "Number of Recent Post to show on User Profile"
+
+#: admin/layout/settings_tab/user_profile/settings.php:45
+msgid "Number of Recent Post to show"
+msgstr "Number of Recent Post to show"
+
+#: admin/layout/settings_tab/user_profile/settings.php:35
+msgid "Disable Description"
+msgstr "Disable Description"
+
+#: admin/layout/settings_tab/user_profile/settings.php:24
+msgid "Change Profile Picture"
+msgstr "Promijeni profilnu sliku"
+
+#: admin/layout/settings_tab/user/user_upload.php:37
+msgid "Allow User Roles to Upload Files"
+msgstr "Allow User Roles to Upload Files"
+
+#: admin/layout/settings_tab/user/user_tab.php:64
+#: admin/layout/settings_tab/user/user_upload.php:32
+msgid "User Upload Permission"
+msgstr "User Upload Permission"
+
+#: admin/layout/settings_tab/user/user_tab.php:58
+msgid "Add/Delete Custom Role"
+msgstr "Add/Delete Custom Role"
+
+#: admin/layout/settings_tab/user/user_tab.php:25
+#: admin/menu/FED_AdminMenu.php:29 admin/menu/FED_AdminMenu.php:30
+#: admin/menu/FED_AdminMenu.php:63 admin/menu/FED_AdminMenu.php:200
+#: admin/menu/FED_AdminMenu.php:292 admin/menu/FED_AdminMenu.php:1750
+#: admin/menu/FED_AdminMenu.php:1779 admin/menu/FED_AdminMenu.php:1822
+#: admin/menu/FED_AdminMenu.php:1831 admin/menu/FED_AdminMenu.php:1840
+#: frontend/controller/logout.php:10 frontend/controller/menu.php:129
+#: frontend/controller/menu.php:171
+msgid "%s"
+msgstr "%s"
+
+#: admin/layout/settings_tab/user/role.php:66
+msgid "Sorry! No custom user role added"
+msgstr "Sorry! No custom user role added"
+
+#: admin/layout/settings_tab/user/role.php:62
+msgid "Custom User Roles"
+msgstr "Custom User Roles"
+
+#: admin/layout/settings_tab/user/role.php:51
+msgid "Add"
+msgstr "Dodaj"
+
+#: admin/layout/settings_tab/user/role.php:39
+#: admin/layout/settings_tab/user/role.php:44
+msgid "Role Slug"
+msgstr "Role Slug"
+
+#: admin/layout/settings_tab/user/role.php:28
+#: admin/layout/settings_tab/user/role.php:33
+msgid "Role Name"
+msgstr "Role Name"
+
+#: admin/layout/settings_tab/user/role.php:23
+msgid "Add New User Role"
+msgstr "Add New User Role"
+
+#: admin/layout/settings_tab/post/post_tab.php:41
+msgid "Permissions"
+msgstr "Permissions"
+
+#: admin/layout/settings_tab/post/post_tab.php:35
+msgid "Menu"
+msgstr "Menu"
+
+#: admin/layout/settings_tab/post/post_tab.php:29
+#: admin/menu/FED_AdminMenu.php:48
+msgid "Dashboard Settings"
+msgstr "Dashboard Settings"
+
+#: admin/layout/settings_tab/post/menu.php:47
+msgid "Please Select Post Menu Icon"
+msgstr "Please Select Post Menu Icon"
+
+#: admin/layout/settings_tab/post/menu.php:38
+msgid "Post Menu Position"
+msgstr "Post Menu Position"
+
+#: admin/layout/settings_tab/post/menu.php:27
+msgid "Please enter new name for Post"
+msgstr "Please enter new name for Post"
+
+#: admin/layout/settings_tab/login/settings.php:103
+msgid "Dashboard"
+msgstr "Kontrolna ploča"
+
+#: admin/layout/settings_tab/login/settings.php:92
+msgid "Redirect After Logged out URL"
+msgstr "Redirect After Logged out URL"
+
+#: admin/layout/settings_tab/login/settings.php:81
+msgid "Redirect After Logged in URL"
+msgstr "Redirect After Logged in URL"
+
+#: admin/layout/settings_tab/login/settings.php:70
+msgid "Redirect After Register URL"
+msgstr "Redirect After Register URL"
+
+#: admin/layout/settings_tab/login/settings.php:56
+msgid "Forgot Password Page URL"
+msgstr "Forgot Password Page URL"
+
+#: admin/layout/settings_tab/login/settings.php:42
+msgid "Register Page URL"
+msgstr "Register Page URL"
+
+#: admin/layout/settings_tab/login/login_tab.php:91
+msgid "Restrict WP Admin Area"
+msgstr "Restrict WP Admin Area"
+
+#: admin/layout/settings_tab/login/login_tab.php:85
+#: shortcodes/login/login-data.php:61 shortcodes/login/login-data.php:65
+msgid "Register"
+msgstr "Registriraj se"
+
+#: admin/layout/metabox/post-meta-box.php:11
+msgid "Frontend Dashboard Custom Fields"
+msgstr "Frontend Dashboard Custom Fields"
+
+#: admin/layout/input_fields/textarea.php:39
+msgid "Textarea Row"
+msgstr "Textarea Row"
+
+#: admin/layout/input_fields/select.php:16
+msgid "Select / Dropdown"
+msgstr "Select / Dropdown"
+
+#: admin/layout/input_fields/radio.php:57
+#: admin/layout/input_fields/select.php:55
+msgid "This will be output as"
+msgstr "This will be output as"
+
+#: admin/layout/input_fields/radio.php:53
+#: admin/layout/input_fields/select.php:51
+msgid "Examples:"
+msgstr "Primjeri:"
+
+#: admin/layout/input_fields/radio.php:45
+#: admin/layout/input_fields/select.php:43
+msgid "Please enter the value by key,value"
+msgstr "Please enter the value by key,value"
+
+#: admin/layout/input_fields/radio.php:43
+#: admin/layout/input_fields/select.php:41
+msgid "Values"
+msgstr "Values"
+
+#: admin/layout/input_fields/number.php:51
+msgid "Step [Increment by Step]"
+msgstr "Step [Increment by Step]"
+
+#: admin/layout/input_fields/number.php:46
+msgid "Max Value"
+msgstr "Max Value"
+
+#: admin/layout/input_fields/number.php:41
+msgid "Min Value"
+msgstr "Min Value"
+
+#: admin/layout/input_fields/common.php:23
+msgid "ID Name"
+msgstr "ID Name"
+
+#: admin/layout/input_fields/common.php:16
+msgid "Class Name"
+msgstr "Class Name"
+
+#: admin/layout/input_fields/common.php:9
+msgid "Placeholder Text"
+msgstr "Placeholder Text"
+
+#: admin/layout/error.php:14
+msgid "home page"
+msgstr "home page"
+
+#: admin/layout/error.php:13
+msgid "Hope you have landed wrongly, please proceed to plugin"
+msgstr "Hope you have landed wrongly, please proceed to plugin"
+
+#: admin/layout/error.php:13
+msgid "404!"
+msgstr "404!"
+
+#: admin/layout/add_edit_profile.php:186
+msgid "Input Meta * [Alpha Numeric and underscore only]"
+msgstr "Input Meta * [Alpha Numeric and underscore only]"
+
+#: admin/layout/add_edit_profile.php:173
+msgid "Submit"
+msgstr "Podnesi"
+
+#: admin/layout/add_edit_profile.php:147
+msgid "Input Order"
+msgstr "Input Order"
+
+#: admin/layout/add_edit_profile.php:139
+msgid "Label Name *"
+msgstr "Label Name *"
+
+#: admin/layout/add_edit_profile.php:117
+msgid "Is this required Field"
+msgstr "Is this required Field"
+
+#: admin/layout/add_edit_profile.php:106
+msgid "Post Type"
+msgstr "Post Type"
+
+#: admin/layout/add_edit_profile.php:97
+msgid "Show this field on User Dashboard"
+msgstr "Show this field on User Dashboard"
+
+#: admin/layout/add_edit_profile.php:85
+msgid "Show this field on Register Form"
+msgstr "Show this field on Register Form"
+
+#: admin/layout/add_edit_profile.php:50
+msgid "Disable in User Profile?"
+msgstr "Disable in User Profile?"
+
+#: admin/layout/add_edit_profile.php:37 admin/layout/add_edit_profile.php:40
+msgid "Menu Location"
+msgstr "Menu Location"
+
+#: admin/layout/add_edit_profile.php:17 admin/menu/FED_AdminMenu.php:189
+msgid "Select user role to show this input field"
+msgstr "Select user role to show this input field"
+
+#: admin/layout/FED_AdminUserProfile.php:28
+msgid "Sorry no extra fields added - Please add here "
+msgstr "Sorry no extra fields added - Please add here "
+
+#: admin/install/install.php:424
+msgid "if everything is good, please  click Don't show again button"
+msgstr "if everything is good, please  click Don't show again button"
+
+#: admin/install/install.php:422
+msgid "Here"
+msgstr "Here"
+
+#: admin/install/install.php:420
+msgid "Notice: Please check your default settings"
+msgstr "Notice: Please check your default settings"
+
+#: admin/install/install.php:417
+msgid "Frontend Dashboard Instructions"
+msgstr "Frontend Dashboard Instructions"
+
+#: admin/install/install.php:414
+msgid "If you need help in configuring the frontend dashboard, please watch the videos here"
+msgstr "If you need help in configuring the frontend dashboard, please watch the videos here"
+
+#: admin/hooks/FED_ActionHooks.php:212
+#: admin/layout/settings_tab/login/login_tab.php:79
+#: admin/layout/settings_tab/post/post_tab.php:23
+#: admin/layout/settings_tab/user_profile/user_profile_tab.php:15
+msgid "Settings"
+msgstr "Postavke"
+
+#: admin/hooks/FED_ActionHooks.php:211
+msgid "Frontend Dashboard Settings"
+msgstr "Frontend Dashboard Settings"
+
+#: admin/hooks/FED_ActionHooks.php:194
+msgid "Support"
+msgstr "Korisnička podrška"
+
+#: admin/hooks/FED_ActionHooks.php:191
+msgid "Donation"
+msgstr "Donation"
+
+#: admin/hooks/FED_ActionHooks.php:189
+msgid "Docs/Videos"
+msgstr "Docs/Videos"
+
+#. #-#-#-#-#  frontend-dashboard-code.pot (Frontend Dashboard 1.3)  #-#-#-#-#
+#. Plugin Name of the plugin/theme
+#: admin/hooks/FED_ActionHooks.php:153 admin/layout/FED_AdminUserProfile.php:23
+#: admin/menu/FED_AdminMenu.php:17 admin/menu/FED_AdminMenu.php:18
+msgid "Frontend Dashboard"
+msgstr "Frontend Dashboard"
+
+#: admin/function-admin.php:2641
+msgid "Please Select one Image"
+msgstr "Molimo označite jednu sliku"
+
+#: admin/function-admin.php:2449
+msgid "Custom Days"
+msgstr "Custom Days"
+
+#: admin/function-admin.php:2448
+msgid "Monthly"
+msgstr "Monthly"
+
+#: admin/function-admin.php:2447
+msgid "Annually"
+msgstr "Annually"
+
+#: admin/function-admin.php:90 admin/layout/input_fields/url.php:17
+msgid "URL"
+msgstr "URL"
+
+#: admin/function-admin.php:86 admin/layout/input_fields/password.php:18
+#: shortcodes/login/login-data.php:34 shortcodes/login/login-data.php:35
+#: shortcodes/login/login-data.php:104 shortcodes/login/login-data.php:105
+msgid "Password"
+msgstr "Lozinka"
+
+#: admin/function-admin.php:82 admin/layout/input_fields/radio.php:16
+msgid "Radio"
+msgstr "Radio"
+
+#: admin/function-admin.php:78
+msgid "Select"
+msgstr "Select"
+
+#: admin/function-admin.php:74 admin/layout/input_fields/checkbox.php:17
+msgid "Checkbox"
+msgstr "Checkbox"
+
+#: admin/function-admin.php:70 admin/layout/input_fields/email.php:18
+msgid "Email"
+msgstr "Email"
+
+#: admin/function-admin.php:66 admin/layout/input_fields/number.php:16
+msgid "Number"
+msgstr "Number"
+
+#: admin/function-admin.php:62 admin/layout/input_fields/textarea.php:17
+msgid "Multi-Line"
+msgstr "Multi-Line"
+
+#: admin/function-admin.php:58 admin/layout/input_fields/text.php:17
+msgid "Single Line"
+msgstr "Single Line"
