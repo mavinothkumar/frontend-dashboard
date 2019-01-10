@@ -345,20 +345,20 @@ if ( ! class_exists('FED_AdminMenu')) {
                                                                                         />
                                                                                     </div>
                                                                                 </div>
-<!--                                                                                <div class="col-md-2">-->
-<!--                                                                                    <div class="form-group">-->
-<!--                                                                                        <label>--><?php //_e('Menu Order',
-//                                                                                                    'frontend-dashboard') ?><!--</label>-->
-<!--                                                                                        <input type="number"-->
-<!--                                                                                               name="fed_menu_order"-->
-<!--                                                                                               class="form-control fed_menu_order"-->
-<!--                                                                                               value="--><?php //echo esc_attr(
-//                                                                                                       $menu['menu_order']) ?><!--"-->
-<!--                                                                                               required="required"-->
-<!--                                                                                               placeholder="Menu Order"-->
-<!--                                                                                        />-->
-<!--                                                                                    </div>-->
-<!--                                                                                </div>-->
+                                                                                <div class="col-md-2 hide">
+                                                                                    <div class="form-group">
+                                                                                        <label><?php _e('Menu Order',
+                                                                                                    'frontend-dashboard') ?></label>
+                                                                                        <input type="number"
+                                                                                               name="fed_menu_order"
+                                                                                               class="form-control fed_menu_order"
+                                                                                               value="<?php echo esc_attr(
+                                                                                                       $menu['menu_order']) ?>"
+                                                                                               required="required"
+                                                                                               placeholder="Menu Order"
+                                                                                        />
+                                                                                    </div>
+                                                                                </div>
                                                                                 <div class="col-md-3">
                                                                                     <div class="form-group text-center">
                                                                                         <?php

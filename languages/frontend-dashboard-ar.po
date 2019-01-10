@@ -1,0 +1,918 @@
+# Translation of Plugins - Frontend Dashboard - Stable (latest release) in Arabic
+# This file is distributed under the same license as the Plugins - Frontend Dashboard - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: +0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: GlotPress/2.4.0-alpha\n"
+"Language: ar\n"
+"Project-Id-Version: Plugins - Frontend Dashboard - Stable (latest release)\n"
+
+#: admin/request/orders.php:176
+msgid "New Transaction ID "
+msgstr ""
+
+#: admin/request/orders.php:60
+msgid "Transaction ID: "
+msgstr ""
+
+#: admin/request/tabs/user.php:122
+msgid "User Role \""
+msgstr ""
+
+#: admin/request/tabs/user.php:112
+msgid "Sorry! The user role \""
+msgstr ""
+
+#: admin/request/tabs/user.php:103
+msgid "Sorry! You cannot delete the default user roles "
+msgstr ""
+
+#: admin/request/tabs/user.php:70
+msgid "Sorry! You have already added the user role "
+msgstr ""
+
+#: admin/request/tabs/user.php:61
+msgid "Sorry! You cannot add the default user roles "
+msgstr ""
+
+#: admin/hooks/FED_ActionHooks.php:171
+msgid "<img class=\"ab-icon\" src=\""
+msgstr ""
+
+#: frontend/request/login/login.php:34
+msgid "Successfully Logged in"
+msgstr ""
+
+#: templates/login/registered-user.php:10
+msgid "Visit Dashboard"
+msgstr ""
+
+#: templates/login/register-only.php:48
+msgid "Already have an account?"
+msgstr ""
+
+#: templates/login/login-only.php:54
+msgid "Lost Password?"
+msgstr ""
+
+#: templates/login/login-only.php:49
+msgid "Create an account"
+msgstr ""
+
+#: shortcodes/login/login-data.php:109 shortcodes/login/login-data.php:110
+msgid "Confirmation Password"
+msgstr ""
+
+#: shortcodes/login/login-data.php:100 shortcodes/login/login-data.php:125
+msgid "Reset Password"
+msgstr ""
+
+#: shortcodes/login/login-data.php:83 shortcodes/login/login-data.php:84
+msgid "User Name / Email Address"
+msgstr ""
+
+#: shortcodes/login/login-data.php:79 shortcodes/login/login-data.php:89
+msgid "Forgot Password"
+msgstr ""
+
+#: shortcodes/login/login-data.php:42
+msgid "Remember Me"
+msgstr ""
+
+#: shortcodes/login/login-data.php:29 shortcodes/login/login-data.php:30
+msgid "User Name"
+msgstr ""
+
+#: frontend/function-frontend.php:814
+msgid "Click here to visit Dashboard"
+msgstr ""
+
+#: frontend/function-frontend.php:813
+msgid "Unauthorised Access"
+msgstr ""
+
+#: frontend/function-frontend.php:809
+msgid "Error (403)"
+msgstr ""
+
+#: frontend/function-frontend.php:771
+msgid "Recent Post by"
+msgstr ""
+
+#: frontend/function-frontend.php:617
+msgid "No user found..."
+msgstr ""
+
+#: frontend/function-frontend.php:616
+msgid "Sorry!"
+msgstr ""
+
+#: frontend/function-frontend.php:90
+msgid "Default Tables not installed, please contact support"
+msgstr ""
+
+#: frontend/controller/profile.php:105
+msgid "Sorry! there is no field associated to this menu"
+msgstr ""
+
+#: frontend/controller/profile.php:97 frontend/controller/posts.php:231
+#: frontend/controller/posts.php:452
+msgid "Save"
+msgstr ""
+
+#: frontend/controller/posts.php:300
+msgid "Sorry! your are not allowed to do this action"
+msgstr ""
+
+#: frontend/controller/posts.php:259
+msgid "Please fill post title"
+msgstr ""
+
+#: frontend/controller/menu.php:182
+msgid "Collapse Menu"
+msgstr ""
+
+#: frontend/controller/logout.php:18
+msgid "Please click here to logout"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://buffercode.com/"
+msgstr ""
+
+#. Author of the plugin
+msgid "vinoth06"
+msgstr ""
+
+#. Description of the plugin
+msgid "Front end dashboard provide high flexible way to customize the user dashboard on front end rather than WordPress wp-admin dashboard."
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://buffercode.com/plugin/frontend-dashboard"
+msgstr ""
+
+#: shortcodes/login/login-data.php:144
+msgid "Please enter user password"
+msgstr ""
+
+#: shortcodes/login/login-data.php:143
+msgid "Please enter user name"
+msgstr ""
+
+#: frontend/request/validation/validation.php:47
+msgid "You can able to add only the registered user, So please use the search functionality to find the user"
+msgstr ""
+
+#: frontend/request/user_profile/user_profile.php:49
+msgid "Invalid user ID."
+msgstr ""
+
+#: frontend/request/support/support.php:24
+msgid "Sorry Something went wrong!, please try again later"
+msgstr ""
+
+#: frontend/request/support/support.php:22
+msgid "Your question has been successfully sent"
+msgstr ""
+
+#: frontend/request/login/validation.php:98
+msgid "<strong>ERROR</strong>: Invalid username or email."
+msgstr ""
+
+#: frontend/request/login/validation.php:85
+msgid "<strong>ERROR</strong>: There is no user registered with that email address."
+msgstr ""
+
+#: frontend/request/login/validation.php:81
+msgid "<strong>ERROR</strong>: Enter a username or email address."
+msgstr ""
+
+#: frontend/request/login/validation.php:35
+msgid "You are trying to hack the user role"
+msgstr ""
+
+#: frontend/request/login/validation.php:31
+msgid "Invalid Role"
+msgstr ""
+
+#: frontend/request/login/validation.php:21
+#: frontend/request/validation/validation.php:21
+msgid "Password not match"
+msgstr ""
+
+#: frontend/request/login/reset.php:31
+msgid "Something went wrong, Please try again later"
+msgstr ""
+
+#: frontend/request/login/reset.php:29
+msgid "Invalid Key, Please try resetting the password again"
+msgstr ""
+
+#: frontend/request/login/reset.php:15
+msgid "Password not matched"
+msgstr ""
+
+#: frontend/request/login/reset.php:11
+msgid "Please enter the Password"
+msgstr ""
+
+#: frontend/request/login/forgot.php:51
+msgid "The email could not be sent. Possible reason: your host may have disabled the mail() function."
+msgstr ""
+
+#: frontend/request/login/forgot.php:47
+msgid "[ %s ] Password Reset"
+msgstr ""
+
+#: frontend/request/login/forgot.php:30
+msgid "To reset your password, visit the following address:"
+msgstr ""
+
+#: frontend/request/login/forgot.php:29
+msgid "If this was a mistake, just ignore this email and nothing will happen."
+msgstr ""
+
+#: frontend/request/login/forgot.php:28
+msgid "Username: %s"
+msgstr ""
+
+#: frontend/request/login/forgot.php:26
+msgid "Someone has requested a password reset for the following account:"
+msgstr ""
+
+#: frontend/controller/support.php:37
+msgid "Sorry! No chat history"
+msgstr ""
+
+#: frontend/controller/posts.php:512
+msgid "Post Format"
+msgstr ""
+
+#: frontend/controller/posts.php:298
+msgid " Successfully saved"
+msgstr ""
+
+#: frontend/controller/posts.php:194 frontend/controller/posts.php:420
+msgid "Allow Comments"
+msgstr ""
+
+#: frontend/controller/posts.php:176 frontend/controller/posts.php:405
+msgid "Featured Image"
+msgstr ""
+
+#: frontend/controller/posts.php:157 frontend/controller/posts.php:386
+msgid "Content"
+msgstr ""
+
+#: frontend/controller/posts.php:143 frontend/controller/posts.php:370
+msgid "Title"
+msgstr ""
+
+#: admin/request/user_profile.php:45
+msgid "Sorry no record found to update your new details"
+msgstr ""
+
+#: admin/request/user_profile.php:20
+msgid "Hey, you are trying something naughty"
+msgstr ""
+
+#: admin/request/tabs/user_profile_layout.php:45
+msgid "Color Settings Updated Successfully "
+msgstr ""
+
+#: admin/request/tabs/user_profile_layout.php:22
+msgid "User Profile Settings Updated Successfully "
+msgstr ""
+
+#: admin/request/tabs/user.php:154
+msgid "User Upload Permission Updated Successfully "
+msgstr ""
+
+#: admin/request/tabs/user.php:50
+msgid "Please fill all the fields"
+msgstr ""
+
+#: admin/request/orders.php:172 admin/request/user_profile.php:72
+msgid "Sorry, Something went wrong in storing values in DB, please try again later or contact support"
+msgstr ""
+
+#: admin/request/orders.php:134
+msgid "Invalid Request"
+msgstr ""
+
+#: admin/request/orders.php:114
+msgid "Great! You have found an user"
+msgstr ""
+
+#: admin/request/orders.php:109
+msgid "Sorry! No user found"
+msgstr ""
+
+#: admin/request/orders.php:103
+msgid "Please fill the search field"
+msgstr ""
+
+#: admin/request/orders.php:90
+msgid "The Order ID not available now, please refresh the page and try again."
+msgstr ""
+
+#: admin/request/orders.php:66
+msgid "Something went wrong, please refresh the page and delete it again."
+msgstr ""
+
+#: admin/request/orders.php:39
+msgid "Orders has been successfully updated"
+msgstr ""
+
+#: admin/request/orders.php:35
+msgid "Sorry no record found to update your details"
+msgstr ""
+
+#: admin/model/menu.php:12 admin/model/menu.php:31
+msgid "There is some trouble in installing the default value, please try to deactivate and activate the plugin or contact us on "
+msgstr ""
+
+#: admin/model/common.php:95
+msgid "There is some trouble in installing the default value, please try to deactivate and activate the plugin or contact us on"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:1953 admin/menu/FED_AdminMenu.php:1954
+msgid "Help"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:1931 admin/menu/FED_AdminMenu.php:1932
+msgid "Add Profile / Post Fields"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:1910 admin/menu/FED_AdminMenu.php:1911
+msgid "Dashboard Menu"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:1750
+msgid "Add New Extra User Profile Field"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:1739 admin/menu/FED_AdminMenu.php:1917
+#: admin/menu/FED_AdminMenu.php:1918
+msgid "User Profile"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:1613
+msgid "Sorry! there are no custom post fields added!"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:1595
+msgid "Add New Custom Post Field"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:1586 admin/menu/FED_AdminMenu.php:1924
+#: admin/menu/FED_AdminMenu.php:1925
+msgid "Post Fields"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:1569 admin/function-admin.php:2979
+msgid ""
+"OOPS! You have not add the callable function, please add %s() to show the\n"
+"\t\t\t\t\tbody container"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:1534
+msgid "User Profile Layout"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:1529
+msgid "User"
+msgstr ""
+
+#: shortcodes/login/login-data.php:25 shortcodes/login/login-data.php:48
+#: admin/menu/FED_AdminMenu.php:1524
+msgid "Login"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:1434
+msgid "Database"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:1388
+msgid "PHP Extensions"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:1305
+msgid "Versions"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:1270 admin/menu/FED_AdminMenu.php:1946
+#: admin/menu/FED_AdminMenu.php:1947
+msgid "Status"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:1134
+msgid "Action Hooks [Developers]"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:1026 admin/menu/FED_AdminMenu.php:1141
+msgid "Note: This is not completely documented"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:1019
+msgid "Filter Hooks [Developers]"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:994
+msgid "Shortcodes"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:979
+msgid "Rate us"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:971
+msgid "Mail"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:963
+msgid "Chat"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:949
+msgid "How to Contact Us"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:873
+msgid "How to Install and Configure"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:862
+msgid "We will help you in better ways"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:844
+msgid "Sorry there is some issue in internet connectivity."
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:738 admin/menu/FED_AdminMenu.php:1939
+#: admin/menu/FED_AdminMenu.php:1940
+msgid "Add-Ons"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:611
+msgid "field"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:606
+msgid "Back to"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:568 admin/menu/FED_AdminMenu.php:1542
+msgid "Post"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:538
+msgid "Profile"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:530
+msgid "Add Extra User Profile Field"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:525
+msgid "Add Extra Post Field"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:516
+msgid "Edit "
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:511
+msgid "Add New "
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:404
+msgid "Select User Role(s)"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:257
+msgid "Search Menu Name..."
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:237
+msgid "Menu Lists"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:177 admin/menu/FED_AdminMenu.php:368
+msgid "Disable User Profile"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:166
+msgid "Menu Order"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:151 admin/menu/FED_AdminMenu.php:335
+msgid "Menu Icon"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:133
+msgid "Menu Slug"
+msgstr "SLUG MENU"
+
+#: admin/menu/FED_AdminMenu.php:120 admin/menu/FED_AdminMenu.php:322
+msgid "Menu Name"
+msgstr "NNNNNNNNNN"
+
+#: admin/menu/FED_AdminMenu.php:106 admin/menu/FED_AdminMenu.php:217
+#: admin/menu/FED_AdminMenu.php:249 admin/menu/FED_AdminMenu.php:1781
+msgid "Add New Menu"
+msgstr "MMMMMMMMMMM"
+
+#: admin/layout/settings_tab/user_profile/user_profile_tab.php:21
+msgid "Colors"
+msgstr ""
+
+#: admin/layout/settings_tab/user_profile/settings.php:162
+msgid "Frontend Dashboard Extra"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:807
+#: admin/layout/settings_tab/user_profile/settings.php:161
+msgid "Download"
+msgstr ""
+
+#: admin/layout/settings_tab/user_profile/settings.php:160
+msgid "Please install Frontend Dashboard Extra Plugin to activate this section"
+msgstr ""
+
+#: admin/layout/settings_tab/user_profile/settings.php:143
+msgid "Secondary Background Font Color"
+msgstr ""
+
+#: admin/layout/settings_tab/user_profile/settings.php:133
+msgid "Secondary Background Color"
+msgstr ""
+
+#: admin/layout/settings_tab/user_profile/settings.php:123
+msgid "Primary Background Font Color"
+msgstr ""
+
+#: admin/layout/settings_tab/user_profile/settings.php:113
+msgid "Primary Background Color"
+msgstr ""
+
+#: admin/layout/settings_tab/user_profile/settings.php:75
+msgid "Disable Collapse Menu"
+msgstr ""
+
+#: admin/layout/settings_tab/user_profile/settings.php:65
+msgid "Disable Logout"
+msgstr ""
+
+#: admin/layout/settings_tab/user_profile/settings.php:55
+msgid "Collapse Menu Always"
+msgstr ""
+
+#: admin/layout/settings_tab/user_profile/settings.php:47
+msgid "Number of Recent Post to show on User Profile"
+msgstr ""
+
+#: admin/layout/settings_tab/user_profile/settings.php:45
+msgid "Number of Recent Post to show"
+msgstr ""
+
+#: admin/layout/settings_tab/user_profile/settings.php:35
+msgid "Disable Description"
+msgstr ""
+
+#: admin/layout/settings_tab/user_profile/settings.php:24
+msgid "Change Profile Picture"
+msgstr ""
+
+#: admin/layout/settings_tab/user/user_upload.php:37
+msgid "Allow User Roles to Upload Files"
+msgstr ""
+
+#: admin/layout/settings_tab/user/user_tab.php:64
+#: admin/layout/settings_tab/user/user_upload.php:32
+msgid "User Upload Permission"
+msgstr ""
+
+#: admin/layout/settings_tab/user/user_tab.php:58
+msgid "Add/Delete Custom Role"
+msgstr ""
+
+#: frontend/controller/menu.php:129 frontend/controller/menu.php:171
+#: frontend/controller/logout.php:10 admin/menu/FED_AdminMenu.php:29
+#: admin/menu/FED_AdminMenu.php:30 admin/menu/FED_AdminMenu.php:63
+#: admin/menu/FED_AdminMenu.php:200 admin/menu/FED_AdminMenu.php:295
+#: admin/menu/FED_AdminMenu.php:1770 admin/menu/FED_AdminMenu.php:1799
+#: admin/menu/FED_AdminMenu.php:1843 admin/menu/FED_AdminMenu.php:1852
+#: admin/menu/FED_AdminMenu.php:1861
+#: admin/layout/settings_tab/user/user_tab.php:25
+msgid "%s"
+msgstr ""
+
+#: admin/layout/settings_tab/user/role.php:66
+msgid "Sorry! No custom user role added"
+msgstr ""
+
+#: admin/layout/settings_tab/user/role.php:62
+msgid "Custom User Roles"
+msgstr ""
+
+#: admin/layout/settings_tab/user/role.php:51
+msgid "Add"
+msgstr ""
+
+#: admin/layout/settings_tab/user/role.php:39
+#: admin/layout/settings_tab/user/role.php:44
+msgid "Role Slug"
+msgstr ""
+
+#: admin/layout/settings_tab/user/role.php:28
+#: admin/layout/settings_tab/user/role.php:33
+msgid "Role Name"
+msgstr ""
+
+#: admin/layout/settings_tab/user/role.php:23
+msgid "Add New User Role"
+msgstr ""
+
+#: admin/layout/settings_tab/post/post_tab.php:41
+msgid "Permissions"
+msgstr ""
+
+#: admin/layout/settings_tab/post/post_tab.php:35
+msgid "Menu"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:48
+#: admin/layout/settings_tab/post/post_tab.php:29
+msgid "Dashboard Settings"
+msgstr ""
+
+#: admin/layout/settings_tab/post/menu.php:47
+msgid "Please Select Post Menu Icon"
+msgstr ""
+
+#: admin/layout/settings_tab/post/menu.php:38
+msgid "Post Menu Position"
+msgstr ""
+
+#: admin/layout/settings_tab/post/menu.php:27
+msgid "Please enter new name for Post"
+msgstr ""
+
+#: admin/layout/settings_tab/login/settings.php:103
+msgid "Dashboard"
+msgstr ""
+
+#: admin/layout/settings_tab/login/settings.php:92
+msgid "Redirect After Logged out URL"
+msgstr ""
+
+#: admin/layout/settings_tab/login/settings.php:81
+msgid "Redirect After Logged in URL"
+msgstr ""
+
+#: admin/layout/settings_tab/login/settings.php:70
+msgid "Redirect After Register URL"
+msgstr ""
+
+#: admin/layout/settings_tab/login/settings.php:56
+msgid "Forgot Password Page URL"
+msgstr ""
+
+#: admin/layout/settings_tab/login/settings.php:42
+msgid "Register Page URL"
+msgstr ""
+
+#: admin/layout/settings_tab/login/login_tab.php:91
+msgid "Restrict WP Admin Area"
+msgstr ""
+
+#: shortcodes/login/login-data.php:61 shortcodes/login/login-data.php:65
+#: admin/layout/settings_tab/login/login_tab.php:85
+msgid "Register"
+msgstr ""
+
+#: admin/layout/metabox/post-meta-box.php:11
+msgid "Frontend Dashboard Custom Fields"
+msgstr ""
+
+#: admin/layout/input_fields/textarea.php:39
+msgid "Textarea Row"
+msgstr ""
+
+#: admin/layout/input_fields/select.php:16
+msgid "Select / Dropdown"
+msgstr ""
+
+#: admin/layout/input_fields/select.php:55
+#: admin/layout/input_fields/radio.php:57
+msgid "This will be output as"
+msgstr ""
+
+#: admin/layout/input_fields/select.php:51
+#: admin/layout/input_fields/radio.php:53
+msgid "Examples:"
+msgstr ""
+
+#: admin/layout/input_fields/select.php:43
+#: admin/layout/input_fields/radio.php:45
+msgid "Please enter the value by key,value"
+msgstr ""
+
+#: admin/layout/input_fields/select.php:41
+#: admin/layout/input_fields/radio.php:43
+msgid "Values"
+msgstr ""
+
+#: admin/layout/input_fields/number.php:51
+msgid "Step [Increment by Step]"
+msgstr ""
+
+#: admin/layout/input_fields/number.php:46
+msgid "Max Value"
+msgstr ""
+
+#: admin/layout/input_fields/number.php:41
+msgid "Min Value"
+msgstr ""
+
+#: admin/layout/input_fields/common.php:23
+msgid "ID Name"
+msgstr ""
+
+#: admin/layout/input_fields/common.php:16
+msgid "Class Name"
+msgstr ""
+
+#: admin/layout/input_fields/common.php:9
+msgid "Placeholder Text"
+msgstr ""
+
+#: admin/layout/error.php:14
+msgid "home page"
+msgstr ""
+
+#: admin/layout/error.php:13
+msgid "Hope you have landed wrongly, please proceed to plugin"
+msgstr ""
+
+#: admin/layout/error.php:13
+msgid "404!"
+msgstr ""
+
+#: admin/layout/add_edit_profile.php:186
+msgid "Input Meta * [Alpha Numeric and underscore only]"
+msgstr ""
+
+#: admin/layout/add_edit_profile.php:173
+msgid "Submit"
+msgstr ""
+
+#: admin/layout/add_edit_profile.php:147
+msgid "Input Order"
+msgstr ""
+
+#: admin/layout/add_edit_profile.php:139
+msgid "Label Name *"
+msgstr ""
+
+#: admin/layout/add_edit_profile.php:117
+msgid "Is this required Field"
+msgstr ""
+
+#: admin/layout/add_edit_profile.php:106
+msgid "Post Type"
+msgstr ""
+
+#: admin/layout/add_edit_profile.php:97
+msgid "Show this field on User Dashboard"
+msgstr ""
+
+#: admin/layout/add_edit_profile.php:85
+msgid "Show this field on Register Form"
+msgstr ""
+
+#: admin/layout/add_edit_profile.php:50
+msgid "Disable in User Profile?"
+msgstr ""
+
+#: admin/layout/add_edit_profile.php:37 admin/layout/add_edit_profile.php:40
+msgid "Menu Location"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:189 admin/layout/add_edit_profile.php:17
+msgid "Select user role to show this input field"
+msgstr ""
+
+#: admin/layout/FED_AdminUserProfile.php:28
+msgid "Sorry no extra fields added - Please add here "
+msgstr ""
+
+#: admin/install/install.php:424
+msgid "if everything is good, please  click Don't show again button"
+msgstr ""
+
+#: admin/install/install.php:422
+msgid "Here"
+msgstr ""
+
+#: admin/install/install.php:420
+msgid "Notice: Please check your default settings"
+msgstr ""
+
+#: admin/install/install.php:417
+msgid "Frontend Dashboard Instructions"
+msgstr ""
+
+#: admin/install/install.php:414
+msgid "If you need help in configuring the frontend dashboard, please watch the videos here"
+msgstr ""
+
+#: admin/hooks/FED_ActionHooks.php:212
+#: admin/layout/settings_tab/login/login_tab.php:79
+#: admin/layout/settings_tab/post/post_tab.php:23
+#: admin/layout/settings_tab/user_profile/user_profile_tab.php:15
+msgid "Settings"
+msgstr ""
+
+#: admin/hooks/FED_ActionHooks.php:211
+msgid "Frontend Dashboard Settings"
+msgstr ""
+
+#: admin/hooks/FED_ActionHooks.php:194
+msgid "Support"
+msgstr "TROPPUS"
+
+#: admin/hooks/FED_ActionHooks.php:191
+msgid "Donation"
+msgstr ""
+
+#: admin/hooks/FED_ActionHooks.php:189
+msgid "Docs/Videos"
+msgstr ""
+
+#. Plugin Name of the plugin
+#: admin/menu/FED_AdminMenu.php:17 admin/menu/FED_AdminMenu.php:18
+#: admin/hooks/FED_ActionHooks.php:153 admin/layout/FED_AdminUserProfile.php:23
+msgid "Frontend Dashboard"
+msgstr ""
+
+#: admin/function-admin.php:2700
+msgid "Please Select one Image"
+msgstr ""
+
+#: admin/function-admin.php:2495
+msgid "Custom Days"
+msgstr ""
+
+#: admin/function-admin.php:2494
+msgid "Monthly"
+msgstr ""
+
+#: admin/function-admin.php:2493
+msgid "Annually"
+msgstr ""
+
+#: admin/layout/input_fields/url.php:17 admin/function-admin.php:93
+msgid "URL"
+msgstr ""
+
+#: shortcodes/login/login-data.php:34 shortcodes/login/login-data.php:35
+#: shortcodes/login/login-data.php:104 shortcodes/login/login-data.php:105
+#: admin/layout/input_fields/password.php:18 admin/function-admin.php:89
+msgid "Password"
+msgstr ""
+
+#: admin/layout/input_fields/radio.php:16 admin/function-admin.php:85
+msgid "Radio"
+msgstr ""
+
+#: admin/function-admin.php:81
+msgid "Select"
+msgstr ""
+
+#: admin/layout/input_fields/checkbox.php:17 admin/function-admin.php:77
+msgid "Checkbox"
+msgstr ""
+
+#: admin/layout/input_fields/email.php:18 admin/function-admin.php:73
+msgid "Email"
+msgstr ""
+
+#: admin/layout/input_fields/number.php:16 admin/function-admin.php:69
+msgid "Number"
+msgstr ""
+
+#: admin/layout/input_fields/textarea.php:17 admin/function-admin.php:65
+msgid "Multi-Line"
+msgstr ""
+
+#: admin/layout/input_fields/text.php:17 admin/function-admin.php:61
+msgid "Single Line"
+msgstr ""
