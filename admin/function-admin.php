@@ -244,8 +244,18 @@ function fed_get_input_details($attr)
             break;
 
         case 'select':
-            $options = fed_get_select_option_value($attr['input_value']);
-            $input   .= '<select '.$values['disabled'].' '.$values['id'].' '.$values['extra'].' name="'.$values['name'].'"  class="'.$values['class'].'">';
+            $options            = fed_get_select_option_value($attr['input_value']);
+            $multi_select       = '';
+            $multi_select_class = '';
+            $select_name        = $values['name'];
+            if (isset($values['extended']['multiple']) && $values['extended']['multiple'] === 'Enable') {
+                $multi_select       = 'multiple=multiple';
+                $multi_select_class = 'fed_multi_select';
+                $select_name        = $values['name'].'[]';
+            }
+
+
+            $input .= '<select '.$values['disabled'].' '.$values['id'].' '.$values['extra'].' name="'.$select_name.'"  class="'.$values['class'].' '.$multi_select_class.' " '.$multi_select.'>';
             foreach ($options as $key => $label) {
                 $input .= '<option
 						value="'.esc_attr($key).'" '.selected($values['value'], $key, false).'>'.$label.'</option>';
@@ -456,7 +466,19 @@ function fed_process_user_profile($row, $action, $update = 'no')
     if ($action === 'post') {
         $default['post_type'] = (isset($row['post_type']) && fed_check_post_type($row['post_type'])) ? sanitize_text_field($row['post_type']) : 'post';
     }
-
+    if ($row['input_type'] === 'select') {
+        if ($update === 'yes') {
+            $extended            = array(
+                    'multiple' => isset($row['extended']['multiple']) ? sanitize_text_field($row['extended']['multiple']) : 'no',
+            );
+            $default['extended'] = serialize($extended);
+        } else {
+            $default['extended'] = $row['extended'];
+            if (is_string($row['extended'])) {
+                $default['extended'] = unserialize($row['extended']);
+            }
+        }
+    }
 
     if ($row['input_type'] === 'date') {
         if (isset($row['extended'])) {

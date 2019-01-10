@@ -62,7 +62,8 @@ function fed_process_update_user_profile( $post ) {
 			}
 		} else {
 			if ( array_key_exists( $site_option, $post ) ) {
-				$new_value[ $site_option ] = esc_attr( $post[ $site_option ] );
+				$new_value[ $site_option ] = fed_sanitize_text_field( $post[ $site_option ] );
+//                $new_value[$site_option] = is_array($post[$site_option]) ? serialize($post[$site_option]) : fed_sanitize_text_field($post[$site_option]);
 			} else {
 				$new_value[ $site_option ] = $user_obj->has_prop( $site_option ) ? $user_obj->get( $site_option ) : '';
 			}
