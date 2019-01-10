@@ -363,6 +363,8 @@ jQuery(document).ready(function ($) {
 
         $(".flatpickr").flatpickr({});
 
+        $('.fed_multi_select').select2();
+
         $('#fed_support_search').on('input', function (e) {
             var rex = new RegExp($(this).val(), 'i');
             $('.fed_get_qa_ajax').hide().filter(function () {

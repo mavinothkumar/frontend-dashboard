@@ -28,6 +28,8 @@ function fed_script_admin( $hook ) {
 
 		wp_enqueue_script( 'fed_jscolor_script', plugins_url( '/common/assets/js/jscolor.js', BC_FED_PLUGIN ), array() );
 
+		wp_enqueue_script( 'fed_select2_script', plugins_url( '/common/assets/js/select2.js', BC_FED_PLUGIN ), array() );
+
 		wp_enqueue_script( 'fed_flatpickr', plugins_url( '/common/assets/js/flatpickr.js', BC_FED_PLUGIN ), array() );
 
 		wp_enqueue_style( 'fed_admin_bootstrap',
@@ -50,6 +52,10 @@ function fed_script_admin( $hook ) {
 
 		wp_enqueue_style( 'fed_flatpikcer',
 			plugins_url( '/common/assets/css/flatpickr.css', BC_FED_PLUGIN ),
+			array(), BC_FED_PLUGIN_VERSION, 'all' );
+
+		wp_enqueue_style( 'fed_select2',
+			plugins_url( '/common/assets/css/select2.css', BC_FED_PLUGIN ),
 			array(), BC_FED_PLUGIN_VERSION, 'all' );
 
 
@@ -102,6 +108,7 @@ function fed_script_front_end() {
 	wp_enqueue_script( 'fed_jscolor_script', plugins_url( '/common/assets/js/jscolor.js', BC_FED_PLUGIN ), array() );
     wp_enqueue_script( 'fed_fontawesome-shims', plugins_url( '/common/assets/js/fontawesome-shims.js', BC_FED_PLUGIN ), array() );
 
+    wp_enqueue_script( 'fed_select2_script', plugins_url( '/common/assets/js/select2.js', BC_FED_PLUGIN ), array() );
 
 
 	wp_enqueue_script( 'fed_flatpickr', plugins_url( '/common/assets/js/flatpickr.js', BC_FED_PLUGIN ), array() );
@@ -138,7 +145,10 @@ function fed_script_front_end() {
 	wp_enqueue_style( 'fed_global_admin_style',
 		plugins_url( 'admin/assets/fed_global_admin_style.css', BC_FED_PLUGIN ),
 		array('dashicons'), BC_FED_PLUGIN_VERSION, 'all' );
-	
+
+    wp_enqueue_style( 'fed_select2',
+            plugins_url( '/common/assets/css/select2.css', BC_FED_PLUGIN ),
+            array(), BC_FED_PLUGIN_VERSION, 'all' );
 
 	do_action( 'fed_enqueue_script_style_frontend');
 
