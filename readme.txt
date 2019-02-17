@@ -4,7 +4,7 @@ Tags: dashboard, frontend dashboard, custom login, custom register, custom roles
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7DHAEMST475BY
 Requires at least: 4.6
 Tested up to: 5.0.3
-Stable tag: 1.3.2
+Stable tag: 1.3.3
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -202,6 +202,9 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 6. [fed_user role=user_role] to generate the role based user page
 
 == Changelog ==
+= 1.3.3 [04-Feb-2019] =
+
+* Bug fixes: Unnecessary assets loads, now the assets will load only in the Frontend Dashboard Shortcodes.
 
 = 1.3.2 [10-Jan-2019] =
 
@@ -377,11 +380,9 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 * Public release
 
 == Upgrade Notice ==
-= 1.3.1 [09-Jan-2019] =
+= 1.3.3 [04-Feb-2019] =
 
-* Bug fixes: Admin User Profile Menu not sorting in order
-* Bug fixes: Frontend Dashboard menu not sorting in order
-* New: Drag and Drop to sort the menu items in Dashboard Menu, User Profile and Post Fields
+* Bug fixes: Unnecessary assets loads, now the assets will load only in the Frontend Dashboard Shortcodes.
 
 == Screenshots ==
 1. Frontend Dashboard Settings | Login | Settings

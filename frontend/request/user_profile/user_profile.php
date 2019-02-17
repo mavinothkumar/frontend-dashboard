@@ -9,6 +9,7 @@ function fed_store_user_profile_save() {
 	$post    = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
 	$message = 'Something Went Wrong';
 
+
 	if ( isset( $_REQUEST, $post['tab_id'] ) && isset($_REQUEST['menu_type']) && $_REQUEST['menu_type'] === 'user' ) {
 
 		fed_nonce_check( $post );
@@ -63,7 +64,6 @@ function fed_process_update_user_profile( $post ) {
 		} else {
 			if ( array_key_exists( $site_option, $post ) ) {
 				$new_value[ $site_option ] = fed_sanitize_text_field( $post[ $site_option ] );
-//                $new_value[$site_option] = is_array($post[$site_option]) ? serialize($post[$site_option]) : fed_sanitize_text_field($post[$site_option]);
 			} else {
 				$new_value[ $site_option ] = $user_obj->has_prop( $site_option ) ? $user_obj->get( $site_option ) : '';
 			}
@@ -72,7 +72,6 @@ function fed_process_update_user_profile( $post ) {
 
 	// Escape data pulled from DB.
 	$user = add_magic_quotes( $new_value );
-
 	return $user;
 }
 

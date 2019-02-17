@@ -780,3 +780,7 @@ v1.3.2
 .bc_fed .ui-sortable-handle {
     cursor: move;
 }
+
+.bc_fed .margin_bottom_20 {
+    margin-bottom: 20px;
+}

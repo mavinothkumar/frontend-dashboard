@@ -95,6 +95,7 @@ function fed_fetch_user_profile_not_extra_fields() {
  */
 function fed_fetch_user_profile_not_extra_fields_key_value() {
 	$value = fed_fetch_user_profile_not_extra_fields();
+
 	if ( ! $value ) {
 		return false;
 	}
