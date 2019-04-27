@@ -872,7 +872,7 @@ if ( ! class_exists('FED_AdminMenu')) {
                                                             'frontend-dashboard') ?></a>
                                             </h5>
                                         </div>
-                                        <div id="fed_videos" class="collapse in" role="tabpanel"
+                                        <div id="fed_videos" class="collapse" role="tabpanel"
                                              aria-labelledby="fed_videos">
                                             <div class="panel-body">
                                                 <div class="row">

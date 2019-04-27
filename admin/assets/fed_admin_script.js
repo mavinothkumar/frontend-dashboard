@@ -508,6 +508,13 @@ jQuery(document).ready(function ($) {
     });
     $(".fed_sort_menu").disableSelection();
 
+    $('#fed_sticky_subscribe').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var email = button.data('email');
+        var modal = $(this);
+        modal.find('#fed_subscribe_email').val(email);
+    })
+
 });
 
 var fedAdminAlert = {

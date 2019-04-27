@@ -791,8 +791,13 @@ v1.3.2
     border-radius: 10px;
 }
 
+.fed_sticky_item a {
+    color: white !important;
+    text-decoration: none;
+}
 .fed_sticky_items {
     padding: 5px;
+    cursor: pointer;
 }
 .fed_sticky_items:not(:last-child) {
     border-bottom: 1px solid white;
