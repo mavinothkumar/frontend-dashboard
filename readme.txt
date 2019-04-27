@@ -3,8 +3,8 @@ Contributors: vinoth06, buffercode
 Tags: dashboard, frontend dashboard, custom login, custom register, custom roles, custom profile, custom post type, custom taxonomies, custom dashboard
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7DHAEMST475BY
 Requires at least: 4.6
-Tested up to: 5.0.3
-Stable tag: 1.3.3
+Tested up to: 5.1.1
+Stable tag: 1.3.7
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -25,6 +25,8 @@ Frontend Dashboard is bundled with the huge list of custom features which can ea
 10. Customize templates
 
 = Frontend Dashboard Plugins List =
+* [Frontend Dashboard Membership (Beta) ](https://buffercode.com/plugin/frontend-dashboard-membership)
+* [Frontend Dashboard Payment (Beta) ](https://buffercode.com/plugin/frontend-dashboard-payment)
 * [Frontend Dashboard Pages](https://buffercode.com/plugin/frontend-dashboard-pages)
 * [Frontend Dashboard Extra](https://buffercode.com/plugin/frontend-dashboard-extra)
 * [Frontend Dashboard Captcha](https://buffercode.com/plugin/frontend-dashboard-captcha)
@@ -202,9 +204,26 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 6. [fed_user role=user_role] to generate the role based user page
 
 == Changelog ==
-= 1.3.3 [04-Feb-2019] =
 
-* Bug fixes: Unnecessary assets loads, now the assets will load only in the Frontend Dashboard Shortcodes.
+= 1.3.7 [26-Apr-2019] =
+
+* Taxonomies (Tags and Categories) inside the post has been changed to multiselect Dropdown.
+* Few bug fixes.
+
+= 1.3.6 [24-Apr-2019] =
+
+* Login use fixed
+* Few bug fixes
+
+
+= 1.3.5 [23-Apr-2019] =
+
+* Added local translation for Javascript files
+* Few bug fixes
+
+= 1.3.4 [18-Apr-2019] =
+
+* Bug fixed: Checkbox label with HTML content support
 
 = 1.3.2 [10-Jan-2019] =
 
@@ -380,9 +399,11 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 * Public release
 
 == Upgrade Notice ==
-= 1.3.3 [04-Feb-2019] =
 
-* Bug fixes: Unnecessary assets loads, now the assets will load only in the Frontend Dashboard Shortcodes.
+= 1.3.6 [24-Apr-2019] =
+
+* Login use fixed
+* Few bug fixes
 
 == Screenshots ==
 1. Frontend Dashboard Settings | Login | Settings

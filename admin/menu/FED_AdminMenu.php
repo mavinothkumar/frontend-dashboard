@@ -26,8 +26,8 @@ if ( ! class_exists('FED_AdminMenu')) {
             $main_menu = $this->fed_get_main_sub_menu();
             foreach ($main_menu as $index => $menu) {
                 add_submenu_page('fed_settings_menu',
-                        sprintf(__('%s', 'frontend-dashboard'), $menu['page_title']),
-                        sprintf(__('%s', 'frontend-dashboard'), $menu['menu_title']),
+                        $menu['page_title'],
+                        $menu['menu_title'],
                         $menu['capability'],
                         $index,
                         $menu['callback']);
@@ -60,7 +60,7 @@ if ( ! class_exists('FED_AdminMenu')) {
                                        role="tab"
                                        data-toggle="tab">
                                         <i class="<?php echo $item['icon_class'] ?>"></i>
-                                        <?php printf(__('%s', 'frontend-dashboard'), $item['name']) ?>
+                                        <?php echo $item['name'] ?>
                                     </a>
                                 </li>
                                 <?php
@@ -197,8 +197,7 @@ if ( ! class_exists('FED_AdminMenu')) {
                                                             <?php echo fed_input_box('user_role', array(
                                                                     'default_value' => 'Enable',
                                                                     'name'          => 'user_role['.$key.']',
-                                                                    'label'         => esc_attr(sprintf(__('%s',
-                                                                            'frontend-dashboard'), $user_role)),
+                                                                    'label'         => esc_attr($user_role),
                                                                     'value'         => 'Enable',
                                                             ), 'checkbox'); ?>
                                                         </div>
@@ -292,8 +291,7 @@ if ( ! class_exists('FED_AdminMenu')) {
                                                             <a>
                                                                 <?php
                                                                 echo '<span class="'.$menu['menu_image_id'].'"></span>'; ?>
-                                                                <?php printf(__('%s', 'frontend-dashboard'),
-                                                                        $menu['menu']) ?>
+                                                                <?php esc_attr_e($menu['menu']) ?>
                                                             </a>
                                                         </h4>
                                                     </div>
@@ -512,7 +510,7 @@ if ( ! class_exists('FED_AdminMenu')) {
             $selected        = '';
             $action          = isset($_GET['fed_action']) ? esc_attr($_GET['fed_action']) : '';
             if (isset($_GET['fed_input_id'])) {
-                $id              = (int)$_GET['fed_input_id'];
+                $id              = (int) $_GET['fed_input_id'];
                 $add_edit_action = __('Edit ', 'frontend-dashboard');
             }
 
@@ -865,6 +863,41 @@ if ( ! class_exists('FED_AdminMenu')) {
                             <div class="panel-body">
 
                                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                    <div class="panel panel-secondary-heading">
+                                        <div class="panel-heading" role="tab" id="fed_videos">
+                                            <h5 class="panel-title">
+                                                <a role="button" data-toggle="collapse" data-parent="#accordion"
+                                                   href="#fed_videos" aria-expanded="true"
+                                                   aria-controls="install"><?php _e('How to Videos',
+                                                            'frontend-dashboard') ?></a>
+                                            </h5>
+                                        </div>
+                                        <div id="fed_videos" class="collapse in" role="tabpanel"
+                                             aria-labelledby="fed_videos">
+                                            <div class="panel-body">
+                                                <div class="row">
+                                                    <?php
+                                                    $items = fed_get_help_video_items();
+                                                    foreach ($items as $item) {
+                                                        ?>
+                                                        <div class="col-md-12">
+                                                            <h4>
+                                                                <i class="<?php echo $item['icon']; ?>"
+                                                                   aria-hidden="true"></i>
+                                                                <a target="_blank" href="<?php echo $item['url']; ?>">
+                                                                    <?php echo $item['name']; ?>
+                                                                </a>
+                                                            </h4>
+                                                        </div>
+                                                    <?php } ?>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
                                     <div class="panel panel-secondary-heading">
                                         <div class="panel-heading" role="tab" id="fed_install">
                                             <h5 class="panel-title">
@@ -1566,8 +1599,9 @@ if ( ! class_exists('FED_AdminMenu')) {
             } else {
                 ?>
                 <div class="container fed_add_page_profile_container text-center">
-                    <?php printf(__('OOPS! You have not add the callable function, please add %s() to show the
-					body container', 'frontend-dashboard'), $item['callable']) ?>
+                    <?php _e('OOPS! You have not add the callable function, please add', 'frontend-dashboard');
+                    echo $item['callable'];
+                    _e('to show the body container', 'frontend-dashboard') ?>
                 </div>
                 <?php
             }
@@ -1661,7 +1695,8 @@ if ( ! class_exists('FED_AdminMenu')) {
 
                                                         foreach ($group as $profile) {
                                                             ?>
-                                                            <div class="row fed_single_profile ui-state-default" id="<?php echo $profile['id'] ?>">
+                                                            <div class="row fed_single_profile ui-state-default"
+                                                                 id="<?php echo $profile['id'] ?>">
                                                                 <form method="post"
                                                                       class="fed_user_profile_delete fed_profile_ajax"
                                                                       action="<?php echo admin_url('admin-ajax.php?action=fed_user_profile_delete') ?>">
@@ -1767,8 +1802,7 @@ if ( ! class_exists('FED_AdminMenu')) {
                                         <li class="<?php echo $isActive; ?>">
                                             <a href="#<?php echo $index ?>" role="tab" data-toggle="tab">
                                                 <?php echo '<span class="'.$menu[$index]['menu_image_id'].'"></span>' ?>
-                                                <?php printf(__('%s', 'frontend-dashboard'), $menu[$index]['menu']
-                                                ); ?>
+                                                <?php esc_attr_e($menu[$index]['menu']) ?>
                                             </a>
                                         </li>
                                         <?php
@@ -1796,8 +1830,7 @@ if ( ! class_exists('FED_AdminMenu')) {
                                                 <div class="panel-heading">
                                                     <h3 class="panel-title">
                                                         <?php echo '<span class="'.$menu[$index]['menu_image_id'].'"></span>' ?>
-                                                        <?php printf(__('%s', 'frontend-dashboard'),
-                                                                $menu[$index]['menu']); ?>
+                                                        <?php esc_attr_e($menu[$index]['menu']) ?>
                                                     </h3>
                                                 </div>
                                                 <div class="panel-body fed_sort_menu"
@@ -1840,27 +1873,21 @@ if ( ! class_exists('FED_AdminMenu')) {
                                                                     <?php echo fed_show_help_message(array(
                                                                             'icon'    => 'fa fa-sign-in',
                                                                             'class'   => 'btn '.$register['button'],
-                                                                            'title'   => sprintf(__('%s',
-                                                                                    'frontend-dashboard'),
-                                                                                    $register['title']),
+                                                                            'title'   => esc_attr($register['title']),
                                                                             'content' => $register['content'],
                                                                     )) ?>
 
                                                                     <?php echo fed_show_help_message(array(
                                                                             'icon'    => 'fas fa-tachometer-alt',
                                                                             'class'   => 'btn '.$dashboard['button'],
-                                                                            'title'   => sprintf(__('%s',
-                                                                                    'frontend-dashboard'),
-                                                                                    $dashboard['title']),
+                                                                            'title'   => esc_attr($dashboard['title']),
                                                                             'content' => $dashboard['content'],
                                                                     )) ?>
 
                                                                     <?php echo fed_show_help_message(array(
                                                                             'icon'    => 'fa fa-user',
                                                                             'class'   => 'btn '.$user_profile['button'],
-                                                                            'title'   => sprintf(__('%s',
-                                                                                    'frontend-dashboard'),
-                                                                                    $user_profile['title']),
+                                                                            'title'   => esc_attr($user_profile['title']),
                                                                             'content' => $user_profile['content'],
                                                                     )) ?>
 

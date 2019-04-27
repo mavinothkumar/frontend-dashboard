@@ -1,6 +1,9 @@
 <?php
 
 
+/**
+ * @param $post
+ */
 function fed_login_form_submit($post)
 {
     do_action('fed_login_before_validation', $post);
@@ -21,7 +24,7 @@ function fed_login_form_submit($post)
 
     $result = wp_signon($credentials);
 
-    //var_dump( $result);
+//    var_dump( $result);
 
     if ($result instanceof WP_Error) {
         wp_send_json_error(array('user' => $result->get_error_messages()));

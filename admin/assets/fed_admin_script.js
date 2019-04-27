@@ -29,13 +29,13 @@ jQuery(document).ready(function ($) {
     $('.fed_ajax_confirmation').on('submit', function (e) {
         var form = $(this);
         swal({
-            title: "Are you sure?",
-            text: "You want to do this action?",
+            title: frontend_dashboard.alert.confirmation.title,
+            text: frontend_dashboard.alert.confirmation.text,
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Yes, Please Proceed",
-            cancelButtonText: "No, Cancel it"
+            confirmButtonText: frontend_dashboard.alert.confirmation.confirm,
+            cancelButtonText: frontend_dashboard.alert.confirmation.cancel,
         }).then(
             function () {
                 fed_toggle_loader();
@@ -52,7 +52,7 @@ jQuery(document).ready(function ($) {
             }, function (dismiss) {
                 if (dismiss === 'cancel') {
                     swal({
-                            title: "Cancelled",
+                            title: frontend_dashboard.alert.title_cancelled,
                             type: "error",
                             confirmButtonColor: '#0AAAAA'
                         }
@@ -109,13 +109,13 @@ jQuery(document).ready(function ($) {
     fed_menu_ajax.on('click', '.fed_menu_delete', function (e) {
         var form = $(this).closest('form');
         swal({
-            title: "Are you sure?",
-            text: "You to delete this Menu!",
+            title: frontend_dashboard.alert.confirmation.title,
+            text: frontend_dashboard.alert.confirmation.text,
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Yes, delete it!",
-            cancelButtonText: "No, cancel it!",
+            confirmButtonText: frontend_dashboard.alert.confirmation.confirm,
+            cancelButtonText: frontend_dashboard.alert.confirmation.cancel,
             showLoaderOnConfirm: true
         }).then(
             function () {
@@ -132,7 +132,7 @@ jQuery(document).ready(function ($) {
             function (dismiss) {
                 if (dismiss === 'cancel') {
                     swal({
-                            title: "Cancelled",
+                            title: frontend_dashboard.alert.title_cancelled,
                             type: "error",
                             confirmButtonColor: '#0AAAAA'
                         }
@@ -150,13 +150,13 @@ jQuery(document).ready(function ($) {
         //console.log('delete');
         var form = $(this).closest('form');
         swal({
-            title: "Are you sure?",
-            text: "You to delete this Profile Input!",
+            title: frontend_dashboard.alert.confirmation.title,
+            text: frontend_dashboard.alert.confirmation.text,
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Yes, delete it!",
-            cancelButtonText: "No, cancel it!",
+            confirmButtonText: frontend_dashboard.alert.confirmation.confirm,
+            cancelButtonText: frontend_dashboard.alert.confirmation.cancel,
             showLoaderOnConfirm: true
         }).then(
             function () {
@@ -173,9 +173,11 @@ jQuery(document).ready(function ($) {
             function (dismiss) {
                 if (dismiss === 'cancel') {
                     swal(
-                        'Cancelled',
-                        'You have cancelled to do this action',
-                        'error'
+                        {
+                            title: frontend_dashboard.alert.title_cancelled,
+                            type: "error",
+                            confirmButtonColor: '#0AAAAA'
+                        }
                     )
                 }
             });
@@ -266,9 +268,7 @@ jQuery(document).ready(function ($) {
      */
     $('.fed_input_type_container').on('change', '.fed_input_label_for_onchange', function () {
         var value = $(this).val().replace(/[^a-zA-Z0-9 ]/g, "").split(' ').join('_').toLowerCase();
-        if (value.length <= 12) {
-            $(this).closest('form').find('.row .form-group .fed_admin_input_meta').val(value);
-        }
+        $(this).closest('form').find('.row .form-group .fed_admin_input_meta').val(value.substring(0, 13));
     });
 
     /**
@@ -331,10 +331,10 @@ jQuery(document).ready(function ($) {
     body.on('click', '.fed_menu_save_button_toggle', function (e) {
         if ($('#fed_add_new_menu_container').hasClass('hide')) {
             $('#fed_add_new_menu_container').removeClass('hide');
-            $(this).html('<i class="fa fa-minus"></i> Hide Add New Menu');
+            $(this).html('<i class="fa fa-minus"></i> frontend_dashboard.common.hide_add_new_menu');
         } else {
-            $('#fed_add_new_menu_container').addClass('hide')
-            $(this).html('<i class="fa fa-plus"></i> Add New Menu');
+            $('#fed_add_new_menu_container').addClass('hide');
+            $(this).html('<i class="fa fa-plus"></i> frontend_dashboard.common.add_new_menu');
         }
         e.preventDefault();
     });
@@ -493,11 +493,11 @@ jQuery(document).ready(function ($) {
             $.ajax({
                 type: 'POST',
                 url: url,
-                data: {sort:data},
+                data: {sort: data},
                 success: function (results) {
-                    if (results.success === false){
+                    if (results.success === false) {
                         swal({
-                            title: results.data.message || 'Something Went Wrong',
+                            title: results.data.message || frontend_dashboard.alert.something_went_wrong,
                             type: "error",
                             confirmButtonColor: '#DD6B55',
                         })
@@ -515,7 +515,7 @@ var fedAdminAlert = {
         console.log(results);
         if (results.success) {
             swal({
-                title: results.data.message || 'Something Went Wrong',
+                title: results.data.message || frontend_dashboard.alert.something_went_wrong,
                 type: "success",
                 confirmButtonColor: '#0AAAAA',
             }).then(
@@ -530,7 +530,7 @@ var fedAdminAlert = {
                 });
         } else if ((results.success) === false) {
             swal({
-                title: results.data.message || 'Something Went Wrong',
+                title: results.data.message || frontend_dashboard.alert.something_went_wrong,
                 type: "error",
                 confirmButtonColor: "#DD6B55"
             }).then(function () {
@@ -544,8 +544,8 @@ var fedAdminAlert = {
             });
         } else {
             swal({
-                title: "Invalid form submission",
-                text: "Please try again",
+                title: frontend_dashboard.alert.invalid_form_submission,
+                text: frontend_dashboard.alert.please_try_again,
                 type: "error",
                 confirmButtonColor: "#DD6B55"
             }).then(function () {
@@ -563,7 +563,7 @@ var fedAdminAlert = {
     adminAlertSettings: function (results) {
         if (results.success) {
             swal({
-                title: results.data.message || 'Something Went Wrong',
+                title: results.data.message || frontend_dashboard.alert.something_went_wrong,
                 type: "success",
                 confirmButtonColor: '#0AAAAA',
             });
@@ -583,8 +583,8 @@ var fedAdminAlert = {
             });
         } else {
             swal({
-                title: "Invalid form submission",
-                text: "Please try again",
+                title: frontend_dashboard.alert.invalid_form_submission,
+                text: frontend_dashboard.alert.please_try_again,
                 type: "error",
                 confirmButtonColor: "#DD6B55"
             });

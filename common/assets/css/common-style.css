@@ -393,7 +393,7 @@ Upload Image
 }
 
 .bc_fed .fed_upload_container .fed_upload_icon {
-    padding-top: 25px;
+    margin-top: 25px;
 }
 
 .bc_fed input[type=color] {

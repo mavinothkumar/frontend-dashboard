@@ -781,6 +781,24 @@ v1.3.2
     cursor: move;
 }
 
-.bc_fed .margin_bottom_20 {
-    margin-bottom: 20px;
+.fed_sticky_help_bar {
+    position: fixed;
+    top: 5%;
+    right: 5px;
+    background: #033333;
+    color: white;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.fed_sticky_items {
+    padding: 5px;
+}
+.fed_sticky_items:not(:last-child) {
+    border-bottom: 1px solid white;
+}
+
+.fed_sticky_title {
+    font-size: 10px;
+    font-weight: 700;
 }

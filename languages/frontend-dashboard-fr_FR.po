@@ -3,22 +3,25 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Frontend Dashboard 1.3.5\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/frontend-dashboard\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/frontend-"
+"dashboard\n"
+"Last-Translator: vinoth <ma.vinothkumar@gmail.com>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2019-04-23T18:21:35+02:00\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.1.0\n"
+"PO-Revision-Date: 2019-04-23 16:26+0000\n"
+"X-Generator: Loco https://localise.biz/\n"
 "X-Domain: frontend-dashboard\n"
+"\n"
+"Language: fr_FR\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Loco-Version: 2.2.2; wp-5.1.1"
 
 #. Plugin Name of the plugin
-#: admin/layout/FED_AdminUserProfile.php:23
-#: admin/hooks/FED_ActionHooks.php:153
-#: admin/menu/FED_AdminMenu.php:17
-#: admin/menu/FED_AdminMenu.php:18
+#: admin/layout/FED_AdminUserProfile.php:23 admin/hooks/FED_ActionHooks.php:153
+#: admin/menu/FED_AdminMenu.php:17 admin/menu/FED_AdminMenu.php:18
 msgid "Frontend Dashboard"
 msgstr ""
 
@@ -27,7 +30,9 @@ msgid "https://buffercode.com/plugin/frontend-dashboard"
 msgstr ""
 
 #. Description of the plugin
-msgid "Front end dashboard provide high flexible way to customize the user dashboard on front end rather than WordPress wp-admin dashboard."
+msgid ""
+"Front end dashboard provide high flexible way to customize the user "
+"dashboard on front end rather than WordPress wp-admin dashboard."
 msgstr ""
 
 #. Author of the plugin
@@ -46,8 +51,7 @@ msgstr ""
 msgid "Collapse Menu"
 msgstr ""
 
-#: frontend/controller/profile.php:96
-#: frontend/controller/posts.php:231
+#: frontend/controller/profile.php:96 frontend/controller/posts.php:231
 #: frontend/controller/posts.php:452
 msgid "Save"
 msgstr ""
@@ -161,15 +165,21 @@ msgid "Password Reset"
 msgstr ""
 
 #: frontend/request/login/forgot.php:53
-msgid "The email could not be sent. Possible reason: your host may have disabled the mail() function."
+msgid ""
+"The email could not be sent. Possible reason: your host may have disabled "
+"the mail() function."
 msgstr ""
 
 #: frontend/request/validation/validation.php:47
-msgid "You can able to add only the registered user, So please use the search functionality to find the user"
+msgid ""
+"You can able to add only the registered user, So please use the search "
+"functionality to find the user"
 msgstr ""
 
 #: admin/install/install.php:414
-msgid "If you need help in configuring the frontend dashboard, please watch the videos here"
+msgid ""
+"If you need help in configuring the frontend dashboard, please watch the "
+"videos here"
 msgstr ""
 
 #: admin/install/install.php:417
@@ -200,13 +210,11 @@ msgstr ""
 msgid "home page"
 msgstr ""
 
-#: admin/layout/input_fields/email.php:18
-#: admin/function-admin.php:73
+#: admin/layout/input_fields/email.php:18 admin/function-admin.php:73
 msgid "Email"
 msgstr ""
 
-#: admin/layout/input_fields/radio.php:16
-#: admin/function-admin.php:85
+#: admin/layout/input_fields/radio.php:16 admin/function-admin.php:85
 msgid "Radio"
 msgstr ""
 
@@ -230,8 +238,7 @@ msgstr ""
 msgid "This will be output as"
 msgstr ""
 
-#: admin/layout/input_fields/number.php:16
-#: admin/function-admin.php:69
+#: admin/layout/input_fields/number.php:16 admin/function-admin.php:69
 msgid "Number"
 msgstr ""
 
@@ -247,22 +254,17 @@ msgstr ""
 msgid "Step [Increment by Step]"
 msgstr ""
 
-#: admin/layout/input_fields/url.php:17
-#: admin/function-admin.php:93
+#: admin/layout/input_fields/url.php:17 admin/function-admin.php:93
 msgid "URL"
 msgstr ""
 
-#: admin/layout/input_fields/password.php:18
-#: admin/function-admin.php:89
-#: shortcodes/login/login-data.php:34
-#: shortcodes/login/login-data.php:35
-#: shortcodes/login/login-data.php:104
-#: shortcodes/login/login-data.php:105
+#: admin/layout/input_fields/password.php:18 admin/function-admin.php:89
+#: shortcodes/login/login-data.php:34 shortcodes/login/login-data.php:35
+#: shortcodes/login/login-data.php:104 shortcodes/login/login-data.php:105
 msgid "Password"
 msgstr ""
 
-#: admin/layout/input_fields/textarea.php:17
-#: admin/function-admin.php:65
+#: admin/layout/input_fields/textarea.php:17 admin/function-admin.php:65
 msgid "Multi-Line"
 msgstr ""
 
@@ -278,8 +280,7 @@ msgstr ""
 msgid "Enable Multi Select"
 msgstr ""
 
-#: admin/layout/input_fields/checkbox.php:23
-#: admin/function-admin.php:77
+#: admin/layout/input_fields/checkbox.php:23 admin/function-admin.php:77
 msgid "Checkbox"
 msgstr ""
 
@@ -295,8 +296,7 @@ msgstr ""
 msgid "ID Name"
 msgstr ""
 
-#: admin/layout/input_fields/text.php:17
-#: admin/function-admin.php:61
+#: admin/layout/input_fields/text.php:17 admin/function-admin.php:61
 msgid "Single Line"
 msgstr ""
 
@@ -388,8 +388,7 @@ msgid "Dashboard"
 msgstr ""
 
 #: admin/layout/settings_tab/login/login_tab.php:85
-#: shortcodes/login/login-data.php:61
-#: shortcodes/login/login-data.php:65
+#: shortcodes/login/login-data.php:61 shortcodes/login/login-data.php:65
 msgid "Register"
 msgstr ""
 
@@ -458,13 +457,11 @@ msgstr ""
 msgid "Frontend Dashboard Extra"
 msgstr ""
 
-#: admin/layout/add_edit_profile.php:17
-#: admin/menu/FED_AdminMenu.php:189
+#: admin/layout/add_edit_profile.php:17 admin/menu/FED_AdminMenu.php:189
 msgid "Select user role to show this input field"
 msgstr ""
 
-#: admin/layout/add_edit_profile.php:37
-#: admin/layout/add_edit_profile.php:40
+#: admin/layout/add_edit_profile.php:37 admin/layout/add_edit_profile.php:40
 msgid "Menu Location"
 msgstr ""
 
@@ -524,13 +521,11 @@ msgstr ""
 msgid "Please Select one Image"
 msgstr ""
 
-#: admin/function-admin.php:3031
-#: admin/menu/FED_AdminMenu.php:1567
+#: admin/function-admin.php:3031 admin/menu/FED_AdminMenu.php:1567
 msgid "OOPS! You have not add the callable function, please add"
 msgstr ""
 
-#: admin/function-admin.php:3033
-#: admin/menu/FED_AdminMenu.php:1569
+#: admin/function-admin.php:3033 admin/menu/FED_AdminMenu.php:1569
 msgid "to show the body container"
 msgstr ""
 
@@ -554,16 +549,13 @@ msgstr ""
 msgid "Frontend Dashboard Settings"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:106
-#: admin/menu/FED_AdminMenu.php:216
-#: admin/menu/FED_AdminMenu.php:248
-#: admin/menu/FED_AdminMenu.php:1780
+#: admin/menu/FED_AdminMenu.php:106 admin/menu/FED_AdminMenu.php:216
+#: admin/menu/FED_AdminMenu.php:248 admin/menu/FED_AdminMenu.php:1780
 #: common/function-common.php:166
 msgid "Add New Menu"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:120
-#: admin/menu/FED_AdminMenu.php:320
+#: admin/menu/FED_AdminMenu.php:120 admin/menu/FED_AdminMenu.php:320
 msgid "Menu Name"
 msgstr ""
 
@@ -571,18 +563,15 @@ msgstr ""
 msgid "Menu Slug"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:151
-#: admin/menu/FED_AdminMenu.php:333
+#: admin/menu/FED_AdminMenu.php:151 admin/menu/FED_AdminMenu.php:333
 msgid "Menu Icon"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:166
-#: admin/menu/FED_AdminMenu.php:348
+#: admin/menu/FED_AdminMenu.php:166 admin/menu/FED_AdminMenu.php:348
 msgid "Menu Order"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:177
-#: admin/menu/FED_AdminMenu.php:366
+#: admin/menu/FED_AdminMenu.php:177 admin/menu/FED_AdminMenu.php:366
 msgid "Disable User Profile"
 msgstr ""
 
@@ -614,8 +603,7 @@ msgstr ""
 msgid "Profile"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:566
-#: admin/menu/FED_AdminMenu.php:1540
+#: admin/menu/FED_AdminMenu.php:566 admin/menu/FED_AdminMenu.php:1540
 msgid "Post"
 msgstr ""
 
@@ -627,8 +615,7 @@ msgstr ""
 msgid "field"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:736
-#: admin/menu/FED_AdminMenu.php:1931
+#: admin/menu/FED_AdminMenu.php:736 admin/menu/FED_AdminMenu.php:1931
 #: admin/menu/FED_AdminMenu.php:1932
 msgid "Add-Ons"
 msgstr ""
@@ -669,8 +656,7 @@ msgstr ""
 msgid "Filter Hooks [Developers]"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:1024
-#: admin/menu/FED_AdminMenu.php:1139
+#: admin/menu/FED_AdminMenu.php:1024 admin/menu/FED_AdminMenu.php:1139
 msgid "Note: This is not completely documented"
 msgstr ""
 
@@ -678,8 +664,7 @@ msgstr ""
 msgid "Action Hooks [Developers]"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:1268
-#: admin/menu/FED_AdminMenu.php:1938
+#: admin/menu/FED_AdminMenu.php:1268 admin/menu/FED_AdminMenu.php:1938
 #: admin/menu/FED_AdminMenu.php:1939
 msgid "Status"
 msgstr ""
@@ -696,8 +681,7 @@ msgstr ""
 msgid "Database"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:1522
-#: shortcodes/login/login-data.php:25
+#: admin/menu/FED_AdminMenu.php:1522 shortcodes/login/login-data.php:25
 #: shortcodes/login/login-data.php:48
 msgid "Login"
 msgstr ""
@@ -710,8 +694,7 @@ msgstr ""
 msgid "User Profile Layout"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:1585
-#: admin/menu/FED_AdminMenu.php:1916
+#: admin/menu/FED_AdminMenu.php:1585 admin/menu/FED_AdminMenu.php:1916
 #: admin/menu/FED_AdminMenu.php:1917
 msgid "Post Fields"
 msgstr ""
@@ -724,8 +707,7 @@ msgstr ""
 msgid "Sorry! there are no custom post fields added!"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:1739
-#: admin/menu/FED_AdminMenu.php:1909
+#: admin/menu/FED_AdminMenu.php:1739 admin/menu/FED_AdminMenu.php:1909
 #: admin/menu/FED_AdminMenu.php:1910
 msgid "User Profile"
 msgstr ""
@@ -734,28 +716,28 @@ msgstr ""
 msgid "Add New Extra User Profile Field"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:1902
-#: admin/menu/FED_AdminMenu.php:1903
+#: admin/menu/FED_AdminMenu.php:1902 admin/menu/FED_AdminMenu.php:1903
 msgid "Dashboard Menu"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:1923
-#: admin/menu/FED_AdminMenu.php:1924
+#: admin/menu/FED_AdminMenu.php:1923 admin/menu/FED_AdminMenu.php:1924
 msgid "Add Profile / Post Fields"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:1945
-#: admin/menu/FED_AdminMenu.php:1946
+#: admin/menu/FED_AdminMenu.php:1945 admin/menu/FED_AdminMenu.php:1946
 msgid "Help"
 msgstr ""
 
-#: admin/model/menu.php:12
-#: admin/model/menu.php:31
-msgid "There is some trouble in installing the default value, please try to deactivate and activate the plugin or contact us on "
+#: admin/model/menu.php:12 admin/model/menu.php:31
+msgid ""
+"There is some trouble in installing the default value, please try to "
+"deactivate and activate the plugin or contact us on "
 msgstr ""
 
 #: admin/model/common.php:95
-msgid "There is some trouble in installing the default value, please try to deactivate and activate the plugin or contact us on"
+msgid ""
+"There is some trouble in installing the default value, please try to "
+"deactivate and activate the plugin or contact us on"
 msgstr ""
 
 #: admin/request/user_profile.php:20
@@ -766,9 +748,10 @@ msgstr ""
 msgid "Sorry no record found to update your new details"
 msgstr ""
 
-#: admin/request/user_profile.php:72
-#: admin/request/orders.php:172
-msgid "Sorry, Something went wrong in storing values in DB, please try again later or contact support"
+#: admin/request/user_profile.php:72 admin/request/orders.php:172
+msgid ""
+"Sorry, Something went wrong in storing values in DB, please try again later "
+"or contact support"
 msgstr ""
 
 #: admin/request/orders.php:35
@@ -807,8 +790,7 @@ msgstr ""
 msgid "New Transaction ID "
 msgstr ""
 
-#: shortcodes/login/login-data.php:29
-#: shortcodes/login/login-data.php:30
+#: shortcodes/login/login-data.php:29 shortcodes/login/login-data.php:30
 msgid "User Name"
 msgstr ""
 
@@ -816,23 +798,19 @@ msgstr ""
 msgid "Remember Me"
 msgstr ""
 
-#: shortcodes/login/login-data.php:79
-#: shortcodes/login/login-data.php:89
+#: shortcodes/login/login-data.php:79 shortcodes/login/login-data.php:89
 msgid "Forgot Password"
 msgstr ""
 
-#: shortcodes/login/login-data.php:83
-#: shortcodes/login/login-data.php:84
+#: shortcodes/login/login-data.php:83 shortcodes/login/login-data.php:84
 msgid "User Name / Email Address"
 msgstr ""
 
-#: shortcodes/login/login-data.php:100
-#: shortcodes/login/login-data.php:125
+#: shortcodes/login/login-data.php:100 shortcodes/login/login-data.php:125
 msgid "Reset Password"
 msgstr ""
 
-#: shortcodes/login/login-data.php:109
-#: shortcodes/login/login-data.php:110
+#: shortcodes/login/login-data.php:109 shortcodes/login/login-data.php:110
 msgid "Confirmation Password"
 msgstr ""
 

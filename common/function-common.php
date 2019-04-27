@@ -3,9 +3,9 @@
 /**
  * Input Fields.
  *
- * @param string $meta_key Meta Key
- * @param array  $attr     Input Attributes
- * @param string $type     Input Format.
+ * @param  string  $meta_key  Meta Key
+ * @param  array  $attr  Input Attributes
+ * @param  string  $type  Input Format.
  *
  * @return string
  */
@@ -48,7 +48,7 @@ function fed_input_box($meta_key, $attr = array(), $type = 'text')
 /**
  * Loader.
  *
- * @param string $hide
+ * @param  string  $hide
  *
  * @return string
  */
@@ -87,30 +87,22 @@ function fed_sort_by_order($a, $b)
 /**
  * Sort by Desc
  *
- * @param array  $a First Element.
- * @param array  $b Second Element.
+ * @param  array  $a  First Element.
+ * @param  array  $b  Second Element.
  *
- * @param string $key
+ * @param  string  $key
  *
  * @return int
  */
 function fed_sort_by_desc($a, $b)
 {
     if (isset($a['id'], $b['id'])) {
-        return (int)$b['id'] - (int)$a['id'];
+        return (int) $b['id'] - (int) $a['id'];
     }
 
     return 199;
 }
 
-/**
- * @param int    $action
- * @param string $name
- * @param bool   $referer
- * @param bool   $echo
- *
- * @return string
- */
 function fed_wp_nonce_field($action = -1, $name = "_wpnonce", $referer = true, $echo = true)
 {
     $name        = esc_attr($name);
@@ -130,7 +122,7 @@ function fed_wp_nonce_field($action = -1, $name = "_wpnonce", $referer = true, $
 /**
  * Generate Random String
  *
- * @param int $length
+ * @param  int  $length
  *
  * @return string
  */
@@ -146,39 +138,33 @@ function fed_get_random_string($length = 10)
     return $randomString;
 }
 
-
 /**
- * @param $content
- *
- * @return bool
+ * @return array
  */
-function fed_is_shortcode_in_content()
+function fed_js_translation()
 {
-    global $post;
-    $shortcodes = fed_shortcode_lists();
+    return array(
+            'plugin_url'          => plugins_url(BC_FED_PLUGIN_NAME),
+            'payment_info'        => 'no',
+            'fed_admin_form_post' => admin_url('admin-ajax.php?action=fed_admin_form_post&nonce='.wp_create_nonce("fed_admin_form_post")),
+            'fed_login_form_post' => admin_url('admin-ajax.php?action=fed_login_form_post&nonce='.wp_create_nonce("fed_login_form_post")),
+            'alert'               => array(
+                    'confirmation'            => array(
+                            'title'   => __('Are you sure?', 'frontend-dashboard'),
+                            'text'    => __('You want to do this action?', 'frontend-dashboard'),
+                            'confirm' => __('Yes, Please Proceed', 'frontend-dashboard'),
+                            'cancel'  => __('No, Cancel it', 'frontend-dashboard'),
 
-    if (is_a($post, 'WP_Post')) {
-        foreach ($shortcodes as $shortcode) {
-            if (has_shortcode($post->post_content, $shortcode)) {
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
-/**
- * @return mixed|void
- */
-function fed_shortcode_lists()
-{
-    return apply_filters('fed_shortcode_lists', array(
-            'fed_login',
-            'fed_login_only',
-            'fed_register_only',
-            'fed_forgot_password_only',
-            'fed_dashboard',
-            'fed_user',
-    ));
+                    ),
+                    'redirecting'             => __('Please wait, you are redirecting..', 'frontend-dashboard'),
+                    'title_cancelled'         => __('Cancelled', 'frontend-dashboard'),
+                    'something_went_wrong'    => __('Something Went Wrong', 'frontend-dashboard'),
+                    'invalid_form_submission' => __('Invalid form submission', 'frontend-dashboard'),
+                    'please_try_again'        => __('Please try again', 'frontend-dashboard'),
+            ),
+            'common'              => array(
+                    'hide_add_new_menu' => __('Hide Add New Menu', 'frontend-dashboard'),
+                    'add_new_menu'      => __('Add New Menu', 'frontend-dashboard'),
+            ),
+    );
 }

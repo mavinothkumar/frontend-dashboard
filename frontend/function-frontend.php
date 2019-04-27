@@ -1,11 +1,11 @@
 <?php
 /**
  * @param        $id_or_email
- * @param string $alt
- * @param string $class
- * @param string $extra
- * @param string $size
- * @param string $attr
+ * @param  string  $alt
+ * @param  string  $class
+ * @param  string  $extra
+ * @param  string  $size
+ * @param  string  $attr
  *
  * @return string
  */
@@ -29,7 +29,7 @@ function fed_get_avatar($id_or_email, $alt = '', $class = '', $extra = '', $size
                 '';
 
         if ($gavatar_id != '') {
-            return wp_get_attachment_image((int)$gavatar_id, $size, $icon = false, $attr);
+            return wp_get_attachment_image((int) $gavatar_id, $size, $icon = false, $attr);
         }
 
         // send the default image
@@ -107,10 +107,11 @@ function fed_get_registration_content_fields()
                                 'rows'        => $detail['input_row'],
                                 'user_value'  => $detail['input_value'],
                                 'input_type'  => $detail['input_type'],
-                                'input_value'  => $detail['input_value'],
+                                'input_value' => $detail['input_value'],
                         )
                 ),
                 'input_order' => $detail['input_order'],
+                'extended'    => $detail['extended'],
         );
     }
 
@@ -187,8 +188,8 @@ function fed_process_user_profile_required_by_menu($menu)
 /**
  * Process Author Input Record
  *
- * @param object $user        User Object
- * @param string $single_item Single Item
+ * @param  object  $user  User Object
+ * @param  string  $single_item  Single Item
  *
  * @return string
  */
@@ -209,7 +210,7 @@ function fed_process_author_details($user, array $single_item)
      * 'color'    => 'Color'
      */
     if ($single_item['input_type'] === 'file') {
-        return wp_get_attachment_image((int)$user->get($single_item['input_meta']), 'thumbnail');
+        return wp_get_attachment_image((int) $user->get($single_item['input_meta']), 'thumbnail');
     }
 
     if ($single_item['input_type'] === 'url') {
@@ -281,9 +282,9 @@ function fed_input_mandatory_required_fields()
 }
 
 /**
- * @param string $content
+ * @param  string  $content
  * @param        $id
- * @param array  $options
+ * @param  array  $options
  *
  * @return string
  */
@@ -302,8 +303,8 @@ function fed_get_wp_editor($content = '', $id, array $options = array())
 }
 
 /**
- * @param string $post
- * @param string $cpt
+ * @param  string  $post
+ * @param  string  $cpt
  *
  * @return string
  */
@@ -314,15 +315,18 @@ function fed_get_dashboard_display_categories($post = '', $cpt = '')
             'taxonomy'   => $cpt->name,
             'hide_empty' => false,
     ));
+
+
     if (isset($post->ID)) {
         $categories = wp_get_post_terms($post->ID, $cpt->name, array('fields' => 'ids'));
     }
-
+//    bcdump($fed_get_categories);
+//    bcdump($categories);
     return fed_convert_array_to_id_name($fed_get_categories, 'term_id', 'tax_input['.$cpt->name.']', $categories);
 }
 
 /**
- * @param string $pos_id
+ * @param  string  $pos_id
  *
  * @return string
  */
@@ -337,14 +341,17 @@ function fed_get_dashboard_display_tags($post = '', $cpt = '')
         $tags = wp_get_post_terms($post->ID, $cpt->name, array('fields' => 'slugs'));
     }
 
+//    bcdump($fed_get_tags);
+//    bcdump($tags);
+
     return fed_convert_array_to_id_name($fed_get_tags, 'slug', 'tax_input['.$cpt->name.']', $tags);
 }
 
 /**
  * @param        $array
- * @param string $key
- * @param string $type
- * @param array  $compare
+ * @param  string  $key
+ * @param  string  $type
+ * @param  array  $compare
  *
  * @return string
  */
@@ -358,20 +365,11 @@ function fed_convert_array_to_id_name(array $array, $key = 'term_id', $type = ''
             $new_category[$value->$key] = $value->name;
         }
 
-        foreach ($new_category as $index => $new_value) {
-            $actual_value = '';
-            if (count($compare) > 0 && in_array($index, $compare, false)) {
-                $actual_value = $index;
-            }
-
-            $html .= fed_input_box($type,
-                    array(
-                            'name'          => $type.'[]',
-                            'default_value' => $index,
-                            'label'         => $new_value,
-                            'value'         => $actual_value,
-                    ), 'checkbox');
-        }
+        $html .= fed_get_input_details(array(
+                'input_value' => $new_category, 'input_meta' => $type, 'input_type' => 'select',
+                'user_value'  => $compare,
+                'extended'    => array('multiple' => 'Enable'),
+        ));
 
         return $html;
     }
@@ -400,8 +398,8 @@ function fed_dashboard_get_post_format()
 /**
  * Get post meta 0th element
  *
- * @param int    $id  post ID.
- * @param string $key Key.
+ * @param  int  $id  post ID.
+ * @param  string  $key  Key.
  *
  * @return string.
  */
@@ -465,8 +463,8 @@ function fed_get_tags_id_by_post_id($pos_id)
 
 /**
  * @param        $array
- * @param string $key
- * @param string $value
+ * @param  string  $key
+ * @param  string  $value
  *
  * @return array
  */
@@ -602,7 +600,7 @@ function fed_show_users_by_role($fed_user_attr)
 function fed_show_user_by_role($fed_user_attr, $user_id)
 {
     $user = new WP_User_Query(array(
-            'include' => (int)$user_id,
+            'include' => (int) $user_id,
             'role'    => $fed_user_attr->role,
     ));
     if ( ! $user->get_total()) {
@@ -629,14 +627,14 @@ function fed_show_user_by_role($fed_user_attr, $user_id)
 /**
  * Show user profile page by user ID
  *
- * @param object $user User Data
+ * @param  object  $user  User Data
  */
 function fed_show_user_profile_page($user)
 {
     /**
      * Collect Menu, User Information and Menu Items
      */
-     $profiles    = fed_array_group_by_key(fed_fetch_user_profile_by_dashboard(), 'menu');
+    $profiles    = fed_array_group_by_key(fed_fetch_user_profile_by_dashboard(), 'menu');
     $menus       = fed_fetch_table_rows_with_key(BC_FED_MENU_DB, 'menu_slug');
     $upl_options = get_option('fed_admin_settings_upl');
 

@@ -1,0 +1,1823 @@
+ 
+ 
+ ==================24/04/2019 08:55:06 (DEBUG) START================== 
+ 
+PayPal\Api\PlanList Object
+(
+    [_propMap:PayPal\Common\PayPalModel:private] => Array
+        (
+            [total_items] => 16
+            [total_pages] => 1
+            [plans] => Array
+                (
+                    [0] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-6LP28471CX649530BSSRSEMI
+                                    [state] => ACTIVE
+                                    [name] => plan created buffercode
+                                    [description] => Template creation.
+                                    [type] => FIXED
+                                    [create_time] => 2018-07-13T17:14:36.465Z
+                                    [update_time] => 2018-07-13T17:16:37.271Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-6LP28471CX649530BSSRSEMI
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [1] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-0TN705125W041810RSS67LMI
+                                    [state] => ACTIVE
+                                    [name] => plan created buffercode
+                                    [description] => Template creation.
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-13T17:43:54.545Z
+                                    [update_time] => 2018-07-18T18:24:47.848Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-0TN705125W041810RSS67LMI
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [2] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-5GF25758YW429781KVUVSA7Q
+                                    [state] => ACTIVE
+                                    [name] => New Plan 2
+                                    [description] => F
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-18T11:34:02.110Z
+                                    [update_time] => 2018-07-18T18:26:03.559Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-5GF25758YW429781KVUVSA7Q
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [3] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-09247657XY310870UVW3POBY
+                                    [state] => ACTIVE
+                                    [name] => Make ID
+                                    [description] => Fixed
+                                    [type] => FIXED
+                                    [create_time] => 2018-07-18T14:06:46.535Z
+                                    [update_time] => 2018-07-19T05:51:39.153Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-09247657XY310870UVW3POBY
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [4] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-2H9988830E3938731WHVDJVQ
+                                    [state] => ACTIVE
+                                    [name] => Oye On
+                                    [description] => oye
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T09:41:13.558Z
+                                    [update_time] => 2018-07-19T09:41:19.268Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-2H9988830E3938731WHVDJVQ
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [5] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-0FM86138RJ450190EWJHUZWQ
+                                    [state] => ACTIVE
+                                    [name] => Buggy
+                                    [description] => buggy
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T11:31:38.842Z
+                                    [update_time] => 2018-07-19T11:31:44.760Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-0FM86138RJ450190EWJHUZWQ
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [6] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-7VV07018AU6566349WJJQCOY
+                                    [state] => ACTIVE
+                                    [name] => My Buggy 2
+                                    [description] => My Buggy
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T11:35:41.627Z
+                                    [update_time] => 2018-07-19T11:35:47.371Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-7VV07018AU6566349WJJQCOY
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [7] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-1P903851WS779361LWJKZHLQ
+                                    [state] => ACTIVE
+                                    [name] => Final Testing
+                                    [description] => 12
+                                    [type] => FIXED
+                                    [create_time] => 2018-07-19T11:38:30.190Z
+                                    [update_time] => 2018-07-19T11:38:36.162Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-1P903851WS779361LWJKZHLQ
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [8] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-29M33569PF4405622WJMLXRI
+                                    [state] => ACTIVE
+                                    [name] => Fighting
+                                    [description] => 233
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T11:41:57.061Z
+                                    [update_time] => 2018-07-19T11:42:02.828Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-29M33569PF4405622WJMLXRI
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [9] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-0KU085170W036023JWKBQNHQ
+                                    [state] => ACTIVE
+                                    [name] => Fighting 2
+                                    [description] => 233
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T12:28:08.734Z
+                                    [update_time] => 2018-07-19T12:28:14.763Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-0KU085170W036023JWKBQNHQ
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [10] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-8AM88434RK6006336WKC2S7A
+                                    [state] => ACTIVE
+                                    [name] => Fighting 4
+                                    [description] => 233
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T12:31:01.500Z
+                                    [update_time] => 2018-07-19T12:31:07.804Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-8AM88434RK6006336WKC2S7A
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [11] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-8NC10941GU605070HWKD44HQ
+                                    [state] => ACTIVE
+                                    [name] => Fighting 4
+                                    [description] => FI
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T12:33:21.950Z
+                                    [update_time] => 2018-07-19T12:33:27.580Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-8NC10941GU605070HWKD44HQ
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [12] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-9M274528WA142222MWKRQV6I
+                                    [state] => ACTIVE
+                                    [name] => Multiple Definition Plan
+                                    [description] => Multiple Definition Plan
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T13:03:07.001Z
+                                    [update_time] => 2018-07-19T13:03:13.084Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-9M274528WA142222MWKRQV6I
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [13] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-00C2981006897012MWOU5G5Q
+                                    [state] => ACTIVE
+                                    [name] => Pro Version One Time
+                                    [description] => One Time Fee
+                                    [type] => FIXED
+                                    [create_time] => 2018-07-19T17:50:08.758Z
+                                    [update_time] => 2018-07-19T17:50:15.469Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-00C2981006897012MWOU5G5Q
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [14] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-6TT8093768093074TX4Y3IVA
+                                    [state] => ACTIVE
+                                    [name] => Auto Billing
+                                    [description] => Auto Billing
+                                    [type] => INFINITE
+                                    [create_time] => 2018-09-09T16:37:10.356Z
+                                    [update_time] => 2018-09-09T16:37:16.644Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-6TT8093768093074TX4Y3IVA
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [15] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-29U43069JE715794MX43PSKQ
+                                    [state] => ACTIVE
+                                    [name] => With Trail
+                                    [description] => Trail
+                                    [type] => INFINITE
+                                    [create_time] => 2018-09-09T16:42:55.658Z
+                                    [update_time] => 2018-09-09T16:52:22.092Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-29U43069JE715794MX43PSKQ
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [links] => Array
+                (
+                    [0] => PayPal\Api\Links Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans?page_size=20&page=0&start=1&status=active
+                                    [rel] => start
+                                    [method] => GET
+                                )
+
+                        )
+
+                    [1] => PayPal\Api\Links Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans?page_size=20&page=0&status=active
+                                    [rel] => last
+                                    [method] => GET
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+ 
+ 
+ ==================24/04/2019 08:55:06 (DEBUG) END================== 
+ 
+ 
+ 
+ 
+ ==================24/04/2019 08:55:20 (DEBUG) START================== 
+ 
+PayPal\Api\PlanList Object
+(
+    [_propMap:PayPal\Common\PayPalModel:private] => Array
+        (
+            [total_items] => 16
+            [total_pages] => 1
+            [plans] => Array
+                (
+                    [0] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-6LP28471CX649530BSSRSEMI
+                                    [state] => ACTIVE
+                                    [name] => plan created buffercode
+                                    [description] => Template creation.
+                                    [type] => FIXED
+                                    [create_time] => 2018-07-13T17:14:36.465Z
+                                    [update_time] => 2018-07-13T17:16:37.271Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-6LP28471CX649530BSSRSEMI
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [1] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-0TN705125W041810RSS67LMI
+                                    [state] => ACTIVE
+                                    [name] => plan created buffercode
+                                    [description] => Template creation.
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-13T17:43:54.545Z
+                                    [update_time] => 2018-07-18T18:24:47.848Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-0TN705125W041810RSS67LMI
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [2] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-5GF25758YW429781KVUVSA7Q
+                                    [state] => ACTIVE
+                                    [name] => New Plan 2
+                                    [description] => F
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-18T11:34:02.110Z
+                                    [update_time] => 2018-07-18T18:26:03.559Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-5GF25758YW429781KVUVSA7Q
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [3] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-09247657XY310870UVW3POBY
+                                    [state] => ACTIVE
+                                    [name] => Make ID
+                                    [description] => Fixed
+                                    [type] => FIXED
+                                    [create_time] => 2018-07-18T14:06:46.535Z
+                                    [update_time] => 2018-07-19T05:51:39.153Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-09247657XY310870UVW3POBY
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [4] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-2H9988830E3938731WHVDJVQ
+                                    [state] => ACTIVE
+                                    [name] => Oye On
+                                    [description] => oye
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T09:41:13.558Z
+                                    [update_time] => 2018-07-19T09:41:19.268Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-2H9988830E3938731WHVDJVQ
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [5] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-0FM86138RJ450190EWJHUZWQ
+                                    [state] => ACTIVE
+                                    [name] => Buggy
+                                    [description] => buggy
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T11:31:38.842Z
+                                    [update_time] => 2018-07-19T11:31:44.760Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-0FM86138RJ450190EWJHUZWQ
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [6] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-7VV07018AU6566349WJJQCOY
+                                    [state] => ACTIVE
+                                    [name] => My Buggy 2
+                                    [description] => My Buggy
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T11:35:41.627Z
+                                    [update_time] => 2018-07-19T11:35:47.371Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-7VV07018AU6566349WJJQCOY
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [7] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-1P903851WS779361LWJKZHLQ
+                                    [state] => ACTIVE
+                                    [name] => Final Testing
+                                    [description] => 12
+                                    [type] => FIXED
+                                    [create_time] => 2018-07-19T11:38:30.190Z
+                                    [update_time] => 2018-07-19T11:38:36.162Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-1P903851WS779361LWJKZHLQ
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [8] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-29M33569PF4405622WJMLXRI
+                                    [state] => ACTIVE
+                                    [name] => Fighting
+                                    [description] => 233
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T11:41:57.061Z
+                                    [update_time] => 2018-07-19T11:42:02.828Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-29M33569PF4405622WJMLXRI
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [9] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-0KU085170W036023JWKBQNHQ
+                                    [state] => ACTIVE
+                                    [name] => Fighting 2
+                                    [description] => 233
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T12:28:08.734Z
+                                    [update_time] => 2018-07-19T12:28:14.763Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-0KU085170W036023JWKBQNHQ
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [10] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-8AM88434RK6006336WKC2S7A
+                                    [state] => ACTIVE
+                                    [name] => Fighting 4
+                                    [description] => 233
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T12:31:01.500Z
+                                    [update_time] => 2018-07-19T12:31:07.804Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-8AM88434RK6006336WKC2S7A
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [11] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-8NC10941GU605070HWKD44HQ
+                                    [state] => ACTIVE
+                                    [name] => Fighting 4
+                                    [description] => FI
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T12:33:21.950Z
+                                    [update_time] => 2018-07-19T12:33:27.580Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-8NC10941GU605070HWKD44HQ
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [12] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-9M274528WA142222MWKRQV6I
+                                    [state] => ACTIVE
+                                    [name] => Multiple Definition Plan
+                                    [description] => Multiple Definition Plan
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T13:03:07.001Z
+                                    [update_time] => 2018-07-19T13:03:13.084Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-9M274528WA142222MWKRQV6I
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [13] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-00C2981006897012MWOU5G5Q
+                                    [state] => ACTIVE
+                                    [name] => Pro Version One Time
+                                    [description] => One Time Fee
+                                    [type] => FIXED
+                                    [create_time] => 2018-07-19T17:50:08.758Z
+                                    [update_time] => 2018-07-19T17:50:15.469Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-00C2981006897012MWOU5G5Q
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [14] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-6TT8093768093074TX4Y3IVA
+                                    [state] => ACTIVE
+                                    [name] => Auto Billing
+                                    [description] => Auto Billing
+                                    [type] => INFINITE
+                                    [create_time] => 2018-09-09T16:37:10.356Z
+                                    [update_time] => 2018-09-09T16:37:16.644Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-6TT8093768093074TX4Y3IVA
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [15] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-29U43069JE715794MX43PSKQ
+                                    [state] => ACTIVE
+                                    [name] => With Trail
+                                    [description] => Trail
+                                    [type] => INFINITE
+                                    [create_time] => 2018-09-09T16:42:55.658Z
+                                    [update_time] => 2018-09-09T16:52:22.092Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-29U43069JE715794MX43PSKQ
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [links] => Array
+                (
+                    [0] => PayPal\Api\Links Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans?page_size=20&page=0&start=1&status=active
+                                    [rel] => start
+                                    [method] => GET
+                                )
+
+                        )
+
+                    [1] => PayPal\Api\Links Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans?page_size=20&page=0&status=active
+                                    [rel] => last
+                                    [method] => GET
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+ 
+ 
+ ==================24/04/2019 08:55:20 (DEBUG) END================== 
+ 
+ 
+ 
+ 
+ ==================24/04/2019 08:55:25 (DEBUG) START================== 
+ 
+PayPal\Api\PlanList Object
+(
+    [_propMap:PayPal\Common\PayPalModel:private] => Array
+        (
+            [total_items] => 2
+            [total_pages] => 1
+            [plans] => Array
+                (
+                    [0] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-424033546V936581NEEXF2OI
+                                    [state] => INACTIVE
+                                    [name] => plan created buffercode
+                                    [description] => Template creation.
+                                    [type] => FIXED
+                                    [create_time] => 2017-05-19T14:48:25.657Z
+                                    [update_time] => 2018-07-19T05:38:48.860Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-424033546V936581NEEXF2OI
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [1] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-4TB584591C573440UVZYM2AY
+                                    [state] => INACTIVE
+                                    [name] => Final Test
+                                    [description] => Fixed
+                                    [type] => FIXED
+                                    [create_time] => 2018-07-18T17:29:45.475Z
+                                    [update_time] => 2018-07-19T05:42:09.428Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-4TB584591C573440UVZYM2AY
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [links] => Array
+                (
+                    [0] => PayPal\Api\Links Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans?page_size=20&page=0&start=1&status=inactive
+                                    [rel] => start
+                                    [method] => GET
+                                )
+
+                        )
+
+                    [1] => PayPal\Api\Links Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans?page_size=20&page=0&status=inactive
+                                    [rel] => last
+                                    [method] => GET
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+ 
+ 
+ ==================24/04/2019 08:55:25 (DEBUG) END================== 
+ 
+ 
+ 
+ 
+ ==================24/04/2019 08:55:51 (DEBUG) START================== 
+ 
+PayPal\Api\PlanList Object
+(
+    [_propMap:PayPal\Common\PayPalModel:private] => Array
+        (
+            [total_items] => 22
+            [total_pages] => 2
+            [plans] => Array
+                (
+                    [0] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-9KS703036R503821SVVEH47Y
+                                    [state] => CREATED
+                                    [name] => 333
+                                    [description] => asdfasdf
+                                    [type] => FIXED
+                                    [create_time] => 2018-07-18T12:06:06.719Z
+                                    [update_time] => 2018-07-18T12:06:06.719Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-9KS703036R503821SVVEH47Y
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [1] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-5HH60597G9962074AWEUTJTA
+                                    [state] => CREATED
+                                    [name] => Multiple Definition
+                                    [description] => This is Multiple Definition Payment
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T06:10:25.100Z
+                                    [update_time] => 2018-07-19T06:10:25.100Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-5HH60597G9962074AWEUTJTA
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [2] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-70J16872MH343280GWEXGTZI
+                                    [state] => CREATED
+                                    [name] => Plan B
+                                    [description] => Plan B
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T06:16:06.373Z
+                                    [update_time] => 2018-07-19T06:16:06.373Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-70J16872MH343280GWEXGTZI
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [3] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-1AB60586RF6750441WEYMPBQ
+                                    [state] => CREATED
+                                    [name] => Plan C
+                                    [description] => Plan C
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T06:18:41.414Z
+                                    [update_time] => 2018-07-19T06:18:41.414Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-1AB60586RF6750441WEYMPBQ
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [4] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-12F062873L511194NWEZCASQ
+                                    [state] => CREATED
+                                    [name] => Plan C
+                                    [description] => Plan C
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T06:20:09.674Z
+                                    [update_time] => 2018-07-19T06:20:09.674Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-12F062873L511194NWEZCASQ
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [5] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-2SM660252D9335917WE2TAZQ
+                                    [state] => CREATED
+                                    [name] => Plan D
+                                    [description] => Plan D
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T06:23:30.406Z
+                                    [update_time] => 2018-07-19T06:23:30.406Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-2SM660252D9335917WE2TAZQ
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [6] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-6UV470983N341220NWE3FLYA
+                                    [state] => CREATED
+                                    [name] => Plan Z
+                                    [description] => Plan Z
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T06:24:45.536Z
+                                    [update_time] => 2018-07-19T06:24:45.536Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-6UV470983N341220NWE3FLYA
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [7] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-23V95733JU4306920WF25TTQ
+                                    [state] => CREATED
+                                    [name] => Plan J
+                                    [description] => PlJ
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T07:34:08.078Z
+                                    [update_time] => 2018-07-19T07:34:08.078Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-23V95733JU4306920WF25TTQ
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [8] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-2L425554WJ099590JWHI6IDQ
+                                    [state] => CREATED
+                                    [name] => Xon Y
+                                    [description] => X On
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T09:14:40.014Z
+                                    [update_time] => 2018-07-19T09:14:40.014Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-2L425554WJ099590JWHI6IDQ
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [9] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-3YX67189UD837911XWHKVSKY
+                                    [state] => CREATED
+                                    [name] => Xon Y
+                                    [description] => X On
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T09:18:26.603Z
+                                    [update_time] => 2018-07-19T09:18:26.603Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-3YX67189UD837911XWHKVSKY
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [10] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-06L117412J6900616WHLIOHI
+                                    [state] => CREATED
+                                    [name] => Tes on ojjy
+                                    [description] => on
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T09:19:43.901Z
+                                    [update_time] => 2018-07-19T09:19:43.901Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-06L117412J6900616WHLIOHI
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [11] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-4U6610937H715982TWHLSFSQ
+                                    [state] => CREATED
+                                    [name] => Tes on ojjy
+                                    [description] => on
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T09:20:23.754Z
+                                    [update_time] => 2018-07-19T09:20:23.754Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-4U6610937H715982TWHLSFSQ
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [12] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-2SE9928794563960EWHMS2LA
+                                    [state] => CREATED
+                                    [name] => Tes on ojjy
+                                    [description] => on
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T09:22:37.484Z
+                                    [update_time] => 2018-07-19T09:22:37.484Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-2SE9928794563960EWHMS2LA
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [13] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-8DD87546NU542821EWHOXH6Q
+                                    [state] => CREATED
+                                    [name] => Tes on ojjy
+                                    [description] => on
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T09:27:17.754Z
+                                    [update_time] => 2018-07-19T09:27:17.754Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-8DD87546NU542821EWHOXH6Q
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [14] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-2SD012866E664410AWHPVHZI
+                                    [state] => CREATED
+                                    [name] => Tes on ojjy
+                                    [description] => on
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T09:29:20.613Z
+                                    [update_time] => 2018-07-19T09:29:20.613Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-2SD012866E664410AWHPVHZI
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [15] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-2N809762Y24430322WHQZ73A
+                                    [state] => CREATED
+                                    [name] => Oye On
+                                    [description] => oye
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T09:31:51.148Z
+                                    [update_time] => 2018-07-19T09:31:51.148Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-2N809762Y24430322WHQZ73A
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [16] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-2UW48038XA7255526WHSTDLI
+                                    [state] => CREATED
+                                    [name] => Oye On
+                                    [description] => oye
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T09:35:45.069Z
+                                    [update_time] => 2018-07-19T09:35:45.069Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-2UW48038XA7255526WHSTDLI
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [17] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-0T5985729N058624PWHTRR3Y
+                                    [state] => CREATED
+                                    [name] => Oye On
+                                    [description] => oye
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T09:37:49.807Z
+                                    [update_time] => 2018-07-19T09:37:49.807Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-0T5985729N058624PWHTRR3Y
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [18] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-3JE30662C8121003LWHUTFNI
+                                    [state] => CREATED
+                                    [name] => Oye On
+                                    [description] => oye
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T09:40:07.477Z
+                                    [update_time] => 2018-07-19T09:40:07.477Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-3JE30662C8121003LWHUTFNI
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                    [19] => PayPal\Api\Plan Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [id] => P-9XL21581HC646990YWHWBT2A
+                                    [state] => CREATED
+                                    [name] => Oye On 4
+                                    [description] => oye
+                                    [type] => INFINITE
+                                    [create_time] => 2018-07-19T09:43:17.736Z
+                                    [update_time] => 2018-07-19T09:43:17.736Z
+                                    [links] => Array
+                                        (
+                                            [0] => PayPal\Api\Links Object
+                                                (
+                                                    [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                                        (
+                                                            [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans/P-9XL21581HC646990YWHWBT2A
+                                                            [rel] => self
+                                                            [method] => GET
+                                                        )
+
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+            [links] => Array
+                (
+                    [0] => PayPal\Api\Links Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans?page_size=20&page=0&start=1&status=created
+                                    [rel] => start
+                                    [method] => GET
+                                )
+
+                        )
+
+                    [1] => PayPal\Api\Links Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans?page_size=20&page=1&status=created
+                                    [rel] => next_page
+                                    [method] => GET
+                                )
+
+                        )
+
+                    [2] => PayPal\Api\Links Object
+                        (
+                            [_propMap:PayPal\Common\PayPalModel:private] => Array
+                                (
+                                    [href] => https://api.sandbox.paypal.com/v1/payments/billing-plans?page_size=20&page=1&status=created
+                                    [rel] => last
+                                    [method] => GET
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+ 
+ 
+ ==================24/04/2019 08:55:51 (DEBUG) END================== 
+ 
+ 
