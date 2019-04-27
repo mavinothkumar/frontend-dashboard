@@ -3,9 +3,9 @@
 /**
  * Input Fields.
  *
- * @param string $meta_key Meta Key
- * @param array  $attr     Input Attributes
- * @param string $type     Input Format.
+ * @param  string  $meta_key  Meta Key
+ * @param  array  $attr  Input Attributes
+ * @param  string  $type  Input Format.
  *
  * @return string
  */
@@ -48,7 +48,7 @@ function fed_input_box($meta_key, $attr = array(), $type = 'text')
 /**
  * Loader.
  *
- * @param string $hide
+ * @param  string  $hide
  *
  * @return string
  */
@@ -87,17 +87,17 @@ function fed_sort_by_order($a, $b)
 /**
  * Sort by Desc
  *
- * @param array  $a First Element.
- * @param array  $b Second Element.
+ * @param  array  $a  First Element.
+ * @param  array  $b  Second Element.
  *
- * @param string $key
+ * @param  string  $key
  *
  * @return int
  */
 function fed_sort_by_desc($a, $b)
 {
     if (isset($a['id'], $b['id'])) {
-        return (int)$b['id'] - (int)$a['id'];
+        return (int) $b['id'] - (int) $a['id'];
     }
 
     return 199;
@@ -122,7 +122,7 @@ function fed_wp_nonce_field($action = -1, $name = "_wpnonce", $referer = true, $
 /**
  * Generate Random String
  *
- * @param int $length
+ * @param  int  $length
  *
  * @return string
  */
@@ -138,3 +138,33 @@ function fed_get_random_string($length = 10)
     return $randomString;
 }
 
+/**
+ * @return array
+ */
+function fed_js_translation()
+{
+    return array(
+            'plugin_url'          => plugins_url(BC_FED_PLUGIN_NAME),
+            'payment_info'        => 'no',
+            'fed_admin_form_post' => admin_url('admin-ajax.php?action=fed_admin_form_post&nonce='.wp_create_nonce("fed_admin_form_post")),
+            'fed_login_form_post' => admin_url('admin-ajax.php?action=fed_login_form_post&nonce='.wp_create_nonce("fed_login_form_post")),
+            'alert'               => array(
+                    'confirmation'            => array(
+                            'title'   => __('Are you sure?', 'frontend-dashboard'),
+                            'text'    => __('You want to do this action?', 'frontend-dashboard'),
+                            'confirm' => __('Yes, Please Proceed', 'frontend-dashboard'),
+                            'cancel'  => __('No, Cancel it', 'frontend-dashboard'),
+
+                    ),
+                    'redirecting'             => __('Please wait, you are redirecting..', 'frontend-dashboard'),
+                    'title_cancelled'         => __('Cancelled', 'frontend-dashboard'),
+                    'something_went_wrong'    => __('Something Went Wrong', 'frontend-dashboard'),
+                    'invalid_form_submission' => __('Invalid form submission', 'frontend-dashboard'),
+                    'please_try_again'        => __('Please try again', 'frontend-dashboard'),
+            ),
+            'common'              => array(
+                    'hide_add_new_menu' => __('Hide Add New Menu', 'frontend-dashboard'),
+                    'add_new_menu'      => __('Add New Menu', 'frontend-dashboard'),
+            ),
+    );
+}

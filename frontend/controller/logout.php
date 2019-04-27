@@ -7,7 +7,7 @@ function fed_logout_process() {
 		<div class="panel-heading">
 			<h3 class="panel-title">
 				<span class="fa <?php echo $logout[ $index ]['menu_image_id'] ?>"></span>
-				<?php printf( esc_attr__( '%s', 'frontend-dashboard' ), ucwords( $logout[ $index ]['menu'] ) ) ?>
+				<?php echo ucwords( $logout[ $index ]['menu'] ) ?>
 			</h3>
 		</div>
 		<div class="panel-body fed_dashboard_panel_body">

@@ -26,7 +26,7 @@ jQuery(document).ready(function ($) {
         $('form.fed_form_post').on('submit', function (e) {
             var click = $(this);
             var data = click.serialize();
-            var url = fed.fed_login_form_post;
+            var url = frontend_dashboard.fed_login_form_post;
             var method = click.attr('method') || 'post';
             fed_toggle_loader();
             $.ajax({
@@ -263,13 +263,13 @@ jQuery(document).ready(function ($) {
             var root = click.closest('.fed_dashboard_item_field_wrapper');
             fed_toggle_loader();
             swal({
-                title: "Are you sure?",
-                text: "You to delete this Menu!",
+                title: frontend_dashboard.alert.confirmation.title,
+                text: frontend_dashboard.alert.confirmation.text,
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Yes, delete it!",
-                cancelButtonText: "No, cancel it!",
+                confirmButtonText: frontend_dashboard.alert.confirmation.confirm,
+                cancelButtonText: frontend_dashboard.alert.confirmation.cancel,
                 showLoaderOnConfirm: true
             }).then(
                 function () {
@@ -287,7 +287,7 @@ jQuery(document).ready(function ($) {
                 function (dismiss) {
                     if (dismiss === 'cancel') {
                         swal({
-                                title: "Cancelled",
+                                title: frontend_dashboard.alert.title_cancelled,
                                 type: "error",
                                 confirmButtonColor: '#0AAAAA'
                             }
@@ -397,8 +397,8 @@ jQuery(document).ready(function ($) {
                 var error;
                 if (results.success) {
                     swal({
-                        title: results.data.message,
-                        text: "Please wait, you are redirecting..",
+                        title: results.data.message  || frontend_dashboard.alert.confirmation.title,
+                        text: frontend_dashboard.alert.redirecting,
                         type: "success",
                         showConfirmButton: false,
                         timer: 1000,
@@ -410,10 +410,9 @@ jQuery(document).ready(function ($) {
                             window.location.href = results.data.url;
                         });
                 } else {
-                    if (fed.fed_captcha_details && fed.fed_captcha_details.fed_captcha_enable === 'Enable') {
+                    if (frontend_dashboard.fed_captcha_details && frontend_dashboard.fed_captcha_details.fed_captcha_enable === 'Enable') {
                         grecaptcha.reset();
                     }
-
                     if (results.data.user instanceof Array) {
                         error = results.data.user.join('</br>');
                     } else {
@@ -429,14 +428,14 @@ jQuery(document).ready(function ($) {
             adminSettings: function (results) {
                 if (results.success) {
                     swal({
-                        title: results.data.message || 'Something Went Wrong',
+                        title: results.data.message || frontend_dashboard.alert.something_went_wrong,
                         type: "success",
                         confirmButtonColor: '#0AAAAA',
                     });
                 } else {
                     swal({
-                        title: "Invalid form submission",
-                        text: "Please try again",
+                        title: frontend_dashboard.alert.invalid_form_submission,
+                        text: frontend_dashboard.alert.please_try_again,
                         type: "error",
                         confirmButtonColor: "#DD6B55"
                     });
@@ -448,7 +447,7 @@ jQuery(document).ready(function ($) {
                 // console.log(results);
                 if (results.success) {
                     swal({
-                        title: results.data.message || 'Something Went Wrong',
+                        title: results.data.message || frontend_dashboard.alert.something_went_wrong,
                         type: "success",
                         text: '',
                         confirmButtonColor: '#0AAAAA'
@@ -459,7 +458,7 @@ jQuery(document).ready(function ($) {
                     } else {
                         error = results.data.user;
                     }
-                    if (fed.fed_captcha_details.fed_captcha_enable == 'Enable') {
+                    if (frontend_dashboard.fed_captcha_details.fed_captcha_enable == 'Enable') {
                         grecaptcha.reset();
                     }
                     swal({
@@ -468,11 +467,10 @@ jQuery(document).ready(function ($) {
                         text: '',
                         confirmButtonColor: "#DD6B55"
                     });
-                }
-                else {
+                } else {
                     swal({
-                        title: "Invalid form submission",
-                        text: "Please try again",
+                        title: frontend_dashboard.alert.invalid_form_submission,
+                        text: frontend_dashboard.alert.please_try_again,
                         type: "error",
                         confirmButtonColor: "#DD6B55"
                     });
@@ -482,7 +480,7 @@ jQuery(document).ready(function ($) {
             dashboardPostCommon: function (results) {
                 if (results.success) {
                     swal({
-                        title: results.data.message || 'Something Went Wrong',
+                        title: results.data.message || frontend_dashboard.alert.something_went_wrong,
                         type: "success",
                         text: '',
                         confirmButtonColor: '#0AAAAA',
@@ -500,11 +498,10 @@ jQuery(document).ready(function ($) {
                         type: "error",
                         confirmButtonColor: "#DD6B55"
                     });
-                }
-                else {
+                } else {
                     swal({
-                        title: "Invalid form submission",
-                        text: "Please try again",
+                        title: frontend_dashboard.alert.invalid_form_submission,
+                        text: frontend_dashboard.alert.please_try_again,
                         type: "error",
                         confirmButtonColor: "#DD6B55"
                     });
@@ -546,10 +543,10 @@ var CaptchaCallback = function () {
     var fedRegister = document.getElementById('fedRegisterCaptcha');
     var fedLogin = document.getElementById('fedLoginCaptcha');
     if (fedRegister !== null) {
-        grecaptcha.render('fedRegisterCaptcha', {'sitekey': fed.fed_captcha_details.fed_captcha_site_key});
+        grecaptcha.render('fedRegisterCaptcha', {'sitekey': frontend_dashboard.fed_captcha_details.fed_captcha_site_key});
     }
     if (fedLogin !== null) {
-        grecaptcha.render('fedLoginCaptcha', {'sitekey': fed.fed_captcha_details.fed_captcha_site_key});
+        grecaptcha.render('fedLoginCaptcha', {'sitekey': frontend_dashboard.fed_captcha_details.fed_captcha_site_key});
 
     }
 };

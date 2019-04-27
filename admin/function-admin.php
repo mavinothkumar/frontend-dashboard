@@ -7,8 +7,8 @@
 /**
  * Verify Nonce
  *
- * @param array                 $request
- * @param null | string | array $permission
+ * @param  array  $request
+ * @param  null | string | array  $permission
  */
 function fed_verify_nonce($request, $permission = null)
 {
@@ -35,7 +35,7 @@ function fed_verify_nonce($request, $permission = null)
  * Check for Nonce
  *
  * @param                       $request
- * @param null | array | string $permission
+ * @param  null | array | string  $permission
  *
  * @internal param string $nonce Nonce
  * @internal param string $key Key
@@ -48,7 +48,7 @@ function fed_nonce_check($request, $permission = null)
 /**
  * Show form fields on admin dashboard
  *
- * @param string $selected Selected.
+ * @param  string  $selected  Selected.
  *
  * @return string | array
  */
@@ -103,7 +103,7 @@ function fed_admin_user_profile_select($selected = '')
 /**
  * Enable or Disable.
  *
- * @param string|bool $condition Condition.
+ * @param  string|bool  $condition  Condition.
  *
  * @return string
  */
@@ -117,7 +117,7 @@ function fed_enable_disable($condition = '')
 }
 
 /**
- * @param string $condition
+ * @param  string  $condition
  *
  * @return string
  */
@@ -131,7 +131,7 @@ function fed_is_required($condition = '')
 }
 
 /**
- * @param string $condition
+ * @param  string  $condition
  *
  * @return bool
  */
@@ -145,8 +145,8 @@ function fed_is_true_false($condition = '')
 }
 
 /**
- * @param string $condition
- * @param string $type
+ * @param  string  $condition
+ * @param  string  $type
  *
  * @return array
  */
@@ -181,7 +181,7 @@ function fed_profile_enable_disable($condition = '', $type = '')
 /**
  * Get Input Details.
  *
- * @param array $attr Attributes
+ * @param  array  $attr  Attributes
  *
  * @return string
  */
@@ -237,10 +237,17 @@ function fed_get_input_details($attr)
 
         case 'checkbox':
             $values['class'] = $values['class'] == 'form-control' ? '' : $values['class'];
-            $input           .= '<label class="'.$values['class'].'">
+            if (isset($values['extended']['label']) && count($values['extended']) > 0) {
+                $input .= '<label class="'.$values['class'].'">
 			<input '.$values['disabled'].' '.$values['extra'].' '.$values['id'].' '.$values['required'].'  name="'.$values['name'].'"  value="'.$values['default_value'].'" type="checkbox" '.checked($values['value'],
-                            $values['default_value'], false).'> '.$label.'</label>';
+                                $values['default_value'],
+                                false).'> '.htmlspecialchars_decode($values['extended']['label']).'</label>';
 
+            } else {
+                $input .= '<label class="'.$values['class'].'">
+			<input '.$values['disabled'].' '.$values['extra'].' '.$values['id'].' '.$values['required'].'  name="'.$values['name'].'"  value="'.$values['default_value'].'" type="checkbox" '.checked($values['value'],
+                                $values['default_value'], false).'> '.$label.'</label>';
+            }
             break;
 
         case 'select':
@@ -257,8 +264,16 @@ function fed_get_input_details($attr)
 
             $input .= '<select '.$values['disabled'].' '.$values['id'].' '.$values['extra'].' name="'.$select_name.'"  class="'.$values['class'].' '.$multi_select_class.' " '.$multi_select.'>';
             foreach ($options as $key => $label) {
-                $input .= '<option
+                if (is_array($values['value'])) {
+                    $checked = in_array($key, $values['value']) ? 'selected' : '';
+                    $input   .= '<option value="'.esc_attr($key).'" '.$checked.'>'.$label.'</option>';
+                } elseif (is_serialized($values['value'])) {
+                    $checked = in_array($key, unserialize($values['value'])) ? 'selected' : '';
+                    $input   .= '<option value="'.esc_attr($key).'" '.$checked.'>'.$label.'</option>';
+                } else {
+                    $input .= '<option
 						value="'.esc_attr($key).'" '.selected($values['value'], $key, false).'>'.$label.'</option>';
+                }
             }
             $input .= '</select>';
             break;
@@ -383,7 +398,7 @@ function fed_default_user_roles()
 /**
  * Get Default value for User Profile
  *
- * @param string $action Action.
+ * @param  string  $action  Action.
  *
  * @return array
  */
@@ -433,9 +448,9 @@ function fed_get_empty_value_for_user_profile($action)
 /**
  * Process User Profile.
  *
- * @param array  $row    User Profiles
- * @param string $action Action
- * @param string $update Status
+ * @param  array  $row  User Profiles
+ * @param  string  $action  Action
+ * @param  string  $update  Status
  *
  * @return array
  */
@@ -470,6 +485,20 @@ function fed_process_user_profile($row, $action, $update = 'no')
         if ($update === 'yes') {
             $extended            = array(
                     'multiple' => isset($row['extended']['multiple']) ? sanitize_text_field($row['extended']['multiple']) : 'no',
+            );
+            $default['extended'] = serialize($extended);
+        } else {
+            $default['extended'] = $row['extended'];
+            if (is_string($row['extended'])) {
+                $default['extended'] = unserialize($row['extended']);
+            }
+        }
+    }
+
+    if ($row['input_type'] === 'checkbox') {
+        if ($update === 'yes') {
+            $extended            = array(
+                    'label' => isset($row['extended']['label']) ? wp_kses_post($row['extended']['label']) : '',
             );
             $default['extended'] = serialize($extended);
         } else {
@@ -522,7 +551,7 @@ function fed_process_user_profile($row, $action, $update = 'no')
 /**
  * Process Menu
  *
- * @param array $row Menu Items.
+ * @param  array  $row  Menu Items.
  *
  * @return array
  */
@@ -545,7 +574,7 @@ function fed_process_menu($row)
 /**
  * Convert comma separated and new line into key value pair
  *
- * @param string $text String.
+ * @param  string  $text  String.
  *
  * @return array
  */
@@ -564,7 +593,7 @@ function fed_convert_comma_separated_key_value($text)
 /**
  * Check is the field is belongs to extra profile
  *
- * @param string $meta_key Meta Key
+ * @param  string  $meta_key  Meta Key
  *
  * @return bool
  */
@@ -607,7 +636,7 @@ function fed_no_update_fields()
 /**
  * Changing Archive page author
  *
- * @param string $single_template Template.
+ * @param  string  $single_template  Template.
  *
  * @return string
  */
@@ -1741,7 +1770,7 @@ function fed_font_awesome_list()
 /**
  * Yes Or No
  *
- * @param string $sort Yes or No
+ * @param  string  $sort  Yes or No
  *
  * @return array
  */
@@ -1763,7 +1792,7 @@ function fed_yes_no($sort = 'DESC')
 /**
  * Show Register Filter
  *
- * @param array $row Row.
+ * @param  array  $row  Row.
  *
  * @return bool | string
  */
@@ -1832,7 +1861,7 @@ add_action('pre_get_posts', 'fed_restrict_user_profile_picture');
 /**
  * Restrict User Profile Picture
  *
- * @param WP_User_Query $wp_query_obj user query
+ * @param  WP_User_Query  $wp_query_obj  user query
  */
 function fed_restrict_user_profile_picture($wp_query_obj)
 {
@@ -1891,7 +1920,7 @@ function fed_get_post_status()
 /**
  * Get all post meta.
  *
- * @param string $postid Post ID
+ * @param  string  $postid  Post ID
  *
  * @return array | null
  *
@@ -1909,7 +1938,7 @@ function fed_get_all_post_meta($postid)
 /**
  * Get all post meta key.
  *
- * @param string $postid Post ID.
+ * @param  string  $postid  Post ID.
  *
  * @return array
  */
@@ -1927,7 +1956,7 @@ function fed_get_all_post_meta_key($postid)
 /**
  * Check Extension Loaded.
  *
- * @param string $extension PHP Extensions.
+ * @param  string  $extension  PHP Extensions.
  *
  * @return bool
  */
@@ -1943,7 +1972,7 @@ function fed_check_extension_loaded($extension)
 /**
  * Get PayPal Admin Options
  *
- * @param array $options Options.
+ * @param  array  $options  Options.
  *
  * @return array
  *
@@ -2321,7 +2350,7 @@ function fed_get_country_code()
 /**
  * Country Code by ID.
  *
- * @param string $id Country ID.
+ * @param  string  $id  Country ID.
  *
  * @return mixed|string
  */
@@ -2404,7 +2433,7 @@ function fed_get_amount_based_on_user_role()
     }
 
 
-    return (float)$amount;
+    return (float) $amount;
 }
 
 
@@ -2521,8 +2550,8 @@ function fed_get_payment_cycles()
 /**
  * Compare Two Array.
  *
- * @param array $array1 Array 1
- * @param array $array2 Array 2
+ * @param  array  $array1  Array 1
+ * @param  array  $array2  Array 2
  *
  * @return bool
  */
@@ -2534,7 +2563,7 @@ function fed_compare_two_array($array1, $array2)
 /**
  * Convert Payment Cycles to days
  *
- * @param array $payment_cycle Payment Cycle.
+ * @param  array  $payment_cycle  Payment Cycle.
  *
  * @return int|string
  *
@@ -2561,7 +2590,7 @@ function fed_convert_payment_cycles_to_days($payment_cycle)
 /**
  * Get User Name by ID.
  *
- * @param string $id User ID.
+ * @param  string  $id  User ID.
  *
  * @return string
  */
@@ -2575,7 +2604,7 @@ function fed_get_user_name_by_id($id)
 /**
  * Display Name by ID.
  *
- * @param string $id User ID.
+ * @param  string  $id  User ID.
  *
  * @return string
  */
@@ -2602,7 +2631,7 @@ function fed_redirect_to_404()
 /**
  * Show helper message
  *
- * @param array $message
+ * @param  array  $message
  *
  * @return string
  */
@@ -2621,8 +2650,8 @@ function fed_show_help_message(array $message)
  * Convert to pricing
  * TODO: Payment
  *
- * @param string $cycle
- * @param string $custom
+ * @param  string  $cycle
+ * @param  string  $custom
  *
  * @return string
  */
@@ -2752,8 +2781,8 @@ function fed_menu_icons_popup()
 /**
  * Compare two array and get the second array value
  *
- * @param array $array1
- * @param array $array2
+ * @param  array  $array1
+ * @param  array  $array2
  *
  * @return array
  */
@@ -2770,9 +2799,9 @@ function fed_compare_two_arrays_get_second_value(array $array1, array $array2)
 }
 
 /**
- * @param array $array
+ * @param  array  $array
  * @param       $key
- * @param null  $value
+ * @param  null  $value
  *
  * @return array
  */
@@ -2804,7 +2833,7 @@ function fed_get_key_value_array(array $array, $key, $value = null)
 }
 
 /**
- * @param string $post_type
+ * @param  string  $post_type
  *
  * @return array
  */
@@ -2832,7 +2861,7 @@ function fed_get_category_tag_post_format($post_type = 'post')
 /**
  * @param     $array
  * @param     $on
- * @param int $order
+ * @param  int  $order
  *
  * @return array
  */
@@ -2895,12 +2924,12 @@ if ( ! function_exists('array_column')) {
      * Optionally, you may provide an $indexKey to index the values in the returned
      * array by the values from the $indexKey column in the input array.
      *
-     * @param array $input     A multi-dimensional array (record set) from which to pull
+     * @param  array  $input  A multi-dimensional array (record set) from which to pull
      *                         a column of values.
-     * @param mixed $columnKey The column of values to return. This value may be the
+     * @param  mixed  $columnKey  The column of values to return. This value may be the
      *                         integer key of the column you wish to retrieve, or it
      *                         may be the string key name for an associative array.
-     * @param mixed $indexKey  (Optional.) The column to use as the index/keys for
+     * @param  mixed  $indexKey  (Optional.) The column to use as the index/keys for
      *                         the returned array. This value may be the integer key
      *                         of the column, or it may be the string key name.
      *
@@ -2947,13 +2976,13 @@ if ( ! function_exists('array_column')) {
             return false;
         }
         $paramsInput     = $params[0];
-        $paramsColumnKey = ($params[1] !== null) ? (string)$params[1] : null;
+        $paramsColumnKey = ($params[1] !== null) ? (string) $params[1] : null;
         $paramsIndexKey  = null;
         if (isset($params[2])) {
             if (is_float($params[2]) || is_int($params[2])) {
-                $paramsIndexKey = (int)$params[2];
+                $paramsIndexKey = (int) $params[2];
             } else {
-                $paramsIndexKey = (string)$params[2];
+                $paramsIndexKey = (string) $params[2];
             }
         }
         $resultArray = array();
@@ -2962,7 +2991,7 @@ if ( ! function_exists('array_column')) {
             $keySet = $valueSet = false;
             if ($paramsIndexKey !== null && array_key_exists($paramsIndexKey, $row)) {
                 $keySet = true;
-                $key    = (string)$row[$paramsIndexKey];
+                $key    = (string) $row[$paramsIndexKey];
             }
             if ($paramsColumnKey === null) {
                 $valueSet = true;
@@ -2998,9 +3027,13 @@ function fed_call_function_method($item)
     } else {
         ?>
         <div class="container fed_add_page_profile_container text-center">
-            <?php printf(__('OOPS! You have not add the callable function, please add %s() to show the
-					body container', 'frontend-dashboard'),
-                    is_array($item['callable']) ? $item['callable']['method'] : $item['callable']) ?>
+
+            <?php
+            _e('OOPS! You have not add the callable function, please add', 'frontend-dashboard');
+            echo is_array($item['callable']) ? $item['callable']['method'] : $item['callable'];
+            _e('to show the body container', 'frontend-dashboard')
+
+            ?>
         </div>
         <?php
     }
@@ -3008,7 +3041,7 @@ function fed_call_function_method($item)
 
 /**
  * @param      $value
- * @param null $default
+ * @param  null  $default
  *
  * @return null
  */
@@ -3019,7 +3052,7 @@ function fed_isset($value, $default = null)
 
 /**
  * @param      $value
- * @param null $default
+ * @param  null  $default
  *
  * @return null|string
  */
@@ -3045,7 +3078,7 @@ function fed_sanitize_text_field($var)
 /**
  * @param      $request
  * @param      $key
- * @param null $default
+ * @param  null  $default
  *
  * @return null|string
  */
@@ -3056,7 +3089,7 @@ function fed_isset_request($request, $key, $default = null)
 }
 
 /**
- * @param array $parameters
+ * @param  array  $parameters
  * @param       $url
  */
 function fed_generate_url(array $parameters, $url)
@@ -3151,4 +3184,175 @@ function fed_get_menu_value($values, $menus)
     return $new_array;
 }
 
+
+/**
+ * @return array
+ */
+function fed_get_help_video_items()
+{
+    return array(
+            array(
+                    'name'  => 'How to create custom login for Frontend Dashboard WordPress Plugin',
+                    'url'   => 'https://buffercode.com/post/how-to-create-custom-login-for-frontend-dashboard-wordpress-plugin',
+                    'order' => 5,
+                    'icon'  => 'fa fa-youtube',
+            ),
+            array(
+                    'name'  => 'How to create Dashboard for Frontend Dashboard WordPress plugin',
+                    'url'   => 'https://buffercode.com/post/how-to-create-dashboard-for-frontend-dashboard-wordpress-plugin',
+                    'order' => 5,
+                    'icon'  => 'fa fa-youtube',
+            ),
+            array(
+                    'name'  => 'How to set Redirect on Login for Frontend Dashboard WordPress plugin',
+                    'url'   => 'https://buffercode.com/post/how-to-set-redirect-on-login-for-frontend-dashboard-wordpress-plugin',
+                    'order' => 5,
+                    'icon'  => 'fa fa-youtube',
+            ),
+
+            array(
+                    'name'  => 'How to set Widget for Frontend Dashboard WordPress plugin',
+                    'url'   => 'https://buffercode.com/post/how-to-set-widget-for-frontend-dashboard-wordpress-plugin',
+                    'order' => 5,
+                    'icon'  => 'fa fa-youtube',
+            ),
+            array(
+                    'name'  => 'How to Create Custom User Role in Frontend Dashboard WordPress Plugin',
+                    'url'   => 'https://buffercode.com/post/how-to-create-custom-user-role-in-frontend-dashboard-wordpress-plugin',
+                    'order' => 5,
+                    'icon'  => 'fa fa-youtube',
+            ),
+
+            array(
+                    'name'  => 'How to create a page for Users, based on their User Role',
+                    'url'   => 'https://buffercode.com/post/how-to-create-a-page-for-users-based-on-their-user-role',
+                    'order' => 5,
+                    'icon'  => 'fa fa-youtube',
+            ),
+            array(
+                    'name'  => 'How new user can select user role on registration',
+                    'url'   => 'https://buffercode.com/post/how-new-user-can-select-user-role-on-registration',
+                    'order' => 5,
+                    'icon'  => 'fa fa-youtube',
+            ),
+            array(
+                    'name'  => 'How to customise the layout colours in Frontend Dashboard',
+                    'url'   => 'https://buffercode.com/post/how-to-customise-the-layout-colours-in-frontend-dashboard',
+                    'order' => 5,
+                    'icon'  => 'fa fa-youtube',
+            ),
+            array(
+                    'name'  => 'How to manage post options in Frontend Dashboard',
+                    'url'   => 'https://buffercode.com/post/how-to-manage-post-options-in-frontend-dashboard',
+                    'order' => 5,
+                    'icon'  => 'fa fa-youtube',
+            ),
+            array(
+                    'name'  => 'How to create custom menu in Frontend Dashboard',
+                    'url'   => 'https://buffercode.com/post/how-to-create-custom-menu-in-frontend-dashboard',
+                    'order' => 5,
+                    'icon'  => 'fa fa-youtube',
+            ),
+            array(
+                    'name'  => 'Disable Frontend Dashboard Menu based on User Role',
+                    'url'   => 'https://buffercode.com/post/disable-frontend-dashboard-menu-based-on-user-role',
+                    'order' => 5,
+                    'icon'  => 'fa fa-youtube',
+            ),
+            array(
+                    'name'  => 'How to add Captcha to Frontend Dashboard',
+                    'url'   => 'https://buffercode.com/post/how-to-add-captcha-to-frontend-dashboard',
+                    'order' => 5,
+                    'icon'  => 'fa fa-youtube',
+            ),
+            array(
+                    'name'  => 'How to show pages content in Frontend Dashboard menu',
+                    'url'   => 'https://buffercode.com/post/how-to-show-pages-content-in-frontend-dashboard-menu',
+                    'order' => 5,
+                    'icon'  => 'fa fa-youtube',
+            ),
+            array(
+                    'name'  => 'How to install Frontend Dashboard Templates',
+                    'url'   => 'https://buffercode.com/post/how-to-install-frontend-dashboard-templates',
+                    'order' => 5,
+                    'icon'  => 'fa fa-youtube',
+            ),
+            array(
+                    'name'  => 'How to add profile picture in Template 1',
+                    'url'   => 'https://buffercode.com/post/how-to-add-profile-picture-in-template-1',
+                    'order' => 5,
+                    'icon'  => 'fa fa-youtube',
+            ),
+            array(
+                    'name'  => 'How to hide admin menu bar in Frontend Dashboard',
+                    'url'   => 'https://buffercode.com/post/how-to-hide-admin-menu-bar-in-frontend-dashboard',
+                    'order' => 5,
+                    'icon'  => 'fa fa-youtube',
+            ),
+    );
+}
+
+add_filter('contextual_help', 'fed_remove_contextual_help', 999, 3);
+/**
+ * @param  string  $old_help
+ * @param  string  $screen_id
+ * @param  object  $screen
+ *
+ * @return string
+ */
+function fed_remove_contextual_help($old_help, $screen_id, $screen)
+{
+    if ($screen_id === 'toplevel_page_fed_settings_menu') {
+        $screen->remove_help_tabs();
+
+        return '';
+    }
+
+    return $old_help;
+}
+
+add_action('admin_footer_text', 'fed_show_help_icons');
+function fed_show_help_icons()
+{
+    if (isset($_GET, $_GET['page']) && in_array($_GET['page'], fed_get_script_loading_pages())) {
+        ?>
+        <div class="fed_sticky_help_bar">
+            <div class="fed_sticky_items">
+                <div class="fed_sticky_item">
+                    <i class="fas fa-question-circle fa-2x"></i>
+                    <div class="fed_sticky_title">Help!</div>
+                </div>
+            </div>
+            <div class="fed_sticky_items">
+                <div class="fed_sticky_item">
+                    <i class="fab fa-youtube fa-2x"></i>
+                    <div class="fed_sticky_title">Videos</div>
+                </div>
+            </div>
+            <div class="fed_sticky_items">
+                <div class="fed_sticky_item">
+                    <i class="fas fa-envelope fa-2x"></i>
+                    <div class="fed_sticky_title">Subscribe</div>
+                </div>
+            </div>
+        </div>
+        <?php
+    }
+}
+
+/**
+ * The below code tested to check input tag works in Custom Label.
+ */
+//add_filter('wp_kses_allowed_html', 'fed_wp_kses_add_input', 10, 2);
+//
+//function fed_wp_kses_add_input($tags, $context)
+//{
+//    $tags['input'] = array(
+//            'type'    => true,
+//            'name'    => true,
+//            'value'   => true,
+//            'checked' => true,
+//    );
+//    return $tags;
+//}
 

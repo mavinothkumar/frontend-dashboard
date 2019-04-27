@@ -5,8 +5,6 @@
 
 $details = fed_register_only();
 
-//var_dump($details);
-
 
 do_action( 'fed_before_register_only_form' );
 ?>
@@ -27,6 +25,7 @@ do_action( 'fed_before_register_only_form' );
 								<?php
 								$contents = $details['content'];
 								uasort( $contents, 'fed_sort_by_order' );
+
 								foreach ( $contents as $content ) {
 									?>
 									<div class="form-group">
