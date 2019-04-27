@@ -10,6 +10,9 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.bc_fed .margin_bottom_20 {
+    margin-bottom: 20px;
+}
 .bc_fed .modal {
     overflow: auto !important;
 }
