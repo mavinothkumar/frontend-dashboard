@@ -783,23 +783,39 @@ v1.3.2
 
 .fed_sticky_help_bar {
     position: fixed;
-    top: 5%;
+    top: 10%;
     right: 5px;
-    background: #033333;
     color: white;
     text-align: center;
-    border-radius: 10px;
 }
-
+.fed_sticky_items {
+    background: #0AAAAA;
+    border-radius: 10px;
+    border: 1px solid white;
+}
+.fed_sticky_close_open {
+    background: #033333;
+    text-align: center;
+    border-radius: 9px;
+    margin-bottom: 2px;
+    font-size: 13px;
+    width: 20px;
+    height: 20px;
+    font-weight: bolder;
+    right: 0 !important;
+    position: absolute;
+    top: -20px;
+    cursor: pointer;
+}
 .fed_sticky_item a {
     color: white !important;
     text-decoration: none;
 }
-.fed_sticky_items {
+.fed_sticky_item {
     padding: 5px;
     cursor: pointer;
 }
-.fed_sticky_items:not(:last-child) {
+.fed_sticky_item:not(:last-child) {
     border-bottom: 1px solid white;
 }
 
