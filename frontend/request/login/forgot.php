@@ -60,10 +60,9 @@ function fed_forgot_form_submit($post)
 
     wp_send_json_success(array(
             'user'    => $user_data,
-            'message' => 'Reset email sent to your email address',
+            'message' => __('Reset email sent to your email address','frontend-dashboard'),
             'url'     => $redirect_url,
     ));
-    exit();
 }
 
 /**

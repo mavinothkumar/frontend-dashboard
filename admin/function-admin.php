@@ -3315,12 +3315,14 @@ add_action('admin_footer_text', 'fed_show_help_icons');
 function fed_show_help_icons()
 {
     if (isset($_GET, $_GET['page']) && in_array($_GET['page'], fed_get_script_loading_pages())) {
-        $current_user = wp_get_current_user();
         ?>
 
         <div class="bc_fed fed_sticky_help_bar">
             <div class="fed_sticky_close_open">
-                <div class="fed_sticky_open hide"><<</div>
+                <div class="fed_sticky_open hide">
+                    <i class="fas fa-angle-double-left fa-2x"></i>
+
+                </div>
                 <div class="fed_sticky_close">X</div>
             </div>
             <div class="fed_sticky_items">
@@ -3338,54 +3340,30 @@ function fed_show_help_icons()
                         <div class="fed_sticky_title">Videos</div>
                     </a>
                 </div>
-                <div class="fed_sticky_item" data-toggle="modal" data-target="#fed_sticky_subscribe"
-                     data-email="<?php echo $current_user->user_email; ?>">
-                    <i class="fas fa-envelope fa-2x"></i>
-                    <div class="fed_sticky_title">Subscribe</div>
+                <div class="fed_sticky_item">
+                    <a href="https://twitter.com/buffercode/" target="_blank">
+                        <i class="fab fa-twitter fa-2x"></i>
+                        <div class="fed_sticky_title">Twitter</div>
+                    </a>
                 </div>
-            </div>
-        </div>
-
-        <div class="bc_fed">
-            <div class="modal fade" id="fed_sticky_subscribe" tabindex="-1" role="dialog"
-                 aria-labelledby="fed_sticky_subscribe">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <h4 class="modal-title" id="exampleModalLabel">Get Latest Update on Frontend Dashboard</h4>
-                        </div>
-                        <div class="modal-body">
-                            <form>
-                                <div class="form-group">
-                                    <label for="email" class="control-label">Email Address</label>
-                                    <input type="text" class="form-control" id="fed_subscribe_email"
-                                           name="fed_subscribe_email">
-                                </div>
-
-                                <div class="checkbox">
-                                    <label for="accepting" class="control-label">
-                                        <input type="checkbox" id="fed_subscribe_accepting"
-                                               name="fed_subscribe_accepting">
-                                        You are accepting our
-                                        <a href="https://buffercode.com/terms-conditions"> Terms and Condition</a>
-                                        on subscribing</label>
-                                </div>
-                            </form>
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary">Subscribe</button>
-                        </div>
-                    </div>
+                <div class="fed_sticky_item">
+                    <a href="https://www.facebook.com/buffercode/" target="_blank">
+                        <i class="fab fa-facebook fa-2x"></i>
+                        <div class="fed_sticky_title">Facebook</div>
+                    </a>
+                </div>
+                <div class="fed_sticky_item">
+                    <a href="https://buffercode.com/plugin/frontend-dashboard" target="_blank">
+                        <i class="far fa-comment-alt fa-2x"></i>
+                        <div class="fed_sticky_title">Chat</div>
+                    </a>
                 </div>
             </div>
         </div>
         <?php
     }
 }
+
 
 /**
  * The below code tested to check input tag works in Custom Label.

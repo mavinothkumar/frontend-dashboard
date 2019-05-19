@@ -106,6 +106,8 @@ require_once BC_FED_PLUGIN_DIR . '/admin/layout/settings_tab/post/post_tab.php';
 require_once BC_FED_PLUGIN_DIR . '/admin/layout/settings_tab/post/settings.php';
 require_once BC_FED_PLUGIN_DIR . '/admin/layout/settings_tab/post/menu.php';
 
+require_once BC_FED_PLUGIN_DIR . '/admin/layout/settings_tab/general/FED_Admin_General.php';
+
 require_once BC_FED_PLUGIN_DIR . '/admin/layout/settings_tab/login/login_tab.php';
 require_once BC_FED_PLUGIN_DIR . '/admin/layout/settings_tab/login/register_tab.php';
 require_once BC_FED_PLUGIN_DIR . '/admin/layout/settings_tab/login/settings.php';

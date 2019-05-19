@@ -481,45 +481,59 @@ jQuery(document).ready(function ($) {
         // $('body').toggleClass('fed_bg_gray');
     }
 
-    $(".fed_sort_menu").sortable({
-        placeholder: "row ui-state-highlight",
-        axis: 'y',
-        opacity: 0.6,
-        cursor: 'move',
-        tolerance: 'pointer',
-        update: function (event, ui) {
-            var data = $(this).sortable('toArray');
-            var url = $(this).closest('.fed_sort_menu').data('url');
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: {sort: data},
-                success: function (results) {
-                    if (results.success === false) {
-                        swal({
-                            title: results.data.message || frontend_dashboard.alert.something_went_wrong,
-                            type: "error",
-                            confirmButtonColor: '#DD6B55',
-                        })
+    if ($('.fed_sort_menu').length) {
+        $('.fed_sort_menu').sortable({
+            placeholder: "row ui-state-highlight",
+            axis: 'y',
+            opacity: 0.6,
+            cursor: 'move',
+            tolerance: 'pointer',
+            update: function (event, ui) {
+                var data = $(this).sortable('toArray');
+                var url = $(this).closest('.fed_sort_menu').data('url');
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: {sort: data},
+                    success: function (results) {
+                        if (results.success === false) {
+                            swal({
+                                title: results.data.message || frontend_dashboard.alert.something_went_wrong,
+                                type: "error",
+                                confirmButtonColor: '#DD6B55',
+                            })
+                        }
                     }
-                }
-            });
-        }
-    });
-    $(".fed_sort_menu").disableSelection();
+                });
+            }
+        });
 
+        $(".fed_sort_menu").disableSelection();
+    }
     $('#fed_sticky_subscribe').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
         var email = button.data('email');
         var modal = $(this);
         modal.find('#fed_subscribe_email').val(email);
-    })
+    });
+
+    $('.fed_sticky_close').on('click', function (e) {
+        $(this).closest('.fed_sticky_help_bar').find('.fed_sticky_items').addClass('hide');
+        $(this).closest('.fed_sticky_close_open').find('.fed_sticky_open').removeClass('hide');
+        $(this).addClass('hide');
+        e.preventDefault();
+    });
+    $('.fed_sticky_open').on('click', function (e) {
+        $(this).closest('.fed_sticky_help_bar').find('.fed_sticky_items').removeClass('hide');
+        $(this).closest('.fed_sticky_close_open').find('.fed_sticky_close').removeClass('hide');
+        $(this).addClass('hide');
+        e.preventDefault();
+    });
 
 });
 
 var fedAdminAlert = {
     adminSettings: function (results) {
-        console.log(results);
         if (results.success) {
             swal({
                 title: results.data.message || frontend_dashboard.alert.something_went_wrong,

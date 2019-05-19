@@ -138,6 +138,43 @@ function fed_get_random_string($length = 10)
     return $randomString;
 }
 
+
+/**
+ * @param $content
+ *
+ * @return bool
+ */
+function fed_is_shortcode_in_content()
+{
+    global $post;
+    $shortcodes = fed_shortcode_lists();
+
+    if (is_a($post, 'WP_Post')) {
+        foreach ($shortcodes as $shortcode) {
+            if (has_shortcode($post->post_content, $shortcode)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+/**
+ * @return mixed|void
+ */
+function fed_shortcode_lists()
+{
+    return apply_filters('fed_shortcode_lists', array(
+            'fed_login',
+            'fed_login_only',
+            'fed_register_only',
+            'fed_forgot_password_only',
+            'fed_dashboard',
+            'fed_user',
+    ));
+}
+
 /**
  * @return array
  */
@@ -167,4 +204,18 @@ function fed_js_translation()
                     'add_new_menu'      => __('Add New Menu', 'frontend-dashboard'),
             ),
     );
+}
+
+/**
+ * @param  null  $action
+ *
+ * @return string|void
+ */
+function fed_get_form_action($action = null)
+{
+    if ($action) {
+        return admin_url('admin-ajax.php?action='.$action);
+    }
+
+    return '#';
 }

@@ -22,7 +22,7 @@ function fed_admin_user_options_tab() {
 						   role="tab"
 						   data-toggle="tab">
 							<i class="<?php echo $tab['icon']; ?>"></i>
-							<?php $tab['name'] ?>
+							<?php echo $tab['name'] ?>
 						</a>
 					</li>
 				<?php } ?>

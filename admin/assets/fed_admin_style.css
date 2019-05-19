@@ -777,44 +777,60 @@ v1.3.2
     line-height: 5em !important;
     background: #e0e0e0;
 }
+
 .bc_fed .ui-sortable-handle {
     cursor: move;
 }
 
 .fed_sticky_help_bar {
     position: fixed;
-    top: 10%;
+    top: 15%;
     right: 5px;
     color: white;
     text-align: center;
 }
+
 .fed_sticky_items {
-    background: #0AAAAA;
+    background: #033333;
     border-radius: 10px;
     border: 1px solid white;
 }
+
 .fed_sticky_close_open {
+    cursor: pointer;
+}
+
+.fed_sticky_open {
+    font-size: 15px;
+    width: 40px;
+    height: 35px;
+    font-weight: bolder;
     background: #033333;
-    text-align: center;
-    border-radius: 9px;
-    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+.fed_sticky_close{
     font-size: 13px;
     width: 20px;
     height: 20px;
     font-weight: bolder;
-    right: 0 !important;
-    position: absolute;
-    top: -20px;
-    cursor: pointer;
+    background: #033333;
+    border-radius: 9px;
+    margin: 0 auto;
 }
+
 .fed_sticky_item a {
     color: white !important;
     text-decoration: none;
 }
+
 .fed_sticky_item {
     padding: 5px;
     cursor: pointer;
 }
+
 .fed_sticky_item:not(:last-child) {
     border-bottom: 1px solid white;
 }

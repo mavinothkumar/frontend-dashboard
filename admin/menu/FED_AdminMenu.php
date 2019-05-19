@@ -1567,6 +1567,14 @@ if ( ! class_exists('FED_AdminMenu')) {
                             'name'       => __('User Profile Layout', 'frontend-dashboard'),
                             'callable'   => 'fed_user_profile_layout_design',
                     ),
+                    'general'              => array(
+                            'icon_class' => 'fas fa-tachometer-alt',
+                            'name'       => __('Common', 'frontend-dashboard'),
+                            'callable'   => array(
+                                    'object' => new FED_Admin_General(),
+                                    'method' => 'fed_admin_general_tab',
+                            ),
+                    ),
             );
 
             if ( ! defined('FED_CP_PLUGIN_VERSION')) {

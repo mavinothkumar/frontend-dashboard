@@ -2,16 +2,16 @@
 # This file is distributed under the same license as the Frontend Dashboard plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Frontend Dashboard 1.3.5\n"
+"Project-Id-Version: Frontend Dashboard 1.3.8\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/frontend-dashboard\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2019-04-23T18:21:35+02:00\n"
+"POT-Creation-Date: 2019-05-09T18:45:33+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.1.0\n"
+"X-Generator: WP-CLI 2.2.0\n"
 "X-Domain: frontend-dashboard\n"
 
 #. Plugin Name of the plugin
@@ -72,27 +72,27 @@ msgstr ""
 msgid "Default Tables not installed, please contact support"
 msgstr ""
 
-#: frontend/function-frontend.php:617
+#: frontend/function-frontend.php:614
 msgid "Sorry!"
 msgstr ""
 
-#: frontend/function-frontend.php:618
+#: frontend/function-frontend.php:615
 msgid "No user found..."
 msgstr ""
 
-#: frontend/function-frontend.php:772
+#: frontend/function-frontend.php:769
 msgid "Recent Post by"
 msgstr ""
 
-#: frontend/function-frontend.php:810
+#: frontend/function-frontend.php:807
 msgid "Error (403)"
 msgstr ""
 
-#: frontend/function-frontend.php:814
+#: frontend/function-frontend.php:811
 msgid "Unauthorised Access"
 msgstr ""
 
-#: frontend/function-frontend.php:815
+#: frontend/function-frontend.php:812
 msgid "Click here to visit Dashboard"
 msgstr ""
 
@@ -104,11 +104,11 @@ msgstr ""
 msgid "Sorry Something went wrong!, please try again later"
 msgstr ""
 
-#: frontend/request/login/login.php:34
+#: frontend/request/login/login.php:37
 msgid "Successfully Logged in"
 msgstr ""
 
-#: frontend/request/login/register.php:30
+#: frontend/request/login/register.php:31
 msgid "Successfully Registered"
 msgstr ""
 
@@ -162,6 +162,10 @@ msgstr ""
 
 #: frontend/request/login/forgot.php:53
 msgid "The email could not be sent. Possible reason: your host may have disabled the mail() function."
+msgstr ""
+
+#: frontend/request/login/forgot.php:63
+msgid "Reset email sent to your email address"
 msgstr ""
 
 #: frontend/request/validation/validation.php:47
@@ -508,29 +512,29 @@ msgstr ""
 msgid "Select"
 msgstr ""
 
-#: admin/function-admin.php:2543
+#: admin/function-admin.php:2544
 msgid "Annually"
 msgstr ""
 
-#: admin/function-admin.php:2544
+#: admin/function-admin.php:2545
 msgid "Monthly"
 msgstr ""
 
-#: admin/function-admin.php:2545
+#: admin/function-admin.php:2546
 msgid "Custom Days"
 msgstr ""
 
-#: admin/function-admin.php:2750
+#: admin/function-admin.php:2751
 msgid "Please Select one Image"
 msgstr ""
 
-#: admin/function-admin.php:3031
-#: admin/menu/FED_AdminMenu.php:1567
+#: admin/function-admin.php:3032
+#: admin/menu/FED_AdminMenu.php:1602
 msgid "OOPS! You have not add the callable function, please add"
 msgstr ""
 
-#: admin/function-admin.php:3033
-#: admin/menu/FED_AdminMenu.php:1569
+#: admin/function-admin.php:3034
+#: admin/menu/FED_AdminMenu.php:1604
 msgid "to show the body container"
 msgstr ""
 
@@ -557,8 +561,8 @@ msgstr ""
 #: admin/menu/FED_AdminMenu.php:106
 #: admin/menu/FED_AdminMenu.php:216
 #: admin/menu/FED_AdminMenu.php:248
-#: admin/menu/FED_AdminMenu.php:1780
-#: common/function-common.php:166
+#: admin/menu/FED_AdminMenu.php:1815
+#: common/function-common.php:167
 msgid "Add New Menu"
 msgstr ""
 
@@ -615,7 +619,7 @@ msgid "Profile"
 msgstr ""
 
 #: admin/menu/FED_AdminMenu.php:566
-#: admin/menu/FED_AdminMenu.php:1540
+#: admin/menu/FED_AdminMenu.php:1575
 msgid "Post"
 msgstr ""
 
@@ -628,8 +632,8 @@ msgid "field"
 msgstr ""
 
 #: admin/menu/FED_AdminMenu.php:736
-#: admin/menu/FED_AdminMenu.php:1931
-#: admin/menu/FED_AdminMenu.php:1932
+#: admin/menu/FED_AdminMenu.php:1966
+#: admin/menu/FED_AdminMenu.php:1967
 msgid "Add-Ons"
 msgstr ""
 
@@ -642,110 +646,114 @@ msgid "We will help you in better ways"
 msgstr ""
 
 #: admin/menu/FED_AdminMenu.php:871
+msgid "How to Videos"
+msgstr ""
+
+#: admin/menu/FED_AdminMenu.php:906
 msgid "How to Install and Configure"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:947
+#: admin/menu/FED_AdminMenu.php:982
 msgid "How to Contact Us"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:961
+#: admin/menu/FED_AdminMenu.php:996
 msgid "Chat"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:969
+#: admin/menu/FED_AdminMenu.php:1004
 msgid "Mail"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:977
+#: admin/menu/FED_AdminMenu.php:1012
 msgid "Rate us"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:992
+#: admin/menu/FED_AdminMenu.php:1027
 msgid "Shortcodes"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:1017
+#: admin/menu/FED_AdminMenu.php:1052
 msgid "Filter Hooks [Developers]"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:1024
-#: admin/menu/FED_AdminMenu.php:1139
+#: admin/menu/FED_AdminMenu.php:1059
+#: admin/menu/FED_AdminMenu.php:1174
 msgid "Note: This is not completely documented"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:1132
+#: admin/menu/FED_AdminMenu.php:1167
 msgid "Action Hooks [Developers]"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:1268
-#: admin/menu/FED_AdminMenu.php:1938
-#: admin/menu/FED_AdminMenu.php:1939
+#: admin/menu/FED_AdminMenu.php:1303
+#: admin/menu/FED_AdminMenu.php:1973
+#: admin/menu/FED_AdminMenu.php:1974
 msgid "Status"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:1303
+#: admin/menu/FED_AdminMenu.php:1338
 msgid "Versions"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:1386
+#: admin/menu/FED_AdminMenu.php:1421
 msgid "PHP Extensions"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:1432
+#: admin/menu/FED_AdminMenu.php:1467
 msgid "Database"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:1522
+#: admin/menu/FED_AdminMenu.php:1557
 #: shortcodes/login/login-data.php:25
 #: shortcodes/login/login-data.php:48
 msgid "Login"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:1527
+#: admin/menu/FED_AdminMenu.php:1562
 msgid "User"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:1532
+#: admin/menu/FED_AdminMenu.php:1567
 msgid "User Profile Layout"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:1585
-#: admin/menu/FED_AdminMenu.php:1916
-#: admin/menu/FED_AdminMenu.php:1917
+#: admin/menu/FED_AdminMenu.php:1620
+#: admin/menu/FED_AdminMenu.php:1951
+#: admin/menu/FED_AdminMenu.php:1952
 msgid "Post Fields"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:1594
+#: admin/menu/FED_AdminMenu.php:1629
 msgid "Add New Custom Post Field"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:1612
+#: admin/menu/FED_AdminMenu.php:1647
 msgid "Sorry! there are no custom post fields added!"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:1739
-#: admin/menu/FED_AdminMenu.php:1909
-#: admin/menu/FED_AdminMenu.php:1910
+#: admin/menu/FED_AdminMenu.php:1774
+#: admin/menu/FED_AdminMenu.php:1944
+#: admin/menu/FED_AdminMenu.php:1945
 msgid "User Profile"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:1750
+#: admin/menu/FED_AdminMenu.php:1785
 msgid "Add New Extra User Profile Field"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:1902
-#: admin/menu/FED_AdminMenu.php:1903
+#: admin/menu/FED_AdminMenu.php:1937
+#: admin/menu/FED_AdminMenu.php:1938
 msgid "Dashboard Menu"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:1923
-#: admin/menu/FED_AdminMenu.php:1924
+#: admin/menu/FED_AdminMenu.php:1958
+#: admin/menu/FED_AdminMenu.php:1959
 msgid "Add Profile / Post Fields"
 msgstr ""
 
-#: admin/menu/FED_AdminMenu.php:1945
-#: admin/menu/FED_AdminMenu.php:1946
+#: admin/menu/FED_AdminMenu.php:1980
+#: admin/menu/FED_AdminMenu.php:1981
 msgid "Help"
 msgstr ""
 
@@ -844,43 +852,43 @@ msgstr ""
 msgid "Please enter user password"
 msgstr ""
 
-#: common/function-common.php:152
+#: common/function-common.php:153
 msgid "Are you sure?"
 msgstr ""
 
-#: common/function-common.php:153
+#: common/function-common.php:154
 msgid "You want to do this action?"
 msgstr ""
 
-#: common/function-common.php:154
+#: common/function-common.php:155
 msgid "Yes, Please Proceed"
 msgstr ""
 
-#: common/function-common.php:155
+#: common/function-common.php:156
 msgid "No, Cancel it"
 msgstr ""
 
-#: common/function-common.php:158
+#: common/function-common.php:159
 msgid "Please wait, you are redirecting.."
 msgstr ""
 
-#: common/function-common.php:159
+#: common/function-common.php:160
 msgid "Cancelled"
 msgstr ""
 
-#: common/function-common.php:160
+#: common/function-common.php:161
 msgid "Something Went Wrong"
 msgstr ""
 
-#: common/function-common.php:161
+#: common/function-common.php:162
 msgid "Invalid form submission"
 msgstr ""
 
-#: common/function-common.php:162
+#: common/function-common.php:163
 msgid "Please try again"
 msgstr ""
 
-#: common/function-common.php:165
+#: common/function-common.php:166
 msgid "Hide Add New Menu"
 msgstr ""
 

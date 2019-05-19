@@ -3,8 +3,8 @@ Contributors: vinoth06, buffercode
 Tags: dashboard, frontend dashboard, custom login, custom register, custom roles, custom profile, custom post type, custom taxonomies, custom dashboard
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7DHAEMST475BY
 Requires at least: 4.6
-Tested up to: 5.1.1
-Stable tag: 1.3.7
+Tested up to: 5.2
+Stable tag: 1.3.10
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -67,6 +67,19 @@ For more video : [Frontend Dashboard](https://buffercode.com/category/name/front
 4. Do save.
 
 == Frequently Asked Questions ==
+
+= Loader doesn't close and not updating ? =
+
+Please check whether your site is having Javascript error(s), If your using Chrome or Safari, Please right click and click Inspect Element, then click Console tab. If you find any error. Then kindly deactivate that plugin and try one more time.
+
+= How to add custom user field inside the template? =
+
+You can add the custom user field in your template by calling the get_user_meta( user_id, custom field slug, true );
+
+= How to add custom post field inside the template? =
+
+You can add the custom post field in your template by calling the get_post_meta( post_id, custom field slug, true );
+
 = How to create all in one login page [login, register, forgot password and dashboard] =
 
 1. First we need to create a new page for custom login.
@@ -204,6 +217,22 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 6. [fed_user role=user_role] to generate the role based user page
 
 == Changelog ==
+
+= 1.3.10 [19-May-2019] =
+
+* Feature: Enable/Disable the default Frontend Dashboard Scripts and Style in Admin page.
+* Bug fixes.
+
+= 1.3.9 [11-May-2019] =
+
+* Load Frontend Dashboard script on it shortcode pages.
+* Bug fixes.
+
+= 1.3.7 [04-May-2019] =
+
+* Translation added
+* Few bug fixes.
+
 
 = 1.3.7 [26-Apr-2019] =
 
@@ -400,10 +429,10 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Upgrade Notice ==
 
-= 1.3.6 [24-Apr-2019] =
+= 1.3.10 [19-May-2019] =
 
-* Login use fixed
-* Few bug fixes
+* Feature: Enable/Disable the default Frontend Dashboard Scripts and Style in Admin page.
+* Bug fixes.
 
 == Screenshots ==
 1. Frontend Dashboard Settings | Login | Settings
