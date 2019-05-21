@@ -100,6 +100,8 @@ do_action('fed_before_login_form');
                                     </div>
                                 </div>
                             </form>
+
+                            <?php do_action('fed_below_login_form'); ?>
                         </div>
 
                         <?php

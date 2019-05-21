@@ -4,7 +4,7 @@ Tags: dashboard, frontend dashboard, custom login, custom register, custom roles
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7DHAEMST475BY
 Requires at least: 4.6
 Tested up to: 5.2
-Stable tag: 1.3.10
+Stable tag: 1.3.11
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -218,6 +218,10 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Changelog ==
 
+= 1.3.11 [20-May-2019] =
+
+* Bug fixes : Not able to login due to Javascript missing.
+
 = 1.3.10 [19-May-2019] =
 
 * Feature: Enable/Disable the default Frontend Dashboard Scripts and Style in Admin page.
@@ -429,10 +433,9 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Upgrade Notice ==
 
-= 1.3.10 [19-May-2019] =
+= 1.3.11 [20-May-2019] =
 
-* Feature: Enable/Disable the default Frontend Dashboard Scripts and Style in Admin page.
-* Bug fixes.
+* Bug fixes : Not able to login due to Javascript missing.
 
 == Screenshots ==
 1. Frontend Dashboard Settings | Login | Settings

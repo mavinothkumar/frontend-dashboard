@@ -5,7 +5,6 @@
 
 $details = fed_register_only();
 
-
 do_action( 'fed_before_register_only_form' );
 ?>
 	<div class="bc_fed container fed_login_container">

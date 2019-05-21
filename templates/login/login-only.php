@@ -10,7 +10,6 @@ if ( isset( $_GET['action'], $_GET['key'], $_GET['login'] ) && $_GET['action'] =
 	$details = fed_login_only();
 	$type = 'Login';
 }
-
 do_action( 'fed_before_login_only_form' );
 ?>
     <div class="bc_fed container fed_login_container">

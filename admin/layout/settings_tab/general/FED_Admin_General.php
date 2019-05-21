@@ -450,7 +450,7 @@ if ( ! class_exists('FED_Admin_General')) {
                                     'wp_core'      => false,
                                     'name'         => 'FED Frontend Script',
                                     'plugin_name'  => 'Frontend Dashboard',
-                                    'src'          => plugins_url('/common/assets/js/fed_script.js'),
+                                    'src'          => plugins_url('/common/assets/js/fed_script.js', BC_FED_PLUGIN),
                                     'dependencies' => array('jquery'),
                                     'version'      => false,
                                     'in_footer'    => false,
