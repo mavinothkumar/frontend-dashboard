@@ -44,10 +44,10 @@ do_action('fed_before_login_form');
                             <?php
                         }
                         ?>
-
                     </div>
                 </div>
                 <div class="fed_login_content">
+                    <?php do_action('fed_above_login_form'); ?>
                     <?php foreach ($details as $key => $detail) {
                         if (isset($_GET['action'])) {
                             if ($key == 'Reset Password' && 'fed_reset' == $_GET['action']) {
@@ -100,7 +100,6 @@ do_action('fed_before_login_form');
                                     </div>
                                 </div>
                             </form>
-
                             <?php do_action('fed_below_login_form'); ?>
                         </div>
 
