@@ -6,7 +6,9 @@
 function fed_register_form_submit($post)
 {
     do_action('fed_register_before_validation', $post);
-    $redirect_url = fed_registration_redirect();
+    $redirect_url    = fed_registration_redirect();
+    $fed_admin_login = get_option('fed_admin_login');
+    $notification    = isset($fed_admin_login['register']['register_email_notification']) ? $fed_admin_login['register']['register_email_notification'] : '';
 
     $errors = fed_validate_registration_form($post);
 
@@ -24,7 +26,16 @@ function fed_register_form_submit($post)
         exit();
     }
 
-    wp_send_new_user_notifications($status, 'admin');
+    wp_send_new_user_notifications($status, $notification);
+
+
+    if ($fed_admin_login && isset($fed_admin_login['register']['auto_login']) && $fed_admin_login['register']['auto_login'] === 'yes') {
+        wp_clear_auth_cookie();
+        wp_set_current_user($status);
+        wp_set_auth_cookie($status);
+
+        $redirect_url = fed_registration_redirect();
+    }
 
     wp_send_json_success(array(
             'user'    => $status,

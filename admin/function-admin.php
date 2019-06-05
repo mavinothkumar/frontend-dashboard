@@ -2408,9 +2408,13 @@ function fed_get_current_user_role()
  */
 function fed_get_current_user_role_key()
 {
-    $user = get_userdata(get_current_user_id());
+    if (is_user_logged_in()) {
+        $user = get_userdata(get_current_user_id());
 
-    return $user ? $user->roles[0] : false;
+        return $user ? $user->roles[0] : false;
+    }
+
+    return false;
 }
 
 /**
@@ -3363,6 +3367,7 @@ function fed_show_help_icons()
         <?php
     }
 }
+
 
 
 /**

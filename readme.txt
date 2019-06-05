@@ -13,16 +13,24 @@ Frontend Dashboard is bundled with huge list of custom features which can easily
 == Description ==
 Frontend Dashboard is bundled with the huge list of custom features which can easily customise the User profile, Posts, Login, Register, Custom roles on the custom front page.
 
-1. Create custom User role
-2. Custom Login, Register and Forgot Password
-3. User roles to manage the Posts in frontend dashboard
-4. Create custom user profiles with variety of form data
-5. Create multiple dashboard menus with user role management
-6. Enable/Disable the post default fields.
-7. Show user role based custom profile page
-8. Restrict the number of posts to show in the custom profile page.
-9. Manage custom Post type and Taxonomies
-10. Customize templates
+1. Custom Login Page.
+2. Custom Register Page.
+3. Custom Forgot Password.
+4. Custom Redirect URL for before and after Login, Register, Logout.
+5. Restrict WP Admin area for role based users.
+6. Add/Delete custom User Roles.
+7. Customise the Frontend Dashboard with your theme matching colors.
+8. Enable/Disable the Frontend Dashboard scripts and styles on both frontend and admin.
+9. Add Frontend Dashboard menus for User based roles.
+10. Add any number of custom user field.
+11. Add any number of post/custom post field.
+12. Each custom fields can be configured based on user roles.
+13. Allow/Disallow to upload files in Frontend Dashboard based on User Role.
+14. Show custom user fields on Register page.
+15. Add/Edit/Delete Post/Custom post in Frontend Dashboard based on User Role.
+16. Show user role based custom profile page.
+17. Manage custom Post type and Taxonomies.
+18. Customize templates.
 
 = Frontend Dashboard Plugins List =
 * [Frontend Dashboard Membership (Beta) ](https://buffercode.com/plugin/frontend-dashboard-membership)
@@ -36,6 +44,8 @@ Frontend Dashboard is bundled with the huge list of custom features which can ea
 = Videos =
 
 For more video : [Frontend Dashboard](https://buffercode.com/category/name/frontend-dashboard)
+
+* [How to Translate Frontend Dashboard](https://buffercode.com/post/how-to-translate-frontend-dashboard)
 
 * [How to create custom login for Frontend Dashboard](https://buffercode.com/post/how-to-create-custom-login-for-frontend-dashboard-wordpress-plugin)
 
@@ -218,8 +228,10 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Changelog ==
 
-= 1.3.12 [26-May-2019] =
+= 1.3.12 [27-May-2019] =
 
+* Feature: Auto Login after Register.
+* Feature: Notification email after Register for User and Admin.
 * Bug fixes: Login Page Label shows respective to the Backend Label.
 
 = 1.3.11 [20-May-2019] =
@@ -437,8 +449,10 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Upgrade Notice ==
 
-= 1.3.12 [26-May-2019] =
+= 1.3.12 [27-May-2019] =
 
+* Feature: Auto Login after Register.
+* Feature: Notification email after Register for User and Admin.
 * Bug fixes: Login Page Label shows respective to the Backend Label.
 
 == Screenshots ==

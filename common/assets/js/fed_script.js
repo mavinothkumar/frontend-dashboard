@@ -394,6 +394,7 @@ jQuery(document).ready(function ($) {
 
         var fedAlert = {
             loginStatus: function (results) {
+                console.log(results);
                 var error;
                 if (results.success) {
                     swal({
