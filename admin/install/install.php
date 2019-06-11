@@ -16,6 +16,10 @@ function fed_upgrade() {
 }
 
 add_action( 'fed_upgrade_action', 'fed_upgrade_actions', 10, 2 );
+/**
+ * @param $new_version
+ * @param $old_version
+ */
 function fed_upgrade_actions( $new_version, $old_version ) {
 	fed_plugin_activation();
 	fed_plugin_data();
@@ -27,12 +31,38 @@ function fed_upgrade_actions( $new_version, $old_version ) {
  * Merge post to custom post options to handle everything globally
  */
 function fed_next_updates() {
+    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 	$cp_admin_settings = get_option( 'fed_cp_admin_settings', array() );
+
 	if ( ! isset( $cp_admin_settings['post'] ) ) {
 		$admin_settings = array( 'post' => get_option( 'fed_admin_settings_post', array() ) );
 		$merge          = array_merge( $cp_admin_settings, $admin_settings );
 		update_option( 'fed_cp_admin_settings', $merge );
 	}
+
+    global $wpdb;
+    $menu_table = $wpdb->prefix.BC_FED_MENU_DB;
+    $menu_meta_table = $wpdb->prefix.BC_FED_MENU_META;
+    $menu_query      = $wpdb->get_results("SELECT * from {$menu_table} LIMIT 1");
+    $charset_collate = $wpdb->get_charset_collate();
+    if( ! isset($menu_query[0]->parent_id)){
+        $wpdb->query("ALTER TABLE {$menu_table} ADD parent_id VARCHAR(10) NOT NULL DEFAULT '0'");
+        $wpdb->query("ALTER TABLE {$menu_table} ADD menu_type VARCHAR(100) NOT NULL DEFAULT 'default'");
+    }
+
+    if ( $wpdb->get_var( "SHOW TABLES LIKE '{$menu_meta_table}'" ) != $menu_meta_table ) {
+        $menu_meta = "CREATE TABLE `" .$menu_meta_table ."` (
+		  meta_id BIGINT(20) NOT NULL AUTO_INCREMENT,
+		  menu_id BIGINT(20) NOT NULL,
+		  meta_key VARCHAR(255) NULL,
+		  meta_value LONGTEXT NULL,
+		  PRIMARY KEY  (meta_id),
+  		  INDEX (menu_id, meta_key)
+		  ) $charset_collate;";
+
+        dbDelta( $menu_meta );
+    }
+
 }
 
 /**
@@ -436,6 +466,9 @@ function fed_admin_notice() {
 //add_action( 'all_admin_notices', 'fed_admin_notice' );
 
 
+/**
+ * @return bool|mixed
+ */
 function get_plugin_list() {
 	$config     = fed_config();
 	$plugin_api = wp_remote_get( $config['plugin_api'], array( 'timeout' => 120, 'httpversion' => '1.1' ) );

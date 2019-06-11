@@ -331,10 +331,10 @@ jQuery(document).ready(function ($) {
     body.on('click', '.fed_menu_save_button_toggle', function (e) {
         if ($('#fed_add_new_menu_container').hasClass('hide')) {
             $('#fed_add_new_menu_container').removeClass('hide');
-            $(this).html('<i class="fa fa-minus"></i> frontend_dashboard.common.hide_add_new_menu');
+            $(this).html('<i class="fa fa-minus"></i> ' + frontend_dashboard.common.hide_add_new_menu);
         } else {
             $('#fed_add_new_menu_container').addClass('hide');
-            $(this).html('<i class="fa fa-plus"></i> frontend_dashboard.common.add_new_menu');
+            $(this).html('<i class="fa fa-plus"></i> ' + frontend_dashboard.common.add_new_menu);
         }
         e.preventDefault();
     });

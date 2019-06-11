@@ -3331,6 +3331,14 @@ function fed_show_help_icons()
             </div>
             <div class="fed_sticky_items">
                 <div class="fed_sticky_item">
+                    <a target="_blank" href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#new-post">
+                        <i class="fas fa-star fa-2x"></i>
+                        <div class="fed_sticky_title">
+                            Rate Us
+                        </div>
+                    </a>
+                </div>
+                <div class="fed_sticky_item">
                     <a href="<?php menu_page_url('fed_help'); ?>">
                         <i class="fas fa-question-circle fa-2x"></i>
                         <div class="fed_sticky_title">
