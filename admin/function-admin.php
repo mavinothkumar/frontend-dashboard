@@ -3165,6 +3165,7 @@ function fed_get_tables()
             'fed_user_profile' => array('order' => 'input_order'),
             'fed_post'         => array('order' => 'input_order'),
             'fed_menu'         => array('order' => 'menu_order'),
+            'fed_menu_meta'    => array(),
     ));
 }
 
@@ -3331,7 +3332,8 @@ function fed_show_help_icons()
             </div>
             <div class="fed_sticky_items">
                 <div class="fed_sticky_item">
-                    <a target="_blank" href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#new-post">
+                    <a target="_blank"
+                       href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#new-post">
                         <i class="fas fa-star fa-2x"></i>
                         <div class="fed_sticky_title">
                             Rate Us

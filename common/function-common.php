@@ -103,6 +103,14 @@ function fed_sort_by_desc($a, $b)
     return 199;
 }
 
+/**
+ * @param  int  $action
+ * @param  string  $name
+ * @param  bool  $referer
+ * @param  bool  $echo
+ *
+ * @return string
+ */
 function fed_wp_nonce_field($action = -1, $name = "_wpnonce", $referer = true, $echo = true)
 {
     $name        = esc_attr($name);
@@ -218,4 +226,29 @@ function fed_get_form_action($action = null)
     }
 
     return '#';
+}
+
+
+/**
+ * @param $user_role
+ *
+ * @return bool
+ */
+function fed_is_current_user_role($user_role)
+{
+    $user          = wp_get_current_user();
+    $allowed_roles = fed_get_user_roles();
+    if (array_intersect(array_keys($allowed_roles), $user->roles)) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * @return bool
+ */
+function fed_is_admin()
+{
+    return fed_is_current_user_role('administrator');
 }

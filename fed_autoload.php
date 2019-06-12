@@ -27,6 +27,7 @@ require_once BC_FED_PLUGIN_DIR . '/admin/request/menu.php';
 require_once BC_FED_PLUGIN_DIR . '/admin/request/admin.php';
 require_once BC_FED_PLUGIN_DIR . '/admin/request/function.php';
 require_once BC_FED_PLUGIN_DIR . '/admin/request/user_profile.php';
+require_once BC_FED_PLUGIN_DIR . '/admin/request/status.php';
 
 require_once BC_FED_PLUGIN_DIR . '/admin/request/tabs/user_profile_layout.php';
 require_once BC_FED_PLUGIN_DIR . '/admin/request/tabs/post_options.php';

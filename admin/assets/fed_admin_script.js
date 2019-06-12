@@ -22,6 +22,33 @@ jQuery(document).ready(function ($) {
         e.preventDefault();
     });
 
+    body.on('click', '.fed_is_delete', function (e) {
+        var click = $(this);
+        swal({
+            title: frontend_dashboard.alert.confirmation.title,
+            text: frontend_dashboard.alert.confirmation.text,
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#0AAAAA',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Please'
+        }).then(function (result){
+            console.log(result);
+            if (result) {
+                console.log('op');
+                click.closest('form').submit();
+            }
+        }, function(dismiss) {
+            if (dismiss === 'cancel') {
+
+            } else {
+                throw dismiss;
+            }
+        });
+
+        e.preventDefault();
+    });
+
     /**
      * Request with Confirmation
      * @type {*}
