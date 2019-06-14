@@ -590,14 +590,16 @@ jQuery(document).ready(function ($) {
             if (target.parents('li').length == 10) {
                 hint.css('background-color', '#ff9999');
                 return false;
-            } else if (target.data('module') === 'custom_menu' || cEl.data('module') === 'custom_menu') {
-                hint.css('background-color', '#ff9999');
-                alert('Sorry You cant change or insert the Custom field');
-                return false;
-            } else {
+            }else {
                 hint.css('background-color', '#99ff99');
                 return true;
             }
+
+        // if (target.data('module') === 'custom_menu' || cEl.data('module') === 'custom_menu') {
+            //         hint.css('background-color', '#ff9999');
+            //         alert('Sorry You cant change or insert the Custom field');
+            //         return false;
+            //     }
         },
         opener: {
             active: true,

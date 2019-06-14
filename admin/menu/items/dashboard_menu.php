@@ -403,24 +403,40 @@ function fed_get_dashboard_menu_items_sort()
 {
 
     wp_enqueue_script('fed_menu_sort', plugins_url('admin/assets/fed_menu_sort.js', BC_FED_PLUGIN), array('jquery'));
-    $menus = fed_get_all_dashboard_display_menus();
-    uasort($menus, 'fed_sort_by_order');
-//    bcdump($menus);
-    $new_menu = array();
-    foreach ($menus as $index => $menu) {
-        $parent_id  = isset($menu['parent_id']) ? $menu['parent_id'] : 0;
-        $menu_order = isset($menu['menu_order']) ? $menu['menu_order'] : mt_rand(99, 99999);
+    $menus      = fed_get_all_dashboard_display_menus();
+    $new_menus = array();
+    $sort_menus = get_option('fed_admin_menu_sort');
 
-        if ($parent_id == '0') {
-            $new_menu[$menu_order] = $menu;
-        } else {
-            $new_menu[$parent_id]['submenu'][$menu['menu_slug']] = $menu;
-        }
+//    bcdump(($menus));
+//    bcdump(count($menus));
+//    bcdump(count($sort_menus));
+//    bcdump(($sort_menus));
+    if($sort_menus){
 
+        /**
+         * TODO;
+         */
+    }else{
+        $new_menus = $menus;
     }
-    ksort($new_menu, 1);
+//    uasort($menus, 'fed_sort_by_order');
+////    bcdump(count($menus));
+//    bcdump(($menus));
+//    $new_menu = array();
+//    foreach ($menus as $index => $menu) {
+//        $parent_id  = isset($menu['parent_id']) ? $menu['parent_id'] : '0';
+//        $menu_order = isset($menu['menu_slug']) ? $menu['menu_slug'] : mt_rand(99, 99999);
+//
+//        if ($parent_id == '0') {
+//            $new_menu[$menu_order] = $menu;
+//        } else {
+//            $new_menu[$parent_id]['submenu'][$menu['menu_slug']] = $menu;
+//        }
+//
+//    }
+//    ksort($new_menu, 1);
+//
 
-//    var_dump($new_menu);
 
     /**
      * if menu_type == user
@@ -433,22 +449,24 @@ function fed_get_dashboard_menu_items_sort()
      * Update
      */
     ?>
-    <ul class="fed_dashboard_menu_sort listsClass" id="fed_dashboard_menu_sort" data-nonce="<?php echo wp_create_nonce('fed_nonce') ?>" data-url="<?php echo fed_get_form_action('fed_menu_sorting_items'); ?>">
+    <ul class="fed_dashboard_menu_sort listsClass" id="fed_dashboard_menu_sort"
+        data-nonce="<?php echo wp_create_nonce('fed_nonce') ?>"
+        data-url="<?php echo fed_get_form_action('fed_menu_sorting_items'); ?>">
         <?php
-        foreach ($new_menu as $newMenu) {
+        foreach ($new_menus as $new_menu) {
             $isOpen    = '';
             $isSubmenu = false;
-            if (isset($newMenu['submenu']) && count($newMenu['submenu'])) {
+            if (isset($new_menu['submenu']) && count($new_menu['submenu'])) {
                 $isOpen    = 'sortableListsOpen';
                 $isSubmenu = true;
             }
             ?>
-            <li class="<?php echo $isOpen; ?>" id="<?php echo $newMenu['menu_type'].'_'.$newMenu['id']; ?>"
-                data-module="<?php echo $newMenu['menu_type']; ?>">
-                <div><?php echo $newMenu['menu'] ?></div>
+            <li class="<?php echo $isOpen; ?>" id="<?php echo $new_menu['menu_type'].'_'.$new_menu['id']; ?>"
+                data-module="<?php echo $new_menu['menu_type']; ?>">
+                <div><?php echo $new_menu['menu'] ?></div>
                 <?php if ($isSubmenu) { ?>
                     <ul class="">
-                        <?php foreach ($newMenu['submenu'] as $newSubMenu) { ?>
+                        <?php foreach ($new_menu['submenu'] as $newSubMenu) { ?>
                             <li id="<?php echo $newSubMenu['menu_type'].'_'.$newSubMenu['id'] ?>"
                                 data-module="<?php echo $newSubMenu['menu_type']; ?>">
                                 <div><?php echo $newSubMenu['menu']; ?></div>

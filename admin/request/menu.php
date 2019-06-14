@@ -131,7 +131,7 @@ function fed_menu_sorting_items()
         }
     }
 
-    update_option('fed_admin_menu_sort', serialize($menus));
+    update_option('fed_admin_menu_sort', $menus);
 
     wp_send_json_success(array('message' => 'Successfully Updated'));
 }
