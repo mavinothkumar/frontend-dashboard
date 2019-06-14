@@ -141,6 +141,13 @@
 .fed_white_font {
     color: #ffffff !important;
 }
+.bc_fed .fed_btn_padd_5 {
+    padding: 2px 10px !important;
+}
+
+.bc_fed .fed_float_right {
+    float: right;
+}
 .fed_flex {
     display: flex;
     justify-content: center;

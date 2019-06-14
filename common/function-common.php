@@ -252,3 +252,27 @@ function fed_is_admin()
 {
     return fed_is_current_user_role('administrator');
 }
+
+/**
+ * @return mixed|void
+ */
+function fed_get_default_menu_type()
+{
+    return apply_filters('fed_get_default_menu_type', array(
+            'post',
+            'user',
+            'logout',
+            'collapse',
+            'custom',
+    ));
+}
+
+/**
+ * @param $string
+ *
+ * @return array
+ */
+function fed_menu_split($string)
+{
+    return explode('_', $string, 2);
+}

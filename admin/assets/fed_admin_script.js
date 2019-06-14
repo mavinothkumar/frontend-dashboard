@@ -32,13 +32,13 @@ jQuery(document).ready(function ($) {
             confirmButtonColor: '#0AAAAA',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes, Please'
-        }).then(function (result){
+        }).then(function (result) {
             console.log(result);
             if (result) {
                 console.log('op');
                 click.closest('form').submit();
             }
-        }, function(dismiss) {
+        }, function (dismiss) {
             if (dismiss === 'cancel') {
 
             } else {
@@ -556,6 +556,68 @@ jQuery(document).ready(function ($) {
         $(this).addClass('hide');
         e.preventDefault();
     });
+
+
+    // Sorting Menu
+    var options = {
+        placeholderCss: {'background-color': '#ff8'},
+        hintCss: {'background-color': '#bbf'},
+        onChange: function (cEl) {
+            console.log('onChange');
+        },
+        complete: function (cEl) {
+            // console.log($('#fed_dashboard_menu_sort').sortableListsToHierarchy());
+            // console.log($('#fed_dashboard_menu_sort').sortableListsToArray());
+            // console.log($('#fed_dashboard_menu_sort').sortableListsToString());
+            // console.log(cEl.closest('#fed_dashboard_menu_sort').data('nonce'));
+            fed_toggle_loader();
+            $.ajax({
+                type: 'POST',
+                url: cEl.closest('#fed_dashboard_menu_sort').data('url'),
+                data: {
+                    'fed_nonce': cEl.closest('#fed_dashboard_menu_sort').data('nonce'),
+                    'data': $('#fed_dashboard_menu_sort').sortableListsToArray()
+                },
+                success: function (results) {
+                    fed_toggle_loader();
+                    fedAdminAlert.adminSettings(results);
+                }
+            });
+
+
+        },
+        isAllowed: function (cEl, hint, target) {
+            if (target.parents('li').length == 10) {
+                hint.css('background-color', '#ff9999');
+                return false;
+            } else if (target.data('module') === 'custom_menu' || cEl.data('module') === 'custom_menu') {
+                hint.css('background-color', '#ff9999');
+                alert('Sorry You cant change or insert the Custom field');
+                return false;
+            } else {
+                hint.css('background-color', '#99ff99');
+                return true;
+            }
+        },
+        opener: {
+            active: true,
+            as: 'html',
+            close: '<i class="fa fa-minus c3"></i>',
+            open: '<i class="fa fa-plus"></i>',
+            openerCss: {
+                'display': 'inline-block',
+                // 'width': '18px', 'height': '18px',
+                'float': 'left',
+                'margin-left': '-35px',
+                'margin-right': '5px',
+                // 'background-position': 'center center', 'background-repeat': 'no-repeat',
+                'font-size': '1.1em'
+            }
+        },
+        ignoreClass: 'clickable'
+    };
+
+    $('#fed_dashboard_menu_sort').sortableLists(options);
 
 });
 

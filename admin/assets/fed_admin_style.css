@@ -839,3 +839,58 @@ v1.3.2
     font-size: 10px;
     font-weight: 700;
 }
+
+
+
+.bc_fed ul.text li {
+    line-height: 1.4;
+}
+
+.bc_fed ul.text li {
+    list-style: none;
+}
+
+.bc_fed ul.text li:before {
+    content: ">>";
+    font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+    font-size: 13px;
+    color: #b5e853;
+    margin-left: -37px;
+    margin-right: 21px;
+    line-height: 16px;
+}
+
+.bc_fed ul, li {
+    list-style-type: none;
+    color: #b5e853;
+    border: 1px solid #3f3f3f;
+}
+
+.bc_fed ul, #fed_dashboard_menu_sort {
+    padding: 0;
+    background-color: #151515;
+}
+
+.bc_fed #fed_dashboard_menu_sort li,  ul#sortableListsBase li {
+    padding-left: 50px;
+    margin: 5px;
+    border: 1px solid #3f3f3f;
+    background-color: #3f3f3f;
+}
+
+.bc_fed li div {
+    padding: 7px;
+    background-color: #222;
+}
+
+.bc_fed li, ul, div {
+    border-radius: 3px;
+}
+
+.bc_fed .c3 {
+    color: #f77720;
+}
+
+.bc_fed #fed_dashboard_menu_sort {
+    margin: 10px auto;
+}

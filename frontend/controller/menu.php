@@ -7,7 +7,6 @@
  */
 function fed_get_all_dashboard_display_menus() {
 	$profile_menu = fed_process_dashboard_display_menu();
-
 	$settings = get_option( 'fed_admin_settings_upl' );
 	if ( isset( $settings['settings']['fed_upl_disable_logout'] ) && 'yes' === $settings['settings']['fed_upl_disable_logout']
 	) {
@@ -17,6 +16,7 @@ function fed_get_all_dashboard_display_menus() {
 	}
 
 	$all_menus = apply_filters( 'fed_frontend_main_menu', array_merge( $profile_menu, $logout ) );
+
 	uasort( $all_menus, 'fed_sort_by_order' );
 
 	return $all_menus;

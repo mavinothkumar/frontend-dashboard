@@ -97,13 +97,7 @@ if ( ! class_exists( 'FED_Routes' ) ) {
          * @return mixed|void
          */
         public function getDefaultMenuType() {
-			return apply_filters( 'fed_get_default_menu_type', array(
-				'post',
-				'user',
-				'logout',
-				'collapse',
-				'custom'
-			) );
+			return fed_get_default_menu_type();
 		}
 
         /**

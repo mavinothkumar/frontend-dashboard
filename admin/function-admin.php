@@ -3128,6 +3128,7 @@ function fed_get_table_status()
      */
     $user_profile = $wpdb->prefix.BC_FED_USER_PROFILE_DB;
     $menu         = $wpdb->prefix.BC_FED_MENU_DB;
+    $menu_meta    = $wpdb->prefix.BC_FED_MENU_META;
     $post         = $wpdb->prefix.BC_FED_POST_DB;
 
     $table_status['user_profile'] = array(
@@ -3139,6 +3140,12 @@ function fed_get_table_status()
     $table_status['menu']         = array(
             'title'       => 'Menu',
             'status'      => $wpdb->get_var("SHOW TABLES LIKE '$menu'") != $menu ? fed_enable_disable(false) : fed_enable_disable(true),
+            'plugin_name' => BC_FED_APP_NAME,
+            'position'    => 0,
+    );
+    $table_status['menu_meta']    = array(
+            'title'       => 'Menu Meta',
+            'status'      => $wpdb->get_var("SHOW TABLES LIKE '$menu_meta'") != $menu_meta ? fed_enable_disable(false) : fed_enable_disable(true),
             'plugin_name' => BC_FED_APP_NAME,
             'position'    => 0,
     );

@@ -47,7 +47,7 @@ function fed_next_updates() {
     $charset_collate = $wpdb->get_charset_collate();
     if( ! isset($menu_query[0]->parent_id)){
         $wpdb->query("ALTER TABLE {$menu_table} ADD parent_id VARCHAR(10) NOT NULL DEFAULT '0'");
-        $wpdb->query("ALTER TABLE {$menu_table} ADD menu_type VARCHAR(100) NOT NULL DEFAULT 'default'");
+//        $wpdb->query("ALTER TABLE {$menu_table} ADD menu_type VARCHAR(100) NOT NULL DEFAULT 'default'");
     }
 
     if ( $wpdb->get_var( "SHOW TABLES LIKE '{$menu_meta_table}'" ) != $menu_meta_table ) {

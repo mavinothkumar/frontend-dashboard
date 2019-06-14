@@ -16,6 +16,15 @@ require_once BC_FED_PLUGIN_DIR . '/include/page-template/FED_Page_Template.php';
  */
 require_once BC_FED_PLUGIN_DIR . '/admin/menu/FED_AdminMenu.php';
 
+//require_once BC_FED_PLUGIN_DIR . '/admin/menu/items/frontend_dashboard.php';
+require_once BC_FED_PLUGIN_DIR . '/admin/menu/items/dashboard_menu.php';
+require_once BC_FED_PLUGIN_DIR . '/admin/menu/items/user_profile.php';
+require_once BC_FED_PLUGIN_DIR . '/admin/menu/items/post_fields.php';
+require_once BC_FED_PLUGIN_DIR . '/admin/menu/items/add_profile_post_fields.php';
+require_once BC_FED_PLUGIN_DIR . '/admin/menu/items/addons.php';
+require_once BC_FED_PLUGIN_DIR . '/admin/menu/items/help.php';
+require_once BC_FED_PLUGIN_DIR . '/admin/menu/items/status.php';
+
 require_once BC_FED_PLUGIN_DIR . '/admin/model/user_profile.php';
 require_once BC_FED_PLUGIN_DIR . '/admin/model/menu.php';
 require_once BC_FED_PLUGIN_DIR . '/admin/model/common.php';
