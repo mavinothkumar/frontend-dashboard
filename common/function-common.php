@@ -74,6 +74,9 @@ function fed_loader($hide = 'hide', $message = null)
  */
 function fed_sort_by_order($a, $b)
 {
+    if (isset($a['order'], $b['order'])) {
+        return $a['order'] - $b['order'];
+    }
     if (isset($a['input_order'], $b['input_order'])) {
         return $a['input_order'] - $b['input_order'];
     }

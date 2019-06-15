@@ -3386,6 +3386,24 @@ function fed_show_help_icons()
 }
 
 
+/**
+ * @param $menus
+ *
+ * @return array
+ */
+function fed_get_keys_from_menu($menus)
+{
+    $keys = array();
+    foreach ($menus as $k => $menu) {
+        $keys[] = $menu['menu_slug'];
+        if (isset($menu['submenu']) && is_array($menu['submenu'])) {
+            $keys = array_merge($keys, fed_get_keys_from_menu($menus[$k]['submenu']));
+        }
+    }
+
+    return $keys;
+
+}
 
 /**
  * The below code tested to check input tag works in Custom Label.

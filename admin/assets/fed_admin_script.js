@@ -564,6 +564,8 @@ jQuery(document).ready(function ($) {
         hintCss: {'background-color': '#bbf'},
         onChange: function (cEl) {
             console.log('onChange');
+        }, onDragStart: function (cEl) {
+            console.log(cEl);
         },
         complete: function (cEl) {
             // console.log($('#fed_dashboard_menu_sort').sortableListsToHierarchy());
@@ -580,26 +582,51 @@ jQuery(document).ready(function ($) {
                 },
                 success: function (results) {
                     fed_toggle_loader();
-                    fedAdminAlert.adminSettings(results);
+                    if ((results.success) === false) {
+                        swal({
+                            title: results.data.message || frontend_dashboard.alert.something_went_wrong,
+                            type: "error",
+                            confirmButtonColor: "#DD6B55"
+                        }).then(function () {
+                            if (results.data.reload) {
+                                if (window.location == results.data.reload) {
+                                    location.reload();
+                                } else {
+                                    window.location = results.data.reload
+                                }
+                            }
+                        });
+                    }
                 }
             });
 
 
         },
         isAllowed: function (cEl, hint, target) {
-            if (target.parents('li').length == 10) {
+            console.log(cEl.find('li').length);
+
+            if (target.parents('li').length == 1 || cEl.find('li').length > 0) {
                 hint.css('background-color', '#ff9999');
+                swal({
+                    title: 'Sorry! you can have only one Sub Menu Level',
+                    type: "warning",
+                    confirmButtonColor: '#0AAAAA',
+                });
                 return false;
-            }else {
-                hint.css('background-color', '#99ff99');
-                return true;
             }
 
-        // if (target.data('module') === 'custom_menu' || cEl.data('module') === 'custom_menu') {
-            //         hint.css('background-color', '#ff9999');
-            //         alert('Sorry You cant change or insert the Custom field');
-            //         return false;
-            //     }
+            if (target.hasClass('invalid_menu') || cEl.hasClass('invalid_menu')) {
+                hint.css('background-color', '#ff9999');
+                swal({
+                    title: 'Sorry You cant change or insert the Invalid Menu Type',
+                    type: "warning",
+                    confirmButtonColor: '#0AAAAA',
+                });
+                return false;
+            }
+
+            hint.css('background-color', '#99ff99');
+            return true;
         },
         opener: {
             active: true,

@@ -854,15 +854,16 @@ v1.3.2
     content: ">>";
     font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
     font-size: 13px;
-    color: #b5e853;
+    color: #ffffff;
     margin-left: -37px;
     margin-right: 21px;
     line-height: 16px;
 }
 
-.bc_fed ul, li {
+.fed_dashboard_menu_sort_wrapper ul,
+.fed_dashboard_menu_sort_wrapper li {
     list-style-type: none;
-    color: #b5e853;
+    color: #ffffff;
     border: 1px solid #3f3f3f;
 }
 
@@ -888,9 +889,21 @@ v1.3.2
 }
 
 .bc_fed .c3 {
-    color: #f77720;
+    color: #ffffff;
 }
 
 .bc_fed #fed_dashboard_menu_sort {
     margin: 10px auto;
+}
+
+.bc_fed .fed_dashboard_menu_sort li {
+    cursor: move;
+}
+
+.bc_fed .fed_dashboard_menu_sort li {
+    background: #0aaaaa;
+}
+
+.bc_fed .fed_dashboard_menu_sort li.invalid_menu {
+    background: red !important;
 }
