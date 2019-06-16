@@ -84,6 +84,24 @@ if ( ! class_exists('FED_ActionHooks')) {
                         color: <?php echo $pbg_font_color ?> !important;
                     }
 
+                    .fed_frontend_dashboard_menu .fed_menu_item
+                    {
+                        background: <?php echo $sbg_color ?> !important;
+                        color: <?php echo $sbg_font_color ?> !important;
+                    }
+                    .fed_frontend_dashboard_menu .panel-body .panel-title {
+                        padding: 10px;
+                        margin: 5px;
+                        background: <?php echo $sbg_color ?>;
+                        color: <?php echo $sbg_font_color ?>;
+                    }
+
+                    .bc_fed .fed_frontend_dashboard_menu .panel-heading.active,
+                    .bc_fed .fed_frontend_dashboard_menu .panel-body .panel-title.active {
+                        color: <?php echo $pbg_font_color ?>;
+                        background: <?php echo $pbg_color ?>;
+                    }
+
                     .bc_fed .nav-tabs {
                         border-bottom: 1px solid <?php echo $pbg_color  ?> !important;
                     }

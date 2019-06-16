@@ -103,42 +103,103 @@ function fed_display_dashboard_menu($menus)
     $first_element     = $first_element_key[0];
     $dashboard_url     = fed_get_dashboard_url();
 
+//    bcdump($menus['menu_items']);
     foreach ($menus['menu_items'] as $index => $menu) {
-        $active    = '';
-        $menu_type = isset($menu['menu_type']) ? $menu['menu_type'] : 'custom';
-        $menu_slug = isset($menu['menu_slug']) ? $menu['menu_slug'] : 'fed_slug_error';
-        $menu_id   = isset($menu['id']) ? $menu['id'] : 0;
-        $menu_url  = $dashboard_url.'?menu_type='.$menu_type.'&'.'menu_slug='.$menu_slug.'&'.'menu_id='.$menu_id.'&fed_nonce='.wp_create_nonce('fed_nonce');
-        $menu_url  = apply_filters('fed_convert_dashboard_menu_url', $menu_url, $menu);
-        $target    = '_self';
-        /*
-         * This check for menu to be open in new or same window
-         */
-        if (is_array($menu_url) && isset($menu_url['url'])) {
-            $target   = isset($menu_url['target']) ? $menu_url['target'] : $target;
-            $menu_url = $menu_url['url'];
+        $menu_format  = fed_format_menu_items($menu, $index, $first_element, $dashboard_url, $index);
+        $is_submenu   = '';
+        $submenu_icon = '';
+        $parent_id    = isset($_GET, $_GET['parent_id']) ? fed_sanitize_text_field($_GET['parent_id']) : '';
+        if (isset($menu['submenu'])) {
+            $is_submenu   = true;
+            $submenu_icon = '<span class="fed_float_right"><i class="fas fa-chevron-right"></i></span>';
         }
 
-        if (isset($_GET['menu_slug'])) {
-            if ($index === $_GET['menu_slug']) {
-                $active = 'active';
-            }
-        } else {
-            if ($index === $first_element) {
-                $active = 'active';
-            }
-        }
+        $random_number = fed_get_random_string(5);
         ?>
-        <li class=" <?php echo $active ?> list-group-item" data-menu="<?php echo $menu_slug; ?>">
-            <a href="<?php echo $menu_url; ?>" target="<?php echo $target; ?>">
-                <div class="flex">
-                    <div class="fed_menu_icon">
-                        <span class="<?php echo $menu['menu_image_id'] ?>"></span>
-                    </div>
-                    <div class="fed_menu_title"><?php echo ucwords($menu['menu']) ?></div>
+        <div class="panel panel-secondary fed_menu_item">
+            <?php if ($is_submenu) { ?>
+                <div class="panel-heading <?php echo $index === $parent_id ? 'active' : ''; ?>" role="tab" id="<?php echo $index; ?>">
+                    <h4 class="panel-title">
+                        <a role="button" data-toggle="collapse" data-parent="#fed_default_template"
+                           href="#<?php echo $index.$random_number; ?>"
+                           aria-expanded="true" aria-controls="<?php echo $index; ?>">
+                            <div class="fed_display_inline">
+                                <div>
+                                    <div class="fed_menu_icon">
+                                        <span class="<?php echo $menu['menu_image_id'] ?>"></span>
+                                    </div>
+                                    <div class="fed_menu_title"><?php echo $menu_format['menu_name'] ?></div>
+                                </div>
+                                <div>
+                                    <?php echo $submenu_icon; ?>
+                                </div>
+
+                            </div>
+                        </a>
+
+                    </h4>
                 </div>
-            </a>
-        </li>
+                <div id="<?php echo $index.$random_number; ?>"
+                     class="panel-collapse collapse <?php echo $index === $parent_id ? 'in' : ''; ?>"
+                     role="tabpanel"
+                     aria-labelledby="<?php echo $index; ?>">
+                    <div class="panel-body">
+                        <h4 class="panel-title">
+                            <a href="<?php echo $menu_format['menu_url']; ?>">
+                                <div class="flex">
+                                    <div class="fed_menu_icon">
+                                        <span class="<?php echo $menu['menu_image_id'] ?>"></span>
+                                    </div>
+                                    <div class="fed_menu_title"><?php echo $menu_format['menu_name'] ?></div>
+                                </div>
+                            </a>
+
+                        </h4>
+                        <?php foreach ($menu['submenu'] as $sub_index => $sub_menu) {
+                            $sub_menu_format = fed_format_menu_items($sub_menu, $sub_index, $first_element,
+                                    $dashboard_url, $index);
+
+                            ?>
+                            <h4 class="panel-title <?php echo $sub_menu_format['active']; ?>">
+                                <a
+                                        href="<?php echo $sub_menu_format['menu_url']; ?>">
+                                    <div class="flex">
+                                        <div class="fed_menu_icon">
+                                            <span class="<?php echo $sub_menu['menu_image_id'] ?>"></span>
+                                        </div>
+                                        <div class="fed_menu_title"><?php echo $sub_menu_format['menu_name'] ?></div>
+                                    </div>
+
+                                </a>
+
+                            </h4>
+                        <?php } ?>
+                    </div>
+                </div>
+            <?php } else { ?>
+                <div class="panel-heading" role="tab" id="<?php echo $index; ?>">
+                    <h4 class="panel-title">
+                        <a data-parent="#fed_default_template"
+                           href="<?php echo $menu_format['menu_url'] ?>">
+                            <div class="fed_display_inline">
+                                <div>
+                                    <div class="fed_menu_icon">
+                                        <span class="<?php echo $menu['menu_image_id'] ?>"></span>
+                                    </div>
+                                    <div class="fed_menu_title"><?php echo $menu_format['menu_name'] ?></div>
+                                </div>
+                                <div>
+                                    <?php echo $submenu_icon; ?>
+                                </div>
+
+                            </div>
+                        </a>
+
+                    </h4>
+                </div>
+            <?php } ?>
+        </div>
+
         <?php
     }
     ?>
@@ -146,55 +207,53 @@ function fed_display_dashboard_menu($menus)
     <?php
 }
 
+/**
+ * @param $menu
+ * @param $index
+ * @param $first_element
+ * @param $dashboard_url
+ *
+ * @param $parent_id
+ *
+ * @return array
+ */
+function fed_format_menu_items($menu, $index, $first_element, $dashboard_url, $parent_id)
+{
 
-//function fed_display_dashboard_menu($menus)
-//{
-//    $first_element_key = array_keys($menus['menu_items']);
-//    $first_element     = $first_element_key[0];
-//    $dashboard_url     = fed_get_dashboard_url();
-//    $main_menus        = $menus['menu_items'];
-//    bcdump(fed_get_dashboard_menu_items_sort_data());
-//    foreach ($menus['menu_items'] as $index => $menu) {
-//        $active    = '';
-//        $menu_type = isset($menu['menu_type']) ? $menu['menu_type'] : 'custom';
-//        $menu_slug = is_string($index) ? $index : 'fed_slug_error';
-//        $menu_url  = $dashboard_url.'?menu_type='.$menu_type.'&'.'menu_slug='.$menu_slug.'&fed_nonce='.wp_create_nonce('fed_nonce');
-//        $menu_url  = apply_filters('fed_convert_dashboard_menu_url', $menu_url, $menu);
-//        $target    = '_self';
-//        /*
-//         * This check for menu to be open in new or same window
-//         */
-//        if (is_array($menu_url) && isset($menu_url['url'])) {
-//            $target   = isset($menu_url['target']) ? $menu_url['target'] : '_self';
-//            $menu_url = $menu_url['url'];
-//        }
-//
-//        if (isset($_GET['menu_slug'])) {
-//            if ($index === $_GET['menu_slug']) {
-//                $active = 'active';
-//            }
-//        } else {
-//            if ($index === $first_element) {
-//                $active = 'active';
-//            }
-//        }
-//        ?>
-    <!--        <li class=" --><?php //echo $active ?><!-- list-group-item" data-menu="--><?php //echo $index; ?><!--">-->
-    <!--            <a href="--><?php //echo $menu_url; ?><!--" target="--><?php //echo $target; ?><!--">-->
-    <!--                <div class="flex">-->
-    <!--                    <div class="fed_menu_icon">-->
-    <!--                        <span class="--><?php //echo $menu['menu_image_id'] ?><!--"></span>-->
-    <!--                    </div>-->
-    <!--                    <div class="fed_menu_title">--><?php //echo ucwords($menu['menu']) ?><!--</div>-->
-    <!--                </div>-->
-    <!--            </a>-->
-    <!--        </li>-->
-    <!--        --><?php
-//    }
-//    ?>
-    <!---->
-    <!--    --><?php
-//}
+    $active    = null;
+    $menu_type = isset($menu['menu_type']) ? $menu['menu_type'] : 'custom';
+    $menu_slug = isset($menu['menu_slug']) ? $menu['menu_slug'] : 'fed_slug_error';
+    $menu_id   = isset($menu['id']) ? $menu['id'] : 0;
+    $menu_name = isset($menu['menu']) ? $menu['menu'] : 'MISSING';
+    $menu_url  = $dashboard_url.'?menu_type='.$menu_type.'&'.'menu_slug='.$menu_slug.'&'.'menu_id='.$menu_id.'&'.'parent_id='.$parent_id.'&fed_nonce='.wp_create_nonce('fed_nonce');
+    $menu_url  = apply_filters('fed_convert_dashboard_menu_url', $menu_url, $menu);
+    $target    = '_self';
+
+    /*
+     * This check for menu to be open in new or same window
+     */
+    if (is_array($menu_url) && isset($menu_url['url'])) {
+        $target   = isset($menu_url['target']) ? $menu_url['target'] : $target;
+        $menu_url = $menu_url['url'];
+    }
+
+    if (isset($_GET['menu_type'],$_GET['menu_id'])) {
+        if ($index === $_GET['menu_type'].'_'.$_GET['menu_id']) {
+            $active = 'active';
+        }
+    } else {
+        if ($index === $first_element) {
+            $active = 'active';
+        }
+    }
+
+    return array(
+            'menu_name' => $menu_name,
+            'menu_url'  => $menu_url,
+            'active'    => $active,
+            'target'    => $target,
+    );
+}
 
 /**
  * Collapse Menu
@@ -221,20 +280,44 @@ function fed_get_collapse_menu()
     }
     $collapse = fed_get_collapse_menu_content();
     ?>
-    <li class="fed_collapse_menu list-group-item visible-lg visibile-md">
-        <div class="flex">
-            <div class="fed_menu_icon fed_collapse_menu_icon menu_open">
-                <span class="open <?php echo $collapse['open_icon'] ?>"></span>
-                <span class="closed hide <?php echo $collapse['close_icon'] ?>"></span>
-            </div>
-            <div class="fed_menu_title fed_collapse_menu_item">
-                <?php echo $collapse['name'] ?>
-            </div>
+    <div class="panel panel-secondary fed_menu_item">
+        <div class="panel-heading" role="tab">
+            <h4 class="panel-title fed_collapse_menu">
+                <a role="button" data-toggle="collapse" data-parent="#fed_default_template"
+                   href="#">
+                    <div class="flex">
+                        <div class="fed_menu_icon fed_collapse_menu_icon menu_open">
+                            <span class="open <?php echo $collapse['open_icon'] ?>"></span>
+                            <span class="closed hide <?php echo $collapse['close_icon'] ?>"></span>
+                        </div>
+                        <div class="fed_menu_title fed_collapse_menu_item">
+                            <?php echo $collapse['name'] ?>
+                        </div>
+                    </div>
+                </a>
+
+            </h4>
         </div>
-    </li>
+        <!--    <li class="fed_collapse_menu list-group-item visible-lg visibile-md">-->
+        <!--        <div class="flex">-->
+        <!--            <div class="fed_menu_icon fed_collapse_menu_icon menu_open">-->
+        <!--                <span class="open --><?php //echo $collapse['open_icon']
+        ?><!--"></span>-->
+        <!--                <span class="closed hide --><?php //echo $collapse['close_icon']
+        ?><!--"></span>-->
+        <!--            </div>-->
+        <!--            <div class="fed_menu_title fed_collapse_menu_item">-->
+        <!--                --><?php //echo $collapse['name']
+        ?>
+        <!--            </div>-->
+        <!--        </div>-->
+        <!--    </li>   -->
     <?php
 }
 
+/**
+ * @return mixed|void
+ */
 function fed_get_collapse_menu_content()
 {
     return apply_filters('fed_collapse_menu_content', array(
