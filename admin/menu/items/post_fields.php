@@ -76,7 +76,7 @@ function fed_get_post_fields_menu_item($profiles)
                 <div class="col-md-12 fed_admin_profile_container">
                     <div class="row">
                         <div class="col-md-3">
-                            <ul class="nav nav-pills nav-stacked p-t-10" role="tablist">
+                            <ul class="nav nav-pills nav-stacked" role="tablist">
                                 <?php
                                 $profilesValue = fed_array_group_by_key($profiles, 'post_type');
                                 $groupBy       = fed_compare_two_arrays_get_second_value($menu, $profilesValue);

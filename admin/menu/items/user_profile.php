@@ -63,7 +63,7 @@ function fed_get_user_profile_menu_items($profiles)
             <div class="col-md-12 fed_admin_profile_container">
                 <div class="row">
                     <div class="col-md-3">
-                        <ul class="nav nav-pills nav-stacked p-t-10" role="tablist">
+                        <ul class="nav nav-pills nav-stacked" role="tablist">
                             <?php
                             $groupBy = fed_get_menu_value($profiles, $menu_key);
                             $count   = 0;

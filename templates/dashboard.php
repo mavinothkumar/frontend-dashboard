@@ -7,7 +7,6 @@
 
 $dashboard_container = new FED_Routes($_REQUEST);
 $menu                = $dashboard_container->setDashboardMenuQuery();
-
 do_action('fed_before_dashboard_container');
 ?>
     <div class="bc_fed fed_dashboard_container">

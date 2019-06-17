@@ -103,7 +103,6 @@ function fed_display_dashboard_menu($menus)
     $first_element     = $first_element_key[0];
     $dashboard_url     = fed_get_dashboard_url();
 
-//    bcdump($menus['menu_items']);
     foreach ($menus['menu_items'] as $index => $menu) {
         $menu_format  = fed_format_menu_items($menu, $index, $first_element, $dashboard_url, $index);
         $is_submenu   = '';
@@ -118,7 +117,8 @@ function fed_display_dashboard_menu($menus)
         ?>
         <div class="panel panel-secondary fed_menu_item">
             <?php if ($is_submenu) { ?>
-                <div class="panel-heading <?php echo $index === $parent_id ? 'active' : ''; ?>" role="tab" id="<?php echo $index; ?>">
+                <div class="panel-heading <?php echo $index === $parent_id ? 'active' : ''; ?> <?php echo $menu_format['active'] ?>"
+                     role="tab" id="<?php echo $index; ?>">
                     <h4 class="panel-title">
                         <a role="button" data-toggle="collapse" data-parent="#fed_default_template"
                            href="#<?php echo $index.$random_number; ?>"
@@ -237,7 +237,7 @@ function fed_format_menu_items($menu, $index, $first_element, $dashboard_url, $p
         $menu_url = $menu_url['url'];
     }
 
-    if (isset($_GET['menu_type'],$_GET['menu_id'])) {
+    if (isset($_GET['menu_type'], $_GET['menu_id'])) {
         if ($index === $_GET['menu_type'].'_'.$_GET['menu_id']) {
             $active = 'active';
         }

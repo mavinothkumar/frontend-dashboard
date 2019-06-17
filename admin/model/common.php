@@ -87,6 +87,28 @@ function fed_delete_table_row_by_id($table, $id)
 }
 
 /**
+ * @param $table
+ * @param $key
+ * @param $value
+ * @param  string  $condition
+ *
+ * @return string
+ */
+function fed_delete_table_rows_on_condition($table, $key, $value)
+{
+    global $wpdb;
+    $table_name = $wpdb->prefix.$table;
+
+    $verify = $wpdb->delete($table_name, array($key => $value));
+
+    if ($verify) {
+        return 'success';
+    }
+
+    return 'failed';
+}
+
+/**
  * Fetch Table Rows with given Key
  *
  * @param  string  $table  Table Name

@@ -650,19 +650,6 @@ jQuery(document).ready(function ($) {
         $('#fed_dashboard_menu_sort').sortableLists(options);
     }
 
-    /* If mobile browser, prevent click on parent nav item from redirecting to URL */
-    if(is_touch_device()) {
-        /* Option 1: Use this to modify the href on the <a> to # */
-        $('.fed_frontend_dashboard_menu > li > a').attr('href' ,'#');
-
-        /* OR Option 2: Use this to keep the href on the <a> intact but prevent the default action */
-        // $('.fed_frontend_dashboard_menu > li > a').click(function(event) {
-        //     event.preventDefault();
-        // });
-    }
-
-    $('.collapse').collapse();
-
 });
 
 var fedAdminAlert = {

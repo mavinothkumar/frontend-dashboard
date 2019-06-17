@@ -3406,6 +3406,27 @@ function fed_get_keys_from_menu($menus)
 }
 
 /**
+ * @param $array
+ * @param $index
+ * @param  string  $submenu
+ *
+ * @return mixed
+ */
+function fed_search_index_from_array_recursively($array, $index, $submenu = 'submenu')
+{
+    foreach ($array as $key => $value) {
+        if ($key == $index) {
+            return $value;
+        }
+        if (isset($value[$submenu]) && array_key_exists($index, $value[$submenu])) {
+            return $value[$submenu][$index];
+        }
+    }
+
+    return false;
+}
+
+/**
  * The below code tested to check input tag works in Custom Label.
  */
 //add_filter('wp_kses_allowed_html', 'fed_wp_kses_add_input', 10, 2);
