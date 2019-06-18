@@ -51,6 +51,13 @@ function fed_register_form_submit($post)
  */
 add_filter('insert_user_meta', 'fed_insert_user_meta', 10, 3);
 
+/**
+ * @param $meta
+ * @param $user
+ * @param $update
+ *
+ * @return mixed|void
+ */
 function fed_insert_user_meta($meta, $user, $update)
 {
     //$extra_fields = fed_fetch_user_profile_extra_fields_key_value();
@@ -65,12 +72,16 @@ function fed_insert_user_meta($meta, $user, $update)
         $register                 = fed_fetch_user_profile_by_registration();
         $get_profile_meta_by_menu = array_column($register, 'input_meta');
     }
+
     if (count($get_profile_meta_by_menu) > 0) {
         foreach ($get_profile_meta_by_menu as $extra_field) {
-            $meta[$extra_field] = is_array($_REQUEST[$extra_field]) ? serialize($_REQUEST[$extra_field]) : fed_sanitize_text_field($_REQUEST[$extra_field]);
+            if (isset($_REQUEST[$extra_field]) && is_array($_REQUEST[$extra_field])) {
+                $meta[$extra_field] = serialize(fed_sanitize_text_field($_REQUEST[$extra_field]));
+            } else {
+                $meta[$extra_field] = isset($_REQUEST[$extra_field]) ? fed_sanitize_text_field($_REQUEST[$extra_field]) : '';
+            }
 
         }
-
     }
 
     return apply_filters('fed_user_extra_fields_registration', $meta);

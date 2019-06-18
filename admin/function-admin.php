@@ -13,20 +13,20 @@
 function fed_verify_nonce($request, $permission = null)
 {
     if ( ! isset($request['fed_nonce'])) {
-        wp_send_json_error(array('message' => 'Invalid Request'));
+        wp_send_json_error(array('message' => 'Invalid Request - 700'));
     }
 
     if ( ! wp_verify_nonce($request['fed_nonce'], 'fed_nonce')) {
-        wp_send_json_error(array('message' => 'Invalid Request'));
+        wp_send_json_error(array('message' => 'Invalid Request - 701'));
     }
 
     if (null !== $permission) {
         $user_role = fed_get_current_user_role_key();
         if (is_string($permission) && $user_role !== $permission) {
-            wp_send_json_error(array('message' => 'Invalid Request'));
+            wp_send_json_error(array('message' => 'Invalid Request - 702'));
         }
         if (is_array($permission) && ! in_array($user_role, $permission, true)) {
-            wp_send_json_error(array('message' => 'Invalid Request'));
+            wp_send_json_error(array('message' => 'Invalid Request - 703'));
         }
     }
 }
