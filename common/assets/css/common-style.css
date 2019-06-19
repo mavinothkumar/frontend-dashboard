@@ -165,21 +165,21 @@ body {
 .bc_fed input[type="submit"]:hover,
 .bc_fed input[type="submit"]:focus,
 .bc_fed .popover-title {
-    background-color: #0AAAAA !important;
-    background-image: none !important;
-    border-color: #0AAAAA !important;
-    color: #ffffff !important;
+    background-color: #0AAAAA;
+    background-image: none;
+    border-color: #0AAAAA;
+    color: #ffffff;
 }
 
 .bc_fed .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover,
 .bc_fed .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
-    background-color: #0AAAAA !important;
-    border-color: #0AAAAA !important;
-    color: #ffffff !important;
+    background-color: #0AAAAA;
+    border-color: #0AAAAA;
+    color: #ffffff;
 }
 
 .bc_fed .nav-tabs {
-    border-bottom: 1px solid #0AAAAA !important;
+    border-bottom: 1px solid #0AAAAA;
 }
 
 .bc_fed .flex-space-around {
@@ -189,7 +189,7 @@ body {
 }
 
 .bc_fed .panel-primary {
-    border-color: #0AAAAA !important;
+    border-color: #0AAAAA;
 }
 
 .bc_fed .bg-primary-font {
@@ -205,15 +205,15 @@ body {
 }
 
 .bc_fed .list-group-item {
-    background-color: #033333 !important;
-    border-color: #ffffff !important;
-    color: #ffffff !important;
+    background-color: #033333;
+    border-color: #ffffff;
+    color: #ffffff;
 }
 
 .bc_fed .fed_question_container .list-group-item {
-    background-color: #fff !important;
-    border: 1px solid #ddd !important;
-    color: #000 !important;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    color: #000;
     padding: 0 10px 0 10px !important;
 }
 
@@ -850,9 +850,7 @@ Pricing
 .bc_fed .pagination:before, .bc_fed .pagination:after {
     content: none;
 }
-.fed_display_inline div {
-    display: inline;
-}
+
 
 
 

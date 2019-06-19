@@ -162,7 +162,9 @@
     padding: 0 !important;
 }
 
-
+.fed_display_inline div {
+    display: inline;
+}
 
 .bc_fed .fed_frontend_dashboard_menu .panel {
     margin-bottom: 1px;

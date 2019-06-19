@@ -279,3 +279,22 @@ function fed_menu_split($string)
 {
     return explode('_', $string, 2);
 }
+
+/**
+ * @return array
+ */
+function fed_get_menu_mobile_attributes()
+{
+    $collapse = array();
+    if (wp_is_mobile()) {
+        $collapse['in']     = '';
+        $collapse['d']      = ' collapsed';
+        $collapse['expand'] = 'false';
+    } else {
+        $collapse['in']     = 'in';
+        $collapse['d']      = ' ';
+        $collapse['expand'] = 'true';
+    }
+
+    return $collapse;
+}
