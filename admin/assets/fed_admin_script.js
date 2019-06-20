@@ -508,35 +508,6 @@ jQuery(document).ready(function ($) {
         // $('body').toggleClass('fed_bg_gray');
     }
 
-    if ($('.fed_sort_menu').length) {
-        $('.fed_sort_menu').sortable({
-            placeholder: "row ui-state-highlight",
-            axis: 'y',
-            opacity: 0.6,
-            cursor: 'move',
-            tolerance: 'pointer',
-            update: function (event, ui) {
-                var data = $(this).sortable('toArray');
-                var url = $(this).closest('.fed_sort_menu').data('url');
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: {sort: data},
-                    success: function (results) {
-                        if (results.success === false) {
-                            swal({
-                                title: results.data.message || frontend_dashboard.alert.something_went_wrong,
-                                type: "error",
-                                confirmButtonColor: '#DD6B55',
-                            })
-                        }
-                    }
-                });
-            }
-        });
-
-        $(".fed_sort_menu").disableSelection();
-    }
     $('#fed_sticky_subscribe').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
         var email = button.data('email');

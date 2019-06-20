@@ -12,19 +12,19 @@ function fed_get_help_menu()
                                     'frontend-dashboard') ?></h3>
                     </div>
                     <div class="panel-body">
-
-                        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        <div class="panel-group" id="fed_menu_help" role="tablist" aria-multiselectable="true">
                             <div class="panel panel-secondary-heading">
                                 <div class="panel-heading" role="tab" id="fed_videos">
                                     <h5 class="panel-title">
-                                        <a role="button" data-toggle="collapse" data-parent="#accordion"
-                                           href="#fed_videos" aria-expanded="true"
-                                           aria-controls="install"><?php _e('How to Videos',
-                                                    'frontend-dashboard') ?></a>
+                                        <a role="button" data-toggle="collapse" data-parent="#fed_menu_help"
+                                           href="#videos"
+                                           aria-controls="install">
+                                            <?php _e('How to Videos', 'frontend-dashboard') ?>
+                                        </a>
                                     </h5>
                                 </div>
-                                <div id="fed_videos" class="collapse" role="tabpanel"
-                                     aria-labelledby="fed_videos">
+                                <div id="videos" class="collapse" role="tabpanel"
+                                     aria-labelledby="fed_videos_heading">
                                     <div class="panel-body">
                                         <div class="row">
                                             <?php
@@ -44,7 +44,6 @@ function fed_get_help_menu()
 
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
 
@@ -52,7 +51,7 @@ function fed_get_help_menu()
                             <div class="panel panel-secondary-heading">
                                 <div class="panel-heading" role="tab" id="fed_install">
                                     <h5 class="panel-title">
-                                        <a role="button" data-toggle="collapse" data-parent="#accordion"
+                                        <a role="button" data-toggle="collapse" data-parent="#fed_menu_help"
                                            href="#install"
                                            aria-controls="install"><?php _e('How to Install and Configure',
                                                     'frontend-dashboard') ?></a>
@@ -125,17 +124,19 @@ function fed_get_help_menu()
 
                                 </div>
                             </div>
+
+
                             <div class="panel panel-secondary-heading">
-                                <div class="panel-heading" role="tab" id="headingOne">
+                                <div class="panel-heading" role="tab" id="contact_us">
                                     <h5 class="panel-title">
-                                        <a role="button" data-toggle="collapse" data-parent="#accordion"
-                                           href="#collapseOne" aria-controls="collapseOne">
+                                        <a role="button" data-toggle="collapse" data-parent="#fed_menu_help"
+                                           href="#fed_contact_us" aria-controls="fed_contact_us">
                                             <?php _e('How to Contact Us', 'frontend-dashboard') ?>
                                         </a>
                                     </h5>
                                 </div>
-                                <div id="collapseOne" class="collapse" role="tabpanel"
-                                     aria-labelledby="headingOne">
+                                <div id="fed_contact_us" class="collapse" role="tabpanel"
+                                     aria-labelledby="contact_us">
                                     <div class="row">
                                         <div class="col-md-7">
                                             <div class="flex_between">
@@ -169,18 +170,20 @@ function fed_get_help_menu()
 
                                 </div>
                             </div>
+
+
                             <div class="panel panel-secondary-heading">
-                                <div class="panel-heading" role="tab" id="headingFive">
+                                <div class="panel-heading" role="tab" id="shortcodes">
                                     <h4 class="panel-title">
                                         <a class="collapsed" role="button" data-toggle="collapse"
-                                           data-parent="#accordion" href="#collapseFive" aria-expanded="false"
-                                           aria-controls="collapseFive">
+                                           data-parent="#fed_menu_help" href="#fed_shortcodes" aria-expanded="false"
+                                           aria-controls="fed_shortcodes">
                                             <?php _e('Shortcodes', 'frontend-dashboard') ?>
                                         </a>
                                     </h4>
                                 </div>
-                                <div id="collapseFive" class="panel-collapse collapse" role="tabpanel"
-                                     aria-labelledby="headingFive">
+                                <div id="fed_shortcodes" class="panel-collapse collapse" role="tabpanel"
+                                     aria-labelledby="shortcodes">
                                     <div class="panel-body">
                                         <h5>1. [fed_login] to generate login, registration, and reset forms</h5>
                                         <h5>2. [fed_login_only] to show only login page</h5>
@@ -194,11 +197,13 @@ function fed_get_help_menu()
                                     </div>
                                 </div>
                             </div>
+
+
                             <div class="panel panel-secondary-heading">
                                 <div class="panel-heading" role="tab" id="fed_filters">
                                     <h4 class="panel-title">
                                         <a class="collapsed" role="button" data-toggle="collapse"
-                                           data-parent="#accordion" href="#filters" aria-expanded="false"
+                                           data-parent="#fed_menu_help" href="#filters" aria-expanded="false"
                                            aria-controls="filters">
                                             <?php _e('Filter Hooks [Developers]', 'frontend-dashboard') ?>
                                         </a>
@@ -309,11 +314,12 @@ function fed_get_help_menu()
                                     </div>
                                 </div>
                             </div>
+
                             <div class="panel panel-secondary-heading">
                                 <div class="panel-heading" role="tab" id="fed_actions">
                                     <h4 class="panel-title">
                                         <a class="collapsed" role="button" data-toggle="collapse"
-                                           data-parent="#accordion" href="#actions" aria-expanded="false"
+                                           data-parent="#fed_menu_help" href="#actions" aria-expanded="false"
                                            aria-controls="actions">
                                             <?php _e('Action Hooks [Developers]', 'frontend-dashboard') ?>
                                         </a>

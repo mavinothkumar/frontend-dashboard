@@ -231,7 +231,7 @@ function fed_get_dashboard_menu_items_list($menus, $user_roles)
                                 </div>
                             </div>
                         </div>
-                        <div class="panel-group fed_sort_menu"
+                        <div class="panel-group"
                              data-url="<?php echo admin_url('admin-ajax.php?action=fed_admin_menu_sorting&table=fed_menu&fed_nonce='.wp_create_nonce('fed_nonce')) ?>"
                              id="fedmenu" role="tablist" aria-multiselectable="true">
                             <?php
@@ -244,7 +244,6 @@ function fed_get_dashboard_menu_items_list($menus, $user_roles)
                                     $collapsed = 'collapsed';
                                     $in        = '';
                                 }
-
                                 $collapse++;
                                 ?>
                                 <div class="fed_dashboard_menu_single_item ui-state-default <?php echo $menu['menu'] ?>"

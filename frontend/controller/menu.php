@@ -111,6 +111,9 @@ function fed_display_dashboard_menu($menus)
         if (isset($menu['submenu'])) {
             $is_submenu   = true;
             $submenu_icon = '<span class="fed_float_right"><i class="fas fa-chevron-right"></i></span>';
+            $submenus     = $menu['submenu'];
+            uasort($submenus, 'fed_sort_by_order');
+
         }
 
         $random_number = fed_get_random_string(5);
@@ -155,7 +158,7 @@ function fed_display_dashboard_menu($menus)
                             </a>
 
                         </h4>
-                        <?php foreach ($menu['submenu'] as $sub_index => $sub_menu) {
+                        <?php foreach ($submenus as $sub_index => $sub_menu) {
                             $sub_menu_format = fed_format_menu_items($sub_menu, $sub_index, $first_element,
                                     $dashboard_url, $index);
 
@@ -285,7 +288,7 @@ function fed_get_collapse_menu()
             <h4 class="panel-title fed_collapse_menu">
                 <a role="button" data-toggle="collapse" data-parent="#fed_default_template"
                    href="#">
-                    <div class="flex">
+                    <div class="fed_flex_left">
                         <div class="fed_menu_icon fed_collapse_menu_icon menu_open">
                             <span class="open <?php echo $collapse['open_icon'] ?>"></span>
                             <span class="closed hide <?php echo $collapse['close_icon'] ?>"></span>

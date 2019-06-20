@@ -4,7 +4,7 @@ Tags: dashboard, frontend dashboard, custom login, custom register, custom roles
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7DHAEMST475BY
 Requires at least: 4.6
 Tested up to: 5.2.1
-Stable tag: 1.3.15
+Stable tag: 1.4
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -227,6 +227,15 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 6. [fed_user role=user_role] to generate the role based user page
 
 == Changelog ==
+
+= 1.4 [20-June-2019] =
+
+* Feature: One level Submenu can be added to the Menu.
+* Feature: Sort all menu in Dashboard Menu.
+* Feature: Delete and Empty the table associated with Frontend Dashboard in Status Menu
+* Bug fixes: Deleting the menu is not deleting the associated items.
+* Some minor bug fixes.
+
 
 = 1.3.13 [8-June-2019] =
 
@@ -453,9 +462,12 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Upgrade Notice ==
 
-= 1.3.13 [8-June-2019] =
-
-* Bug fixes: Layout color issue in Default Template
+= 1.4 [20-June-2019] =
+* Feature: One level Submenu can be added to the Menu.
+* Feature: Sort all menu in Dashboard Menu.
+* Feature: Delete and Empty the table associated with Frontend Dashboard in Status Menu
+* Bug fixes: Deleting the menu is not deleting the associated items.
+* Some minor bug fixes.
 
 == Screenshots ==
 1. Frontend Dashboard Settings | Login | Settings

@@ -3204,6 +3204,12 @@ function fed_get_help_video_items()
 {
     return array(
             array(
+                    'name'  => 'How to Translate Frontend Dashboard WordPress Plugin',
+                    'url'   => 'https://buffercode.com/post/how-to-translate-frontend-dashboard',
+                    'order' => 5,
+                    'icon'  => 'fa fa-youtube',
+            ),
+            array(
                     'name'  => 'How to create custom login for Frontend Dashboard WordPress Plugin',
                     'url'   => 'https://buffercode.com/post/how-to-create-custom-login-for-frontend-dashboard-wordpress-plugin',
                     'order' => 5,
