@@ -867,7 +867,9 @@ v1.3.2
     border: 1px solid #3f3f3f;
 }
 
-.bc_fed ul, #fed_dashboard_menu_sort {
+.bc_fed  ul#fed_dashboard_menu_sort,
+.bc_fed  #fed_dashboard_menu_sort ul,
+#fed_dashboard_menu_sort {
     padding: 0;
     background-color: #151515;
 }
@@ -879,12 +881,14 @@ v1.3.2
     background-color: #3f3f3f;
 }
 
-.bc_fed li div {
+.bc_fed #fed_dashboard_menu_sort li div {
     padding: 7px;
     background-color: #222;
 }
 
-.bc_fed li, ul, div {
+.bc_fed #fed_dashboard_menu_sort li,
+.bc_fed #fed_dashboard_menu_sort ul,
+.bc_fed #fed_dashboard_menu_sort div {
     border-radius: 3px;
 }
 

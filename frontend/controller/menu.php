@@ -18,6 +18,7 @@ function fed_get_all_dashboard_display_menus()
 
     $all_menus = apply_filters('fed_frontend_main_menu', array_merge($profile_menu, $logout));
 
+
     uasort($all_menus, 'fed_sort_by_order');
 
     return $all_menus;
@@ -180,7 +181,7 @@ function fed_display_dashboard_menu($menus)
                     </div>
                 </div>
             <?php } else { ?>
-                <div class="panel-heading" role="tab" id="<?php echo $index; ?>">
+                <div class="panel-heading  <?php echo $index === $parent_id ? 'active' : ''; ?>" role="tab" id="<?php echo $index; ?>">
                     <h4 class="panel-title">
                         <a data-parent="#fed_default_template"
                            href="<?php echo $menu_format['menu_url'] ?>">
@@ -253,6 +254,7 @@ function fed_format_menu_items($menu, $index, $first_element, $dashboard_url, $p
     return array(
             'menu_name' => $menu_name,
             'menu_url'  => $menu_url,
+            'menu_id'   => $menu_id,
             'active'    => $active,
             'target'    => $target,
     );
