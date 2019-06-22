@@ -127,6 +127,9 @@
 .fed_p_l_20 {
     padding-left: 20px !important;
 }
+.fed_show_cursor {
+    cursor: pointer !important;
+}
 
 .fed_flex_start_center {
     display: flex;

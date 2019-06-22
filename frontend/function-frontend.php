@@ -322,11 +322,12 @@ function fed_get_dashboard_display_categories($post = '', $cpt = '')
     }
 //    bcdump($fed_get_categories);
 //    bcdump($categories);
-    return fed_convert_array_to_id_name($fed_get_categories, 'term_id', 'tax_input['.$cpt->name.']', $categories);
+    return fed_convert_array_to_id_name($fed_get_categories, 'term_id', $cpt->name, $categories);
 }
 
 /**
- * @param  string  $pos_id
+ * @param  string  $post
+ * @param  string  $cpt
  *
  * @return string
  */
@@ -344,7 +345,7 @@ function fed_get_dashboard_display_tags($post = '', $cpt = '')
 //    bcdump($fed_get_tags);
 //    bcdump($tags);
 
-    return fed_convert_array_to_id_name($fed_get_tags, 'slug', 'tax_input['.$cpt->name.']', $tags);
+    return fed_convert_array_to_id_name($fed_get_tags, 'slug', $cpt->name, $tags);
 }
 
 /**
@@ -366,16 +367,22 @@ function fed_convert_array_to_id_name(array $array, $key = 'term_id', $type = ''
         }
 
         $html .= fed_get_input_details(array(
-                'input_value' => $new_category, 'input_meta' => $type, 'input_type' => 'select',
+                'input_value' => $new_category, 'input_meta' => 'tax_input['.$type.']', 'input_type' => 'select',
                 'user_value'  => $compare,
+                'id_name'     => $type,
                 'extended'    => array('multiple' => 'Enable'),
         ));
 
         return $html;
     }
-    $temp = $key === 'term_id' ? 'Category' : 'Tag';
 
-    return 'Sorry! there is no field associated to this '.$temp;
+    return fed_get_input_details(array(
+            'input_value' => array(), 'input_meta' => $type,
+            'input_type'  => 'select',
+            'user_value'  => '',
+            'id_name'     => $type,
+            'extended'    => array('multiple' => 'Enable'),
+    ));
 }
 
 /**
