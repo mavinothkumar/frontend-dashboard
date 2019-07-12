@@ -6,7 +6,6 @@
  * @return array
  */
 
-add_action('wp_ajax_fed_add_new_tag_fronted', 'fed_add_new_tag_fronted_save');
 
 /**
  * Process Dashboard Display Post
@@ -519,7 +518,7 @@ function fed_show_category_tag_post_format($post, $post_settings)
                         <div class="col-md-12">
                             <div class="fed_header_font_color">
                                 <?php echo $tag->label; ?>
-                                <?php fed_can_add_new_tag_to_post($tag); ?>
+                                <?php do_action('fed_frontend_dashboard_edit_tag_label', $tag) ?>
                             </div>
                             <?php echo fed_get_dashboard_display_tags($post, $tag); ?>
                         </div>
@@ -548,73 +547,4 @@ function fed_show_category_tag_post_format($post, $post_settings)
             }
         }
     }
-}
-
-/**
- * @param $tag
- */
-function fed_can_add_new_tag_to_post($tag)
-{
-    ?>
-    <div class="row p-b-10 fed_add_new_tag_container">
-        <div class="col-md-6 text-right fed_add_new_tag_text hide">
-            <div data-method="post" class="fed_new_tag_ajax" data-id="<?php echo $tag->name; ?>"
-                 data-action="<?php echo fed_get_form_action('fed_add_new_tag_fronted'); ?>">
-                <?php fed_wp_nonce_field('fed_nonce', 'fed_nonce'); ?>
-                <input type="hidden" required name="fed_post_type_slug" value="<?php echo $tag->name; ?>"/>
-                <div class="input-group">
-                    <input required name="fed_new_post_tag" type="text" class="form-control"
-                           placeholder="Add New <?php echo $tag->label; ?>">
-                    <span class="input-group-btn">
-                        <button class="btn btn-primary fed_add_new_tag_add" type="button">Add</button>
-                        <button class="btn btn-danger fed_add_new_tag_close" type="button">Cancel</button>
-                    </span>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 fed_add_new_tag_button fed_float_right fed_show_cursor">
-            <div class="fed_p_l_20 fed_float_right">
-                <i class="fa fa-plus"></i>
-                <?php _e('Add New', 'frontend-dashboard'); ?> <?php echo $tag->label; ?>
-            </div>
-        </div>
-    </div>
-
-    <?php
-}
-
-function fed_add_new_tag_fronted_save()
-{
-    $request = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-
-    fed_verify_nonce($request);
-
-    if (isset($request['term'], $request['taxonomy']) && ! empty($request['term']) && ! empty($request['taxonomy'])) {
-
-        //check term already exist
-        $term_status = term_exists($request['term'], $request['taxonomy']);
-
-        if ( ! $term_status) {
-            //Update term
-            $status = wp_insert_term(
-                    fed_sanitize_text_field($request['term']), // the term
-                    fed_sanitize_text_field($request['taxonomy']) // the taxonomy
-            );
-
-            if ($status) {
-
-                wp_send_json_success([
-                        'message' => 'Successfully added',
-                        'data'    => array(
-                                'id'   => $status['term_id'],
-                                'text' => fed_sanitize_text_field($request['term']),
-                        ),
-                ]);
-            }
-        }
-
-        wp_send_json_error(['message' => 'Tag already exist']);
-    }
-
-    wp_send_json_error(['message' => 'Please add tag']);
 }

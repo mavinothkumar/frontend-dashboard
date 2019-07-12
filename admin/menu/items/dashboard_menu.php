@@ -421,27 +421,25 @@ function fed_get_dashboard_menu_items_list($menus, $user_roles)
  */
 function fed_get_dashboard_menu_items_sort_data()
 {
-    $menus             = fed_get_all_dashboard_display_menus();
-    $new_menus         = array();
-    $sort_menus        = get_option('fed_admin_menu_sort');
-
+    $menus      = fed_get_all_dashboard_display_menus();
+    $new_menus  = array();
+    $sort_menus = get_option('fed_admin_menu_sort');
 
     if ($sort_menus) {
-        foreach ($menus as $index => $menu) {
-            foreach ($sort_menus as $sort_index => $sort_menu) {
+        foreach ($sort_menus as $sort_index => $sort_menu) {
+            foreach ($menus as $index => $menu) {
                 if ($menu['menu_type'].'_'.$menu['id'] === $sort_index) {
-                    if ($sort_menu['parent_id'] == '0') {
+                    if (is_null($sort_menu['parent_id']) || empty($sort_menu['parent_id'])) {
                         $new_menus[$sort_index]          = $menu;
                         $new_menus[$sort_index]['order'] = $sort_menu['order'];
-
                     } else {
                         $new_menus[$sort_menu['parent_type'].'_'.$sort_menu['parent_id']]['submenu'][$sort_index]          = $menu;
                         $new_menus[$sort_menu['parent_type'].'_'.$sort_menu['parent_id']]['submenu'][$sort_index]['order'] = $sort_menu['order'];
                     }
                     break;
                 }
-
             }
+
         }
     } else {
         $new_menus = $menus;
@@ -456,7 +454,7 @@ function fed_get_dashboard_menu_items_sort()
 {
     wp_enqueue_script('fed_menu_sort', plugins_url('admin/assets/fed_menu_sort.js', BC_FED_PLUGIN), array('jquery'));
     $default_menu_type = fed_get_default_menu_type();
-    $new_menus = fed_get_dashboard_menu_items_sort_data();
+    $new_menus         = fed_get_dashboard_menu_items_sort_data();
     ?>
     <ul class="fed_dashboard_menu_sort listsClass" id="fed_dashboard_menu_sort"
         data-nonce="<?php echo wp_create_nonce('fed_nonce') ?>"

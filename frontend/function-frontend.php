@@ -342,9 +342,6 @@ function fed_get_dashboard_display_tags($post = '', $cpt = '')
         $tags = wp_get_post_terms($post->ID, $cpt->name, array('fields' => 'slugs'));
     }
 
-//    bcdump($fed_get_tags);
-//    bcdump($tags);
-
     return fed_convert_array_to_id_name($fed_get_tags, 'slug', $cpt->name, $tags);
 }
 

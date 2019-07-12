@@ -385,55 +385,6 @@ jQuery(document).ready(function ($) {
             e.preventDefault();
         });
 
-        /**
-         * Show/Hide add new tag in Frontend Dashboard
-         */
-        $('.fed_float_right').on('click', function (e) {
-            var click = $(this);
-            click.closest('.fed_add_new_tag_container').find('.fed_add_new_tag_text').removeClass('hide');
-            e.preventDefault();
-        });
-
-        $('.fed_add_new_tag_close').on('click', function (e) {
-            var click = $(this);
-            click.closest('.fed_add_new_tag_container').find('.fed_add_new_tag_text').addClass('hide');
-            e.preventDefault();
-        });
-
-        $('.fed_add_new_tag_add').on('click', function (e) {
-            var click = $(this);
-            var closest = click.closest('.fed_new_tag_ajax');
-            var fed_nonce = closest.find('input[name=fed_nonce]').val();
-            var term = closest.find('input[name=fed_new_post_tag]').val();
-            var taxonomy = closest.find('input[name=fed_post_type_slug]').val();
-            var id = closest.data('id');
-            var data = {'term': term, 'taxonomy': taxonomy, 'fed_nonce': fed_nonce};
-            var url = closest.data('action');
-            var method = 'post';
-            fed_toggle_loader();
-            $.ajax({
-                type: method,
-                data: data,
-                url: url,
-                success: function (results) {
-                    fed_toggle_loader();
-                    fedAlert.dashboardPostCommon(results);
-                    // Set the value, creating a new option if necessary
-                    if ($('#' + id).find("option[value='" + results.data.data.id + "']").length) {
-                        $('#' + id).val(results.data.data.id).trigger('change');
-                    } else {
-                        // Create a DOM Option and pre-select by default
-                        var newOption = new Option(results.data.data.text, results.data.data.id, true, true);
-                        // Append it to the select
-                        $('#' + id).append(newOption).trigger('change');
-                    }
-
-                    closest.find('input[name=fed_new_post_tag]').val('');
-                }
-            });
-            e.preventDefault();
-        });
-
 
         $('.fed_menu_slug ').on('click', function (e) {
             $(this).closest('.fed_menu_ul').toggleClass('in');

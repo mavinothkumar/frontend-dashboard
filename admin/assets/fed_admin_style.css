@@ -729,7 +729,7 @@ Loader
 .bc_fed .panel,
 .bc_fed .btn,
 .bc_fed .form-control {
-    border-radius: 0 !important;
+    border-radius: 0;
 }
 
 .bc_fed .panel-heading {
@@ -867,6 +867,9 @@ v1.3.2
     border: 1px solid #3f3f3f;
 }
 
+.bc_fed .fed_bg_red {
+    background: #ff2755 !important;
+}
 .bc_fed  ul#fed_dashboard_menu_sort,
 .bc_fed  #fed_dashboard_menu_sort ul,
 #fed_dashboard_menu_sort {

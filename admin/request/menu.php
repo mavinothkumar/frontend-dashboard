@@ -111,8 +111,8 @@ function fed_menu_sorting_items()
             $menu   = fed_menu_split($data['id']);
             $parent = isset($data['parentId']) ? fed_menu_split($data['parentId']) : 0;
 
-            if (in_array($menu[0], $default_menu_type) &&
-                    isset($menu[0], $menu[1]) &&
+            if (isset($menu[0], $menu[1]) &&
+                    in_array($menu[0], $default_menu_type) &&
                     ! empty($menu[0]) &&
                     ! empty($menu[1]) &&
                     ($parent === 0 || (isset($parent[0], $parent[1]) && ! empty($parent[0]) && ! empty($parent[1])))
@@ -121,7 +121,7 @@ function fed_menu_sorting_items()
                 $menus[$data['id']] = array(
                         'menu_id'     => $menu[1],
                         'menu_type'   => $menu[0],
-                        'parent_id'   => isset($parent[1]) ? $parent[1] : 0,
+                        'parent_id'   => isset($parent[1]) ? $parent[1] : null,
                         'parent_type' => isset($parent[0]) ? $parent[0] : null,
                         'order'       => $data['order'],
                 );
@@ -130,6 +130,8 @@ function fed_menu_sorting_items()
             }
         }
     }
+
+    FED_Log::writeLog($menus);
 
     update_option('fed_admin_menu_sort', $menus);
 

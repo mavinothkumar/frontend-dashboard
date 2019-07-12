@@ -37,6 +37,7 @@ if ( ! class_exists('FED_ActionHooks')) {
         public function fed_add_inline_css_at_head_color()
         {
             $fed_colors = get_option('fed_admin_setting_upl_color');
+
             if (false !== $fed_colors) {
                 $pbg_color      = $fed_colors['color']['fed_upl_color_bg_color'];
                 $pbg_font_color = $fed_colors['color']['fed_upl_color_bg_font_color'];

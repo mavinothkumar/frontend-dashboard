@@ -3,8 +3,8 @@ Contributors: vinoth06, buffercode
 Tags: dashboard, frontend dashboard, custom login, custom register, custom roles, custom profile, custom post type, custom taxonomies, custom dashboard
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7DHAEMST475BY
 Requires at least: 4.6
-Tested up to: 5.2.1
-Stable tag: 1.4.1
+Tested up to: 5.2.2
+Stable tag: 1.4.4
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -44,6 +44,8 @@ Frontend Dashboard is bundled with the huge list of custom features which can ea
 = Videos =
 
 For more video : [Frontend Dashboard](https://buffercode.com/category/name/frontend-dashboard)
+
+* [How to show custom post field in Frontend Post](https://buffercode.com/post/how-to-show-custom-post-field-in-frontend-post)
 
 * [How to Translate Frontend Dashboard](https://buffercode.com/post/how-to-translate-frontend-dashboard)
 
@@ -227,8 +229,17 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 6. [fed_user role=user_role] to generate the role based user page
 
 == Changelog ==
+= 1.4.4 [2-July-2019] =
+* Bug Fixed : Drag and drop sort menu
+
+= 1.4.3 [28-June-2019] =
+* Bug Fixed : Drag and drop sort menu
+
+= 1.4.2 [26-June-2019] =
+* Bug Fixed : Drag and drop sort menu
+
 = 1.4.1 [21-June-2019] =
-* Bug: Dashboard Menu selected highlight
+* Bug Fixed : Dashboard Menu selected highlight
 
 = 1.4 [20-June-2019] =
 
@@ -464,8 +475,8 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Upgrade Notice ==
 
-= 1.4.1 [21-June-2019] =
-* Bug: Dashboard Menu selected highlight
+= 1.4.4 [2-July-2019] =
+* Bug Fixed : Drag and drop sort menu
 
 == Screenshots ==
 1. Frontend Dashboard Settings | Login | Settings

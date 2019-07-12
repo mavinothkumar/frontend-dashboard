@@ -1821,7 +1821,7 @@ function fed_enable_file_uploads_by_role()
 {
     global $current_user;
     $user = get_userdata($current_user->ID);
-    $role = isset($user->roles[0]) ? $user->roles[0] : null;
+    $role = isset($user->roles) && is_array($user->roles) && count($user->roles) ? reset($user->roles) : null;
     if ($role) {
         $fed_admin_options = get_option('fed_admin_settings_user', array());
         if (isset($fed_admin_options['user']['upload_permission'])) {
@@ -2411,7 +2411,7 @@ function fed_get_current_user_role_key()
     if (is_user_logged_in()) {
         $user = get_userdata(get_current_user_id());
 
-        return $user ? $user->roles[0] : false;
+        return $user ? reset($user->roles) : false;
     }
 
     return false;
@@ -3353,6 +3353,12 @@ function fed_show_help_icons()
                         </div>
                     </a>
                 </div>
+                <div class="fed_sticky_item fed_bg_red">
+                    <a href="https://paypal.me/buffercode" target="_blank">
+                        <i class="fas fa-hand-holding-usd fa-2x"></i>
+                        <div class="fed_sticky_title">Donate</div>
+                    </a>
+                </div>
                 <div class="fed_sticky_item">
                     <a href="<?php menu_page_url('fed_help'); ?>">
                         <i class="fas fa-question-circle fa-2x"></i>
@@ -3385,6 +3391,7 @@ function fed_show_help_icons()
                         <div class="fed_sticky_title">Chat</div>
                     </a>
                 </div>
+
             </div>
         </div>
         <?php

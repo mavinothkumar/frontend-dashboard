@@ -298,3 +298,59 @@ function fed_get_menu_mobile_attributes()
 
     return $collapse;
 }
+
+/**
+ * @param $var
+ * @param  bool  $exit
+ */
+function bcdump($var, $exit = false)
+{
+    echo '<pre style="font-size:11px;">';
+
+    if (is_array($var) || is_object($var)) {
+        echo htmlentities(print_r($var, true));
+    } elseif (is_string($var)) {
+        echo "string(".strlen($var).") \"".htmlentities($var)."\"\n";
+    } else {
+        var_dump($var);
+    }
+
+    echo "\n</pre>";
+
+    if ($exit) {
+        exit;
+    }
+}
+
+
+/**
+ * @param $className
+ * @param  array  $arguments
+ *
+ * @return bool|mixed
+ */
+function fed_create_new_instance($className, array $arguments = array())
+{
+    if (class_exists($className)) {
+        try {
+            return call_user_func_array(array(
+                    new ReflectionClass($className), 'newInstance',
+            ),
+                    $arguments);
+        } catch (ReflectionException $e) {
+            wp_die('Class Name '.$className.' Doesnt exist');
+        }
+    }
+
+    wp_die('Class Name '.$className.' Doesnt exist');
+}
+
+/**
+ * @param $page_slug
+ *
+ * @return string|void
+ */
+function fed_menu_page_url($page_slug)
+{
+    return admin_url('/admin.php?page='.$page_slug);
+}

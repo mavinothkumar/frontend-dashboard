@@ -534,15 +534,6 @@ jQuery(document).ready(function ($) {
         placeholderCss: {'background-color': '#ff8'},
         hintCss: {'background-color': '#bbf'},
         onChange: function (cEl) {
-            console.log('onChange');
-        }, onDragStart: function (cEl) {
-            console.log(cEl);
-        },
-        complete: function (cEl) {
-            // console.log($('#fed_dashboard_menu_sort').sortableListsToHierarchy());
-            // console.log($('#fed_dashboard_menu_sort').sortableListsToArray());
-            // console.log($('#fed_dashboard_menu_sort').sortableListsToString());
-            // console.log(cEl.closest('#fed_dashboard_menu_sort').data('nonce'));
             fed_toggle_loader();
             $.ajax({
                 type: 'POST',
@@ -570,12 +561,12 @@ jQuery(document).ready(function ($) {
                     }
                 }
             });
-
-
+        }, onDragStart: function (cEl) {
+            console.log(cEl);
+        },
+        complete: function (cEl) {
         },
         isAllowed: function (cEl, hint, target) {
-            console.log(cEl.find('li').length);
-
             if (target.parents('li').length == 1 || cEl.find('li').length > 0) {
                 hint.css('background-color', '#ff9999');
                 swal({
