@@ -44,6 +44,8 @@ if ( ! class_exists('FED_Routes')) {
             $first_element_key = array_keys($menu);
             $first_element     = $first_element_key[0];
 
+//            FED_Log::writeLog([$first_element_key,$first_element]);
+
             if (count(array_diff($this->getDefaultMenuQuery(), array_keys($this->request))) !== 0) {
                 $menu_items = array(
                         'menu_request' => array(

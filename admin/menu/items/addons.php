@@ -79,43 +79,55 @@ function fed_get_plugin_pages_menu()
                         </div>
                         <div class="panel-body">
                             <div class="row">
-                                <?php foreach ($plugins->plugins as $single) { ?>
-                                    <div class="col-md-6 col-xs-12 col-sm-12">
-                                        <div class="panel panel-primary">
-                                            <div class="panel-heading">
-                                                <h3 class="panel-title">
-                                                    <?php echo $single->title; ?>
-                                                    <span class="pull-right">
-											<i class="fa fa-code-fork" aria-hidden="true"></i>
+                                <?php foreach ($plugins->plugins as $slug=>$single) {
+                                    if ($single->pricing->type === 'Free') {
+                                        $type = '<i class="fas fa-lock-open"></i>';
+                                        $bgColor = '';
+                                    } else {
+                                        $type = '<i class="fas fa-lock"></i>';
+                                        $bgColor = 'bg_pro_color';
+                                    }
+                                    ?>
+                                    <div class="col-md-12">
+                                        <div class="padd_5 margin_bottom_20 fed_border_2px fed_font_size_20">
+                                            <div class="row  <?php echo $bgColor; ?>">
+                                                <div class="col-md-1">
+                                                    <img class="img-responsive" width="100px"
+                                                         src="<?php echo $single->thumbnail; ?>"
+                                                         alt="">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="fed_addons_title fed_flex_space_between">
+                                                        <div class="fed_p_b_10">
+                                                            <?php echo $single->title; ?>
+                                                            <small>
+                                                                (
+                                                                v
                                                                 <?php
                                                                 if (is_plugin_active($single->directory)) {
                                                                     echo constant($single->id.'_VERSION');
                                                                 } else {
                                                                     echo $single->version;
                                                                 } ?>
-										</span>
-                                                </h3>
-                                            </div>
-                                            <div class="panel-body">
-                                                <div class="row">
-                                                    <div class="col-md-4">
-                                                        <img class="img-responsive"
-                                                             src="<?php echo $single->thumbnail; ?>"
-                                                             alt="">
+                                                                )
+                                                            </small>
+                                                        </div>
+                                                        <div class="">
+                                                            <div class="fed_p_l_10">
+                                                                <?php echo $type ?>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-md-8">
-                                                        <p class="fed_plugin_description">
+                                                    <div class="fed_addons_description">
+                                                        <p>
                                                             <?php echo wp_trim_words($single->description,
                                                                     100); ?>
                                                         </p>
-                                                        <div class="fed_plugin_link">
-                                                            <a href="<?php echo $single->download_url ?>">
-                                                                <button class="btn btn-warning">
-                                                                    <i class="fa fa-eye"
-                                                                       aria-hidden="true"></i>
-                                                                    View
-                                                                </button>
-                                                            </a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <div class="fed_plugin_link">
+                                                        <div class="fed_flex_space_between">
                                                             <?php
                                                             if (is_plugin_active($single->directory)) {
                                                                 ?>
@@ -149,17 +161,39 @@ function fed_get_plugin_pages_menu()
                                                                 <?php }
                                                                 if ($single->pricing->type === 'Pro') {
                                                                     ?>
-                                                                    <a href="#" class="btn btn-primary"
-                                                                       role="button">
-                                                                        <i class="fa fa-shopping-cart"
-                                                                           aria-hidden="true"></i>
-                                                                        <?php echo $single->pricing->currency.$single->pricing->amount; ?>
-                                                                    </a>
+                                                                    <?php
+                                                                    foreach ($single->pricing->amount as $amount) {
+                                                                        ?>
+                                                                        <form method="post"
+                                                                              action="<?php echo $single->pricing->purchase_url; ?>">
+                                                                            <input type='hidden' name='redirect_url' value="<?php echo fed_current_page_url(); ?>" />
+                                                                            <input type='hidden' name='domain' value="<?php echo fed_get_domain_name(); ?>" />
+                                                                            <input type='hidden' name='contact_email' value="<?php echo fed_get_admin_email(); ?>" />
+                                                                            <input type='hidden' name='plugin_name' value='<?php echo $slug; ?>' />
+                                                                            <input type='hidden' name='amount' value='<?php echo $amount->amount; ?>' />
+                                                                            <input type='hidden' name='plan_type' value='lifetime' />
+                                                                            <button type="submit"
+                                                                                    class="btn btn-primary">
+                                                                                <i class="fa fa-shopping-cart"
+                                                                                   aria-hidden="true"></i>
+                                                                                <?php echo 'Buy '.$amount->name.' '.$single->pricing->currency.$amount->amount; ?>
+                                                                            </button>
+                                                                        </form>
+                                                                        <?php
+                                                                    }
+                                                                    ?>
                                                                     <?php
                                                                 }
 
                                                             }
                                                             ?>
+                                                            <a href="<?php echo $single->download_url ?>">
+                                                                <button class="btn btn-warning">
+                                                                    <i class="fa fa-eye"
+                                                                       aria-hidden="true"></i>
+                                                                    View
+                                                                </button>
+                                                            </a>
                                                         </div>
                                                     </div>
                                                 </div>

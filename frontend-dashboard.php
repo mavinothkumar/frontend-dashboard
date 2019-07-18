@@ -2,14 +2,14 @@
 /**
  * Plugin Name: Frontend Dashboard
  * Plugin URI: https://buffercode.com/plugin/frontend-dashboard
- * Description: Front end dashboard provide high flexible way to customize the user dashboard on front end rather than WordPress wp-admin dashboard.
- * Version: 1.4.4
+ * Description: Frontend dashboard makes you flexible way to customize the user dashboard on frontend rather than WordPress wp-admin dashboard.
+ * Version: 1.4.6
  * Author: vinoth06
  * Author URI: https://buffercode.com/
  * License: GPLv2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: frontend-dashboard Domain
- * Path: /languages
+ * Text Domain: frontend-dashboard
+ * Domain Path: /languages
  */
 
 if ( ! defined('ABSPATH')) {
@@ -20,7 +20,7 @@ if ( ! defined('ABSPATH')) {
 /**
  * Version Number
  */
-define('BC_FED_PLUGIN_VERSION', '1.4.4');
+define('BC_FED_PLUGIN_VERSION', '1.4.6');
 define('BC_FED_PLUGIN_VERSION_TYPE', 'FREE');
 
 /**

@@ -31,6 +31,10 @@
     padding: 0 !important;
 }
 
+.fed_border_2px {
+    border: 2px solid #033333;
+}
+
 .bc_fed .fed_no_m {
     margin: 0 !important;
 }
@@ -126,6 +130,21 @@
 
 .fed_p_l_20 {
     padding-left: 20px !important;
+}
+.fed_p_l_10 {
+    padding-left: 10px !important;
+}
+.fed_p_b_10{
+    padding-bottom: 10px !important;
+}
+.fed_sticky_item.fed_bg_addons {
+    background: #0AAAAA;
+}
+.fed_font_size_20 {
+    font-size: 20px;
+}
+.fed_m_l_10 {
+    margin-left: 10px !important;
 }
 .fed_show_cursor {
     cursor: pointer !important;

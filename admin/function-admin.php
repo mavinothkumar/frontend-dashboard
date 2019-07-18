@@ -3359,6 +3359,12 @@ function fed_show_help_icons()
                         <div class="fed_sticky_title">Donate</div>
                     </a>
                 </div>
+                <div class="fed_sticky_item fed_bg_addons">
+                    <a href="<?php menu_page_url('fed_plugin_pages'); ?>">
+                        <i class="fas fa-puzzle-piece fa-2x"></i>
+                        <div class="fed_sticky_title">Addons</div>
+                    </a>
+                </div>
                 <div class="fed_sticky_item">
                     <a href="<?php menu_page_url('fed_help'); ?>">
                         <i class="fas fa-question-circle fa-2x"></i>
@@ -3439,6 +3445,23 @@ function fed_search_index_from_array_recursively($array, $index, $submenu = 'sub
     return false;
 }
 
+/**
+ * @return mixed
+ */
+function fed_get_domain_name()
+{
+    $url = parse_url(home_url());
+
+    return $url['host'];
+}
+
+/**
+ * @return mixed|void
+ */
+function fed_get_admin_email()
+{
+    return get_option('admin_email');
+}
 /**
  * The below code tested to check input tag works in Custom Label.
  */

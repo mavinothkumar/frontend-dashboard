@@ -4,7 +4,7 @@ Tags: dashboard, frontend dashboard, custom login, custom register, custom roles
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7DHAEMST475BY
 Requires at least: 4.6
 Tested up to: 5.2.2
-Stable tag: 1.4.4
+Stable tag: 1.4.6
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -33,6 +33,7 @@ Frontend Dashboard is bundled with the huge list of custom features which can ea
 18. Customize templates.
 
 = Frontend Dashboard Plugins List =
+* [Frontend Dashboard Social Connect (Pro) ](https://buffercode.com/plugin/frontend-dashboard-social-connect)
 * [Frontend Dashboard Membership (Beta) ](https://buffercode.com/plugin/frontend-dashboard-membership)
 * [Frontend Dashboard Payment (Beta) ](https://buffercode.com/plugin/frontend-dashboard-payment)
 * [Frontend Dashboard Pages](https://buffercode.com/plugin/frontend-dashboard-pages)
@@ -229,6 +230,13 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 6. [fed_user role=user_role] to generate the role based user page
 
 == Changelog ==
+= 1.4.6 [18-July-2019] =
+* Bug Fixed : Menu
+* Releasing Frontend Dashboard Social Connect
+
+= 1.4.5 [16-July-2019] =
+* Bug Fixed
+
 = 1.4.4 [2-July-2019] =
 * Bug Fixed : Drag and drop sort menu
 
@@ -475,8 +483,9 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Upgrade Notice ==
 
-= 1.4.4 [2-July-2019] =
-* Bug Fixed : Drag and drop sort menu
+= 1.4.6 [18-July-2019] =
+* Bug Fixed : Menu
+* Releasing Frontend Dashboard Social Connect
 
 == Screenshots ==
 1. Frontend Dashboard Settings | Login | Settings

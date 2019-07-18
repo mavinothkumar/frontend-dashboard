@@ -6,7 +6,7 @@
  * @return bool|false|string
  */
 function fed_get_login_url() {
-	$fed_admin_options = get_option( 'fed_admin_login', false );
+	$fed_admin_options = get_option( 'fed_admin_login');
 	if ( $fed_admin_options && isset( $fed_admin_options['settings']['fed_login_url'] ) && $fed_admin_options['settings']['fed_login_url'] != '' ) {
 		return get_permalink( $fed_admin_options['settings']['fed_login_url'] );
 	}
@@ -19,7 +19,7 @@ function fed_get_login_url() {
  * Get Registration URL
  */
 function fed_get_registration_url() {
-	$fed_admin_options = get_option( 'fed_admin_login', false );
+	$fed_admin_options = get_option( 'fed_admin_login');
 	if ( $fed_admin_options && isset( $fed_admin_options['settings']['fed_register_url'] ) && $fed_admin_options['settings']['fed_register_url'] != '' ) {
 		return get_permalink( $fed_admin_options['settings']['fed_register_url'] );
 	}
@@ -32,7 +32,7 @@ function fed_get_registration_url() {
  * @return bool|false|string
  */
 function fed_get_forgot_password_url() {
-	$fed_admin_options = get_option( 'fed_admin_login', false );
+	$fed_admin_options = get_option( 'fed_admin_login' );
 	if ( $fed_admin_options && isset( $fed_admin_options['settings']['fed_forgot_password_url'] ) && $fed_admin_options['settings']['fed_forgot_password_url'] != '' ) {
 		return get_permalink( $fed_admin_options['settings']['fed_forgot_password_url'] );
 	}

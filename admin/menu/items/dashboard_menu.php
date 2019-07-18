@@ -436,10 +436,25 @@ function fed_get_dashboard_menu_items_sort_data()
                         $new_menus[$sort_menu['parent_type'].'_'.$sort_menu['parent_id']]['submenu'][$sort_index]          = $menu;
                         $new_menus[$sort_menu['parent_type'].'_'.$sort_menu['parent_id']]['submenu'][$sort_index]['order'] = $sort_menu['order'];
                     }
+
+                    if ($menu['menu_type'] === 'user' || $menu['menu_type'] === 'custom') {
+                        unset($menus[$menu['menu_slug']]);
+                    } else {
+                        unset($menus[$menu['id']]);
+                    }
+
                     break;
                 }
             }
 
+        }
+
+        /**
+         * New added menu after the sorting saved
+         */
+        foreach ($menus as $m => $missing_menu) {
+            $new_menus[$missing_menu['menu_type'].'_'.$missing_menu['id']]          = $missing_menu;
+            $new_menus[$missing_menu['menu_type'].'_'.$missing_menu['id']]['order'] = mt_rand(99,999);
         }
     } else {
         $new_menus = $menus;

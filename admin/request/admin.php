@@ -183,25 +183,31 @@ function fed_admin_setting_form_dashboard_menu_function()
 
         if ($is_ID instanceof WP_Error) {
             wp_send_json_error(array('message' => $is_ID->get_error_message('fed_no_row_found_on_that_id')));
-            exit();
         }
 
+        /**
+         * Check deleting item is parent item in Sub Menu
+         */
 
-        $delete_profile_field = fed_delete_table_rows_on_condition(BC_FED_USER_PROFILE_DB, 'menu', $is_ID['menu_slug']);
+        $check_menu = fed_get_dashboard_menu_items_sort_data();
+
+        if (isset($check_menu['user_'.$is_ID['id']]) && isset($check_menu['user_'.$is_ID['id']]['submenu'])) {
+            wp_send_json_error(array('message' => __('You are trying to delete a menu, which has Sub Menu(s), Please delete or move it to different Menu')));
+        }
+
+        fed_delete_table_rows_on_condition(BC_FED_USER_PROFILE_DB, 'menu', $is_ID['menu_slug']);
         $is_delete            = fed_delete_table_row_by_id(BC_FED_MENU_DB, $post_id);
 
-        if ('success' === $is_delete && 'success' === $delete_profile_field) {
+        if ('success' === $is_delete) {
             wp_send_json_success(array(
                     'message' => $post['fed_menu_name'].' has been successfully deleted',
                     'reload'  => admin_url().'admin.php?page=fed_dashboard_menu',
             ));
-            exit();
         }
 
         wp_send_json_success(array(
                 'message' => 'Something went wrong, please try again or report us',
         ));
-        exit();
     }
 
 
