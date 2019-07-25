@@ -90,7 +90,7 @@ do_action('fed_before_login_form');
                                     <?php
                                 }
                                 ?>
-                                <div class="row">
+                                <div class="form-group">
                                     <div class="text-center">
                                         <input type="hidden"
                                                name="submit"

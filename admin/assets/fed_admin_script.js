@@ -480,8 +480,10 @@ jQuery(document).ready(function ($) {
         selector: '[data-toggle="popover"]',
         trigger: 'focus'
     });
-    $(".flatpickr").flatpickr({});
 
+    if ($(".flatpickr").length) {
+        $(".flatpickr").flatpickr({});
+    }
     /**
      * Initial Setup
      */

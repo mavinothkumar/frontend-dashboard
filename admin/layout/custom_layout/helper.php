@@ -24,7 +24,8 @@ function fed_common_simple_layout( $form ) {
 	if ( isset( $form['form']['action'] ) && is_array( $form['form']['action'] ) ) {
 		$url         = isset( $form['form']['action']['url'] ) && ! empty( $form['form']['action']['url'] ) ? esc_url( $form['form']['action']['url'] ) : admin_url(
 			'admin-ajax.php' );
-		$form_action = isset( $form['form']['action']['action'] ) && ! empty( $form['form']['action']['action'] ) ? $url . '?action=' . esc_attr( $form['form']['action']['action'] ) : $url;
+		$parameters = isset( $form['form']['action']['parameters']) && is_array($form['form']['action']['parameters']) ? http_build_query( $form['form']['action']['parameters'] ) : '';
+		$form_action = isset( $form['form']['action']['action'] ) && ! empty( $form['form']['action']['action'] ) ? $url . '?action=' . esc_attr( $form['form']['action']['action'] ).'&'. $parameters : $url;
 
 	} else {
 		$form_action = admin_url( 'admin-ajax.php?action=fed_admin_setting_form' );

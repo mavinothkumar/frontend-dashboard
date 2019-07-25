@@ -814,6 +814,13 @@ Pricing
 .bc_fed .m-t-5 {
     margin-top: 5px !important;
 }
+
+.bc_fed .m-b-10{
+    margin-bottom: 10px !important;
+}
+.bc_fed .m-b-5{
+    margin-bottom: 5px !important;
+}
 .fed_bg_gray{
     background: gray !important;
     opacity: 0.7 !important;
@@ -836,6 +843,9 @@ Pricing
 .bc_fed .padding {
     padding: 20px !important;
 }
+.bc_fed .p-10 {
+    padding: 10px !important;
+}
 
 .bc_fed .p-t-b-20 {
     padding: 20px 0 !important;
@@ -850,6 +860,7 @@ Pricing
 .bc_fed .pagination:before, .bc_fed .pagination:after {
     content: none;
 }
+
 
 
 

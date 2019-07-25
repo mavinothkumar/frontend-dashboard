@@ -2385,7 +2385,7 @@ function fed_get_currency_type_key_value()
     $currency  = fed_currency_type();
     $key_value = array();
     foreach ($currency as $index => $item) {
-        $key_value[$index] = $item['name'].'-'.$item['hex'];
+        $key_value[$index] = '('.$index.')' . $item['name'].'-'.$item['hex'];
     }
 
     return $key_value;
@@ -3040,6 +3040,27 @@ function fed_call_function_method($item)
             ?>
         </div>
         <?php
+    }
+}
+
+/**
+ * @param $item
+ */
+function fed_ajax_call_function_method($item)
+{
+    if (is_string($item['callable']) && function_exists($item['callable'])) {
+        $parameter = isset($item['arguments']) ? $item['arguments'] : '';
+        call_user_func($item['callable'], $parameter);
+    } elseif (is_array($item['callable']) && method_exists($item['callable']['object'], $item['callable']['method'])) {
+        $parameter = isset($item['arguments']) ? $item['arguments'] : '';
+        call_user_func(array($item['callable']['object'], $item['callable']['method']), $parameter);
+    } else {
+        $error = is_array($item['callable']) ? $item['callable']['method'] : $item['callable'];
+
+        wp_send_json_error(array(
+                'message' => __('OOPS! You have not add the callable function, please add ',
+                                'frontend-dashboard').$error.__('to show the body container', 'frontend-dashboard'),
+        ));
     }
 }
 

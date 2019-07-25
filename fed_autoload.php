@@ -130,6 +130,7 @@ require_once BC_FED_PLUGIN_DIR.'/admin/layout/custom_layout/helper.php';
 require_once BC_FED_PLUGIN_DIR.'/config/config.php';
 
 require_once BC_FED_PLUGIN_DIR.'/route/FED_Routes.php';
+require_once BC_FED_PLUGIN_DIR.'/route/FED_Requests.php';
 
 require_once BC_FED_PLUGIN_DIR.'/admin/hooks/FED_ActionHooks.php';
 
