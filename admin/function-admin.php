@@ -2385,7 +2385,7 @@ function fed_get_currency_type_key_value()
     $currency  = fed_currency_type();
     $key_value = array();
     foreach ($currency as $index => $item) {
-        $key_value[$index] = '('.$index.')' . $item['name'].'-'.$item['hex'];
+        $key_value[$index] = '('.$index.')'.$item['name'].'-'.$item['hex'];
     }
 
     return $key_value;
@@ -3062,6 +3062,25 @@ function fed_ajax_call_function_method($item)
                                 'frontend-dashboard').$error.__('to show the body container', 'frontend-dashboard'),
         ));
     }
+}
+
+/**
+ * @param $item
+ * @param  null  $parameter
+ */
+function fed_execute_method_by_string($item, $parameter = null)
+{
+    $class = explode('@', $item);
+    if (is_array($class) && isset($class[0])) {
+        fed_call_function_method(array(
+                'callable'  => array(
+                        'object' => new $class[0],
+                        'method' => isset($class[1]) ? $class[1] : 'update',
+                ),
+                'arguments' => $parameter,
+        ));
+    }
+
 }
 
 /**

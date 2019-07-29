@@ -348,9 +348,15 @@ function fed_create_new_instance($className, array $arguments = array())
 /**
  * @param $page_slug
  *
+ * @param  string  $parameters
+ *
  * @return string|void
  */
-function fed_menu_page_url($page_slug)
+function fed_menu_page_url($page_slug, $parameters = null)
 {
+    if (is_array($parameters) && count($parameters)) {
+        return admin_url('/admin.php?page='.$page_slug).'&'.http_build_query($parameters);
+    }
+
     return admin_url('/admin.php?page='.$page_slug);
 }

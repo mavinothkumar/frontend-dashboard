@@ -33,9 +33,7 @@ jQuery(document).ready(function ($) {
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes, Please'
         }).then(function (result) {
-            console.log(result);
             if (result) {
-                console.log('op');
                 click.closest('form').submit();
             }
         }, function (dismiss) {

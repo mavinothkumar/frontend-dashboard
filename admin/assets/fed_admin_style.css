@@ -870,6 +870,10 @@ v1.3.2
     border: 1px solid #3f3f3f;
 }
 
+.bc_fed .fed_flex_1 {
+    flex: 1 !important;
+}
+
 .bc_fed .fed_bg_red {
     background: #ff2755 !important;
 }

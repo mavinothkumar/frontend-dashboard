@@ -96,6 +96,7 @@ body {
     color: #0AAAAA;
     font-weight: bolder;
 }
+
 .bc_fed .panel-body {
     background: #f3f3f3;
 }
@@ -103,6 +104,7 @@ body {
 .bc_fed a:focus {
     outline: none !important;
 }
+
 .bc_fed #fedLoginCaptcha, #fedRegisterCaptcha {
     transform: scale(0.9);
     -webkit-transform: scale(0.9);
@@ -243,6 +245,10 @@ body {
     font-size: 14px;
 }
 
+.bc_fed .fed_flex_1 {
+    flex: 1 !important;
+}
+
 .bc_fed .fed_qa_chat_area_container {
     max-height: 550px;
     overflow-y: auto;
@@ -364,6 +370,7 @@ body {
 .bc_fed .fed_menu_slug .dashicons {
     padding-right: 10px;
 }
+
 .bc_fed .fed_menu_slug .dashicons {
     width: inherit;
 }
@@ -789,42 +796,51 @@ Pricing
     display: flex;
     justify-content: space-between;
 }
+
 .bc_fed .flex {
     display: flex;
 }
+
 .bc_fed .flex_center {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.bc_fed .fed_collapse_menu{
+.bc_fed .fed_collapse_menu {
     cursor: pointer;
 }
-.bc_fed .fed_dashboard_menus.fed_collapse .fed_menu_title{
+
+.bc_fed .fed_dashboard_menus.fed_collapse .fed_menu_title {
     display: none;
 }
+
 .bc_fed .fed_menu_title,
-.bc_fed .fed_menu_icon{
+.bc_fed .fed_menu_icon {
     color: #ffffff;
 }
+
 .bc_fed .m-t-10 {
     margin-top: 10px !important;
 }
+
 .bc_fed .m-t-5 {
     margin-top: 5px !important;
 }
 
-.bc_fed .m-b-10{
+.bc_fed .m-b-10 {
     margin-bottom: 10px !important;
 }
-.bc_fed .m-b-5{
+
+.bc_fed .m-b-5 {
     margin-bottom: 5px !important;
 }
-.fed_bg_gray{
+
+.fed_bg_gray {
     background: gray !important;
     opacity: 0.7 !important;
 }
+
 .bc_fed .p-b-20 {
     padding-bottom: 20px !important;
 }
@@ -836,6 +852,7 @@ Pricing
 .bc_fed .p-t-10 {
     padding-top: 10px !important;
 }
+
 .bc_fed .p-t-20 {
     padding-top: 20px !important;
 }
@@ -843,6 +860,7 @@ Pricing
 .bc_fed .padding {
     padding: 20px !important;
 }
+
 .bc_fed .p-10 {
     padding: 10px !important;
 }
@@ -850,19 +868,19 @@ Pricing
 .bc_fed .p-t-b-20 {
     padding: 20px 0 !important;
 }
+
 .bc_fed .fed_upload_image_container img {
     height: inherit;
 }
+
 .bc_fed .fed_menu_slug a:focus {
     outline: none;
     text-decoration: none;
 }
+
 .bc_fed .pagination:before, .bc_fed .pagination:after {
     content: none;
 }
-
-
-
 
 
 /*@media screen and (min-width: 768px) {*/

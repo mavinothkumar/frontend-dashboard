@@ -9,14 +9,18 @@
  *
  * @param  string  $table  Table Name
  *
+ * @param  null  $order
+ *
  * @return array|WP_Error
  */
-function fed_fetch_rows_by_table($table)
+function fed_fetch_rows_by_table($table, $order = null)
 {
     global $wpdb;
     $table_name = $wpdb->prefix.$table;
 
-    return $wpdb->get_results("SELECT * FROM $table_name", ARRAY_A);
+    $order = $order ? 'ORDER BY id '.$order : '';
+
+    return $wpdb->get_results("SELECT * FROM $table_name $order", ARRAY_A);
 }
 
 /**
@@ -34,7 +38,7 @@ function fed_fetch_table_row_by_id($table, $id)
 
     $result = $wpdb->get_row("SELECT * FROM $table_name WHERE id = $id", ARRAY_A);
 
-    if (count($result) <= 0) {
+    if ((is_array($result) && count($result) <= 0) || ! $result) {
         return new WP_Error('fed_no_row_found_on_that_id', 'There is no row associated with that ID');
     }
 
