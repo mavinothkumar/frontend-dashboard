@@ -131,18 +131,23 @@
 .fed_p_l_20 {
     padding-left: 20px !important;
 }
+
 .fed_p_l_10 {
     padding-left: 10px !important;
 }
-.fed_p_b_10{
+
+.fed_p_b_10 {
     padding-bottom: 10px !important;
 }
+
 .fed_sticky_item.fed_bg_addons {
     background: #0AAAAA;
 }
+
 .fed_font_size_20 {
     font-size: 20px;
 }
+
 .fed_m_l_10 {
     margin-left: 10px !important;
 }
@@ -187,10 +192,12 @@
 .fed_display_inline div {
     display: inline;
 }
+
 .fed_flex_left {
     display: flex;
     justify-content: left;
 }
+
 .bc_fed .fed_frontend_dashboard_menu .panel {
     margin-bottom: 1px;
 }

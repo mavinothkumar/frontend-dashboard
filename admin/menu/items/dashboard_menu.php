@@ -15,7 +15,7 @@ function fed_get_dashboard_menu_items()
                             <h3 class="panel-title">
                                 <b><?php _e('Sort Dashboard Menu', 'frontend-dashboard') ?></b>
                                 <a href="<?php menu_page_url('fed_dashboard_menu') ?>"
-                                   class="btn btn-secondary fed_btn_padd_5 fed_float_right">
+                                   class="btn btn-secondary fed_btn_padd_5 pull-right">
                                     <i class="fas fa-undo-alt"></i> <?php _e('Back', 'frontend-dashboard') ?>
 
                                 </a>
@@ -197,8 +197,8 @@ function fed_get_dashboard_menu_items_list($menus, $user_roles)
                 <div class="panel-heading">
                     <h3 class="panel-title">
                         <b><?php _e('Menu Lists', 'frontend-dashboard') ?></b>
-                        <a href="<?php echo menu_page_url('fed_dashboard_menu', false).'&sort=yes' ?>"
-                           class="btn btn-secondary fed_btn_padd_5 fed_float_right">
+                        <a href="<?php echo fed_menu_page_url('fed_dashboard_menu',array('sort'=>'yes')) ?>"
+                           class="btn btn-secondary fed_btn_padd_5 pull-right">
                             <i class="fas fa-sort-amount-up"></i>
                             <?php _e('Sort Menu', 'frontend-dashboard') ?>
                         </a>

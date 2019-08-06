@@ -145,6 +145,7 @@ if ( ! class_exists('FED_ActionHooks')) {
                 </style>
 
                 <?php
+                do_action('fed_head_css');
             }
         }
 
