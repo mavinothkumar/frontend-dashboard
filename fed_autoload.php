@@ -137,3 +137,6 @@ require_once BC_FED_PLUGIN_DIR.'/admin/hooks/FED_ActionHooks.php';
 require_once BC_FED_PLUGIN_DIR.'/log/FED_Log.php';
 
 require_once BC_FED_PLUGIN_DIR.'/admin/validation/FED_Validation.php';
+
+
+require_once BC_FED_PLUGIN_DIR.'/admin/pro/plugins/FEDSCPRO.php';

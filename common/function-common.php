@@ -360,3 +360,52 @@ function fed_menu_page_url($page_slug, $parameters = null)
 
     return admin_url('/admin.php?page='.$page_slug);
 }
+
+/**
+ * @param $string
+ *
+ * @return bool|string
+ */
+function fed_encrypt($string)
+{
+    $secret_key = wp_create_nonce();
+    $secret_iv  = fed_generate_secret();
+
+    $encrypt_method = "AES-128-CBC";
+    $key            = hash('sha256', $secret_key);
+    $iv             = substr(hash('sha256', $secret_iv), 0, 16);
+
+
+    return base64_encode(openssl_encrypt($string, $encrypt_method, $key, 0, $iv));
+
+}
+
+/**
+ * @param $string
+ *
+ * @return string
+ */
+function fed_decrypt($string)
+{
+    $secret_key = wp_create_nonce();
+    $secret_iv  = fed_generate_secret();
+
+    $encrypt_method = "AES-128-CBC";
+    $key            = hash('sha256', $secret_key);
+    $iv             = substr(hash('sha256', $secret_iv), 0, 16);
+
+    return openssl_decrypt(base64_decode($string), $encrypt_method, $key, 0, $iv);
+}
+
+/**
+ * @return mixed|string
+ */
+function fed_generate_secret()
+{
+    if (isset($_SESSION['fed_secret']) && ! empty($_SESSION['fed_secret'])) {
+        return $_SESSION['fed_secret'];
+    }
+    $_SESSION['fed_secret'] = fed_get_random_string(5);
+
+    return $_SESSION['fed_secret'];
+}
