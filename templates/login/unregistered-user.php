@@ -3,7 +3,6 @@
  * Logged in User form
  */
 
-
 $details = fed_login_form();
 do_action('fed_before_login_form');
 ?>

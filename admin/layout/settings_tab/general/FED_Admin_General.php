@@ -160,7 +160,7 @@ if ( ! class_exists('FED_Admin_General')) {
                                     'src'          => plugins_url('/common/assets/js/sweetalert2.js', BC_FED_PLUGIN),
                                     'dependencies' => array(),
                                     'version'      => false,
-                                    'in_footer'    => false,
+                                    'in_footer'    => true,
                             ),
                             'fed_fontawesome'       => array(
                                     'wp_core'      => false,
@@ -169,7 +169,7 @@ if ( ! class_exists('FED_Admin_General')) {
                                     'src'          => plugins_url('/common/assets/js/fontawesome.js', BC_FED_PLUGIN),
                                     'dependencies' => array(),
                                     'version'      => false,
-                                    'in_footer'    => false,
+                                    'in_footer'    => true,
                             ),
                             'fed_fontawesome-shims' => array(
                                     'wp_core'      => false,
@@ -179,7 +179,7 @@ if ( ! class_exists('FED_Admin_General')) {
                                             BC_FED_PLUGIN),
                                     'dependencies' => array(),
                                     'version'      => false,
-                                    'in_footer'    => false,
+                                    'in_footer'    => true,
                             ),
                             'fed_admin_script'      => array(
                                     'wp_core'      => false,
@@ -188,7 +188,7 @@ if ( ! class_exists('FED_Admin_General')) {
                                     'src'          => plugins_url('/admin/assets/fed_admin_script.js', BC_FED_PLUGIN),
                                     'dependencies' => array(),
                                     'version'      => false,
-                                    'in_footer'    => false,
+                                    'in_footer'    => true,
                             ),
                             'fed_bootstrap_script'  => array(
                                     'wp_core'      => false,
@@ -197,7 +197,7 @@ if ( ! class_exists('FED_Admin_General')) {
                                     'src'          => plugins_url('/common/assets/js/bootstrap.js', BC_FED_PLUGIN),
                                     'dependencies' => array(),
                                     'version'      => false,
-                                    'in_footer'    => false,
+                                    'in_footer'    => true,
                             ),
                             'fed_jscolor_script'    => array(
                                     'wp_core'      => false,
@@ -206,7 +206,7 @@ if ( ! class_exists('FED_Admin_General')) {
                                     'src'          => plugins_url('/common/assets/js/jscolor.js', BC_FED_PLUGIN),
                                     'dependencies' => array(),
                                     'version'      => false,
-                                    'in_footer'    => false,
+                                    'in_footer'    => true,
                             ),
                             'fed_select2_script'    => array(
                                     'wp_core'      => false,
@@ -215,7 +215,7 @@ if ( ! class_exists('FED_Admin_General')) {
                                     'src'          => plugins_url('/common/assets/js/select2.js', BC_FED_PLUGIN),
                                     'dependencies' => array(),
                                     'version'      => false,
-                                    'in_footer'    => false,
+                                    'in_footer'    => true,
                             ),
                             'fed_flatpickr'         => array(
                                     'wp_core'      => false,
@@ -224,7 +224,7 @@ if ( ! class_exists('FED_Admin_General')) {
                                     'src'          => plugins_url('/common/assets/js/flatpickr.js', BC_FED_PLUGIN),
                                     'dependencies' => array(),
                                     'version'      => false,
-                                    'in_footer'    => false,
+                                    'in_footer'    => true,
                             ),
                     ),
                     'styles'  => array(
@@ -425,7 +425,7 @@ if ( ! class_exists('FED_Admin_General')) {
                                     'src'          => plugins_url('/common/assets/js/sweetalert2.js', BC_FED_PLUGIN),
                                     'dependencies' => array(),
                                     'version'      => false,
-                                    'in_footer'    => false,
+                                    'in_footer'    => true,
                             ),
                             'fed_fontawesome'       => array(
                                     'wp_core'      => false,
@@ -434,7 +434,7 @@ if ( ! class_exists('FED_Admin_General')) {
                                     'src'          => plugins_url('/common/assets/js/fontawesome.js', BC_FED_PLUGIN),
                                     'dependencies' => array(),
                                     'version'      => false,
-                                    'in_footer'    => false,
+                                    'in_footer'    => true,
                             ),
                             'fed_fontawesome-shims' => array(
                                     'wp_core'      => false,
@@ -444,7 +444,7 @@ if ( ! class_exists('FED_Admin_General')) {
                                             BC_FED_PLUGIN),
                                     'dependencies' => array(),
                                     'version'      => false,
-                                    'in_footer'    => false,
+                                    'in_footer'    => true,
                             ),
                             'fed_script'            => array(
                                     'wp_core'      => false,
@@ -453,7 +453,7 @@ if ( ! class_exists('FED_Admin_General')) {
                                     'src'          => plugins_url('/common/assets/js/fed_script.js', BC_FED_PLUGIN),
                                     'dependencies' => array('jquery'),
                                     'version'      => false,
-                                    'in_footer'    => false,
+                                    'in_footer'    => true,
                             ),
                             'fed_bootstrap_script'  => array(
                                     'wp_core'      => false,
@@ -462,7 +462,7 @@ if ( ! class_exists('FED_Admin_General')) {
                                     'src'          => plugins_url('/common/assets/js/bootstrap.js', BC_FED_PLUGIN),
                                     'dependencies' => array(),
                                     'version'      => false,
-                                    'in_footer'    => false,
+                                    'in_footer'    => true,
                             ),
                             'fed_jscolor_script'    => array(
                                     'wp_core'      => false,
@@ -471,7 +471,7 @@ if ( ! class_exists('FED_Admin_General')) {
                                     'src'          => plugins_url('/common/assets/js/jscolor.js', BC_FED_PLUGIN),
                                     'dependencies' => array(),
                                     'version'      => false,
-                                    'in_footer'    => false,
+                                    'in_footer'    => true,
                             ),
                             'fed_select2_script'    => array(
                                     'wp_core'      => false,
@@ -480,7 +480,7 @@ if ( ! class_exists('FED_Admin_General')) {
                                     'src'          => plugins_url('/common/assets/js/select2.js', BC_FED_PLUGIN),
                                     'dependencies' => array(),
                                     'version'      => false,
-                                    'in_footer'    => false,
+                                    'in_footer'    => true,
                             ),
                             'fed_flatpickr'         => array(
                                     'wp_core'      => false,
@@ -489,7 +489,7 @@ if ( ! class_exists('FED_Admin_General')) {
                                     'src'          => plugins_url('/common/assets/js/flatpickr.js', BC_FED_PLUGIN),
                                     'dependencies' => array(),
                                     'version'      => false,
-                                    'in_footer'    => false,
+                                    'in_footer'    => true,
                             ),
                     ),
                     'styles'  => array(
