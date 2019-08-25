@@ -223,7 +223,7 @@ if ( ! class_exists('FED_Validation')) {
         }
 
         /**
-         * Dimensione massima del file
+         * Max Size
          *
          * @param  int  $size
          *
@@ -242,7 +242,7 @@ if ( ! class_exists('FED_Validation')) {
         }
 
         /**
-         * Estensione (formato) del file
+         * Ext
          *
          * @param  string  $extension
          *
@@ -262,7 +262,7 @@ if ( ! class_exists('FED_Validation')) {
         }
 
         /**
-         * Campi validati
+         * Is Success
          *
          * @return boolean
          */
@@ -274,7 +274,7 @@ if ( ! class_exists('FED_Validation')) {
         }
 
         /**
-         * Errori della validazione
+         * Get Errors
          *
          * @return array $this->errors
          */
@@ -286,7 +286,7 @@ if ( ! class_exists('FED_Validation')) {
         }
 
         /**
-         * Visualizza errori in formato Html
+         * Display Errors
          *
          * @return string $html
          */
@@ -304,9 +304,9 @@ if ( ! class_exists('FED_Validation')) {
         }
 
         /**
-         * Visualizza risultato della validazione
+         * Result
          *
-         * @return booelan|string
+         * @return bool|string
          */
         public function result()
         {
@@ -325,8 +325,8 @@ if ( ! class_exists('FED_Validation')) {
         }
 
         /**
-         * Verifica se il valore è
-         * un numero intero
+         * Is Int
+         *
          *
          * @param  mixed  $value
          *
@@ -340,8 +340,8 @@ if ( ! class_exists('FED_Validation')) {
         }
 
         /**
-         * Verifica se il valore è
-         * un numero float
+         * Is Float
+         *
          *
          * @param  mixed  $value
          *
@@ -355,8 +355,8 @@ if ( ! class_exists('FED_Validation')) {
         }
 
         /**
-         * Verifica se il valore è
-         * una lettera dell'alfabeto
+         * Is Float
+         *
          *
          * @param  mixed  $value
          *
@@ -370,8 +370,8 @@ if ( ! class_exists('FED_Validation')) {
         }
 
         /**
-         * Verifica se il valore è
-         * una lettera o un numero
+         * Is Alpa Numeric
+         *
          *
          * @param  mixed  $value
          *
@@ -385,8 +385,8 @@ if ( ! class_exists('FED_Validation')) {
         }
 
         /**
-         * Verifica se il valore è
-         * un url
+         * Is URL
+         *
          *
          * @param  mixed  $value
          *
@@ -400,8 +400,8 @@ if ( ! class_exists('FED_Validation')) {
         }
 
         /**
-         * Verifica se il valore è
-         * un uri
+         * Is URI
+         *
          *
          * @param  mixed  $value
          *
@@ -416,8 +416,8 @@ if ( ! class_exists('FED_Validation')) {
         }
 
         /**
-         * Verifica se il valore è
-         * true o false
+         * Is Bool
+         *
          *
          * @param  mixed  $value
          *
@@ -431,8 +431,8 @@ if ( ! class_exists('FED_Validation')) {
         }
 
         /**
-         * Verifica se il valore è
-         * un'e-mail
+         * Is Email
+         *
          *
          * @param  mixed  $value
          *

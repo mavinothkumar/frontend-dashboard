@@ -597,17 +597,14 @@ jQuery(document).ready(function ($) {
             open: '<i class="fa fa-plus"></i>',
             openerCss: {
                 'display': 'inline-block',
-                // 'width': '18px', 'height': '18px',
                 'float': 'left',
                 'margin-left': '-35px',
                 'margin-right': '5px',
-                // 'background-position': 'center center', 'background-repeat': 'no-repeat',
                 'font-size': '1.1em'
             }
         },
         ignoreClass: 'clickable'
     };
-
     if ($('#fed_dashboard_menu_sort').length) {
         $('#fed_dashboard_menu_sort').sortableLists(options);
     }

@@ -186,9 +186,9 @@ if ( ! class_exists('FED_AdminMenu')) {
             } else {
                 ?>
                 <div class="container fed_add_page_profile_container text-center">
-                    <?php _e('OOPS! You have not add the callable function, please add', 'frontend-dashboard');
+                    <?php _e('OOPS! You have not add the callable function, please add ', 'frontend-dashboard');
                     echo $item['callable'];
-                    _e('to show the body container', 'frontend-dashboard') ?>
+                    _e(' to show the body container', 'frontend-dashboard') ?>
                 </div>
                 <?php
             }
@@ -229,6 +229,13 @@ if ( ! class_exists('FED_AdminMenu')) {
                             'position'   => 30,
 
                     ),
+                    'fed_payments'     => array(
+                            'page_title' => __('Payments', 'frontend-dashboard'),
+                            'menu_title' => __('Payments', 'frontend-dashboard'),
+                            'capability' => 'manage_options',
+                            'callback'   => array(new FEDPaymentMenu(), 'index'),
+                            'position'   => 30,
+                    ),
                     'fed_plugin_pages'     => array(
                             'page_title' => __('Add-Ons', 'frontend-dashboard'),
                             'menu_title' => __('Add-Ons', 'frontend-dashboard'),
@@ -250,6 +257,7 @@ if ( ! class_exists('FED_AdminMenu')) {
                             'callback'   => array($this, 'help'),
                             'position'   => 100,
                     ),
+
             );
 
             $main_menu = apply_filters('fed_add_main_sub_menu', $menu);

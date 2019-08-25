@@ -863,6 +863,11 @@ v1.3.2
     line-height: 16px;
 }
 
+.list-group .list-group-item a {
+    color: white;
+    display: block;
+}
+
 .fed_dashboard_menu_sort_wrapper ul,
 .fed_dashboard_menu_sort_wrapper li {
     list-style-type: none;

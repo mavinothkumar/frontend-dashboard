@@ -1,6 +1,9 @@
 <?php
 if ( ! class_exists('FED_AdminUserProfile')) {
-    class FED_AdminUserProfile
+	/**
+	 * Class FED_AdminUserProfile
+	 */
+	class FED_AdminUserProfile
     {
         public function __construct()
         {
