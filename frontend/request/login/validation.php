@@ -1,5 +1,7 @@
 <?php
-
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 /**
  * Registration Form Validation
  *
@@ -34,6 +36,10 @@ function fed_validate_registration_form( $post ) {
 	if ( ! $role && isset($post['role'])){
 		$fed_error->add( 'invalid_role', __('You are trying to hack the user role','frontend-dashboard') );
 	}
+
+	if(isset($post['user_login']) && fed_validate_username($post['user_login'])){
+        $fed_error->add( 'invalid_username', __('This Username is Illegal to use in this website','frontend-dashboard') );
+    }
 
 
 	if ( $fed_error->get_error_codes() ) {

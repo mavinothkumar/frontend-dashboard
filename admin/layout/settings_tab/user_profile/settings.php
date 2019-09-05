@@ -1,4 +1,11 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
+
+/**
+ * @param $fed_admin_options
+ */
 function fed_admin_user_profile_settings_tab( $fed_admin_options ) {
 	$fed_upef = array_merge( fed_fetch_user_profile_extra_fields_key_value(), array( '' => 'Let it be default' ) );
 

@@ -1,4 +1,7 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 /**
  * Admin Setting User Profile Request
  */

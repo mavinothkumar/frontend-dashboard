@@ -1,4 +1,7 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 
 add_action( 'wp_ajax_fed_user_contact', 'fed_user_contact_fn' );
 add_action( 'wp_ajax_fed_add_answer', 'fed_add_answer_fn' );
@@ -56,6 +59,12 @@ function fed_add_answer_fn() {
 	wp_send_json_success( array( 'message' => $html ) );
 }
 
+/**
+ * @param $question_id
+ * @param $responses
+ *
+ * @return string
+ */
 function fed_show_add_answers( $question_id, $responses ) {
 	$getQuestion = fed_fetch_table_row_by_id( BC_FED_QUESTION_DB, $question_id );
 	$html        = '';

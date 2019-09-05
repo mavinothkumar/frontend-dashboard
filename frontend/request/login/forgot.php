@@ -1,4 +1,12 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
+/**
+ * @param $post
+ *
+ * @return string|\WP_Error
+ */
 function fed_forgot_form_submit($post)
 {
     global $wpdb, $wp_hasher;
@@ -70,6 +78,11 @@ function fed_forgot_form_submit($post)
  */
 
 add_filter('lostpassword_url', 'fed_lostpassword_url');
+/**
+ * @param $lostpassword_url
+ *
+ * @return string
+ */
 function fed_lostpassword_url($lostpassword_url)
 {
 

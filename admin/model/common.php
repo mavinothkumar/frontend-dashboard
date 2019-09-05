@@ -1,5 +1,7 @@
 <?php
-
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 if ( ! function_exists( 'fed_fetch_rows_by_table' ) ) {
 	/**
 	 * Fetch all Table Row

@@ -1,4 +1,7 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 if ( ! class_exists('FEDSCPRO') && ! defined('BC_FED_SC_PLUGIN')) {
     /**
      * Class FEDSCPRO

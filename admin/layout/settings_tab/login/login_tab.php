@@ -1,5 +1,8 @@
 <?php
 
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 /**
  * Admin Login Tab
  */

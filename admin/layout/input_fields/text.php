@@ -1,5 +1,12 @@
 <?php
-
+if ( ! defined('ABSPATH')) {
+    exit;
+}
+/**
+ * @param $row
+ * @param $action
+ * @param $menu_options
+ */
 function fed_admin_input_fields_single_line($row, $action, $menu_options ) {
 	?>
     <div class="row fed_input_type_container fed_input_single_line_container hide">

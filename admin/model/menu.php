@@ -1,5 +1,7 @@
 <?php
-
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 /**
  * Fetch Menu with Key and Value Pair
  *

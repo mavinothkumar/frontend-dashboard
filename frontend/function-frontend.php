@@ -1,4 +1,7 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 /**
  * @param        $id_or_email
  * @param  string  $alt

@@ -1,4 +1,7 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 if(!function_exists( 'fed_get_status_menu')) {
 	/**
 	 * Get Table Status

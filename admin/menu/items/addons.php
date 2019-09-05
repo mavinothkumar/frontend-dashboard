@@ -1,4 +1,7 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 
 function fed_get_plugin_pages_menu()
 {

@@ -1,4 +1,8 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
+
 /**
  * Enqueue Script at Admin and Front End
  */

@@ -1,4 +1,7 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 
 function fed_get_dashboard_menu_items()
 {

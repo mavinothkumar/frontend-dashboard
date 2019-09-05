@@ -1,5 +1,7 @@
 <?php
-
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 /**
  * Placeholder Field
  * @param array $row
@@ -11,6 +13,9 @@ function fed_get_placeholder_field( array $row ) {
 	<?php
 }
 
+/**
+ * @param  array  $row
+ */
 function fed_get_class_field( array $row ) {
 	?>
 	<label for=""><?php _e( 'Class Name', 'frontend-dashboard' ) ?></label>
@@ -18,6 +23,9 @@ function fed_get_class_field( array $row ) {
 	<?php
 }
 
+/**
+ * @param  array  $row
+ */
 function fed_get_id_field( array $row ) {
 	?>
 	<label for=""><?php _e( 'ID Name', 'frontend-dashboard' ) ?></label>

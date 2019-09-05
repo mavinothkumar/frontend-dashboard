@@ -1,4 +1,7 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 
 if(!function_exists( 'fed_get_user_profile_menu')) {
 	function fed_get_user_profile_menu() {

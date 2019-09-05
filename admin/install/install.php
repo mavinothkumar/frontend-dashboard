@@ -1,4 +1,7 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 
 add_action( 'admin_init', 'fed_upgrade' );
 function fed_upgrade() {

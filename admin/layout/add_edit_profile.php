@@ -1,5 +1,8 @@
 <?php
 
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 /**
  * Get Admin User Profile Role Based.
  *

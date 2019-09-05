@@ -1,4 +1,13 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
+
+/**
+ * @param $row
+ * @param $action
+ * @param $menu_options
+ */
 function fed_admin_input_fields_checkbox($row, $action, $menu_options)
 {
     $data = ['h', 'd', 'ss'];

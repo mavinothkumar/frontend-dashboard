@@ -1,4 +1,7 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 
 function fed_admin_user_options_tab() {
 	$fed_admin_options = get_option( 'fed_admin_settings_user' );
@@ -51,6 +54,11 @@ function fed_admin_user_options_tab() {
 	<?php
 }
 
+/**
+ * @param $fed_admin_options
+ *
+ * @return mixed|void
+ */
 function fed_get_admin_user_options( $fed_admin_options ) {
 	return apply_filters( 'fed_customize_admin_user_options', array(
 		'fed_admin_user_profile_settings'  => array(

@@ -1,4 +1,7 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 add_action( 'wp_ajax_fed_admin_orders', 'fed_admin_orders_function' );
 add_action( 'wp_ajax_fed_admin_order_delete', 'fed_admin_order_delete_function' );
 add_action( 'wp_ajax_fed_order_search_add', 'fed_order_search_add_function' );

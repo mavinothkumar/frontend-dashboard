@@ -1,4 +1,10 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
+/**
+ * @param $fed_login_register
+ */
 function fed_admin_restrict_wp_admin_tab($fed_login_register) {
 	$user_role  = isset( $fed_login_register['restrict_wp']['role'] ) ? array_keys( $fed_login_register['restrict_wp']['role'] ) : array();
 

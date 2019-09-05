@@ -1,4 +1,10 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
+/**
+ * @param $request
+ */
 function fed_reset_form_submit( $request ) {
 	if ( ! isset( $request['key'], $request['login'], $request['user_password'], $request['confirmation_password'] ) ) {
 		wp_send_json_success( array(

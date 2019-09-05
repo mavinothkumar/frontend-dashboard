@@ -1,4 +1,8 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
+
 if(!function_exists( 'fed_get_post_fields_menu')){
 	/**
 	 * Get post field

@@ -1,4 +1,11 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
+
+/**
+ * @param $fed_admin_options
+ */
 function fed_admin_post_permissions_tab( $fed_admin_options ) {
 	$all_roles             = fed_get_user_roles();
 	$post_permission   = isset( $fed_admin_options['permissions']['post_permission'] ) ? array_keys( $fed_admin_options['permissions']['post_permission'] ) : array();

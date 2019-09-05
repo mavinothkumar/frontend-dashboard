@@ -1,10 +1,17 @@
 <?php
 
+if ( ! defined('ABSPATH')) {
+    exit;
+}
+
 /**
  * Class FED_Admin_General
  */
 
 if ( ! class_exists('FED_Admin_General')) {
+    /**
+     * Class FED_Admin_General
+     */
     class FED_Admin_General
     {
 

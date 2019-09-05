@@ -1,5 +1,7 @@
 <?php
-
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 add_action( 'wp_ajax_fed_dashboard_add_new_post', 'fed_dashboard_add_new_post_fn' );
 //add_action( 'wp_ajax_fed_dashboard_add_new_post_request', 'fed_dashboard_add_new_post_request_fn' );
 

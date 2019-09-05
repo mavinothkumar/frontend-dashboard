@@ -1,4 +1,12 @@
 <?php
+
+if ( ! defined('ABSPATH')) {
+    exit;
+}
+
+/**
+ * @param $fed_login_settings
+ */
 function fed_admin_login_settings_tab( $fed_login_settings ) {
 	$array = array(
 		'form'   => array(

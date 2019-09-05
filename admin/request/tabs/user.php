@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined('ABSPATH')) {
+    exit;
+}
+
 function fed_admin_user_options_request() {
 	$message = '';
 	$request = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
@@ -35,6 +39,9 @@ function fed_admin_user_options_request() {
 	exit();
 }
 
+/**
+ * @param $request
+ */
 function fed_admin_tab_post_role( $request ) {
 	global $wpdb;
 	$user_roles = $wpdb->prefix . 'user_roles';
@@ -87,6 +94,9 @@ function fed_admin_tab_post_role( $request ) {
 	) );
 }
 
+/**
+ * @param $request
+ */
 function fed_admin_tab_post_role_delete( $request ) {
 	global $wpdb;
 	$user_roles = $wpdb->prefix . 'user_roles';
@@ -126,6 +136,9 @@ function fed_admin_tab_post_role_delete( $request ) {
 
 }
 
+/**
+ * @param $request
+ */
 function fed_admin_tab_user_upload( $request ) {
 	$user_options         = get_option( 'fed_admin_settings_user' );
 	$user_options['user'] = array(

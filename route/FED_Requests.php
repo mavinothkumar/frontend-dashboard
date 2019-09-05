@@ -1,5 +1,7 @@
 <?php
-
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 if ( ! class_exists('FED_Requests')) {
     /**
      * Class FED_Requests

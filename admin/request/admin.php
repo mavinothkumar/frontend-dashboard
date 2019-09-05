@@ -1,4 +1,8 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
+
 /**
  * Get all admin page setting request
  */

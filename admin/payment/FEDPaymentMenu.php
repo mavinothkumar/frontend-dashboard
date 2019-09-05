@@ -1,4 +1,7 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 if ( ! class_exists( 'FEDPaymentMenu' ) ) {
 	/**
 	 * Class FEDPayments
@@ -18,22 +21,17 @@ if ( ! class_exists( 'FEDPaymentMenu' ) ) {
 					'icon' => 'fa fa-money',
 					'name' => 'Payment Gateway',
 					'submenu' => array(
-						'FEDPayment@paypal' => array(
-							'icon' => 'fa fa-money',
-							'name' => 'PayPal',
-							'menu' => array( 'FEDPayment@paypal' ),
-						),
-						'FEDPayment@stripe' => array(
-							'icon' => 'fab fa-stripe',
-							'name' => 'Stripe',
-							'menu' => array( 'FEDPayment@stripe' ),
+						'FEDPayment@settings' => array(
+							'icon' => 'fa fa-cogs',
+							'name' => 'Settings',
+							'menu' => array( 'FEDPayment@settings' ),
 						),
 					),
 				),
 				'transactions' => array(
 					'icon'   => 'fa fa-list',
 					'name'   => 'Transactions',
-					'action' => 'FEDTransaction@transactions',
+					'submenu' => 'FEDTransaction@transactions',
 				),
 			) );
 			?>
@@ -96,7 +94,7 @@ if ( ! class_exists( 'FEDPaymentMenu' ) ) {
 			$submenu = isset( $_GET, $_GET['submenu'] ) && ! empty( $_GET['submenu'] ) ? esc_html( $_GET['submenu'] ) : false;
 
 			if ( $menu ) {
-				if ( isset( $menus[ $menu ]['submenu'] ) && count( $menus[ $menu ]['submenu'] ) ) {
+				if ( isset( $menus[ $menu ]['submenu'] ) && is_array($menus[ $menu ]['submenu']) && count( $menus[ $menu ]['submenu'] ) ) {
 					?>
                     <div class="row">
                         <div class="col-md-3">
@@ -124,20 +122,40 @@ if ( ! class_exists( 'FEDPaymentMenu' ) ) {
                             </ul>
                         </div>
                         <div class="col-md-9">
-							<?php
-							if ( is_string( $submenu ) ) {
-								fed_execute_method_by_string( $submenu, $_GET );
-							}
-							?>
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        <i class="<?php echo  esc_attr($menus[$menu]['submenu'][$submenu]['icon']); ?>"></i>
+                                        <?php echo esc_attr($menus[$menu]['submenu'][$submenu]['name']); ?>
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <?php
+                                    if ( is_string( $submenu ) ) {
+                                        fed_execute_method_by_string( $submenu, $_GET );
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 					<?php
 				} else {
-					if ( isset( $menus[ $menu ]['action'] ) && is_string( $menus[ $menu ]['action'] ) ) {
+					if ( isset( $menus[ $menu ]['submenu'] ) && is_string( $menus[ $menu ]['submenu'] ) ) {
 						?>
                         <div class="row">
                             <div class="col-md-12">
-								<?php fed_execute_method_by_string( $menus[ $menu ]['action'], $_GET ); ?>
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title"> <i class="<?php echo  esc_attr($menus[$menu]['icon']); ?>"></i>
+                                            <?php echo esc_attr($menus[$menu]['name']); ?></h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <?php fed_execute_method_by_string( $menus[ $menu ]['submenu'], $_GET ); ?>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 						<?php

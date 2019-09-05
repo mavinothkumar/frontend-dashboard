@@ -1,4 +1,7 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 function fed_admin_setting_post_options_request() {
 	$message                 = '';
 	$request                 = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
@@ -43,6 +46,11 @@ function fed_admin_setting_post_options_request() {
 	) );
 }
 
+/**
+ * @param $request
+ *
+ * @return array
+ */
 function fed_process_admin_settings_post_permissions( $request ) {
 	return array(
 		'post_permission'   => isset( $request['post_permission'] ) ? $request['post_permission'] : array(),
@@ -50,12 +58,22 @@ function fed_process_admin_settings_post_permissions( $request ) {
 	);
 }
 
+/**
+ * @param $request
+ *
+ * @return array
+ */
 function fed_process_admin_settings_post_settings( $request ) {
 	return array(
 		'fed_post_status' => isset( $request['fed_post_status'] ) ? sanitize_text_field( $request['fed_post_status'] ) : 'publish',
 	);
 }
 
+/**
+ * @param $request
+ *
+ * @return array
+ */
 function fed_process_admin_settings_post_menu( $request ) {
 	return array(
 		'rename_post'    => isset( $request['menu']['rename_post'] ) ? sanitize_text_field( $request['menu']['rename_post'] ) : 'Post',
@@ -64,6 +82,11 @@ function fed_process_admin_settings_post_menu( $request ) {
 	);
 }
 
+/**
+ * @param $request
+ *
+ * @return array
+ */
 function fed_process_admin_settings_post_dashboard( $request ) {
 	return array(
 		'post_content'                  => isset( $request['post_content'] ) ? sanitize_text_field( $request['post_content'] ) : '',

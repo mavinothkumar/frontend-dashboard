@@ -1,4 +1,8 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
+
 if ( ! class_exists('FED_AdminUserProfile')) {
 	/**
 	 * Class FED_AdminUserProfile

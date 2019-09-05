@@ -1,4 +1,7 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 function fed_logout_process() {
 	$index        = 'logout';
 	$logout = fed_get_logout_menu();

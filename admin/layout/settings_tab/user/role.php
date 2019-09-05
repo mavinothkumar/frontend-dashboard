@@ -1,5 +1,12 @@
 <?php
 
+if ( ! defined('ABSPATH')) {
+    exit;
+}
+
+/**
+ * @param $fed_admin_options
+ */
 function fed_admin_user_role_tab( $fed_admin_options ) {
 	$user_roles = fed_get_extra_user_roles();
 	?>

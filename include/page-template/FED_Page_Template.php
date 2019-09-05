@@ -1,5 +1,10 @@
 <?php
-
+if ( ! defined('ABSPATH')) {
+    exit;
+}
+/**
+ * Class FED_Page_Template
+ */
 class FED_Page_Template {
 	/**
 	 * A reference to an instance of this class.

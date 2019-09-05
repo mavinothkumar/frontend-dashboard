@@ -1,4 +1,8 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
+
 /**
  * User Profile Layout
  */
@@ -8,6 +12,11 @@ function fed_user_profile_layout_design() {
 	fed_common_layouts_admin_settings( $fed_admin_options, $tabs );
 }
 
+/**
+ * @param $fed_admin_options
+ *
+ * @return mixed|void
+ */
 function fed_user_profile_layout_options( $fed_admin_options ) {
 	$options = array(
 		'fed_admin_user_profile_layout_settings' => array(

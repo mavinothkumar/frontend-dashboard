@@ -2,7 +2,9 @@
 /**
  * Delete and empty the Database Tables and Options
  */
-
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 
 add_action('wp_ajax_fed_status_delete_table', 'fed_status_delete_table');
 add_action('wp_ajax_fed_status_empty_table', 'fed_status_empty_table');

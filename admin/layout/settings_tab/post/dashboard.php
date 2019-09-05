@@ -1,5 +1,12 @@
 <?php
 
+if ( ! defined('ABSPATH')) {
+    exit;
+}
+
+/**
+ * @param $fed_admin_options
+ */
 function fed_admin_post_dashboard_tab($fed_admin_options) {
 	//var_dump($fed_admin_options);
 	?>

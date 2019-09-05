@@ -1,5 +1,7 @@
 <?php
-
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 if ( ! class_exists('FED_AdminMenu')) {
     /**
      * Class FED_AdminMenu
@@ -229,13 +231,16 @@ if ( ! class_exists('FED_AdminMenu')) {
                             'position'   => 30,
 
                     ),
-                    'fed_payments'     => array(
-                            'page_title' => __('Payments', 'frontend-dashboard'),
-                            'menu_title' => __('Payments', 'frontend-dashboard'),
-                            'capability' => 'manage_options',
-                            'callback'   => array(new FEDPaymentMenu(), 'index'),
-                            'position'   => 30,
-                    ),
+                /**
+                 * TODO: Disabled until payment add-on into live
+                 */
+//                    'fed_payments'     => array(
+//                            'page_title' => __('Payments', 'frontend-dashboard'),
+//                            'menu_title' => __('Payments', 'frontend-dashboard'),
+//                            'capability' => 'manage_options',
+//                            'callback'   => array(new FEDPaymentMenu(), 'index'),
+//                            'position'   => 30,
+//                    ),
                     'fed_plugin_pages'     => array(
                             'page_title' => __('Add-Ons', 'frontend-dashboard'),
                             'menu_title' => __('Add-Ons', 'frontend-dashboard'),

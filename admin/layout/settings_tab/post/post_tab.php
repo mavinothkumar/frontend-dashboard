@@ -1,4 +1,7 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 /**
  * Post Options
  */
@@ -16,6 +19,11 @@ function fed_admin_post_options_tab() {
 }
 
 
+/**
+ * @param $fed_admin_options
+ *
+ * @return mixed|void
+ */
 function fed_get_admin_post_options( $fed_admin_options ) {
 	return apply_filters( 'fed_customize_admin_post_options', array(
 		'fed_admin_post_settings'    => array(

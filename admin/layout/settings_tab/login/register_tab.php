@@ -1,4 +1,8 @@
 <?php
+
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 /**
  * @param $fed_login_register
  */

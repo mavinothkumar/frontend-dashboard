@@ -1,5 +1,12 @@
 <?php
-
+if ( ! defined('ABSPATH')) {
+    exit;
+}
+/**
+ * @param $row
+ * @param $action
+ * @param $menu_options
+ */
 function fed_admin_input_fields_multi_line($row, $action,$menu_options ) {
 	?>
     <div class="row fed_input_type_container fed_input_multi_line_container hide">

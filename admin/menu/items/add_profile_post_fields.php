@@ -1,4 +1,8 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
+
 function fed_get_add_profile_post_fields()
 {
     $id              = '';

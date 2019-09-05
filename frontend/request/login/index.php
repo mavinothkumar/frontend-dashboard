@@ -1,4 +1,7 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 /**
  * All Login, Register and Reset Password Request
  */

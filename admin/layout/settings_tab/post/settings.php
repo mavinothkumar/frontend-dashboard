@@ -1,4 +1,11 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
+
+/**
+ * @param $fed_admin_options
+ */
 function fed_admin_post_settings_tab( $fed_admin_options ) {
 	$post_status = fed_get_post_status();
 	$fed_post_status       = isset( $fed_admin_options['settings']['fed_post_status'] ) ? $fed_admin_options['settings']['fed_post_status'] : '';
