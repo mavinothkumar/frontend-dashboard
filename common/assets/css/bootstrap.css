@@ -1594,17 +1594,17 @@
 }
 @media (min-width: 768px) {
     .bc_fed.container {
-        width: 750px;
+        max-width: 750px;
     }
 }
 @media (min-width: 992px) {
     .bc_fed.container {
-        width: 970px;
+        max-width: 970px;
     }
 }
 @media (min-width: 1200px) {
     .bc_fed.container {
-        width: 1170px;
+        max-width: 1170px;
     }
 }
 .bc_fed.container-fluid {
