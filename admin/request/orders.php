@@ -11,7 +11,7 @@ add_action( 'wp_ajax_fed_admin_add_orders', 'fed_admin_add_orders_function' );
  */
 function fed_admin_orders_function() {
 	global $wpdb;
-	$table_name = $wpdb->prefix . BC_FED_PAYMENT_DB;
+	$table_name = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
 	$request    = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
 
 	$response = fed_admin_order_id_validation( $request );
@@ -49,7 +49,7 @@ function fed_admin_orders_function() {
  */
 function fed_admin_order_delete_function() {
 	global $wpdb;
-	$table_name = $wpdb->prefix . BC_FED_PAYMENT_DB;
+	$table_name = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
 	$request    = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
 	parse_str( $request['data'], $request );
 	$response = fed_admin_order_id_validation( $request );
@@ -88,7 +88,7 @@ function fed_admin_order_id_validation( $request ) {
 		wp_send_json_error( array( 'message' => 'The Order ID is missing, please refresh the page and try again' ) );
 		exit();
 	}
-	$order = fed_fetch_table_row_by_id( BC_FED_PAYMENT_DB, $id );
+	$order = fed_fetch_table_row_by_id( BC_FED_TABLE_PAYMENT, $id );
 	if ( $order instanceof WP_Error ) {
 		wp_send_json_error( array( 'message' => __( 'The Order ID not available now, please refresh the page and try again.', 'frontend-dashboard' ) ) );
 		exit();
@@ -130,7 +130,7 @@ function fed_order_search_add_function() {
  */
 function fed_admin_add_orders_function() {
 	global $wpdb;
-	$table_name = $wpdb->prefix . BC_FED_PAYMENT_DB;
+	$table_name = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
 	$request    = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
 
 	if ( ! wp_verify_nonce( $request['fed_admin_add_orders'], 'fed_admin_add_orders' ) ) {

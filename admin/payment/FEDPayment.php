@@ -10,7 +10,7 @@ if ( ! class_exists('FEDPayment')) {
     {
         public function __construct()
         {
-
+            add_filter('fed_add_main_sub_menu', array($this, 'main_sub_menu'));
         }
 
         public function settings()
@@ -19,47 +19,37 @@ if ( ! class_exists('FEDPayment')) {
             fed_common_simple_layout($settings);
         }
 
-        public function paypal()
-        {
-            /**
-             * Payment Gateways
-             */
-
-            echo 'paypal Under Construction';
-        }
-
-        public function stripe()
-        {
-            /**
-             * Payment Gateways
-             */
-
-            echo 'stripe Under Construction';
-        }
-
         /**
          * @return mixed|void
          */
         public function settingsData()
         {
-            /**
-            option slug =>  fed_payment_settings
-            array(
-                'settings' => array(
-                    'enable' => '' //default no
-                ),
-                'gateway'  => array(
-                    'stripe' => array(
-                        'enable'      => '',
-                        'public_key'  => '',
-                        'private_key' => '',
-                        'success_url' => '',
-                        'cancel_url' => '',
-                        'notify_url' => '',
-                    ),
-                ),
-            );
-             * **/
+
+//            option slug =>  fed_payment_settings
+//            array(
+//                'settings' => array(
+//                    'enable' => '' //default no
+//                ),
+//                'gateway'  => array(
+//                    'stripe' => array(
+//                        'enable'  => '', //sandbox or live
+//                        'sandbox' => array(
+//                            'public_key'  => '',
+//                            'private_key' => '',
+//                        ),
+//                        'live'    => array(
+//                            'public_key'  => '',
+//                            'private_key' => '',
+//                        ),
+//                        'url'     => array(
+//                            'success_url' => '',
+//                            'cancel_url'  => '',
+//                            'notify_url'  => '',
+//                        ),
+//                    ),
+//                ),
+//            );
+
             $settings = get_option('fed_payment_settings');
             $array    = array(
                 'form'  => array(
@@ -89,6 +79,24 @@ if ( ! class_exists('FEDPayment')) {
             );
 
             return apply_filters('fed_payment_settings', $array, $settings);
+        }
+
+        /**
+         * @param $menu
+         *
+         * @return array
+         */
+        public function main_sub_menu($menu)
+        {
+            $menu['fed_payments'] = array(
+                'page_title' => __('Payments', 'frontend-dashboard'),
+                'menu_title' => __('Payments', 'frontend-dashboard'),
+                'capability' => 'manage_options',
+                'callback'   => array(new FEDPaymentMenu(), 'index'),
+                'position'   => 30,
+            );
+
+            return $menu;
         }
 
 

@@ -10,9 +10,9 @@ if ( ! defined('ABSPATH')) {
  */
 function fed_admin_input_fields_checkbox($row, $action, $menu_options)
 {
-    $data = ['h', 'd', 'ss'];
+//    $data = ['h', 'd', 'ss'];
 
-    maybe_unserialize($data);
+//    maybe_unserialize($data);
 
 
     ?>

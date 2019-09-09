@@ -1,10 +1,10 @@
 === Frontend Dashboard ===
 Contributors: vinoth06, buffercode
 Tags: dashboard, frontend dashboard, custom login, custom register, custom roles, custom profile, custom post type, custom taxonomies, custom dashboard
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7DHAEMST475BY
+Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 4.6
-Tested up to: 5.2.2
-Stable tag: 1.4.10
+Tested up to: 5.2.3
+Stable tag: 1.4.11.1
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -31,6 +31,7 @@ Frontend Dashboard is bundled with the huge list of custom features which can ea
 16. Show user role based custom profile page.
 17. Manage custom Post type and Taxonomies.
 18. Customize templates.
+19. Restrict illegal username on Registration.
 
 = Frontend Dashboard Plugins List =
 * [Frontend Dashboard Social Connect (Pro) ](https://buffercode.com/plugin/frontend-dashboard-social-connect)
@@ -230,6 +231,11 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 6. [fed_user role=user_role] to generate the role based user page
 
 == Changelog ==
+
+= 1.4.11 [05-Sept-2019] =
+* Feature: Restrict illegal username on Registration. [FED | FED | Login | Restrict Username]
+* Bug Fixes
+
 = 1.4.10 [22-August-2019] =
 * Bug Fixes
 
@@ -493,7 +499,8 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Upgrade Notice ==
 
-= 1.4.9 [16-August-2019] =
+= 1.4.11 [05-Sept-2019] =
+* Feature: Restrict illegal username on Registration. [FED | FED | Login | Restrict Username]
 * Bug Fixes
 
 == Screenshots ==

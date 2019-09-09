@@ -5,7 +5,7 @@ if ( ! defined('ABSPATH')) {
 
 function fed_get_dashboard_menu_items()
 {
-    $menus      = fed_fetch_table_rows_with_key(BC_FED_MENU_DB, 'menu_slug');
+    $menus      = fed_fetch_table_rows_with_key(BC_FED_TABLE_MENU, 'menu_slug');
     $user_roles = fed_get_user_roles();
 
     if (isset($_GET, $_GET['sort'])) {

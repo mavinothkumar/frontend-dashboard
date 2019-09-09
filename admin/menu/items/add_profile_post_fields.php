@@ -36,7 +36,7 @@ function fed_get_add_profile_post_fields()
         $page = __('Profile', 'frontend-dashboard');
         $url  = menu_page_url('fed_user_profile', false);
         if (is_int($id)) {
-            $rows = fed_fetch_table_row_by_id(BC_FED_USER_PROFILE_DB, $id);
+            $rows = fed_fetch_table_row_by_id(BC_FED_TABLE_USER_PROFILE, $id);
             if ($rows instanceof WP_Error) {
                 ?>
                 <div class="container fed_UP_container">
@@ -66,7 +66,7 @@ function fed_get_add_profile_post_fields()
         $page = __('Post', 'frontend-dashboard');
         $url  = menu_page_url('fed_post_fields', false);
         if (is_int($id)) {
-            $rows = fed_fetch_table_row_by_id(BC_FED_POST_DB, $id);
+            $rows = fed_fetch_table_row_by_id(BC_FED_TABLE_POST, $id);
             if ($rows instanceof WP_Error) {
                 ?>
                 <div class="container fed_UP_container">

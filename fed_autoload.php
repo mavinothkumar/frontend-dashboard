@@ -63,6 +63,8 @@ require_once BC_FED_PLUGIN_DIR.'/shortcodes/user_role.php';
 
 require_once BC_FED_PLUGIN_DIR.'/shortcodes/dashboard/dashboard-shortcode.php';
 
+require_once BC_FED_PLUGIN_DIR.'/shortcodes/payments/transactions.php';
+
 require_once BC_FED_PLUGIN_DIR.'/frontend/menu/menus.php';
 
 require_once BC_FED_PLUGIN_DIR.'/frontend/request/login/login.php';
@@ -126,6 +128,7 @@ require_once BC_FED_PLUGIN_DIR.'/admin/layout/settings_tab/login/login_tab.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/layout/settings_tab/login/register_tab.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/layout/settings_tab/login/settings.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/layout/settings_tab/login/restrict_wp_tab.php';
+require_once BC_FED_PLUGIN_DIR.'/admin/layout/settings_tab/login/restrict_username.php';
 
 require_once BC_FED_PLUGIN_DIR.'/admin/layout/custom_layout/FEDCustomCSS.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/layout/custom_layout/helper.php';

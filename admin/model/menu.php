@@ -8,7 +8,7 @@ if ( ! defined('ABSPATH')) {
  * @return array
  */
 function fed_fetch_menu() {
-	$results = fed_fetch_rows_by_table( BC_FED_MENU_DB );
+	$results = fed_fetch_rows_by_table( BC_FED_TABLE_MENU );
 
 	if ( count( $results ) <= 0 ) {
 		new WP_Error( 'fed_default_value_not_installed', __( 'There is some trouble in installing the default value, please try to deactivate and activate the plugin or contact us on ', 'frontend-dashboard' ) . make_clickable( 'https://buffercode.com/' ) );
@@ -29,7 +29,7 @@ function fed_fetch_table_rows_with_key_front_end( $table, $key ) {
 	$results = apply_filters( 'fed_add_custom_menu', fed_fetch_rows_by_table( $table ) );
 	$user_role = fed_get_current_user_role_key();
 
-	if ( count( $results ) <= 0 && BC_FED_POST_DB !== $table ) {
+	if ( count( $results ) <= 0 && BC_FED_TABLE_POST !== $table ) {
 		return new WP_Error( 'fed_default_value_not_installed', __( 'There is some trouble in installing the default value, please try to deactivate and activate the plugin or contact us on ', 'frontend-dashboard' ) . make_clickable( 'https://buffercode.com/' ) );
 	}
 	$result_with_key = array();

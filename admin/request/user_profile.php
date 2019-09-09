@@ -15,9 +15,9 @@ function fed_save_profile_post($request, $action = '', $post_id = '')
     $input_meta = $request['input_meta'];
 
     if ($action === 'profile') {
-        $table_name = $wpdb->prefix.BC_FED_USER_PROFILE_DB;
+        $table_name = $wpdb->prefix.BC_FED_TABLE_USER_PROFILE;
     } elseif ($action === 'post') {
-        $table_name = $wpdb->prefix.BC_FED_POST_DB;
+        $table_name = $wpdb->prefix.BC_FED_TABLE_POST;
     } else {
         wp_send_json_error(array('message' => __('Hey, you are trying something naughty', 'frontend-dashboard')));
     }

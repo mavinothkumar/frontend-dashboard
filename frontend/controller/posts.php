@@ -112,7 +112,7 @@ function fed_get_post_pagination($post_object, $menu)
  */
 function fed_display_dashboard_add_new_post($post_type)
 {
-    $post_table    = fed_fetch_rows_by_table(BC_FED_POST_DB);
+    $post_table    = fed_fetch_rows_by_table(BC_FED_TABLE_POST);
     $post_settings = fed_get_post_settings_by_type($post_type);
     $menu          = isset($post_settings['menu']['rename_post']) ? $post_settings['menu']['rename_post'] : strtoupper($post_type);
     $menu_item     = get_query_var('fed_menu_items');
@@ -260,7 +260,7 @@ function fed_process_dashboard_add_new_post($post)
 
     $user_role = fed_get_current_user_role();
     if (count(array_intersect($user_role, array_keys($fed_admin_options['permissions']['post_permission']))) > 0) {
-        $extras      = fed_fetch_table_rows_with_key(BC_FED_POST_DB, 'input_meta');
+        $extras      = fed_fetch_table_rows_with_key(BC_FED_TABLE_POST, 'input_meta');
         $post_status = isset($fed_admin_options['settings']['fed_post_status']) ? sanitize_text_field($fed_admin_options['settings']['fed_post_status']) : 'publish';
 
         if (empty($post['post_title'])) {
@@ -321,7 +321,7 @@ function fed_process_dashboard_add_new_post($post)
  */
 function fed_display_dashboard_edit_post_by_id($post)
 {
-    $post_table    = fed_fetch_rows_by_table(BC_FED_POST_DB);
+    $post_table    = fed_fetch_rows_by_table(BC_FED_TABLE_POST);
     $post_meta     = get_post_meta($post->ID);
     $post_settings = fed_get_post_settings_by_type($post->post_type);
 

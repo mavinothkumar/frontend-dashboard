@@ -183,7 +183,7 @@ function fed_admin_setting_form_dashboard_menu_function()
             exit();
         }
 
-        $is_ID = fed_fetch_table_row_by_id(BC_FED_MENU_DB, $post_id);
+        $is_ID = fed_fetch_table_row_by_id(BC_FED_TABLE_MENU, $post_id);
 
         if ($is_ID instanceof WP_Error) {
             wp_send_json_error(array('message' => $is_ID->get_error_message('fed_no_row_found_on_that_id')));
@@ -199,8 +199,8 @@ function fed_admin_setting_form_dashboard_menu_function()
             wp_send_json_error(array('message' => __('You are trying to delete a menu, which has Sub Menu(s), Please delete or move it to different Menu')));
         }
 
-        fed_delete_table_rows_on_condition(BC_FED_USER_PROFILE_DB, 'menu', $is_ID['menu_slug']);
-        $is_delete            = fed_delete_table_row_by_id(BC_FED_MENU_DB, $post_id);
+        fed_delete_table_rows_on_condition(BC_FED_TABLE_USER_PROFILE, 'menu', $is_ID['menu_slug']);
+        $is_delete            = fed_delete_table_row_by_id(BC_FED_TABLE_MENU, $post_id);
 
         if ('success' === $is_delete) {
             wp_send_json_success(array(
@@ -251,11 +251,11 @@ function fed_user_profile_delete_function()
     if ('delete' === $action) {
         $check_up_id = $is_delete = $reload = '';
         if (isset($post['profile_id'])) {
-            $check_up_id = fed_fetch_table_row_by_id(BC_FED_USER_PROFILE_DB, $post['profile_id']);
+            $check_up_id = fed_fetch_table_row_by_id(BC_FED_TABLE_USER_PROFILE, $post['profile_id']);
         }
 
         if (isset($post['post_id'])) {
-            $check_up_id = fed_fetch_table_row_by_id(BC_FED_POST_DB, $post['post_id']);
+            $check_up_id = fed_fetch_table_row_by_id(BC_FED_TABLE_POST, $post['post_id']);
         }
 
         if ($check_up_id instanceof WP_Error) {
@@ -264,12 +264,12 @@ function fed_user_profile_delete_function()
         }
 
         if (isset($post['profile_id'])) {
-            $is_delete = fed_delete_table_row_by_id(BC_FED_USER_PROFILE_DB, $post['profile_id']);
+            $is_delete = fed_delete_table_row_by_id(BC_FED_TABLE_USER_PROFILE, $post['profile_id']);
             $reload    = admin_url().'admin.php?page=fed_user_profile';
         }
 
         if (isset($post['post_id'])) {
-            $is_delete = fed_delete_table_row_by_id(BC_FED_POST_DB, $post['post_id']);
+            $is_delete = fed_delete_table_row_by_id(BC_FED_TABLE_POST, $post['post_id']);
             $reload    = admin_url().'admin.php?page=fed_post_fields';
         }
 

@@ -22,7 +22,7 @@ function fed_add_meta_boxes() {
 function fed_add_meta_boxes_display() {
 	fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' );
 
-	$extra_fields = fed_fetch_table_rows_with_key( BC_FED_POST_DB, 'input_meta' );
+	$extra_fields = fed_fetch_table_rows_with_key( BC_FED_TABLE_POST, 'input_meta' );
 	global $post;
 	$post_meta = fed_get_all_post_meta_key( $post->ID );
 	?>
@@ -68,7 +68,7 @@ function fed_save_meta_boxes_display( $post_id, $post ) {
 	/**
 	 * Get all post meta key
 	 */
-	$post_meta = fed_fetch_table_rows_with_key( BC_FED_POST_DB, 'input_meta' );
+	$post_meta = fed_fetch_table_rows_with_key( BC_FED_TABLE_POST, 'input_meta' );
 	/**
 	 * Check with post meta to save the meta
 	 */

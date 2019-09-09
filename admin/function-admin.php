@@ -3114,10 +3114,10 @@ function fed_get_table_status() {
 	/**
 	 * Check all table exists
 	 */
-	$user_profile = $wpdb->prefix . BC_FED_USER_PROFILE_DB;
-	$menu         = $wpdb->prefix . BC_FED_MENU_DB;
-	$menu_meta    = $wpdb->prefix . BC_FED_MENU_META;
-	$post         = $wpdb->prefix . BC_FED_POST_DB;
+	$user_profile = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
+	$menu         = $wpdb->prefix . BC_FED_TABLE_MENU;
+	$menu_meta    = $wpdb->prefix . BC_FED_TABLE_MENU_META;
+	$post         = $wpdb->prefix . BC_FED_TABLE_POST;
 
 	$table_status['user_profile'] = array(
 		'title'       => 'User Profile',
