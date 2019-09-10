@@ -10,7 +10,7 @@ if ( ! class_exists('FEDTransaction')) {
     {
         public function __construct()
         {
-            add_action('plugins_loaded', array($this, 'authorize'));
+
         }
 
         public function transactions()
@@ -18,6 +18,7 @@ if ( ! class_exists('FEDTransaction')) {
             /**
              * Payment Gateways
              */
+            $this->authorize();
 
             echo do_shortcode('[fed_transactions]');
         }
