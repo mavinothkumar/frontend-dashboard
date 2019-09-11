@@ -690,7 +690,7 @@ msgid "Allow Comments"
 msgstr "אפשר תגובות"
 
 #: frontend/controller/posts.php:298
-msgid " Successfully saved"
+msgid " Successfully Saved"
 msgstr "נשמר בהצלחה"
 
 #: frontend/controller/posts.php:512

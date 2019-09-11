@@ -221,7 +221,7 @@ msgid "Post Format"
 msgstr "Post Format"
 
 #: frontend/controller/posts.php:298
-msgid " Successfully saved"
+msgid " Successfully Saved"
 msgstr "Uspješno spremljeno"
 
 #: frontend/controller/posts.php:194 frontend/controller/posts.php:420

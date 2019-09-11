@@ -706,7 +706,7 @@ msgid "Allow Comments"
 msgstr "Permitir comentarios"
 
 #: frontend/controller/posts.php:298
-msgid " Successfully saved"
+msgid " Successfully Saved"
 msgstr "Guardado satisfactoriamente"
 
 #: frontend/controller/posts.php:512

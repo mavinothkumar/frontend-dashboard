@@ -304,7 +304,7 @@ function fed_process_dashboard_add_new_post($post)
             wp_send_json_error($success->get_error_messages());
         }
 
-        wp_send_json_success(array('message' => $post['post_title'].__(' Successfully saved', 'frontend-dashboard')));
+        wp_send_json_success(array('message' => $post['post_title'].__(' Successfully Saved', 'frontend-dashboard')));
     }
     $error = new WP_Error('fed_action_not_allowed',
             __('Sorry! your are not allowed to do this action', 'frontend-dashboard'));
