@@ -47,23 +47,27 @@ if ( ! function_exists( 'fed_fetch_table_row_by_id' ) ) {
 }
 
 if ( ! function_exists( 'fed_fetch_table_rows_by_key_value' ) ) {
-	/**
-	 * Fetch Table Row(s) by Key values
-	 *
-	 * @param  string  $table  Table Name.
-	 * @param  string  $key  Table Row Name.
-	 * @param  string  $value  Table Row Value.
-	 * @param  string  $condition  Condition to apply on Row Name and Row Value.
-	 *
-	 * @param  string  $output
-	 *
-	 * @return array|null
-	 */
-	function fed_fetch_table_rows_by_key_value( $table, $key, $value, $condition = '=', $output = ARRAY_A ) {
+    /**
+     * Fetch Table Row(s) by Key values
+     *
+     * @param  string  $table  Table Name.
+     * @param  string  $key  Table Row Name.
+     * @param  string  $value  Table Row Value.
+     * @param  string  $condition  Condition to apply on Row Name and Row Value.
+     *
+     * @param  string  $output
+     *
+     * @param  string  $order
+     *
+     * @return array|null
+     */
+	function fed_fetch_table_rows_by_key_value( $table, $key, $value, $condition = '=', $output = ARRAY_A, $order='ASC' ) {
 		global $wpdb;
 		$table_name = $wpdb->prefix . $table;
 
-		return $wpdb->get_results( "SELECT * FROM $table_name WHERE {$key} $condition '{$value}' ", $output );
+        $order = $order ? 'ORDER BY id ' . $order : '';
+
+		return $wpdb->get_results( "SELECT * FROM $table_name WHERE {$key} $condition '{$value}' $order", $output );
 
 	}
 }

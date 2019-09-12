@@ -11,10 +11,9 @@ if ( ! $transactions instanceof WP_Error) {
     ?>
     <div class="table-responsive">
         <?php if (fed_is_admin()) { ?>
-            <a class="btn btn-primary m-b-10" data-toggle="modal"
-               href="#fed_transaction_modal"><?php _e('Add New Transaction', 'frontend-dashboard'); ?></a>
+            <button type="button"  data-target="#fed_transaction_modal" class="btn btn-primary m-b-10" data-toggle="modal"><?php _e('Add New Transaction', 'frontend-dashboard'); ?></button>
         <?php } ?>
-        <table class="table table-hover table-striped">
+        <table class="table table-hover table-striped fed_datatable">
             <thead>
             <tr>
                 <?php if (fed_is_admin()) { ?>
@@ -36,7 +35,8 @@ if ( ! $transactions instanceof WP_Error) {
                 foreach ($transactions as $transaction) { ?>
                     <tr>
                         <?php if (fed_is_admin()) { ?>
-                            <td><?php printf('ID: %s <br> Name: %s <br> Email: %s', esc_attr($transaction['user_id']),
+                            <td><?php printf('<strong>ID:</strong> %s <br> <strong>Name:</strong> %s <br> <strong>Email:</strong> %s',
+                                    esc_attr($transaction['user_id']),
                                     esc_attr($transaction['user_nicename']),
                                     esc_attr($transaction['user_email'])) ?></td>
                         <?php } ?>
@@ -70,20 +70,134 @@ if ( ! $transactions instanceof WP_Error) {
 }
 ?>
 
-<div class="modal fade" id="fed_transaction_modal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Modal title</h4>
-            </div>
-            <div class="modal-body">
-                Modal body ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
+<div class="modal fade" id="fed_transaction_modal" tabindex="-1" role="dialog" >
+    <form class="fed_ajax"
+          action="<?php echo fed_get_form_action('fed_ajax_request').'&fed_action_hook=FEDTransaction@update'; ?>">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <?php fed_wp_nonce_field('fed_nonce', 'fed_nonce') ?>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"><?php _e('Add New Transaction', 'frontend-dashboard'); ?></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label><?php _e('User Name', 'frontend-dashboard') ?></label>
+                                <?php wp_dropdown_users(array(
+                                    'name'             => 'user_id',
+                                    'show_option_none' => 'Please Select the User',
+                                    'class'            => 'form-control',
+                                    'role__not_in'     => array('administrator'),
+                                )) ?>
+                            </div>
+                            <div class="form-group">
+                                <label><?php _e('Transaction ID', 'frontend-dashboard') ?></label>
+                                <input type="text" value="<?php echo fed_get_random_string(15); ?>"
+                                       placeholder="<?php _e('Transaction ID', 'frontend-dashboard') ?>"
+                                       name="transaction_id" class="form-control"/>
+                            </div>
+                            <div class="form-group">
+                                <label><?php _e('Purchase Date', 'frontend-dashboard') ?></label>
+                                <input type="date"
+                                       placeholder="<?php _e('Purchase Date - dd/mm/yyyy', 'frontend-dashboard') ?>"
+                                       name="created" class="form-control"/>
+                            </div>
+                            <div class="form-group">
+                                <label><?php _e('Payment Source', 'frontend-dashboard') ?></label>
+                                <?php echo fed_get_input_details(array(
+                                    'input_value' => fed_get_payment_sources(),
+                                    'input_meta'  => 'payment_source',
+                                    'input_type'  => 'select',
+                                )); ?>
+                            </div>
+                            <div class="form-group">
+                                <label><?php _e('Plan Type', 'frontend-dashboard') ?></label>
+                                <?php echo fed_get_input_details(array(
+                                    'input_value' => fed_mp_default_plan(),
+                                    'input_meta'  => 'plan_type',
+                                    'input_type'  => 'select',
+                                )); ?>
+                            </div>
+                            <div class="form-group">
+                                <label><?php _e('If Plan Type Custom', 'frontend-dashboard') ?></label>
+                                <input type="text"
+                                       placeholder="<?php _e('If Plan Type Custom, Enter the Days',
+                                           'frontend-dashboard') ?>"
+                                       name="plan_days" class="form-control"/>
+                            </div>
+                            <div class="form-group">
+                                <label><?php _e('Membership Type', 'frontend-dashboard') ?></label>
+                                <input type="text"
+                                       placeholder="<?php _e('Membership Type (eg) Membership, Post',
+                                           'frontend-dashboard') ?>"
+                                       name="type" class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+                                <label><?php _e('Product Name', 'frontend-dashboard') ?></label>
+                                <input type="text"
+                                       placeholder="<?php _e('Product Name', 'frontend-dashboard') ?>"
+                                       name="name" class="form-control"/>
+                            </div>
+                            <div class="form-group">
+                                <label><?php _e('Amount', 'frontend-dashboard') ?></label>
+                                <input type="text"
+                                       placeholder="<?php _e('Amount', 'frontend-dashboard') ?>"
+                                       name="amount" class="form-control"/>
+                            </div>
+                            <div class="form-group">
+                                <label><?php _e('Currency Type', 'frontend-dashboard') ?></label>
+                                <?php echo fed_get_input_details(array(
+                                    'input_value' => fed_get_currency_type_key_value(),
+                                    'input_meta'  => 'currency',
+                                    'input_type'  => 'select',
+                                )); ?>
+                            </div>
+                            <div class="form-group">
+                                <label><?php _e('Discount Value', 'frontend-dashboard') ?></label>
+                                <input type="text"
+                                       placeholder="<?php _e('Discount Value', 'frontend-dashboard') ?>"
+                                       name="discount_value" class="form-control"/>
+                            </div>
+                            <div class="form-group">
+                                <label><?php _e('Discount', 'frontend-dashboard') ?></label>
+                                <?php echo fed_get_input_details(array(
+                                    'input_value' => fed_mp_discount_type(),
+                                    'input_meta'  => 'discount',
+                                    'input_type'  => 'select',
+                                )); ?>
+                            </div>
+                            <div class="form-group">
+                                <label><?php _e('User Role', 'frontend-dashboard') ?></label>
+                                <select name="user_role" class="form-control">
+                                    <option value=""><?php _e('Please select user role',
+                                            'frontend-dashboard') ?></option>
+                                    <?php wp_dropdown_roles() ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label><?php _e('Default User Role', 'frontend-dashboard') ?></label>
+                                <select name="default_user_role" class="form-control">
+                                    <option value=""><?php _e('Please select default user role',
+                                            'frontend-dashboard') ?></option>
+                                    <?php wp_dropdown_roles() ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close',
+                            'frontend-dashboard') ?></button>
+                    <button type="submit" class="btn btn-primary"><?php _e('Add New Transaction',
+                            'frontend-dashboard') ?></button>
+                </div>
+
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </form>
 </div><!-- /.modal -->

@@ -46,7 +46,7 @@ function fed_get_transactions()
 	FROM        $table_payment payment
 	INNER JOIN  $table_user users
 	            ON payment.user_id = users.id
-	ORDER BY    payment.id
+	ORDER BY    payment.id DESC
 	", ARRAY_A);
     } else {
         return fed_fetch_table_rows_by_key_value(BC_FED_TABLE_PAYMENT, 'user_id', get_current_user_id());
@@ -63,7 +63,8 @@ function fed_transaction_product_details($transaction)
     if (isset($transaction['product_object'])) {
         $product = unserialize($transaction['product_object']);
 
-        return sprintf('Name: %s <br> Amount: %s %s<br> Plan Type: %s <br> Discount: %s',
+        return sprintf('<strong>%s</strong> <br> <strong>Name:</strong> %s <br> <strong>Amount:</strong> %s %s<br> <strong>Plan Type:</strong> %s <br> <strong>Discount:</strong> %s',
+            esc_attr(mb_strtoupper($product['type'])),
             esc_attr($product['name']),
             esc_attr($product['amount']),
             esc_attr($product['currency']),
@@ -73,4 +74,56 @@ function fed_transaction_product_details($transaction)
     }
 
     return null;
+}
+
+/**
+ * @param $object
+ *
+ * @return float|int
+ */
+function fed_get_exact_amount($object)
+{
+    $amount = isset($object['amount']) ? $object['amount'] : 0;
+    if (isset($object['discount']) && $object['discount'] === 'percentage') {
+        $amount = ($amount * $object['discount_value']) / 100;
+    }
+    if (isset($object['discount']) && $object['discount'] === 'flat') {
+        $amount = ($amount - $object['discount_value']);
+    }
+
+    return $amount * 100;
+}
+
+/**
+ * @param $object
+ *
+ * @return bool|false|string
+ */
+function fed_get_membership_expiry_date($object)
+{
+    if ($object && isset($object['plan_type'])) {
+        if ($object['plan_type'] === 'free') {
+            return __('Free', 'frontend-dashboard');
+        }
+
+        if ($object['plan_type'] === 'custom') {
+            $days = isset($object['plan_days']) ? $object['plan_days'] + 1 : '0';
+
+            return date('Y-m-d', strtotime("+'.$days.' days"));
+        }
+
+        if ($object['plan_type'] === 'monthly') {
+            return date('Y-m-d', strtotime("+ 31 days"));
+        }
+
+        if ($object['plan_type'] === 'annual') {
+            return date('Y-m-d', strtotime("+ 367 days"));
+        }
+
+        if ($object['plan_type'] === 'one_time') {
+            return __('One Time', 'frontend-dashboard');
+        }
+    }
+
+    return false;
 }

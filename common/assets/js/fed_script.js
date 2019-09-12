@@ -95,7 +95,6 @@ jQuery(document).ready(function ($) {
             e.preventDefault();
         });
 
-
         // User Profile Save
         $('form.fed_user_profile_save').on('submit', function (e) {
             var click = $(this);
@@ -493,7 +492,7 @@ jQuery(document).ready(function ($) {
                     } else {
                         error = results.data.message;
                     }
-                    console.log(results.data.message);
+                    // console.log(results.data.message);
                     swal({
                         title: error,
                         type: "error",
@@ -511,6 +510,10 @@ jQuery(document).ready(function ($) {
             },
 
         };
+
+        if ($('.fed_datatable').length) {
+            $('.fed_datatable').dataTable({"autoWidth": false, "order": []});
+        }
 
         function fed_toggle_loader() {
             $('.preview-area').toggleClass('hide');

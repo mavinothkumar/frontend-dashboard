@@ -279,7 +279,10 @@ if ( ! function_exists('fed_is_admin')) {
      */
     function fed_is_admin()
     {
-        return fed_is_current_user_role();
+        $user = wp_get_current_user();
+
+        return in_array('administrator', $user->roles) ? true : false;
+
     }
 }
 
@@ -545,8 +548,10 @@ function fed_show_alert_message($message, $type = 'danger')
  */
 function fed_illegal_usernames()
 {
-    $login = get_option('fed_admin_login');
-    $illegal = isset($login['restrict_username']) && !empty($login['restrict_username']) ? explode(',', $login['restrict_username']) : array();
+    $login   = get_option('fed_admin_login');
+    $illegal = isset($login['restrict_username']) && ! empty($login['restrict_username']) ? explode(',',
+        $login['restrict_username']) : array();
+
     return apply_filters('fed_illegal_user_names', $illegal);
 }
 

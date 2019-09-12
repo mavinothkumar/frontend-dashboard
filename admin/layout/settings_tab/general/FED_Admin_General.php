@@ -233,6 +233,15 @@ if ( ! class_exists('FED_Admin_General')) {
                                     'version'      => false,
                                     'in_footer'    => true,
                             ),
+                            'fed_datatables'         => array(
+                                    'wp_core'      => false,
+                                    'name'         => 'Data Tables',
+                                    'plugin_name'  => 'Frontend Dashboard',
+                                    'src'          => plugins_url('/common/assets/js/datatables.js', BC_FED_PLUGIN),
+                                    'dependencies' => array(),
+                                    'version'      => false,
+                                    'in_footer'    => true,
+                            ),
                     ),
                     'styles'  => array(
                             'fed_admin_bootstrap'          => array(
@@ -286,6 +295,15 @@ if ( ! class_exists('FED_Admin_General')) {
                                     'name'         => 'Select 2',
                                     'plugin_name'  => 'Frontend Dashboard',
                                     'src'          => plugins_url('/common/assets/css/select2.css', BC_FED_PLUGIN),
+                                    'dependencies' => array(),
+                                    'version'      => BC_FED_PLUGIN_VERSION,
+                                    'media'        => 'all',
+                            ),
+                            'fed_datatables'                  => array(
+                                    'wp_core'      => false,
+                                    'name'         => 'DataTables',
+                                    'plugin_name'  => 'Frontend Dashboard',
+                                    'src'          => plugins_url('/common/assets/css/datatables.css', BC_FED_PLUGIN),
                                     'dependencies' => array(),
                                     'version'      => BC_FED_PLUGIN_VERSION,
                                     'media'        => 'all',
@@ -498,6 +516,15 @@ if ( ! class_exists('FED_Admin_General')) {
                                     'version'      => false,
                                     'in_footer'    => true,
                             ),
+                            'fed_datatables'         => array(
+                                'wp_core'      => false,
+                                'name'         => 'Data Tables',
+                                'plugin_name'  => 'Frontend Dashboard',
+                                'src'          => plugins_url('/common/assets/js/datatables.js', BC_FED_PLUGIN),
+                                'dependencies' => array(),
+                                'version'      => false,
+                                'in_footer'    => true,
+                            ),
                     ),
                     'styles'  => array(
                             'fed_admin_bootstrap'          => array(
@@ -582,6 +609,15 @@ if ( ! class_exists('FED_Admin_General')) {
                                     'dependencies' => array(),
                                     'version'      => BC_FED_PLUGIN_VERSION,
                                     'media'        => 'all',
+                            ),
+                            'fed_datatables'                  => array(
+                                'wp_core'      => false,
+                                'name'         => 'DataTables',
+                                'plugin_name'  => 'Frontend Dashboard',
+                                'src'          => plugins_url('/common/assets/css/datatables.css', BC_FED_PLUGIN),
+                                'dependencies' => array(),
+                                'version'      => BC_FED_PLUGIN_VERSION,
+                                'media'        => 'all',
                             ),
                     ),
             ));
