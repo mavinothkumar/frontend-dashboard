@@ -69,6 +69,11 @@ Fed User Profile Layout
     font-weight: 500;
 }
 
+.bc_fed .fed_flex_center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .bc_fed .fed_admin_user_role_delete button {
     background-color: transparent;
     border: none;

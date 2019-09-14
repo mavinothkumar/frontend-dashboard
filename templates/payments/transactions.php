@@ -11,7 +11,7 @@ if ( ! $transactions instanceof WP_Error) {
     ?>
     <div class="table-responsive">
         <?php if (fed_is_admin()) { ?>
-            <button type="button"  data-target="#fed_transaction_modal" class="btn btn-primary m-b-10" data-toggle="modal"><?php _e('Add New Transaction', 'frontend-dashboard'); ?></button>
+            <button type="button" data-toggle="modal" data-target="#fed_transaction_modal" class="btn btn-primary m-b-10 fed_frontend_add_new_transaction"><?php _e('Add New Transaction', 'frontend-dashboard'); ?></button>
         <?php } ?>
         <table class="table table-hover table-striped fed_datatable">
             <thead>
@@ -46,9 +46,11 @@ if ( ! $transactions instanceof WP_Error) {
                         <td><?php echo esc_attr($transaction['ends_at']) ?></td>
                         <td><?php echo esc_attr($transaction['created']) ?></td>
                         <td>
+                            <?php if($transaction['invoice_url'] !== 'custom'){ ?>
                             <a target="_blank" href="<?php echo esc_url($transaction['invoice_url']) ?>">
                                 <i class="fa fa-download"></i>
                             </a>
+                            <?php } ?>
                         </td>
                     </tr>
                 <?php }
@@ -171,21 +173,22 @@ if ( ! $transactions instanceof WP_Error) {
                                     'input_type'  => 'select',
                                 )); ?>
                             </div>
+
                             <div class="form-group">
                                 <label><?php _e('User Role', 'frontend-dashboard') ?></label>
-                                <select name="user_role" class="form-control">
-                                    <option value=""><?php _e('Please select user role',
-                                            'frontend-dashboard') ?></option>
-                                    <?php wp_dropdown_roles() ?>
-                                </select>
+                                <?php echo fed_get_input_details(array(
+                                    'input_value' => fed_get_user_roles_without_admin(),
+                                    'input_meta'  => 'user_role',
+                                    'input_type'  => 'select',
+                                )); ?>
                             </div>
                             <div class="form-group">
                                 <label><?php _e('Default User Role', 'frontend-dashboard') ?></label>
-                                <select name="default_user_role" class="form-control">
-                                    <option value=""><?php _e('Please select default user role',
-                                            'frontend-dashboard') ?></option>
-                                    <?php wp_dropdown_roles() ?>
-                                </select>
+                                <?php echo fed_get_input_details(array(
+                                    'input_value' => fed_get_user_roles_without_admin(),
+                                    'input_meta'  => 'default_user_role',
+                                    'input_type'  => 'select',
+                                )); ?>
                             </div>
                         </div>
                     </div>

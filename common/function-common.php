@@ -199,6 +199,7 @@ if ( ! function_exists('fed_shortcode_lists')) {
             'fed_forgot_password_only',
             'fed_dashboard',
             'fed_user',
+            'fed_transactions',
         ));
     }
 }

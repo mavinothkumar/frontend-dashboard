@@ -33,6 +33,27 @@ if ( ! class_exists( 'FEDPaymentMenu' ) ) {
 					'name'   => 'Transactions',
 					'submenu' => 'FEDTransaction@transactions',
 				),
+                'invoice' => array(
+					'icon'   => 'fa fa-receipt',
+					'name'   => 'Invoice',
+                    'submenu' => array(
+                        'FEDInvoice@settings' => array(
+                            'icon' => 'fa fa-cogs',
+                            'name' => 'Settings',
+                            'menu' => array( 'FEDInvoice@settings' ),
+                        ),
+                        'FEDInvoice@details' => array(
+                            'icon' => 'far fa-building',
+                            'name' => 'Company Details',
+                            'menu' => array( 'FEDInvoice@details' ),
+                        ),
+                        'FEDInvoiceTemplate@template' => array(
+                            'icon' => 'fa fa-paint-brush',
+                            'name' => 'Template',
+                            'menu' => array( 'FEDInvoiceTemplate@template' ),
+                        ),
+                    ),
+				),
 			) );
 			?>
             <div class="bc_fed">
