@@ -30,7 +30,7 @@ if ( ! class_exists('FEDInvoice')) {
                     'loader' => '',
                 ),
                 'input' => array(
-                    'Company Logo'  => array(
+                    'Company Logo' => array(
                         'col'          => 'col-md-12',
                         'name'         => __('Company Logo', 'frontend-dashboard'),
                         'input'        => fed_get_input_details(array(
@@ -42,7 +42,7 @@ if ( ! class_exists('FEDInvoice')) {
                             'content' => __('Company Logo', 'frontend-dashboard'),
                         )),
                     ),
-                    'Logo Width'    => array(
+                    'Logo Width'   => array(
                         'col'          => 'col-md-6',
                         'name'         => __('Logo Width (px)', 'frontend-dashboard'),
                         'input'        =>
@@ -57,7 +57,7 @@ if ( ! class_exists('FEDInvoice')) {
                             'content' => __('Logo Width in Pixel', 'frontend-dashboard'),
                         )),
                     ),
-                    'Logo Height'   => array(
+                    'Logo Height'  => array(
                         'col'          => 'col-md-6',
                         'name'         => __('Logo Height (px)', 'frontend-dashboard'),
                         'input'        =>
@@ -72,7 +72,7 @@ if ( ! class_exists('FEDInvoice')) {
                             'content' => __('Logo Height in Pixel', 'frontend-dashboard'),
                         )),
                     ),
-                    'Company Name'  => array(
+                    'Company Name' => array(
                         'col'          => 'col-md-12',
                         'name'         => __('Company Name', 'frontend-dashboard'),
                         'input'        =>
@@ -86,7 +86,7 @@ if ( ! class_exists('FEDInvoice')) {
                             'content' => __('Company Name', 'frontend-dashboard'),
                         )),
                     ),
-                    'Door Number'   => array(
+                    'Door Number'  => array(
                         'col'          => 'col-md-6',
                         'name'         => __('Door Number', 'frontend-dashboard'),
                         'input'        =>
@@ -100,7 +100,7 @@ if ( ! class_exists('FEDInvoice')) {
                             'content' => __('Door Number', 'frontend-dashboard'),
                         )),
                     ),
-                    'Street Name'   => array(
+                    'Street Name'  => array(
                         'col'          => 'col-md-6',
                         'name'         => __('Street Name', 'frontend-dashboard'),
                         'input'        =>
@@ -114,7 +114,7 @@ if ( ! class_exists('FEDInvoice')) {
                             'content' => __('Street Name', 'frontend-dashboard'),
                         )),
                     ),
-                    'City'          => array(
+                    'City'         => array(
                         'col'          => 'col-md-6',
                         'name'         => __('City', 'frontend-dashboard'),
                         'input'        =>
@@ -126,7 +126,7 @@ if ( ! class_exists('FEDInvoice')) {
                             )),
                         'help_message' => fed_show_help_message(array('content' => __('City', 'frontend-dashboard'))),
                     ),
-                    'State'         => array(
+                    'State'        => array(
                         'col'          => 'col-md-6',
                         'name'         => __('State', 'frontend-dashboard'),
                         'input'        =>
@@ -138,7 +138,7 @@ if ( ! class_exists('FEDInvoice')) {
                             )),
                         'help_message' => fed_show_help_message(array('content' => __('State', 'frontend-dashboard'))),
                     ),
-                    'Postal Code'   => array(
+                    'Postal Code'  => array(
                         'col'          => 'col-md-6',
                         'name'         => __('Postal Code', 'frontend-dashboard'),
                         'input'        =>
@@ -152,7 +152,7 @@ if ( ! class_exists('FEDInvoice')) {
                             'content' => __('Postal Code', 'frontend-dashboard'),
                         )),
                     ),
-                    'Country'       => array(
+                    'Country'      => array(
                         'col'          => 'col-md-6',
                         'name'         => __('Country', 'frontend-dashboard'),
                         'input'        =>
@@ -167,19 +167,6 @@ if ( ! class_exists('FEDInvoice')) {
                             'content' => __('Country', 'frontend-dashboard'),
                         )),
                     ),
-                    'Note to Buyer' => array(
-                        'col'          => 'col-md-12',
-                        'name'         => __('Note to Buyer', 'frontend-dashboard'),
-                        'input'        =>
-                            fed_get_input_details(array(
-                                'placeholder' => __('Note to Buyer', 'frontend-dashboard'),
-                                'input_meta'  => 'note_to_buyer',
-                                'user_value'  => isset($settings['details']['note_to_buyer']) ? $settings['details']['note_to_buyer'] : '',
-                                'input_type'  => 'multi_line',
-                            )),
-                        'help_message' => fed_show_help_message(array('content' => __('Note to Buyer'))),
-                    ),
-
                 ),
             );
             $array    = apply_filters('fed_invoice_template_data', $array);
@@ -193,17 +180,16 @@ if ( ! class_exists('FEDInvoice')) {
         {
             $invoice            = get_option('fed_invoice_settings');
             $invoice['details'] = array(
-                'logo'          => isset($request['logo']) ? (int) $request['logo'] : '',
-                'width'         => isset($request['width']) ? fed_sanitize_text_field($request['width']) : '',
-                'height'        => isset($request['height']) ? fed_sanitize_text_field($request['height']) : '',
-                'country'       => isset($request['country']) ? fed_sanitize_text_field($request['country']) : '',
-                'postal_code'   => isset($request['postal_code']) ? fed_sanitize_text_field($request['postal_code']) : '',
-                'state'         => isset($request['state']) ? fed_sanitize_text_field($request['state']) : '',
-                'city'          => isset($request['city']) ? fed_sanitize_text_field($request['city']) : '',
-                'street_name'   => isset($request['street_name']) ? fed_sanitize_text_field($request['street_name']) : '',
-                'door_number'   => isset($request['door_number']) ? fed_sanitize_text_field($request['door_number']) : '',
-                'company_name'  => isset($request['company_name']) ? fed_sanitize_text_field($request['company_name']) : '',
-                'note_to_buyer' => isset($request['note_to_buyer']) ? fed_sanitize_text_field($request['note_to_buyer']) : '',
+                'logo'         => isset($request['logo']) ? (int) $request['logo'] : '',
+                'width'        => isset($request['width']) ? fed_sanitize_text_field($request['width']) : '',
+                'height'       => isset($request['height']) ? fed_sanitize_text_field($request['height']) : '',
+                'country'      => isset($request['country']) ? fed_sanitize_text_field($request['country']) : '',
+                'postal_code'  => isset($request['postal_code']) ? fed_sanitize_text_field($request['postal_code']) : '',
+                'state'        => isset($request['state']) ? fed_sanitize_text_field($request['state']) : '',
+                'city'         => isset($request['city']) ? fed_sanitize_text_field($request['city']) : '',
+                'street_name'  => isset($request['street_name']) ? fed_sanitize_text_field($request['street_name']) : '',
+                'door_number'  => isset($request['door_number']) ? fed_sanitize_text_field($request['door_number']) : '',
+                'company_name' => isset($request['company_name']) ? fed_sanitize_text_field($request['company_name']) : '',
             );
 
             $new_settings = apply_filters('fed_payment_invoice_template_update', $invoice,
@@ -376,6 +362,11 @@ if ( ! class_exists('FEDInvoice')) {
             </div>';
 
             wp_send_json_success(array('message' => 'ok', 'html' => $html));
+        }
+
+        public function user()
+        {
+            echo 'success';
         }
     }
 }

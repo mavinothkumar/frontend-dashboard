@@ -163,7 +163,7 @@ if ( ! $transactions instanceof WP_Error) {
                                         <label><?php _e('Product Name', 'frontend-dashboard') ?></label>
                                         <input type="text"
                                                placeholder="<?php _e('Product Name', 'frontend-dashboard') ?>"
-                                               name="items[<?php echo $random; ?>][name]" class="form-control"/>
+                                               name="items[<?php echo $random; ?>][plan_name]" class="form-control"/>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -268,7 +268,7 @@ if ( ! $transactions instanceof WP_Error) {
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <label><?php _e('Discount Value', 'frontend-dashboard') ?></label>
+                                    <label><?php _e('Discount', 'frontend-dashboard') ?></label>
                                     <div class="input-group fed_input_group_select">
                                         <input type="text"
                                                placeholder="<?php _e('Discount Value', 'frontend-dashboard') ?>"

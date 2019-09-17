@@ -52,6 +52,11 @@ if ( ! class_exists( 'FEDPaymentMenu' ) ) {
                             'name' => 'Template',
                             'menu' => array( 'FEDInvoiceTemplate@template' ),
                         ),
+                        'FEDInvoice@user' => array(
+                            'icon' => 'fa fa-user-times',
+                            'name' => 'User Address',
+                            'menu' => array( 'FEDInvoice@user' ),
+                        ),
                     ),
 				),
 			) );

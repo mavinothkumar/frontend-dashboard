@@ -38,6 +38,12 @@
     border: 2px solid #e7e7e7;
 }
 
+.bc_fed .fed_equal_column_height {
+    display: flex;
+    display: -webkit-flex;
+    flex-wrap: wrap;
+}
+
 .bc_fed .fed_no_m {
     margin: 0 !important;
 }

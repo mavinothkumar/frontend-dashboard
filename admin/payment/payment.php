@@ -109,8 +109,8 @@ function fed_transaction_product_details($transaction)
                 esc_attr($item['amount']),
                 esc_attr($item['currency']),
                 ucfirst(fed_convert_this_to_that(esc_attr($item['plan_type']), '_', ' ')),
-                isset($item['discount_value']) && !empty($item['discount_value']) ? esc_attr($item['discount_value']).' '.esc_attr($item['discount']) : '',
-                isset($item['tax_value']) && !empty($item['tax_value']) ? esc_attr($item['tax_value']).' '.esc_attr($item['tax']) : 'NA'
+                isset($item['discount_value']) && !empty($item['discount_value']) ? esc_attr($item['discount_value']).' '.esc_attr(fed_mp_get_discount_type($item['discount'])) : '',
+                isset($item['tax_value']) && !empty($item['tax_value']) ? esc_attr($item['tax_value']).' '.esc_attr(fed_mp_get_discount_type($item['tax'])) : 'NA'
             );
         }
 

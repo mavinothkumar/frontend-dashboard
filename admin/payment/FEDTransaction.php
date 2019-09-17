@@ -148,7 +148,7 @@ if ( ! class_exists('FEDTransaction')) {
                     'currency'          => $currency,
                     'plan_type'         => isset($item['plan_type']) ? fed_sanitize_text_field($item['plan_type']) : '',
                     'plan_days'         => isset($item['plan_days']) ? fed_sanitize_text_field($item['plan_days']) : '',
-                    'name'              => isset($item['name']) ? fed_sanitize_text_field($item['name']) : '',
+                    'plan_name'         => isset($item['plan_name']) ? fed_sanitize_text_field($item['plan_name']) : '',
                     'type'              => isset($item['type']) ? fed_sanitize_text_field($item['type']) : '',
                     'default_user_role' => isset($item['default_user_role']) ? fed_sanitize_text_field($item['default_user_role']) : '',
                     'user_role'         => isset($item['user_role']) ? fed_sanitize_text_field($item['user_role']) : '',

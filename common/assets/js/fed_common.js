@@ -1,6 +1,7 @@
 jQuery(document).ready(function ($) {
 
     var b = $('body');
+    var transaction_modal = $('#fed_transaction_modal');
     b.on('submit', '.fed_ajax_print_invoice', function (e) {
         var form = $(this);
         $.ajax({
@@ -23,4 +24,10 @@ jQuery(document).ready(function ($) {
         });
         e.preventDefault();
     });
+
+    if (transaction_modal.length) {
+        transaction_modal.on('hidden.bs.modal', function () {
+            location.reload();
+        });
+    }
 });
