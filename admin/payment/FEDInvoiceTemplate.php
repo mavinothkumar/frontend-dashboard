@@ -12,7 +12,7 @@ if ( ! class_exists( 'FEDInvoiceTemplate' ) ) {
 				$settings = get_option( 'fed_payment_settings' );
 				?>
                 <form method="post" class="fed_ajax"
-                      action="<?php echo fed_get_form_action( 'fed_ajax_request' ) . '&fed_action_hook=FEDInvoiceTemplate@update'; ?>">
+                      action="<?php echo fed_get_ajax_form_action( 'fed_ajax_request' ) . '&fed_action_hook=FEDInvoiceTemplate@update'; ?>">
 					<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
                     <div class="row">
 						<?php

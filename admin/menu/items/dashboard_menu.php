@@ -476,7 +476,7 @@ function fed_get_dashboard_menu_items_sort()
     ?>
     <ul class="fed_dashboard_menu_sort listsClass" id="fed_dashboard_menu_sort"
         data-nonce="<?php echo wp_create_nonce('fed_nonce') ?>"
-        data-url="<?php echo fed_get_form_action('fed_menu_sorting_items'); ?>">
+        data-url="<?php echo fed_get_ajax_form_action('fed_menu_sorting_items'); ?>">
         <?php
         foreach ($new_menus as $new_menu) {
             $isOpen    = '';

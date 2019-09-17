@@ -15,20 +15,25 @@ if ( ! defined('ABSPATH')) {
 function fed_verify_nonce($request, $permission = null)
 {
     if ( ! isset($request['fed_nonce'])) {
-        wp_send_json_error(array('message' => 'Invalid Request - 700'));
+        $message = __('Invalid Request - 700', 'frontend-dashboard');
+        wp_doing_ajax() ? wp_send_json_error(array('message' => $message)) : wp_die($message);
     }
 
     if ( ! wp_verify_nonce($request['fed_nonce'], 'fed_nonce')) {
-        wp_send_json_error(array('message' => 'Invalid Request - 701'));
+        $message = __('Invalid Request - 701', 'frontend-dashboard');
+        wp_doing_ajax() ? wp_send_json_error(array('message' => $message)) : wp_die($message);
     }
 
     if (null !== $permission) {
         $user_role = fed_get_current_user_role_key();
         if (is_string($permission) && $user_role !== $permission) {
-            wp_send_json_error(array('message' => 'Invalid Request - 702'));
+            $message = __('Invalid Request - 702', 'frontend-dashboard');
+            wp_doing_ajax() ? wp_send_json_error(array('message' => $message)) : wp_die($message);
+
         }
         if (is_array($permission) && ! in_array($user_role, $permission, true)) {
-            wp_send_json_error(array('message' => 'Invalid Request - 703'));
+            $message = __('Invalid Request - 703', 'frontend-dashboard');
+            wp_doing_ajax() ? wp_send_json_error(array('message' => $message)) : wp_die($message);
         }
     }
 }
@@ -353,7 +358,9 @@ function fed_get_select_option_value($input_value)
  */
 function fed_get_user_roles()
 {
-    require_once(ABSPATH.'/wp-admin/includes/user.php');
+    if ( ! function_exists( 'get_editable_roles' ) ) {
+        require_once ABSPATH . 'wp-admin/includes/user.php';
+    }
     $user_roles = get_editable_roles();
     $roles      = array();
     foreach ($user_roles as $key => $user_role) {

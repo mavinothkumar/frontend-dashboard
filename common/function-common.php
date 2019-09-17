@@ -238,6 +238,22 @@ if ( ! function_exists('fed_js_translation')) {
     }
 }
 
+if ( ! function_exists('fed_get_ajax_form_action')) {
+    /**
+     * @param  null  $action
+     *
+     * @return string|void
+     */
+    function fed_get_ajax_form_action($action = null)
+    {
+        if ($action) {
+            return admin_url('admin-ajax.php?action='.$action);
+        }
+
+        return '#';
+    }
+}
+
 if ( ! function_exists('fed_get_form_action')) {
     /**
      * @param  null  $action
@@ -247,7 +263,7 @@ if ( ! function_exists('fed_get_form_action')) {
     function fed_get_form_action($action = null)
     {
         if ($action) {
-            return admin_url('admin-ajax.php?action='.$action);
+            return get_admin_url().'admin-post.php?action='.$action;
         }
 
         return '#';

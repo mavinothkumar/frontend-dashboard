@@ -324,7 +324,7 @@ if(!function_exists( 'fed_get_status_menu')) {
                                                                     </td>
                                                                     <td>
                                                                         <form method="post" class="fed_ajax"
-                                                                              action="<?php echo fed_get_form_action( 'fed_status_delete_table' ); ?>">
+                                                                              action="<?php echo fed_get_ajax_form_action( 'fed_status_delete_table' ); ?>">
 																			<?php fed_wp_nonce_field( 'fed_nonce',
 																				'fed_nonce' ); ?>
                                                                             <input type="hidden" name="table_name"
@@ -371,7 +371,7 @@ if(!function_exists( 'fed_get_status_menu')) {
                                                                     </td>
                                                                     <td>
                                                                         <form method="post" class="fed_ajax"
-                                                                              action="<?php echo fed_get_form_action( 'fed_status_empty_table' ); ?>">
+                                                                              action="<?php echo fed_get_ajax_form_action( 'fed_status_empty_table' ); ?>">
 																			<?php fed_wp_nonce_field( 'fed_nonce',
 																				'fed_nonce' ); ?>
                                                                             <input type="hidden" name="table_name"
@@ -421,7 +421,7 @@ if(!function_exists( 'fed_get_status_menu')) {
                                                 <div class="col-md-12">
                                                     <div class="text-right">
                                                         <form method="post" class="fed_ajax"
-                                                              action="<?php echo fed_get_form_action( 'fed_status_delete_all_option' ); ?>">
+                                                              action="<?php echo fed_get_ajax_form_action( 'fed_status_delete_all_option' ); ?>">
 															<?php fed_wp_nonce_field( 'fed_nonce',
 																'fed_nonce' ); ?>
                                                             <button type="submit"
@@ -443,7 +443,7 @@ if(!function_exists( 'fed_get_status_menu')) {
                                                             </div>
                                                             <div class="">
                                                                 <form method="post" class="fed_ajax"
-                                                                      action="<?php echo fed_get_form_action( 'fed_status_delete_option' ); ?>">
+                                                                      action="<?php echo fed_get_ajax_form_action( 'fed_status_delete_option' ); ?>">
 																	<?php fed_wp_nonce_field( 'fed_nonce',
 																		'fed_nonce' ); ?>
                                                                     <input type="hidden" name="option_id"

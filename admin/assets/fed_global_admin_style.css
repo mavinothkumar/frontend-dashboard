@@ -34,6 +34,9 @@
 .fed_border_2px {
     border: 2px solid #033333;
 }
+.fed_border_gray_2px {
+    border: 2px solid #e7e7e7;
+}
 
 .bc_fed .fed_no_m {
     margin: 0 !important;
@@ -151,6 +154,7 @@
 .fed_m_l_10 {
     margin-left: 10px !important;
 }
+
 .fed_show_cursor {
     cursor: pointer !important;
 }
@@ -200,4 +204,19 @@
 
 .bc_fed .fed_frontend_dashboard_menu .panel {
     margin-bottom: 1px;
+}
+
+.bc_fed .fed_input_group_select .input-group-addon, .bc_fed .fed_input_group_select .input-group-btn {
+    width: auto !important;
+}
+.bc_fed .fed_input_group_select .input-group-addon {
+    padding: 0 !important;
+    background-color: transparent !important;
+    border: none !important;
+}
+.bc_fed #fed_transaction_modal .modal-lg {
+    width: 1200px !important;
+}
+.bc_fed #fed_transaction_modal {
+    z-index: 9999;
 }

@@ -242,6 +242,15 @@ if ( ! class_exists('FED_Admin_General')) {
                                     'version'      => false,
                                     'in_footer'    => true,
                             ),
+                            'fed_common'            => array(
+                                'wp_core'      => false,
+                                'name'         => 'FED Common Script',
+                                'plugin_name'  => 'Frontend Dashboard',
+                                'src'          => plugins_url('/common/assets/js/fed_common.js', BC_FED_PLUGIN),
+                                'dependencies' => array('jquery'),
+                                'version'      => false,
+                                'in_footer'    => true,
+                            ),
                     ),
                     'styles'  => array(
                             'fed_admin_bootstrap'          => array(
@@ -338,7 +347,7 @@ if ( ! class_exists('FED_Admin_General')) {
             $default = $this->default_admin_script();
             ?>
             <form method="post" class="fed_admin_menu fed_ajax"
-                  action="<?php echo fed_get_form_action('fed_admin_script_menu') ?>">
+                  action="<?php echo fed_get_ajax_form_action('fed_admin_script_menu') ?>">
                 <?php fed_wp_nonce_field('fed_nonce', 'fed_nonce') ?>
 
                 <?php echo fed_loader(); ?>
@@ -476,6 +485,15 @@ if ( ! class_exists('FED_Admin_General')) {
                                     'name'         => 'FED Frontend Script',
                                     'plugin_name'  => 'Frontend Dashboard',
                                     'src'          => plugins_url('/common/assets/js/fed_script.js', BC_FED_PLUGIN),
+                                    'dependencies' => array('jquery'),
+                                    'version'      => false,
+                                    'in_footer'    => true,
+                            ),
+                            'fed_common'            => array(
+                                    'wp_core'      => false,
+                                    'name'         => 'FED Common Script',
+                                    'plugin_name'  => 'Frontend Dashboard',
+                                    'src'          => plugins_url('/common/assets/js/fed_common.js', BC_FED_PLUGIN),
                                     'dependencies' => array('jquery'),
                                     'version'      => false,
                                     'in_footer'    => true,
@@ -629,7 +647,7 @@ if ( ! class_exists('FED_Admin_General')) {
             $default = $this->default_frontend_script();
             ?>
             <form method="post" class="fed_admin_menu fed_ajax"
-                  action="<?php echo fed_get_form_action('fed_admin_script_menu') ?>">
+                  action="<?php echo fed_get_ajax_form_action('fed_admin_script_menu') ?>">
                 <?php fed_wp_nonce_field('fed_nonce', 'fed_nonce') ?>
                 <input type="hidden" name="fed_admin_script_type" value="frontend"/>
 

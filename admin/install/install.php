@@ -171,7 +171,7 @@ function fed_plugin_activation()
         $payment = "CREATE TABLE `".$payment_table."` (
 		  id BIGINT(20) NOT NULL AUTO_INCREMENT,
 		  user_id BIGINT(20) NOT NULL,
-		  product_object TEXT NOT NULL,
+		  items TEXT NOT NULL,
 		  transaction_id VARCHAR(255) NOT NULL,
 		  invoice_url TEXT NULL,
 		  amount VARCHAR(100) NOT NULL,
@@ -180,6 +180,7 @@ function fed_plugin_activation()
 		  updated TIMESTAMP NOT NULL,
 		  created TIMESTAMP NOT NULL,
 		  ends_at VARCHAR(100) NOT NULL,
+		  status VARCHAR(100) NULL,
 		  PRIMARY KEY  (id)
 		  ) $charset_collate;";
 
