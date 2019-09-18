@@ -35,7 +35,7 @@ if ( ! $transactions instanceof WP_Error) {
             <tbody>
             <?php
             if (count($transactions)) {
-                foreach ($transactions as $transaction) {?>
+                foreach ($transactions as $transaction) { ?>
                     <tr>
                         <?php if (fed_is_admin()) { ?>
                             <td><?php printf('<strong>ID:</strong> %s <br> <strong>Name:</strong> %s <br> <strong>Email:</strong> %s',
@@ -63,7 +63,7 @@ if ( ! $transactions instanceof WP_Error) {
             } ?>
             </tbody>
         </table>
-        <div class="modal fade" id="fed_invoice_popup">
+        <div class="modal fade" id="fed_invoice_popup" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -75,7 +75,7 @@ if ( ! $transactions instanceof WP_Error) {
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-default fed_invoice_print" data-dismiss="modal">
+                        <button type="button" class="btn btn-default fed_invoice_print">
                             <i class="fa fa-print"></i>
                         </button>
                     </div>
@@ -158,12 +158,21 @@ if ( ! $transactions instanceof WP_Error) {
 
                         <div class="col-md-12 p-10">
                             <div class="row">
-                                <div class="col-md-5">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label><?php _e('Product Name', 'frontend-dashboard') ?></label>
                                         <input type="text"
                                                placeholder="<?php _e('Product Name', 'frontend-dashboard') ?>"
                                                name="items[<?php echo $random; ?>][plan_name]" class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label><?php _e('Description', 'frontend-dashboard') ?></label>
+                                        <input type="text"
+                                               placeholder="<?php _e('Product Description',
+                                                   'frontend-dashboard') ?>"
+                                               name="items[<?php echo $random; ?>][description]" class="form-control"/>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -201,7 +210,7 @@ if ( ! $transactions instanceof WP_Error) {
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label><?php _e('If Plan Type Custom', 'frontend-dashboard') ?></label>
+                                        <label><?php _e('If Plan Type Date', 'frontend-dashboard') ?></label>
                                         <input type="text"
                                                placeholder="<?php _e('Number of Days',
                                                    'frontend-dashboard') ?>"
@@ -252,7 +261,7 @@ if ( ! $transactions instanceof WP_Error) {
                                           </span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <label><?php _e('Tax', 'frontend-dashboard') ?></label>
                                     <div class="input-group fed_input_group_select">
                                         <input type="text"
@@ -260,14 +269,14 @@ if ( ! $transactions instanceof WP_Error) {
                                                name="items[<?php echo $random; ?>][tax_value]" class="form-control"/>
                                         <span class="input-group-addon">
                                             <?php echo fed_get_input_details(array(
-                                                'input_value' => fed_mp_discount_type(),
+                                                'input_value' => fed_discount_type(),
                                                 'input_meta'  => 'items['.$random.'][tax]',
                                                 'input_type'  => 'select',
                                             )); ?>
                                           </span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <label><?php _e('Discount', 'frontend-dashboard') ?></label>
                                     <div class="input-group fed_input_group_select">
                                         <input type="text"
@@ -276,11 +285,20 @@ if ( ! $transactions instanceof WP_Error) {
                                                class="form-control"/>
                                         <span class="input-group-addon">
                                             <?php echo fed_get_input_details(array(
-                                                'input_value' => fed_mp_discount_type(),
+                                                'input_value' => fed_discount_type(),
                                                 'input_meta'  => 'items['.$random.'][discount]',
                                                 'input_type'  => 'select',
                                             )); ?>
                                           </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <label><?php _e('Note to Payee', 'frontend-dashboard') ?></label>
+                                    <div class="input-group">
+                                        <input type="text"
+                                               placeholder="<?php _e('Note to Payee', 'frontend-dashboard') ?>"
+                                               name="items[<?php echo $random; ?>][note_to_payee]"
+                                               class="form-control"/>
                                     </div>
                                 </div>
 
@@ -299,3 +317,31 @@ if ( ! $transactions instanceof WP_Error) {
         </div><!-- /.modal-dialog -->
     </form>
 </div><!-- /.modal -->
+<style>
+    @media screen {
+        #fed_invoice_popup {
+            display: none;
+        }
+    }
+
+    @media print {
+        html, body * {
+            visibility: hidden;
+            background: white !important;
+        }
+
+        #fed_invoice_popup .modal-body, #fed_invoice_popup .modal-body * {
+            visibility: visible;
+        }
+
+        #fed_invoice_popup {
+            border: 2px solid #033333 !important;
+            width: auto;
+        }
+
+        #fed_invoice_popup .container {
+            background: white !important;
+            padding: 20px !important;
+        }
+    }
+</style>

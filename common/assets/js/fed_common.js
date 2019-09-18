@@ -4,13 +4,13 @@ jQuery(document).ready(function ($) {
     var transaction_modal = $('#fed_transaction_modal');
     b.on('submit', '.fed_ajax_print_invoice', function (e) {
         var form = $(this);
+        var modal = $('#fed_invoice_popup');
         $.ajax({
             type: 'POST',
             url: form.attr('action'),
             data: form.serialize(),
             success: function (results) {
                 if (results.success) {
-                    var modal = $('#fed_invoice_popup');
                     modal.find('.modal-body').html(results.data.html);
                     modal.modal('show');
                 } else {
@@ -24,6 +24,13 @@ jQuery(document).ready(function ($) {
         });
         e.preventDefault();
     });
+
+    if ($('.fed_invoice_print').length) {
+        b.on('click', '.fed_invoice_print', function (e) {
+            window.print();
+            e.preventDefault();
+        });
+    }
 
     if (transaction_modal.length) {
         transaction_modal.on('hidden.bs.modal', function () {

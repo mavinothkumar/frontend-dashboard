@@ -105,9 +105,11 @@ if ( ! class_exists('FEDTransaction')) {
         /**
          * @param $request
          *
+         * @param  string  $type
+         *
          * @return array
          */
-        public function formatTransaction($request)
+        public function formatTransaction($request, $type='')
         {
             $total     = 0;
             $items     = array();
@@ -137,19 +139,20 @@ if ( ! class_exists('FEDTransaction')) {
                 if ($shipping) {
                     $shipping_cost = fed_get_exact_amount($item, 'shipping');
                 }
-                $discounted_amount = ($amount - ($discount_cost + $tax_cost + $shipping_cost)) * $quantity;
+
+                $discounted_amount = ($amount + $tax_cost + $shipping_cost) - ($discount_cost) * $quantity;
 
                 $total = $total + $discounted_amount;
 
                 $items[] = array(
-                    'id'                => 'manual',
+                    'id'                => isset($item['id']) ? intval($item['id']) : 'manual',
                     'amount'            => $amount,
                     'total'             => $discounted_amount,
                     'currency'          => $currency,
                     'plan_type'         => isset($item['plan_type']) ? fed_sanitize_text_field($item['plan_type']) : '',
                     'plan_days'         => isset($item['plan_days']) ? fed_sanitize_text_field($item['plan_days']) : '',
                     'plan_name'         => isset($item['plan_name']) ? fed_sanitize_text_field($item['plan_name']) : '',
-                    'type'              => isset($item['type']) ? fed_sanitize_text_field($item['type']) : '',
+                    'type'              => isset($item['type']) ? fed_sanitize_text_field($item['type']) : $type,
                     'default_user_role' => isset($item['default_user_role']) ? fed_sanitize_text_field($item['default_user_role']) : '',
                     'user_role'         => isset($item['user_role']) ? fed_sanitize_text_field($item['user_role']) : '',
                     'quantity'          => $quantity,
@@ -159,13 +162,15 @@ if ( ! class_exists('FEDTransaction')) {
                     'tax_value'         => isset($item['tax_value']) ? fed_sanitize_text_field($item['tax_value']) : '',
                     'shipping'          => isset($item['shipping']) ? fed_sanitize_text_field($item['shipping']) : '',
                     'shipping_value'    => isset($item['shipping_value']) ? fed_sanitize_text_field($item['shipping_value']) : '',
+                    'note_to_payee'     => isset($item['note_to_payee']) ? fed_sanitize_text_field($item['note_to_payee']) : '',
+                    'description'       => isset($item['description']) ? fed_sanitize_text_field($item['description']) : '',
                 );
 
 
             }
 
             $data = array(
-                'user_id'        => (int) $request['user_id'],
+                'user_id'        => isset($request['user_id']) ? (int) $request['user_id'] : get_current_user_id(),
                 'items'          => serialize($items),
                 'transaction_id' => isset($request['transaction_id']) ? fed_sanitize_text_field($request['transaction_id']) : '',
                 'invoice_url'    => 'custom',
