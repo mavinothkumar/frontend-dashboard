@@ -15,7 +15,7 @@ function fed_store_user_profile_save()
 
     if (isset($_REQUEST, $post['tab_id']) && isset($_REQUEST['menu_type']) && $_REQUEST['menu_type'] === 'user') {
 
-        fed_nonce_check($post);
+        fed_verify_nonce($post);
 
         $validation = fed_validate_user_profile_form($post);
 

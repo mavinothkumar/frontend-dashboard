@@ -107,7 +107,7 @@ function fed_admin_setting_up_form_function()
     /**
      * Check for Nonce
      */
-    fed_nonce_check($post);
+    fed_verify_nonce($post);
 
 
     if ( ! isset($post['label_name']) || empty($post['label_name'])
@@ -159,7 +159,7 @@ function fed_admin_setting_form_dashboard_menu_function()
     /**
      * Check for Nonce
      */
-    fed_nonce_check($post);
+    fed_verify_nonce($post);
 
     if ('save' === $action) {
         if (empty($post['fed_menu_name'])
@@ -246,7 +246,7 @@ function fed_user_profile_delete_function()
     /**
      * Check for Nonce
      */
-    fed_nonce_check($post);
+    fed_verify_nonce($post);
 
     if ('delete' === $action) {
         $check_up_id = $is_delete = $reload = '';

@@ -4748,7 +4748,7 @@
 .bc_fed .pagination > li > span:hover,
 .bc_fed .pagination > li > a:focus,
 .bc_fed .pagination > li > span:focus {
-    color: #23527c;
+    color: #0AAAAA;
     background-color: #eeeeee;
     border-color: #dddddd;
 }
@@ -4760,8 +4760,8 @@
 .bc_fed .pagination > .active > span:focus {
     z-index: 2;
     color: #ffffff;
-    background-color: #337ab7;
-    border-color: #337ab7;
+    background-color: #0AAAAA;
+    border-color: #0AAAAA;
     cursor: default;
 }
 .bc_fed .pagination > .disabled > span,

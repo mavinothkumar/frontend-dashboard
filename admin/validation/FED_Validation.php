@@ -15,21 +15,21 @@ if ( ! class_exists('FED_Validation')) {
          * @var array $patterns
          */
         public $patterns = array(
-                'uri'      => '[A-Za-z0-9-\/_?&=]+',
-                'url'      => '[A-Za-z0-9-:.\/_?&=#]+',
-                'alpha'    => '[\p{L}]+',
-                'words'    => '[\p{L}\s]+',
-                'alphanum' => '[\p{L}0-9]+',
-                'int'      => '[0-9]+',
-                'float'    => '[0-9\.,]+',
-                'tel'      => '[0-9+\s()-]+',
-                'text'     => '[\p{L}0-9\s-.,;:!"%&()?+\'°#\/@]+',
-                'file'     => '[\p{L}\s0-9-_!%&()=\[\]#@,.;+]+\.[A-Za-z0-9]{2,4}',
-                'folder'   => '[\p{L}\s0-9-_!%&()=\[\]#@,.;+]+',
-                'address'  => '[\p{L}0-9\s.,()°-]+',
-                'date_dmy' => '[0-9]{1,2}\-[0-9]{1,2}\-[0-9]{4}',
-                'date_ymd' => '[0-9]{4}\-[0-9]{1,2}\-[0-9]{1,2}',
-                'email'    => '[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+',
+            'uri'      => '[A-Za-z0-9-\/_?&=]+',
+            'url'      => '[A-Za-z0-9-:.\/_?&=#]+',
+            'alpha'    => '[\p{L}]+',
+            'words'    => '[\p{L}\s]+',
+            'alphanum' => '[\p{L}0-9]+',
+            'int'      => '[0-9]+',
+            'float'    => '[0-9\.,]+',
+            'tel'      => '[0-9+\s()-]+',
+            'text'     => '[\p{L}0-9\s-.,;:!"%&()?+\'°#\/@]+',
+            'file'     => '[\p{L}\s0-9-_!%&()=\[\]#@,.;+]+\.[A-Za-z0-9]{2,4}',
+            'folder'   => '[\p{L}\s0-9-_!%&()=\[\]#@,.;+]+',
+            'address'  => '[\p{L}0-9\s.,()°-]+',
+            'date_dmy' => '[0-9]{1,2}\-[0-9]{1,2}\-[0-9]{4}',
+            'date_ymd' => '[0-9]{4}\-[0-9]{1,2}\-[0-9]{1,2}',
+            'email'    => '[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+',
         );
 
         /**
@@ -47,7 +47,7 @@ if ( ! class_exists('FED_Validation')) {
         public function name($name)
         {
 
-            $this->name = $name;
+            $this->name = sprintf(__('%s', 'frontend-dashboard'), $name);
 
             return $this;
 
@@ -236,7 +236,7 @@ if ( ! class_exists('FED_Validation')) {
 
             if ($this->file['error'] != 4 && $this->file['size'] > $size) {
                 $this->errors[] = 'Il file '.$this->name.' supera la dimensione massima di '.number_format($size / 1048576,
-                                2).' MB.';
+                        2).' MB.';
             }
 
             return $this;
@@ -254,8 +254,8 @@ if ( ! class_exists('FED_Validation')) {
         {
 
             if ($this->file['error'] != 4 && pathinfo($this->file['name'],
-                            PATHINFO_EXTENSION) != $extension && strtoupper(pathinfo($this->file['name'],
-                            PATHINFO_EXTENSION)) != $extension) {
+                    PATHINFO_EXTENSION) != $extension && strtoupper(pathinfo($this->file['name'],
+                    PATHINFO_EXTENSION)) != $extension) {
                 $this->errors[] = 'Il file '.$this->name.' non è un '.$extension.'.';
             }
 
@@ -412,7 +412,7 @@ if ( ! class_exists('FED_Validation')) {
         public static function is_uri($value)
         {
             if (filter_var($value, FILTER_VALIDATE_REGEXP,
-                    array('options' => array('regexp' => "/^[A-Za-z0-9-\/_]+$/")))) {
+                array('options' => array('regexp' => "/^[A-Za-z0-9-\/_]+$/")))) {
                 return true;
             }
         }

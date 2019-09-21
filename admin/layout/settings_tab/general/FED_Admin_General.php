@@ -545,7 +545,7 @@ if ( ! class_exists('FED_Admin_General')) {
                             ),
                     ),
                     'styles'  => array(
-                            'fed_admin_bootstrap'          => array(
+                            'fed_frontend_bootstrap'          => array(
                                     'wp_core'      => false,
                                     'name'         => 'Bootstrap',
                                     'plugin_name'  => 'Frontend Dashboard',

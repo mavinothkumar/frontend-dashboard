@@ -21,7 +21,7 @@ add_action( 'wp_ajax_nopriv_fed_dashboard_process_edit_post_request', 'fed_block
 
 function fed_dashboard_add_new_post_request_fn() {
 	$request = $_REQUEST;
-	fed_nonce_check( $request );
+	fed_verify_nonce( $request );
 	$post_type = isset( $request['fed_post_type'] ) ? $request['fed_post_type'] : 'post';
 
 	fed_display_dashboard_add_new_post( $post_type );
@@ -31,7 +31,7 @@ function fed_dashboard_add_new_post_request_fn() {
 
 function fed_dashboard_add_new_post_fn() {
 	$request = $_REQUEST;
-	fed_nonce_check( $request );
+	fed_verify_nonce( $request );
 
 	fed_process_dashboard_add_new_post( $request );
 	exit();

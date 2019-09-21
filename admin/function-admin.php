@@ -49,6 +49,7 @@ function fed_verify_nonce($request, $permission = null)
  */
 function fed_nonce_check($request, $permission = null)
 {
+    _deprecated_function(__FUNCTION__, '1.4.11', 'fed_verify_nonce()');
     fed_verify_nonce($request, $permission);
 }
 
@@ -358,8 +359,8 @@ function fed_get_select_option_value($input_value)
  */
 function fed_get_user_roles()
 {
-    if ( ! function_exists( 'get_editable_roles' ) ) {
-        require_once ABSPATH . 'wp-admin/includes/user.php';
+    if ( ! function_exists('get_editable_roles')) {
+        require_once ABSPATH.'wp-admin/includes/user.php';
     }
     $user_roles = get_editable_roles();
     $roles      = array();
@@ -3161,6 +3162,145 @@ function fed_isset_request($request, $key, $default = null)
 {
 
     return isset($request[$key]) && ! empty($request[$key]) && $request[$key] ? sanitize_text_field($request[$key]) : $default;
+}
+
+/**
+ * @param  string  $key
+ * @param  null|array  $target
+ * @param  null|mixed  $default
+ *
+ * @return mixed|null
+ */
+function fed_get_data($key, $target = null, $default = null)
+{
+    if ($target === null && ! isset($_REQUEST)) {
+        return $default;
+    }
+    if ($target === null && isset($_REQUEST)) {
+        $target = $_REQUEST;
+    }
+
+    if (is_null($key)) {
+        return $target;
+    }
+    foreach (explode('.', $key) as $segment) {
+        if (is_array($target)) {
+            if ( ! array_key_exists($segment, $target)) {
+                return fed_get_value($default);
+            }
+            $target = $target[$segment];
+        } elseif ($target instanceof ArrayAccess) {
+            if ( ! isset($target[$segment])) {
+                return fed_get_value($default);
+            }
+            $target = $target[$segment];
+        } elseif (is_object($target)) {
+            if ( ! isset($target->{$segment})) {
+                return fed_get_value($default);
+            }
+            $target = $target->{$segment};
+        } else {
+            return fed_get_value($default);
+        }
+    }
+
+    return $target;
+}
+
+/**
+ * @param $value
+ *
+ * @return mixed
+ */
+function fed_get_value($value)
+{
+    return $value instanceof Closure ? $value() : $value;
+}
+
+if ( ! function_exists('fed_set_data')) {
+    /**
+     * Set an item on an array or object using dot notation.
+     *
+     * @param  mixed  $target
+     * @param  string|array  $key
+     * @param  mixed  $value
+     * @param  bool  $overwrite
+     *
+     * @return mixed
+     */
+    function fed_set_data(&$target, $key, $value, $overwrite = true)
+    {
+        $segments = is_array($key) ? $key : explode('.', $key);
+        if (($segment = array_shift($segments)) === '*') {
+            if ( ! fed_accessible($target)) {
+                $target = [];
+            }
+            if ($segments) {
+                foreach ($target as &$inner) {
+                    fed_set_data($inner, $segments, $value, $overwrite);
+                }
+            } elseif ($overwrite) {
+                foreach ($target as &$inner) {
+                    $inner = $value;
+                }
+            }
+        } elseif (fed_accessible($target)) {
+            if ($segments) {
+                if ( ! fed_exists($target, $segment)) {
+                    $target[$segment] = [];
+                }
+                fed_set_data($target[$segment], $segments, $value, $overwrite);
+            } elseif ($overwrite || ! fed_exists($target, $segment)) {
+                $target[$segment] = $value;
+            }
+        } elseif (is_object($target)) {
+            if ($segments) {
+                if ( ! isset($target->{$segment})) {
+                    $target->{$segment} = [];
+                }
+                fed_set_data($target->{$segment}, $segments, $value, $overwrite);
+            } elseif ($overwrite || ! isset($target->{$segment})) {
+                $target->{$segment} = $value;
+            }
+        } else {
+            $target = [];
+            if ($segments) {
+                fed_set_data($target[$segment], $segments, $value, $overwrite);
+            } elseif ($overwrite) {
+                $target[$segment] = $value;
+            }
+        }
+
+        return $target;
+    }
+}
+/**
+ * Determine whether the given value is array accessible.
+ *
+ * @param  mixed  $value
+ *
+ * @return bool
+ */
+function fed_accessible($value)
+{
+    return is_array($value) || $value instanceof ArrayAccess;
+}
+
+/**
+ * Determine if the given key exists in the provided array.
+ *
+ * @param  \ArrayAccess|array  $array
+ * @param  string|int  $key
+ *
+ * @return bool
+ */
+function fed_exists($array, $key)
+{
+    if ($array instanceof ArrayAccess) {
+        return $array->offsetExists($key);
+    }
+
+    return array_key_exists($key, $array);
 }
 
 /**

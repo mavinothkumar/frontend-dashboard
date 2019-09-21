@@ -8,11 +8,6 @@ if ( ! class_exists('FEDInvoice')) {
      */
     class FEDInvoice
     {
-        public function settings()
-        {
-            echo 'success';
-        }
-
         public function details()
         {
             $settings = get_option('fed_invoice_settings');
@@ -157,7 +152,6 @@ if ( ! class_exists('FEDInvoice')) {
                         'name'         => __('Country', 'frontend-dashboard'),
                         'input'        =>
                             fed_get_input_details(array(
-                                'placeholder' => __('Country', 'frontend-dashboard'),
                                 'input_value' => fed_get_country_code(),
                                 'input_meta'  => 'country',
                                 'user_value'  => isset($settings['details']['country']) ? $settings['details']['country'] : '',
@@ -165,6 +159,20 @@ if ( ! class_exists('FEDInvoice')) {
                             )),
                         'help_message' => fed_show_help_message(array(
                             'content' => __('Country', 'frontend-dashboard'),
+                        )),
+                    ),
+                    'Footer Note'  => array(
+                        'col'          => 'col-md-12',
+                        'name'         => __('Footer Note', 'frontend-dashboard'),
+                        'input'        =>
+                            fed_get_input_details(array(
+                                'placeholder' => __('Footer Note', 'frontend-dashboard'),
+                                'input_meta'  => 'footer_note',
+                                'user_value'  => isset($settings['details']['footer_note']) ? $settings['details']['footer_note'] : '',
+                                'input_type'  => 'multi_line',
+                            )),
+                        'help_message' => fed_show_help_message(array(
+                            'content' => __('Footer Note', 'frontend-dashboard'),
                         )),
                     ),
                 ),
@@ -190,6 +198,7 @@ if ( ! class_exists('FEDInvoice')) {
                 'street_name'  => isset($request['street_name']) ? fed_sanitize_text_field($request['street_name']) : '',
                 'door_number'  => isset($request['door_number']) ? fed_sanitize_text_field($request['door_number']) : '',
                 'company_name' => isset($request['company_name']) ? fed_sanitize_text_field($request['company_name']) : '',
+                'footer_note'  => isset($request['footer_note']) ? fed_sanitize_text_field($request['footer_note']) : '',
             );
 
             $new_settings = apply_filters('fed_payment_invoice_template_update', $invoice,
@@ -208,7 +217,7 @@ if ( ! class_exists('FEDInvoice')) {
         public function download($request)
         {
             $validate = new FED_Validation();
-            $validate->name('Transaction ID')->value($request['transaction_id'])->required();
+            $validate->name('Transaction ID')->value((int) $request['transaction_id'])->required();
 
             if ( ! $validate->isSuccess()) {
                 $errors = implode('<br>', $validate->getErrors());
@@ -247,15 +256,18 @@ if ( ! class_exists('FEDInvoice')) {
             $user_telephone = $this->invoice_address($settings, $user_profile, $user, 'telephone');
 
             $logo         = isset($settings['details']['logo']) ? wp_get_attachment_url($settings['details']['logo']) : '#';
-            $width        = isset($settings['details']['width']) ? 'width='.$settings['details']['width'] : '';
-            $height       = isset($settings['details']['height']) ? 'height='.$settings['details']['height'] : '';
-            $company_name = isset($settings['details']['company_name']) ? $settings['details']['company_name'] : '';
-            $door_number  = isset($settings['details']['door_number']) ? $settings['details']['door_number'] : '';
-            $street_name  = isset($settings['details']['street_name']) ? $settings['details']['street_name'] : '';
-            $city         = isset($settings['details']['city']) ? $settings['details']['city'] : '';
-            $state        = isset($settings['details']['state']) ? $settings['details']['state'] : '';
-            $country      = isset($settings['details']['country']) ? $settings['details']['country'] : '';
-            $postal_code  = isset($settings['details']['postal_code']) ? $settings['details']['postal_code'] : '';
+            $width        = isset($settings['details']['width']) ? sprintf('width=%s',
+                $settings['details']['width']) : '';
+            $height       = isset($settings['details']['height']) ? sprintf('height=%s',
+                $settings['details']['height']) : '';
+            $company_name = isset($settings['details']['company_name']) ? esc_attr($settings['details']['company_name']) : '';
+            $door_number  = isset($settings['details']['door_number']) ? esc_attr($settings['details']['door_number']) : '';
+            $street_name  = isset($settings['details']['street_name']) ? esc_attr($settings['details']['street_name']) : '';
+            $city         = isset($settings['details']['city']) ? esc_attr($settings['details']['city']) : '';
+            $state        = isset($settings['details']['state']) ? esc_attr($settings['details']['state']) : '';
+            $country      = isset($settings['details']['country']) ? esc_attr($settings['details']['country']) : '';
+            $postal_code  = isset($settings['details']['postal_code']) ? esc_attr($settings['details']['postal_code']) : '';
+            $footer_note  = isset($settings['details']['footer_note']) ? esc_attr($settings['details']['footer_note']) : '';
 
             $transaction_id = isset($payment['transaction_id']) ? $payment['transaction_id'] : '';
             $created        = isset($payment['created']) ? date('Y-m-d', strtotime($payment['created'])) : '';
@@ -314,13 +326,16 @@ if ( ! class_exists('FEDInvoice')) {
                             <tbody>';
 
             foreach ($object as $item) {
-                $plan_name     = isset($item['plan_name']) ? $item['plan_name'] : '';
-                $plan_quantity = isset($item['quantity']) ? $item['quantity'] : '1';
-                $total         = isset($payment['amount']) ? $payment['amount'] : '0';
-                $plan_amount   = isset($item['amount']) ? $item['amount'] : '0';
-                $plan_currency = isset($item['currency']) ? $item['currency'] : 'USD';
-                $discount      = isset($item['discount_value']) && ! empty($item['discount_value']) ? 'Discount : '.$item['discount_value'].' '.fed_get_discount_type($item['discount']) : '';
-                $tax           = isset($item['tax_value']) && ! empty($item['tax_value']) ? 'Tax : '.$item['tax_value'].' '.fed_get_discount_type($item['tax']) : '';
+                $plan_name     = isset($item['plan_name']) ? esc_attr($item['plan_name']) : '';
+                $plan_quantity = isset($item['quantity']) ? (int) $item['quantity'] : 1;
+                $total         = isset($payment['amount']) ? floatval($payment['amount']) : 0;
+                $plan_amount   = isset($item['amount']) ? floatval($item['amount']) : 0;
+                $plan_currency = isset($item['currency']) ? esc_attr($item['currency']) : 'USD';
+                $discount      = isset($item['discount_value']) && ! empty($item['discount_value']) ? sprintf('Discount : %s %s',
+                    esc_attr($item['discount_value']), fed_get_discount_type(esc_attr($item['discount']))) : '';
+                $tax           = isset($item['tax_value']) && ! empty($item['tax_value']) ?
+                    sprintf('Tax : %s %s',
+                        esc_attr($item['tax_value']), fed_get_discount_type(esc_attr($item['tax']))) : '';
                 $html          .= '<tr style="display: table-row;">
                                 <td>'.$plan_name.'</td>
                                 <td>'.$plan_amount.$plan_currency.'</td>
@@ -341,7 +356,7 @@ if ( ! class_exists('FEDInvoice')) {
                                     <b>'.__('Total', 'frontend-dashboard').'</b>
                                 </td>
                                 <td>
-                                    <b>'.$payment['amount'].' '.$payment['currency'].'</b>
+                                    <b>'.floatval($payment['amount']).' '.esc_attr($payment['currency']).'</b>
                                 </td>
                             </tr>
                             </tbody>
@@ -350,7 +365,8 @@ if ( ! class_exists('FEDInvoice')) {
                 </div>
                 <div class="row">
                     <div class="col-md-12 text-center">
-                        <p class="invoice-color">                           
+                        <p class="invoice-color">  
+                        '.fed_sanitize_text_field($footer_note).'                         
                         </p>
                     </div>
                 </div>
@@ -525,7 +541,7 @@ if ( ! class_exists('FEDInvoice')) {
                 $user_meta = $user_profile[$settings['user_address'][$key]];
                 $v         = isset($user->$user_meta) && ! empty($user->$user_meta) ? $user->$user_meta : '';
 
-                return $v;
+                return esc_attr($v);
             }
 
             return '';

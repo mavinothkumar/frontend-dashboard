@@ -1,4 +1,8 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
+
 if ( ! class_exists( 'FEDInvoiceTemplate' ) ) {
 	/**
 	 * Class FEDInvoiceTemplate
@@ -24,10 +28,12 @@ if ( ! class_exists( 'FEDInvoiceTemplate' ) ) {
                                         <h3 class="panel-title"><?php echo $template['name'] ?></h3>
                                     </div>
                                     <div class="panel-body">
-                                        <img class="img-responsive" src="<?php echo $template['image'] ?>">
+                                        <img alt="" class="img-responsive" src="<?php echo $template['image'] ?>">
                                         <div class="fed_flex_center">
-                                            <input class="radio" type="radio" name="template"
-                                                   value="template-1" <?php echo isset( $settings['invoice']['template']['default'] ) && $settings['invoice']['template']['default'] === 'template-1' ? 'checked' : '' ?>/>
+                                            <label>
+                                                <input class="radio" type="radio" name="template"
+                                                       value="template-1" <?php echo isset( $settings['invoice']['template']['default'] ) && $settings['invoice']['template']['default'] === 'template-1' ? 'checked' : '' ?>/>
+                                            </label>
                                         </div>
                                         <div class="text-center">
                                             <strong><?php _e( 'Select to make default',

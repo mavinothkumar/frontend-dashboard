@@ -21,35 +21,11 @@ if ( ! class_exists('FEDPayment')) {
 
         /**
          * @return mixed|void
+         *
+         * Options => fed_payment_settings
          */
         public function settingsData()
         {
-
-//            option slug =>  fed_payment_settings
-//            array(
-//                'settings' => array(
-//                    'gateway' => '' //default disabled
-//                ),
-//                'gateway'  => array(
-//                    'stripe' => array(
-//                        'enable'  => '', //sandbox or live
-//                        'sandbox' => array(
-//                            'public_key'  => '',
-//                            'private_key' => '',
-//                        ),
-//                        'live'    => array(
-//                            'public_key'  => '',
-//                            'private_key' => '',
-//                        ),
-//                        'url'     => array(
-//                            'success_url' => '',
-//                            'cancel_url'  => '',
-//                            'notify_url'  => '',
-//                        ),
-//                    ),
-//                ),
-//            );
-
             $settings = get_option('fed_payment_settings');
             $array    = array(
                 'form'  => array(
@@ -71,7 +47,7 @@ if ( ! class_exists('FEDPayment')) {
                         'input'        =>
                             fed_get_input_details(array(
                                 'input_meta'  => 'settings[gateway]',
-                                'user_value'  => isset($settings['settings']['gateway']) ? $settings['settings']['gateway'] : 'disable',
+                                'user_value'  => isset($settings['settings']['gateway']) ? esc_attr($settings['settings']['gateway']) : 'disable',
                                 'input_type'  => 'radio',
                                 'class_name'  => 'm-r-10',
                                 'input_value' => fed_get_payment_gateways(),
@@ -113,7 +89,7 @@ if ( ! class_exists('FEDPayment')) {
 
             $this->authorize();
 
-            $this->validation($request);
+            $this->validation();
 
             $settings = get_option('fed_payment_settings');
 
@@ -121,17 +97,17 @@ if ( ! class_exists('FEDPayment')) {
 
             update_option('fed_payment_settings', $settings);
 
-            wp_send_json_success(array('message' => 'Payment Settings Successfully Saved'));
+            wp_send_json_success(array('message' => __('Payment Settings Successfully Saved', 'frontend-dashboard')));
         }
 
         /**
          * @param $request
          */
-        private function validation($request)
+        private function validation()
         {
             $validate = new FED_Validation();
 
-            $validate->name('Payment Gateway')->value($request['settings']['gateway'])->required();
+            $validate->name('Payment Gateway')->value(fed_get_data('settings.gateway'))->required();
 
             if ( ! $validate->isSuccess()) {
                 $errors = implode('<br>', $validate->getErrors());
