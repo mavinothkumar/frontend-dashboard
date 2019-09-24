@@ -187,7 +187,7 @@ if ( ! class_exists('FED_AdminMenu')) {
                 call_user_func(array($item['callable']['object'], $item['callable']['method']), $parameter);
             } else {
                 ?>
-                <div class="container fed_add_page_profile_container text-center">
+                <div class="bc_fed container fed_add_page_profile_container text-center">
                     <?php _e('OOPS! You have not add the callable function, please add ', 'frontend-dashboard');
                     echo $item['callable'];
                     _e(' to show the body container', 'frontend-dashboard') ?>

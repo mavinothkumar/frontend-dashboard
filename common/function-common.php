@@ -272,17 +272,21 @@ if ( ! function_exists('fed_get_form_action')) {
 
 
 if ( ! function_exists('fed_is_current_user_role')) {
+
     /**
-     * @param $user_role
+     * @param  array  $allowed_roles
+     * @param  bool  $is_key
      *
      * @return bool
      */
-    function fed_is_current_user_role()
+    function fed_is_current_user_role(array $allowed_roles, $is_key = true)
     {
-        $user          = wp_get_current_user();
-        $allowed_roles = fed_get_user_roles();
-        if (array_intersect(array_keys($allowed_roles), $user->roles)) {
-            return true;
+        if (count($allowed_roles)) {
+            $user          = fed_get_current_user_role();
+            $allowed_roles = $is_key ? array_keys($allowed_roles) : $allowed_roles;
+            if (array_intersect($allowed_roles, $user)) {
+                return true;
+            }
         }
 
         return false;
@@ -377,7 +381,6 @@ if ( ! function_exists('bcdump')) {
         }
     }
 }
-
 
 if ( ! function_exists('fed_create_new_instance')) {
     /**

@@ -319,12 +319,10 @@ function fed_get_dashboard_display_categories($post = '', $cpt = '')
             'hide_empty' => false,
     ));
 
-
     if (isset($post->ID)) {
         $categories = wp_get_post_terms($post->ID, $cpt->name, array('fields' => 'ids'));
     }
-//    bcdump($fed_get_categories);
-//    bcdump($categories);
+
     return fed_convert_array_to_id_name($fed_get_categories, 'term_id', $cpt->name, $categories);
 }
 
