@@ -3048,7 +3048,7 @@ function fed_call_function_method($item)
         call_user_func(array($item['callable']['object'], $item['callable']['method']), $parameter);
     } else {
         ?>
-        <div class="bc_fed container fed_add_page_profile_container">
+        <div class="bc_fed fed_add_page_profile_container">
             <?php
             $message = is_array($item['callable']) ? $item['callable']['method'] : $item['callable'];
             fed_show_alert_message(sprintf(__('OOPS! You have not add the callable function ( %s ), please add to show the body container',
@@ -3100,7 +3100,7 @@ function fed_execute_method_by_string($item, $parameter = null)
             ));
         } else {
             ?>
-            <div class="bc_fed container fed_add_page_profile_container">
+            <div class="bc_fed fed_add_page_profile_container">
                 <?php
                 fed_show_alert_message(sprintf(__('Class %s does not exist', 'frontend-dashboard'),
                     esc_html($class[0])));
