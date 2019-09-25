@@ -22,6 +22,7 @@ if ( ! $transactions instanceof WP_Error) {
                 <?php if (fed_is_admin()) { ?>
                     <th><?php _e('User Details', 'frontend-dashboard'); ?></th>
                 <?php } ?>
+                <th><?php _e('Source', 'frontend-dashboard'); ?></th>
                 <th><?php _e('Transaction', 'frontend-dashboard'); ?></th>
                 <th><?php _e('Product', 'frontend-dashboard'); ?></th>
                 <th><?php _e('Amount', 'frontend-dashboard'); ?></th>
@@ -43,6 +44,7 @@ if ( ! $transactions instanceof WP_Error) {
                                     esc_attr($transaction['user_nicename']),
                                     esc_attr($transaction['user_email'])) ?></td>
                         <?php } ?>
+                        <td><?php echo esc_attr($transaction['payment_source']) ?></td>
                         <td><?php echo esc_attr($transaction['transaction_id']) ?></td>
                         <td><?php echo fed_transaction_product_details($transaction); ?></td>
                         <td><?php echo esc_attr($transaction['amount']).' '.mb_strtoupper(esc_attr($transaction['currency'])) ?></td>

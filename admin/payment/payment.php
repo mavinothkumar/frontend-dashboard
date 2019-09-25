@@ -68,7 +68,13 @@ if ( ! function_exists('fed_get_transactions')) {
 	ORDER BY    payment.id DESC
 	", ARRAY_A);
         } else {
-            return fed_fetch_table_rows_by_key_value(BC_FED_TABLE_PAYMENT, 'user_id', get_current_user_id());
+            return fed_fetch_table_rows_by_key_value(
+                BC_FED_TABLE_PAYMENT,
+                'user_id',
+                get_current_user_id(),
+                '=',
+                ARRAY_A,
+                'DESC');
         }
     }
 }

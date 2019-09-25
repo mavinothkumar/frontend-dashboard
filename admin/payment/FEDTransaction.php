@@ -78,22 +78,25 @@ if ( ! class_exists('FEDTransaction')) {
                 global $wpdb;
                 $table = $wpdb->prefix.BC_FED_TABLE_PAYMENT;
 
-                $data = $this->formatTransaction($request);
+                $data      = $this->formatTransaction($request);
+                $user_role = fed_get_data('user_role', $data);
+
+                unset($data['user_role']);
 
 
                 $status = $wpdb->insert($table, $data['data']);
 
                 if ($status) {
-                    if ($data['user_role']) {
+                    if ($user_role) {
                         $user_update = wp_update_user(
                             array(
                                 'ID'   => (int) $request['user_id'],
-                                'role' => $data['user_role'],
+                                'role' => $user_role,
                             ));
                         if ($user_update instanceof WP_Error) {
                             FED_Log::writeLog(array(
                                 '$status'      => $status,
-                                '$user_role'   => $data['user_role'],
+                                '$user_role'   => $user_role,
                                 '$user_update' => $user_update,
                             ));
 
@@ -106,7 +109,7 @@ if ( ! class_exists('FEDTransaction')) {
 
                 FED_Log::writeLog(array(
                     '$status'      => $status,
-                    '$user_role'   => $data['user_role'],
+                    '$user_role'   => $user_role,
                     '$user_update' => $user_update,
                 ));
 
@@ -164,7 +167,7 @@ if ( ! class_exists('FEDTransaction')) {
                     'plan_type'         => fed_sanitize_text_field(fed_get_data('plan_type', $item)),
                     'plan_days'         => fed_sanitize_text_field(fed_get_data('plan_days', $item)),
                     'plan_name'         => fed_sanitize_text_field(fed_get_data('plan_name', $item)),
-                    'type'              => fed_sanitize_text_field(fed_get_data('type', $item)),
+                    'type'              => ! empty($type) ? $type : '',
                     'default_user_role' => fed_sanitize_text_field(fed_get_data('default_user_role', $item)),
                     'user_role'         => fed_sanitize_text_field(fed_get_data('user_role', $item)),
                     'quantity'          => $quantity,
@@ -180,7 +183,7 @@ if ( ! class_exists('FEDTransaction')) {
             }
 
             $data = array(
-                'user_id'        => (int) fed_get_data('shipping_value', $request, get_current_user_id()),
+                'user_id'        => (int) fed_get_data('id', $request, get_current_user_id()),
                 'items'          => serialize($items),
                 'transaction_id' => fed_sanitize_text_field(fed_get_data('transaction_id', $request)),
                 'invoice_url'    => 'custom',
@@ -192,9 +195,10 @@ if ( ! class_exists('FEDTransaction')) {
                     strtotime(fed_sanitize_text_field($request['created']))) : '',
                 'status'         => fed_sanitize_text_field(fed_get_data('status', $request, 'Pending')),
                 'ends_at'        => $ends_at,
+                'user_role'      => $user_role,
             );
 
-            return array('data' => $data, 'user_role' => $user_role);
+            return $data;
         }
 
     }

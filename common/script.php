@@ -51,7 +51,6 @@ if ( ! function_exists('fed_script_front_end')) {
         if (fed_is_shortcode_in_content()) {
             $db_scripts      = get_option('fed_general_scripts_styles', array());
             $default_scripts = new FED_Admin_General();
-//            FED_Log::writeLog($default_scripts->default_admin_script());
             foreach ($default_scripts->default_frontend_script() as $index => $scripts) {
                 foreach ($scripts as $key => $script) {
                     if ( ! isset($db_scripts['frontend'][$index][$key])) {
@@ -96,7 +95,6 @@ if ( ! function_exists('fed_enqueue_scripts')) {
                 wp_enqueue_style($key, $script['src'], $script['dependencies'], $script['version'],
                     $script['media']);
             }
-            FED_Log::writeLog($key);
         }
     }
 }
