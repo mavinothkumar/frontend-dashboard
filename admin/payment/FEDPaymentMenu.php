@@ -8,11 +8,6 @@ if ( ! class_exists('FEDPaymentMenu')) {
      */
     class FEDPaymentMenu
     {
-        public function __construct()
-        {
-
-        }
-
         public function index()
         {
             $this->layout();
