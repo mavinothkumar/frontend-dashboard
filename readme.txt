@@ -4,7 +4,7 @@ Tags: dashboard, frontend dashboard, custom login, custom register, custom roles
 Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 4.6
 Tested up to: 5.2.3
-Stable tag: 1.4.11.1
+Stable tag: 1.4.11.6
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 

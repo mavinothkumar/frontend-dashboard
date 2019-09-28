@@ -144,6 +144,7 @@ if ( ! class_exists('FEDTransaction')) {
                 $shipping_cost = 0;
                 $quantity      = isset($item['quantity']) && ! empty($item['quantity']) ? (int) $item['quantity'] : 1;
                 $currency      = isset($item['currency']) ? fed_sanitize_text_field($item['currency']) : '';
+                $type          = ! empty($type) ? $type : isset($item['type']) && ! empty($item['type']) ? $item['type'] : '';
 
                 if ($discount) {
                     $discount_cost = fed_get_exact_amount($item, 'discount');
@@ -167,7 +168,6 @@ if ( ! class_exists('FEDTransaction')) {
                     'plan_type'         => fed_sanitize_text_field(fed_get_data('plan_type', $item)),
                     'plan_days'         => fed_sanitize_text_field(fed_get_data('plan_days', $item)),
                     'plan_name'         => fed_sanitize_text_field(fed_get_data('plan_name', $item)),
-                    'type'              => ! empty($type) ? $type : '',
                     'default_user_role' => fed_sanitize_text_field(fed_get_data('default_user_role', $item)),
                     'user_role'         => fed_sanitize_text_field(fed_get_data('user_role', $item)),
                     'quantity'          => $quantity,
@@ -189,6 +189,7 @@ if ( ! class_exists('FEDTransaction')) {
                 'invoice_url'    => 'custom',
                 'amount'         => $total,
                 'currency'       => $currency,
+                'payment_type'   => ! empty($type) ? $type : 'NA',
                 'payment_source' => fed_sanitize_text_field(fed_get_data('payment_source', $request)),
                 'updated'        => current_time('Y-m-d'),
                 'created'        => isset($request['created']) ? date('Y-m-d H:i:s',

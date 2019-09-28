@@ -177,11 +177,13 @@ function fed_plugin_activation()
 		  amount VARCHAR(100) NOT NULL,
 		  currency VARCHAR(20) NOT NULL,
 		  payment_source VARCHAR(50) NOT NULL DEFAULT 'stripe',
+		  payment_type VARCHAR(50) NOT NULL DEFAULT 'membership',
 		  updated TIMESTAMP NOT NULL,
 		  created TIMESTAMP NOT NULL,
 		  ends_at VARCHAR(100) NOT NULL,
 		  status VARCHAR(100) NULL,
-		  PRIMARY KEY  (id)
+		  PRIMARY KEY  (id),
+		  INDEX (user_id, transaction_id, payment_type, created)
 		  ) $charset_collate;";
 
         dbDelta($payment);

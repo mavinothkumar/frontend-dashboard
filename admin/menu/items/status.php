@@ -2,52 +2,53 @@
 if ( ! defined('ABSPATH')) {
     exit;
 }
-if(!function_exists( 'fed_get_status_menu')) {
-	/**
-	 * Get Table Status
-	 */
-	function fed_get_status_menu() {
-		global $wp_version;
-		global $wpdb;
+if ( ! function_exists('fed_get_status_menu')) {
+    /**
+     * Get Table Status
+     */
+    function fed_get_status_menu()
+    {
+        global $wp_version;
+        global $wpdb;
 
-		$table   = $wpdb->prefix . 'options';
-		$options = $wpdb->get_results( "SELECT * from {$table} WHERE option_name LIKE 'fed%' " );
+        $table   = $wpdb->prefix.'options';
+        $options = $wpdb->get_results("SELECT * from {$table} WHERE option_name LIKE 'fed%' ");
 
-		/**
-		 * Login
-		 */
-		$fed_login           = get_option( 'fed_admin_login', array() );
-		$login_settings      = fed_enable_disable( isset( $fed_login['settings']['fed_login_url'] ) ? true : false );
-		$redirect_login_url  = fed_enable_disable( isset( $fed_login['settings']['fed_redirect_login_url'] ) ? true : false );
-		$redirect_logout_url = fed_enable_disable( isset( $fed_login['settings']['fed_redirect_logout_url'] ) ? true : false );
-		$dashboard           = fed_enable_disable( isset( $fed_login['settings']['fed_dashboard_url'] ) ? true : false );
+        /**
+         * Login
+         */
+        $fed_login           = get_option('fed_admin_login', array());
+        $login_settings      = fed_enable_disable(isset($fed_login['settings']['fed_login_url']) ? true : false);
+        $redirect_login_url  = fed_enable_disable(isset($fed_login['settings']['fed_redirect_login_url']) ? true : false);
+        $redirect_logout_url = fed_enable_disable(isset($fed_login['settings']['fed_redirect_logout_url']) ? true : false);
+        $dashboard           = fed_enable_disable(isset($fed_login['settings']['fed_dashboard_url']) ? true : false);
 
-		/**
-		 * Post
-		 */
-		$fed_post           = get_option( 'fed_cp_admin_settings', array() );
-		$fed_post_settings  = fed_enable_disable( isset( $fed_post['post']['settings'] ) ? true : false );
-		$fed_post_dashboard = fed_enable_disable( isset( $fed_post['post']['dashboard'] ) ? true : false );
-		$fed_post_menu      = fed_enable_disable( isset( $fed_post['post']['menu'] ) ? true : false );
-		$post_permissions   = fed_enable_disable( isset( $fed_post['post']['permissions'] ) ? true : false );
+        /**
+         * Post
+         */
+        $fed_post           = get_option('fed_cp_admin_settings', array());
+        $fed_post_settings  = fed_enable_disable(isset($fed_post['post']['settings']) ? true : false);
+        $fed_post_dashboard = fed_enable_disable(isset($fed_post['post']['dashboard']) ? true : false);
+        $fed_post_menu      = fed_enable_disable(isset($fed_post['post']['menu']) ? true : false);
+        $post_permissions   = fed_enable_disable(isset($fed_post['post']['permissions']) ? true : false);
 
-		/**
-		 * User Profile Layout
-		 */
-		$fed_upl          = get_option( 'fed_admin_settings_upl', array() );
-		$fed_upl_settings = fed_enable_disable( isset( $fed_upl['settings'] ) ? true : false );
+        /**
+         * User Profile Layout
+         */
+        $fed_upl          = get_option('fed_admin_settings_upl', array());
+        $fed_upl_settings = fed_enable_disable(isset($fed_upl['settings']) ? true : false);
 
-		$sql       = "SHOW TABLES LIKE '{$wpdb->prefix}fed%'";
-		$db_tables = $wpdb->get_results( $sql );
+        $sql       = "SHOW TABLES LIKE '{$wpdb->prefix}fed%'";
+        $db_tables = $wpdb->get_results($sql);
 
 
-		?>
+        ?>
         <div class="bc_fed container">
             <div class="row padd_top_20">
                 <div class="col-md-12">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <h3 class="panel-title"><?php _e( 'Status', 'frontend-dashboard' ) ?></h3>
+                            <h3 class="panel-title"><?php _e('Status', 'frontend-dashboard') ?></h3>
                         </div>
                         <div class="panel-body">
                             <div class="row">
@@ -82,8 +83,8 @@ if(!function_exists( 'fed_get_status_menu')) {
                                     <div class="col-md-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">
-                                                <h3 class="panel-title"><?php _e( 'Versions',
-														'frontend-dashboard' ) ?></h3>
+                                                <h3 class="panel-title"><?php _e('Versions',
+                                                        'frontend-dashboard') ?></h3>
                                             </div>
                                             <div class="panel-body">
                                                 <div class="table-responsive">
@@ -110,11 +111,11 @@ if(!function_exists( 'fed_get_status_menu')) {
                                                         <tr>
                                                             <td class="fed_header_font_color">Plugins & Ads-ons</td>
                                                             <td>
-																<?php echo fed_plugin_versions() ?>
+                                                                <?php echo fed_plugin_versions() ?>
                                                             </td>
                                                         </tr>
 
-														<?php do_action( 'fed_admin_menu_status_version_below' ) ?>
+                                                        <?php do_action('fed_admin_menu_status_version_below') ?>
 
                                                         </tbody>
                                                     </table>
@@ -165,8 +166,8 @@ if(!function_exists( 'fed_get_status_menu')) {
                                     <div class="col-md-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">
-                                                <h3 class="panel-title"><?php _e( 'PHP Extensions',
-														'frontend-dashboard' ) ?></h3>
+                                                <h3 class="panel-title"><?php _e('PHP Extensions',
+                                                        'frontend-dashboard') ?></h3>
                                             </div>
                                             <div class="panel-body">
                                                 <div class="table-responsive">
@@ -181,25 +182,25 @@ if(!function_exists( 'fed_get_status_menu')) {
                                                         <tr>
                                                             <td class="fed_header_font_color">cURL</td>
                                                             <td>
-																<?php
-																echo fed_enable_disable( fed_check_extension_loaded( 'cURL' ) );
-																?>
+                                                                <?php
+                                                                echo fed_enable_disable(fed_check_extension_loaded('cURL'));
+                                                                ?>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td class="fed_header_font_color">JSON</td>
                                                             <td>
-																<?php
-																echo fed_enable_disable( fed_check_extension_loaded( 'JSON' ) );
-																?>
+                                                                <?php
+                                                                echo fed_enable_disable(fed_check_extension_loaded('JSON'));
+                                                                ?>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td class="fed_header_font_color">OpenSSL</td>
                                                             <td>
-																<?php
-																echo fed_enable_disable( fed_check_extension_loaded( 'OpenSSL' ) );
-																?>
+                                                                <?php
+                                                                echo fed_enable_disable(fed_check_extension_loaded('OpenSSL'));
+                                                                ?>
                                                             </td>
                                                         </tr>
                                                         </tbody>
@@ -211,8 +212,8 @@ if(!function_exists( 'fed_get_status_menu')) {
                                     <div class="col-md-12">
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">
-                                                <h3 class="panel-title"><?php _e( 'Database',
-														'frontend-dashboard' ) ?></h3>
+                                                <h3 class="panel-title"><?php _e('Database',
+                                                        'frontend-dashboard') ?></h3>
                                             </div>
                                             <div class="panel-body">
                                                 <div class="table-responsive">
@@ -224,15 +225,15 @@ if(!function_exists( 'fed_get_status_menu')) {
                                                         </tr>
                                                         </thead>
                                                         <tbody>
-														<?php foreach ( fed_get_table_status() as $table ) { ?>
+                                                        <?php foreach (fed_get_table_status() as $table) { ?>
                                                             <tr>
                                                                 <td class="fed_header_font_color">
-																	<?php echo $table['title'] . ' ( ' . $table['plugin_name'] . ' )' ?>
+                                                                    <?php echo $table['title'].' ( '.$table['plugin_name'].' )' ?>
                                                                 </td>
                                                                 <td><?php echo $table['status']; ?></td>
                                                             </tr>
-														<?php } ?>
-														<?php do_action( 'fed_admin_menu_status_database_below' ) ?>
+                                                        <?php } ?>
+                                                        <?php do_action('fed_admin_menu_status_database_below') ?>
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -282,7 +283,7 @@ if(!function_exists( 'fed_get_status_menu')) {
                                         </div>
                                     </div>
                                 </div>
-								<?php do_action( 'fed_admin_menu_status_below' ); ?>
+                                <?php do_action('fed_admin_menu_status_below'); ?>
                             </div>
                         </div>
                     </div>
@@ -294,7 +295,7 @@ if(!function_exists( 'fed_get_status_menu')) {
                 <div class="col-md-12">
                     <div class="panel panel-danger">
                         <div class="panel-heading">
-                            <h3 class="panel-title"><?php _e( 'Delete or Empty', 'frontend-dashboard' ) ?></h3>
+                            <h3 class="panel-title"><?php _e('Delete or Empty', 'frontend-dashboard') ?></h3>
                         </div>
                         <div class="panel-body">
                             <div class="row">
@@ -303,7 +304,7 @@ if(!function_exists( 'fed_get_status_menu')) {
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">
                                                 <h3 class="panel-title">
-													<?php _e( 'Delete The Table', 'frontend-dashboard' ) ?>
+                                                    <?php _e('Delete The Table', 'frontend-dashboard') ?>
                                                 </h3>
                                             </div>
                                             <div class="panel-body">
@@ -311,22 +312,22 @@ if(!function_exists( 'fed_get_status_menu')) {
                                                     <table class="table table-hover">
                                                         <thead>
                                                         <tr>
-                                                            <th><?php _e( 'Table Name', 'frontend-dashboard' ) ?></th>
-                                                            <th><?php _e( 'Action', 'frontend-dashboard' ) ?></th>
+                                                            <th><?php _e('Table Name', 'frontend-dashboard') ?></th>
+                                                            <th><?php _e('Action', 'frontend-dashboard') ?></th>
                                                         </tr>
                                                         </thead>
                                                         <tbody>
-														<?php foreach ( $db_tables as $index => $table ) {
-															foreach ( $table as $tableName ) { ?>
+                                                        <?php foreach ($db_tables as $index => $table) {
+                                                            foreach ($table as $tableName) { ?>
                                                                 <tr>
                                                                     <td class="fed_header_font_color">
-																		<?php echo $tableName; ?>
+                                                                        <?php echo $tableName; ?>
                                                                     </td>
                                                                     <td>
                                                                         <form method="post" class="fed_ajax"
-                                                                              action="<?php echo fed_get_ajax_form_action( 'fed_status_delete_table' ); ?>">
-																			<?php fed_wp_nonce_field( 'fed_nonce',
-																				'fed_nonce' ); ?>
+                                                                              action="<?php echo fed_get_ajax_form_action('fed_status_delete_table'); ?>">
+                                                                            <?php fed_wp_nonce_field('fed_nonce',
+                                                                                'fed_nonce'); ?>
                                                                             <input type="hidden" name="table_name"
                                                                                    value="<?php echo $tableName; ?>"/>
                                                                             <button type="submit"
@@ -336,8 +337,8 @@ if(!function_exists( 'fed_get_status_menu')) {
                                                                         </form>
                                                                     </td>
                                                                 </tr>
-															<?php }
-														} ?>
+                                                            <?php }
+                                                        } ?>
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -350,8 +351,8 @@ if(!function_exists( 'fed_get_status_menu')) {
                                         <div class="panel panel-primary">
                                             <div class="panel-heading">
                                                 <h3 class="panel-title">
-													<?php _e( 'Empty The Table',
-														'frontend-dashboard' ) ?></h3>
+                                                    <?php _e('Empty The Table',
+                                                        'frontend-dashboard') ?></h3>
                                             </div>
                                             <div class="panel-body">
                                                 <div class="table-responsive">
@@ -363,17 +364,17 @@ if(!function_exists( 'fed_get_status_menu')) {
                                                         </tr>
                                                         </thead>
                                                         <tbody>
-														<?php foreach ( $db_tables as $index => $table ) {
-															foreach ( $table as $tableName ) { ?>
+                                                        <?php foreach ($db_tables as $index => $table) {
+                                                            foreach ($table as $tableName) { ?>
                                                                 <tr>
                                                                     <td class="fed_header_font_color">
-																		<?php echo $tableName; ?>
+                                                                        <?php echo $tableName; ?>
                                                                     </td>
                                                                     <td>
                                                                         <form method="post" class="fed_ajax"
-                                                                              action="<?php echo fed_get_ajax_form_action( 'fed_status_empty_table' ); ?>">
-																			<?php fed_wp_nonce_field( 'fed_nonce',
-																				'fed_nonce' ); ?>
+                                                                              action="<?php echo fed_get_ajax_form_action('fed_status_empty_table'); ?>">
+                                                                            <?php fed_wp_nonce_field('fed_nonce',
+                                                                                'fed_nonce'); ?>
                                                                             <input type="hidden" name="table_name"
                                                                                    value="<?php echo $tableName; ?>"/>
                                                                             <button type="submit"
@@ -383,8 +384,8 @@ if(!function_exists( 'fed_get_status_menu')) {
                                                                         </form>
                                                                     </td>
                                                                 </tr>
-															<?php }
-														} ?>
+                                                            <?php }
+                                                        } ?>
                                                         </tbody>
                                                         </tbody>
                                                     </table>
@@ -393,7 +394,7 @@ if(!function_exists( 'fed_get_status_menu')) {
                                         </div>
                                     </div>
                                 </div>
-								<?php do_action( 'fed_admin_menu_delete_status_below' ); ?>
+                                <?php do_action('fed_admin_menu_delete_status_below'); ?>
                             </div>
                         </div>
                     </div>
@@ -405,7 +406,7 @@ if(!function_exists( 'fed_get_status_menu')) {
                 <div class="col-md-12">
                     <div class="panel panel-danger">
                         <div class="panel-heading">
-                            <h3 class="panel-title"><?php _e( 'Options', 'frontend-dashboard' ) ?></h3>
+                            <h3 class="panel-title"><?php _e('Options', 'frontend-dashboard') ?></h3>
                         </div>
                         <div class="panel-body">
                             <div class="row">
@@ -413,7 +414,7 @@ if(!function_exists( 'fed_get_status_menu')) {
                                     <div class="panel panel-primary">
                                         <div class="panel-heading">
                                             <h3 class="panel-title">
-												<?php _e( 'Delete The Options', 'frontend-dashboard' ) ?>
+                                                <?php _e('Delete The Options', 'frontend-dashboard') ?>
                                             </h3>
                                         </div>
                                         <div class="panel-body">
@@ -421,9 +422,9 @@ if(!function_exists( 'fed_get_status_menu')) {
                                                 <div class="col-md-12">
                                                     <div class="text-right">
                                                         <form method="post" class="fed_ajax"
-                                                              action="<?php echo fed_get_ajax_form_action( 'fed_status_delete_all_option' ); ?>">
-															<?php fed_wp_nonce_field( 'fed_nonce',
-																'fed_nonce' ); ?>
+                                                              action="<?php echo fed_get_ajax_form_action('fed_status_delete_all_option'); ?>">
+                                                            <?php fed_wp_nonce_field('fed_nonce',
+                                                                'fed_nonce'); ?>
                                                             <button type="submit"
                                                                     class="fed_is_delete btn btn-danger">
                                                                 <i class="fa fa-trash"></i>
@@ -434,18 +435,18 @@ if(!function_exists( 'fed_get_status_menu')) {
                                                 </div>
                                             </div>
                                             <div class="row">
-												<?php foreach ( $options as $index => $option ) {
-													?>
+                                                <?php foreach ($options as $index => $option) {
+                                                    ?>
                                                     <div class="col-md-4">
                                                         <div class="fed_flex_space_between bg_secondary fed_white_font padd_5 m-b-10">
                                                             <div class="">
-																<?php echo $option->option_name; ?>
+                                                                <?php echo $option->option_name; ?>
                                                             </div>
                                                             <div class="">
                                                                 <form method="post" class="fed_ajax"
-                                                                      action="<?php echo fed_get_ajax_form_action( 'fed_status_delete_option' ); ?>">
-																	<?php fed_wp_nonce_field( 'fed_nonce',
-																		'fed_nonce' ); ?>
+                                                                      action="<?php echo fed_get_ajax_form_action('fed_status_delete_option'); ?>">
+                                                                    <?php fed_wp_nonce_field('fed_nonce',
+                                                                        'fed_nonce'); ?>
                                                                     <input type="hidden" name="option_id"
                                                                            value="<?php echo $option->option_id; ?>"/>
                                                                     <button type="submit"
@@ -456,7 +457,7 @@ if(!function_exists( 'fed_get_status_menu')) {
                                                             </div>
                                                         </div>
                                                     </div>
-												<?php } ?>
+                                                <?php } ?>
 
 
                                             </div>
@@ -468,7 +469,22 @@ if(!function_exists( 'fed_get_status_menu')) {
                     </div>
                 </div>
             </div>
+
+            <div class="row padd_top_20">
+                <div class="col-md-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Log File</h3>
+                        </div>
+                        <div class="panel-body">
+                            <object data="<?php echo plugins_url('log/dashboard.log', BC_FED_PLUGIN); ?>" width="1000" height="700">
+                                Not supported
+                            </object>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-		<?php
-	}
+        <?php
+    }
 }
