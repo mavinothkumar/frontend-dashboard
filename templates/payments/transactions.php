@@ -5,7 +5,7 @@
  * @package frontend-dashboard
  */
 
-$transactions = fed_get_transactions_with_meta();
+$transactions = fed_get_transactions();
 if ( ! $transactions instanceof WP_Error) {
     $random = fed_get_random_string(5);
     ?>
@@ -45,9 +45,21 @@ if ( ! $transactions instanceof WP_Error) {
                         <?php } ?>
                         <td><?php echo esc_attr($transaction['payment_source']) ?></td>
                         <td><?php echo esc_attr($transaction['transaction_id']) ?></td>
-                        <td><?php
-                            echo fed_transaction_product_details($transaction)
-                            ?></td>
+                        <td>
+                            <div class="fed_transaction_items_container">
+                                <?php
+                                esc_attr_e(mb_strtoupper($transaction['payment_type']))
+                                ?>
+                                <form class="fed_transaction_items" action="<?php echo fed_get_ajax_form_action('fed_ajax_request').'&fed_action_hook=FEDTransaction@items'; ?>"
+                                      method="post">
+                                    <?php fed_wp_nonce_field() ?>
+                                    <input type="hidden" name="transaction_id"
+                                           value="<?php echo $transaction['id']; ?>"/>
+                                    <button type="submit" class="btn btn-link"><?php _e('More Info',
+                                            'frontend-dashboard') ?></button>
+                                </form>
+                            </div>
+                        </td>
                         <td><?php echo esc_attr($transaction['amount']).' '.mb_strtoupper(esc_attr($transaction['currency'])) ?></td>
                         <td><?php echo esc_attr($transaction['ends_at']) ?></td>
                         <td><?php echo esc_attr($transaction['created']) ?></td>

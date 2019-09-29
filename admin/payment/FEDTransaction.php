@@ -200,7 +200,24 @@ if ( ! class_exists('FEDTransaction')) {
                 'ends_at'        => $ends_at,
                 'user_role'      => $user_role,
             );
+
             return array('transaction' => $transaction, 'items' => $items);
+        }
+
+
+        /**
+         * @param $request
+         */
+        public function items($request)
+        {
+            fed_verify_nonce($request);
+
+            if (isset($request['transaction_id'])) {
+                $items = fed_get_transaction_with_meta($request['transaction_id']);
+                $html  = fed_transaction_product_details($items);
+                wp_send_json_success(array('html' => $html));
+            }
+            wp_send_json_error(array('html' => __('Something went wrong', 'frontend-dashboard')));
         }
 
     }

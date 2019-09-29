@@ -309,3 +309,86 @@ Array
  ==================29/09/2019 11:22:08 (DEBUG) END================== 
  
  
+ 
+ 
+ ==================29/09/2019 15:13:28 (DEBUG) START================== 
+ 
+Array
+(
+    [0] => $object
+    [1] => $payment
+    [2] => $request
+)
+ 
+ 
+ ==================29/09/2019 15:13:28 (DEBUG) END================== 
+ 
+ 
+ 
+ 
+ ==================29/09/2019 15:13:28 (DEBUG) START================== 
+ 
+Array
+(
+    [0] => Array
+        (
+            [transaction] => Array
+                (
+                    [user_id] => 23
+                    [transaction_id] => j11gyrc9
+                    [amount] => 25.41
+                    [currency] => USD
+                    [payment_type] => membership
+                    [payment_source] => braintree
+                    [updated] => 2019-09-29
+                    [created] => 2019-09-29 15:13:28
+                    [status] => submitted_for_settlement
+                    [ends_at] => 2020-09-30 15:13:26
+                )
+
+            [items] => Array
+                (
+                    [7] => Array
+                        (
+                            [id] => 7
+                            [amount] => 33
+                            [total] => 25.41
+                            [currency] => USD
+                            [plan_type] => annual
+                            [plan_days] => 
+                            [plan_name] => Oye
+                            [default_user_role] => author
+                            [user_role] => editor
+                            [quantity] => 1
+                            [discount] => percentage
+                            [discount_value] => 23
+                            [tax] => NA
+                            [tax_value] => 
+                            [shipping] => 
+                            [shipping_value] => 
+                            [note_to_payee] => List 1
+                            [description] => List 1
+                        )
+
+                )
+
+        )
+
+    [1] => 3
+    [2] => Array
+        (
+            [action] => fed_ajax_request
+            [fed_action_hook] => FEDPPBraintree@charge
+            [fed_nonce] => aab426501e
+            [token] => tokencc_bh_tfpk88_5v7q4f_tqdynf_knxvyv_sb3
+            [fed_pp_object_id] => 7
+            [fed_pp_object_name] => fed_mp_plan
+            [fed_pp_object_type] => membership
+        )
+
+)
+ 
+ 
+ ==================29/09/2019 15:13:28 (DEBUG) END================== 
+ 
+ 

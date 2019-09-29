@@ -82,7 +82,6 @@ if ( ! function_exists('fed_get_transactions')) {
         global $wpdb;
         $table_payment = $wpdb->prefix.BC_FED_TABLE_PAYMENT;
         $table_user    = $wpdb->prefix.'users';
-
         if (fed_is_admin()) {
 
             return $wpdb->get_results(
@@ -118,11 +117,11 @@ if ( ! function_exists('fed_get_transaction_with_meta')) {
     function fed_get_transaction_with_meta($id, $column = 'id')
     {
         global $wpdb;
-        $transaction        = fed_get_transaction($id, $column = 'id');
+        $transaction         = fed_get_transaction($id, $column = 'id');
         $table_payment_items = $wpdb->prefix.BC_FED_TABLE_PAYMENT_ITEMS;
 
-        $transaction_id                        = $transaction['id'];
-        $m                                     = $wpdb->get_results("SELECT * FROM $table_payment_items WHERE payment_id = $transaction_id ORDER BY  payment_item_id DESC",
+        $transaction_id               = $transaction['id'];
+        $m                            = $wpdb->get_results("SELECT * FROM $table_payment_items WHERE payment_id = $transaction_id ORDER BY  payment_item_id DESC",
             ARRAY_A);
         $transaction['payment_items'] = $m;
 
@@ -162,6 +161,26 @@ if ( ! function_exists('fed_get_transaction')) {
         return new WP_Error('fed_no_row_found_on_that_id', sprintf(__('Invalid %s', 'frontend-dashboard'), $column));
     }
 }
+
+if ( ! function_exists('fed_get_transaction_meta')) {
+    /**
+     * @param $id
+     * @param  string  $column
+     *
+     * @return array|object|void|null
+     */
+    function fed_get_transaction_meta($id, $column = 'id')
+    {
+        global $wpdb;
+        $table_payment_items = $wpdb->prefix.BC_FED_TABLE_PAYMENT_ITEMS;
+        $transaction         = $wpdb->get_results("SELECT * FROM $table_payment_items WHERE $column = $id ORDER BY  payment_item_id DESC",
+            ARRAY_A);
+
+        return $transaction;
+
+    }
+}
+
 if ( ! function_exists('fed_transaction_product_details')) {
     /**
      * @param $transaction

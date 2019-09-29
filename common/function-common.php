@@ -124,7 +124,7 @@ if ( ! function_exists('fed_wp_nonce_field')) {
      *
      * @return string
      */
-    function fed_wp_nonce_field($action = -1, $name = "_wpnonce", $referer = true, $echo = true)
+    function fed_wp_nonce_field($action = 'fed_nonce', $name = "fed_nonce", $referer = true, $echo = true)
     {
         $name        = esc_attr($name);
         $nonce_field = '<input type="hidden" name="'.$name.'" value="'.wp_create_nonce($action).'" />';

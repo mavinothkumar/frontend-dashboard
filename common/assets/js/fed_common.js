@@ -32,6 +32,22 @@ jQuery(document).ready(function ($) {
         });
     }
 
+    b.on('submit', '.fed_transaction_items', function (e) {
+        var form = $(this);
+        $.ajax({
+            type: 'POST',
+            url: form.attr('action'),
+            data: form.serialize(),
+            success: function (results) {
+                if (results.success) {
+                    form.closest('.fed_transaction_items_container').html(results.data.html);
+                }
+            }
+        });
+        e.preventDefault();
+
+    });
+
     if (transaction_modal.length) {
         transaction_modal.on('hidden.bs.modal', function () {
             location.reload();
