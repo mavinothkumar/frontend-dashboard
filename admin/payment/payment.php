@@ -47,6 +47,31 @@ if ( ! function_exists('fed_payment_gateway')) {
         return false;
     }
 }
+
+if ( ! function_exists('fed_get_transactions_with_meta')) {
+    /**
+     * @return array|object|void|null
+     */
+    function fed_get_transactions_with_meta()
+    {
+        global $wpdb;
+        $transactions = fed_get_transactions();
+        if (count($transactions)) {
+            $table_payment_items = $wpdb->prefix.BC_FED_TABLE_PAYMENT_ITEMS;
+
+            foreach ($transactions as $index => $transaction) {
+                $transaction_id                        = $transaction['id'];
+                $m                                     = $wpdb->get_results("SELECT * FROM $table_payment_items WHERE payment_id = $transaction_id ORDER BY  payment_item_id DESC",
+                    ARRAY_A);
+                $transactions[$index]['payment_items'] = $m;
+            }
+
+            return $transactions;
+        }
+
+        return;
+    }
+}
 if ( ! function_exists('fed_get_transactions')) {
 
     /**
@@ -54,10 +79,11 @@ if ( ! function_exists('fed_get_transactions')) {
      */
     function fed_get_transactions()
     {
+        global $wpdb;
+        $table_payment = $wpdb->prefix.BC_FED_TABLE_PAYMENT;
+        $table_user    = $wpdb->prefix.'users';
+
         if (fed_is_admin()) {
-            global $wpdb;
-            $table_payment = $wpdb->prefix.BC_FED_TABLE_PAYMENT;
-            $table_user    = $wpdb->prefix.'users';
 
             return $wpdb->get_results(
                 "
@@ -68,14 +94,40 @@ if ( ! function_exists('fed_get_transactions')) {
 	ORDER BY    payment.id DESC
 	", ARRAY_A);
         } else {
-            return fed_fetch_table_rows_by_key_value(
-                BC_FED_TABLE_PAYMENT,
-                'user_id',
-                get_current_user_id(),
-                '=',
-                ARRAY_A,
-                'DESC');
+            $user_id = get_current_user_id();
+
+            return $wpdb->get_results(
+                "
+	SELECT      *
+	FROM        $table_payment payment
+	INNER JOIN  $table_user users
+	            ON payment.user_id = users.id
+    WHERE       payment.user_id = $user_id
+	ORDER BY    payment.id DESC
+	", ARRAY_A);
         }
+    }
+}
+if ( ! function_exists('fed_get_transaction_with_meta')) {
+    /**
+     * @param $id
+     * @param  string  $column
+     *
+     * @return array|object|void|null
+     */
+    function fed_get_transaction_with_meta($id, $column = 'id')
+    {
+        global $wpdb;
+        $transaction        = fed_get_transaction($id, $column = 'id');
+        $table_payment_items = $wpdb->prefix.BC_FED_TABLE_PAYMENT_ITEMS;
+
+        $transaction_id                        = $transaction['id'];
+        $m                                     = $wpdb->get_results("SELECT * FROM $table_payment_items WHERE payment_id = $transaction_id ORDER BY  payment_item_id DESC",
+            ARRAY_A);
+        $transaction['payment_items'] = $m;
+
+        return $transaction;
+
     }
 }
 if ( ! function_exists('fed_get_transaction')) {
@@ -118,25 +170,21 @@ if ( ! function_exists('fed_transaction_product_details')) {
      */
     function fed_transaction_product_details($transaction)
     {
-        if (isset($transaction['items'])) {
-            $product = unserialize($transaction['items']);
-            $items   = '';
-            foreach ($product as $item) {
-                $items .= sprintf('<strong>%s</strong> <br> <strong>Name:</strong> %s <br> <strong>Amount:</strong> %s %s<br> <strong>Plan Type:</strong> %s <br> <strong>Discount:</strong> %s <br> <strong>Tax:</strong> %s',
-                    esc_attr(mb_strtoupper($item['type'])),
-                    esc_attr($item['plan_name']),
-                    esc_attr($item['amount']),
-                    esc_attr($item['currency']),
-                    ucfirst(fed_convert_this_to_that(esc_attr($item['plan_type']), '_', ' ')),
-                    isset($item['discount_value']) && ! empty($item['discount_value']) ? esc_attr($item['discount_value']).' '.esc_attr(fed_get_discount_type($item['discount'])) : '',
-                    isset($item['tax_value']) && ! empty($item['tax_value']) ? esc_attr($item['tax_value']).' '.esc_attr(fed_get_discount_type($item['tax'])) : 'NA'
-                );
-            }
-
-            return $items;
+        $items = '';
+        foreach ($transaction['payment_items'] as $products) {
+            $item  = unserialize($products['object_items']);
+            $items .= sprintf('<strong>%s</strong> <br> <strong>Name:</strong> %s <br> <strong>Amount:</strong> %s %s<br> <strong>Plan Type:</strong> %s <br> <strong>Discount:</strong> %s <br> <strong>Tax:</strong> %s <br> <br>',
+                esc_attr(mb_strtoupper($transaction['payment_type'])),
+                esc_attr($item['plan_name']),
+                esc_attr($item['amount']),
+                esc_attr($item['currency']),
+                ucfirst(fed_convert_this_to_that(esc_attr($item['plan_type']), '_', ' ')),
+                isset($item['discount_value']) && ! empty($item['discount_value']) ? esc_attr($item['discount_value']).' '.esc_attr(fed_get_discount_type($item['discount'])) : '',
+                isset($item['tax_value']) && ! empty($item['tax_value']) ? esc_attr($item['tax_value']).' '.esc_attr(fed_get_discount_type($item['tax'])) : 'NA'
+            );
         }
 
-        return null;
+        return $items;
     }
 }
 if ( ! function_exists('fed_get_exact_amount')) {

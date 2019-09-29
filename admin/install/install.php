@@ -80,10 +80,11 @@ function fed_plugin_activation()
     global $wpdb;
 
     require_once(ABSPATH.'wp-admin/includes/upgrade.php');
-    $user_profile_table = $wpdb->prefix.BC_FED_TABLE_USER_PROFILE;
-    $menu_table         = $wpdb->prefix.BC_FED_TABLE_MENU;
-    $post_table         = $wpdb->prefix.BC_FED_TABLE_POST;
-    $payment_table      = $wpdb->prefix.BC_FED_TABLE_PAYMENT;
+    $user_profile_table  = $wpdb->prefix.BC_FED_TABLE_USER_PROFILE;
+    $menu_table          = $wpdb->prefix.BC_FED_TABLE_MENU;
+    $post_table          = $wpdb->prefix.BC_FED_TABLE_POST;
+    $payment_table       = $wpdb->prefix.BC_FED_TABLE_PAYMENT;
+    $payment_items_table = $wpdb->prefix.BC_FED_TABLE_PAYMENT_ITEMS;
 
 
     $charset_collate = $wpdb->get_charset_collate();
@@ -171,9 +172,7 @@ function fed_plugin_activation()
         $payment = "CREATE TABLE `".$payment_table."` (
 		  id BIGINT(20) NOT NULL AUTO_INCREMENT,
 		  user_id BIGINT(20) NOT NULL,
-		  items TEXT NOT NULL,
-		  transaction_id VARCHAR(255) NOT NULL,
-		  invoice_url TEXT NULL,
+		  transaction_id VARCHAR(100) NOT NULL,
 		  amount VARCHAR(100) NOT NULL,
 		  currency VARCHAR(20) NOT NULL,
 		  payment_source VARCHAR(50) NOT NULL DEFAULT 'stripe',
@@ -187,6 +186,20 @@ function fed_plugin_activation()
 		  ) $charset_collate;";
 
         dbDelta($payment);
+    }
+
+    if ($wpdb->get_var("SHOW TABLES LIKE '{$payment_items_table}'") != $payment_items_table) {
+        $payment_items_table = "CREATE TABLE `".$payment_items_table."` (
+		  payment_item_id BIGINT(20) NOT NULL AUTO_INCREMENT,
+		  payment_id BIGINT(20) NOT NULL,
+		  object_table VARCHAR(70) NOT NULL,
+		  object_id BIGINT(20) NOT NULL,
+		  object_items TEXT NOT NULL,
+		  PRIMARY KEY  (payment_item_id),
+		  INDEX (payment_id, object_id)
+		  ) $charset_collate;";
+
+        dbDelta($payment_items_table);
     }
 
     update_option('fed_plugin_version', BC_FED_PLUGIN_VERSION);

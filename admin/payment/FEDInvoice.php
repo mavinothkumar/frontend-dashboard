@@ -225,7 +225,7 @@ if ( ! class_exists('FEDInvoice')) {
             }
 
             // Check the Transaction is Valid
-            $payment = fed_get_transaction((int) $request['transaction_id']);
+            $payment = fed_get_transaction_with_meta((int) $request['transaction_id']);
 
             if ($payment instanceof WP_Error) {
                 wp_send_json_error(array('message' => $payment->get_error_message()));
@@ -275,7 +275,6 @@ if ( ! class_exists('FEDInvoice')) {
             $currency       = isset($payment['currency']) ? $payment['currency'] : '';
 
             $html   = '';
-            $object = unserialize($payment['items']);
             $html   .= '<div class="container" id="print">
                 <div class="row">
                     <div class="col-sm-6">
@@ -325,7 +324,8 @@ if ( ! class_exists('FEDInvoice')) {
                             </thead>
                             <tbody>';
 
-            foreach ($object as $item) {
+            foreach ($payment['payment_items'] as $items) {
+                $item = unserialize($items['object_items']);
                 $plan_name     = isset($item['plan_name']) ? esc_attr($item['plan_name']) : '';
                 $plan_quantity = isset($item['quantity']) ? (int) $item['quantity'] : 1;
                 $total         = isset($payment['amount']) ? floatval($payment['amount']) : 0;

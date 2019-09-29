@@ -120,11 +120,11 @@ if ( ! class_exists('FEDTransaction')) {
         /**
          * @param $request
          *
-         * @param  string  $type
+         * @param  string  $payment_type
          *
          * @return array
          */
-        public function formatTransaction($request, $type = '')
+        public function formatTransaction($request, $payment_type = '')
         {
             $total     = 0;
             $items     = array();
@@ -144,7 +144,11 @@ if ( ! class_exists('FEDTransaction')) {
                 $shipping_cost = 0;
                 $quantity      = isset($item['quantity']) && ! empty($item['quantity']) ? (int) $item['quantity'] : 1;
                 $currency      = isset($item['currency']) ? fed_sanitize_text_field($item['currency']) : '';
-                $type          = ! empty($type) ? $type : isset($item['type']) && ! empty($item['type']) ? $item['type'] : '';
+                if ( ! empty($payment_type)) {
+                    $type = $payment_type;
+                } else {
+                    $type = (isset($item['type']) && ! empty($item['type'])) ? $item['type'] : '';
+                }
 
                 if ($discount) {
                     $discount_cost = fed_get_exact_amount($item, 'discount');
@@ -158,10 +162,10 @@ if ( ! class_exists('FEDTransaction')) {
 
                 $discounted_amount = ($amount + $tax_cost + $shipping_cost) - ($discount_cost) * $quantity;
 
-                $total = $total + $discounted_amount;
-
-                $items[] = array(
-                    'id'                => isset($item['id']) ? intval($item['id']) : 'manual',
+                $total      = $total + $discounted_amount;
+                $id         = isset($item['id']) ? (int) $item['id'] : fed_get_random_string(7);
+                $items[$id] = array(
+                    'id'                => $id,
                     'amount'            => $amount,
                     'total'             => $discounted_amount,
                     'currency'          => $currency,
@@ -182,11 +186,9 @@ if ( ! class_exists('FEDTransaction')) {
                 );
             }
 
-            $data = array(
+            $transaction = array(
                 'user_id'        => (int) fed_get_data('id', $request, get_current_user_id()),
-                'items'          => serialize($items),
                 'transaction_id' => fed_sanitize_text_field(fed_get_data('transaction_id', $request)),
-                'invoice_url'    => 'custom',
                 'amount'         => $total,
                 'currency'       => $currency,
                 'payment_type'   => ! empty($type) ? $type : 'NA',
@@ -198,8 +200,7 @@ if ( ! class_exists('FEDTransaction')) {
                 'ends_at'        => $ends_at,
                 'user_role'      => $user_role,
             );
-
-            return $data;
+            return array('transaction' => $transaction, 'items' => $items);
         }
 
     }

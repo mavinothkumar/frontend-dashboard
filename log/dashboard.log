@@ -1,33 +1,311 @@
-
-
- ==================26/09/2019 14:29:31 (DEBUG) START==================
-
+ 
+ 
+ ==================29/09/2019 09:52:54 (DEBUG) START================== 
+ 
+FEDTransaction 
+ 
+ ==================29/09/2019 09:52:54 (DEBUG) END================== 
+ 
+ 
+ 
+ 
+ ==================29/09/2019 09:52:54 (DEBUG) START================== 
+ 
 Array
 (
-    [$payment] => Array
+    [transaction] => Array
         (
-            [0] => stdClass Object
+            [user_id] => 23
+            [transaction_id] => 
+            [amount] => 234
+            [currency] => USD
+            [payment_type] => membership
+            [payment_source] => 
+            [updated] => 2019-09-29
+            [created] => 
+            [status] => Pending
+            [ends_at] => 2019-10-30 09:52:54
+            [user_role] => administrator
+        )
+
+    [items] => Array
+        (
+            [6] => Array
                 (
-                    [id] => 52
-                    [user_id] => 23
-                    [items] => a:1:{i:0;a:19:{s:2:"id";i:4;s:6:"amount";d:100;s:5:"total";d:90;s:8:"currency";s:3:"USD";s:9:"plan_type";s:6:"custom";s:9:"plan_days";s:2:"10";s:9:"plan_name";s:3:"Pro";s:4:"type";s:10:"membership";s:17:"default_user_role";s:10:"subscriber";s:9:"user_role";s:6:"author";s:8:"quantity";i:1;s:8:"discount";s:10:"percentage";s:14:"discount_value";s:2:"10";s:3:"tax";s:2:"NA";s:9:"tax_value";s:0:"";s:8:"shipping";N;s:14:"shipping_value";N;s:13:"note_to_payee";s:4:"Note";s:11:"description";s:11:"Description";}}
-                    [transaction_id] => dg9wnffs
-                    [invoice_url] => custom
-                    [amount] => 90.00
+                    [id] => 6
+                    [amount] => 234
+                    [total] => 234
                     [currency] => USD
-                    [payment_source] => braintree
-                    [payment_type] => membership
-                    [updated] => 2019-09-26 00:00:00
-                    [created] => 2019-09-26 13:57:51
-                    [ends_at] => 2019-10-07 13:57:50
-                    [status] => submitted_for_settlement
+                    [plan_type] => monthly
+                    [plan_days] => 
+                    [plan_name] => Exterme
+                    [default_user_role] => subscriber
+                    [user_role] => administrator
+                    [quantity] => 1
+                    [discount] => NA
+                    [discount_value] => 
+                    [tax] => 
+                    [tax_value] => 
+                    [shipping] => 
+                    [shipping_value] => 
+                    [note_to_payee] => List 1
+                    [description] => List 1
                 )
 
         )
 
 )
+ 
+ 
+ ==================29/09/2019 09:52:54 (DEBUG) END================== 
+ 
+ 
+ 
+ 
+ ==================29/09/2019 09:52:56 (DEBUG) START================== 
+ 
+Array
+(
+    [0] => $object
+    [1] => $payment
+    [2] => $request
+)
+ 
+ 
+ ==================29/09/2019 09:52:56 (DEBUG) END================== 
+ 
+ 
+ 
+ 
+ ==================29/09/2019 09:52:56 (DEBUG) START================== 
+ 
+Array
+(
+    [0] => Array
+        (
+            [transaction] => Array
+                (
+                    [user_id] => 23
+                    [transaction_id] => g4x84nfe
+                    [amount] => 234.00
+                    [currency] => USD
+                    [payment_type] => membership
+                    [payment_source] => braintree
+                    [updated] => 2019-09-29
+                    [created] => 2019-09-29 09:52:56
+                    [status] => submitted_for_settlement
+                    [ends_at] => 2019-10-30 09:52:54
+                )
 
+            [items] => Array
+                (
+                    [6] => Array
+                        (
+                            [id] => 6
+                            [amount] => 234
+                            [total] => 234
+                            [currency] => USD
+                            [plan_type] => monthly
+                            [plan_days] => 
+                            [plan_name] => Exterme
+                            [default_user_role] => subscriber
+                            [user_role] => administrator
+                            [quantity] => 1
+                            [discount] => NA
+                            [discount_value] => 
+                            [tax] => 
+                            [tax_value] => 
+                            [shipping] => 
+                            [shipping_value] => 
+                            [note_to_payee] => List 1
+                            [description] => List 1
+                        )
 
- ==================26/09/2019 14:29:31 (DEBUG) END==================
+                )
 
+        )
 
+    [1] => 4
+    [2] => Array
+        (
+            [action] => fed_ajax_request
+            [fed_action_hook] => FEDPPBraintree@charge
+            [fed_nonce] => f54d381b78
+            [token] => tokencc_bh_ymyyn2_qtby4m_jnj7yy_gj2ky5_885
+            [fed_pp_object_id] => 6
+            [fed_pp_object_name] => fed_mp_plan
+            [fed_pp_object_type] => membership
+        )
+
+)
+ 
+ 
+ ==================29/09/2019 09:52:56 (DEBUG) END================== 
+ 
+ 
+ 
+ 
+ ==================29/09/2019 11:20:55 (DEBUG) START================== 
+ 
+Array
+(
+    [0] => $object
+    [1] => $payment
+    [2] => $request
+)
+ 
+ 
+ ==================29/09/2019 11:20:55 (DEBUG) END================== 
+ 
+ 
+ 
+ 
+ ==================29/09/2019 11:20:55 (DEBUG) START================== 
+ 
+Array
+(
+    [0] => Array
+        (
+            [transaction] => Array
+                (
+                    [user_id] => 23
+                    [transaction_id] => ay7ssrvs
+                    [amount] => 234.00
+                    [currency] => USD
+                    [payment_type] => membership
+                    [payment_source] => braintree
+                    [updated] => 2019-09-29
+                    [created] => 2019-09-29 11:20:55
+                    [status] => submitted_for_settlement
+                    [ends_at] => 2019-10-30 11:20:53
+                )
+
+            [items] => Array
+                (
+                    [6] => Array
+                        (
+                            [id] => 6
+                            [amount] => 234
+                            [total] => 234
+                            [currency] => USD
+                            [plan_type] => monthly
+                            [plan_days] => 
+                            [plan_name] => Exterme
+                            [default_user_role] => subscriber
+                            [user_role] => administrator
+                            [quantity] => 1
+                            [discount] => NA
+                            [discount_value] => 
+                            [tax] => 
+                            [tax_value] => 
+                            [shipping] => 
+                            [shipping_value] => 
+                            [note_to_payee] => List 1
+                            [description] => List 1
+                        )
+
+                )
+
+        )
+
+    [1] => 1
+    [2] => Array
+        (
+            [action] => fed_ajax_request
+            [fed_action_hook] => FEDPPBraintree@charge
+            [fed_nonce] => f54d381b78
+            [token] => tokencc_bh_w9y82k_9b9wmc_4skpkr_rmjgdr_cf3
+            [fed_pp_object_id] => 6
+            [fed_pp_object_name] => fed_mp_plan
+            [fed_pp_object_type] => membership
+        )
+
+)
+ 
+ 
+ ==================29/09/2019 11:20:55 (DEBUG) END================== 
+ 
+ 
+ 
+ 
+ ==================29/09/2019 11:22:08 (DEBUG) START================== 
+ 
+Array
+(
+    [0] => $object
+    [1] => $payment
+    [2] => $request
+)
+ 
+ 
+ ==================29/09/2019 11:22:08 (DEBUG) END================== 
+ 
+ 
+ 
+ 
+ ==================29/09/2019 11:22:08 (DEBUG) START================== 
+ 
+Array
+(
+    [0] => Array
+        (
+            [transaction] => Array
+                (
+                    [user_id] => 23
+                    [transaction_id] => rcah0p81
+                    [amount] => 25.41
+                    [currency] => USD
+                    [payment_type] => membership
+                    [payment_source] => braintree
+                    [updated] => 2019-09-29
+                    [created] => 2019-09-29 11:22:08
+                    [status] => submitted_for_settlement
+                    [ends_at] => 2020-09-30 11:22:06
+                )
+
+            [items] => Array
+                (
+                    [7] => Array
+                        (
+                            [id] => 7
+                            [amount] => 33
+                            [total] => 25.41
+                            [currency] => USD
+                            [plan_type] => annual
+                            [plan_days] => 
+                            [plan_name] => Oye
+                            [default_user_role] => author
+                            [user_role] => editor
+                            [quantity] => 1
+                            [discount] => percentage
+                            [discount_value] => 23
+                            [tax] => NA
+                            [tax_value] => 
+                            [shipping] => 
+                            [shipping_value] => 
+                            [note_to_payee] => List 1
+                            [description] => List 1
+                        )
+
+                )
+
+        )
+
+    [1] => 2
+    [2] => Array
+        (
+            [action] => fed_ajax_request
+            [fed_action_hook] => FEDPPBraintree@charge
+            [fed_nonce] => f54d381b78
+            [token] => tokencc_bh_rtfv3h_zhcvw3_k47k7r_nvwdy6_t97
+            [fed_pp_object_id] => 7
+            [fed_pp_object_name] => fed_mp_plan
+            [fed_pp_object_type] => membership
+        )
+
+)
+ 
+ 
+ ==================29/09/2019 11:22:08 (DEBUG) END================== 
+ 
+ 

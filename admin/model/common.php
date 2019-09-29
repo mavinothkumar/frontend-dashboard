@@ -62,11 +62,12 @@ if ( ! function_exists('fed_fetch_table_row_by_ids')) {
         global $wpdb;
         $table_name = $wpdb->prefix.$table;
 
-        $result = $wpdb->get_results("SELECT * FROM $table_name WHERE id IN (" . implode(',', array_map('intval', $ids)) . ")", ARRAY_A);
+        $result = $wpdb->get_results("SELECT * FROM $table_name WHERE id IN (".implode(',',
+                array_map('intval', $ids)).")", ARRAY_A);
 
         if ((is_array($result) && count($result) <= 0) || ! $result) {
-        return new WP_Error('fed_no_row_found_on_that_id', __('Invalid ID', 'frontend-dashboard'));
-    }
+            return new WP_Error('fed_no_row_found_on_that_id', __('Invalid ID', 'frontend-dashboard'));
+        }
 
         return $result;
 
@@ -222,10 +223,12 @@ if ( ! function_exists('fed_insert_new_row')) {
         global $wpdb;
         $table_name = $wpdb->prefix.$table;
 
-        return $wpdb->insert(
+        $status = $wpdb->insert(
             $table_name,
             $data
         );
+
+        return $status ? $wpdb->insert_id : false;
     }
 }
 

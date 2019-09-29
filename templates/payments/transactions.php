@@ -5,8 +5,7 @@
  * @package frontend-dashboard
  */
 
-$transactions = fed_get_transactions();
-
+$transactions = fed_get_transactions_with_meta();
 if ( ! $transactions instanceof WP_Error) {
     $random = fed_get_random_string(5);
     ?>
@@ -46,7 +45,9 @@ if ( ! $transactions instanceof WP_Error) {
                         <?php } ?>
                         <td><?php echo esc_attr($transaction['payment_source']) ?></td>
                         <td><?php echo esc_attr($transaction['transaction_id']) ?></td>
-                        <td><?php echo fed_transaction_product_details($transaction); ?></td>
+                        <td><?php
+                            echo fed_transaction_product_details($transaction)
+                            ?></td>
                         <td><?php echo esc_attr($transaction['amount']).' '.mb_strtoupper(esc_attr($transaction['currency'])) ?></td>
                         <td><?php echo esc_attr($transaction['ends_at']) ?></td>
                         <td><?php echo esc_attr($transaction['created']) ?></td>
