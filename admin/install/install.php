@@ -194,9 +194,10 @@ function fed_plugin_activation()
 		  payment_id BIGINT(20) NOT NULL,
 		  object_table VARCHAR(70) NOT NULL,
 		  object_id BIGINT(20) NOT NULL,
+		  user_id BIGINT(20) NOT NULL,
 		  object_items TEXT NOT NULL,
 		  PRIMARY KEY  (payment_item_id),
-		  INDEX (payment_id, object_id)
+		  INDEX (payment_id, object_id, user_id)
 		  ) $charset_collate;";
 
         dbDelta($payment_items_table);

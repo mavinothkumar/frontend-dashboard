@@ -75,6 +75,8 @@ if ( ! function_exists('fed_get_transactions_with_meta')) {
 if ( ! function_exists('fed_get_transactions')) {
 
     /**
+     * @param  null  $payment_type
+     *
      * @return array|object|null
      */
     function fed_get_transactions()
@@ -94,8 +96,9 @@ if ( ! function_exists('fed_get_transactions')) {
 	", ARRAY_A);
         } else {
             $user_id = get_current_user_id();
+            FED_Log::writeLog(['$user_id' => $user_id]);
 
-            return $wpdb->get_results(
+            $result = $wpdb->get_results(
                 "
 	SELECT      *
 	FROM        $table_payment payment
@@ -104,6 +107,9 @@ if ( ! function_exists('fed_get_transactions')) {
     WHERE       payment.user_id = $user_id
 	ORDER BY    payment.id DESC
 	", ARRAY_A);
+//            FED_Log::writeLog(['$result' => $result]);
+
+            return $result;
         }
     }
 }

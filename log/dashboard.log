@@ -1,68 +1,19 @@
  
  
- ==================29/09/2019 09:52:54 (DEBUG) START================== 
- 
-FEDTransaction 
- 
- ==================29/09/2019 09:52:54 (DEBUG) END================== 
- 
- 
- 
- 
- ==================29/09/2019 09:52:54 (DEBUG) START================== 
+ ==================30/09/2019 16:33:37 (DEBUG) START================== 
  
 Array
 (
-    [transaction] => Array
-        (
-            [user_id] => 23
-            [transaction_id] => 
-            [amount] => 234
-            [currency] => USD
-            [payment_type] => membership
-            [payment_source] => 
-            [updated] => 2019-09-29
-            [created] => 
-            [status] => Pending
-            [ends_at] => 2019-10-30 09:52:54
-            [user_role] => administrator
-        )
-
-    [items] => Array
-        (
-            [6] => Array
-                (
-                    [id] => 6
-                    [amount] => 234
-                    [total] => 234
-                    [currency] => USD
-                    [plan_type] => monthly
-                    [plan_days] => 
-                    [plan_name] => Exterme
-                    [default_user_role] => subscriber
-                    [user_role] => administrator
-                    [quantity] => 1
-                    [discount] => NA
-                    [discount_value] => 
-                    [tax] => 
-                    [tax_value] => 
-                    [shipping] => 
-                    [shipping_value] => 
-                    [note_to_payee] => List 1
-                    [description] => List 1
-                )
-
-        )
-
+    [$user_id] => 23
 )
  
  
- ==================29/09/2019 09:52:54 (DEBUG) END================== 
+ ==================30/09/2019 16:33:37 (DEBUG) END================== 
  
  
  
  
- ==================29/09/2019 09:52:56 (DEBUG) START================== 
+ ==================30/09/2019 16:33:52 (DEBUG) START================== 
  
 Array
 (
@@ -72,12 +23,12 @@ Array
 )
  
  
- ==================29/09/2019 09:52:56 (DEBUG) END================== 
+ ==================30/09/2019 16:33:52 (DEBUG) END================== 
  
  
  
  
- ==================29/09/2019 09:52:56 (DEBUG) START================== 
+ ==================30/09/2019 16:33:52 (DEBUG) START================== 
  
 Array
 (
@@ -86,15 +37,15 @@ Array
             [transaction] => Array
                 (
                     [user_id] => 23
-                    [transaction_id] => g4x84nfe
+                    [transaction_id] => k5arjcpf
                     [amount] => 234.00
                     [currency] => USD
                     [payment_type] => membership
                     [payment_source] => braintree
-                    [updated] => 2019-09-29
-                    [created] => 2019-09-29 09:52:56
+                    [updated] => 2019-09-30
+                    [created] => 2019-09-30 16:33:52
                     [status] => submitted_for_settlement
-                    [ends_at] => 2019-10-30 09:52:54
+                    [ends_at] => 2019-10-31 16:33:50
                 )
 
             [items] => Array
@@ -109,259 +60,10 @@ Array
                             [plan_days] => 
                             [plan_name] => Exterme
                             [default_user_role] => subscriber
-                            [user_role] => administrator
+                            [user_role] => translator
                             [quantity] => 1
                             [discount] => NA
                             [discount_value] => 
-                            [tax] => 
-                            [tax_value] => 
-                            [shipping] => 
-                            [shipping_value] => 
-                            [note_to_payee] => List 1
-                            [description] => List 1
-                        )
-
-                )
-
-        )
-
-    [1] => 4
-    [2] => Array
-        (
-            [action] => fed_ajax_request
-            [fed_action_hook] => FEDPPBraintree@charge
-            [fed_nonce] => f54d381b78
-            [token] => tokencc_bh_ymyyn2_qtby4m_jnj7yy_gj2ky5_885
-            [fed_pp_object_id] => 6
-            [fed_pp_object_name] => fed_mp_plan
-            [fed_pp_object_type] => membership
-        )
-
-)
- 
- 
- ==================29/09/2019 09:52:56 (DEBUG) END================== 
- 
- 
- 
- 
- ==================29/09/2019 11:20:55 (DEBUG) START================== 
- 
-Array
-(
-    [0] => $object
-    [1] => $payment
-    [2] => $request
-)
- 
- 
- ==================29/09/2019 11:20:55 (DEBUG) END================== 
- 
- 
- 
- 
- ==================29/09/2019 11:20:55 (DEBUG) START================== 
- 
-Array
-(
-    [0] => Array
-        (
-            [transaction] => Array
-                (
-                    [user_id] => 23
-                    [transaction_id] => ay7ssrvs
-                    [amount] => 234.00
-                    [currency] => USD
-                    [payment_type] => membership
-                    [payment_source] => braintree
-                    [updated] => 2019-09-29
-                    [created] => 2019-09-29 11:20:55
-                    [status] => submitted_for_settlement
-                    [ends_at] => 2019-10-30 11:20:53
-                )
-
-            [items] => Array
-                (
-                    [6] => Array
-                        (
-                            [id] => 6
-                            [amount] => 234
-                            [total] => 234
-                            [currency] => USD
-                            [plan_type] => monthly
-                            [plan_days] => 
-                            [plan_name] => Exterme
-                            [default_user_role] => subscriber
-                            [user_role] => administrator
-                            [quantity] => 1
-                            [discount] => NA
-                            [discount_value] => 
-                            [tax] => 
-                            [tax_value] => 
-                            [shipping] => 
-                            [shipping_value] => 
-                            [note_to_payee] => List 1
-                            [description] => List 1
-                        )
-
-                )
-
-        )
-
-    [1] => 1
-    [2] => Array
-        (
-            [action] => fed_ajax_request
-            [fed_action_hook] => FEDPPBraintree@charge
-            [fed_nonce] => f54d381b78
-            [token] => tokencc_bh_w9y82k_9b9wmc_4skpkr_rmjgdr_cf3
-            [fed_pp_object_id] => 6
-            [fed_pp_object_name] => fed_mp_plan
-            [fed_pp_object_type] => membership
-        )
-
-)
- 
- 
- ==================29/09/2019 11:20:55 (DEBUG) END================== 
- 
- 
- 
- 
- ==================29/09/2019 11:22:08 (DEBUG) START================== 
- 
-Array
-(
-    [0] => $object
-    [1] => $payment
-    [2] => $request
-)
- 
- 
- ==================29/09/2019 11:22:08 (DEBUG) END================== 
- 
- 
- 
- 
- ==================29/09/2019 11:22:08 (DEBUG) START================== 
- 
-Array
-(
-    [0] => Array
-        (
-            [transaction] => Array
-                (
-                    [user_id] => 23
-                    [transaction_id] => rcah0p81
-                    [amount] => 25.41
-                    [currency] => USD
-                    [payment_type] => membership
-                    [payment_source] => braintree
-                    [updated] => 2019-09-29
-                    [created] => 2019-09-29 11:22:08
-                    [status] => submitted_for_settlement
-                    [ends_at] => 2020-09-30 11:22:06
-                )
-
-            [items] => Array
-                (
-                    [7] => Array
-                        (
-                            [id] => 7
-                            [amount] => 33
-                            [total] => 25.41
-                            [currency] => USD
-                            [plan_type] => annual
-                            [plan_days] => 
-                            [plan_name] => Oye
-                            [default_user_role] => author
-                            [user_role] => editor
-                            [quantity] => 1
-                            [discount] => percentage
-                            [discount_value] => 23
-                            [tax] => NA
-                            [tax_value] => 
-                            [shipping] => 
-                            [shipping_value] => 
-                            [note_to_payee] => List 1
-                            [description] => List 1
-                        )
-
-                )
-
-        )
-
-    [1] => 2
-    [2] => Array
-        (
-            [action] => fed_ajax_request
-            [fed_action_hook] => FEDPPBraintree@charge
-            [fed_nonce] => f54d381b78
-            [token] => tokencc_bh_rtfv3h_zhcvw3_k47k7r_nvwdy6_t97
-            [fed_pp_object_id] => 7
-            [fed_pp_object_name] => fed_mp_plan
-            [fed_pp_object_type] => membership
-        )
-
-)
- 
- 
- ==================29/09/2019 11:22:08 (DEBUG) END================== 
- 
- 
- 
- 
- ==================29/09/2019 15:13:28 (DEBUG) START================== 
- 
-Array
-(
-    [0] => $object
-    [1] => $payment
-    [2] => $request
-)
- 
- 
- ==================29/09/2019 15:13:28 (DEBUG) END================== 
- 
- 
- 
- 
- ==================29/09/2019 15:13:28 (DEBUG) START================== 
- 
-Array
-(
-    [0] => Array
-        (
-            [transaction] => Array
-                (
-                    [user_id] => 23
-                    [transaction_id] => j11gyrc9
-                    [amount] => 25.41
-                    [currency] => USD
-                    [payment_type] => membership
-                    [payment_source] => braintree
-                    [updated] => 2019-09-29
-                    [created] => 2019-09-29 15:13:28
-                    [status] => submitted_for_settlement
-                    [ends_at] => 2020-09-30 15:13:26
-                )
-
-            [items] => Array
-                (
-                    [7] => Array
-                        (
-                            [id] => 7
-                            [amount] => 33
-                            [total] => 25.41
-                            [currency] => USD
-                            [plan_type] => annual
-                            [plan_days] => 
-                            [plan_name] => Oye
-                            [default_user_role] => author
-                            [user_role] => editor
-                            [quantity] => 1
-                            [discount] => percentage
-                            [discount_value] => 23
                             [tax] => NA
                             [tax_value] => 
                             [shipping] => 
@@ -379,9 +81,9 @@ Array
         (
             [action] => fed_ajax_request
             [fed_action_hook] => FEDPPBraintree@charge
-            [fed_nonce] => aab426501e
-            [token] => tokencc_bh_tfpk88_5v7q4f_tqdynf_knxvyv_sb3
-            [fed_pp_object_id] => 7
+            [fed_nonce] => a4120751b6
+            [token] => tokencc_bh_9t4whm_hbs76b_6wxgjw_mxmctw_nr5
+            [fed_pp_object_id] => 6
             [fed_pp_object_name] => fed_mp_plan
             [fed_pp_object_type] => membership
         )
@@ -389,6 +91,219 @@ Array
 )
  
  
- ==================29/09/2019 15:13:28 (DEBUG) END================== 
+ ==================30/09/2019 16:33:52 (DEBUG) END================== 
+ 
+ 
+ 
+ 
+ ==================30/09/2019 16:33:53 (DEBUG) START================== 
+ 
+Array
+(
+    [$user_id] => 23
+)
+ 
+ 
+ ==================30/09/2019 16:33:53 (DEBUG) END================== 
+ 
+ 
+ 
+ 
+ ==================30/09/2019 16:34:09 (DEBUG) START================== 
+ 
+Array
+(
+    [$user_id] => 23
+)
+ 
+ 
+ ==================30/09/2019 16:34:09 (DEBUG) END================== 
+ 
+ 
+ 
+ 
+ ==================30/09/2019 16:34:10 (DEBUG) START================== 
+ 
+Array
+(
+    [$user_id] => 23
+)
+ 
+ 
+ ==================30/09/2019 16:34:10 (DEBUG) END================== 
+ 
+ 
+ 
+ 
+ ==================30/09/2019 16:34:42 (DEBUG) START================== 
+ 
+Array
+(
+    [$user_id] => 23
+)
+ 
+ 
+ ==================30/09/2019 16:34:42 (DEBUG) END================== 
+ 
+ 
+ 
+ 
+ ==================30/09/2019 16:34:43 (DEBUG) START================== 
+ 
+Array
+(
+    [$user_id] => 23
+)
+ 
+ 
+ ==================30/09/2019 16:34:43 (DEBUG) END================== 
+ 
+ 
+ 
+ 
+ ==================30/09/2019 16:36:06 (DEBUG) START================== 
+ 
+Array
+(
+    [$user_id] => 23
+)
+ 
+ 
+ ==================30/09/2019 16:36:06 (DEBUG) END================== 
+ 
+ 
+ 
+ 
+ ==================30/09/2019 16:36:21 (DEBUG) START================== 
+ 
+Array
+(
+    [0] => $object
+    [1] => $payment
+    [2] => $request
+)
+ 
+ 
+ ==================30/09/2019 16:36:21 (DEBUG) END================== 
+ 
+ 
+ 
+ 
+ ==================30/09/2019 16:36:21 (DEBUG) START================== 
+ 
+Array
+(
+    [0] => Array
+        (
+            [transaction] => Array
+                (
+                    [user_id] => 23
+                    [transaction_id] => rjvs1wvq
+                    [amount] => 234.00
+                    [currency] => USD
+                    [payment_type] => membership
+                    [payment_source] => braintree
+                    [updated] => 2019-09-30
+                    [created] => 2019-09-30 16:36:21
+                    [status] => submitted_for_settlement
+                    [ends_at] => 2019-10-31 16:36:19
+                )
+
+            [items] => Array
+                (
+                    [6] => Array
+                        (
+                            [id] => 6
+                            [amount] => 234
+                            [total] => 234
+                            [currency] => USD
+                            [plan_type] => monthly
+                            [plan_days] => 
+                            [plan_name] => Exterme
+                            [default_user_role] => subscriber
+                            [user_role] => translator
+                            [quantity] => 1
+                            [discount] => NA
+                            [discount_value] => 
+                            [tax] => NA
+                            [tax_value] => 
+                            [shipping] => 
+                            [shipping_value] => 
+                            [note_to_payee] => List 1
+                            [description] => List 1
+                        )
+
+                )
+
+        )
+
+    [1] => 4
+    [2] => Array
+        (
+            [action] => fed_ajax_request
+            [fed_action_hook] => FEDPPBraintree@charge
+            [fed_nonce] => c6609f4575
+            [token] => tokencc_bh_xkm5cx_3yzt2d_62rsn4_9k2kr7_5ny
+            [fed_pp_object_id] => 6
+            [fed_pp_object_name] => fed_mp_plan
+            [fed_pp_object_type] => membership
+        )
+
+)
+ 
+ 
+ ==================30/09/2019 16:36:21 (DEBUG) END================== 
+ 
+ 
+ 
+ 
+ ==================30/09/2019 16:36:22 (DEBUG) START================== 
+ 
+Array
+(
+    [$user_id] => 23
+)
+ 
+ 
+ ==================30/09/2019 16:36:22 (DEBUG) END================== 
+ 
+ 
+ 
+ 
+ ==================30/09/2019 16:36:37 (DEBUG) START================== 
+ 
+Array
+(
+    [$user_id] => 23
+)
+ 
+ 
+ ==================30/09/2019 16:36:37 (DEBUG) END================== 
+ 
+ 
+ 
+ 
+ ==================30/09/2019 16:36:44 (DEBUG) START================== 
+ 
+Array
+(
+    [$user_id] => 23
+)
+ 
+ 
+ ==================30/09/2019 16:36:44 (DEBUG) END================== 
+ 
+ 
+ 
+ 
+ ==================30/09/2019 16:36:45 (DEBUG) START================== 
+ 
+Array
+(
+    [$user_id] => 23
+)
+ 
+ 
+ ==================30/09/2019 16:36:45 (DEBUG) END================== 
  
  

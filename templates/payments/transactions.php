@@ -6,6 +6,7 @@
  */
 
 $transactions = fed_get_transactions();
+
 if ( ! $transactions instanceof WP_Error) {
     $random = fed_get_random_string(5);
     ?>
