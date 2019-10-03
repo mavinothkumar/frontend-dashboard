@@ -7,6 +7,7 @@
 
 $transactions = fed_get_transactions();
 
+
 if ( ! $transactions instanceof WP_Error) {
     $random = fed_get_random_string(5);
     ?>
@@ -51,7 +52,8 @@ if ( ! $transactions instanceof WP_Error) {
                                 <?php
                                 esc_attr_e(mb_strtoupper($transaction['payment_type']))
                                 ?>
-                                <form class="fed_transaction_items" action="<?php echo fed_get_ajax_form_action('fed_ajax_request').'&fed_action_hook=FEDTransaction@items'; ?>"
+                                <form class="fed_transaction_items"
+                                      action="<?php echo fed_get_ajax_form_action('fed_ajax_request').'&fed_action_hook=FEDTransaction@items'; ?>"
                                       method="post">
                                     <?php fed_wp_nonce_field() ?>
                                     <input type="hidden" name="transaction_id"
@@ -172,152 +174,33 @@ if ( ! $transactions instanceof WP_Error) {
                             </div>
                         </div>
 
-                        <div class="col-md-12 p-10">
+                        <div class="col-md-12 p-10 fed_transaction_items_wrapper">
                             <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label><?php _e('Product Name', 'frontend-dashboard') ?></label>
-                                        <input type="text"
-                                               placeholder="<?php _e('Product Name', 'frontend-dashboard') ?>"
-                                               name="items[<?php echo $random; ?>][plan_name]" class="form-control"/>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label><?php _e('Description', 'frontend-dashboard') ?></label>
-                                        <input type="text"
-                                               placeholder="<?php _e('Product Description',
-                                                   'frontend-dashboard') ?>"
-                                               name="items[<?php echo $random; ?>][description]" class="form-control"/>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label><?php _e('Payment for', 'frontend-dashboard') ?></label>
-                                        <?php echo fed_get_input_details(array(
-                                            'input_value' => array('' => 'Please Select') + fed_payment_for(),
-                                            'input_meta'  => 'items['.$random.'][type]',
-                                            'input_type'  => 'select',
-                                        )); ?>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label><?php _e('Quantity', 'frontend-dashboard') ?></label>
-                                        <input type="number"
-                                               placeholder="<?php _e('(eg) 1 or 2',
-                                                   'frontend-dashboard') ?>"
-                                               name="items[<?php echo $random; ?>][quantity]" class="form-control"/>
+                                        <select class="form-control" name='fed_pp_object_type'
+                                                id="fed_add_transaction_item"
+                                                data-url="<?php echo fed_get_ajax_form_action('fed_ajax_request').'&fed_action_hook=FEDTransaction@add_items&fed_nonce='.wp_create_nonce('fed_nonce'); ?>">
+                                            <?php foreach (
+                                                array(
+                                                    '' => __('Please Select', 'frontend-dashboard'),
+                                                ) + fed_get_payment_for_key_index() as $key => $for
+                                            ) {
+                                                ?>
+                                                <option value="<?php echo $key; ?>"><?php echo $for ?></option>
+                                                <?php
+
+                                            } ?>
+
+                                        </select>
                                     </div>
                                 </div>
                             </div>
-
                             <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label><?php _e('Plan Type', 'frontend-dashboard') ?></label>
-                                        <?php echo fed_get_input_details(array(
-                                            'input_value' => fed_mp_default_plan(),
-                                            'input_meta'  => 'items['.$random.'][plan_type]',
-                                            'input_type'  => 'select',
-                                        )); ?>
-                                    </div>
+                                <div class="col-md-8" id="fed_transaction_items_container">
 
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label><?php _e('If Plan Type Date', 'frontend-dashboard') ?></label>
-                                        <input type="text"
-                                               placeholder="<?php _e('Number of Days',
-                                                   'frontend-dashboard') ?>"
-                                               name="items[<?php echo $random; ?>][plan_days]" class="form-control"/>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label><?php _e('User Role', 'frontend-dashboard') ?></label>
-                                        <?php echo fed_get_input_details(array(
-                                            'input_value' => array(
-                                                                 'fed_null' => __('Let it be default',
-                                                                     'frontend-dashboard'),
-                                                             ) + fed_get_user_roles_without_admin(),
-                                            'input_meta'  => 'items['.$random.'][user_role]',
-                                            'input_type'  => 'select',
-                                        )); ?>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label><?php _e('Default User Role', 'frontend-dashboard') ?></label>
-                                        <?php echo fed_get_input_details(array(
-                                            'input_value' => array(
-                                                                 'fed_null' => __('Let it be default',
-                                                                     'frontend-dashboard'),
-                                                             ) + fed_get_user_roles_without_admin(),
-                                            'input_meta'  => 'items['.$random.'][default_user_role]',
-                                            'input_type'  => 'select',
-                                        )); ?>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <label><?php _e('Amount', 'frontend-dashboard') ?></label>
-                                    <div class="input-group fed_input_group_select">
-                                        <input type="text"
-                                               placeholder="<?php _e('Amount', 'frontend-dashboard') ?>"
-                                               name="items[<?php echo $random; ?>][amount]" class="form-control"/>
-                                        <span class="input-group-addon">
-                                            <?php echo fed_get_input_details(array(
-                                                'input_value' => fed_get_currency_type_key_value(),
-                                                'input_meta'  => 'items['.$random.'][currency]',
-                                                'input_type'  => 'select',
-                                            )); ?>
-                                          </span>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <label><?php _e('Tax', 'frontend-dashboard') ?></label>
-                                    <div class="input-group fed_input_group_select">
-                                        <input type="text"
-                                               placeholder="<?php _e('Tax', 'frontend-dashboard') ?>"
-                                               name="items[<?php echo $random; ?>][tax_value]" class="form-control"/>
-                                        <span class="input-group-addon">
-                                            <?php echo fed_get_input_details(array(
-                                                'input_value' => fed_discount_type(),
-                                                'input_meta'  => 'items['.$random.'][tax]',
-                                                'input_type'  => 'select',
-                                            )); ?>
-                                          </span>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <label><?php _e('Discount', 'frontend-dashboard') ?></label>
-                                    <div class="input-group fed_input_group_select">
-                                        <input type="text"
-                                               placeholder="<?php _e('Discount Value', 'frontend-dashboard') ?>"
-                                               name="items[<?php echo $random; ?>][discount_value]"
-                                               class="form-control"/>
-                                        <span class="input-group-addon">
-                                            <?php echo fed_get_input_details(array(
-                                                'input_value' => fed_discount_type(),
-                                                'input_meta'  => 'items['.$random.'][discount]',
-                                                'input_type'  => 'select',
-                                            )); ?>
-                                          </span>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <label><?php _e('Note to Payee', 'frontend-dashboard') ?></label>
-                                    <div class="input-group">
-                                        <input type="text"
-                                               placeholder="<?php _e('Note to Payee', 'frontend-dashboard') ?>"
-                                               name="items[<?php echo $random; ?>][note_to_payee]"
-                                               class="form-control"/>
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
                     </div>

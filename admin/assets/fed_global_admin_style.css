@@ -14,6 +14,10 @@
     margin-bottom: 20px;
 }
 
+.bc_fed .m-r-10 {
+    margin-right: 10px !important;
+}
+
 .bc_fed .modal {
     overflow: auto !important;
 }
@@ -52,6 +56,9 @@
     padding-right: 5px;
 }
 
+.bc_fed .m-t-20 {
+    margin-top: 20px;
+}
 .bc_fed .panel-heading[data-toggle='collapse'].collapsed h4:after {
     font-family: 'Font Awesome 5 Free';
     content: '\f078';
@@ -170,6 +177,7 @@
     justify-content: flex-start;
     align-items: center;
 }
+
 
 .fed_flex_space_between {
     display: flex;

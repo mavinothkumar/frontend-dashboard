@@ -32,6 +32,39 @@ if ( ! function_exists('fed_payment_for')) {
         return apply_filters('fed_payment_for', array());
     }
 }
+
+if ( ! function_exists('fed_get_payment_for')) {
+    /**
+     * @param $table
+     *
+     * @return bool|mixed
+     */
+    function fed_get_payment_for($table)
+    {
+        $payment = fed_payment_for();
+
+        return isset($payment[$table]) ? $payment[$table] : false;
+    }
+}
+if ( ! function_exists('fed_get_payment_for_key_index')) {
+    /**
+     *
+     *
+     * @return mixed|void
+     */
+    function fed_get_payment_for_key_index()
+    {
+        $p           = array();
+        $payment_for = fed_payment_for();
+        if (is_array($payment_for) && count($payment_for)) {
+            foreach ($payment_for as $index => $payment) {
+                $p[$index] = $payment['name'];
+            }
+        }
+
+        return $p;
+    }
+}
 if ( ! function_exists('fed_payment_gateway')) {
     /**
      * @return bool | string
@@ -107,6 +140,7 @@ if ( ! function_exists('fed_get_transactions')) {
     WHERE       payment.user_id = $user_id
 	ORDER BY    payment.id DESC
 	", ARRAY_A);
+
 //            FED_Log::writeLog(['$result' => $result]);
 
             return $result;

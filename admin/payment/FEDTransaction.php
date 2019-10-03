@@ -37,6 +37,7 @@ if ( ! class_exists('FEDTransaction')) {
                 wp_die(__('Error 403: You are not allowed to view this page', 'frontend-dashboard'));
             }
 
+            //TODO: Update manual adding Transaction Payments
             //Validation
             $validate = new FED_Validation();
             $validate->name(__('User Name', 'frontend-dashboard'))->value(fed_get_data('user_id'))->required();
@@ -45,21 +46,30 @@ if ( ! class_exists('FEDTransaction')) {
             $validate->name(__('Purchase Date', 'frontend-dashboard'))->value(fed_get_data('created'))->required();
             $validate->name(__('Payment Source',
                 'frontend-dashboard'))->value(fed_get_data('payment_source'))->required();
+            $validate->name(__('Payment Type',
+                'frontend-dashboard'))->value(fed_get_data('fed_pp_object_type'))->required();
+            $validate->name(__('Product Name',
+                'frontend-dashboard'))->value(fed_get_data('fed_pp_object_id'))->is_array(1);
 
             if ( ! $validate->isSuccess()) {
                 $errors = implode('<br>', $validate->getErrors());
                 wp_send_json_error(array('message' => $errors));
             }
 
-            // add the Transactions.
-            $status = $this->addTransaction($request);
+            $table = fed_get_payment_for(esc_attr($request['fed_pp_object_type']));
 
-            if ($status) {
-                wp_send_json_success(array(
-                    'message' => __('Transaction Added Successfully', 'frontend-dashboard'),
-                ));
+            if (isset($table['object_table']) && ! empty($table['object_table'])) {
+                $values           = fed_fetch_table_row_by_ids($table['object_table'], $request['fed_pp_object_id']);
+                $request['items'] = $values;
+                $status           = $this->addTransaction($request);
+
+                if ($status) {
+                    wp_send_json_success(array(
+                        'message' => __('Transaction Added Successfully', 'frontend-dashboard'),
+                    ));
+                }
             }
-
+            // add the Transactions.
             FED_Log::writeLog(array('$request' => $request));
             wp_send_json_error(array(
                 'message' => __('OOPs! There is some issue in adding the record, please check the log',
@@ -75,36 +85,42 @@ if ( ! class_exists('FEDTransaction')) {
         {
             if (isset($request['items']) && count($request['items']) > 0) {
                 $user_update = true;
-                global $wpdb;
-                $table = $wpdb->prefix.BC_FED_TABLE_PAYMENT;
+                $type        = isset($request['fed_pp_object_type']) && ! empty($request['fed_pp_object_type']) ? $request['fed_pp_object_type'] : '';
+                $data        = $this->formatTransaction($request, $type);
+                if (isset($data['transaction'])) {
+                    $user_role = fed_get_data('user_role', $data['transaction']);
 
-                $data      = $this->formatTransaction($request);
-                $user_role = fed_get_data('user_role', $data);
+                    unset($data['transaction']['user_role']);
 
-                unset($data['user_role']);
+                    FED_Log::writeLog(['$data' => $data]);
+
+                    $payment = fed_insert_new_row(BC_FED_TABLE_PAYMENT, $data['transaction']);
+
+                    FED_Log::writeLog(['$payment' => $payment]);
 
 
-                $status = $wpdb->insert($table, $data['data']);
+                    $status = fed_mp_add_payment_meta($data, $payment, $request);
 
-                if ($status) {
-                    if ($user_role) {
-                        $user_update = wp_update_user(
-                            array(
-                                'ID'   => (int) $request['user_id'],
-                                'role' => $user_role,
-                            ));
-                        if ($user_update instanceof WP_Error) {
-                            FED_Log::writeLog(array(
-                                '$status'      => $status,
-                                '$user_role'   => $user_role,
-                                '$user_update' => $user_update,
-                            ));
+                    if ($payment && $status) {
+                        if ($user_role) {
+                            $user_update = wp_update_user(
+                                array(
+                                    'ID'   => (int) $request['user_id'],
+                                    'role' => $user_role,
+                                ));
+                            if ($user_update instanceof WP_Error) {
+                                FED_Log::writeLog(array(
+                                    '$status'      => $status,
+                                    '$user_role'   => $user_role,
+                                    '$user_update' => $user_update,
+                                ));
 
-                            return false;
+                                return false;
+                            }
                         }
-                    }
 
-                    return true;
+                        return true;
+                    }
                 }
 
                 FED_Log::writeLog(array(
@@ -163,6 +179,7 @@ if ( ! class_exists('FEDTransaction')) {
                 $discounted_amount = ($amount + $tax_cost + $shipping_cost) - ($discount_cost) * $quantity;
 
                 $total      = $total + $discounted_amount;
+
                 $id         = isset($item['id']) ? (int) $item['id'] : fed_get_random_string(7);
                 $items[$id] = array(
                     'id'                => $id,
@@ -187,7 +204,7 @@ if ( ! class_exists('FEDTransaction')) {
             }
 
             $transaction = array(
-                'user_id'        => (int) fed_get_data('id', $request, get_current_user_id()),
+                'user_id'        => (int) fed_get_data('user_id', $request, get_current_user_id()),
                 'transaction_id' => fed_sanitize_text_field(fed_get_data('transaction_id', $request)),
                 'amount'         => $total,
                 'currency'       => $currency,
@@ -218,6 +235,43 @@ if ( ! class_exists('FEDTransaction')) {
                 wp_send_json_success(array('html' => $html));
             }
             wp_send_json_error(array('html' => __('Something went wrong', 'frontend-dashboard')));
+        }
+
+        /**
+         * @param $request
+         */
+        public function add_items($request)
+        {
+            if (isset($request['type'])) {
+                global $wpdb;
+                $table      = fed_get_payment_for(esc_attr($request['type']));
+                $table_name = $wpdb->prefix.$table['object_table'];
+                if ($wpdb->get_var("SHOW TABLES LIKE '{$table_name}' ") === $table_name) {
+                    $records = $wpdb->get_results("SELECT * FROM `{$table_name}` ", ARRAY_A);
+                    if ($records && count($records) > 0) {
+                        $formatted = fed_get_key_value_array($records, 'id', 'plan_name');
+                        $html      = '<div class="fed_flex_start_center fed_transaction_item"><div>';
+                        $html      .= '<label>'.__('Please select your product', 'frontend-dashboard').'</label>';
+                        $html      .= '<select name="fed_pp_object_id[]" class="form-control">';
+                        foreach ($formatted as $key => $format) {
+                            $html .= '<option value="'.$key.'">'.$format.'</option>';
+                        }
+                        $html .= '</select></div>';
+                        $html .= '<div class="m-t-20 fed_m_l_10"><button type="button" class="btn btn-danger m-r-10 fed_delete_transaction_item"><i class="fa fa-trash"></i></button><button  type="button" class="btn btn-primary fed_add_transaction_item" data-url="'.fed_get_ajax_form_action('fed_ajax_request').'&fed_action_hook=FEDTransaction@add_new_item&fed_nonce='.wp_create_nonce('fed_nonce').'"><i class="fa fa-plus"></i></button></div></div>';
+
+                        wp_send_json_success(array('html' => $html));
+                    }
+                }
+                wp_send_json_error(array('message' => __('Table not exist', 'frontend-dashboard')));
+            }
+        }
+
+        /**
+         * @param $request
+         */
+        public function add_new_item($request)
+        {
+
         }
 
     }

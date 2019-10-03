@@ -1,19 +1,45 @@
  
  
- ==================30/09/2019 16:33:37 (DEBUG) START================== 
+ ==================03/10/2019 16:20:08 (DEBUG) START================== 
  
 Array
 (
-    [$user_id] => 23
+    [$user_id] => 6
 )
  
  
- ==================30/09/2019 16:33:37 (DEBUG) END================== 
+ ==================03/10/2019 16:20:08 (DEBUG) END================== 
  
  
  
  
- ==================30/09/2019 16:33:52 (DEBUG) START================== 
+ ==================03/10/2019 16:20:09 (DEBUG) START================== 
+ 
+Array
+(
+    [$user_id] => 6
+)
+ 
+ 
+ ==================03/10/2019 16:20:09 (DEBUG) END================== 
+ 
+ 
+ 
+ 
+ ==================03/10/2019 16:20:12 (DEBUG) START================== 
+ 
+Array
+(
+    [$user_id] => 6
+)
+ 
+ 
+ ==================03/10/2019 16:20:12 (DEBUG) END================== 
+ 
+ 
+ 
+ 
+ ==================03/10/2019 16:20:24 (DEBUG) START================== 
  
 Array
 (
@@ -23,12 +49,12 @@ Array
 )
  
  
- ==================30/09/2019 16:33:52 (DEBUG) END================== 
+ ==================03/10/2019 16:20:24 (DEBUG) END================== 
  
  
  
  
- ==================30/09/2019 16:33:52 (DEBUG) START================== 
+ ==================03/10/2019 16:20:24 (DEBUG) START================== 
  
 Array
 (
@@ -36,16 +62,16 @@ Array
         (
             [transaction] => Array
                 (
-                    [user_id] => 23
-                    [transaction_id] => k5arjcpf
+                    [user_id] => 6
+                    [transaction_id] => mmwt902m
                     [amount] => 234.00
                     [currency] => USD
                     [payment_type] => membership
                     [payment_source] => braintree
-                    [updated] => 2019-09-30
-                    [created] => 2019-09-30 16:33:52
+                    [updated] => 2019-10-03
+                    [created] => 2019-10-03 16:20:24
                     [status] => submitted_for_settlement
-                    [ends_at] => 2019-10-31 16:33:50
+                    [ends_at] => 2019-11-03 16:20:23
                 )
 
             [items] => Array
@@ -76,13 +102,13 @@ Array
 
         )
 
-    [1] => 3
+    [1] => 14
     [2] => Array
         (
             [action] => fed_ajax_request
             [fed_action_hook] => FEDPPBraintree@charge
-            [fed_nonce] => a4120751b6
-            [token] => tokencc_bh_9t4whm_hbs76b_6wxgjw_mxmctw_nr5
+            [fed_nonce] => d3084dbe0f
+            [token] => tokencc_bh_mhv6c7_68kg37_fthpsk_384b5k_yn6
             [fed_pp_object_id] => 6
             [fed_pp_object_name] => fed_mp_plan
             [fed_pp_object_type] => membership
@@ -91,219 +117,32 @@ Array
 )
  
  
- ==================30/09/2019 16:33:52 (DEBUG) END================== 
+ ==================03/10/2019 16:20:24 (DEBUG) END================== 
  
  
  
  
- ==================30/09/2019 16:33:53 (DEBUG) START================== 
- 
-Array
-(
-    [$user_id] => 23
-)
- 
- 
- ==================30/09/2019 16:33:53 (DEBUG) END================== 
- 
- 
- 
- 
- ==================30/09/2019 16:34:09 (DEBUG) START================== 
+ ==================03/10/2019 16:20:28 (DEBUG) START================== 
  
 Array
 (
-    [$user_id] => 23
+    [$user_id] => 6
 )
  
  
- ==================30/09/2019 16:34:09 (DEBUG) END================== 
+ ==================03/10/2019 16:20:28 (DEBUG) END================== 
  
  
  
  
- ==================30/09/2019 16:34:10 (DEBUG) START================== 
+ ==================03/10/2019 16:20:31 (DEBUG) START================== 
  
 Array
 (
-    [$user_id] => 23
+    [$user_id] => 6
 )
  
  
- ==================30/09/2019 16:34:10 (DEBUG) END================== 
- 
- 
- 
- 
- ==================30/09/2019 16:34:42 (DEBUG) START================== 
- 
-Array
-(
-    [$user_id] => 23
-)
- 
- 
- ==================30/09/2019 16:34:42 (DEBUG) END================== 
- 
- 
- 
- 
- ==================30/09/2019 16:34:43 (DEBUG) START================== 
- 
-Array
-(
-    [$user_id] => 23
-)
- 
- 
- ==================30/09/2019 16:34:43 (DEBUG) END================== 
- 
- 
- 
- 
- ==================30/09/2019 16:36:06 (DEBUG) START================== 
- 
-Array
-(
-    [$user_id] => 23
-)
- 
- 
- ==================30/09/2019 16:36:06 (DEBUG) END================== 
- 
- 
- 
- 
- ==================30/09/2019 16:36:21 (DEBUG) START================== 
- 
-Array
-(
-    [0] => $object
-    [1] => $payment
-    [2] => $request
-)
- 
- 
- ==================30/09/2019 16:36:21 (DEBUG) END================== 
- 
- 
- 
- 
- ==================30/09/2019 16:36:21 (DEBUG) START================== 
- 
-Array
-(
-    [0] => Array
-        (
-            [transaction] => Array
-                (
-                    [user_id] => 23
-                    [transaction_id] => rjvs1wvq
-                    [amount] => 234.00
-                    [currency] => USD
-                    [payment_type] => membership
-                    [payment_source] => braintree
-                    [updated] => 2019-09-30
-                    [created] => 2019-09-30 16:36:21
-                    [status] => submitted_for_settlement
-                    [ends_at] => 2019-10-31 16:36:19
-                )
-
-            [items] => Array
-                (
-                    [6] => Array
-                        (
-                            [id] => 6
-                            [amount] => 234
-                            [total] => 234
-                            [currency] => USD
-                            [plan_type] => monthly
-                            [plan_days] => 
-                            [plan_name] => Exterme
-                            [default_user_role] => subscriber
-                            [user_role] => translator
-                            [quantity] => 1
-                            [discount] => NA
-                            [discount_value] => 
-                            [tax] => NA
-                            [tax_value] => 
-                            [shipping] => 
-                            [shipping_value] => 
-                            [note_to_payee] => List 1
-                            [description] => List 1
-                        )
-
-                )
-
-        )
-
-    [1] => 4
-    [2] => Array
-        (
-            [action] => fed_ajax_request
-            [fed_action_hook] => FEDPPBraintree@charge
-            [fed_nonce] => c6609f4575
-            [token] => tokencc_bh_xkm5cx_3yzt2d_62rsn4_9k2kr7_5ny
-            [fed_pp_object_id] => 6
-            [fed_pp_object_name] => fed_mp_plan
-            [fed_pp_object_type] => membership
-        )
-
-)
- 
- 
- ==================30/09/2019 16:36:21 (DEBUG) END================== 
- 
- 
- 
- 
- ==================30/09/2019 16:36:22 (DEBUG) START================== 
- 
-Array
-(
-    [$user_id] => 23
-)
- 
- 
- ==================30/09/2019 16:36:22 (DEBUG) END================== 
- 
- 
- 
- 
- ==================30/09/2019 16:36:37 (DEBUG) START================== 
- 
-Array
-(
-    [$user_id] => 23
-)
- 
- 
- ==================30/09/2019 16:36:37 (DEBUG) END================== 
- 
- 
- 
- 
- ==================30/09/2019 16:36:44 (DEBUG) START================== 
- 
-Array
-(
-    [$user_id] => 23
-)
- 
- 
- ==================30/09/2019 16:36:44 (DEBUG) END================== 
- 
- 
- 
- 
- ==================30/09/2019 16:36:45 (DEBUG) START================== 
- 
-Array
-(
-    [$user_id] => 23
-)
- 
- 
- ==================30/09/2019 16:36:45 (DEBUG) END================== 
+ ==================03/10/2019 16:20:31 (DEBUG) END================== 
  
  

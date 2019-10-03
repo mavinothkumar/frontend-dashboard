@@ -32,6 +32,70 @@ jQuery(document).ready(function ($) {
         });
     }
 
+
+    b.on('change', '#fed_add_transaction_item', function (e) {
+        var change = $(this);
+        var url = change.data('url');
+        var type = change.val();
+        if (type !== '') {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {type: type},
+                success: function (results) {
+                    if (results.success) {
+                        $('#fed_transaction_items_container').html(results.data.html);
+                    } else {
+                        swal({
+                            title: frontend_dashboard.alert.something_went_wrong,
+                            text: results.data.message,
+                            type: "error",
+                        })
+                    }
+
+                }
+            });
+        } else {
+            $('#fed_transaction_items_container').html('');
+        }
+        e.preventDefault();
+    });
+
+
+    b.on('click', '.fed_add_transaction_item', function (e) {
+        var url = $('#fed_add_transaction_item').data('url');
+        var type = $('#fed_add_transaction_item').val();
+        if (type !== '') {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {type: type},
+                success: function (results) {
+                    if (results.success) {
+                        $('#fed_transaction_items_container').append(results.data.html);
+                    } else {
+                        swal({
+                            title: frontend_dashboard.alert.something_went_wrong,
+                            text: results.data.message,
+                            type: "error",
+                        })
+                    }
+
+                }
+            });
+        } else {
+            $('#fed_transaction_items_container').html('');
+        }
+        e.preventDefault();
+    });
+
+
+    b.on('click', '.fed_delete_transaction_item', function (e) {
+        var change = $(this);
+        change.closest('.fed_transaction_item').remove();
+        e.preventDefault();
+    });
+
     b.on('submit', '.fed_transaction_items', function (e) {
         var form = $(this);
         $.ajax({
@@ -47,6 +111,7 @@ jQuery(document).ready(function ($) {
         e.preventDefault();
 
     });
+
 
     if (transaction_modal.length) {
         transaction_modal.on('hidden.bs.modal', function () {

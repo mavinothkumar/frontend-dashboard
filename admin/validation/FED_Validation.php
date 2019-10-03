@@ -150,6 +150,24 @@ if ( ! class_exists('FED_Validation')) {
         }
 
         /**
+         * Is Array
+         *
+         * @param  int  $count
+         *
+         * @return $this
+         */
+        public function is_array($count = 0)
+        {
+
+            if ( ! is_array($this->value) && count($this->value) >= $count) {
+                $this->errors[] = __('Please select ', 'frontend-dashboard').$this->name;
+            }
+
+            return $this;
+
+        }
+
+        /**
          * Min Value
          *
          * @param  int  $min
@@ -357,7 +375,7 @@ if ( ! class_exists('FED_Validation')) {
         }
 
         /**
-         * Is Float
+         * Is Alpha
          *
          *
          * @param  mixed  $value
