@@ -3217,6 +3217,33 @@ function fed_get_value($value)
     return $value instanceof Closure ? $value() : $value;
 }
 
+/**
+ * @param $value
+ *
+ * @return string
+ */
+function fed_get_column_count($value)
+{
+    if ($value && ! empty($value)) {
+        switch ((int) $value) {
+            case 1:
+                return 'col-md-12';
+            case 2:
+                return 'col-md-6';
+            case 3:
+                return 'col-md-4';
+            case 4:
+                return 'col-md-3';
+            case 6:
+                return 'col-md-2';
+            case 12:
+                return 'col-md-1';
+        }
+    }
+
+    return 'col-md-12';
+}
+
 if ( ! function_exists('fed_set_data')) {
     /**
      * Set an item on an array or object using dot notation.

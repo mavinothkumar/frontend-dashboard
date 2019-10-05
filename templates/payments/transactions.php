@@ -45,8 +45,8 @@ if ( ! $transactions instanceof WP_Error) {
                                     esc_attr($transaction['user_nicename']),
                                     esc_attr($transaction['user_email'])) ?></td>
                         <?php } ?>
-                        <td><?php echo esc_attr($transaction['payment_source']) ?></td>
-                        <td><?php echo esc_attr($transaction['transaction_id']) ?></td>
+                        <td><?php esc_attr_e(mb_strtoupper($transaction['payment_source'])) ?></td>
+                        <td><?php esc_attr_e($transaction['transaction_id']) ?></td>
                         <td>
                             <div class="fed_transaction_items_container">
                                 <?php
