@@ -609,7 +609,7 @@ jQuery(document).ready(function ($) {
         $('#fed_dashboard_menu_sort').sortableLists(options);
     }
     if ($('.fed_datatable').length) {
-        $('.fed_datatable').dataTable({"autoWidth": false,"order": []});
+        $('.fed_datatable').dataTable({"autoWidth": false, "order": []});
     }
 
 

@@ -151,6 +151,7 @@ require_once BC_FED_PLUGIN_DIR.'/admin/payment/FEDTransaction.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/payment/payment.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/payment/FEDInvoice.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/payment/FEDInvoiceTemplate.php';
+require_once BC_FED_PLUGIN_DIR.'/admin/payment/FEDPaymentWidgets.php';
 
 
 require_once BC_FED_PLUGIN_DIR.'/admin/pro/plugins/FEDSCPRO.php';
