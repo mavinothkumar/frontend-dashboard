@@ -539,7 +539,7 @@ if ( ! class_exists('FEDInvoice')) {
         {
             if (isset($settings['user_address'][$key]) && ! empty($settings['user_address'][$key])) {
                 $user_meta = $user_profile[$settings['user_address'][$key]];
-                $v         = isset($user->$user_meta) && ! empty($user->$user_meta) ? $user->$user_meta : '';
+                $v         = isset($user->$user_meta) && ! empty($user->$user_meta) ? esc_attr($user->$user_meta) : '';
 
                 return esc_attr($v);
             }
