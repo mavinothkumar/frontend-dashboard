@@ -591,3 +591,20 @@ function fed_validate_username($username)
     return false;
 }
 
+
+if ( ! function_exists('fed_is_shortcode_in_page')) {
+    /**
+     * @param $shorcode
+     *
+     * @return bool
+     */
+    function fed_is_shortcode_in_page($shorcode)
+    {
+        global $post;
+        if (has_shortcode($post->post_content, $shorcode)) {
+            return true;
+        }
+
+        return false;
+    }
+}

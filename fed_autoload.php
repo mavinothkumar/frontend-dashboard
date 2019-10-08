@@ -13,6 +13,7 @@ require_once BC_FED_PLUGIN_DIR.'/admin/install/initial_setup.php';
 require_once BC_FED_PLUGIN_DIR.'/include/loader/FED_Template_Loader.php';
 require_once BC_FED_PLUGIN_DIR.'/include/page-template/FED_Page_Template.php';
 
+require_once BC_FED_PLUGIN_DIR.'/log/FED_Log.php';
 
 /**
  * Include Necessary Files
@@ -139,8 +140,6 @@ require_once BC_FED_PLUGIN_DIR.'/route/FED_Routes.php';
 require_once BC_FED_PLUGIN_DIR.'/route/FED_Requests.php';
 
 require_once BC_FED_PLUGIN_DIR.'/admin/hooks/FED_ActionHooks.php';
-
-require_once BC_FED_PLUGIN_DIR.'/log/FED_Log.php';
 
 require_once BC_FED_PLUGIN_DIR.'/admin/validation/FED_Validation.php';
 
