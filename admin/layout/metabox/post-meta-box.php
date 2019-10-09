@@ -52,6 +52,12 @@ function fed_add_meta_boxes_display() {
 
 add_action( 'save_post', 'fed_save_meta_boxes_display', 10, 2 );
 
+/**
+ * @param $post_id
+ * @param $post
+ *
+ * @return mixed
+ */
 function fed_save_meta_boxes_display( $post_id, $post ) {
 	/* Verify the nonce before proceeding */
 	if ( ! isset( $_POST['fed_nonce'], $_POST['fed_meta'] ) || ! wp_verify_nonce( $_POST['fed_nonce'], 'fed_nonce' ) ) {

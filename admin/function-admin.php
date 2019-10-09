@@ -9,22 +9,30 @@ if ( ! defined('ABSPATH')) {
 /**
  * Verify Nonce
  *
- * @param  array  $request
+ * @param  array  $request  (Added null in version 1.5)
  * @param  null | string | array  $permission
  */
-function fed_verify_nonce($request, $permission = null)
+function fed_verify_nonce($request = null, $permission = null)
 {
-    if ( ! isset($request['fed_nonce'])) {
+
+    /**
+     * Added in version 1.5
+     */
+    if ($request === null) {
+        $request = isset($_REQUEST) ? $_REQUEST : null;
+    }
+
+    if ( ! $request || ! isset($request['fed_nonce'])) {
         $message = __('Invalid Request - 700', 'frontend-dashboard');
         wp_doing_ajax() ? wp_send_json_error(array('message' => $message)) : wp_die($message);
     }
 
-    if ( ! wp_verify_nonce($request['fed_nonce'], 'fed_nonce')) {
+    if ( ! $request || ! wp_verify_nonce($request['fed_nonce'], 'fed_nonce')) {
         $message = __('Invalid Request - 701', 'frontend-dashboard');
         wp_doing_ajax() ? wp_send_json_error(array('message' => $message)) : wp_die($message);
     }
 
-    if (null !== $permission) {
+    if ($request && null !== $permission) {
         $user_role = fed_get_current_user_role_key();
         if (is_string($permission) && $user_role !== $permission) {
             $message = __('Invalid Request - 702', 'frontend-dashboard');
@@ -1902,24 +1910,22 @@ function fed_restrict_user_profile_picture($wp_query_obj)
  */
 function fed_get_script_loading_pages()
 {
-    return apply_filters('fed_admin_script_loading_pages', array(
+    $fed_menus      = new FED_AdminMenu();
+    $fed_menu_items = array_keys($fed_menus->fed_get_main_sub_menu());
+    $default        = array(
         'fed_settings_menu',
-        'fed_user_profile',
-        'fed_add_user_profile',
         'fed_user_profile_layout',
-        'fed_post_fields',
-        'fed_dashboard_menu',
         'fed_orders',
-        'fed_help',
-        'fed_status',
-        'fed_plugin_pages',
         'fed_payments',
         'post.php',
         'user-edit.php',
         'post-new.php',
         'profile.php',
+    );
 
-    ));
+    $items = array_merge($default, $fed_menu_items);
+
+    return apply_filters('fed_admin_script_loading_pages', $items);
 }
 
 /**

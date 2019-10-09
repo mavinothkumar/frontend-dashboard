@@ -199,7 +199,7 @@ if ( ! class_exists('FED_AdminMenu')) {
         /**
          * @return array
          */
-        protected function fed_get_main_sub_menu()
+        public function fed_get_main_sub_menu()
         {
             $menu = array(
                     'fed_dashboard_menu'   => array(
@@ -231,16 +231,6 @@ if ( ! class_exists('FED_AdminMenu')) {
                             'position'   => 30,
 
                     ),
-                /**
-                 * TODO: Disabled until payment add-on into live
-                 */
-//                    'fed_payments'     => array(
-//                            'page_title' => __('Payments', 'frontend-dashboard'),
-//                            'menu_title' => __('Payments', 'frontend-dashboard'),
-//                            'capability' => 'manage_options',
-//                            'callback'   => array(new FEDPaymentMenu(), 'index'),
-//                            'position'   => 30,
-//                    ),
                     'fed_plugin_pages'     => array(
                             'page_title' => __('Add-Ons', 'frontend-dashboard'),
                             'menu_title' => __('Add-Ons', 'frontend-dashboard'),

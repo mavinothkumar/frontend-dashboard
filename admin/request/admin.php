@@ -24,7 +24,7 @@ function fed_admin_setting_form_function()
     /**
      * Check for Nonce
      */
-    fed_verify_nonce($request);
+    fed_verify_nonce();
 
     /**
      * Process the Admin page request.

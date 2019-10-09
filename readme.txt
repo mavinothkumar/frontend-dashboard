@@ -4,7 +4,7 @@ Tags: dashboard, frontend dashboard, custom login, custom register, custom roles
 Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 4.6
 Tested up to: 5.2.3
-Stable tag: 1.4.12
+Stable tag: 1.5
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -35,8 +35,8 @@ Frontend Dashboard is bundled with the huge list of custom features which can ea
 
 = Frontend Dashboard Plugins List =
 * [Frontend Dashboard Social Connect (Pro) ](https://buffercode.com/plugin/frontend-dashboard-social-connect)
-* [Frontend Dashboard Membership (Beta) ](https://buffercode.com/plugin/frontend-dashboard-membership)
-* [Frontend Dashboard Payment (Beta) ](https://buffercode.com/plugin/frontend-dashboard-payment)
+* [Frontend Dashboard Membership (Pro) ](https://buffercode.com/plugin/frontend-dashboard-membership-pro)
+* [Frontend Dashboard Payment (Pro) ](https://buffercode.com/plugin/frontend-dashboard-payment-pro)
 * [Frontend Dashboard Pages](https://buffercode.com/plugin/frontend-dashboard-pages)
 * [Frontend Dashboard Extra](https://buffercode.com/plugin/frontend-dashboard-extra)
 * [Frontend Dashboard Captcha](https://buffercode.com/plugin/frontend-dashboard-captcha)
@@ -230,7 +230,13 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 6. [fed_user role=user_role] to generate the role based user page
 
+7. [fed_transactions] to generate the payment transactions
+
 == Changelog ==
+
+= 1.5 [08-Oct-2019] =
+* Added support to new add-on
+* Bug fixes
 
 = 1.4.11 [05-Sept-2019] =
 * Feature: Restrict illegal username on Registration. [FED | FED | Login | Restrict Username]
@@ -499,9 +505,9 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Upgrade Notice ==
 
-= 1.4.11 [05-Sept-2019] =
-* Feature: Restrict illegal username on Registration. [FED | FED | Login | Restrict Username]
-* Bug Fixes
+= 1.5 [08-Oct-2019] =
+* Added support to new add-on
+* Bug fixes
 
 == Screenshots ==
 1. Frontend Dashboard Settings | Login | Settings
