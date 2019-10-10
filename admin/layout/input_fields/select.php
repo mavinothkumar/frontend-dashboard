@@ -69,12 +69,12 @@ function fed_admin_input_fields_select($row, $action, $menu_options)
                                 </div>
                                 <div class="col-md-7">
                                     <div class="row fed_key_value_eg_container">
-                                        <div class="col-md-5">
+                                        <div class="col-md-12">
                                             <label for=""><?php _e('Examples:', 'frontend-dashboard') ?></label>
                                             <p>key,value|one,One|two,Two|five-category,Five Category</p>
                                         </div>
-                                        <div class="col-md-7">
-                                            <b><?php _e('This will be output as', 'frontend-dashboard') ?></b>
+                                        <div class="col-md-12">
+                                            <b><?php _e('This will be output as', 'frontend-dashboard') ?></b><br><br>
                                             <?php
                                             $value = array(
                                                     'key'           => 'Value',

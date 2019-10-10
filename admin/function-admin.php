@@ -223,7 +223,8 @@ function fed_get_input_details($attr)
 
     switch ($values['input_type']) {
         case 'single_line':
-            $input .= '<input '.$values['disabled'].' '.$values['extra'].' '.$values['id'].' '.$values['readonly'].' '.$values['required'].' type="text" name="'.$values['name'].'"  value="'.esc_attr($values['value']).'" class="'.$values['class'].'" placeholder="'.$values['placeholder'].'" >';
+            $input .= fed_single_line($attr);
+//            $input .= '<input '.$values['disabled'].' '.$values['extra'].' '.$values['id'].' '.$values['readonly'].' '.$values['required'].' type="text" name="'.$values['name'].'"  value="'.esc_attr($values['value']).'" class="'.$values['class'].'" placeholder="'.$values['placeholder'].'" >';
             break;
 
         case 'hidden':
@@ -3175,9 +3176,11 @@ function fed_isset_request($request, $key, $default = null)
  * @param  null|array  $target
  * @param  null|mixed  $default
  *
+ * @param  bool  $sanitize
+ *
  * @return mixed|null
  */
-function fed_get_data($key, $target = null, $default = null)
+function fed_get_data($key, $target = null, $default = null, $sanitize = true)
 {
     if ($target === null && ! isset($_REQUEST)) {
         return $default;
@@ -3192,21 +3195,21 @@ function fed_get_data($key, $target = null, $default = null)
     foreach (explode('.', $key) as $segment) {
         if (is_array($target)) {
             if ( ! array_key_exists($segment, $target)) {
-                return fed_get_value($default);
+                return fed_get_value($default, $sanitize);
             }
             $target = $target[$segment];
         } elseif ($target instanceof ArrayAccess) {
             if ( ! isset($target[$segment])) {
-                return fed_get_value($default);
+                return fed_get_value($default, $sanitize);
             }
             $target = $target[$segment];
         } elseif (is_object($target)) {
             if ( ! isset($target->{$segment})) {
-                return fed_get_value($default);
+                return fed_get_value($default, $sanitize);
             }
             $target = $target->{$segment};
         } else {
-            return fed_get_value($default);
+            return fed_get_value($default, $sanitize);
         }
     }
 
@@ -3216,11 +3219,13 @@ function fed_get_data($key, $target = null, $default = null)
 /**
  * @param $value
  *
+ * @param  bool  $sanitize
+ *
  * @return mixed
  */
-function fed_get_value($value)
+function fed_get_value($value, $sanitize = true)
 {
-    return $value instanceof Closure ? $value() : $value;
+    return $value instanceof Closure ? $value() : $sanitize ? fed_sanitize_text_field($value) : $value;
 }
 
 /**

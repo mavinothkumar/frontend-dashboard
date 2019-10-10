@@ -128,7 +128,6 @@ function fed_admin_setting_up_form_function()
     if ('post' === $post['fed_action'] && $post['input_id'] === '' && in_array($post['input_meta'],
                     fed_get_default_post_items(), false)) {
         wp_send_json_error(array('message' => 'Sorry! you cannot add the default post value "'.$post['label_name'].'"'));
-        exit();
     }
 
     /**
@@ -137,7 +136,6 @@ function fed_admin_setting_up_form_function()
     if ('profile' === $post['fed_action'] && '' === $post['input_id'] && in_array($post['input_meta'],
                     fed_get_default_profile_items(), false)) {
         wp_send_json_error(array('message' => 'Sorry! you cannot add the default profile value "'.$post['label_name'].'"'));
-        exit();
     }
 
     $values = fed_process_user_profile($post, $post['fed_action'], 'yes');

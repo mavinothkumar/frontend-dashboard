@@ -157,23 +157,7 @@ require_once BC_FED_PLUGIN_DIR.'/admin/pro/plugins/FEDSCPRO.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/pro/plugins/FEDPPPRO.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/pro/plugins/FEDMPPRO.php';
 
-require_once BC_FED_PLUGIN_DIR.'/admin/elements/Button.php';
-//require_once BC_FED_PLUGIN_DIR.'/admin/elements/Checkbox.php';
-//require_once BC_FED_PLUGIN_DIR.'/admin/elements/Date.php';
-//require_once BC_FED_PLUGIN_DIR.'/admin/elements/DateTimeLocal.php';
-require_once BC_FED_PLUGIN_DIR.'/admin/elements/Element.php';
-//require_once BC_FED_PLUGIN_DIR.'/admin/elements/Email.php';
-//require_once BC_FED_PLUGIN_DIR.'/admin/elements/File.php';
-require_once BC_FED_PLUGIN_DIR.'/admin/elements/FormControl.php';
-require_once BC_FED_PLUGIN_DIR.'/admin/elements/FormOpen.php';
-//require_once BC_FED_PLUGIN_DIR.'/admin/elements/Hidden.php';
-require_once BC_FED_PLUGIN_DIR.'/admin/elements/Input.php';
-require_once BC_FED_PLUGIN_DIR.'/admin/elements/Label.php';
-//require_once BC_FED_PLUGIN_DIR.'/admin/elements/Password.php';
-//require_once BC_FED_PLUGIN_DIR.'/admin/elements/RadioButton.php';
-require_once BC_FED_PLUGIN_DIR.'/admin/elements/Select.php';
-require_once BC_FED_PLUGIN_DIR.'/admin/elements/Text.php';
-require_once BC_FED_PLUGIN_DIR.'/admin/elements/TextArea.php';
+require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormSingleLine.php';
 
 
 

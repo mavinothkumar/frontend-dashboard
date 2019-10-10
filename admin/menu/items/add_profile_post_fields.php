@@ -111,13 +111,13 @@ function fed_get_add_profile_post_fields()
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-3">
                 <div class="fed_buttons_container <?php echo $buttons['class']; ?>">
                     <?php
                     foreach ($buttons['options'] as $index => $button) {
                         $active = $buttons['value'] === $index ? 'active' : '';
                         ?>
-                        <div class="fed_button <?php echo $active; ?>" data-button="<?php echo $index; ?>">
+                        <div class="col-md-6 fed_button <?php echo $active; ?>" data-button="<?php echo $index; ?>">
                             <div class="fed_button_image">
                                 <img src="<?php echo $button['image'] ?>"/>
                             </div>
@@ -128,33 +128,36 @@ function fed_get_add_profile_post_fields()
                     ?>
                 </div>
             </div>
+            <div class="col-md-8">
+                <div class="fed_all_input_fields_container">
+
+                    <?php
+                    //			Input Type
+                    fed_admin_input_fields_single_line($row, $action, $menu_options);
+                    //            Email Type
+                    fed_admin_input_fields_mail($row, $action, $menu_options);
+                    //            Number Type
+                    fed_admin_input_fields_number($row, $action, $menu_options);
+                    //            Password
+                    fed_admin_input_fields_password($row, $action, $menu_options);
+                    //            TextArea
+                    fed_admin_input_fields_multi_line($row, $action, $menu_options);
+                    //            Checkbox
+                    fed_admin_input_fields_checkbox($row, $action, $menu_options);
+                    //            Radio
+                    fed_admin_input_fields_radio($row, $action, $menu_options);
+                    //            Select / Dropdown
+                    fed_admin_input_fields_select($row, $action, $menu_options);
+                    // URL
+                    fed_admin_input_fields_url($row, $action, $menu_options);
+
+                    do_action('fed_admin_input_fields_container_extra', $row, $action, $menu_options);
+                    ?>
+
+                </div>
+            </div>
         </div>
-        <div class="fed_all_input_fields_container">
 
-            <?php
-            //			Input Type
-            fed_admin_input_fields_single_line($row, $action, $menu_options);
-            //            Email Type
-            fed_admin_input_fields_mail($row, $action, $menu_options);
-            //            Number Type
-            fed_admin_input_fields_number($row, $action, $menu_options);
-            //            Password
-            fed_admin_input_fields_password($row, $action, $menu_options);
-            //            TextArea
-            fed_admin_input_fields_multi_line($row, $action, $menu_options);
-            //            Checkbox
-            fed_admin_input_fields_checkbox($row, $action, $menu_options);
-            //            Radio
-            fed_admin_input_fields_radio($row, $action, $menu_options);
-            //            Select / Dropdown
-            fed_admin_input_fields_select($row, $action, $menu_options);
-            // URL
-            fed_admin_input_fields_url($row, $action, $menu_options);
-
-            do_action('fed_admin_input_fields_container_extra', $row, $action, $menu_options);
-            ?>
-
-        </div>
     </div>
     <?php
 }
