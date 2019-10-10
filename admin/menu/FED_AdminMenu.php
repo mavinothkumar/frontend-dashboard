@@ -1,4 +1,8 @@
 <?php
+
+
+use AdamWathan\Form\Elements\Text;
+
 if ( ! defined('ABSPATH')) {
     exit;
 }
@@ -252,12 +256,24 @@ if ( ! class_exists('FED_AdminMenu')) {
                             'callback'   => array($this, 'help'),
                             'position'   => 100,
                     ),
+                    'fed_test'             => array(
+                            'page_title' => __('Test', 'frontend-dashboard'),
+                            'menu_title' => __('Test', 'frontend-dashboard'),
+                            'capability' => 'manage_options',
+                            'callback'   => array($this, 'test'),
+                            'position'   => 100,
+                    ),
 
             );
 
             $main_menu = apply_filters('fed_add_main_sub_menu', $menu);
 
             return fed_array_sort($main_menu, 'position');
+        }
+
+        public function test()
+        {
+            echo (((new Text('name'))->placeholder('hello')->addClass('oye') ));
         }
 
     }

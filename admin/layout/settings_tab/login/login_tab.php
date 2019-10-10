@@ -7,6 +7,7 @@ if ( ! defined('ABSPATH')) {
  * Admin Login Tab
  */
 function fed_admin_login_tab() {
+    
 	$fed_login = get_option( 'fed_admin_login' );
 	$tabs      = fed_get_admin_login_options( $fed_login );
 	?>
