@@ -158,6 +158,12 @@ require_once BC_FED_PLUGIN_DIR.'/admin/pro/plugins/FEDPPPRO.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/pro/plugins/FEDMPPRO.php';
 
 require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormSingleLine.php';
+require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormMultiLine.php';
+require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormHidden.php';
+require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormEmail.php';
+require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormURL.php';
+require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormPassword.php';
+require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormCheckBox.php';
 
 
 

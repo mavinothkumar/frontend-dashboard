@@ -9,7 +9,7 @@ if ( ! defined('ABSPATH')) {
  *
  * @return string
  */
-function fed_form_single_line($options)
+function fed_form_email($options)
 {
     $placeholder = fed_get_data('placeholder', $options);
     $name        = fed_get_data('input_meta', $options);
@@ -22,7 +22,7 @@ function fed_form_single_line($options)
     $extra       = isset($options['extra']) ? $options['extra'] : null;
 
     return sprintf(
-        "<input type='text' name='%s' value='%s' class='%s' placeholder='%s' %s %s %s %s %s />",
+        "<input type='email' name='%s' value='%s' class='%s' placeholder='%s' %s %s %s %s %s />",
         $name,
         $value,
         $class,

@@ -87,7 +87,7 @@ function fed_get_admin_up_display_permission($row, $action, $type = '')
             <div class="form-group col-md-4">
                 <?php echo fed_input_box('show_register', array(
                     'default_value' => 'Enable',
-                    'label'         => __('Show this field on Register Form',
+                    'label'         => __('Show in Register Form',
                             'frontend-dashboard').' '.$notification,
                     'value'         => $value,
                     'disabled'      => $others,
@@ -100,7 +100,7 @@ function fed_get_admin_up_display_permission($row, $action, $type = '')
             <div class="form-group col-md-4">
                 <?php echo fed_input_box('show_dashboard', array(
                     'default_value' => 'Enable',
-                    'label'         => __('Show this field on User Dashboard', 'frontend-dashboard'),
+                    'label'         => __('Show in User Dashboard ', 'frontend-dashboard'),
                     'value'         => $row['show_dashboard'],
                 ), 'checkbox'); ?>
             </div>

@@ -223,48 +223,31 @@ function fed_get_input_details($attr)
 
     switch ($values['input_type']) {
         case 'single_line':
-            $input .= fed_single_line($attr);
-//            $input .= '<input '.$values['disabled'].' '.$values['extra'].' '.$values['id'].' '.$values['readonly'].' '.$values['required'].' type="text" name="'.$values['name'].'"  value="'.esc_attr($values['value']).'" class="'.$values['class'].'" placeholder="'.$values['placeholder'].'" >';
+            $input .= fed_form_single_line($attr);
             break;
 
         case 'hidden':
-            $input .= '<input '.$values['disabled'].' '.$values['extra'].' '.$values['id'].' '.$values['readonly'].' '.$values['required'].' type="hidden" name="'.$values['name'].'"  value="'.esc_attr($values['value']).'" class="'.$values['class'].'" placeholder="'.$values['placeholder'].'">';
+            $input .= fed_form_hidden($attr);
             break;
 
         case 'email':
-            $input .= '<input '.$values['disabled'].' '.$values['extra'].' '.$values['id'].' '.$values['readonly'].' '.$values['required'].' type="email" name="'.$values['name'].'"   value="'.esc_attr($values['value']).'" class="'.$values['class'].'" placeholder="'.$values['placeholder'].'">';
+            $input .= fed_form_email($attr);
             break;
 
         case 'password':
-            $input .= '<input '.$values['disabled'].' '.$values['extra'].' '.$values['id'].' '.$values['required'].' type="password"
-			name="'.$values['name'].'"    class="'.$values['class'].'" placeholder="'.$values['placeholder'].'">';
+            $input .= fed_form_password($attr);
             break;
 
-
         case 'url':
-            $input .= '<input '.$values['disabled'].' '.$values['extra'].' '.$values['id'].' '.$values['required'].' type="url"  placeholder="'.$values['placeholder'].'"  name="'.$values['name'].'"    class="'.$values['class'].'" value="'.esc_attr($values['value']).'" >';
+            $input .= fed_form_url($attr);
             break;
 
         case 'multi_line':
-            $rows = isset($attr['rows']) ? absint($attr['rows']) : 4;
-
-            $input .= '<textarea '.$values['disabled'].' '.$values['id'].' '.$values['extra'].' name="'.$values['name'].'"   rows="'.$rows.'"
-			          class="'.$values['class'].'" placeholder="'.$values['placeholder'].'">'.esc_textarea($values['value']).'</textarea>';
+            $input .= fed_form_multi_line($attr);
             break;
 
         case 'checkbox':
-            $values['class'] = $values['class'] == 'form-control' ? '' : $values['class'];
-            if (isset($values['extended']['label']) && count($values['extended']) > 0) {
-                $input .= '<label class="'.$values['class'].'">
-			<input '.$values['disabled'].' '.$values['extra'].' '.$values['id'].' '.$values['required'].'  name="'.$values['name'].'"  value="'.$values['default_value'].'" type="checkbox" '.checked($values['value'],
-                        $values['default_value'],
-                        false).'> '.htmlspecialchars_decode($values['extended']['label']).'</label>';
-
-            } else {
-                $input .= '<label class="'.$values['class'].'">
-			<input '.$values['disabled'].' '.$values['extra'].' '.$values['id'].' '.$values['required'].'  name="'.$values['name'].'"  value="'.$values['default_value'].'" type="checkbox" '.checked($values['value'],
-                        $values['default_value'], false).'> '.$label.'</label>';
-            }
+            $input           .= fed_form_checkbox($attr);
             break;
 
         case 'select':

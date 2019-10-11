@@ -273,9 +273,10 @@ if ( ! class_exists('FED_AdminMenu')) {
 
         public function test()
         {
-            echo (new FEDFormText(array(
-                'class' => 'oye', 'id' => 'supber', 'name' => 'test', 'value' => 'good',
-            )))->render();
+            echo fed_get_input_details(array(
+                'input_type' => 'email',
+                'class_name'      => 'oye', 'id_name' => 'supber', 'input_meta' => 'test', 'user_value' => 'good',
+            ));
         }
 
     }

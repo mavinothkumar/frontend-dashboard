@@ -106,12 +106,12 @@ function fed_get_add_profile_post_fields()
             </div>
             <div class="col-md-3 col-lg-offset-1 text-center">
                 <h4 class="fed_header_font_color text-uppercase">
-                    <?php echo $add_edit_action; ?><?php echo $page ?><?php _e('field', 'frontend-dashboard') ?>
+                    <?php echo $add_edit_action; ?><?php echo $page ?><?php _e(' field', 'frontend-dashboard') ?>
                 </h4>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <div class="fed_buttons_container <?php echo $buttons['class']; ?>">
                     <?php
                     foreach ($buttons['options'] as $index => $button) {
@@ -128,7 +128,7 @@ function fed_get_add_profile_post_fields()
                     ?>
                 </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <div class="fed_all_input_fields_container">
 
                     <?php
