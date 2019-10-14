@@ -164,6 +164,7 @@ require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormEmail.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormURL.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormPassword.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormCheckBox.php';
+require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormRadio.php';
 
 
 

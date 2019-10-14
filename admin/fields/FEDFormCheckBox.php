@@ -23,7 +23,7 @@ function fed_form_checkbox($options)
     $label         = fed_get_data('label', $options);
     $extended      = isset($options['extended']) ? (is_string($options['extended']) ? unserialize($options['extended']) : $options['extended']) : array();
 
-    $is_extended   = count($extended) > 0 && isset($extended['label']) ? htmlspecialchars_decode($extended['label']) : null;
+    $is_extended   = isset($extended['label']) && count($extended) > 0 ? htmlspecialchars_decode($extended['label']) : null;
     $label_value = $is_extended ? $is_extended : $label;
     $checked     = checked($value, $default_value, false);
 

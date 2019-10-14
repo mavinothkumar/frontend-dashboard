@@ -247,7 +247,7 @@ function fed_get_input_details($attr)
             break;
 
         case 'checkbox':
-            $input           .= fed_form_checkbox($attr);
+            $input .= fed_form_checkbox($attr);
             break;
 
         case 'select':
@@ -293,15 +293,7 @@ function fed_get_input_details($attr)
             break;
 
         case 'radio':
-            $values['class'] = $values['class'] === 'form-control' ? '' : $values['class'];
-            $options         = fed_get_select_option_value($attr['input_value']);
-            foreach ($options as $key => $label) {
-                $input .= '<label class="'.$values['class'].'" for="'.$key.'">
-					<input '.$values['disabled'].' '.$values['extra'].' '.$values['readonly'].' name="'.$values['name'].'"  value="'.$key.'" 
-					       type="radio" '.checked($values['value'], $key, false).' '.$values['required'].' >
-					'.$label.'
-				</label>';
-            }
+            $input .= fed_form_radio($attr);
             break;
 
     }
