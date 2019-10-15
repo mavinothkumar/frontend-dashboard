@@ -130,6 +130,7 @@ require_once BC_FED_PLUGIN_DIR.'/admin/layout/settings_tab/login/register_tab.ph
 require_once BC_FED_PLUGIN_DIR.'/admin/layout/settings_tab/login/settings.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/layout/settings_tab/login/restrict_wp_tab.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/layout/settings_tab/login/restrict_username.php';
+require_once BC_FED_PLUGIN_DIR.'/admin/layout/settings_tab/login/frontend_login_menu.php';
 
 require_once BC_FED_PLUGIN_DIR.'/admin/layout/custom_layout/FEDCustomCSS.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/layout/custom_layout/helper.php';

@@ -102,5 +102,11 @@ function fed_get_admin_login_options( $fed_login ) {
 			'callable'  => 'fed_admin_username_restrict_tab',
 			'arguments' => $fed_login
 		),
+        'fed_admin_frontend_login_menu' => array(
+			'icon'      => 'fa fa-align-justify',
+			'name'      => __( 'Frontend Login Menu', 'frontend-dashboard' ),
+			'callable'  => 'fed_admin_frontend_login_menu_tab',
+			'arguments' => $fed_login
+		),
 	) );
 }

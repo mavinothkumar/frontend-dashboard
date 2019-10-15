@@ -3717,6 +3717,31 @@ function fed_get_first_key_in_array($array)
 
     return false;
 }
+
+add_filter('wp_nav_menu_items','login_logout_menu', 10, 2);
+
+/**
+ * @param $items
+ * @param $args
+ *
+ * @return mixed|void
+ */
+function login_logout_menu($items, $args)
+{
+    $fed_login = get_option('fed_admin_login');
+
+    if ($args->theme_location == fed_get_data('login_menu.menu_item', $fed_login)) {
+        if (is_user_logged_in()) {
+            $items .= '<li><a href="'.fed_get_dashboard_url().'">Dashboard</a></li>';
+            $items .= '<li><a href="'.wp_logout_url().'">Log Out</a></li>';
+        } else {
+            $items .= '<li><a href="'.wp_login_url(get_permalink()).'">Log In</a></li>';
+        }
+    }
+
+    return $items;
+}
+
 /**
  * The below code tested to check input tag works in Custom Label.
  */
