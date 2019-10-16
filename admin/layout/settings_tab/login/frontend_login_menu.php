@@ -26,7 +26,7 @@ function fed_admin_frontend_login_menu_tab($fed_login_register)
                 'name'         => __('Assign Login Menu', 'frontend-dashboard'),
                 'input'        => fed_get_input_details(array(
                     'input_meta'  => 'menu_item',
-                    'input_value' => get_registered_nav_menus(),
+                    'input_value' => array('none'=>'Disable') + get_registered_nav_menus(),
                     'user_value'  => isset($fed_login_register['login_menu']['menu_item']) ? $fed_login_register['login_menu']['menu_item'] : '',
                     'input_type'  => 'select',
                 )),
