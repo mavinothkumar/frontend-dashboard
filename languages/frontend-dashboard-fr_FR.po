@@ -65,7 +65,7 @@ msgid "Please fill post title"
 msgstr ""
 
 #: frontend/controller/posts.php:298
-msgid " Successfully saved"
+msgid " Successfully Saved"
 msgstr ""
 
 #: frontend/controller/posts.php:300

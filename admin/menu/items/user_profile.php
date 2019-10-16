@@ -5,7 +5,7 @@ if ( ! defined('ABSPATH')) {
 
 if(!function_exists( 'fed_get_user_profile_menu')) {
 	function fed_get_user_profile_menu() {
-		$user_profile = fed_fetch_table_rows_with_key( BC_FED_USER_PROFILE_DB, 'input_meta' );
+		$user_profile = fed_fetch_table_rows_with_key( BC_FED_TABLE_USER_PROFILE, 'input_meta' );
 
 		if ( $user_profile instanceof WP_Error ) {
 			?>

@@ -9,7 +9,7 @@ if(!function_exists( 'fed_get_post_fields_menu')){
 	 */
 	function fed_get_post_fields_menu()
 {
-    $post_fields = fed_fetch_table_rows_with_key(BC_FED_POST_DB, 'input_meta');
+    $post_fields = fed_fetch_table_rows_with_key(BC_FED_TABLE_POST, 'input_meta');
     if ($post_fields instanceof WP_Error) {
         ?>
         <div class="bc_fed container fed_UP_container">

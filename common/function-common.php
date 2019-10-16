@@ -124,7 +124,7 @@ if ( ! function_exists('fed_wp_nonce_field')) {
      *
      * @return string
      */
-    function fed_wp_nonce_field($action = -1, $name = "_wpnonce", $referer = true, $echo = true)
+    function fed_wp_nonce_field($action = 'fed_nonce', $name = "fed_nonce", $referer = true, $echo = true)
     {
         $name        = esc_attr($name);
         $nonce_field = '<input type="hidden" name="'.$name.'" value="'.wp_create_nonce($action).'" />';
@@ -199,6 +199,7 @@ if ( ! function_exists('fed_shortcode_lists')) {
             'fed_forgot_password_only',
             'fed_dashboard',
             'fed_user',
+            'fed_transactions',
         ));
     }
 }
@@ -237,13 +238,13 @@ if ( ! function_exists('fed_js_translation')) {
     }
 }
 
-if ( ! function_exists('fed_get_form_action')) {
+if ( ! function_exists('fed_get_ajax_form_action')) {
     /**
      * @param  null  $action
      *
      * @return string|void
      */
-    function fed_get_form_action($action = null)
+    function fed_get_ajax_form_action($action = null)
     {
         if ($action) {
             return admin_url('admin-ajax.php?action='.$action);
@@ -253,19 +254,39 @@ if ( ! function_exists('fed_get_form_action')) {
     }
 }
 
+if ( ! function_exists('fed_get_form_action')) {
+    /**
+     * @param  null  $action
+     *
+     * @return string|void
+     */
+    function fed_get_form_action($action = null)
+    {
+        if ($action) {
+            return get_admin_url().'admin-post.php?action='.$action;
+        }
+
+        return '#';
+    }
+}
+
 
 if ( ! function_exists('fed_is_current_user_role')) {
+
     /**
-     * @param $user_role
+     * @param  array  $allowed_roles
+     * @param  bool  $is_key
      *
      * @return bool
      */
-    function fed_is_current_user_role($user_role)
+    function fed_is_current_user_role(array $allowed_roles, $is_key = true)
     {
-        $user          = wp_get_current_user();
-        $allowed_roles = fed_get_user_roles();
-        if (array_intersect(array_keys($allowed_roles), $user->roles)) {
-            return true;
+        if (count($allowed_roles)) {
+            $user          = fed_get_current_user_role();
+            $allowed_roles = $is_key ? array_keys($allowed_roles) : $allowed_roles;
+            if (array_intersect($allowed_roles, $user)) {
+                return true;
+            }
         }
 
         return false;
@@ -279,7 +300,10 @@ if ( ! function_exists('fed_is_admin')) {
      */
     function fed_is_admin()
     {
-        return fed_is_current_user_role('administrator');
+        $user = wp_get_current_user();
+
+        return in_array('administrator', $user->roles) ? true : false;
+
     }
 }
 
@@ -357,7 +381,6 @@ if ( ! function_exists('bcdump')) {
         }
     }
 }
-
 
 if ( ! function_exists('fed_create_new_instance')) {
     /**
@@ -545,7 +568,11 @@ function fed_show_alert_message($message, $type = 'danger')
  */
 function fed_illegal_usernames()
 {
-    return apply_filters('fed_illegal_user_names', array('chat', 'meet', 'admin'));
+    $login   = get_option('fed_admin_login');
+    $illegal = isset($login['restrict_username']) && ! empty($login['restrict_username']) ? explode(',',
+        $login['restrict_username']) : array();
+
+    return apply_filters('fed_illegal_user_names', $illegal);
 }
 
 /**
@@ -564,3 +591,20 @@ function fed_validate_username($username)
     return false;
 }
 
+
+if ( ! function_exists('fed_is_shortcode_in_page')) {
+    /**
+     * @param $shorcode
+     *
+     * @return bool
+     */
+    function fed_is_shortcode_in_page($shorcode)
+    {
+        global $post;
+        if (has_shortcode($post->post_content, $shorcode)) {
+            return true;
+        }
+
+        return false;
+    }
+}

@@ -10,7 +10,7 @@ if ( ! class_exists('FEDPayment')) {
     {
         public function __construct()
         {
-
+            add_filter('fed_add_main_sub_menu', array($this, 'main_sub_menu'));
         }
 
         public function settings()
@@ -19,66 +19,38 @@ if ( ! class_exists('FEDPayment')) {
             fed_common_simple_layout($settings);
         }
 
-        public function paypal()
-        {
-            /**
-             * Payment Gateways
-             */
-
-            echo 'paypal Under Construction';
-        }
-
-        public function stripe()
-        {
-            /**
-             * Payment Gateways
-             */
-
-            echo 'stripe Under Construction';
-        }
-
         /**
          * @return mixed|void
+         *
+         * Options => fed_payment_settings
          */
         public function settingsData()
         {
-            /**
-            option slug =>  fed_payment_settings
-            array(
-                'settings' => array(
-                    'enable' => '' //default no
-                ),
-                'gateway'  => array(
-                    'stripe' => array(
-                        'enable'      => '',
-                        'public_key'  => '',
-                        'private_key' => '',
-                        'success_url' => '',
-                        'cancel_url' => '',
-                        'notify_url' => '',
-                    ),
-                ),
-            );
-             * **/
             $settings = get_option('fed_payment_settings');
             $array    = array(
                 'form'  => array(
                     'method' => '',
                     'class'  => 'fed_admin_menu fed_ajax',
                     'attr'   => '',
-                    'action' => array('url' => '', 'action' => 'fed_ajax_request'),
+                    'action' => array(
+                        'url' => '', 'action' => 'fed_ajax_request', 'parameters' => array(
+                            'fed_action_hook' => 'FEDPayment',
+                        ),
+                    ),
                     'nonce'  => array('action' => '', 'name' => ''),
                     'loader' => '',
                 ),
                 'input' => array(
                     'Enable Payment' => array(
                         'col'          => 'col-md-7',
-                        'name'         => __('Enable Payment', 'frontend-dashboard'),
+                        'name'         => __('Gateway', 'frontend-dashboard'),
                         'input'        =>
                             fed_get_input_details(array(
-                                'input_meta' => 'settings[enable]',
-                                'user_value' => isset($settings['settings']['enable']) ? $settings['settings']['enable'] : 'no',
-                                'input_type' => 'checkbox',
+                                'input_meta'  => 'settings[gateway]',
+                                'user_value'  => isset($settings['settings']['gateway']) ? esc_attr($settings['settings']['gateway']) : 'disable',
+                                'input_type'  => 'radio',
+                                'class_name'  => 'm-r-10',
+                                'input_value' => fed_get_payment_gateways(),
                             )),
                         'help_message' => fed_show_help_message(array(
                             'content' => __('By Checking this, you are enabling the Payment',
@@ -89,6 +61,66 @@ if ( ! class_exists('FEDPayment')) {
             );
 
             return apply_filters('fed_payment_settings', $array, $settings);
+        }
+
+        /**
+         * @param $menu
+         *
+         * @return array
+         */
+        public function main_sub_menu($menu)
+        {
+            $menu['fed_payments'] = array(
+                'page_title' => __('Payments', 'frontend-dashboard'),
+                'menu_title' => __('Payments', 'frontend-dashboard'),
+                'capability' => 'manage_options',
+                'callback'   => array(new FEDPaymentMenu(), 'index'),
+                'position'   => 30,
+            );
+
+            return $menu;
+        }
+
+        /**
+         * @param $request
+         */
+        public function update($request)
+        {
+
+            $this->authorize();
+
+            $this->validation();
+
+            $settings = get_option('fed_payment_settings');
+
+            $settings['settings']['gateway'] = isset($request['settings']['gateway']) ? fed_sanitize_text_field($request['settings']['gateway']) : 'disable';
+
+            update_option('fed_payment_settings', $settings);
+
+            wp_send_json_success(array('message' => __('Payment Settings Successfully Saved', 'frontend-dashboard')));
+        }
+
+        /**
+         * @param $request
+         */
+        private function validation()
+        {
+            $validate = new FED_Validation();
+
+            $validate->name('Payment Gateway')->value(fed_get_data('settings.gateway'))->required();
+
+            if ( ! $validate->isSuccess()) {
+                $errors = implode('<br>', $validate->getErrors());
+                wp_send_json_error(array('message' => $errors));
+            }
+        }
+
+        public function authorize()
+        {
+            if ( ! fed_is_admin()) {
+                wp_die(__('Sorry! You are not allowed to do this action | Error: FED|Admin|Payment|FEDPayment@authorize'));
+            }
+
         }
 
 

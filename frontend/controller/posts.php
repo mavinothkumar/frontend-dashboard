@@ -21,13 +21,13 @@ function fed_process_dashboard_display_post($post_type = 'post')
     $user  = get_userdata(get_current_user_id());
     $paged = isset($_REQUEST['page_number']) ? absint($_REQUEST['page_number']) : 1;
     $args  = array(
-            'author'         => $user->ID,
-            'orderby'        => 'post_date',
-            'order'          => 'DESC',
-            'posts_per_page' => get_option('posts_per_page', 10),
-            'paged'          => $paged,
-            'post_status'    => array('publish', 'pending'),
-            'post_type'      => $post_type,
+        'author'         => $user->ID,
+        'orderby'        => 'post_date',
+        'order'          => 'DESC',
+        'posts_per_page' => get_option('posts_per_page', 10),
+        'paged'          => $paged,
+        'post_status'    => array('publish', 'pending'),
+        'post_type'      => $post_type,
     );
 
     return new WP_Query($args);
@@ -91,9 +91,9 @@ function fed_get_post_pagination($post_object, $menu)
             ?>
             <li <?php echo $class; ?>>
                 <a href="<?php echo esc_url(add_query_arg(
-                        array(
-                                'page_number' => $i,
-                        )
+                    array(
+                        'page_number' => $i,
+                    )
                 ), site_url()); ?>">
                     <span><?php echo $i; ?></span>
                 </a>
@@ -112,7 +112,7 @@ function fed_get_post_pagination($post_object, $menu)
  */
 function fed_display_dashboard_add_new_post($post_type)
 {
-    $post_table    = fed_fetch_rows_by_table(BC_FED_POST_DB);
+    $post_table    = fed_fetch_rows_by_table(BC_FED_TABLE_POST);
     $post_settings = fed_get_post_settings_by_type($post_type);
     $menu          = isset($post_settings['menu']['rename_post']) ? $post_settings['menu']['rename_post'] : strtoupper($post_type);
     $menu_item     = get_query_var('fed_menu_items');
@@ -120,11 +120,11 @@ function fed_display_dashboard_add_new_post($post_type)
     <div class="row">
         <div class="col-md-5">
             <a class="btn btn-primary" href="<?php echo esc_url(add_query_arg(
-                    array(
-                            'menu_type' => $menu_item['menu_type'],
-                            'menu_slug' => $menu_item['menu_slug'],
-                            'fed_nonce' => wp_create_nonce('fed_nonce'),
-                    )
+                array(
+                    'menu_type' => $menu_item['menu_type'],
+                    'menu_slug' => $menu_item['menu_slug'],
+                    'fed_nonce' => wp_create_nonce('fed_nonce'),
+                )
             ), site_url()); ?>">
                 <i class="fa fa-mail-reply"></i>
                 Back to <?php echo $menu; ?>
@@ -149,9 +149,9 @@ function fed_display_dashboard_add_new_post($post_type)
             <div class="col-md-12">
                 <div class="fed_header_font_color"><?php _e('Title') ?></div>
                 <?php echo fed_get_input_details(array(
-                        'placeholder' => 'Title',
-                        'input_meta'  => 'post_title',
-                        'input_type'  => 'single_line',
+                    'placeholder' => 'Title',
+                    'input_meta'  => 'post_title',
+                    'input_type'  => 'single_line',
                 )); ?>
             </div>
 
@@ -184,8 +184,8 @@ function fed_display_dashboard_add_new_post($post_type)
                     </div>
                     <?php echo fed_input_box('_thumbnail_id', array(), 'file') ?>
                     <?php echo fed_get_input_details(array(
-                            'input_meta' => '_thumbnail_id',
-                            'input_type' => 'file',
+                        'input_meta' => '_thumbnail_id',
+                        'input_type' => 'file',
                     )) ?>
                 </div>
             </div>
@@ -200,15 +200,15 @@ function fed_display_dashboard_add_new_post($post_type)
                 <div class="col-md-12">
                     <div class="fed_header_font_color"><?php _e('Allow Comments') ?></div>
                     <?php echo fed_input_box('comment_status', array(
-                            'default_value' => 'open',
-                            'value'         => 'open',
+                        'default_value' => 'open',
+                        'value'         => 'open',
                     ), 'checkbox'); ?>
 
                     <?php echo fed_get_input_details(array(
-                            'input_meta'    => 'comment_status',
-                            'input_type'    => 'checkbox',
-                            'default_value' => 'open',
-                            'user_value'    => 'open',
+                        'input_meta'    => 'comment_status',
+                        'input_type'    => 'checkbox',
+                        'default_value' => 'open',
+                        'user_value'    => 'open',
                     )); ?>
                 </div>
             </div>
@@ -260,23 +260,23 @@ function fed_process_dashboard_add_new_post($post)
 
     $user_role = fed_get_current_user_role();
     if (count(array_intersect($user_role, array_keys($fed_admin_options['permissions']['post_permission']))) > 0) {
-        $extras      = fed_fetch_table_rows_with_key(BC_FED_POST_DB, 'input_meta');
+        $extras      = fed_fetch_table_rows_with_key(BC_FED_TABLE_POST, 'input_meta');
         $post_status = isset($fed_admin_options['settings']['fed_post_status']) ? sanitize_text_field($fed_admin_options['settings']['fed_post_status']) : 'publish';
 
         if (empty($post['post_title'])) {
             $error = new WP_Error('fed_dashboard_add_post_title_missing',
-                    __('Please fill post title', 'frontend-dashboard'));
+                __('Please fill post title', 'frontend-dashboard'));
             wp_send_json_error(array('message' => $error->get_error_messages()));
         }
 
         $default = array(
-                'post_title'     => sanitize_text_field($post['post_title']),
-                'post_content'   => isset($post['post_content']) ? wp_kses_post($post['post_content']) : '',
-                'post_category'  => isset($post['post_category']) ? sanitize_text_field($post['post_category']) : '',
-                'tags_input'     => isset($post['tags_input']) ? implode(',', $post['tags_input']) : '',
-                'post_type'      => isset($post['post_type']) ? sanitize_text_field($post['post_type']) : 'post',
-                'comment_status' => isset($post['comment_status']) ? sanitize_text_field($post['comment_status']) : 'open',
-                'post_status'    => $post_status,
+            'post_title'     => sanitize_text_field($post['post_title']),
+            'post_content'   => isset($post['post_content']) ? wp_kses_post($post['post_content']) : '',
+            'post_category'  => isset($post['post_category']) ? sanitize_text_field($post['post_category']) : '',
+            'tags_input'     => isset($post['tags_input']) ? implode(',', $post['tags_input']) : '',
+            'post_type'      => isset($post['post_type']) ? sanitize_text_field($post['post_type']) : 'post',
+            'comment_status' => isset($post['comment_status']) ? sanitize_text_field($post['comment_status']) : 'open',
+            'post_status'    => $post_status,
         );
 
         if (isset($post['ID'])) {
@@ -304,10 +304,10 @@ function fed_process_dashboard_add_new_post($post)
             wp_send_json_error($success->get_error_messages());
         }
 
-        wp_send_json_success(array('message' => $post['post_title'].__(' Successfully saved', 'frontend-dashboard')));
+        wp_send_json_success(array('message' => $post['post_title'].__(' Successfully Saved', 'frontend-dashboard')));
     }
     $error = new WP_Error('fed_action_not_allowed',
-            __('Sorry! your are not allowed to do this action', 'frontend-dashboard'));
+        __('Sorry! your are not allowed to do this action', 'frontend-dashboard'));
 
     wp_send_json_error(array('message' => $error->get_error_messages()));
 }
@@ -321,7 +321,7 @@ function fed_process_dashboard_add_new_post($post)
  */
 function fed_display_dashboard_edit_post_by_id($post)
 {
-    $post_table    = fed_fetch_rows_by_table(BC_FED_POST_DB);
+    $post_table    = fed_fetch_rows_by_table(BC_FED_TABLE_POST);
     $post_meta     = get_post_meta($post->ID);
     $post_settings = fed_get_post_settings_by_type($post->post_type);
 
@@ -333,12 +333,12 @@ function fed_display_dashboard_edit_post_by_id($post)
 			  class="fed_dashboard_show_post_list_request"
 			  action=" '.admin_url('admin-ajax.php?action=fed_dashboard_show_post_list_request').'">';
     $html .= fed_wp_nonce_field('fed_dashboard_show_post_list_request', 'fed_dashboard_show_post_list_request', '',
-            false);
+        false);
 
     $html .= fed_get_input_details(array(
-            'input_type' => 'hidden',
-            'input_meta' => 'fed_post_type',
-            'user_value' => $post->post_type,
+        'input_type' => 'hidden',
+        'input_meta' => 'fed_post_type',
+        'user_value' => $post->post_type,
     ));
 
     $html .= '
@@ -357,8 +357,8 @@ function fed_display_dashboard_edit_post_by_id($post)
 	  action="'.admin_url('admin-ajax.php?action=fed_dashboard_process_edit_post_request').'">';
 
     $html .= fed_wp_nonce_field("fed_dashboard_process_edit_post_request", "fed_dashboard_process_edit_post_request",
-            true,
-            false);
+        true,
+        false);
 
     $html .= fed_input_box('ID', array('value' => (int) $post->ID), 'hidden');
 
@@ -381,9 +381,9 @@ function fed_display_dashboard_edit_post_by_id($post)
 		<div class="col-md-12">
 			<div class="fed_header_font_color">'.__('Title').'</div>
 			'.fed_input_box('post_title', array(
-                    'value'       => esc_attr($post->post_title),
-                    'placeholder' => 'Post Title',
-            ), 'single_line').'
+            'value'       => esc_attr($post->post_title),
+            'placeholder' => 'Post Title',
+        ), 'single_line').'
 		</div>
 
 	</div>
@@ -397,8 +397,8 @@ function fed_display_dashboard_edit_post_by_id($post)
 		<div class="col-md-12">
 			<div class="fed_header_font_color">'.__('Content').'</div>
 			'.fed_get_wp_editor($post->post_content, 'post_content', array(
-                        'quicktags' => true,
-                )).'
+                'quicktags' => true,
+            )).'
 		</div>
 
 	</div>
@@ -416,7 +416,7 @@ function fed_display_dashboard_edit_post_by_id($post)
 		<div class="col-md-12">
 			<div class="fed_header_font_color">'.__('Featured Image').'</div>
 			'.fed_input_box('_thumbnail_id', array('value' => (int) $post_meta['_thumbnail_id'][0]), 'file').
-                '
+                 '
 		</div>
 	</div>
 	';
@@ -431,9 +431,9 @@ function fed_display_dashboard_edit_post_by_id($post)
 		<div class="col-md-12">
 			<div class="fed_header_font_color">'.__('Allow Comments').'</div>
 			'.fed_input_box('comment_status', array(
-                        'default_value' => 'open',
-                        'value'         => esc_attr($post->comment_status),
-                ), 'checkbox').'
+                'default_value' => 'open',
+                'value'         => esc_attr($post->comment_status),
+            ), 'checkbox').'
 		</div>
 	</div>
 	';
@@ -504,6 +504,7 @@ function fed_show_category_tag_post_format($post, $post_settings)
                         <div class="col-md-12">
                             <div class="fed_header_font_color">
                                 <?php echo $category->label ?>
+                                <?php  do_action('fed_frontend_dashboard_edit_tag_label', $category, $post) ?>
                             </div>
                             <?php echo fed_get_dashboard_display_categories($post, $category); ?>
                         </div>
@@ -520,7 +521,7 @@ function fed_show_category_tag_post_format($post, $post_settings)
                         <div class="col-md-12">
                             <div class="fed_header_font_color">
                                 <?php echo $tag->label; ?>
-                                <?php do_action('fed_frontend_dashboard_edit_tag_label', $tag) ?>
+                                <?php  do_action('fed_frontend_dashboard_edit_tag_label', $tag, $post) ?>
                             </div>
                             <?php echo fed_get_dashboard_display_tags($post, $tag); ?>
                         </div>
@@ -539,8 +540,8 @@ function fed_show_category_tag_post_format($post, $post_settings)
                         <div class="col-md-12">
                             <div class="fed_header_font_color"><?php _e('Post Format'); ?></div>
                             <?php echo fed_input_box('tax_input[post_format][]', array(
-                                    'options' => $post_format,
-                                    'value'   => esc_attr(get_post_format($post->ID)) ?: 'standard',
+                                'options' => $post_format,
+                                'value'   => esc_attr(get_post_format($post->ID)) ?: 'standard',
                             ), 'radio'); ?>
                         </div>
                     </div>

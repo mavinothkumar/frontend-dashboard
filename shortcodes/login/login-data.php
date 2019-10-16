@@ -21,7 +21,7 @@ function fed_login_form()
  */
 function fed_login_only()
 {
-    $login_info = fed_fetch_table_rows_with_key(BC_FED_USER_PROFILE_DB, 'input_meta');
+    $login_info = fed_fetch_table_rows_with_key(BC_FED_TABLE_USER_PROFILE, 'input_meta');
 
     $login = array(
             'menu'     => array(

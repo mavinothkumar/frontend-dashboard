@@ -33,7 +33,7 @@ function fed_get_all_dashboard_display_menus()
  */
 function fed_process_dashboard_display_menu()
 {
-    return fed_fetch_table_rows_with_key_front_end(BC_FED_MENU_DB, 'menu_slug');
+    return fed_fetch_table_rows_with_key_front_end(BC_FED_TABLE_MENU, 'menu_slug');
 }
 
 /**

@@ -254,7 +254,7 @@ msgid "Post Format"
 msgstr ""
 
 #: frontend/controller/posts.php:298
-msgid " Successfully saved"
+msgid " Successfully Saved"
 msgstr ""
 
 #: frontend/controller/posts.php:194 frontend/controller/posts.php:420

@@ -26,6 +26,11 @@ function fed_admin_setting_login_request()
         $message                        = 'Restrict WP Admin ';
     }
 
+    if (isset($requests['fed_admin_unique_login']) && 'fed_restrict_username' === $requests['fed_admin_unique_login']) {
+        $fed_admin_login['restrict_username'] = fed_sanitize_text_field($request['restrict_username']);
+        $message                        = 'Restrict Username ';
+    }
+
     apply_filters('fed_admin_login', $fed_admin_login);
 
     update_option('fed_admin_login', $fed_admin_login);

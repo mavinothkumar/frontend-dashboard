@@ -10,11 +10,6 @@ if ( ! defined('ABSPATH')) {
  */
 function fed_admin_input_fields_checkbox($row, $action, $menu_options)
 {
-    $data = ['h', 'd', 'ss'];
-
-    maybe_unserialize($data);
-
-
     ?>
     <div class="row fed_input_type_container fed_input_checkbox_container hide">
         <form method="post"
@@ -54,7 +49,7 @@ function fed_admin_input_fields_checkbox($row, $action, $menu_options)
 
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label>Custom Label</label>
+                                    <label>Custom Label <?php echo fed_show_help_message(array('content'=>'This text will be added after the checkbox, you can add the HTML text')); ?></label>
                                     <textarea class="form-control" name="extended[label]" cols="30" rows="4"
                                               placeholder="Please add custom HTML based label here"><?php echo isset($row['extended']['label']) ? $row['extended']['label'] : ''; ?></textarea>
                                 </div>

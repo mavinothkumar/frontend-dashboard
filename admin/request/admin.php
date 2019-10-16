@@ -24,7 +24,7 @@ function fed_admin_setting_form_function()
     /**
      * Check for Nonce
      */
-    fed_verify_nonce($request);
+    fed_verify_nonce();
 
     /**
      * Process the Admin page request.
@@ -107,7 +107,7 @@ function fed_admin_setting_up_form_function()
     /**
      * Check for Nonce
      */
-    fed_nonce_check($post);
+    fed_verify_nonce($post);
 
 
     if ( ! isset($post['label_name']) || empty($post['label_name'])
@@ -128,7 +128,6 @@ function fed_admin_setting_up_form_function()
     if ('post' === $post['fed_action'] && $post['input_id'] === '' && in_array($post['input_meta'],
                     fed_get_default_post_items(), false)) {
         wp_send_json_error(array('message' => 'Sorry! you cannot add the default post value "'.$post['label_name'].'"'));
-        exit();
     }
 
     /**
@@ -137,7 +136,6 @@ function fed_admin_setting_up_form_function()
     if ('profile' === $post['fed_action'] && '' === $post['input_id'] && in_array($post['input_meta'],
                     fed_get_default_profile_items(), false)) {
         wp_send_json_error(array('message' => 'Sorry! you cannot add the default profile value "'.$post['label_name'].'"'));
-        exit();
     }
 
     $values = fed_process_user_profile($post, $post['fed_action'], 'yes');
@@ -159,7 +157,7 @@ function fed_admin_setting_form_dashboard_menu_function()
     /**
      * Check for Nonce
      */
-    fed_nonce_check($post);
+    fed_verify_nonce($post);
 
     if ('save' === $action) {
         if (empty($post['fed_menu_name'])
@@ -183,7 +181,7 @@ function fed_admin_setting_form_dashboard_menu_function()
             exit();
         }
 
-        $is_ID = fed_fetch_table_row_by_id(BC_FED_MENU_DB, $post_id);
+        $is_ID = fed_fetch_table_row_by_id(BC_FED_TABLE_MENU, $post_id);
 
         if ($is_ID instanceof WP_Error) {
             wp_send_json_error(array('message' => $is_ID->get_error_message('fed_no_row_found_on_that_id')));
@@ -199,8 +197,8 @@ function fed_admin_setting_form_dashboard_menu_function()
             wp_send_json_error(array('message' => __('You are trying to delete a menu, which has Sub Menu(s), Please delete or move it to different Menu')));
         }
 
-        fed_delete_table_rows_on_condition(BC_FED_USER_PROFILE_DB, 'menu', $is_ID['menu_slug']);
-        $is_delete            = fed_delete_table_row_by_id(BC_FED_MENU_DB, $post_id);
+        fed_delete_table_rows_on_condition(BC_FED_TABLE_USER_PROFILE, 'menu', $is_ID['menu_slug']);
+        $is_delete            = fed_delete_table_row_by_id(BC_FED_TABLE_MENU, $post_id);
 
         if ('success' === $is_delete) {
             wp_send_json_success(array(
@@ -246,16 +244,16 @@ function fed_user_profile_delete_function()
     /**
      * Check for Nonce
      */
-    fed_nonce_check($post);
+    fed_verify_nonce($post);
 
     if ('delete' === $action) {
         $check_up_id = $is_delete = $reload = '';
         if (isset($post['profile_id'])) {
-            $check_up_id = fed_fetch_table_row_by_id(BC_FED_USER_PROFILE_DB, $post['profile_id']);
+            $check_up_id = fed_fetch_table_row_by_id(BC_FED_TABLE_USER_PROFILE, $post['profile_id']);
         }
 
         if (isset($post['post_id'])) {
-            $check_up_id = fed_fetch_table_row_by_id(BC_FED_POST_DB, $post['post_id']);
+            $check_up_id = fed_fetch_table_row_by_id(BC_FED_TABLE_POST, $post['post_id']);
         }
 
         if ($check_up_id instanceof WP_Error) {
@@ -264,12 +262,12 @@ function fed_user_profile_delete_function()
         }
 
         if (isset($post['profile_id'])) {
-            $is_delete = fed_delete_table_row_by_id(BC_FED_USER_PROFILE_DB, $post['profile_id']);
+            $is_delete = fed_delete_table_row_by_id(BC_FED_TABLE_USER_PROFILE, $post['profile_id']);
             $reload    = admin_url().'admin.php?page=fed_user_profile';
         }
 
         if (isset($post['post_id'])) {
-            $is_delete = fed_delete_table_row_by_id(BC_FED_POST_DB, $post['post_id']);
+            $is_delete = fed_delete_table_row_by_id(BC_FED_TABLE_POST, $post['post_id']);
             $reload    = admin_url().'admin.php?page=fed_post_fields';
         }
 

@@ -17,7 +17,7 @@ function fed_admin_menu_save($request, $post_id = '')
     /**
      * TODO: changed prefix to get_blog_prefix() for multisite check.
      */
-    $table_name = $wpdb->get_blog_prefix().BC_FED_MENU_DB;
+    $table_name = $wpdb->get_blog_prefix().BC_FED_TABLE_MENU;
 
     fed_admin_menu_restrictive_words_check($request['menu_slug']);
 

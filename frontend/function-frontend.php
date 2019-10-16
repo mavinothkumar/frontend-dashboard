@@ -158,7 +158,7 @@ function fed_get_registration_content_fields()
  */
 function fed_process_user_profile_required_field()
 {
-    $fields = fed_fetch_table_by_is_required(BC_FED_USER_PROFILE_DB);
+    $fields = fed_fetch_table_by_is_required(BC_FED_TABLE_USER_PROFILE);
 
     $values = array_reduce($fields, function ($result, $item) {
         $result[$item['input_meta']] = 'Please enter '.$item['label_name'];
@@ -319,12 +319,10 @@ function fed_get_dashboard_display_categories($post = '', $cpt = '')
             'hide_empty' => false,
     ));
 
-
     if (isset($post->ID)) {
         $categories = wp_get_post_terms($post->ID, $cpt->name, array('fields' => 'ids'));
     }
-//    bcdump($fed_get_categories);
-//    bcdump($categories);
+
     return fed_convert_array_to_id_name($fed_get_categories, 'term_id', $cpt->name, $categories);
 }
 
@@ -642,7 +640,7 @@ function fed_show_user_profile_page($user)
      * Collect Menu, User Information and Menu Items
      */
     $profiles    = fed_array_group_by_key(fed_fetch_user_profile_by_dashboard(), 'menu');
-    $menus       = fed_fetch_table_rows_with_key(BC_FED_MENU_DB, 'menu_slug');
+    $menus       = fed_fetch_table_rows_with_key(BC_FED_TABLE_MENU, 'menu_slug');
     $upl_options = get_option('fed_admin_settings_upl');
 
     /**

@@ -608,6 +608,11 @@ jQuery(document).ready(function ($) {
     if ($('#fed_dashboard_menu_sort').length) {
         $('#fed_dashboard_menu_sort').sortableLists(options);
     }
+    if ($('.fed_datatable').length) {
+        $('.fed_datatable').dataTable({"autoWidth": false, "order": []});
+    }
+
+
 
 });
 

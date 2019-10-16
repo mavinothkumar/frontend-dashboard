@@ -32,7 +32,7 @@ body.swal2-iosfix {
   right: 0;
   padding: 10px;
   background-color: transparent;
-  z-index: 1060; }
+  z-index: 99999999; }
   .swal2-container.swal2-fade {
     -webkit-transition: background-color .1s;
     transition: background-color .1s; }

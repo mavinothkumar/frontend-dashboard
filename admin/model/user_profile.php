@@ -9,7 +9,7 @@ if ( ! defined('ABSPATH')) {
  */
 function fed_fetch_user_profile_by_registration() {
 	global $wpdb;
-	$table_name = $wpdb->prefix . BC_FED_USER_PROFILE_DB;
+	$table_name = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
 
 	$result = $wpdb->get_results( "SELECT * FROM $table_name WHERE show_register LIKE 'Enable'", ARRAY_A );
 	if ( count( $result ) <= 0 ) {
@@ -32,7 +32,7 @@ function fed_fetch_user_profile_by_registration() {
  */
 function fed_fetch_user_profile_required_by_menu( $menu = 'profile' ) {
 	global $wpdb;
-	$table_name = $wpdb->prefix . BC_FED_USER_PROFILE_DB;
+	$table_name = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
 
 	$result = $wpdb->get_results( "SELECT * FROM $table_name WHERE (menu LIKE '{$menu}' AND is_required LIKE 'true') ", ARRAY_A );
 	if ( count( $result ) <= 0 ) {
@@ -50,7 +50,7 @@ function fed_fetch_user_profile_required_by_menu( $menu = 'profile' ) {
  */
 function fed_fetch_user_profile_extra_fields() {
 	global $wpdb;
-	$table_name = $wpdb->prefix . BC_FED_USER_PROFILE_DB;
+	$table_name = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
 
 	$result = $wpdb->get_results( "SELECT * FROM $table_name WHERE extra LIKE 'yes'", ARRAY_A );
 
@@ -82,7 +82,7 @@ function fed_fetch_user_profile_extra_fields_key_value() {
  */
 function fed_fetch_user_profile_not_extra_fields() {
 	global $wpdb;
-	$table_name = $wpdb->prefix . BC_FED_USER_PROFILE_DB;
+	$table_name = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
 
 	$result = $wpdb->get_results( "SELECT * FROM $table_name WHERE extra LIKE 'no'", ARRAY_A );
 	if ( null === $result || count( $result ) <= 0 ) {
@@ -114,7 +114,7 @@ function fed_fetch_user_profile_not_extra_fields_key_value() {
  */
 function fed_fetch_user_profile_by_dashboard() {
 	global $wpdb;
-	$table_name = $wpdb->prefix . BC_FED_USER_PROFILE_DB;
+	$table_name = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
 
 	$results = $wpdb->get_results( "SELECT * FROM $table_name WHERE show_dashboard LIKE 'Enable'", ARRAY_A );
 
@@ -132,7 +132,7 @@ function fed_fetch_user_profile_by_dashboard() {
  */
 function fed_fetch_user_profile_by_menu_slug($menu_slug = '') {
 	global $wpdb;
-	$table_name = $wpdb->prefix . BC_FED_USER_PROFILE_DB;
+	$table_name = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
 
 	$results = $wpdb->get_results( "SELECT * FROM $table_name WHERE show_dashboard LIKE 'Enable' AND menu LIKE '{$menu_slug}' ", ARRAY_A );
 
@@ -264,7 +264,7 @@ function fed_role_with_pricing_flat( $fed_admin_login = '' ) {
  */
 function fed_fetch_user_profile_columns($value ) {
 	global $wpdb;
-	$table_name = $wpdb->prefix . BC_FED_USER_PROFILE_DB;
+	$table_name = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
 
 	$columns =  $wpdb->get_results( "SELECT input_meta FROM $table_name WHERE menu = '{$value}' AND show_dashboard = 'Enable' AND extra = 'yes' ", ARRAY_A );
 	$new_col = array();
