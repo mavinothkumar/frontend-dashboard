@@ -569,6 +569,7 @@ function fed_show_alert_message($message, $type = 'danger')
 function fed_illegal_usernames()
 {
     $login   = get_option('fed_admin_login');
+    FED_Log::writeLog(['$login'=>$login]);
     $illegal = isset($login['restrict_username']) && ! empty($login['restrict_username']) ? explode(',',
         $login['restrict_username']) : array();
 
@@ -583,7 +584,8 @@ function fed_illegal_usernames()
  */
 function fed_validate_username($username)
 {
-    $result = preg_grep('/^['.$username.']/i', fed_illegal_usernames());
+    $result = preg_grep('#'.$username.'#i', fed_illegal_usernames());
+
     if ($result && count($result)) {
         return true;
     }

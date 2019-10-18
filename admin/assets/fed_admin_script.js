@@ -236,6 +236,7 @@ jQuery(document).ready(function ($) {
         closest.find('input[name=input_type]').val(selected);
         btn_container.find('.fed_button').removeClass('active');
         $(this).addClass('active');
+        $('#fed_button_pointing_arrow').addClass('hide');
         switch (selected) {
             case 'single_line':
                 closest.find('.fed_input_single_line_container').removeClass('hide');
@@ -276,8 +277,8 @@ jQuery(document).ready(function ($) {
             case 'wysiwyg':
                 closest.find('.fed_input_wysiwyg_container').removeClass('hide');
                 break;
-            case 'label':
-                closest.find('.fed_input_label_container').removeClass('hide');
+            case 'wp_editor':
+                closest.find('.fed_input_wp_editor_container').removeClass('hide');
                 break;
 
 
@@ -611,7 +612,6 @@ jQuery(document).ready(function ($) {
     if ($('.fed_datatable').length) {
         $('.fed_datatable').dataTable({"autoWidth": false, "order": []});
     }
-
 
 
 });

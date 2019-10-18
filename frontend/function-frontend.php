@@ -298,9 +298,9 @@ function fed_get_wp_editor($content = '', $id, array $options = array())
     wp_editor($content, $id, $options);
 
     $temp = ob_get_clean();
-    $temp .= \_WP_Editors::enqueue_scripts();
-    print_footer_scripts();
-    $temp .= \_WP_Editors::editor_js();
+//    $temp .= \_WP_Editors::enqueue_scripts();
+//    print_footer_scripts();
+//    $temp .= \_WP_Editors::editor_js();
 
     return $temp;
 }

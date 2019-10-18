@@ -196,7 +196,7 @@ if ( ! function_exists('fed_fetch_table_by_is_required')) {
         global $wpdb;
         $table_name = $wpdb->prefix.$table;
 
-        $result = $wpdb->get_results("SELECT * FROM $table_name WHERE is_required LIKE 'true'", ARRAY_A);
+        $result = $wpdb->get_results("SELECT * FROM $table_name WHERE is_required LIKE 'true' AND show_register LIKE 'Enable'", ARRAY_A);
         if (count($result) <= 0) {
             return array();
         }

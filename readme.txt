@@ -4,7 +4,7 @@ Tags: dashboard, frontend dashboard, custom login, custom register, custom roles
 Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 4.6
 Tested up to: 5.2.3
-Stable tag: 1.5.1
+Stable tag: 1.5.2
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -233,6 +233,9 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 7. [fed_transactions] to generate the payment transactions
 
 == Changelog ==
+
+= 1.5.2 [16-Oct-2019] =
+* Now Login or Dashboard and Logout will be automatically shown in the selective menu
 
 = 1.5.1 [14-Oct-2019] =
 * Few improvements
@@ -509,9 +512,8 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Upgrade Notice ==
 
-= 1.5.1 [14-Oct-2019] =
-* Few improvements
-* Bug fixes
+= 1.5.2 [16-Oct-2019] =
+* Now Login or Dashboard and Logout will be automatically shown in the selective menu
 
 == Screenshots ==
 1. Frontend Dashboard Settings | Login | Settings

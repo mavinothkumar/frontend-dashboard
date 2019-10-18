@@ -451,7 +451,6 @@ function fed_get_empty_value_for_user_profile($action)
  */
 function fed_process_user_profile($row, $action, $update = 'no')
 {
-
     $default = array(
         'label_name'     => isset($row['label_name']) ? sanitize_text_field(htmlentities($row['label_name'])) : '',
         'input_order'    => isset($row['input_order']) ? sanitize_text_field($row['input_order']) : '',
@@ -526,6 +525,8 @@ function fed_process_user_profile($row, $action, $update = 'no')
             $default['extended'] = fed_default_extended_fields();
         }
     }
+
+    $default = apply_filters('fed_process_form_fields', $default, $row, $action, $update);
 
     if ($action === 'profile') {
         $user_profile  = array(
@@ -3718,7 +3719,7 @@ function fed_get_first_key_in_array($array)
     return false;
 }
 
-add_filter('wp_nav_menu_items','login_logout_menu', 10, 2);
+add_filter('wp_nav_menu_items', 'login_logout_menu', 10, 2);
 
 /**
  * @param $items

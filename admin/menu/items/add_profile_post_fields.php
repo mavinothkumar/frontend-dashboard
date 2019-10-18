@@ -113,6 +113,11 @@ function fed_get_add_profile_post_fields()
         <div class="row">
             <div class="col-md-2">
                 <div class="fed_buttons_container <?php echo $buttons['class']; ?>">
+                    <div class="fed_button_pointing_arrow" id="fed_button_pointing_arrow">
+                        <div class="fed_arrow_box">
+                            <?php _e('SELECT ANY', 'frontend-dashboard') ?>
+                        </div>
+                    </div>
                     <?php
                     foreach ($buttons['options'] as $index => $button) {
                         $active = $buttons['value'] === $index ? 'active' : '';

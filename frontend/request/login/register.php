@@ -40,9 +40,9 @@ function fed_register_form_submit($post)
     }
 
     wp_send_json_success(array(
-            'user'    => $status,
-            'message' => __('Successfully Registered', 'frontend-dashboard'),
-            'url'     => $redirect_url,
+        'user'    => $status,
+        'message' => __('Successfully Registered', 'frontend-dashboard'),
+        'url'     => $redirect_url,
     ));
 
 }
@@ -67,20 +67,29 @@ function fed_insert_user_meta($meta, $user, $update)
     if (isset($_REQUEST['tab_id'])) {
         $get_profile_meta_by_menu = fed_fetch_user_profile_columns($_REQUEST['tab_id']);
     }
+
     if (isset($_REQUEST['fed_registration_form'])) {
         /**
          * Fetch registration form field and add it in the meta fields
          */
-        $register                 = fed_fetch_user_profile_by_registration();
-        $get_profile_meta_by_menu = array_column($register, 'input_meta');
+        $get_profile_meta_by_menu                 = fed_fetch_user_profile_by_registration();
+//        $get_profile_meta_by_menu = array_column($register, 'input_meta');
     }
 
+
     if (count($get_profile_meta_by_menu) > 0) {
-        foreach ($get_profile_meta_by_menu as $extra_field) {
-            if (isset($_REQUEST[$extra_field]) && is_array($_REQUEST[$extra_field])) {
-                $meta[$extra_field] = serialize(fed_sanitize_text_field($_REQUEST[$extra_field]));
+        foreach ($get_profile_meta_by_menu as $key => $extra_field) {
+            if (isset($_REQUEST[$extra_field['input_meta']]) && is_array($_REQUEST[$extra_field['input_meta']])) {
+                $meta[$extra_field['input_meta']] = serialize(fed_sanitize_text_field($_REQUEST[$extra_field['input_meta']]));
             } else {
-                $meta[$extra_field] = isset($_REQUEST[$extra_field]) ? fed_sanitize_text_field($_REQUEST[$extra_field]) : '';
+                if (isset($extra_field['input_type']) && $extra_field['input_type'] === 'wp_editor') {
+                    $meta[$extra_field['input_meta']] = isset($_REQUEST[$extra_field['input_meta']]) ? wp_kses_post($_REQUEST[$extra_field['input_meta']]) : '';
+                } elseif (isset($extra_field['input_type']) && $extra_field['input_type'] === 'multi_line') {
+                    $meta[$extra_field['input_meta']] = isset($_REQUEST[$extra_field['input_meta']]) ? wp_kses($_REQUEST[$extra_field['input_meta']],
+                        array()) : '';
+                } else {
+                    $meta[$extra_field['input_meta']] = isset($_REQUEST[$extra_field['input_meta']]) ? fed_sanitize_text_field($_REQUEST[$extra_field['input_meta']]) : '';
+                }
             }
 
         }
