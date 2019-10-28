@@ -160,6 +160,14 @@ if ( ! class_exists('FED_AdminMenu')) {
                         'method' => 'fed_admin_general_tab',
                     ),
                 ),
+                'email'             => array(
+                    'icon_class' => 'fas fa-envelope',
+                    'name'       => __('Email', 'frontend-dashboard'),
+                    'callable'   => array(
+                        'object' => new FEDEmail(),
+                        'method' => 'show',
+                    ),
+                ),
             );
 
             if ( ! defined('FED_CP_PLUGIN_VERSION')) {
@@ -256,13 +264,13 @@ if ( ! class_exists('FED_AdminMenu')) {
                     'callback'   => array($this, 'help'),
                     'position'   => 100,
                 ),
-                'fed_test'             => array(
-                    'page_title' => __('Test', 'frontend-dashboard'),
-                    'menu_title' => __('Test', 'frontend-dashboard'),
-                    'capability' => 'manage_options',
-                    'callback'   => array($this, 'test'),
-                    'position'   => 100,
-                ),
+//                'fed_test'             => array(
+//                    'page_title' => __('Test', 'frontend-dashboard'),
+//                    'menu_title' => __('Test', 'frontend-dashboard'),
+//                    'capability' => 'manage_options',
+//                    'callback'   => array($this, 'test'),
+//                    'position'   => 100,
+//                ),
 
             );
 

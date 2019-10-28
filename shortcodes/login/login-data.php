@@ -89,8 +89,6 @@ function fed_register_only()
             'selected' => false,
             'button'   => __('Register', 'frontend-dashboard'),
     );
-
-
     return apply_filters('fed_register_only_filter', $register);
 }
 

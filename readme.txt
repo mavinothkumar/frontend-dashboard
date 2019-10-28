@@ -3,14 +3,18 @@ Contributors: vinoth06, buffercode
 Tags: dashboard, frontend dashboard, custom login, custom register, custom roles, custom profile, custom post type, custom taxonomies, custom dashboard
 Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 4.6
-Tested up to: 5.2.3
-Stable tag: 1.5.2
+Tested up to: 5.2.4
+Stable tag: 1.5.5
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
 Frontend Dashboard is bundled with huge list of custom features which can easily customise the User profile, Posts, Login, Register, Custom roles on custom front page.
 
 == Description ==
+
+= Frontend Dashboard Demo =
+[Frontend Dashboard Demo](https://demo.frontenddashboard.com/)
+
 Frontend Dashboard is bundled with the huge list of custom features which can easily customise the User profile, Posts, Login, Register, Custom roles on the custom front page.
 
 1. Custom Login Page.
@@ -44,6 +48,9 @@ Frontend Dashboard is bundled with the huge list of custom features which can ea
 * [Frontend Dashboard Custom Post and Taxonomies](https://buffercode.com/plugin/frontend-dashboard-custom-post-and-taxonomies)
 
 = Videos =
+**How to Setup Frontend Dashboard and its Add-on**
+
+http://www.youtube.com/watch?v=lyoUkwndoRA
 
 For more video : [Frontend Dashboard](https://buffercode.com/category/name/frontend-dashboard)
 
@@ -234,6 +241,14 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Changelog ==
 
+= 1.5.5 [28-Oct-2019] =
+* SMTP or WP_MAIL Email setup added.
+* Bug fixes
+
+= 1.5.3 [20-Oct-2019] =
+* Few layout changes and support WP Editor on Frontend Dashboard Custom Post
+* Bug fixes
+
 = 1.5.2 [16-Oct-2019] =
 * Now Login or Dashboard and Logout will be automatically shown in the selective menu
 
@@ -326,7 +341,6 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 * Login use fixed
 * Few bug fixes
-
 
 = 1.3.5 [23-Apr-2019] =
 
@@ -512,8 +526,8 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Upgrade Notice ==
 
-= 1.5.2 [16-Oct-2019] =
-* Now Login or Dashboard and Logout will be automatically shown in the selective menu
+* SMTP or WP_MAIL Email setup added.
+* Bug fixes
 
 == Screenshots ==
 1. Frontend Dashboard Settings | Login | Settings

@@ -38,6 +38,7 @@
 .fed_border_2px {
     border: 2px solid #033333;
 }
+
 .fed_border_gray_2px {
     border: 2px solid #e7e7e7;
 }
@@ -59,6 +60,7 @@
 .bc_fed .m-t-20 {
     margin-top: 20px;
 }
+
 .bc_fed .panel-heading[data-toggle='collapse'].collapsed h4:after {
     font-family: 'Font Awesome 5 Free';
     content: '\f078';
@@ -223,14 +225,33 @@
 .bc_fed .fed_input_group_select .input-group-addon, .bc_fed .fed_input_group_select .input-group-btn {
     width: auto !important;
 }
+
 .bc_fed .fed_input_group_select .input-group-addon {
     padding: 0 !important;
     background-color: transparent !important;
     border: none !important;
 }
+
 .bc_fed #fed_transaction_modal .modal-lg {
     width: 1200px !important;
 }
+
 .bc_fed #fed_transaction_modal {
     z-index: 9999;
+}
+
+.bc_fed .fed_datatable td {
+    word-break: break-all;
+}
+.bc_fed .select2-container {
+    width: 100% !important;
+}
+
+.bc_fed .select2-container--default .select2-selection--multiple {
+    height: 34px;
+    border: 1px solid #cccccc;
+    border-radius: 0;
+}
+.bc_fed .select2-container--default .select2-selection--multiple .select2-selection__choice {
+    font-size: 12px;
 }

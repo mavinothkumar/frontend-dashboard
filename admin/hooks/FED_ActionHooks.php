@@ -24,6 +24,36 @@ if ( ! class_exists('FED_ActionHooks')) {
                 $this,
                 'fed_plugin_action_links',
             ), 10, 2);
+            add_action('phpmailer_init', array($this, 'send_email_via_smtp'));
+        }
+
+        /**
+         * @param $mailer
+         */
+        public function send_email_via_smtp($mailer)
+        {
+            $settings  = get_option('fed_settings_email');
+            $is_enable = fed_get_data('via', $settings, false);
+            if ($settings) {
+                $email     = fed_get_data('credentials.email', $settings, false);
+                $from_name = fed_get_data('credentials.from_name', $settings, false);
+                $FEDEmail  = new FEDEmail();
+                if ($email && ! empty($email) && is_email($email)) {
+                    add_filter('wp_mail_from', array($FEDEmail, 'sender_email'));
+                }
+                if ($from_name && ! empty($from_name)) {
+                    add_filter('wp_mail_from_name', array($FEDEmail, 'sender_name'));
+                }
+                if ($is_enable === 'SMTP') {
+                    $mailer->IsSMTP();
+                    $mailer->SMTPAuth   = fed_get_data('smtp.auth', $settings);
+                    $mailer->Host       = fed_get_data('smtp.host_name', $settings);
+                    $mailer->Username   = fed_get_data('smtp.user_name', $settings);
+                    $mailer->Password   = fed_get_data('smtp.password', $settings);
+                    $mailer->SMTPSecure = fed_get_data('smtp.encryption', $settings);
+                    $mailer->Port       = fed_get_data('smtp.port', $settings);
+                }
+            }
         }
 
         /**

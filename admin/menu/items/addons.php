@@ -106,7 +106,7 @@ function fed_get_plugin_pages_menu()
                                                                 if ($single->pricing->type === 'Pro') {
                                                                     ?>
                                                                     <?php
-                                                                    foreach ($single->pricing->amount as $amount) {
+                                                                    foreach ($single->pricing->amount as $atype=> $amount) {
                                                                         ?>
                                                                         <form method="post"
                                                                               action="<?php echo $single->pricing->purchase_url; ?>">
@@ -115,7 +115,7 @@ function fed_get_plugin_pages_menu()
                                                                             <input type='hidden' name='contact_email' value="<?php echo fed_get_admin_email(); ?>" />
                                                                             <input type='hidden' name='plugin_name' value='<?php echo $slug; ?>' />
                                                                             <input type='hidden' name='amount' value='<?php echo $amount->amount; ?>' />
-                                                                            <input type='hidden' name='plan_type' value='lifetime' />
+                                                                            <input type='hidden' name='plan_type' value=<?php echo $atype; ?> />
                                                                             <button type="submit"
                                                                                     class="btn btn-primary">
                                                                                 <i class="fa fa-shopping-cart"

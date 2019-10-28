@@ -28,8 +28,8 @@ function fed_get_avatar($id_or_email, $alt = '', $class = '', $extra = '', $size
         $user_obj = get_userdata($user_data);
 
         $gavatar_id = $user_obj->has_prop($fed_upl['settings']['fed_upl_change_profile_pic']) ?
-                $user_obj->get($fed_upl['settings']['fed_upl_change_profile_pic']) :
-                '';
+            $user_obj->get($fed_upl['settings']['fed_upl_change_profile_pic']) :
+            '';
 
         if ($gavatar_id != '') {
             return wp_get_attachment_image((int) $gavatar_id, $size, $icon = false, $attr);
@@ -37,21 +37,21 @@ function fed_get_avatar($id_or_email, $alt = '', $class = '', $extra = '', $size
 
         // send the default image
         return sprintf(
-                "<img alt='%s' src='%s' class='%s' %s />",
-                esc_attr($alt),
-                esc_url('https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y&s=600'),
-                esc_attr($class),
-                $extra
+            "<img alt='%s' src='%s' class='%s' %s />",
+            esc_attr($alt),
+            esc_url('https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&f=y&s=600'),
+            esc_attr($class),
+            $extra
         );
     }
 
     $get_avatar = get_avatar_data($id_or_email, array('size' => 600));
     $avatar     = sprintf(
-            "<img alt='%s' src='%s' class='%s' %s />",
-            esc_attr($alt),
-            esc_url($get_avatar['url']),
-            esc_attr($class),
-            $extra
+        "<img alt='%s' src='%s' class='%s' %s />",
+        esc_attr($alt),
+        esc_url($get_avatar['url']),
+        esc_attr($class),
+        $extra
     );
 
     return $avatar;
@@ -96,33 +96,34 @@ function fed_get_registration_content_fields()
     $registration = array();
     foreach ($details as $detail) {
         $registration[$detail['input_meta']] = array(
-                'name'        => $detail['label_name'],
-                'input'       => fed_get_input_details(
-                        array(
-                                'input_meta'  => $detail['input_meta'],
-                                'placeholder' => $detail['placeholder'],
-                                'class'       => $detail['class_name'],
-                                'id'          => $detail['id_name'],
-                                'is_required' => $detail['is_required'],
-                                'step'        => $detail['input_step'],
-                                'min'         => $detail['input_min'],
-                                'max'         => $detail['input_max'],
-                                'rows'        => $detail['input_row'],
-                                'user_value'  => $detail['input_value'],
-                                'input_type'  => $detail['input_type'],
-                                'input_value' => $detail['input_value'],
-                        )
-                ),
-                'input_order' => $detail['input_order'],
-                'extended'    => $detail['extended'],
+            'name'        => $detail['label_name'],
+            'input'       => fed_get_input_details(
+                array(
+                    'input_meta'  => $detail['input_meta'],
+                    'placeholder' => $detail['placeholder'],
+                    'class'       => $detail['class_name'],
+                    'id'          => $detail['id_name'],
+                    'is_required' => $detail['is_required'],
+                    'step'        => $detail['input_step'],
+                    'input_min'   => $detail['input_min'],
+                    'input_max'   => $detail['input_max'],
+                    'input_rows'  => $detail['input_row'],
+                    'user_value'  => $detail['input_value'],
+                    'input_type'  => $detail['input_type'],
+                    'input_value' => $detail['input_value'],
+                    'extended'    => $detail['extended'],
+                )
+            ),
+            'input_order' => $detail['input_order'],
+            'extended'    => $detail['extended'],
         );
     }
 
     if ($role) {
         $registration['role'] = array(
-                'name'        => $fed_admin_login['register']['name'],
-                'input'       => fed_input_box('role', array('options' => $role), 'select'),
-                'input_order' => $fed_admin_login['register']['position'],
+            'name'        => $fed_admin_login['register']['name'],
+            'input'       => fed_input_box('role', array('options' => $role), 'select'),
+            'input_order' => $fed_admin_login['register']['position'],
         );
     }
 
@@ -130,24 +131,25 @@ function fed_get_registration_content_fields()
      * Hidden text to make sure its a registration form
      */
     $registration['fed_registration_form'] = array(
-            'name'        => '',
-            'input'       => fed_get_input_details(
-                    array(
-                            'input_meta'  => 'fed_registration_form',
-                            'placeholder' => '',
-                            'class'       => '',
-                            'id'          => '',
-                            'is_required' => 'true',
-                            'step'        => '',
-                            'min'         => '',
-                            'max'         => '',
-                            'rows'        => '',
-                            'user_value'  => 'frf',
-                            'input_type'  => 'hidden',
-                    )
-            ),
-            'input_order' => 9999,
+        'name'        => '',
+        'input'       => fed_get_input_details(
+            array(
+                'input_meta'  => 'fed_registration_form',
+                'placeholder' => '',
+                'class'       => '',
+                'id'          => '',
+                'is_required' => 'true',
+                'input_step'  => '',
+                'input_min'   => '',
+                'input_max'   => '',
+                'rows'        => '',
+                'user_value'  => 'frf',
+                'input_type'  => 'hidden',
+            )
+        ),
+        'input_order' => 9999,
     );
+
 
     return $registration;
 
@@ -222,22 +224,22 @@ function fed_process_author_details($user, array $single_item)
 
     if ($single_item['input_type'] === 'color') {
         return fed_input_box($single_item['input_meta'], array(
-                'value'    => $user->get($single_item['input_meta']),
-                'disabled' => true,
+            'value'    => $user->get($single_item['input_meta']),
+            'disabled' => true,
         ), 'color');
     }
 
     if ($single_item['input_type'] === 'checkbox') {
         return fed_input_box($single_item['input_meta'], array(
-                'value'    => $user->get($single_item['input_meta']),
-                'disabled' => true,
+            'value'    => $user->get($single_item['input_meta']),
+            'disabled' => true,
         ), 'checkbox');
     }
 
     if ($single_item['input_type'] === 'radio') {
         $input_value = fed_convert_comma_separated_key_value($single_item['input_value']);
 
-        return $input_value[$user->get($single_item['input_meta'])];
+        return isset($input_value[$user->get($single_item['input_meta'])]) ? $input_value[$user->get($single_item['input_meta'])] : '';
     }
 
     if ($single_item['input_type'] === 'date') {
@@ -249,7 +251,7 @@ function fed_process_author_details($user, array $single_item)
             $range = explode('to', $user_date);
 
             return ucfirst(strftime($format, strtotime($range[0]))).' to '.ucfirst(strftime($format,
-                            strtotime($range[1])));
+                    strtotime($range[1])));
 
         }
 
@@ -277,10 +279,10 @@ function fed_process_author_details($user, array $single_item)
 function fed_input_mandatory_required_fields()
 {
     return apply_filters('fed_input_mandatory_required_fields', array(
-            'user_login',
-            'user_pass',
-            'confirmation_password',
-            'user_email',
+        'user_login',
+        'user_pass',
+        'confirmation_password',
+        'user_email',
     ));
 }
 
@@ -315,8 +317,8 @@ function fed_get_dashboard_display_categories($post = '', $cpt = '')
 {
     $categories         = array();
     $fed_get_categories = get_terms(array(
-            'taxonomy'   => $cpt->name,
-            'hide_empty' => false,
+        'taxonomy'   => $cpt->name,
+        'hide_empty' => false,
     ));
 
     if (isset($post->ID)) {
@@ -336,8 +338,8 @@ function fed_get_dashboard_display_tags($post = '', $cpt = '')
 {
     $tags         = array();
     $fed_get_tags = get_terms(array(
-            'taxonomy'   => $cpt->name,
-            'hide_empty' => false,
+        'taxonomy'   => $cpt->name,
+        'hide_empty' => false,
     ));
     if (isset($post->ID)) {
         $tags = wp_get_post_terms($post->ID, $cpt->name, array('fields' => 'slugs'));
@@ -365,21 +367,21 @@ function fed_convert_array_to_id_name(array $array, $key = 'term_id', $type = ''
         }
 
         $html .= fed_get_input_details(array(
-                'input_value' => $new_category, 'input_meta' => 'tax_input['.$type.']', 'input_type' => 'select',
-                'user_value'  => $compare,
-                'id_name'     => $type,
-                'extended'    => array('multiple' => 'Enable'),
+            'input_value' => $new_category, 'input_meta' => 'tax_input['.$type.']', 'input_type' => 'select',
+            'user_value'  => $compare,
+            'id_name'     => $type,
+            'extended'    => array('multiple' => 'Enable'),
         ));
 
         return $html;
     }
 
     return fed_get_input_details(array(
-            'input_value' => array(), 'input_meta' => $type,
-            'input_type'  => 'select',
-            'user_value'  => '',
-            'id_name'     => $type,
-            'extended'    => array('multiple' => 'Enable'),
+        'input_value' => array(), 'input_meta' => $type,
+        'input_type'  => 'select',
+        'user_value'  => '',
+        'id_name'     => $type,
+        'extended'    => array('multiple' => 'Enable'),
     ));
 }
 
@@ -605,8 +607,8 @@ function fed_show_users_by_role($fed_user_attr)
 function fed_show_user_by_role($fed_user_attr, $user_id)
 {
     $user = new WP_User_Query(array(
-            'include' => (int) $user_id,
-            'role'    => $fed_user_attr->role,
+        'include' => (int) $user_id,
+        'role'    => $fed_user_attr->role,
     ));
     if ( ! $user->get_total()) {
         ?>
@@ -745,7 +747,7 @@ function fed_show_user_profile_page($user)
                                             $single_item['readonly'] = 'readonly';
                                         }
                                         if (count(array_intersect($user->roles,
-                                                        unserialize($single_item['user_role']))) <= 0) {
+                                                unserialize($single_item['user_role']))) <= 0) {
                                             continue;
                                         }
 
@@ -815,7 +817,7 @@ function fed_get_403_error_page()
         <div class="panel-body">
             <h2><?php _e('Unauthorised Access', 'frontend-dashboard') ?></h2>
             <a class="btn btn-primary" href="<?php echo $url[0]; ?>"><?php _e('Click here to visit Dashboard',
-                        'frontend-dashboard') ?></a>
+                    'frontend-dashboard') ?></a>
         </div>
     </div>
     <?php

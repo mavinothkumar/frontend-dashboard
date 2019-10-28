@@ -92,7 +92,7 @@ if ( ! class_exists('FED_Admin_General')) {
             return apply_filters('fed_customize_admin_general_options', array(
                     'fed_admin_scripts'    => array(
                             'icon'      => 'fas fa-code',
-                            'name'      => __('Admin Scripts', 'frontend-dashboard-extra'),
+                            'name'      => __('Admin Scripts', 'frontend-dashboard'),
                             'callable'  => array('object' => $this, 'method' => 'fed_admin_script_menu_tab'),
                             'arguments' => $options,
                     ),

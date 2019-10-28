@@ -124,6 +124,7 @@ require_once BC_FED_PLUGIN_DIR.'/admin/layout/settings_tab/post/settings.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/layout/settings_tab/post/menu.php';
 
 require_once BC_FED_PLUGIN_DIR.'/admin/layout/settings_tab/general/FED_Admin_General.php';
+require_once BC_FED_PLUGIN_DIR.'/admin/layout/settings_tab/email/FEDEmail.php';
 
 require_once BC_FED_PLUGIN_DIR.'/admin/layout/settings_tab/login/login_tab.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/layout/settings_tab/login/register_tab.php';
@@ -166,6 +167,8 @@ require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormURL.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormPassword.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormCheckBox.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormRadio.php';
+require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormSelect.php';
+require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormNumber.php';
 
 
 
