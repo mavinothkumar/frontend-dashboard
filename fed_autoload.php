@@ -59,6 +59,7 @@ require_once BC_FED_PLUGIN_DIR.'/shortcodes/login/login-data.php';
 require_once BC_FED_PLUGIN_DIR.'/shortcodes/login/login-only-shortcode.php';
 require_once BC_FED_PLUGIN_DIR.'/shortcodes/login/register-only-shortcode.php';
 require_once BC_FED_PLUGIN_DIR.'/shortcodes/login/forgot-password-only-shortcode.php';
+require_once BC_FED_PLUGIN_DIR.'/shortcodes/widget/taxonomy.php';
 
 require_once BC_FED_PLUGIN_DIR.'/shortcodes/user_role.php';
 
@@ -170,5 +171,9 @@ require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormRadio.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormSelect.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormNumber.php';
 
+/**
+ * Widget
+ */
+require_once BC_FED_PLUGIN_DIR.'/admin/widgets/FEDUserCountWidget.php';
 
 

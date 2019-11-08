@@ -165,16 +165,18 @@ if ( ! function_exists('fed_get_random_string')) {
 
 if ( ! function_exists('fed_is_shortcode_in_content')) {
     /**
-     * @param $content
+     * @param  null  $shortcodes
      *
      * @return bool
      */
-    function fed_is_shortcode_in_content()
+    function fed_is_shortcode_in_content($shortcodes = null)
     {
         global $post;
-        $shortcodes = fed_shortcode_lists();
+        if ($shortcodes === null) {
+            $shortcodes = fed_shortcode_lists();
+        }
 
-        if (is_a($post, 'WP_Post')) {
+        if (is_array($shortcodes) && is_a($post, 'WP_Post')) {
             foreach ($shortcodes as $shortcode) {
                 if (has_shortcode($post->post_content, $shortcode)) {
                     return true;
@@ -568,8 +570,8 @@ function fed_show_alert_message($message, $type = 'danger')
  */
 function fed_illegal_usernames()
 {
-    $login   = get_option('fed_admin_login');
-    FED_Log::writeLog(['$login'=>$login]);
+    $login = get_option('fed_admin_login');
+    FED_Log::writeLog(['$login' => $login]);
     $illegal = isset($login['restrict_username']) && ! empty($login['restrict_username']) ? explode(',',
         $login['restrict_username']) : array();
 
@@ -609,4 +611,40 @@ if ( ! function_exists('fed_is_shortcode_in_page')) {
 
         return false;
     }
+}
+
+/**
+ * @param  string  $key
+ *
+ * @return bool|string
+ */
+function fed_get_current_user($key = 'id')
+{
+    $current_user = wp_get_current_user();
+    if ( ! ($current_user instanceof WP_User)) {
+        return false;
+    }
+
+    switch ($key) {
+        case 'email':
+            return esc_html($current_user->user_email);
+            break;
+        case 'username':
+            return esc_html($current_user->user_login);
+            break;
+        case 'firstname':
+            return esc_html($current_user->user_firstname);
+            break;
+        case 'lastname':
+            return esc_html($current_user->user_lastname);
+            break;
+        case 'display_name':
+            return esc_html($current_user->display_name);
+            break;
+        case 'id':
+            return esc_html($current_user->ID);
+            break;
+    }
+
+    return false;
 }

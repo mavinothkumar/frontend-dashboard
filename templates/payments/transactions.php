@@ -28,7 +28,7 @@ $transactions = fed_get_transactions();
                     <th><?php _e('Transaction', 'frontend-dashboard'); ?></th>
                     <th><?php _e('Product', 'frontend-dashboard'); ?></th>
                     <th><?php _e('Amount', 'frontend-dashboard'); ?></th>
-                    <th><?php _e('Expires', 'frontend-dashboard'); ?></th>
+                    <th><?php _e('Status', 'frontend-dashboard'); ?></th>
                     <th><?php _e('Purchase Date', 'frontend-dashboard'); ?></th>
                     <th>
                         <i class="fa fa-print"></i>
@@ -65,7 +65,7 @@ $transactions = fed_get_transactions();
                                 </div>
                             </td>
                             <td><?php echo esc_attr($transaction['amount']).' '.mb_strtoupper(esc_attr($transaction['currency'])) ?></td>
-                            <td><?php echo esc_attr($transaction['ends_at']) ?></td>
+                            <td><?php echo esc_attr(strtoupper($transaction['ends_at'])) ?></td>
                             <td><?php echo esc_attr($transaction['created']) ?></td>
                             <td>
                                 <form method="post" class="fed_ajax_print_invoice"

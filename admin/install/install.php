@@ -203,6 +203,14 @@ function fed_plugin_activation()
         dbDelta($payment_items_table);
     }
 
+    // Adding Three Column
+    $payment_update_1       = $wpdb->get_row("SELECT * FROM $payment_table");
+    if ( ! array_key_exists('trail_period', $payment_update_1)) {
+        $wpdb->query("ALTER TABLE $payment_table ADD COLUMN trail_period VARCHAR(255) NULL AFTER `status`,  ADD COLUMN payment_method VARCHAR(255) NULL AFTER `status`, ADD COLUMN ends_at_time VARCHAR(255) NULL AFTER `ends_at`");
+
+    }
+
+
     update_option('fed_plugin_version', BC_FED_PLUGIN_VERSION);
 
 }

@@ -2,7 +2,7 @@
 /**
  * Show Taxonomy in Shortcode or Widget
  * Format:
- * [fed_list_custom_taxonomy taxonomy=ifecho_tax title_li='' show_count=1]
+ * [fed_list_taxonomy taxonomy=TAXONOMY_NAME]
  */
 
 add_filter('widget_text', 'do_shortcode');
@@ -39,7 +39,7 @@ function fed_list_taxonomy($attributes)
         'show_option_none'    => __('No categories'),
         'style'               => 'list',
         'taxonomy'            => null,
-        'title_li'            => __('Categories'),
+        'title_li'            => '',
         'use_desc_for_title'  => 1,
     ), $attributes));
 
@@ -83,5 +83,5 @@ function fed_list_taxonomy($attributes)
         return $html;
     }
 
-    return __('Please Add Taxonomy Name like [fed_show_custom_taxonomy taxonomy=TAXONOMY_NAME]', 'frontend-dashboard');
+    return __('Please Add Taxonomy Name like [fed_list_taxonomy taxonomy=TAXONOMY_NAME]', 'frontend-dashboard');
 }

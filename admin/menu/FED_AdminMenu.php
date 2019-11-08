@@ -264,13 +264,13 @@ if ( ! class_exists('FED_AdminMenu')) {
                     'callback'   => array($this, 'help'),
                     'position'   => 100,
                 ),
-//                'fed_test'             => array(
-//                    'page_title' => __('Test', 'frontend-dashboard'),
-//                    'menu_title' => __('Test', 'frontend-dashboard'),
-//                    'capability' => 'manage_options',
-//                    'callback'   => array($this, 'test'),
-//                    'position'   => 100,
-//                ),
+                'fed_test'             => array(
+                    'page_title' => __('Test', 'frontend-dashboard'),
+                    'menu_title' => __('Test', 'frontend-dashboard'),
+                    'capability' => 'manage_options',
+                    'callback'   => array($this, 'test'),
+                    'position'   => 100,
+                ),
 
             );
 
@@ -281,10 +281,7 @@ if ( ! class_exists('FED_AdminMenu')) {
 
         public function test()
         {
-            echo fed_get_input_details(array(
-                'input_type' => 'email',
-                'class_name'      => 'oye', 'id_name' => 'supber', 'input_meta' => 'test', 'user_value' => 'good',
-            ));
+
         }
 
     }

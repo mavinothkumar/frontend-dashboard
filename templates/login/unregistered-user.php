@@ -74,8 +74,8 @@ do_action('fed_before_login_form');
                                 $contents = $detail['content'];
                                 uasort($contents, 'fed_sort_by_order');
                                 foreach ($contents as $content) {
+                                    $label = null;
                                     if ( ! empty($content['extended'])) {
-                                        $label = null;
                                         $extended = maybe_unserialize($content['extended']);
                                         if (isset($extended['label'])) {
                                             $label =  $extended['label'];

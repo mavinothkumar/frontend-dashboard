@@ -178,7 +178,7 @@ if ( ! class_exists('FEDTransaction')) {
 
                 $discounted_amount = ($amount + $tax_cost + $shipping_cost) - ($discount_cost) * $quantity;
 
-                $total      = $total + $discounted_amount;
+                $total = $total + $discounted_amount;
 
                 $id         = isset($item['id']) ? (int) $item['id'] : fed_get_random_string(7);
                 $items[$id] = array(
@@ -187,6 +187,8 @@ if ( ! class_exists('FEDTransaction')) {
                     'total'             => $discounted_amount,
                     'currency'          => $currency,
                     'plan_type'         => fed_sanitize_text_field(fed_get_data('plan_type', $item)),
+                    'plan_id'           => fed_sanitize_text_field(fed_get_data('plan_id', $item)),
+                    'gateway'           => fed_sanitize_text_field(fed_get_data('gateway', $item)),
                     'plan_days'         => fed_sanitize_text_field(fed_get_data('plan_days', $item)),
                     'plan_name'         => fed_sanitize_text_field(fed_get_data('plan_name', $item)),
                     'default_user_role' => fed_sanitize_text_field(fed_get_data('default_user_role', $item)),

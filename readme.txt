@@ -1,10 +1,10 @@
 === Frontend Dashboard ===
 Contributors: vinoth06, buffercode
-Tags: dashboard, frontend dashboard, custom login, custom register, custom roles, custom profile, custom post type, custom taxonomies, custom dashboard
+Tags: dashboard, frontend dashboard, custom login, custom register, custom roles, custom profile, custom post type, custom taxonomies, custom dashboard, hide admin bar, widget
 Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 4.6
 Tested up to: 5.2.4
-Stable tag: 1.5.5
+Stable tag: 1.5.7.1
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -53,6 +53,8 @@ Frontend Dashboard is bundled with the huge list of custom features which can ea
 http://www.youtube.com/watch?v=lyoUkwndoRA
 
 For more video : [Frontend Dashboard](https://buffercode.com/category/name/frontend-dashboard)
+
+* [How to setup Membership and Payment (PRO)](https://buffercode.com/post/how-to-setup-payment-and-membership-pro)
 
 * [How to show custom post field in Frontend Post](https://buffercode.com/post/how-to-show-custom-post-field-in-frontend-post)
 
@@ -239,7 +241,17 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 7. [fed_transactions] to generate the payment transactions
 
+8. [fed_list_taxonomy taxonomy=TAXONOMY_NAME] to generate taxonomy in list order
+
 == Changelog ==
+
+= 1.5.7 [3-Nov-2019] =
+
+* Bug fixes
+
+= 1.5.6 [30-Oct-2019] =
+* Show Taxonomy in Widget Through Shortcode [fed_list_taxonomy taxonomy=TAXONOMY_NAME title_li='' show_count=1]
+* Bug fixes
 
 = 1.5.5 [28-Oct-2019] =
 * SMTP or WP_MAIL Email setup added.

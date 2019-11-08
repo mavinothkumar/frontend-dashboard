@@ -3702,6 +3702,35 @@ function login_logout_menu($items, $args)
 }
 
 /**
+ * @param $meta
+ * @param  array  $user_roles
+ * @param  string  $column
+ *
+ * @return string
+ */
+function fed_user_role_checkboxes($meta, $user_roles = array(), $column = '6')
+{
+    $all_roles = fed_get_user_roles();
+    $html      = '';
+    $html      .= '<div class="row">';
+    foreach ($all_roles as $key => $role) {
+        $c_value = array_key_exists($key, $user_roles) ? 'Enable' : 'Disable';
+
+        $html .= '<div class="col-md-'.$column.'">
+                    '.fed_form_checkbox(array(
+                'input_meta'    => $meta.'['.$key.']',
+                'default_value' => 'Enable',
+                'label'         => $role,
+                'user_value'    => $c_value,
+            )).'
+                </div>';
+    }
+    $html .= '</div>';
+
+    return $html;
+}
+
+/**
  * The below code tested to check input tag works in Custom Label.
  */
 //add_filter('wp_kses_allowed_html', 'fed_wp_kses_add_input', 10, 2);
@@ -3716,4 +3745,3 @@ function login_logout_menu($items, $args)
 //    );
 //    return $tags;
 //}
-

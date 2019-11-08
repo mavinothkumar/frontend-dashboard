@@ -129,7 +129,7 @@ if ( ! function_exists('fed_get_transactions')) {
 	", ARRAY_A);
         } else {
             $user_id = get_current_user_id();
-            FED_Log::writeLog(['$user_id' => $user_id]);
+//            FED_Log::writeLog(['$user_id' => $user_id]);
 
             $result = $wpdb->get_results(
                 "
@@ -138,6 +138,51 @@ if ( ! function_exists('fed_get_transactions')) {
 	INNER JOIN  $table_user users
 	            ON payment.user_id = users.id
     WHERE       payment.user_id = $user_id
+	ORDER BY    payment.id DESC
+	", ARRAY_A);
+
+//            FED_Log::writeLog(['$result' => $result]);
+
+            return $result;
+        }
+    }
+}
+
+if ( ! function_exists('fed_get_active_transactions')) {
+
+    /**
+     * @param  null  $payment_type
+     *
+     * @return array|object|null
+     */
+    function fed_get_active_transactions()
+    {
+        global $wpdb;
+        $table_payment = $wpdb->prefix.BC_FED_TABLE_PAYMENT;
+        $table_user    = $wpdb->prefix.'users';
+        if (fed_is_admin()) {
+
+            return $wpdb->get_results(
+                "
+	SELECT      *
+	FROM        $table_payment payment
+	INNER JOIN  $table_user users
+	            ON payment.user_id = users.id
+    WHERE ends_at = 'active'
+	ORDER BY    payment.id DESC
+	", ARRAY_A);
+        } else {
+            $user_id = get_current_user_id();
+//            FED_Log::writeLog(['$user_id' => $user_id]);
+
+            $result = $wpdb->get_results(
+                "
+	SELECT      *
+	FROM        $table_payment payment
+	INNER JOIN  $table_user users
+	            ON payment.user_id = users.id
+    WHERE       payment.user_id = $user_id AND
+                ends_at = 'active'
 	ORDER BY    payment.id DESC
 	", ARRAY_A);
 
@@ -286,22 +331,26 @@ if ( ! function_exists('fed_get_membership_expiry_date')) {
                 return __('Free', 'frontend-dashboard');
             }
 
-            if ($object['plan_type'] === 'custom') {
-                $days = isset($object['plan_days']) ? $object['plan_days'] + 1 : '0';
-
-                return date('Y-m-d H:i:s', strtotime("+ {$days} days"));
-            }
-
-            if ($object['plan_type'] === 'monthly') {
-                return date('Y-m-d H:i:s', strtotime("+ 31 days"));
-            }
-
-            if ($object['plan_type'] === 'annual') {
-                return date('Y-m-d H:i:s', strtotime("+ 367 days"));
-            }
+//            if ($object['plan_type'] === 'custom') {
+//                $days = isset($object['plan_days']) ? $object['plan_days'] + 1 : '0';
+//
+//                return date('Y-m-d H:i:s', strtotime("+ {$days} days"));
+//            }
+//
+//            if ($object['plan_type'] === 'monthly') {
+//                return date('Y-m-d H:i:s', strtotime("+ 31 days"));
+//            }
+//
+//            if ($object['plan_type'] === 'annual') {
+//                return date('Y-m-d H:i:s', strtotime("+ 367 days"));
+//            }
 
             if ($object['plan_type'] === 'one_time') {
                 return __('One Time', 'frontend-dashboard');
+            }
+
+            if ($object['plan_type'] === 'recurring') {
+                return __('Recurring', 'frontend-dashboard');
             }
         }
 

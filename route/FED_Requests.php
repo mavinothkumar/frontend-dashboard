@@ -12,6 +12,7 @@ if ( ! class_exists('FED_Requests')) {
         {
             add_action('wp_ajax_fed_ajax_request', array($this, 'ajax_request'));
             add_action('admin_post_fed_request', array($this, 'request'));
+            add_action('admin_post_fed_api_request', array($this, 'api_request'));
         }
 
         public function ajax_request()
@@ -37,7 +38,7 @@ if ( ! class_exists('FED_Requests')) {
 
             do_action('fed_after_ajax_request_action_hook_call', $request);
 
-            wp_send_json_error(array('message' => 'Invalid Request - FED|route|FED_Requests@request'));
+            wp_send_json_error(array('message' => 'Invalid Request - FED|route|FED_Requests@ajax_request'));
         }
 
         public function request()
@@ -63,7 +64,30 @@ if ( ! class_exists('FED_Requests')) {
 
             do_action('fed_after_ajax_request_action_hook_call', $request);
 
-            wp_send_json_error(array('message' => 'Invalid Request - FED|route|FED_Requests@request'));
+            wp_send_json_error(array('message' => 'Invalid Request - FED|route|FED_Requests@request '));
+        }
+
+        public function api_request()
+        {
+            $request = $_REQUEST;
+
+            do_action('fed_before_api_request_action_hook_call', $request);
+
+            if (isset($request['fed_action_hook'])) {
+                fed_execute_method_by_string(urldecode($request['fed_action_hook']), $request);
+                exit();
+            }
+            if (isset($request['fed_action_hook_fn']) && ! empty($request['fed_action_hook_fn']) && is_string($request['fed_action_hook_fn'])) {
+                fed_ajax_call_function_method(array(
+                    'callable'  => $request['fed_action_hook_fn'],
+                    'arguments' => $request,
+                ));
+                exit();
+            }
+
+            do_action('fed_after_api_request_action_hook_call', $request);
+
+            wp_send_json_error(array('message' => 'Invalid Request - FED|route|FED_Requests@request '));
         }
     }
 
