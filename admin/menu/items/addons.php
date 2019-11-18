@@ -22,13 +22,28 @@ function fed_get_plugin_pages_menu()
                             </h3>
                         </div>
                         <div class="panel-body">
+                            <?php echo fed_loader('hide', 'Please wait, its working') ?>
+                            <div class="row m-b-10">
+                                <div class="col-md-12">
+                                    <a target="_blank" class="btn btn-secondary btn-lg" href="https://demo.frontenddashboard.com">
+                                        <i class="fa fa-eye"></i>
+                                        Frontend Dashboard Demo
+                                    </a>
+                                </div>
+                            </div>
                             <div class="row">
-                                <?php foreach ($plugins->plugins as $slug=>$single) {
+                                <div class="col-md-12">
+                                    <?php echo fed_show_alert('fed_activation_message'); ?>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <?php foreach ($plugins->plugins as $slug => $single) {
                                     if ($single->pricing->type === 'Free') {
-                                        $type = '<i class="fas fa-lock-open"></i>';
+                                        $type    = '<i class="fas fa-lock-open"></i>';
                                         $bgColor = '';
-                                    } else {
-                                        $type = '<i class="fas fa-lock"></i>';
+                                    }
+                                    else {
+                                        $type    = '<i class="fas fa-lock"></i>';
                                         $bgColor = 'bg_pro_color';
                                     }
                                     ?>
@@ -65,7 +80,7 @@ function fed_get_plugin_pages_menu()
                                                     <div class="fed_addons_description">
                                                         <p>
                                                             <?php echo wp_trim_words($single->description,
-                                                                    100); ?>
+                                                                100); ?>
                                                         </p>
                                                     </div>
                                                 </div>
@@ -82,7 +97,7 @@ function fed_get_plugin_pages_menu()
                                                                 </button>
                                                                 <?php
                                                                 if ($single->version > constant($single->id.'_VERSION'
-                                                                        )) {
+                                                                    )) {
                                                                     ?>
                                                                     <button class="btn btn-danger">
                                                                         <i class="fa fa-refresh"
@@ -93,29 +108,57 @@ function fed_get_plugin_pages_menu()
                                                                 }
 
                                                             } else {
-                                                                if ($single->pricing->type === 'Free') { ?>
-                                                                    <a href="<?php echo $single->download_url; ?>"
-                                                                       class="btn btn-primary"
-                                                                       role="button">
-                                                                        <i class="fa fa-download"
-                                                                           aria-hidden="true"></i>
-                                                                        <?php _e('Download',
-                                                                                'frontend-dashboard') ?>
-                                                                    </a>
-                                                                <?php }
+                                                                if ($single->pricing->type === 'Free') {
+                                                                    $path = WP_PLUGIN_DIR.'/'.$single->install_slug;
+                                                                    if (is_dir($path)) {
+                                                                        ?>
+                                                                        <form method="post"
+                                                                              action="<?php echo fed_get_form_action('fed_request').'&fed_action_hook=FEDInstallAddons@activate'; ?>">
+                                                                            <?php fed_wp_nonce_field(); ?>
+                                                                            <input type="hidden" name="plugin_name" value="<?php echo $single->install_slug.'/'.$single->install_slug.'.php'; ?>" />
+                                                                            <button type="submit"
+                                                                                    class="btn btn-primary">
+                                                                                Activate
+                                                                            </button>
+                                                                        </form>
+                                                                        <?php
+                                                                    } else {
+                                                                        ?>
+                                                                        <form method="post"
+                                                                              class="fed_ajax_plugin_install"
+                                                                              action="<?php echo fed_get_ajax_form_action('fed_api_ajax_request').'&fed_action_hook=FEDInstallAddons@install'; ?>">
+                                                                            <?php wp_nonce_field('updates') ?>
+                                                                            <input type="hidden" name="slug"
+                                                                                   value="<?php echo isset($single->install_slug) ? $single->install_slug : $slug; ?>">
+                                                                            <button type="submit"
+                                                                                    class="btn btn-primary">
+                                                                                <i class="fa fa-download"
+                                                                                   aria-hidden="true"></i> <?php _e('Install & Activate',
+                                                                                    'frontend-dashboard') ?></button>
+                                                                        </form>
+                                                                        <?php
+                                                                    }
+                                                                }
                                                                 if ($single->pricing->type === 'Pro') {
                                                                     ?>
                                                                     <?php
-                                                                    foreach ($single->pricing->amount as $atype=> $amount) {
+                                                                    foreach ($single->pricing->amount as $atype => $amount) {
                                                                         ?>
                                                                         <form method="post"
                                                                               action="<?php echo $single->pricing->purchase_url; ?>">
-                                                                            <input type='hidden' name='redirect_url' value="<?php echo fed_current_page_url(); ?>" />
-                                                                            <input type='hidden' name='domain' value="<?php echo fed_get_domain_name(); ?>" />
-                                                                            <input type='hidden' name='contact_email' value="<?php echo fed_get_admin_email(); ?>" />
-                                                                            <input type='hidden' name='plugin_name' value='<?php echo $slug; ?>' />
-                                                                            <input type='hidden' name='amount' value='<?php echo $amount->amount; ?>' />
-                                                                            <input type='hidden' name='plan_type' value=<?php echo $atype; ?> />
+                                                                            <input type='hidden' name='redirect_url'
+                                                                                   value="<?php echo fed_current_page_url(); ?>"/>
+                                                                            <input type='hidden' name='domain'
+                                                                                   value="<?php echo fed_get_domain_name(); ?>"/>
+                                                                            <input type='hidden'
+                                                                                   name='contact_email'
+                                                                                   value="<?php echo fed_get_admin_email(); ?>"/>
+                                                                            <input type='hidden' name='plugin_name'
+                                                                                   value='<?php echo $slug; ?>'/>
+                                                                            <input type='hidden' name='amount'
+                                                                                   value='<?php echo $amount->amount; ?>'/>
+                                                                            <input type='hidden' name='plan_type'
+                                                                                   value=<?php echo $atype; ?>/>
                                                                             <button type="submit"
                                                                                     class="btn btn-primary">
                                                                                 <i class="fa fa-shopping-cart"
@@ -128,7 +171,6 @@ function fed_get_plugin_pages_menu()
                                                                     ?>
                                                                     <?php
                                                                 }
-
                                                             }
                                                             ?>
                                                             <a href="<?php echo $single->download_url ?>">
@@ -159,7 +201,7 @@ function fed_get_plugin_pages_menu()
             <div class="alert alert-danger">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 <strong><?php _e('Sorry there is some issue in internet connectivity.',
-                            'frontend-dashboard') ?></strong>
+                        'frontend-dashboard') ?></strong>
             </div>
             <?php echo fed_loader(''); ?>
         </div>

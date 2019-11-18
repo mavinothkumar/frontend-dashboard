@@ -22,6 +22,44 @@ jQuery(document).ready(function ($) {
         e.preventDefault();
     });
 
+    body.on('submit', '.fed_ajax_plugin_install', function (e) {
+        var form = $(this);
+        fed_toggle_loader();
+        $.ajax({
+            type: 'POST',
+            url: form.attr('action'),
+            data: form.serialize(),
+            success: function (results) {
+                console.log(results);
+                fed_toggle_loader();
+                if (results.success) {
+                    swal({
+                        title: frontend_dashboard.alert.plugin_installed_successfully,
+                        text: frontend_dashboard.alert.redirecting,
+                        type: "success",
+                        showConfirmButton: false,
+                        timer: 3000,
+                        confirmButtonColor: '#0AAAAA',
+                    }).then(
+                        function () {
+                        },
+                        function () {
+                            window.location = results.data.activateUrl + '&fed_plugin_custom_activate=on'
+                        });
+                } else {
+                    swal({
+                        title: results.data.errorMessage || frontend_dashboard.alert.something_went_wrong,
+                        type: "error",
+                        confirmButtonColor: '#DD6B55',
+                    })
+                }
+            }
+
+        });
+
+        e.preventDefault();
+    });
+
     body.on('click', '.fed_is_delete', function (e) {
         var click = $(this);
         swal({

@@ -182,7 +182,7 @@ function fed_plugin_activation()
 		  ends_at VARCHAR(100) NOT NULL,
 		  status VARCHAR(100) NULL,
 		  PRIMARY KEY  (id),
-		  INDEX (user_id, transaction_id, payment_type, created)
+		  INDEX (user_id, transaction_id, created)
 		  ) $charset_collate;";
 
         dbDelta($payment);
@@ -208,6 +208,9 @@ function fed_plugin_activation()
     if ( ! array_key_exists('trail_period', $payment_update_1)) {
         $wpdb->query("ALTER TABLE $payment_table ADD COLUMN trail_period VARCHAR(255) NULL AFTER `status`,  ADD COLUMN payment_method VARCHAR(255) NULL AFTER `status`, ADD COLUMN ends_at_time VARCHAR(255) NULL AFTER `ends_at`");
 
+    }
+    if ( ! array_key_exists('invoice_id', $payment_update_1)) {
+        $wpdb->query("ALTER TABLE $payment_table ADD COLUMN invoice_id VARCHAR(255) NULL AFTER `status`");
     }
 
 

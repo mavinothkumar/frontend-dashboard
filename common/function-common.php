@@ -219,18 +219,18 @@ if ( ! function_exists('fed_js_translation')) {
             'fed_admin_form_post' => admin_url('admin-ajax.php?action=fed_admin_form_post&nonce='.wp_create_nonce("fed_admin_form_post")),
             'fed_login_form_post' => admin_url('admin-ajax.php?action=fed_login_form_post&nonce='.wp_create_nonce("fed_login_form_post")),
             'alert'               => array(
-                'confirmation'            => array(
+                'confirmation'                  => array(
                     'title'   => __('Are you sure?', 'frontend-dashboard'),
                     'text'    => __('You want to do this action?', 'frontend-dashboard'),
                     'confirm' => __('Yes, Please Proceed', 'frontend-dashboard'),
                     'cancel'  => __('No, Cancel it', 'frontend-dashboard'),
-
                 ),
-                'redirecting'             => __('Please wait, you are redirecting..', 'frontend-dashboard'),
-                'title_cancelled'         => __('Cancelled', 'frontend-dashboard'),
-                'something_went_wrong'    => __('Something Went Wrong', 'frontend-dashboard'),
-                'invalid_form_submission' => __('Invalid form submission', 'frontend-dashboard'),
-                'please_try_again'        => __('Please try again', 'frontend-dashboard'),
+                'redirecting'                   => __('Please wait, you are redirecting..', 'frontend-dashboard'),
+                'title_cancelled'               => __('Cancelled', 'frontend-dashboard'),
+                'something_went_wrong'          => __('Something Went Wrong', 'frontend-dashboard'),
+                'invalid_form_submission'       => __('Invalid form submission', 'frontend-dashboard'),
+                'please_try_again'              => __('Please try again', 'frontend-dashboard'),
+                'plugin_installed_successfully' => __('Plugin Installed and Activated Successfully', 'frontend-dashboard'),
             ),
             'common'              => array(
                 'hide_add_new_menu' => __('Hide Add New Menu', 'frontend-dashboard'),

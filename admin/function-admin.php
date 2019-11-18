@@ -1819,6 +1819,10 @@ function fed_restrict_user_profile_picture($wp_query_obj)
         return;
     }
 
+    if (fed_is_admin()) {
+        return;
+    }
+
     if ('admin-ajax.php' != $pagenow || $_REQUEST['action'] != 'query-attachments') {
         return;
     }
@@ -3518,10 +3522,10 @@ function fed_show_help_icons()
                 <div class="fed_sticky_close">X</div>
             </div>
             <div class="fed_sticky_items">
-                <div class="fed_sticky_item">
+                <div class="fed_sticky_item fed_demo">
                     <a target="_blank"
                        href="https://demo.frontenddashboard.com">
-                        <i class="fas fa-eye fa-2x"></i>
+                        <i class="fas fa-eye fa-2x bc_fed_jump"></i>
                         <div class="fed_sticky_title">
                             Demo
                         </div>
@@ -3530,7 +3534,7 @@ function fed_show_help_icons()
                 <div class="fed_sticky_item">
                     <a target="_blank"
                        href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#new-post">
-                        <i class="fas fa-star fa-2x"></i>
+                        <i class="fas fa-star fa-2x bc_fed_spin"></i>
                         <div class="fed_sticky_title">
                             Rate Us
                         </div>
@@ -3706,13 +3710,22 @@ function login_logout_menu($items, $args)
  * @param  array  $user_roles
  * @param  string  $column
  *
+ * @param  array  $extra
+ *
+ * @param  array  $remove
+ *
  * @return string
  */
-function fed_user_role_checkboxes($meta, $user_roles = array(), $column = '6')
+function fed_user_role_checkboxes($meta, $user_roles = array(), $column = '6', $extra = array(), $remove = null)
 {
-    $all_roles = fed_get_user_roles();
-    $html      = '';
-    $html      .= '<div class="row">';
+    $all_roles = array_merge(fed_get_user_roles(), $extra);
+    if ($remove) {
+        foreach ($remove as $remove_user_role) {
+            unset($all_roles[$remove_user_role]);
+        }
+    }
+    $html = '';
+    $html .= '<div class="row">';
     foreach ($all_roles as $key => $role) {
         $c_value = array_key_exists($key, $user_roles) ? 'Enable' : 'Disable';
 

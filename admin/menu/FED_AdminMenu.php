@@ -1,8 +1,5 @@
 <?php
 
-
-use AdamWathan\Form\Elements\Text;
-
 if ( ! defined('ABSPATH')) {
     exit;
 }
@@ -160,7 +157,7 @@ if ( ! class_exists('FED_AdminMenu')) {
                         'method' => 'fed_admin_general_tab',
                     ),
                 ),
-                'email'             => array(
+                'email'               => array(
                     'icon_class' => 'fas fa-envelope',
                     'name'       => __('Email', 'frontend-dashboard'),
                     'callable'   => array(
@@ -264,13 +261,13 @@ if ( ! class_exists('FED_AdminMenu')) {
                     'callback'   => array($this, 'help'),
                     'position'   => 100,
                 ),
-                'fed_test'             => array(
-                    'page_title' => __('Test', 'frontend-dashboard'),
-                    'menu_title' => __('Test', 'frontend-dashboard'),
-                    'capability' => 'manage_options',
-                    'callback'   => array($this, 'test'),
-                    'position'   => 100,
-                ),
+//                'fed_test'             => array(
+//                    'page_title' => __('Test', 'frontend-dashboard'),
+//                    'menu_title' => __('Test', 'frontend-dashboard'),
+//                    'capability' => 'manage_options',
+//                    'callback'   => array($this, 'test'),
+//                    'position'   => 100,
+//                ),
 
             );
 
@@ -281,7 +278,8 @@ if ( ! class_exists('FED_AdminMenu')) {
 
         public function test()
         {
-
+            ?>
+            <?php
         }
 
     }

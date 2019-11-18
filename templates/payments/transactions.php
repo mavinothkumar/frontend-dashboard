@@ -65,7 +65,7 @@ $transactions = fed_get_transactions();
                                 </div>
                             </td>
                             <td><?php echo esc_attr($transaction['amount']).' '.mb_strtoupper(esc_attr($transaction['currency'])) ?></td>
-                            <td><?php echo esc_attr(strtoupper($transaction['ends_at'])) ?></td>
+                            <td><?php echo esc_attr(strtoupper($transaction['status'])) ?></td>
                             <td><?php echo esc_attr($transaction['created']) ?></td>
                             <td>
                                 <form method="post" class="fed_ajax_print_invoice"

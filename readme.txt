@@ -3,8 +3,8 @@ Contributors: vinoth06, buffercode
 Tags: dashboard, frontend dashboard, custom login, custom register, custom roles, custom profile, custom post type, custom taxonomies, custom dashboard, hide admin bar, widget
 Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 4.6
-Tested up to: 5.2.4
-Stable tag: 1.5.7.1
+Tested up to: 5.3
+Stable tag: 1.5.8
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -245,9 +245,13 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Changelog ==
 
-= 1.5.7 [3-Nov-2019] =
+= 1.5.8 [17-Nov-2019] =
 
-* Bug fixes
+* Install and activate add-ons on the fly
+
+= 1.5.7.3 [13-Nov-2019] =
+
+* Bug fixes : Media Library
 
 = 1.5.6 [30-Oct-2019] =
 * Show Taxonomy in Widget Through Shortcode [fed_list_taxonomy taxonomy=TAXONOMY_NAME title_li='' show_count=1]
@@ -538,8 +542,9 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Upgrade Notice ==
 
-* SMTP or WP_MAIL Email setup added.
-* Bug fixes
+= 1.5.8 [17-Nov-2019] =
+
+* Install and activate add-ons on the fly
 
 == Screenshots ==
 1. Frontend Dashboard Settings | Login | Settings

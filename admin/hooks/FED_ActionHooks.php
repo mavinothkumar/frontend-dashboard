@@ -71,115 +71,118 @@ if ( ! class_exists('FED_ActionHooks')) {
         {
             $fed_colors = get_option('fed_admin_setting_upl_color');
 
-            if (false !== $fed_colors) {
-                $pbg_color      = $fed_colors['color']['fed_upl_color_bg_color'];
-                $pbg_font_color = $fed_colors['color']['fed_upl_color_bg_font_color'];
-                $sbg_color      = $fed_colors['color']['fed_upl_color_sbg_color'];
-                $sbg_font_color = $fed_colors['color']['fed_upl_color_sbg_font_color'];
-                ?>
-                <style>
-                    .bc_fed .fed_header_font_color {
-                        color: <?php echo $pbg_color; ?> !important;
-                        font-weight: bolder;
-                    }
+            $pbg_color      = fed_get_data('color.fed_upl_color_bg_color', $fed_colors, '#0AAAAA');
+            $pbg_font_color = fed_get_data('color.fed_upl_color_bg_font_color', $fed_colors, '#FFFFFF');
+            $sbg_color      = fed_get_data('color.fed_upl_color_sbg_color', $fed_colors, '#033333');
+            $sbg_font_color = fed_get_data('color.fed_upl_color_sbg_font_color', $fed_colors, '#FFFFFF');
+            ?>
+            <style>
+                .bc_fed .fed_header_font_color {
+                    color: <?php echo $pbg_color; ?> !important;
+                    font-weight: bolder;
+                }
 
-                    .bc_fed .fed_menu_title, .bc_fed .fed_menu_icon {
-                        color: <?php echo $sbg_font_color ?> !important;
-                    }
+                .bc_fed .fed_menu_title, .bc_fed .fed_menu_icon {
+                    color: <?php echo $sbg_font_color ?> !important;
+                }
 
-                    .bc_fed .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover,
-                    .bc_fed .btn-primary,
-                    .bc_fed .bg-primary,
-                    .bc_fed .nav-pills > li.active > a,
-                    .bc_fed .nav-pills > li.active > a:focus,
-                    .bc_fed .nav-pills > li.active > a:hover,
-                    .bc_fed .list-group-item.active,
-                    .bc_fed .list-group-item.active:focus,
-                    .bc_fed .list-group-item.active:hover,
-                    .bc_fed .panel-primary > .panel-heading,
-                    .bc_fed .btn-primary.focus, .btn-primary:focus,
-                    .bc_fed .btn-primary:hover,
-                    .bc_fed .btn.active, .btn:active,
-                    .bc_fed input[type="button"]:hover,
-                    .bc_fed input[type="button"]:focus,
-                    .bc_fed input[type="submit"]:hover,
-                    .bc_fed input[type="submit"]:focus,
-                    .bc_fed .popover-title {
-                        background-color: <?php echo $pbg_color  ?>;
-                        background-image: none !important;
-                        border-color: <?php echo $pbg_color  ?>;
-                        color: <?php echo $pbg_font_color ?>;
-                    }
+                .bc_fed .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover,
+                .bc_fed .btn-primary,
+                .bc_fed .bg-primary,
+                .bc_fed .nav-pills > li.active > a,
+                .bc_fed .nav-pills > li.active > a:focus,
+                .bc_fed .nav-pills > li.active > a:hover,
+                .bc_fed .list-group-item.active,
+                .bc_fed .list-group-item.active:focus,
+                .bc_fed .list-group-item.active:hover,
+                .bc_fed .panel-primary > .panel-heading,
+                .bc_fed .btn-primary.focus, .btn-primary:focus,
+                .bc_fed .btn-primary:hover,
+                .bc_fed .btn.active, .btn:active,
+                .bc_fed input[type="button"]:hover,
+                .bc_fed input[type="button"]:focus,
+                .bc_fed input[type="submit"]:hover,
+                .bc_fed input[type="submit"]:focus,
+                .bc_fed .popover-title {
+                    background-color: <?php echo $pbg_color  ?>;
+                    background-image: none !important;
+                    border-color: <?php echo $pbg_color  ?>;
+                    color: <?php echo $pbg_font_color ?>;
+                }
 
-                    .bc_fed .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover,
-                    .bc_fed .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
-                        background-color: <?php echo $pbg_color  ?> !important;
-                        border-color: <?php echo $pbg_color  ?> !important;
-                        color: <?php echo $pbg_font_color ?> !important;
-                    }
+                .bc_fed .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover,
+                .bc_fed .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+                    background-color: <?php echo $pbg_color  ?> !important;
+                    border-color: <?php echo $pbg_color  ?> !important;
+                    color: <?php echo $pbg_font_color ?> !important;
+                }
 
-                    .fed_frontend_dashboard_menu .fed_menu_item {
-                        background: <?php echo $sbg_color ?> !important;
-                        color: <?php echo $sbg_font_color ?> !important;
-                    }
+                .fed_frontend_dashboard_menu .fed_menu_item {
+                    background: <?php echo $sbg_color ?> !important;
+                    color: <?php echo $sbg_font_color ?> !important;
+                }
 
-                    .fed_frontend_dashboard_menu .panel-body .panel-title {
-                        padding: 10px;
-                        margin: 5px;
-                        background: <?php echo $sbg_color ?>;
-                        color: <?php echo $sbg_font_color ?>;
-                    }
+                .fed_frontend_dashboard_menu .panel-body .panel-title {
+                    padding: 10px;
+                    margin: 5px;
+                    background: <?php echo $sbg_color ?>;
+                    color: <?php echo $sbg_font_color ?>;
+                }
 
-                    .bc_fed .fed_frontend_dashboard_menu .panel-heading.active,
-                    .bc_fed .fed_frontend_dashboard_menu .panel-body .panel-title.active {
-                        color: <?php echo $pbg_font_color ?>;
-                        background: <?php echo $pbg_color ?>;
-                    }
+                .bc_fed .fed_frontend_dashboard_menu .panel-heading.active,
+                .bc_fed .fed_frontend_dashboard_menu .panel-body .panel-title.active {
+                    color: <?php echo $pbg_font_color ?>;
+                    background: <?php echo $pbg_color ?>;
+                }
 
-                    .bc_fed .nav-tabs {
-                        border-bottom: 1px solid <?php echo $pbg_color  ?> !important;
-                    }
+                .bc_fed .nav-tabs {
+                    border-bottom: 1px solid <?php echo $pbg_color  ?> !important;
+                }
 
-                    .bc_fed .panel-primary {
-                        border-color: <?php echo $pbg_color  ?> !important;
-                    }
+                .bc_fed .panel-primary {
+                    border-color: <?php echo $pbg_color  ?> !important;
+                }
 
-                    .bc_fed .bg-primary-font {
-                        color: <?php echo $pbg_color; ?>;
-                    }
+                .bc_fed .bg-primary-font {
+                    color: <?php echo $pbg_color; ?>;
+                }
 
-                    .bc_fed .fed_login_menus {
-                        background-color: <?php echo $pbg_color; ?> !important;
-                        color: <?php echo $pbg_font_color ?> !important;
-                    }
+                .bc_fed .fed_login_menus {
+                    background-color: <?php echo $pbg_color; ?> !important;
+                    color: <?php echo $pbg_font_color ?> !important;
+                }
 
-                    .bc_fed .fed_login_content {
-                        border: 1px solid <?php echo $pbg_color; ?> !important;
-                        padding: 20px 40px;
-                    }
+                .bc_fed .fed_login_content {
+                    border: 1px solid <?php echo $pbg_color; ?> !important;
+                    padding: 20px 40px;
+                }
 
-                    .bc_fed .list-group-item {
-                        background-color: <?php echo $sbg_color?> !important;
-                        border-color: #ffffff !important;
-                        color: <?php echo $sbg_font_color?> !important;
-                    }
+                .bc_fed .list-group-item {
+                    background-color: <?php echo $sbg_color?> !important;
+                    border-color: #ffffff !important;
+                    color: <?php echo $sbg_font_color?> !important;
+                }
 
-                    .bc_fed .list-group-item a {
-                        color: <?php echo $sbg_font_color?> !important;
-                    }
+                .bc_fed .list-group-item a {
+                    color: <?php echo $sbg_font_color?> !important;
+                }
 
-                    .bc_fed .list-group-item.active, .bc_fed .list-group-item.active:hover, .bc_fed .list-group-item.active:focus {
-                        text-shadow: none !important;
-                    }
+                .bc_fed .list-group-item.active, .bc_fed .list-group-item.active:hover, .bc_fed .list-group-item.active:focus {
+                    text-shadow: none !important;
+                }
 
-                    .bc_fed .btn-default, .bc_fed .btn-primary, .bc_fed .btn-success, .bc_fed .btn-info, .bc_fed .btn-warning, .bc_fed .btn-danger {
-                        text-shadow: none !important;
-                    }
-                </style>
+                .bc_fed .btn-default, .bc_fed .btn-primary, .bc_fed .btn-success, .bc_fed .btn-info, .bc_fed .btn-warning, .bc_fed .btn-danger {
+                    text-shadow: none !important;
+                }
+            </style>
 
-                <?php
-                do_action('fed_head_css');
-            }
+            <?php
+            do_action('fed_head_css', array(
+                'pbg_color'      => $pbg_color,
+                'pbg_font_color' => $pbg_font_color,
+                'sbg_color'      => $sbg_color,
+                'sbg_font_color' => $sbg_font_color,
+            ));
         }
 
         /**
@@ -254,6 +257,8 @@ href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#
         {
             if (BC_FED_PLUGIN_BASENAME == $file) {
                 $row_meta = array(
+                    'demo'        => '<a href="'.esc_url('https://demo.frontenddashboard.com/').'">'.esc_html__('Demo',
+                            'frontend-dashboard').'</a>',
                     'docs/videos' => '<a href="'.esc_url('https://buffercode.com/category/name/frontend-dashboard').'">'.esc_html__('Docs/Videos',
                             'frontend-dashboard').'</a>',
                     'donation'    => '<a href="'.esc_url('https://www.paypal.me/buffercode').'">'.esc_html__('Donation',
