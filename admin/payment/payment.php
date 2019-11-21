@@ -13,7 +13,6 @@ if ( ! function_exists('fed_get_payment_shortcodes')) {
     }
 }
 
-
 if ( ! function_exists('fed_get_payment_gateways')) {
     /**
      * @return array
@@ -21,6 +20,7 @@ if ( ! function_exists('fed_get_payment_gateways')) {
     function fed_get_payment_gateways()
     {
         return apply_filters('fed_payment_gateways', array('disable' => 'Disable'));
+		//return apply_filters('fed_payment_gateways', array('disable' => 'Disable', 'enable' => 'Enable'));
     }
 }
 if ( ! function_exists('fed_payment_for')) {
@@ -29,8 +29,24 @@ if ( ! function_exists('fed_payment_for')) {
      */
     function fed_payment_for()
     {
-        return apply_filters('fed_payment_for', array());
-    }
+        //return apply_filters('fed_payment_for', array());
+		
+		$payment_for = array(
+			'suscription' => array(
+				'name' => 'Suscripción',
+				'type' => 'suscription',
+				//'object_table' => BC_FED_PAYPAL_PAYMENT_PLAN_TABLE,
+				'object_table' => BC_FED_TABLE_PAYMENT_ITEMS,
+			),
+			'single' => array(
+				'name' => 'Pago Unico',
+				'type' => 'single',
+				'object_table' => BC_FED_PAYPAL_PAYMENT_PLAN_TABLE,
+				//'object_table' => BC_FED_TABLE_PAYMENT_ITEMS,
+			)
+		);
+		return apply_filters('fed_payment_for', $payment_for);
+	}
 }
 
 if ( ! function_exists('fed_get_payment_for')) {
@@ -54,7 +70,7 @@ if ( ! function_exists('fed_get_payment_for_key_index')) {
      */
     function fed_get_payment_for_key_index()
     {
-        $p           = array();
+        $p = array();
         $payment_for = fed_payment_for();
         if (is_array($payment_for) && count($payment_for)) {
             foreach ($payment_for as $index => $payment) {
@@ -85,19 +101,23 @@ if ( ! function_exists('fed_get_transactions_with_meta')) {
     /**
      * @return array|object|void|null
      */
-    function fed_get_transactions_with_meta()
-    {
-        global $wpdb;
-        $transactions = fed_get_transactions();
-        if (count($transactions)) {
-            $table_payment_items = $wpdb->prefix.BC_FED_TABLE_PAYMENT_ITEMS;
-
-            foreach ($transactions as $index => $transaction) {
-                $transaction_id                        = $transaction['id'];
-                $m                                     = $wpdb->get_results("SELECT * FROM $table_payment_items WHERE payment_id = $transaction_id ORDER BY  payment_item_id DESC",
-                    ARRAY_A);
-                $transactions[$index]['payment_items'] = $m;
-            }
+	function fed_get_transactions_with_meta()
+	{
+		global $wpdb;
+		$transactions = fed_get_transactions();
+		if (count($transactions)) {
+			$table_payment_items = $wpdb->prefix.BC_FED_TABLE_PAYMENT_ITEMS;
+			foreach ($transactions as $index => $transaction) {
+				$transaction_id                        = $transaction['id'];
+				$m                                     = $wpdb->get_results("
+					SELECT * 
+					FROM $table_payment_items 
+					WHERE payment_id = $transaction_id 
+					ORDER BY  payment_item_id 
+					DESC
+				", ARRAY_A);
+				$transactions[$index]['payment_items'] = $m;
+			}
 
             return $transactions;
         }
@@ -117,6 +137,48 @@ if ( ! function_exists('fed_get_transactions')) {
         global $wpdb;
         $table_payment = $wpdb->prefix.BC_FED_TABLE_PAYMENT;
         $table_user    = $wpdb->prefix.'users';
+        if(fed_is_admin()) {
+			return $wpdb->get_results(
+				"
+				SELECT      *
+				FROM        $table_payment payment
+				INNER JOIN  $table_user users
+				ON          payment.user_id = users.id
+				ORDER BY    payment.id DESC
+				", ARRAY_A);
+        }else{
+            $user_id = get_current_user_id();
+//            FED_Log::writeLog(['$user_id' => $user_id]);
+
+			$result = $wpdb->get_results(
+				"
+				SELECT      *
+				FROM        $table_payment payment
+				INNER JOIN  $table_user users
+				ON          payment.user_id = users.id
+				WHERE       payment.user_id = $user_id
+				ORDER BY    payment.id DESC
+				", ARRAY_A);
+
+//            FED_Log::writeLog(['$result' => $result]);
+
+            return $result;
+        }
+    }
+}
+
+if ( ! function_exists('fed_get_active_transactions')) {
+
+    /**
+     * @param  null  $payment_type
+     *
+     * @return array|object|null
+     */
+    function fed_get_active_transactions()
+    {
+        global $wpdb;
+        $table_payment = $wpdb->prefix.BC_FED_TABLE_PAYMENT;
+        $table_user    = $wpdb->prefix.'users';
         if (fed_is_admin()) {
 
             return $wpdb->get_results(
@@ -125,11 +187,12 @@ if ( ! function_exists('fed_get_transactions')) {
 	FROM        $table_payment payment
 	INNER JOIN  $table_user users
 	            ON payment.user_id = users.id
+    WHERE ends_at = 'active'
 	ORDER BY    payment.id DESC
 	", ARRAY_A);
         } else {
             $user_id = get_current_user_id();
-            FED_Log::writeLog(['$user_id' => $user_id]);
+//            FED_Log::writeLog(['$user_id' => $user_id]);
 
             $result = $wpdb->get_results(
                 "
@@ -137,7 +200,8 @@ if ( ! function_exists('fed_get_transactions')) {
 	FROM        $table_payment payment
 	INNER JOIN  $table_user users
 	            ON payment.user_id = users.id
-    WHERE       payment.user_id = $user_id
+    WHERE       payment.user_id = $user_id AND
+                ends_at = 'active'
 	ORDER BY    payment.id DESC
 	", ARRAY_A);
 
@@ -156,16 +220,21 @@ if ( ! function_exists('fed_get_transaction_with_meta')) {
      */
     function fed_get_transaction_with_meta($id, $column = 'id')
     {
-        global $wpdb;
-        $transaction         = fed_get_transaction($id, $column = 'id');
-        $table_payment_items = $wpdb->prefix.BC_FED_TABLE_PAYMENT_ITEMS;
+		global $wpdb;
+		$transaction         = fed_get_transaction($id, $column = 'id');
+		$table_payment_items = $wpdb->prefix.BC_FED_TABLE_PAYMENT_ITEMS;
 
-        $transaction_id               = $transaction['id'];
-        $m                            = $wpdb->get_results("SELECT * FROM $table_payment_items WHERE payment_id = $transaction_id ORDER BY  payment_item_id DESC",
-            ARRAY_A);
-        $transaction['payment_items'] = $m;
+		$transaction_id               = $transaction['id'];
+		$m                            = $wpdb->get_results("
+			SELECT * 
+			FROM $table_payment_items 
+			WHERE payment_id = $transaction_id 
+			ORDER BY  payment_item_id 
+			DESC
+			", ARRAY_A);
+		$transaction['payment_items'] = $m;
 
-        return $transaction;
+		return $transaction;
 
     }
 }
@@ -213,10 +282,15 @@ if ( ! function_exists('fed_get_transaction_meta')) {
     {
         global $wpdb;
         $table_payment_items = $wpdb->prefix.BC_FED_TABLE_PAYMENT_ITEMS;
-        $transaction         = $wpdb->get_results("SELECT * FROM $table_payment_items WHERE $column = $id ORDER BY  payment_item_id DESC",
-            ARRAY_A);
+        $transaction         = $wpdb->get_results("
+			SELECT * 
+			FROM $table_payment_items 
+			WHERE $column = $id 
+			ORDER BY  payment_item_id 
+			DESC
+		", ARRAY_A);
 
-        return $transaction;
+		return $transaction;
 
     }
 }
@@ -282,13 +356,13 @@ if ( ! function_exists('fed_get_membership_expiry_date')) {
     function fed_get_membership_expiry_date($object)
     {
         if ($object && isset($object['plan_type'])) {
+
             if ($object['plan_type'] === 'free') {
                 return __('Free', 'frontend-dashboard');
             }
-
+        
             if ($object['plan_type'] === 'custom') {
                 $days = isset($object['plan_days']) ? $object['plan_days'] + 1 : '0';
-
                 return date('Y-m-d H:i:s', strtotime("+ {$days} days"));
             }
 
@@ -302,6 +376,10 @@ if ( ! function_exists('fed_get_membership_expiry_date')) {
 
             if ($object['plan_type'] === 'one_time') {
                 return __('One Time', 'frontend-dashboard');
+            }
+
+            if ($object['plan_type'] === 'recurring') {
+                return __('Recurring', 'frontend-dashboard');
             }
         }
 

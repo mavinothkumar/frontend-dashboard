@@ -196,7 +196,7 @@ if ( ! function_exists('fed_fetch_table_by_is_required')) {
         global $wpdb;
         $table_name = $wpdb->prefix.$table;
 
-        $result = $wpdb->get_results("SELECT * FROM $table_name WHERE is_required LIKE 'true'", ARRAY_A);
+        $result = $wpdb->get_results("SELECT * FROM $table_name WHERE is_required LIKE 'true' AND show_register LIKE 'Enable'", ARRAY_A);
         if (count($result) <= 0) {
             return array();
         }
@@ -210,26 +210,26 @@ if ( ! function_exists('fed_fetch_table_by_is_required')) {
 }
 
 if ( ! function_exists('fed_insert_new_row')) {
-    /**
-     * Create row(s)
-     *
-     * @param  string  $table  Table Name.
-     * @param  array  $data  Insert row content
-     *
-     * @return false|int
-     */
-    function fed_insert_new_row($table, $data)
-    {
-        global $wpdb;
-        $table_name = $wpdb->prefix.$table;
+	/**
+	 * Create row(s)
+	 *
+	 * @param  string  $table  Table Name.
+	 * @param  array  $data  Insert row content
+	 *
+	 * @return false|int
+	 */
+	function fed_insert_new_row($table, $data)
+	{
+		global $wpdb;
+		$table_name = $wpdb->prefix.$table;
 
-        $status = $wpdb->insert(
-            $table_name,
-            $data
-        );
+		$status = $wpdb->insert(
+			$table_name,
+			$data
+		);
 
-        return $status ? $wpdb->insert_id : false;
-    }
+		return $status ? $wpdb->insert_id : false;
+	}
 }
 
 if ( ! function_exists('fed_fetch_table_rows_by_key_value_column')) {

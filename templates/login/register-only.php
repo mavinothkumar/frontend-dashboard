@@ -28,6 +28,7 @@ do_action( 'fed_before_register_only_form' );
 								foreach ( $contents as $content ) {
 									?>
 									<div class="form-group">
+
 										<label><?php echo $content['name'] ?></label>
 										<?php echo $content['input'] ?>
 									</div>

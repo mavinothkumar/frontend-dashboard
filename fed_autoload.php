@@ -6,6 +6,7 @@ if ( ! defined('ABSPATH')) {
  * Autoload Files
  */
 require_once BC_FED_PLUGIN_DIR.'/admin/install/install.php';
+require_once BC_FED_PLUGIN_DIR.'/admin/install/FEDInstallAddons.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/install/initial_setup.php';
 /**
  * Loader
@@ -59,6 +60,7 @@ require_once BC_FED_PLUGIN_DIR.'/shortcodes/login/login-data.php';
 require_once BC_FED_PLUGIN_DIR.'/shortcodes/login/login-only-shortcode.php';
 require_once BC_FED_PLUGIN_DIR.'/shortcodes/login/register-only-shortcode.php';
 require_once BC_FED_PLUGIN_DIR.'/shortcodes/login/forgot-password-only-shortcode.php';
+require_once BC_FED_PLUGIN_DIR.'/shortcodes/widget/taxonomy.php';
 
 require_once BC_FED_PLUGIN_DIR.'/shortcodes/user_role.php';
 
@@ -124,6 +126,7 @@ require_once BC_FED_PLUGIN_DIR.'/admin/layout/settings_tab/post/settings.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/layout/settings_tab/post/menu.php';
 
 require_once BC_FED_PLUGIN_DIR.'/admin/layout/settings_tab/general/FED_Admin_General.php';
+require_once BC_FED_PLUGIN_DIR.'/admin/layout/settings_tab/email/FEDEmail.php';
 
 require_once BC_FED_PLUGIN_DIR.'/admin/layout/settings_tab/login/login_tab.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/layout/settings_tab/login/register_tab.php';
@@ -145,6 +148,7 @@ require_once BC_FED_PLUGIN_DIR.'/admin/hooks/FED_ActionHooks.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/validation/FED_Validation.php';
 
 
+
 require_once BC_FED_PLUGIN_DIR.'/admin/payment/FEDPaymentMenu.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/payment/FEDPayment.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/payment/FEDTransaction.php';
@@ -154,9 +158,9 @@ require_once BC_FED_PLUGIN_DIR.'/admin/payment/FEDInvoiceTemplate.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/payment/FEDPaymentWidgets.php';
 
 
-require_once BC_FED_PLUGIN_DIR.'/admin/pro/plugins/FEDSCPRO.php';
-require_once BC_FED_PLUGIN_DIR.'/admin/pro/plugins/FEDPPPRO.php';
-require_once BC_FED_PLUGIN_DIR.'/admin/pro/plugins/FEDMPPRO.php';
+// require_once BC_FED_PLUGIN_DIR.'/admin/pro/plugins/FEDSCPRO.php';
+// require_once BC_FED_PLUGIN_DIR.'/admin/pro/plugins/FEDPPPRO.php';
+// require_once BC_FED_PLUGIN_DIR.'/admin/pro/plugins/FEDMPPRO.php';
 
 require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormSingleLine.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormMultiLine.php';
@@ -166,6 +170,12 @@ require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormURL.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormPassword.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormCheckBox.php';
 require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormRadio.php';
+require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormSelect.php';
+require_once BC_FED_PLUGIN_DIR.'/admin/fields/FEDFormNumber.php';
 
+/**
+ * Widget
+ */
+require_once BC_FED_PLUGIN_DIR.'/admin/widgets/FEDUserCountWidget.php';
 
 

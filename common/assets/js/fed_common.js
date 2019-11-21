@@ -133,7 +133,7 @@ jQuery(document).ready(function ($) {
     //
     //     return false;
     // };
-
+    
     if (transaction_modal.length) {
         transaction_modal.on('hidden.bs.modal', function () {
             location.reload();

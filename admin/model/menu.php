@@ -33,15 +33,15 @@ function fed_fetch_table_rows_with_key_front_end( $table, $key ) {
 		return new WP_Error( 'fed_default_value_not_installed', __( 'There is some trouble in installing the default value, please try to deactivate and activate the plugin or contact us on ', 'frontend-dashboard' ) . make_clickable( 'https://buffercode.com/' ) );
 	}
 	$result_with_key = array();
-	foreach ( $results as $result ) {
-		$res = isset( $result['user_role'] ) && ! empty( $result['user_role'] ) ? $result['user_role'] : false;
+	foreach( $results as $result ){
+		$res = isset( $result['user_role'] ) && !empty($result['user_role']) ? $result['user_role'] : false;
 		/**
 		 * Lets compare the user role with the admin saved user role
 		 */
-		if ( ! $res ) {
+		if(!$res){
 			continue;
 		}
-		if ( ! in_array( $user_role, unserialize( $res ), true ) ) {
+		if( !in_array( $user_role, unserialize($res), true) ){
 			continue;
 		}
 		$result['menu_type']                = isset( $result['menu_type'] ) ? $result['menu_type'] : 'user';

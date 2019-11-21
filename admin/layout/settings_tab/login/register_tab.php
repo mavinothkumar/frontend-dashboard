@@ -73,7 +73,7 @@ function fed_admin_register_settings_tab($fed_login_register)
                             'name'  => 'Email Notification after Register',
                             'input' => fed_get_input_details(array(
                                     'input_meta'  => 'fed_admin_login[register_email_notification]',
-                                    'user_value'  => $auto_login,
+                                    'user_value'  => fed_get_data('register.register_email_notification',$fed_login_register),
                                     'input_type'  => 'select',
                                     'input_value' => array(
                                             ''      => 'Please Select',

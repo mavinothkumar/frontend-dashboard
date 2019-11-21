@@ -27,7 +27,7 @@ if ( ! class_exists('FEDPayment')) {
         public function settingsData()
         {
             $settings = get_option('fed_payment_settings');
-            $array    = array(
+			$array    = array(
                 'form'  => array(
                     'method' => '',
                     'class'  => 'fed_admin_menu fed_ajax',
@@ -53,8 +53,8 @@ if ( ! class_exists('FEDPayment')) {
                                 'input_value' => fed_get_payment_gateways(),
                             )),
                         'help_message' => fed_show_help_message(array(
-                            'content' => __('By Checking this, you are enabling the Payment',
-                                'frontend-dashboard'),
+                            'content' => __('By Checking this, you are enabling the Payment', 
+                            'frontend-dashboard'),
                         )),
                     ),
                 ),

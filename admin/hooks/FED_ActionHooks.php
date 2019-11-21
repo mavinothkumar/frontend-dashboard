@@ -21,9 +21,39 @@ if ( ! class_exists('FED_ActionHooks')) {
             add_action('plugin_row_meta', array($this, 'fed_plugin_row_meta'), 10, 2);
             add_action('admin_footer_text', array($this, 'fed_update_footer'));
             add_action('plugin_action_links_'.BC_FED_PLUGIN_BASENAME, array(
-                $this,
-                'fed_plugin_action_links',
+                    $this,
+                    'fed_plugin_action_links',
             ), 10, 2);
+            add_action('phpmailer_init', array($this, 'send_email_via_smtp'));
+        }
+
+        /**
+         * @param $mailer
+         */
+        public function send_email_via_smtp($mailer)
+        {
+            $settings  = get_option('fed_settings_email');
+            $is_enable = fed_get_data('via', $settings, false);
+            if ($settings) {
+                $email     = fed_get_data('credentials.email', $settings, false);
+                $from_name = fed_get_data('credentials.from_name', $settings, false);
+                $FEDEmail  = new FEDEmail();
+                if ($email && ! empty($email) && is_email($email)) {
+                    add_filter('wp_mail_from', array($FEDEmail, 'sender_email'));
+                }
+                if ($from_name && ! empty($from_name)) {
+                    add_filter('wp_mail_from_name', array($FEDEmail, 'sender_name'));
+                }
+                if ($is_enable === 'SMTP') {
+                    $mailer->IsSMTP();
+                    $mailer->SMTPAuth   = fed_get_data('smtp.auth', $settings);
+                    $mailer->Host       = fed_get_data('smtp.host_name', $settings);
+                    $mailer->Username   = fed_get_data('smtp.user_name', $settings);
+                    $mailer->Password   = fed_get_data('smtp.password', $settings);
+                    $mailer->SMTPSecure = fed_get_data('smtp.encryption', $settings);
+                    $mailer->Port       = fed_get_data('smtp.port', $settings);
+                }
+            }
         }
 
         /**
@@ -41,11 +71,10 @@ if ( ! class_exists('FED_ActionHooks')) {
         {
             $fed_colors = get_option('fed_admin_setting_upl_color');
 
-            if (false !== $fed_colors) {
-                $pbg_color      = $fed_colors['color']['fed_upl_color_bg_color'];
-                $pbg_font_color = $fed_colors['color']['fed_upl_color_bg_font_color'];
-                $sbg_color      = $fed_colors['color']['fed_upl_color_sbg_color'];
-                $sbg_font_color = $fed_colors['color']['fed_upl_color_sbg_font_color'];
+            $pbg_color      = fed_get_data('color.fed_upl_color_bg_color', $fed_colors, '#0AAAAA');
+            $pbg_font_color = fed_get_data('color.fed_upl_color_bg_font_color', $fed_colors, '#FFFFFF');
+            $sbg_color      = fed_get_data('color.fed_upl_color_sbg_color', $fed_colors, '#033333');
+            $sbg_font_color = fed_get_data('color.fed_upl_color_sbg_font_color', $fed_colors, '#FFFFFF');
                 ?>
                 <style>
                     .bc_fed .fed_header_font_color {
@@ -92,7 +121,6 @@ if ( ! class_exists('FED_ActionHooks')) {
                         background: <?php echo $sbg_color ?> !important;
                         color: <?php echo $sbg_font_color ?> !important;
                     }
-
                     .fed_frontend_dashboard_menu .panel-body .panel-title {
                         padding: 10px;
                         margin: 5px;
@@ -147,11 +175,15 @@ if ( ! class_exists('FED_ActionHooks')) {
                     }
                 </style>
 
-                <?php
-                do_action('fed_head_css');
-            }
+            <?php
+            do_action('fed_head_css', array(
+                'pbg_color'      => $pbg_color,
+                'pbg_font_color' => $pbg_font_color,
+                'sbg_color'      => $sbg_color,
+                'sbg_font_color' => $sbg_font_color,
+            ));
         }
-
+        
         /**
          * @param $text
          *
@@ -181,10 +213,10 @@ href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#
             $dashboard_url = fed_get_dashboard_url();
             if ($dashboard_url) {
                 $under_dashboard = array(
-                    'parent' => 'site-name',
-                    'id'     => 'frontend-dashboard',
-                    'title'  => __('Frontend Dashboard', 'frontend-dashboard'),
-                    'href'   => fed_get_dashboard_url(),
+                        'parent' => 'site-name',
+                        'id'     => 'frontend-dashboard',
+                        'title'  => __('Frontend Dashboard', 'frontend-dashboard'),
+                        'href'   => fed_get_dashboard_url(),
                 );
 
                 $wp_admin_bar->add_node($under_dashboard);
@@ -200,15 +232,15 @@ href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#
             $dashboard_url = fed_get_dashboard_url();
             if ($dashboard_url) {
                 $frontend_dashboard = array(
-                    'parent' => false,
-                    'id'     => 'frontend-dashboard-main',
-                    'meta'   => array(
-                        'class' => 'menupop',
-                    ),
-                    'title'  => __('<span class="ab-icon"><img style="margin-top:-4px;" class="" src="'.plugins_url('common/assets/images/d.png',
-                            BC_FED_PLUGIN).'" /></span><span class="ab-label">Frontend Dashboard</span>',
-                        'frontend-dashboard'),
-                    'href'   => $dashboard_url,
+                        'parent' => false,
+                        'id'     => 'frontend-dashboard-main',
+                        'meta'   => array(
+                        	'class'=>'menupop',
+                        ),
+                        'title'  => __('<span class="ab-icon"><img style="margin-top:-4px;" class="" src="'.plugins_url('common/assets/images/d.png',
+                                        BC_FED_PLUGIN).'" /></span><span class="ab-label">Frontend Dashboard</span>',
+                                'frontend-dashboard'),
+                        'href'   => $dashboard_url,
                 );
                 $wp_admin_bar->add_menu($frontend_dashboard);
             }
@@ -224,13 +256,15 @@ href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#
         {
             if (BC_FED_PLUGIN_BASENAME == $file) {
                 $row_meta = array(
-                    'docs/videos' => '<a href="'.esc_url('https://buffercode.com/category/name/frontend-dashboard').'">'.esc_html__('Docs/Videos',
+  						'demo' => '<a href="'.esc_url('https://demo.frontenddashboard.com/').'">'.esc_html__('Demo',
                             'frontend-dashboard').'</a>',
-                    'donation'    => '<a href="'.esc_url('https://www.paypal.me/buffercode').'">'.esc_html__('Donation',
-                            'frontend-dashboard').'</a>',
+                        'docs/videos' => '<a href="'.esc_url('https://buffercode.com/category/name/frontend-dashboard').'">'.esc_html__('Docs/Videos',
+                                        'frontend-dashboard').'</a>',
+                        'donation'    => '<a href="'.esc_url('https://www.paypal.me/buffercode').'">'.esc_html__('Donation',
+                                        'frontend-dashboard').'</a>',
 
-                    'support' => '<a href="mailto:support@buffercode.com">'.esc_html__('Support',
-                            'frontend-dashboard').'</a>',
+                        'support' => '<a href="mailto:support@buffercode.com">'.esc_html__('Support',
+                                        'frontend-dashboard').'</a>',
                 );
 
                 return array_merge($links, $row_meta);
@@ -247,8 +281,8 @@ href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#
         public function fed_plugin_action_links($links)
         {
             $action_links = array(
-                'settings' => '<a href="'.admin_url('admin.php?page=fed_settings_menu').'" aria-label="'.esc_attr__('Frontend Dashboard Settings',
-                        'frontend-dashboard').'">'.esc_html__('Settings', 'frontend-dashboard').'</a>',
+                    'settings' => '<a href="'.admin_url('admin.php?page=fed_settings_menu').'" aria-label="'.esc_attr__('Frontend Dashboard Settings',
+                                    'frontend-dashboard').'">'.esc_html__('Settings', 'frontend-dashboard').'</a>',
             );
 
             return array_merge($action_links, $links);

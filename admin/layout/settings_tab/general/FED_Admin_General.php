@@ -92,7 +92,7 @@ if ( ! class_exists('FED_Admin_General')) {
             return apply_filters('fed_customize_admin_general_options', array(
                     'fed_admin_scripts'    => array(
                             'icon'      => 'fas fa-code',
-                            'name'      => __('Admin Scripts', 'frontend-dashboard-extra'),
+                            'name'      => __('Admin Scripts', 'frontend-dashboard'),
                             'callable'  => array('object' => $this, 'method' => 'fed_admin_script_menu_tab'),
                             'arguments' => $options,
                     ),
@@ -243,13 +243,13 @@ if ( ! class_exists('FED_Admin_General')) {
                                     'in_footer'    => true,
                             ),
                             'fed_common'            => array(
-                                'wp_core'      => false,
-                                'name'         => 'FED Common Script',
-                                'plugin_name'  => 'Frontend Dashboard',
-                                'src'          => plugins_url('/common/assets/js/fed_common.js', BC_FED_PLUGIN),
-                                'dependencies' => array('jquery'),
-                                'version'      => false,
-                                'in_footer'    => true,
+									'wp_core'      => false,
+									'name'         => 'FED Common Script',
+									'plugin_name'  => 'Frontend Dashboard',
+									'src'          => plugins_url('/common/assets/js/fed_common.js', BC_FED_PLUGIN),
+									'dependencies' => array('jquery'),
+									'version'      => false,
+									'in_footer'    => true,
                             ),
                     ),
                     'styles'  => array(

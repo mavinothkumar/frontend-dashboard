@@ -3,7 +3,7 @@ if ( ! defined('ABSPATH')) {
     exit;
 }
 
-if ( ! function_exists('fed_input_box')) {
+if( !function_exists('fed_input_box')){
     /**
      * Input Fields.
      *
@@ -164,26 +164,26 @@ if ( ! function_exists('fed_get_random_string')) {
 
 
 if ( ! function_exists('fed_is_shortcode_in_content')) {
-    /**
-     * @param $content
-     *
-     * @return bool
-     */
-    function fed_is_shortcode_in_content()
-    {
-        global $post;
-        $shortcodes = fed_shortcode_lists();
-
-        if (is_a($post, 'WP_Post')) {
-            foreach ($shortcodes as $shortcode) {
-                if (has_shortcode($post->post_content, $shortcode)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
+	/**
+	 * @param  null  $shortcodes
+	 *
+	 * @return bool
+	 */
+	function fed_is_shortcode_in_content( $shortcodes = null )
+	{
+		global $post;
+		if ( $shortcodes === null ) {
+			$shortcodes = fed_shortcode_lists();
+		}
+		if ( is_array($shortcodes) && is_a( $post, 'WP_Post' ) ) {
+			foreach ( $shortcodes as $shortcode ) {
+				if ( has_shortcode( $post->post_content, $shortcode ) ) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }
 
 if ( ! function_exists('fed_shortcode_lists')) {
@@ -222,13 +222,13 @@ if ( ! function_exists('fed_js_translation')) {
                     'text'    => __('You want to do this action?', 'frontend-dashboard'),
                     'confirm' => __('Yes, Please Proceed', 'frontend-dashboard'),
                     'cancel'  => __('No, Cancel it', 'frontend-dashboard'),
-
                 ),
                 'redirecting'             => __('Please wait, you are redirecting..', 'frontend-dashboard'),
                 'title_cancelled'         => __('Cancelled', 'frontend-dashboard'),
                 'something_went_wrong'    => __('Something Went Wrong', 'frontend-dashboard'),
                 'invalid_form_submission' => __('Invalid form submission', 'frontend-dashboard'),
                 'please_try_again'        => __('Please try again', 'frontend-dashboard'),
+                'plugin_installed_successfully' => __('Plugin Installed and Activated Successfully', 'frontend-dashboard'),
             ),
             'common'              => array(
                 'hide_add_new_menu' => __('Hide Add New Menu', 'frontend-dashboard'),
@@ -569,6 +569,7 @@ function fed_show_alert_message($message, $type = 'danger')
 function fed_illegal_usernames()
 {
     $login   = get_option('fed_admin_login');
+	FED_Log::writeLog(['$login'=>$login]);
     $illegal = isset($login['restrict_username']) && ! empty($login['restrict_username']) ? explode(',',
         $login['restrict_username']) : array();
 
@@ -583,7 +584,8 @@ function fed_illegal_usernames()
  */
 function fed_validate_username($username)
 {
-    $result = preg_grep('/^['.$username.']/i', fed_illegal_usernames());
+    $result = preg_grep('#'.$username.'#i', fed_illegal_usernames());
+
     if ($result && count($result)) {
         return true;
     }
@@ -604,7 +606,42 @@ if ( ! function_exists('fed_is_shortcode_in_page')) {
         if (has_shortcode($post->post_content, $shorcode)) {
             return true;
         }
-
         return false;
     }
+}
+
+/**
+ * @param  string  $key
+ *
+ * @return bool|string
+ */
+function fed_get_current_user($key = 'id')
+{
+    $current_user = wp_get_current_user();
+    if ( ! ($current_user instanceof WP_User)) {
+        return false;
+    }
+
+    switch ($key) {
+        case 'email':
+            return esc_html($current_user->user_email);
+            break;
+        case 'username':
+            return esc_html($current_user->user_login);
+            break;
+        case 'firstname':
+            return esc_html($current_user->user_firstname);
+            break;
+        case 'lastname':
+            return esc_html($current_user->user_lastname);
+            break;
+        case 'display_name':
+            return esc_html($current_user->display_name);
+            break;
+        case 'id':
+            return esc_html($current_user->ID);
+            break;
+    }
+
+    return false;
 }

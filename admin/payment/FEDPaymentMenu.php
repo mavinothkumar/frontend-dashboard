@@ -55,24 +55,22 @@ if ( ! class_exists('FEDPaymentMenu')) {
                 ),
             ));
             ?>
-            <div class="bc_fed">
-                <div class="container">
-                    <?php if (count($menus)) { ?>
-                        <div class="m-t-10">
-                            <h3 class="fed_header_font_color">Payments</h3>
-                            <?php $this->header_menu($menus) ?>
-                        </div>
-                        <div class="m-t-10">
-                            <?php $this->body_content($menus) ?>
-                        </div>
-                    <?php } else {
-                        ?>
-                        <div class="m-t-10">
-                            <?php _e('Something went wrong', 'frontend-dashboard') ?>
-                        </div>
-                        <?php
-                    } ?>
-                </div>
+            <div class="bc_fed container">
+				<?php if (count($menus)) { ?>
+					<div class="m-t-10">
+						<h3 class="fed_header_font_color">Payments</h3>
+						<?php $this->header_menu($menus) ?>
+					</div>
+					<div class="m-t-10">
+						<?php $this->body_content($menus) ?>
+					</div>
+				<?php } else {
+					?>
+					<div class="m-t-10">
+						<?php _e('Something went wrong', 'frontend-dashboard') ?>
+					</div>
+					<?php
+				} ?>
             </div>
             <?php
         }
@@ -122,28 +120,21 @@ if ( ! class_exists('FEDPaymentMenu')) {
                     ?>
                     <div class="row">
                         <div class="col-md-3">
-                            <ul class="list-group">
+                            <div class="list-group">
                                 <?php foreach ($menus[$menu]['submenu'] as $index => $sub_menu) {
                                     $active = '';
-                                    if ( ! $submenu) {
+                                    if( !$submenu ){
                                         $submenu = fed_get_first_key_in_array($menus[$menu]['submenu']);
                                     }
-                                    if (in_array($submenu, $sub_menu['menu'])) {
+                                    if( in_array($submenu, $sub_menu['menu']) ){
                                         $active = 'active';
                                     }
                                     ?>
-                                    <li class="list-group-item <?php echo $active; ?>">
-
-                                        <a href="<?php echo fed_menu_page_url('fed_payments', array(
-                                            'menu'    => $menu,
-                                            'submenu' => $index,
-                                        )); ?>">
-                                            <i class="<?php echo esc_html($sub_menu['icon']); ?>"></i>
-                                            <?php echo esc_attr($sub_menu['name']); ?>
-                                        </a>
-                                    </li>
-                                <?php } ?>
-                            </ul>
+									<a href="<?php echo fed_menu_page_url('fed_payments', array('menu' => $menu, 'submenu' => $index)); ?>" class="list-group-item <?php echo $active; ?>">
+                                        <i class="<?php echo esc_html($sub_menu['icon']); ?>"></i> <?php echo esc_attr($sub_menu['name']); ?>
+                                    </a>
+								<?php } ?>
+                            </div>
                         </div>
                         <div class="col-md-9">
                             <div class="panel panel-primary">

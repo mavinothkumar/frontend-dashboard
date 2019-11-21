@@ -22,6 +22,44 @@ jQuery(document).ready(function ($) {
         e.preventDefault();
     });
 
+    body.on('submit', '.fed_ajax_plugin_install', function (e) {
+        var form = $(this);
+        fed_toggle_loader();
+        $.ajax({
+            type: 'POST',
+            url: form.attr('action'),
+            data: form.serialize(),
+            success: function (results) {
+                console.log(results);
+                fed_toggle_loader();
+                if (results.success) {
+                    swal({
+                        title: frontend_dashboard.alert.plugin_installed_successfully,
+                        text: frontend_dashboard.alert.redirecting,
+                        type: "success",
+                        showConfirmButton: false,
+                        timer: 3000,
+                        confirmButtonColor: '#0AAAAA',
+                    }).then(
+                        function () {
+                        },
+                        function () {
+                            window.location = results.data.activateUrl + '&fed_plugin_custom_activate=on'
+                        });
+                } else {
+                    swal({
+                        title: results.data.errorMessage || frontend_dashboard.alert.something_went_wrong,
+                        type: "error",
+                        confirmButtonColor: '#DD6B55',
+                    })
+                }
+            }
+
+        });
+
+        e.preventDefault();
+    });
+
     body.on('click', '.fed_is_delete', function (e) {
         var click = $(this);
         swal({
@@ -236,6 +274,7 @@ jQuery(document).ready(function ($) {
         closest.find('input[name=input_type]').val(selected);
         btn_container.find('.fed_button').removeClass('active');
         $(this).addClass('active');
+		$('#fed_button_pointing_arrow').addClass('hide');
         switch (selected) {
             case 'single_line':
                 closest.find('.fed_input_single_line_container').removeClass('hide');
@@ -276,8 +315,8 @@ jQuery(document).ready(function ($) {
             case 'wysiwyg':
                 closest.find('.fed_input_wysiwyg_container').removeClass('hide');
                 break;
-            case 'label':
-                closest.find('.fed_input_label_container').removeClass('hide');
+            case 'wp_editor':
+                closest.find('.fed_input_wp_editor_container').removeClass('hide');
                 break;
 
 
@@ -611,7 +650,6 @@ jQuery(document).ready(function ($) {
     if ($('.fed_datatable').length) {
         $('.fed_datatable').dataTable({"autoWidth": false, "order": []});
     }
-
 
 
 });

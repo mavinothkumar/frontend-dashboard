@@ -99,18 +99,19 @@ function fed_get_registration_content_fields()
                 'name'        => $detail['label_name'],
                 'input'       => fed_get_input_details(
                         array(
-                                'input_meta'  => $detail['input_meta'],
-                                'placeholder' => $detail['placeholder'],
-                                'class'       => $detail['class_name'],
-                                'id'          => $detail['id_name'],
-                                'is_required' => $detail['is_required'],
-                                'step'        => $detail['input_step'],
-                                'min'         => $detail['input_min'],
-                                'max'         => $detail['input_max'],
-                                'rows'        => $detail['input_row'],
-                                'user_value'  => $detail['input_value'],
-                                'input_type'  => $detail['input_type'],
-                                'input_value' => $detail['input_value'],
+                            'input_meta'  => $detail['input_meta'],
+		                    'placeholder' => $detail['placeholder'],
+		                    'class'       => $detail['class_name'],
+		                    'id'          => $detail['id_name'],
+		                    'is_required' => $detail['is_required'],
+		                    'step'        => $detail['input_step'],
+		                    'input_min'   => $detail['input_min'],
+		                    'input_max'   => $detail['input_max'],
+		                    'input_rows'  => $detail['input_row'],
+		                    'user_value'  => $detail['input_value'],
+		                    'input_type'  => $detail['input_type'],
+		                    'input_value' => $detail['input_value'],
+		                    'extended'    => $detail['extended'],
                         )
                 ),
                 'input_order' => $detail['input_order'],
@@ -138,9 +139,9 @@ function fed_get_registration_content_fields()
                             'class'       => '',
                             'id'          => '',
                             'is_required' => 'true',
-                            'step'        => '',
-                            'min'         => '',
-                            'max'         => '',
+                            'input_step'  => '',
+			                'input_min'   => '',
+			                'input_max'   => '',
                             'rows'        => '',
                             'user_value'  => 'frf',
                             'input_type'  => 'hidden',
@@ -237,7 +238,7 @@ function fed_process_author_details($user, array $single_item)
     if ($single_item['input_type'] === 'radio') {
         $input_value = fed_convert_comma_separated_key_value($single_item['input_value']);
 
-        return $input_value[$user->get($single_item['input_meta'])];
+        return isset($input_value[$user->get($single_item['input_meta'])]) ? $input_value[$user->get($single_item['input_meta'])] : '';
     }
 
     if ($single_item['input_type'] === 'date') {
@@ -298,9 +299,9 @@ function fed_get_wp_editor($content = '', $id, array $options = array())
     wp_editor($content, $id, $options);
 
     $temp = ob_get_clean();
-    $temp .= \_WP_Editors::enqueue_scripts();
-    print_footer_scripts();
-    $temp .= \_WP_Editors::editor_js();
+//    $temp .= \_WP_Editors::enqueue_scripts();
+//    print_footer_scripts();
+//    $temp .= \_WP_Editors::editor_js();
 
     return $temp;
 }

@@ -234,3 +234,19 @@
 .bc_fed #fed_transaction_modal {
     z-index: 9999;
 }
+
+.bc_fed .fed_datatable td {
+    word-break: break-all;
+}
+.bc_fed .select2-container {
+    width: 100% !important;
+}
+
+.bc_fed .select2-container--default .select2-selection--multiple {
+    height: 34px;
+    border: 1px solid #cccccc;
+    border-radius: 0;
+}
+.bc_fed .select2-container--default .select2-selection--multiple .select2-selection__choice {
+    font-size: 12px;
+}

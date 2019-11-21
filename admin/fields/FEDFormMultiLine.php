@@ -23,7 +23,7 @@ function fed_form_multi_line($options)
     $cols        = isset($options['cols']) ? absint($options['cols']) : 30;
 
     return sprintf(
-        "<textarea name='%s' rows='%s' cols='%s' class='%s' placeholder='%s' %s %s %s %s %s />%s</textarea>",
+        "<textarea name='%s' rows='%s' cols='%s' class='%s' placeholder='%s' %s %s %s %s %s >%s</textarea>",
         $name,
         $rows,
         $cols,

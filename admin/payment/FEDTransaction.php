@@ -33,7 +33,7 @@ if ( ! class_exists('FEDTransaction')) {
         {
             $this->authorize();
 
-            if ( ! is_admin()) {
+            if ( !is_admin()) {
                 wp_die(__('Error 403: You are not allowed to view this page', 'frontend-dashboard'));
             }
 
@@ -187,6 +187,8 @@ if ( ! class_exists('FEDTransaction')) {
                     'total'             => $discounted_amount,
                     'currency'          => $currency,
                     'plan_type'         => fed_sanitize_text_field(fed_get_data('plan_type', $item)),
+                    'plan_id'           => fed_sanitize_text_field(fed_get_data('plan_id', $item)),
+                    'gateway'           => fed_sanitize_text_field(fed_get_data('gateway', $item)),
                     'plan_days'         => fed_sanitize_text_field(fed_get_data('plan_days', $item)),
                     'plan_name'         => fed_sanitize_text_field(fed_get_data('plan_name', $item)),
                     'default_user_role' => fed_sanitize_text_field(fed_get_data('default_user_role', $item)),
@@ -261,8 +263,9 @@ if ( ! class_exists('FEDTransaction')) {
 
                         wp_send_json_success(array('html' => $html));
                     }
+					wp_send_json_error(array('message' => 'Table '.$table_name.' exist but not records'));
                 }
-                wp_send_json_error(array('message' => __('Table not exist', 'frontend-dashboard')));
+                wp_send_json_error(array('message' => __('Table not exist: ', 'frontend-dashboard').$table_name));
             }
         }
 

@@ -75,18 +75,15 @@ function fed_display_dashboard_profile( $menu_item ) {
 							}
 							?>
 							<div class="row fed_dashboard_item_field">
-								<div class="col-md-7 fo">
+								<div class="col-md-12 fo">
 									<label>
 										<?php
-//										_e( $single_item['label_name'], 'frontend-dashboard' );
                                         echo htmlspecialchars_decode($single_item['label_name'])
 										?>
 									</label>
 									<?php
 									echo fed_get_input_details( $single_item );
 									?>
-								</div>
-								<div class="col-md-5">
 								</div>
 							</div>
 							<?php

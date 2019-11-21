@@ -203,25 +203,9 @@ function fed_profile_enable_disable($condition = '', $type = '')
  */
 function fed_get_input_details($attr)
 {
-    $values                  = array();
-    $values['placeholder']   = isset($attr['placeholder']) && $attr['placeholder'] != '' ? esc_attr($attr['placeholder']) : '';
-    $values['input_type']    = isset($attr['input_type']) && $attr['input_type'] != '' ? esc_attr($attr['input_type']) : 'single_line';
-    $values['class']         = isset($attr['class_name']) && $attr['class_name'] != '' ? 'form-control '.esc_attr($attr['class_name']) : 'form-control';
-    $values['name']          = isset($attr['input_meta']) && $attr['input_meta'] != '' ? esc_attr($attr['input_meta']) : 'BUG';
-    $values['value']         = isset($attr['user_value']) && $attr['user_value'] != '' ? $attr['user_value'] : '';
-    $values['required']      = isset($attr['is_required']) && $attr['is_required'] == 'true' ? 'required="required"' : '';
-    $values['id']            = isset($attr['id_name']) && $attr['id_name'] != '' ? 'id="'.$attr['id_name'].'"' : '';
-    $values['default_value'] = isset($attr['default_value']) && $attr['default_value'] != '' ? $attr['default_value'] : 'yes';
-    $input                   = '';
-    $values['readonly']      = isset($attr['readonly']) && $attr['readonly'] === true ? 'readonly=readonly' : '';
-    $values['disabled']      = isset($attr['disabled']) && $attr['disabled'] === true ? 'disabled=disabled' : '';
+    $input = '';
 
-    $label              = isset($attr['label']) ? $attr['label'] : '';
-    $values['extended'] = isset($attr['extended']) ? (is_string($attr['extended']) ? unserialize($attr['extended']) : $attr['extended']) : array();
-
-    $values['extra'] = isset($attr['extra']) ? $attr['extra'] : '';
-
-    switch ($values['input_type']) {
+    switch ($attr['input_type']) {
         case 'single_line':
             $input .= fed_form_single_line($attr);
             break;
@@ -251,45 +235,11 @@ function fed_get_input_details($attr)
             break;
 
         case 'select':
-            $options            = fed_get_select_option_value($attr['input_value']);
-            $multi_select       = '';
-            $multi_select_class = '';
-            $select_name        = $values['name'];
-            if (isset($values['extended']['multiple']) && $values['extended']['multiple'] === 'Enable') {
-                $multi_select       = 'multiple=multiple';
-                $multi_select_class = 'fed_multi_select';
-                $select_name        = $values['name'].'[]';
-            }
-
-
-            $input .= '<select '.$values['disabled'].' '.$values['id'].' '.$values['extra'].' name="'.$select_name.'"  class="'.$values['class'].' '.$multi_select_class.' " '.$multi_select.'>';
-            foreach ($options as $key => $label) {
-                if (is_array($values['value'])) {
-                    $checked = in_array($key, $values['value']) ? 'selected' : '';
-                    $input   .= '<option value="'.esc_attr($key).'" '.$checked.'>'.$label.'</option>';
-                } elseif (is_serialized($values['value'])) {
-                    $checked = in_array($key, unserialize($values['value'])) ? 'selected' : '';
-                    $input   .= '<option value="'.esc_attr($key).'" '.$checked.'>'.$label.'</option>';
-                } else {
-                    $input .= '<option
-						value="'.esc_attr($key).'" '.selected($values['value'], $key,
-                            false).'>'.$label.'</option>';
-                }
-            }
-            $input .= '</select>';
+            $input .= fed_form_select($attr);
             break;
 
         case 'number':
-            $min  = isset($attr['input_min']) ? $attr['input_min'] : 0;
-            $max  = isset($attr['input_max']) ? $attr['input_max'] : 99999999999999999999999999999999999999999999999999;
-            $step = isset($attr['input_step']) ? $attr['input_step'] : 'any';
-
-            $input .= '<input '.$values['disabled'].' '.$values['id'].' '.$values['readonly'].' '.$values['extra'].' '.$values['required'].' type="number" name="'.$values['name'].'" 
-			                                value="'.esc_attr($values['value']).'" class="'.$values['class'].'"
-			                                placeholder="'.$values['placeholder'].'"
-			                                min="'.esc_attr($min).'"
-			                                max="'.esc_attr($max).'"
-			                                step="'.esc_attr($step).'">';
+            $input .= fed_form_number($attr);
             break;
 
         case 'radio':
@@ -298,7 +248,7 @@ function fed_get_input_details($attr)
 
     }
 
-    return apply_filters('fed_custom_input_fields', $input, $values, $attr);
+    return apply_filters('fed_custom_input_fields', $input, $attr);
 }
 
 /**
@@ -526,6 +476,8 @@ function fed_process_user_profile($row, $action, $update = 'no')
             $default['extended'] = fed_default_extended_fields();
         }
     }
+
+    $default = apply_filters('fed_process_form_fields', $default, $row, $action, $update);
 
     if ($action === 'profile') {
         $user_profile  = array(
@@ -1868,6 +1820,10 @@ function fed_restrict_user_profile_picture($wp_query_obj)
         return;
     }
 
+    if (fed_is_admin()) {
+        return;
+    }
+
     if ('admin-ajax.php' != $pagenow || $_REQUEST['action'] != 'query-attachments') {
         return;
     }
@@ -2704,7 +2660,6 @@ function fed_check_post_type($post_type)
 function fed_get_current_screen_id()
 {
     $screen = get_current_screen();
-
     return $screen->id;
 }
 
@@ -3563,15 +3518,23 @@ function fed_show_help_icons()
             <div class="fed_sticky_close_open">
                 <div class="fed_sticky_open hide">
                     <i class="fas fa-angle-double-left fa-2x"></i>
-
                 </div>
                 <div class="fed_sticky_close">X</div>
             </div>
             <div class="fed_sticky_items">
+                <div class="fed_sticky_item fed_demo">
+                    <a target="_blank"
+                       href="https://demo.frontenddashboard.com">
+                        <i class="fas fa-eye fa-2x bc_fed_jump"></i>
+                        <div class="fed_sticky_title">
+                            Demo
+                        </div>
+                    </a>
+                </div>
                 <div class="fed_sticky_item">
                     <a target="_blank"
                        href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#new-post">
-                        <i class="fas fa-star fa-2x"></i>
+                        <i class="fas fa-star fa-2x bc_fed_spin"></i>
                         <div class="fed_sticky_title">
                             Rate Us
                         </div>
@@ -3743,6 +3706,44 @@ function login_logout_menu($items, $args)
 }
 
 /**
+ * @param $meta
+ * @param  array  $user_roles
+ * @param  string  $column
+ *
+ * @param  array  $extra
+ *
+ * @param  array  $remove
+ *
+ * @return string
+ */
+function fed_user_role_checkboxes($meta, $user_roles = array(), $column = '6', $extra = array(), $remove = null)
+{
+    $all_roles = array_merge(fed_get_user_roles(), $extra);
+    if ($remove) {
+        foreach ($remove as $remove_user_role) {
+            unset($all_roles[$remove_user_role]);
+        }
+    }
+    $html      = '';
+    $html      .= '<div class="row">';
+    foreach ($all_roles as $key => $role) {
+        $c_value = array_key_exists($key, $user_roles) ? 'Enable' : 'Disable';
+
+        $html .= '<div class="col-md-'.$column.'">
+                    '.fed_form_checkbox(array(
+                'input_meta'    => $meta.'['.$key.']',
+                'default_value' => 'Enable',
+                'label'         => $role,
+                'user_value'    => $c_value,
+            )).'
+                </div>';
+    }
+    $html .= '</div>';
+
+    return $html;
+}
+
+/**
  * The below code tested to check input tag works in Custom Label.
  */
 //add_filter('wp_kses_allowed_html', 'fed_wp_kses_add_input', 10, 2);
@@ -3757,4 +3758,3 @@ function login_logout_menu($items, $args)
 //    );
 //    return $tags;
 //}
-

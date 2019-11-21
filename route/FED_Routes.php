@@ -79,7 +79,7 @@ if ( ! class_exists('FED_Routes')) {
              * Check the Menu type is valid
              */
             if ( ! in_array($menu_items['menu_request']['menu_type'], $this->getDefaultMenuType(), true)) {
-                return new WP_Error('invalid_menu_type', 'Invalid Menu Type in URL');
+                return new WP_Error('invalid_menu_type', 'Invalid Menu Type in URL 1');
             }
             /**
              * Check is the menu is allowed for this user
@@ -87,7 +87,7 @@ if ( ! class_exists('FED_Routes')) {
 
             if (isset($this->request['menu_slug']) && ! in_array($this->request['menu_slug'],
                             fed_get_keys_from_menu($menu))) {
-                return new WP_Error('invalid_menu_type', 'Invalid Menu Type in URL');
+                return new WP_Error('invalid_menu_type', 'Invalid Menu Type in URL 2');
             }
 
             set_query_var('fed_menu_items', $menu_items);

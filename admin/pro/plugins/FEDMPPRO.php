@@ -175,10 +175,10 @@ if ( ! class_exists('FEDMPPRO') && ! defined('BC_FED_MP_PLUGIN')) {
                                             <input type='hidden' name='domain' value="<?php echo fed_get_domain_name(); ?>"/>
                                             <input type='hidden' name='contact_email' value="<?php echo fed_get_admin_email(); ?>"/>
                                             <input type='hidden' name='plugin_name' value='frontend-dashboard-membership-pro'/>
-                                            <input type='hidden' name='amount' value='49'/>
+                                            <input type='hidden' name='amount' value='29'/>
                                             <input type='hidden' name='plan_type' value='annual'/>
                                             <button type="submit" style="
-                                                    background:url(<?php echo plugins_url('admin/assets/images/pro/buy-now-49.png',
+                                                    background:url(<?php echo plugins_url('admin/assets/images/pro/buy-now-29.png',
                                                 BC_FED_PLUGIN) ?>);
                                                     background-repeat: no-repeat;
                                                     width:200px;
@@ -194,10 +194,10 @@ if ( ! class_exists('FEDMPPRO') && ! defined('BC_FED_MP_PLUGIN')) {
                                             <input type='hidden' name='domain' value="<?php echo fed_get_domain_name(); ?>"/>
                                             <input type='hidden' name='contact_email' value="<?php echo fed_get_admin_email(); ?>"/>
                                             <input type='hidden' name='plugin_name' value='frontend-dashboard-membership-pro'/>
-                                            <input type='hidden' name='amount' value='149'/>
+                                            <input type='hidden' name='amount' value='99'/>
                                             <input type='hidden' name='plan_type' value='lifetime'/>
                                             <button type="submit" style="
-                                                    background:url(<?php echo plugins_url('admin/assets/images/pro/buy-now-149.png',
+                                                    background:url(<?php echo plugins_url('admin/assets/images/pro/buy-now-99.png',
                                                 BC_FED_PLUGIN) ?>);
                                                     background-repeat: no-repeat;
                                                     width:200px;
