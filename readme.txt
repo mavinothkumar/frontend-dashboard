@@ -4,7 +4,7 @@ Tags: dashboard, frontend dashboard, custom login, custom register, custom roles
 Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 4.6
 Tested up to: 5.3
-Stable tag: 1.5.8
+Stable tag: 1.5.11
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -45,6 +45,7 @@ Frontend Dashboard is bundled with the huge list of custom features which can ea
 * [Frontend Dashboard Extra](https://buffercode.com/plugin/frontend-dashboard-extra)
 * [Frontend Dashboard Captcha](https://buffercode.com/plugin/frontend-dashboard-captcha)
 * [Frontend Dashboard Templates](https://buffercode.com/plugin/frontend-dashboard-templates)
+* [Frontend Dashboard Social Chat](https://buffercode.com/plugin/frontend-dashboard-social-chat)
 * [Frontend Dashboard Custom Post and Taxonomies](https://buffercode.com/plugin/frontend-dashboard-custom-post-and-taxonomies)
 
 = Videos =
@@ -244,6 +245,19 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 8. [fed_list_taxonomy taxonomy=TAXONOMY_NAME] to generate taxonomy in list order
 
 == Changelog ==
+
+= 1.5.11 [21-Nov-2019] =
+
+* Bug: Unnecessary body background color update - Thanks to Vik for reporting
+
+= 1.5.10 [20-Nov-2019] =
+
+* Password form field bug fixes - Thanks to Abdel for reporting
+
+= 1.5.9 [19-Nov-2019] =
+
+* Frontend Dashboard Social Chat Add-on supportive added.
+* Bug fixes.
 
 = 1.5.8 [17-Nov-2019] =
 
@@ -542,9 +556,9 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Upgrade Notice ==
 
-= 1.5.8 [17-Nov-2019] =
+= 1.5.11 [21-Nov-2019] =
 
-* Install and activate add-ons on the fly
+* Bug: Unnecessary body background color update - Thanks to Vik for reporting
 
 == Screenshots ==
 1. Frontend Dashboard Settings | Login | Settings
