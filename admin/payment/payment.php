@@ -182,11 +182,12 @@ if ( ! function_exists('fed_get_active_transactions')) {
 	INNER JOIN  $table_user users
 	            ON payment.user_id = users.id
     WHERE       payment.user_id = $user_id AND
-                ends_at = 'active'
+                status = 'active'
 	ORDER BY    payment.id DESC
 	", ARRAY_A);
 
 //            FED_Log::writeLog(['$result' => $result]);
+//            bcdump(array('$result'=>$result));
 
             return $result;
         }

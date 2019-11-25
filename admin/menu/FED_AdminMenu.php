@@ -278,8 +278,7 @@ if ( ! class_exists('FED_AdminMenu')) {
 
         public function test()
         {
-            ?>
-            <?php
+
         }
 
     }

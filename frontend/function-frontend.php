@@ -547,7 +547,8 @@ function fed_show_users_by_role($fed_user_attr)
             short-code
         </div>
         <?php
-    } else {
+    }
+    else {
         $get_all_users = new WP_User_Query(array('role' => $get_user_role));
         if ( ! $get_all_users->get_total()) {
             ?>
