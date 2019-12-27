@@ -1,52 +1,53 @@
 <?php
-if ( ! defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
-if ( ! function_exists( 'fed_get_help_menu' ) ) {
-	/**
-	 * Help Menu
-	 */
-	function fed_get_help_menu() {
-		?>
+if (!function_exists('fed_get_help_menu')) {
+    /**
+     * Help Menu
+     */
+    function fed_get_help_menu()
+    {
+        ?>
         <div class="bc_fed container">
             <div class="row">
                 <div class="col-md-12 padd_top_20">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <h3 class="panel-title"><?php _e( 'We will help you in better ways',
-									'frontend-dashboard' ) ?></h3>
+                            <h3 class="panel-title">
+                                <?php _e(
+                                            'We will help you in better ways',
+                                            'frontend-dashboard'
+                                        ) ?>
+                            </h3>
                         </div>
                         <div class="panel-body">
                             <div class="panel-group" id="fed_menu_help" role="tablist" aria-multiselectable="true">
                                 <div class="panel panel-secondary-heading">
                                     <div class="panel-heading" role="tab" id="fed_videos">
                                         <h5 class="panel-title">
-                                            <a role="button" data-toggle="collapse" data-parent="#fed_menu_help"
-                                               href="#videos"
-                                               aria-controls="install">
-												<?php _e( 'How to Videos', 'frontend-dashboard' ) ?>
+                                            <a role="button" data-toggle="collapse" data-parent="#fed_menu_help" href="#videos" aria-controls="install">
+                                                <?php _e('How to Videos', 'frontend-dashboard') ?>
                                             </a>
                                         </h5>
                                     </div>
-                                    <div id="videos" class="collapse" role="tabpanel"
-                                         aria-labelledby="fed_videos_heading">
+                                    <div id="videos" class="collapse" role="tabpanel" aria-labelledby="fed_videos_heading">
                                         <div class="panel-body">
                                             <div class="row">
-												<?php
-												$items = fed_get_help_video_items();
-												foreach ( $items as $item ) {
-													?>
+                                                <?php
+                                                        $items = fed_get_help_video_items();
+                                                        foreach ($items as $item) {
+                                                            ?>
                                                     <div class="col-md-12">
                                                         <h4>
-                                                            <i class="<?php echo $item['icon']; ?>"
-                                                               aria-hidden="true"></i>
+                                                            <i class="<?php echo $item['icon']; ?>" aria-hidden="true"></i>
                                                             <a target="_blank" href="<?php echo $item['url']; ?>">
-																<?php echo $item['name']; ?>
+                                                                <?php echo $item['name']; ?>
                                                             </a>
                                                         </h4>
                                                     </div>
-												<?php } ?>
+                                                <?php } ?>
 
                                             </div>
                                         </div>
@@ -57,14 +58,13 @@ if ( ! function_exists( 'fed_get_help_menu' ) ) {
                                 <div class="panel panel-secondary-heading">
                                     <div class="panel-heading" role="tab" id="fed_install">
                                         <h5 class="panel-title">
-                                            <a role="button" data-toggle="collapse" data-parent="#fed_menu_help"
-                                               href="#install"
-                                               aria-controls="install"><?php _e( 'How to Install and Configure',
-													'frontend-dashboard' ) ?></a>
+                                            <a role="button" data-toggle="collapse" data-parent="#fed_menu_help" href="#install" aria-controls="install"><?php _e(
+                                                                                                                                                                        'How to Install and Configure',
+                                                                                                                                                                        'frontend-dashboard'
+                                                                                                                                                                    ) ?></a>
                                         </h5>
                                     </div>
-                                    <div id="install" class="collapse" role="tabpanel"
-                                         aria-labelledby="fed_install">
+                                    <div id="install" class="collapse" role="tabpanel" aria-labelledby="fed_install">
                                         <div class="panel-body">
                                             <div class="row">
                                                 <div class="col-md-12">
@@ -135,40 +135,50 @@ if ( ! function_exists( 'fed_get_help_menu' ) ) {
                                 <div class="panel panel-secondary-heading">
                                     <div class="panel-heading" role="tab" id="contact_us">
                                         <h5 class="panel-title">
-                                            <a role="button" data-toggle="collapse" data-parent="#fed_menu_help"
-                                               href="#fed_contact_us" aria-controls="fed_contact_us">
-												<?php _e( 'How to Contact Us', 'frontend-dashboard' ) ?>
+                                            <a role="button" data-toggle="collapse" data-parent="#fed_menu_help" href="#fed_contact_us" aria-controls="fed_contact_us">
+                                                <?php _e('How to Contact Us', 'frontend-dashboard') ?>
                                             </a>
                                         </h5>
                                     </div>
-                                    <div id="fed_contact_us" class="collapse" role="tabpanel"
-                                         aria-labelledby="contact_us">
+                                    <div id="fed_contact_us" class="collapse" role="tabpanel" aria-labelledby="contact_us">
                                         <div class="row">
                                             <div class="col-md-7">
                                                 <div class="flex_between">
                                                     <div class="bc_item">
                                                         <a href="https://buffercode.com/plugin/frontend-dashboard">
-                                                            <img src="<?php echo plugins_url( 'admin/assets/images/chat.png',
-																BC_FED_PLUGIN ) ?>"/>
+                                                            <img src="<?php echo plugins_url(
+                                                                                    'admin/assets/images/chat.png',
+                                                                                    BC_FED_PLUGIN
+                                                                                ) ?>" />
                                                         </a>
-                                                        <h5 class="text-center"><?php _e( 'Chat',
-																'frontend-dashboard' ) ?></h5>
+                                                        <h5 class="text-center"><?php _e(
+                                                                                            'Chat',
+                                                                                            'frontend-dashboard'
+                                                                                        ) ?></h5>
                                                     </div>
                                                     <div class="bc_item">
                                                         <a href="mailto:support@buffercode.com">
-                                                            <img src="<?php echo plugins_url( 'admin/assets/images/mail.png',
-																BC_FED_PLUGIN ) ?>"/>
+                                                            <img src="<?php echo plugins_url(
+                                                                                    'admin/assets/images/mail.png',
+                                                                                    BC_FED_PLUGIN
+                                                                                ) ?>" />
                                                         </a>
-                                                        <h5 class="text-center"><?php _e( 'Mail',
-																'frontend-dashboard' ) ?></h5>
+                                                        <h5 class="text-center"><?php _e(
+                                                                                            'Mail',
+                                                                                            'frontend-dashboard'
+                                                                                        ) ?></h5>
                                                     </div>
                                                     <div class="bc_item">
                                                         <a href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#new-post">
-                                                            <img src="<?php echo plugins_url( 'admin/assets/images/rate.png',
-																BC_FED_PLUGIN ) ?>"/>
+                                                            <img src="<?php echo plugins_url(
+                                                                                    'admin/assets/images/rate.png',
+                                                                                    BC_FED_PLUGIN
+                                                                                ) ?>" />
                                                         </a>
-                                                        <h5 class="text-center"><?php _e( 'Rate us',
-																'frontend-dashboard' ) ?></h5>
+                                                        <h5 class="text-center"><?php _e(
+                                                                                            'Rate us',
+                                                                                            'frontend-dashboard'
+                                                                                        ) ?></h5>
                                                     </div>
                                                 </div>
                                             </div>
@@ -181,15 +191,12 @@ if ( ! function_exists( 'fed_get_help_menu' ) ) {
                                 <div class="panel panel-secondary-heading">
                                     <div class="panel-heading" role="tab" id="shortcodes">
                                         <h4 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse"
-                                               data-parent="#fed_menu_help" href="#fed_shortcodes" aria-expanded="false"
-                                               aria-controls="fed_shortcodes">
-												<?php _e( 'Shortcodes', 'frontend-dashboard' ) ?>
+                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#fed_menu_help" href="#fed_shortcodes" aria-expanded="false" aria-controls="fed_shortcodes">
+                                                <?php _e('Shortcodes', 'frontend-dashboard') ?>
                                             </a>
                                         </h4>
                                     </div>
-                                    <div id="fed_shortcodes" class="panel-collapse collapse" role="tabpanel"
-                                         aria-labelledby="shortcodes">
+                                    <div id="fed_shortcodes" class="panel-collapse collapse" role="tabpanel" aria-labelledby="shortcodes">
                                         <div class="panel-body">
                                             <h5>1. [fed_login] to generate login, registration, and reset forms</h5>
                                             <h5>2. [fed_login_only] to show only login page</h5>
@@ -208,18 +215,17 @@ if ( ! function_exists( 'fed_get_help_menu' ) ) {
                                 <div class="panel panel-secondary-heading">
                                     <div class="panel-heading" role="tab" id="fed_filters">
                                         <h4 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse"
-                                               data-parent="#fed_menu_help" href="#filters" aria-expanded="false"
-                                               aria-controls="filters">
-												<?php _e( 'Filter Hooks [Developers]', 'frontend-dashboard' ) ?>
+                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#fed_menu_help" href="#filters" aria-expanded="false" aria-controls="filters">
+                                                <?php _e('Filter Hooks [Developers]', 'frontend-dashboard') ?>
                                             </a>
                                         </h4>
                                     </div>
-                                    <div id="filters" class="panel-collapse collapse" role="tabpanel"
-                                         aria-labelledby="fed_filters">
+                                    <div id="filters" class="panel-collapse collapse" role="tabpanel" aria-labelledby="fed_filters">
                                         <div class="panel-body">
-                                            <b><?php _e( 'Note: This is not completely documented',
-													'frontend-dashboard' ) ?></b>
+                                            <b><?php _e(
+                                                            'Note: This is not completely documented',
+                                                            'frontend-dashboard'
+                                                        ) ?></b>
                                             <br>
                                             <br>
                                             <div class="row">
@@ -324,18 +330,17 @@ if ( ! function_exists( 'fed_get_help_menu' ) ) {
                                 <div class="panel panel-secondary-heading">
                                     <div class="panel-heading" role="tab" id="fed_actions">
                                         <h4 class="panel-title">
-                                            <a class="collapsed" role="button" data-toggle="collapse"
-                                               data-parent="#fed_menu_help" href="#actions" aria-expanded="false"
-                                               aria-controls="actions">
-												<?php _e( 'Action Hooks [Developers]', 'frontend-dashboard' ) ?>
+                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#fed_menu_help" href="#actions" aria-expanded="false" aria-controls="actions">
+                                                <?php _e('Action Hooks [Developers]', 'frontend-dashboard') ?>
                                             </a>
                                         </h4>
                                     </div>
-                                    <div id="actions" class="panel-collapse collapse" role="tabpanel"
-                                         aria-labelledby="fed_actions">
+                                    <div id="actions" class="panel-collapse collapse" role="tabpanel" aria-labelledby="fed_actions">
                                         <div class="panel-body">
-                                            <b><?php _e( 'Note: This is not completely documented',
-													'frontend-dashboard' ) ?></b>
+                                            <b><?php _e(
+                                                            'Note: This is not completely documented',
+                                                            'frontend-dashboard'
+                                                        ) ?></b>
                                             <br>
                                             <br>
                                             <div class="row">
@@ -425,6 +430,6 @@ if ( ! function_exists( 'fed_get_help_menu' ) ) {
                 </div>
             </div>
         </div>
-		<?php
-	}
+<?php
+    }
 }
