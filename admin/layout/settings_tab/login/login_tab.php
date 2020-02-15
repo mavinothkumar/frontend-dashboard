@@ -98,7 +98,7 @@ function fed_get_admin_login_options($fed_login)
             'callable'  => 'fed_admin_restrict_wp_admin_tab',
             'arguments' => $fed_login,
         ),
-        'fed_admin_username_restrict'   => array(
+        'fed_admin_username_restrict' => array(
             'icon'      => 'fa fa-ban',
             'name'      => __('Restrict Username', 'frontend-dashboard'),
             'callable'  => 'fed_admin_username_restrict_tab',

@@ -3,7 +3,7 @@
  * Plugin Name: Frontend Dashboard
  * Plugin URI: https://buffercode.com/plugin/frontend-dashboard
  * Description: Frontend dashboard makes you flexible way to customize the user dashboard on frontend rather than WordPress wp-admin dashboard.
- * Version: 1.5.12
+ * Version: 1.5.13
  * Author: vinoth06
  * Author URI: https://buffercode.com/
  * License: GPLv2
@@ -12,61 +12,61 @@
  * Domain Path: /languages
  */
 
-if ( ! defined('ABSPATH')) {
-    exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
 
 /**
  * Version Number
  */
-define('BC_FED_PLUGIN_VERSION', '1.5.12');
-define('BC_FED_PLUGIN_VERSION_TYPE', 'FREE');
+define( 'BC_FED_PLUGIN_VERSION', '1.5.13' );
+define( 'BC_FED_PLUGIN_VERSION_TYPE', 'FREE' );
 
 /**
  * App Name
  */
-define('BC_FED_APP_NAME', 'Frontend Dashboard');
+define( 'BC_FED_APP_NAME', 'Frontend Dashboard' );
 
 /**
  * Root Path
  */
-define('BC_FED_PLUGIN', __FILE__);
+define( 'BC_FED_PLUGIN', __FILE__ );
 /**
  * Plugin Base Name
  */
-define('BC_FED_PLUGIN_BASENAME', plugin_basename(BC_FED_PLUGIN));
+define( 'BC_FED_PLUGIN_BASENAME', plugin_basename( BC_FED_PLUGIN ) );
 /**
  * Plugin Name
  */
-define('BC_FED_PLUGIN_NAME', trim(dirname(BC_FED_PLUGIN_BASENAME), '/'));
+define( 'BC_FED_PLUGIN_NAME', trim( dirname( BC_FED_PLUGIN_BASENAME ), '/' ) );
 /**
  * Plugin Directory
  */
-define('BC_FED_PLUGIN_DIR', untrailingslashit(dirname(BC_FED_PLUGIN)));
+define( 'BC_FED_PLUGIN_DIR', untrailingslashit( dirname( BC_FED_PLUGIN ) ) );
 
 /**
  * User Profile Table Name
  */
-define('BC_FED_TABLE_USER_PROFILE', 'fed_user_profile');
+define( 'BC_FED_TABLE_USER_PROFILE', 'fed_user_profile' );
 /**
  * Dashboard Menu Items
  */
-define('BC_FED_TABLE_MENU', 'fed_menu');
-define('BC_FED_TABLE_MENU_META', 'fed_menu_meta');
+define( 'BC_FED_TABLE_MENU', 'fed_menu' );
+define( 'BC_FED_TABLE_MENU_META', 'fed_menu_meta' );
 /**
  * Post Fields
  */
-define('BC_FED_TABLE_POST', 'fed_post');
-define('BC_FED_TABLE_PAYMENT', 'fed_payment');
-define('BC_FED_TABLE_PAYMENT_ITEMS', 'fed_payment_items');
+define( 'BC_FED_TABLE_POST', 'fed_post' );
+define( 'BC_FED_TABLE_PAYMENT', 'fed_payment' );
+define( 'BC_FED_TABLE_PAYMENT_ITEMS', 'fed_payment_items' );
 /**
  * Plugin URL
  */
-define('BC_FED_API_PLUGIN_LIST', 'https://buffercode/api/v1/fed/plugin_list');
+define( 'BC_FED_API_PLUGIN_LIST', 'https://buffercode/api/v1/fed/plugin_list' );
 
-if (!session_id()) {
+if ( ! session_id() ) {
 	session_start();
 }
 
-require_once BC_FED_PLUGIN_DIR.'/fed_autoload.php';
+require_once BC_FED_PLUGIN_DIR . '/fed_autoload.php';
