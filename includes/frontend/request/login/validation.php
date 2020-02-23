@@ -1,12 +1,17 @@
 <?php
-if ( ! defined('ABSPATH')) {
-    exit;
+/**
+ * Validation.
+ *
+ * @package Frontend Dashboard.
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 /**
  * Registration Form Validation
  *
- * @param array $post post.
- * @param bool $tab User Profile Save or Register.
+ * @param  array $post  post.
  *
  * @return bool|WP_Error
  */
@@ -20,27 +25,28 @@ function fed_validate_registration_form( $post ) {
 
 
 	if ( $post['user_pass'] !== $post['confirmation_password'] ) {
-		$fed_error->add( 'password_not_match', __( 'Password not match','frontend-dashboard' ) );
+		$fed_error->add( 'password_not_match', __( 'Password not match', 'frontend-dashboard' ) );
 	}
 
 	foreach ( $mandatory_fields as $key => $mandatory_field ) {
-		if ( $post[ $key ] == '' ) {
+		if ( '' == $post[ $key ] ) {
 			$fed_error->add( $key, $mandatory_field );
 		}
 	}
 
 	if ( $role && ! array_key_exists( $post['role'], $role ) ) {
-		$fed_error->add( 'invalid_role', __('Invalid Role','frontend-dashboard') );
+		$fed_error->add( 'invalid_role', __( 'Invalid Role', 'frontend-dashboard' ) );
 	}
 
-	if ( ! $role && isset($post['role'])){
-		$fed_error->add( 'invalid_role', __('You are trying to hack the user role','frontend-dashboard') );
+	if ( ! $role && isset( $post['role'] ) ) {
+		$fed_error->add( 'invalid_role', __( 'You are trying to hack the user role', 'frontend-dashboard' ) );
 	}
 
-	if(isset($post['user_login']) && fed_validate_username($post['user_login'])){
-        $fed_error->add( 'invalid_username', __('This Username is Illegal to use in this website','frontend-dashboard') );
-    }
-
+	if ( isset( $post['user_login'] ) && fed_validate_username( $post['user_login'] ) ) {
+		$fed_error->add(
+			'invalid_username', __( 'This Username is Illegal to use in this website', 'frontend-dashboard' )
+		);
+	}
 
 	if ( $fed_error->get_error_codes() ) {
 		return $fed_error;
@@ -52,7 +58,7 @@ function fed_validate_registration_form( $post ) {
 /**
  * Login Form Validation.
  *
- * @param array $post post.
+ * @param  array $post  post.
  *
  * @return bool|WP_Error
  */
@@ -61,7 +67,7 @@ function fed_validate_login_form( $post ) {
 	$mandatory_fields = fed_login_mandatory_fields();
 
 	foreach ( $mandatory_fields as $key => $mandatory_field ) {
-		if ( $post[ $key ] == '' ) {
+		if ( '' == $post[ $key ] ) {
 			$fed_error->add( $key, $mandatory_field );
 		}
 	}
@@ -76,25 +82,28 @@ function fed_validate_login_form( $post ) {
 /**
  * Lost Password Validation.
  *
- * @param array $post post.
+ * @param  array $post  post.
  *
  * @return false|WP_Error|WP_User
  */
 function fed_validate_forgot_password( $post ) {
 	$errors = new WP_Error();
 
-	if ( empty( $post['user_login'] ) || $post['user_login'] == '' ) {
+	if ( empty( $post['user_login'] ) || '' == $post['user_login'] ) {
 		$errors->add( 'empty_username', __( '<strong>ERROR</strong>: Enter a username or email address.' ) );
-	} elseif ( strpos( $post['user_login'], '@' ) ) {
+	}
+	elseif ( strpos( $post['user_login'], '@' ) ) {
 		$user_data = get_user_by( 'email', trim( wp_unslash( $post['user_login'] ) ) );
 		if ( empty( $user_data ) ) {
-			$errors->add( 'invalid_email', __( '<strong>ERROR</strong>: There is no user registered with that email address.' ) );
+			$errors->add(
+				'invalid_email', __( '<strong>ERROR</strong>: There is no user registered with that email address.' )
+			);
 		}
-	} else {
+	}
+	else {
 		$login     = trim( $post['user_login'] );
 		$user_data = get_user_by( 'login', $login );
 	}
-
 
 	if ( $errors->get_error_code() ) {
 		wp_send_json_error( array( 'user' => $errors->get_error_messages() ) );

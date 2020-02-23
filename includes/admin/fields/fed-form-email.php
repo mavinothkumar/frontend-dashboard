@@ -1,4 +1,9 @@
 <?php
+/**
+ * Form Email.
+ *
+ * @package Frontend Dashboard.
+ */
 
 if ( ! defined('ABSPATH')) {
     exit;

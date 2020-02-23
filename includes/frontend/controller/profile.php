@@ -1,9 +1,18 @@
 <?php
-if ( ! defined('ABSPATH')) {
-    exit;
-}
 /**
- * Get Display Profile
+ * Profile.
+ *
+ * @package Frontend Dashboard.
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Get Display Profile.
+ *
+ * @param  string $menu  Menu.
  *
  * @return array|bool
  */
@@ -13,56 +22,58 @@ function fed_process_dashboard_display_profile( $menu ) {
 }
 
 /**
- * Get Display Dashboard Profile
+ * Get Display Dashboard Profile.
  *
- * @param $menu_item
+ * @param  array $menu_item  Menu Item.
  */
 function fed_display_dashboard_profile( $menu_item ) {
 	/**
-	 * Whether the menu is permitted?
-	 * Then Fetch the menu it based on the menu id
+	 * Is menu permitted?
+	 * Then Fetch the menu and its menu id
 	 */
-
 	$profiles = fed_process_dashboard_display_profile( $menu_item['menu_slug'] );
 	$user     = get_userdata( get_current_user_id() );
 	$menus    = fed_process_dashboard_display_menu();
 
-	$index             = $menu_item['menu_slug'];
-	$menu_title        = ucwords( __( $menus[ $index ]['menu'], 'frontend-dashboard' ) );
+	$index = $menu_item['menu_slug'];
+	/** Translators : %s : Menu. */
+	$menu_title        = sprintf( ucwords( __( '%s', 'frontend-dashboard' ) ), esc_attr( $menus[ $index ]['menu'] ) );
 	$menu_title_value  = apply_filters( 'fed_menu_title', $menu_title, $menus, $index );
 	$menu_default_page = apply_filters( 'fed_menu_default_page', true, $menus, $index );
 	?>
 	<div class="panel panel-primary fed_dashboard_item">
 		<div class="panel-heading">
 			<h3 class="panel-title">
-				<span class="<?php echo $menus[ $index ]['menu_image_id'] ?>"></span>
-				<?php esc_attr_e( $menus[ $index ]['menu'], 'frontend-dashboard' ) ?>
+				<span class="<?php echo esc_attr( $menus[ $index ]['menu_image_id'] ); ?>"></span>
+				<?php
+				/** Translators : %s : Menu */
+				printf( __( '%s', 'frontend-dashboard' ), esc_attr( $menus[ $index ]['menu'] ) );
+				?>
 			</h3>
 		</div>
 		<div class="panel-body">
 			<?php
 			if ( $menu_default_page ) {
 				if ( $profiles ) {
-                    usort($profiles, 'fed_sort_by_order');
+					usort( $profiles, 'fed_sort_by_order' );
 					echo fed_show_alert( 'fed_profile_save_message' );
 					?>
 					<form method="post"
-						  action="">
-						<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ) ?>
+							action="">
+						<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
 						<input type="hidden"
-							   name="tab_id"
-							   value="<?php echo $index ?>">
-                        <input type="hidden"
-							   name="menu_type"
-							   value="<?php echo $menu_item['menu_type'] ?>">
+								name="tab_id"
+								value="<?php echo esc_attr( $index ); ?>">
+						<input type="hidden"
+								name="menu_type"
+								value="<?php echo esc_attr( $menu_item['menu_type'] ); ?>">
 
-                        <input type="hidden"
-							   name="menu_slug"
-							   value="<?php echo $menu_item['menu_slug'] ?>">
+						<input type="hidden"
+								name="menu_slug"
+								value="<?php echo esc_attr( $menu_item['menu_slug'] ); ?>">
 						<?php
 						foreach ( $profiles as $single_item ) {
-
-							if ( ! $single_item['input_meta'] !== 'user_pass' || ! $single_item['input_meta'] !== 'confirmation_password' ) {
+							if ( 'user_pass' !== ! $single_item['input_meta'] || 'confirmation_password' !== ! $single_item['input_meta'] ) {
 								$single_item['user_value'] = $user->get( $single_item['input_meta'] );
 							}
 
@@ -70,7 +81,11 @@ function fed_display_dashboard_profile( $menu_item ) {
 								$single_item['readonly'] = true;
 							}
 
-							if ( count( array_intersect( $user->roles, unserialize( $single_item['user_role'] ) ) ) <= 0 ) {
+							if (
+								count(
+									array_intersect( $user->roles, unserialize( $single_item['user_role'] ) )
+								) <= 0
+							) {
 								continue;
 							}
 							?>
@@ -78,7 +93,7 @@ function fed_display_dashboard_profile( $menu_item ) {
 								<div class="col-md-12 fo">
 									<label>
 										<?php
-                                        echo htmlspecialchars_decode($single_item['label_name'])
+										echo htmlspecialchars_decode( $single_item['label_name'] );
 										?>
 									</label>
 									<?php
@@ -92,18 +107,23 @@ function fed_display_dashboard_profile( $menu_item ) {
 						<div class="row text-center">
 							<button type="submit" class="btn btn-primary">
 								<i class="fa fa-floppy-o"></i>
-								<?php _e( 'Save', 'frontend-dashboard' ) ?>
+								<?php esc_attr_e( 'Save', 'frontend-dashboard' ); ?>
 							</button>
 						</div>
-
 					</form>
 					<?php
-				} else {
+				}
+				else {
 					?>
-					<h4><?php _e( 'Sorry! there is no field associated to this menu', 'frontend-dashboard' ) ?></h4>
+					<h4>
+						<?php
+						esc_attr_e( 'Sorry! there is no field associated to this menu', 'frontend-dashboard' );
+						?>
+					</h4>
 					<?php
 				}
-			} else {
+			}
+			else {
 				do_action( 'fed_override_default_page', $menus, $index );
 			}
 			?>

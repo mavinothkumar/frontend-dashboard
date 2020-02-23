@@ -1,12 +1,18 @@
 <?php
-if ( ! defined('ABSPATH')) {
-    exit;
+/**
+ * Payment.
+ *
+ * @package Frontend Dashboard.
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
 /**
  * Display Dashboard Payment.
  *
- * @param string $first_element Position
+ * @param  string $first_element  Position
  */
 function fed_display_dashboard_payment( $first_element ) {
 	$index        = 'payment';
@@ -16,7 +22,8 @@ function fed_display_dashboard_payment( $first_element ) {
 
 	if ( $index == $first_element ) {
 		$active = '';
-	} else {
+	}
+	else {
 		$active = 'hide';
 	}
 	?>
@@ -35,7 +42,8 @@ function fed_display_dashboard_payment( $first_element ) {
 						fed_display_user_not_paid( $payment_rbp );
 					}
 					fed_display_user_paid( $payment_rbp->isUserPaid() );
-				} else {
+				}
+				else {
 					fed_display_user_not_paid( $payment_rbp );
 				}
 				?>
@@ -72,11 +80,13 @@ function fed_display_user_paid( $payment_rbp ) {
 					<td><?php echo esc_attr( $payment_detail['created_at'] ) ?></td>
 					<td><?php echo esc_attr( $payment_detail['transaction_id'] ) ?></td>
 					<td><?php echo esc_attr( $payment_detail['invoice_number'] ) ?></td>
-					<td><?php echo esc_attr( $payment_detail['currency_type'] ) . ' ' . (float) $payment_detail['amount'] ?></td>
+					<td><?php echo esc_attr(
+						               $payment_detail['currency_type']
+					               ) . ' ' . (float) $payment_detail['amount'] ?></td>
 					<td><?php echo esc_attr( $payment_detail['payment_source'] ) ?></td>
 					<td>
 						<a target="_blank"
-						   href="<?php echo fed_get_invoice_url() . '?invoice_id=' . $payment_detail['sku'] ?>">
+								href="<?php echo fed_get_invoice_url() . '?invoice_id=' . $payment_detail['sku'] ?>">
 							<i class="fa fa-download"></i>
 						</a>
 					</td>
@@ -93,28 +103,29 @@ function fed_display_user_paid( $payment_rbp ) {
 /**
  * User Not Paid
  *
- * @param object $payment_rbp FEDPaymentRBP
+ * @param  object $payment_rbp  FEDPaymentRBP
  */
 function fed_display_user_not_paid( $payment_rbp ) {
-	$payment_settings = new FEDPaymentSettings();
+	$payment_settings  = new FEDPaymentSettings();
 	$current_user_role = fed_get_current_user_role();
 	if ( $payment_settings->getSettings() !== null ) {
 
 		?>
 		<div class="padd_bot_20">
 			<form method="post"
-				  role="form"
-				  class="fed_user_not_paid_form"
+					role="form"
+					class="fed_user_not_paid_form"
 			>
 				<?php fed_wp_nonce_field( 'fed_display_user_not_paid', 'fed_display_user_not_paid' ) ?>
 				<input type="hidden"
-					   name="fed_paypal"
-					   value=""/>
-				<?php echo do_shortcode( '[fed_show_roles roles=subscriber type=submit]'); ?>
+						name="fed_paypal"
+						value=""/>
+				<?php echo do_shortcode( '[fed_show_roles roles=subscriber type=submit]' ); ?>
 			</form>
 		</div>
 		<?php
-	} else {
+	}
+	else {
 		echo 'Admin has not configured the Payment Settings';
 	}
 }

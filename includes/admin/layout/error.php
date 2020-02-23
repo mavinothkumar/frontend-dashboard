@@ -1,6 +1,12 @@
 <?php
-if ( ! defined('ABSPATH')) {
-    exit;
+/**
+ * Error.
+ *
+ * @package Frontend Dashboard.
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
 /**
@@ -8,15 +14,32 @@ if ( ! defined('ABSPATH')) {
  */
 function fed_landed_wrongly() {
 	?>
-    <div class="bc_fed container">
-        <div class="alert alert-danger">
-            <button type="button"
-                    class="close"
-                    data-dismiss="alert"
-                    aria-hidden="true">&times;</button>
-            <strong><?php _e( '404!', 'frontend-dashboard' ) ?> </strong> <?php _e( 'Hope you have landed wrongly, please proceed to plugin', 'frontend-dashboard' ) ?>
-            <a href="<?php  menu_page_url( 'fed_settings_menu' ) ?>"> <?php _e( 'home page', 'frontend-dashboard' ) ?> </a>.
-        </div>
-    </div>
+	<div class="bc_fed container">
+		<div class="alert alert-danger">
+			<button type="button"
+					class="close"
+					data-dismiss="alert"
+					aria-hidden="true">&times;
+			</button>
+			<strong>
+				<?php esc_attr_e( '404!', 'frontend-dashboard' ); ?>
+			</strong>
+			<?php
+			esc_attr_e(
+				'Hope you have landed wrongly, please proceed to plugin',
+				'frontend-dashboard'
+			)
+			?>
+			<a href="<?php menu_page_url( 'fed_settings_menu' ); ?>">
+				<?php
+				esc_attr_e(
+					'home page',
+					'frontend-dashboard'
+				)
+				?>
+			</a>
+			.
+		</div>
+	</div>
 	<?php
 }

@@ -1,16 +1,26 @@
 <?php
-if ( ! defined('ABSPATH')) {
-    exit;
+/**
+ * Reset Password.
+ *
+ * @package Frontend Dashboard.
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 /**
- * @param $request
+ * Reset Form Submit.
+ *
+ * @param  array $request  Request.
  */
 function fed_reset_form_submit( $request ) {
 	if ( ! isset( $request['key'], $request['login'], $request['user_password'], $request['confirmation_password'] ) ) {
-		wp_send_json_success( array(
-			'message' => 'Invalid details',
-			'url'     => fed_get_login_url()
-		) );
+		wp_send_json_success(
+			array(
+				'message' => 'Invalid details',
+				'url'     => fed_get_login_url(),
+			)
+		);
 	}
 
 	if ( empty( $request['user_password'] ) || empty( $request['confirmation_password'] ) ) {
@@ -26,15 +36,23 @@ function fed_reset_form_submit( $request ) {
 	$user = check_password_reset_key( $rp_key, $rp_login );
 	if ( $user instanceof WP_User ) {
 		reset_password( $user, $request['user_password'] );
-		wp_send_json_success( array(
-			'message' => 'Successfully Password Reset',
-			'url'     => fed_get_login_url()
-		) );
-	} else {
+		wp_send_json_success(
+			array(
+				'message' => 'Successfully Password Reset',
+				'url'     => fed_get_login_url(),
+			)
+		);
+	}
+	else {
 		if ( $user instanceof WP_Error ) {
-			wp_send_json_error( array( 'user' => __( 'Invalid Key, Please try resetting the password again', 'frontend-dashboard' ) ) );
-		} else {
-			wp_send_json_error( array( 'user' => __( 'Something went wrong, Please try again later', 'frontend-dashboard' ) ) );
+			wp_send_json_error(
+				array( 'user' => __( 'Invalid Key, Please try resetting the password again', 'frontend-dashboard' ) )
+			);
+		}
+		else {
+			wp_send_json_error(
+				array( 'user' => __( 'Something went wrong, Please try again later', 'frontend-dashboard' ) )
+			);
 		}
 	}
 }

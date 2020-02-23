@@ -1,13 +1,20 @@
 <?php
-if ( ! defined('ABSPATH')) {
-    exit;
+/**
+ * Orders.
+ *
+ * @package Frontend Dashboard.
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 add_action( 'wp_ajax_fed_admin_orders', 'fed_admin_orders_function' );
 add_action( 'wp_ajax_fed_admin_order_delete', 'fed_admin_order_delete_function' );
 add_action( 'wp_ajax_fed_order_search_add', 'fed_order_search_add_function' );
 add_action( 'wp_ajax_fed_admin_add_orders', 'fed_admin_add_orders_function' );
+
 /**
- * Admin Orders
+ * Admin Orders.
  */
 function fed_admin_orders_function() {
 	global $wpdb;
@@ -20,22 +27,34 @@ function fed_admin_orders_function() {
 
 	$orders = array(
 		'email'          => isset( $request['email'] ) ? sanitize_email( $request['email'] ) : $order['email'],
-		'first_name'     => isset( $request['first_name'] ) ? sanitize_text_field( $request['first_name'] ) : $order['first_name'],
-		'last_name'      => isset( $request['last_name'] ) ? sanitize_text_field( $request['last_name'] ) : $order['last_name'],
-		'recipient_name' => isset( $request['recipient_name'] ) ? sanitize_text_field( $request['recipient_name'] ) : $order['recipient_name'],
+		'first_name'     => isset( $request['first_name'] ) ? sanitize_text_field(
+			$request['first_name']
+		) : $order['first_name'],
+		'last_name'      => isset( $request['last_name'] ) ? sanitize_text_field(
+			$request['last_name']
+		) : $order['last_name'],
+		'recipient_name' => isset( $request['recipient_name'] ) ? sanitize_text_field(
+			$request['recipient_name']
+		) : $order['recipient_name'],
 		'amount'         => isset( $request['amount'] ) ? (float) $request['amount'] : $order['amount'],
 		'line1'          => isset( $request['line1'] ) ? sanitize_text_field( $request['line1'] ) : $order['line1'],
 		'city'           => isset( $request['city'] ) ? sanitize_text_field( $request['city'] ) : $order['city'],
 		'state'          => isset( $request['state'] ) ? sanitize_text_field( $request['state'] ) : $order['state'],
-		'postal_code'    => isset( $request['postal_code'] ) ? sanitize_text_field( $request['postal_code'] ) : $order['postal_code'],
-		'country_code'   => isset( $request['country_code'] ) ? sanitize_text_field( $request['country_code'] ) : $order['country_code'],
+		'postal_code'    => isset( $request['postal_code'] ) ? sanitize_text_field(
+			$request['postal_code']
+		) : $order['postal_code'],
+		'country_code'   => isset( $request['country_code'] ) ? sanitize_text_field(
+			$request['country_code']
+		) : $order['country_code'],
 		'updated_at'     => date( 'Y-m-d H:i:s' ),
 	);
 
 	$status = $wpdb->update( $table_name, $orders, array( 'id' => $id ) );
 
-	if ( $status === false ) {
-		wp_send_json_error( array( 'message' => __( 'Sorry no record found to update your details', 'frontend-dashboard' ) ) );
+	if ( false === $status ) {
+		wp_send_json_error(
+			array( 'message' => __( 'Sorry no record found to update your details', 'frontend-dashboard' ) )
+		);
 		exit();
 	}
 
@@ -45,7 +64,7 @@ function fed_admin_orders_function() {
 }
 
 /**
- * Admin Order Delete
+ * Admin Order Delete.
  */
 function fed_admin_order_delete_function() {
 	global $wpdb;
@@ -59,21 +78,33 @@ function fed_admin_order_delete_function() {
 	$verify = $wpdb->delete( $table_name, array( 'id' => $id ), array( '%d' ) );
 
 	if ( $verify ) {
-		wp_send_json_success( array(
-			'message' => __( 'Transaction ID: ' . $order['transaction_id'] . ' has been deleted successfully', 'frontend-dashboard' ),
-			'reload'  => admin_url() . 'admin.php?page=fed_orders',
-		) );
+		wp_send_json_success(
+			array(
+				'message' => sprintf(
+				/* Translators: %s : Transaction ID */
+					__( 'Transaction ID %s has been deleted successfully', 'frontend-dashboard' ),
+					esc_attr( $order['transaction_id'] )
+				),
+				'reload'  => admin_url() . 'admin.php?page=fed_orders',
+			)
+		);
 		exit();
 	}
 
-	wp_send_json_error( array( 'message' => __( 'Something went wrong, please refresh the page and delete it again.', 'frontend-dashboard' ) ) );
+	wp_send_json_error(
+		array(
+			'message' => __(
+				'Something went wrong, please refresh the page and delete it again.', 'frontend-dashboard'
+			),
+		)
+	);
 	exit();
 }
 
 /**
  * Admin Order ID Validation
  *
- * @param array $request Request
+ * @param  array $request  Request.
  *
  * @return array
  */
@@ -90,11 +121,20 @@ function fed_admin_order_id_validation( $request ) {
 	}
 	$order = fed_fetch_table_row_by_id( BC_FED_TABLE_PAYMENT, $id );
 	if ( $order instanceof WP_Error ) {
-		wp_send_json_error( array( 'message' => __( 'The Order ID not available now, please refresh the page and try again.', 'frontend-dashboard' ) ) );
+		wp_send_json_error(
+			array(
+				'message' => __(
+					'The Order ID not available now, please refresh the page and try again.', 'frontend-dashboard'
+				),
+			)
+		);
 		exit();
 	}
 
-	return array( 'id' => $id, 'order' => $order );
+	return array(
+		'id'    => $id,
+		'order' => $order,
+	);
 }
 
 /**
@@ -106,22 +146,26 @@ function fed_order_search_add_function() {
 		wp_send_json_error( array( 'message' => __( 'Please fill the search field', 'frontend-dashboard' ) ) );
 		exit();
 	}
-	$user = get_user_by( sanitize_text_field( $request['order_search_key'] ), sanitize_text_field( $request['fed_order_search'] ) );
+	$user = get_user_by(
+		sanitize_text_field( $request['order_search_key'] ), sanitize_text_field( $request['fed_order_search'] )
+	);
 
 	if ( ! $user ) {
 		wp_send_json_error( array( 'message' => __( 'Sorry! No user found', 'frontend-dashboard' ) ) );
 		exit();
 	}
 
-	wp_send_json_success( array(
-		'message' => __( 'Great! You have found an user', 'frontend-dashboard' ),
-		'extra'   => array(
-			'user_id'    => $user->ID,
-			'email'      => $user->user_email,
-			'first_name' => $user->first_name,
-			'last_name'  => $user->last_name,
+	wp_send_json_success(
+		array(
+			'message' => __( 'Great! You have found an user', 'frontend-dashboard' ),
+			'extra'   => array(
+				'user_id'    => $user->ID,
+				'email'      => $user->user_email,
+				'first_name' => $user->first_name,
+				'last_name'  => $user->last_name,
+			),
 		)
-	) );
+	);
 
 }
 
@@ -148,20 +192,28 @@ function fed_admin_add_orders_function() {
 		'transaction_id' => wp_generate_password( 17, false ),
 		'payer_id'       => wp_generate_password( 13, false ),
 		'invoice_number' => wp_generate_password( 13, false ),
-		'sku'            => current_time( 'YmdHis' ) . '_' . $request['user_id'] . '_' . wp_generate_password( 6, false ),
+		'sku'            => current_time( 'YmdHis' ) . '_' . $request['user_id'] . '_' . wp_generate_password(
+				6, false
+			),
 		'user_id'        => isset( $request['user_id'] ) ? (int) $request['user_id'] : '',
 		'email'          => isset( $request['email'] ) ? sanitize_email( $request['email'] ) : '',
 		'first_name'     => isset( $request['first_name'] ) ? sanitize_text_field( $request['first_name'] ) : '',
 		'last_name'      => isset( $request['last_name'] ) ? sanitize_text_field( $request['last_name'] ) : '',
-		'recipient_name' => isset( $request['recipient_name'] ) ? sanitize_text_field( $request['recipient_name'] ) : '',
+		'recipient_name' => isset( $request['recipient_name'] ) ? sanitize_text_field(
+			$request['recipient_name']
+		) : '',
 		'amount'         => isset( $request['amount'] ) ? (float) $request['amount'] : '',
 		'line1'          => isset( $request['line1'] ) ? sanitize_text_field( $request['line1'] ) : '',
 		'city'           => isset( $request['city'] ) ? sanitize_text_field( $request['city'] ) : '',
 		'state'          => isset( $request['state'] ) ? sanitize_text_field( $request['state'] ) : '',
 		'postal_code'    => isset( $request['postal_code'] ) ? sanitize_text_field( $request['postal_code'] ) : '',
 		'country_code'   => isset( $request['country_code'] ) ? sanitize_text_field( $request['country_code'] ) : '',
-		'payment_source' => isset( $request['payment_source'] ) ? sanitize_text_field( $request['payment_source'] ) : '',
-		'currency_type'  => isset( $request['currency_type'] ) ? sanitize_text_field( $request['currency_type'] ) : 'paypal',
+		'payment_source' => isset( $request['payment_source'] ) ? sanitize_text_field(
+			$request['payment_source']
+		) : '',
+		'currency_type'  => isset( $request['currency_type'] ) ? sanitize_text_field(
+			$request['currency_type']
+		) : 'paypal',
 		'created_at'     => date( 'Y-m-d H:i:s' ),
 		'updated_at'     => date( 'Y-m-d H:i:s' ),
 	);
@@ -171,12 +223,26 @@ function fed_admin_add_orders_function() {
 		$orders
 	);
 
-	if ( $status === false ) {
-		wp_send_json_error( array( 'message' => __( 'Sorry, Something went wrong in storing values in DB, please try again later or contact support', 'frontend-dashboard' ) ) );
+	if ( false === $status ) {
+		wp_send_json_error(
+			array(
+				'message' => __(
+					'Sorry, Something went wrong in storing values in DB, please try again later or contact support',
+					'frontend-dashboard'
+				),
+			)
+		);
 		exit();
 	}
 
-	wp_send_json_success( array( 'message' => __( 'New Transaction ID ' . $orders['transaction_id'] . ' successfully added', 'frontend-dashboard' ) ) );
+	wp_send_json_success(
+		array(
+			'message' => sprintf(
+			/* Translators: %s : Label Name */
+				__( 'New Transaction ID %s successfully added', 'frontend-dashboard' ),
+				esc_attr( $orders['transaction_id'] )
+			),
+		)
+	);
 	exit();
 }
-

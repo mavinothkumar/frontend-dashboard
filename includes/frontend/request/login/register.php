@@ -1,48 +1,59 @@
 <?php
-if ( ! defined('ABSPATH')) {
-    exit;
+/**
+ * Register.
+ *
+ * @package Frontend Dashboard.
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 /**
- * @param $post
+ * Register Form Submit.
+ *
+ * @param  array $post  Post.
  */
-function fed_register_form_submit($post)
-{
-    do_action('fed_register_before_validation', $post);
-    $redirect_url    = fed_registration_redirect();
-    $fed_admin_login = get_option('fed_admin_login');
-    $notification    = isset($fed_admin_login['register']['register_email_notification']) ? $fed_admin_login['register']['register_email_notification'] : '';
+function fed_register_form_submit( $post ) {
 
-    $errors = fed_validate_registration_form($post);
+	do_action( 'fed_register_before_validation', $post );
 
-    if ($errors instanceof WP_Error) {
-        wp_send_json_error(array('user' => $errors->get_error_messages()));
-        exit();
-    }
+	$redirect_url    = fed_registration_redirect();
+	$fed_admin_login = get_option( 'fed_admin_login' );
+	$notification    = isset( $fed_admin_login['register']['register_email_notification'] ) ? $fed_admin_login['register']['register_email_notification'] : '';
 
-    apply_filters('fed_register_form_submit', $post);
+	$errors = fed_validate_registration_form( $post );
 
-    $status = wp_insert_user($post);
+	if ( $errors instanceof WP_Error ) {
+		wp_send_json_error( array( 'user' => $errors->get_error_messages() ) );
+		exit();
+	}
 
-    if ($status instanceof WP_Error) {
-        wp_send_json_error(array('user' => $status->get_error_messages()));
-        exit();
-    }
+	apply_filters( 'fed_register_form_submit', $post );
 
-    wp_send_new_user_notifications($status, $notification);
+	$status = wp_insert_user( $post );
 
-    if ($fed_admin_login && isset($fed_admin_login['register']['auto_login']) && $fed_admin_login['register']['auto_login'] === 'yes') {
-        wp_clear_auth_cookie();
-        wp_set_current_user($status);
-        wp_set_auth_cookie($status);
+	if ( $status instanceof WP_Error ) {
+		wp_send_json_error( array( 'user' => $status->get_error_messages() ) );
+		exit();
+	}
 
-        $redirect_url = fed_registration_redirect();
-    }
+	wp_send_new_user_notifications( $status, $notification );
 
-    wp_send_json_success(array(
-        'user'    => $status,
-        'message' => __('Successfully Registered', 'frontend-dashboard'),
-        'url'     => $redirect_url,
-    ));
+	if ( $fed_admin_login && isset( $fed_admin_login['register']['auto_login'] ) && ( 'yes' === $fed_admin_login['register']['auto_login'] ) ) {
+		wp_clear_auth_cookie();
+		wp_set_current_user( $status );
+		wp_set_auth_cookie( $status );
+
+		$redirect_url = fed_registration_redirect();
+	}
+
+	wp_send_json_success(
+		array(
+			'user'    => $status,
+			'message' => __( 'Successfully Registered', 'frontend-dashboard' ),
+			'url'     => $redirect_url,
+		)
+	);
 
 }
 
@@ -50,51 +61,62 @@ function fed_register_form_submit($post)
 /**
  * Filter for add extra fields to save.
  */
-add_filter('insert_user_meta', 'fed_insert_user_meta', 10, 3);
+add_filter( 'insert_user_meta', 'fed_insert_user_meta', 10, 3 );
 
 /**
- * @param $meta
- * @param $user
- * @param $update
+ * Insert User Meta.
+ *
+ * @param  array    $meta  Meta.
+ * @param  \WP_User $user  User.
+ * @param  bool     $update  Update.
  *
  * @return mixed|void
  */
-function fed_insert_user_meta($meta, $user, $update)
-{
-    //$extra_fields = fed_fetch_user_profile_extra_fields_key_value();
-    $get_profile_meta_by_menu = array();
-    if (isset($_REQUEST['tab_id'])) {
-        $get_profile_meta_by_menu = fed_fetch_user_profile_columns($_REQUEST['tab_id']);
-    }
+function fed_insert_user_meta( $meta, $user, $update ) {
+	$get_profile_meta_by_menu = array();
+	if ( isset( $_REQUEST['tab_id'] ) ) {
+		$get_profile_meta_by_menu = fed_fetch_user_profile_columns( esc_attr( $_REQUEST['tab_id'] ) );
+	}
 
-    if (isset($_REQUEST['fed_registration_form'])) {
-        /**
-         * Fetch registration form field and add it in the meta fields
-         */
-        $get_profile_meta_by_menu                 = fed_fetch_user_profile_by_registration();
-//        $get_profile_meta_by_menu = array_column($register, 'input_meta');
-    }
+	if ( isset( $_REQUEST['fed_registration_form'] ) ) {
+		/**
+		 * Fetch registration form field and add it in the meta fields
+		 */
+		$get_profile_meta_by_menu = fed_fetch_user_profile_by_registration();
+	}
 
+	if ( count( $get_profile_meta_by_menu ) > 0 ) {
+		foreach ( $get_profile_meta_by_menu as $key => $extra_field ) {
+			if (
+				isset( $_REQUEST[ $extra_field['input_meta'] ] ) && is_array(
+					$_REQUEST[ $extra_field['input_meta'] ]
+				)
+			) {
+				$meta[ $extra_field['input_meta'] ] = serialize(
+					fed_sanitize_text_field( $_REQUEST[ $extra_field['input_meta'] ] )
+				);
+			}
+			else {
+				if ( isset( $extra_field['input_type'] ) && 'wp_editor' === $extra_field['input_type'] ) {
+					$meta[ $extra_field['input_meta'] ] = isset( $_REQUEST[ $extra_field['input_meta'] ] ) ? wp_kses_post(
+						$_REQUEST[ $extra_field['input_meta'] ]
+					) : '';
+				}
+				elseif ( isset( $extra_field['input_type'] ) && 'multi_line' === $extra_field['input_type'] ) {
+					$meta[ $extra_field['input_meta'] ] = isset( $_REQUEST[ $extra_field['input_meta'] ] ) ? wp_kses(
+						$_REQUEST[ $extra_field['input_meta'] ],
+						array()
+					) : '';
+				}
+				else {
+					$meta[ $extra_field['input_meta'] ] = isset( $_REQUEST[ $extra_field['input_meta'] ] ) ? fed_sanitize_text_field(
+						$_REQUEST[ $extra_field['input_meta'] ]
+					) : '';
+				}
+			}
+		}
+	}
 
-    if (count($get_profile_meta_by_menu) > 0) {
-        foreach ($get_profile_meta_by_menu as $key => $extra_field) {
-            if (isset($_REQUEST[$extra_field['input_meta']]) && is_array($_REQUEST[$extra_field['input_meta']])) {
-                $meta[$extra_field['input_meta']] = serialize(fed_sanitize_text_field($_REQUEST[$extra_field['input_meta']]));
-            } else {
-                if (isset($extra_field['input_type']) && $extra_field['input_type'] === 'wp_editor') {
-                    $meta[$extra_field['input_meta']] = isset($_REQUEST[$extra_field['input_meta']]) ? wp_kses_post($_REQUEST[$extra_field['input_meta']]) : '';
-                } elseif (isset($extra_field['input_type']) && $extra_field['input_type'] === 'multi_line') {
-                    $meta[$extra_field['input_meta']] = isset($_REQUEST[$extra_field['input_meta']]) ? wp_kses($_REQUEST[$extra_field['input_meta']],
-                        array()) : '';
-                } else {
-                    $meta[$extra_field['input_meta']] = isset($_REQUEST[$extra_field['input_meta']]) ? fed_sanitize_text_field($_REQUEST[$extra_field['input_meta']]) : '';
-                }
-            }
-
-        }
-    }
-
-    return apply_filters('fed_user_extra_fields_registration', $meta);
-
+	return apply_filters( 'fed_user_extra_fields_registration', $meta );
 
 }

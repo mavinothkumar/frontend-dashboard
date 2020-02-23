@@ -1,4 +1,9 @@
 <?php
+/**
+ * Form Hidden.
+ *
+ * @package Frontend Dashboard.
+ */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -15,9 +20,9 @@ function fed_form_hidden( $options ) {
 	$value       = fed_get_data( 'user_value', $options );
 	$class       = 'form-control ' . fed_get_data( 'class_name', $options );
 	$required    = fed_get_data( 'is_required', $options ) == 'true' ? 'required="required"' : null;
-	$id          = isset( $options['id_name'] ) && $options['id_name'] != '' ? 'id="' . esc_attr( $options['id_name'] ) . '"' : null;
-	$readonly    = fed_get_data( 'readonly', $options ) === true ? 'readonly=readonly' : null;
-	$disabled    = fed_get_data( 'disabled', $options ) === true ? 'disabled=disabled' : null;
+	$id          = ( isset( $options['id_name'] ) && '' != $options['id_name'] ) ? 'id="' . esc_attr( $options['id_name'] ) . '"' : null;
+	$readonly    = ( true === fed_get_data( 'readonly', $options ) ) ? 'readonly=readonly' : null;
+	$disabled    = ( true === fed_get_data( 'disabled', $options ) ) ? 'disabled=disabled' : null;
 	$extra       = isset( $options['extra'] ) ? $options['extra'] : null;
 
 	return sprintf(

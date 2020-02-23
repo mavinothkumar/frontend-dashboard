@@ -1,7 +1,12 @@
 <?php
+/**
+ * Meta Box.
+ *
+ * @package Frontend Dashboard.
+ */
 
-if ( ! defined('ABSPATH')) {
-    exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
 /**
@@ -13,7 +18,8 @@ add_action( 'admin_init', 'fed_add_meta_boxes', 1 );
  * Add Post Meta Boxes
  */
 function fed_add_meta_boxes() {
-	add_meta_box( 'fed_meta_boxes', esc_html__( 'Frontend Dashboard Custom Fields', 'frontend-dashboard' ), 'fed_add_meta_boxes_display', array_keys( fed_get_public_post_types() ), 'normal', 'high' );
+	add_meta_box( 'fed_meta_boxes', esc_html__( 'Frontend Dashboard Custom Fields', 'frontend-dashboard' ),
+		'fed_add_meta_boxes_display', array_keys( fed_get_public_post_types() ), 'normal', 'high' );
 }
 
 /**
@@ -26,7 +32,7 @@ function fed_add_meta_boxes_display() {
 	global $post;
 	$post_meta = fed_get_all_post_meta_key( $post->ID );
 	?>
-	<div class="bc_fed">
+    <div class="bc_fed">
 		<?php
 		foreach ( $extra_fields as $item ) {
 			$temp               = $item;
@@ -35,17 +41,17 @@ function fed_add_meta_boxes_display() {
 
 			if ( fed_get_current_screen_id() === $item['post_type'] ) {
 				?>
-				<div class="row fed_dashboard_item_field p-b-20">
-					<div class="col-md-6">
-						<div class="fed_header_font_color"><?php esc_attr_e( $temp['label_name'], 'fed' ); ?></div>
+                <div class="row fed_dashboard_item_field p-b-20">
+                    <div class="col-md-6">
+                        <div class="fed_header_font_color"><?php esc_attr_e( $temp['label_name'], 'fed' ); ?></div>
 						<?php echo fed_get_input_details( $temp ); ?>
-					</div>
-				</div>
+                    </div>
+                </div>
 				<?php
 			}
 		}
 		?>
-	</div>
+    </div>
 	<?php
 
 }
@@ -53,14 +59,17 @@ function fed_add_meta_boxes_display() {
 add_action( 'save_post', 'fed_save_meta_boxes_display', 10, 2 );
 
 /**
- * @param $post_id
- * @param $post
+ * Save Meta Boxes.
+ *
+ * @param  int    $post_id  Post ID.
+ * @param  object $post  Post.
  *
  * @return mixed
  */
 function fed_save_meta_boxes_display( $post_id, $post ) {
+	$post_payload = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
 	/* Verify the nonce before proceeding */
-	if ( ! isset( $_POST['fed_nonce'], $_POST['fed_meta'] ) || ! wp_verify_nonce( $_POST['fed_nonce'], 'fed_nonce' ) ) {
+	if ( ! isset( $post_payload['fed_nonce'], $post_payload['fed_meta'] ) || ! wp_verify_nonce( $post_payload['fed_nonce'], 'fed_nonce' ) ) {
 		return $post_id;
 	}
 	/* Get the post type object. */
@@ -80,9 +89,9 @@ function fed_save_meta_boxes_display( $post_id, $post ) {
 	 */
 	if ( count( $post_meta ) > 0 ) {
 		foreach ( $post_meta as $index => $extra ) {
-			if ( isset( $_POST['fed_meta'] ) ) {
-				if ( array_key_exists( $index, $_POST['fed_meta'] ) ) {
-					$meta_value = isset( $_POST['fed_meta'][ $index ] ) ? sanitize_text_field( $_POST['fed_meta'][ $index ] ) : '';
+			if ( isset( $post_payload['fed_meta'] ) ) {
+				if ( array_key_exists( $index, $post_payload['fed_meta'] ) ) {
+					$meta_value = isset( $post_payload['fed_meta'][ $index ] ) ? sanitize_text_field( $post_payload['fed_meta'][ $index ] ) : '';
 					update_post_meta( $post_id, $index, $meta_value );
 				} else {
 					/**

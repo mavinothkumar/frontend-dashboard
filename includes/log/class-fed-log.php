@@ -51,72 +51,84 @@ class FED_Log {
 	 * FED_Log constructor.
 	 */
 	protected function __construct() {
-		$this->file = fopen( self::getFileName(), 'a+' );
+		$this->file = fopen( self::get_file_name(), 'a+' );
 		if ( ! $this->file ) {
 			new WP_Error(
 				'403_FILE_PERMISSION',
-				sprintf( "Could not open file '%s' for writing.", self::getFileName() )
+				sprintf( "Could not open file '%s' for writing.", self::get_file_name() )
 			);
 		}
 	}
 
 	/**
+	 * Get File Name.
+	 *
 	 * @return string
 	 */
-	public static function getFileName() {
-		if ( self::$filename == null ) {
-			self::$filename = BC_FED_PLUGIN_DIR . '/log/dashboard.log';
+	public static function get_file_name() {
+		if ( null == self::$filename ) {
+			self::$filename = BC_FED_PLUGIN_DIR . '/includes/log/dashboard.log';
 		}
 
 		return self::$filename;
 	}
 
 	/**
-	 * @param $filename
+	 * Set File Name.
+	 *
+	 * @param  string $filename  File Name.
 	 */
-	public static function setFileName( $filename ) {
+	public static function set_filename( $filename ) {
 		self::$filename = $filename;
 	}
 
 	/**
-	 * @param  bool  $condition
+	 * Enable If.
+	 *
+	 * @param  bool $condition  Condition.
 	 */
-	public static function enableIf( $condition = true ) {
+	public static function enable_if( $condition = true ) {
 		if ( (bool) $condition ) {
 			self::$enabled = true;
 		}
 	}
 
 	/**
-	 *
+	 * Disable.
 	 */
 	public static function disable() {
 		self::$enabled = false;
 	}
 
 	/**
-	 * @param $message
-	 * @param  int  $level
+	 * Write If Enabled.
+	 *
+	 * @param  string       $message  Message.
+	 * @param  int | string $level  Level.
 	 */
-	public static function writeIfEnabled( $message, $level = self::DEBUG ) {
+	public static function write_if_enabled( $message, $level = self::DEBUG ) {
 		if ( self::$enabled ) {
-			self::writeLog( $message, $level );
+			self::write_log( $message, $level );
 		}
 	}
 
 	/**
-	 * @param $message
-	 * @param  int  $level
+	 * Write Log.
+	 *
+	 * @param  string       $message  message.
+	 * @param  int | string $level  Level.
 	 */
-	public static function writeLog( $message, $level = self::DEBUG ) {
-		self::getInstance()->writeLine( $message, $level );
+	public static function write_log( $message, $level = self::DEBUG ) {
+		self::get_instance()->write_line( $message, $level );
 	}
 
 	/**
-	 * @param $message
-	 * @param $level
+	 * Write Line.
+	 *
+	 * @param  string       $message  message.
+	 * @param  int | string $level  Level.
 	 */
-	protected function writeLine( $message, $level = 'DEBUG' ) {
+	protected function write_line( $message, $level = 'DEBUG' ) {
 		switch ( $level ) {
 			case self::NOTICE:
 				$this->write_into_file( $message, 'NOTICE' );
@@ -136,8 +148,10 @@ class FED_Log {
 	}
 
 	/**
-	 * @param $message
-	 * @param  string  $level
+	 * Write into file.
+	 *
+	 * @param  string       $message  message.
+	 * @param  int | string $level  Level.
 	 */
 	public function write_into_file( $message, $level = 'DEBUG' ) {
 		$date    = new DateTime();
@@ -149,10 +163,12 @@ class FED_Log {
 	}
 
 	/**
+	 * Get  Instance.
+	 *
 	 * @return FED_Log
 	 */
-	protected static function getInstance() {
-		if ( ! self::hasInstance() ) {
+	protected static function get_instance() {
+		if ( ! self::has_instance() ) {
 			self::$instance = new self();
 		}
 
@@ -160,34 +176,43 @@ class FED_Log {
 	}
 
 	/**
+	 * Has Instance.
+	 *
 	 * @return bool
 	 */
-	protected static function hasInstance() {
+	protected static function has_instance() {
 		return self::$instance instanceof self;
 	}
 
 	/**
-	 * @param $condition
-	 * @param $message
-	 * @param  int  $level
+	 * Write If Enabled
+	 *
+	 * @param  string       $condition  Condition.
+	 * @param  string       $message  Message.
+	 * @param  int | string $level  Level.
 	 */
-	public static function writeIfEnabledAnd( $condition, $message, $level = self::DEBUG ) {
+	public static function write_if_enabled_and( $condition, $message, $level = self::DEBUG ) {
 		if ( self::$enabled ) {
-			self::writeIf( $condition, $message, $level );
+			self::write_if( $condition, $message, $level );
 		}
 	}
 
 	/**
-	 * @param $condition
-	 * @param $message
-	 * @param  int  $level
+	 * Write if.
+	 *
+	 * @param  string       $condition  Condition.
+	 * @param  string       $message  Message.
+	 * @param  int | string $level  Level.
 	 */
-	public static function writeIf( $condition, $message, $level = self::DEBUG ) {
+	public static function write_if( $condition, $message, $level = self::DEBUG ) {
 		if ( $condition ) {
-			self::writeLog( $message, $level );
+			self::write_log( $message, $level );
 		}
 	}
 
+	/**
+	 * Destruct.
+	 */
 	public function __destruct() {
 		fclose( $this->file );
 	}

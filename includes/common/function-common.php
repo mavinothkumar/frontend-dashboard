@@ -1,4 +1,10 @@
 <?php
+/**
+ * Function.
+ *
+ * @package Frontend Dashboard.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -7,9 +13,9 @@ if ( ! function_exists( 'fed_input_box' ) ) {
 	/**
 	 * Input Fields.
 	 *
-	 * @param  string  $meta_key  Meta Key
-	 * @param  array  $attr  Input Attributes
-	 * @param  string  $type  Input Format.
+	 * @param  string $meta_key  Meta Key.
+	 * @param  array  $attr  Input Attributes.
+	 * @param  string $type  Input Format.
 	 *
 	 * @return string
 	 */
@@ -22,25 +28,37 @@ if ( ! function_exists( 'fed_input_box' ) ) {
 		}
 
 		$values                = array();
-		$values['placeholder'] = isset( $attr['placeholder'] ) && ! empty( $attr['placeholder'] ) ? esc_attr( $attr['placeholder'] ) : '';
-		$values['label']       = isset( $attr['label'] ) && ! empty( $attr['label'] ) ? strip_tags( $attr['label'],
-			'<i><b>' ) : '';
+		$values['placeholder'] = isset( $attr['placeholder'] ) && ! empty( $attr['placeholder'] ) ? esc_attr(
+			$attr['placeholder']
+		) : '';
+		$values['label']       = isset( $attr['label'] ) && ! empty( $attr['label'] ) ? strip_tags(
+			$attr['label'],
+			'<i><b>'
+		) : '';
 		$values['class_name']  = isset( $attr['class'] ) && ! empty( $attr['class'] ) ? esc_attr( $attr['class'] ) : '';
 
 		$values['user_value'] = isset( $attr['value'] ) && ! empty( $attr['value'] ) ? esc_attr( $attr['value'] ) : '';
 		$values['input_min']  = isset( $attr['min'] ) && ! empty( $attr['min'] ) ? esc_attr( $attr['min'] ) : 0;
-		$values['input_max']  = isset( $attr['max'] ) && ! empty( $attr['max'] ) ? esc_attr( $attr['max'] ) : 99999999999999999999999999999999999999999999999999;
+		$values['input_max']  = isset( $attr['max'] ) && ! empty( $attr['max'] ) ? esc_attr(
+			$attr['max']
+		) : 99999999999999999999999999999999999999999999999999;
 		$values['input_step'] = isset( $attr['step'] ) && ! empty( $attr['step'] ) ? esc_attr( $attr['step'] ) : 'any';
 
-		$values['is_required']   = isset( $attr['is_required'] ) && $attr['required'] == 'true' ? 'required="required"' : '';
+		$values['is_required']   = isset( $attr['is_required'] ) && ( 'true' == $attr['required'] ) ? 'required="required"' : '';
 		$values['id_name']       = isset( $attr['id'] ) && ! empty( $attr['id'] ) ? esc_attr( $attr['id'] ) : '';
-		$values['readonly']      = isset( $attr['readonly'] ) && $attr['readonly'] === true ? true : '';
-		$values['user_value']    = isset( $attr['value'] ) && ! empty( $attr['value'] ) ? esc_attr( $attr['value'] ) : '';
+		$values['readonly']      = isset( $attr['readonly'] ) && ( true === $attr['readonly'] ) ? true : '';
+		$values['user_value']    = isset( $attr['value'] ) && ! empty( $attr['value'] ) ? esc_attr(
+			$attr['value']
+		) : '';
 		$values['input_value']   = isset( $attr['options'] ) && ! empty( $attr['options'] ) ? $attr['options'] : '';
-		$values['disabled']      = isset( $attr['disabled'] ) && $attr['disabled'] === true ? true : '';
-		$values['default_value'] = isset( $attr['default_value'] ) && ! empty( $attr['default_value'] ) ? esc_attr( $attr['default_value'] ) : 'yes';
+		$values['disabled']      = isset( $attr['disabled'] ) && ( true === $attr['disabled'] ) ? true : '';
+		$values['default_value'] = isset( $attr['default_value'] ) && ! empty( $attr['default_value'] ) ? esc_attr(
+			$attr['default_value']
+		) : 'yes';
 		$values['extra']         = isset( $attr['extra'] ) ? $attr['extra'] : '';
-		$values['extended']      = isset( $attr['extended'] ) && ! empty( $attr['extended'] ) ? esc_attr( $attr['extended'] ) : array();
+		$values['extended']      = isset( $attr['extended'] ) && ! empty( $attr['extended'] ) ? esc_attr(
+			$attr['extended']
+		) : array();
 		$values['input_type']    = $type;
 		$values['input_meta']    = isset( $attr['name'] ) ? $attr['name'] : $meta_key;
 		$values['content']       = isset( $attr['content'] ) ? $attr['content'] : '';
@@ -52,7 +70,9 @@ if ( ! function_exists( 'fed_loader' ) ) {
 	/**
 	 * Loader.
 	 *
-	 * @param  string  $hide
+	 * @param  string $hide  Hide.
+	 *
+	 * @param  null   $message  Message.
 	 *
 	 * @return string
 	 */
@@ -74,7 +94,12 @@ if ( ! function_exists( 'fed_loader' ) ) {
 }
 if ( ! function_exists( 'fed_sort_by_order' ) ) {
 	/**
-	 * Sort given array by order key
+	 * Sort given array by order key.
+	 *
+	 * @param  array $a  First Value.
+	 * @param  array $b  Second Value.
+	 *
+	 * @return int | string.
 	 */
 	function fed_sort_by_order( $a, $b ) {
 		if ( isset( $a['order'], $b['order'] ) ) {
@@ -93,12 +118,10 @@ if ( ! function_exists( 'fed_sort_by_order' ) ) {
 
 if ( ! function_exists( 'fed_sort_by_desc' ) ) {
 	/**
-	 * Sort by Desc
+	 * Sort by Desc.
 	 *
-	 * @param  array  $a  First Element.
-	 * @param  array  $b  Second Element.
-	 *
-	 * @param  string  $key
+	 * @param  array $a  First Element.
+	 * @param  array $b  Second Element.
 	 *
 	 * @return int
 	 */
@@ -113,14 +136,16 @@ if ( ! function_exists( 'fed_sort_by_desc' ) ) {
 
 if ( ! function_exists( 'fed_wp_nonce_field' ) ) {
 	/**
-	 * @param  int  $action
-	 * @param  string  $name
-	 * @param  bool  $referer
-	 * @param  bool  $echo
+	 * WP Nonce Field.
+	 *
+	 * @param  int | string $action  Action.
+	 * @param  string       $name  Name.
+	 * @param  bool         $referer  Referer.
+	 * @param  bool         $echo  Echo.
 	 *
 	 * @return string
 	 */
-	function fed_wp_nonce_field( $action = 'fed_nonce', $name = "fed_nonce", $referer = true, $echo = true ) {
+	function fed_wp_nonce_field( $action = 'fed_nonce', $name = 'fed_nonce', $referer = true, $echo = true ) {
 		$name        = esc_attr( $name );
 		$nonce_field = '<input type="hidden" name="' . $name . '" value="' . wp_create_nonce( $action ) . '" />';
 
@@ -138,34 +163,36 @@ if ( ! function_exists( 'fed_wp_nonce_field' ) ) {
 
 if ( ! function_exists( 'fed_get_random_string' ) ) {
 	/**
-	 * Generate Random String
+	 * Generate Random String.
 	 *
-	 * @param  int  $length
+	 * @param  int $length  Length.
 	 *
 	 * @return string
 	 */
 	function fed_get_random_string( $length = 10 ) {
-		$characters       = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-		$charactersLength = strlen( $characters );
-		$randomString     = '';
+		$characters        = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$characters_length = strlen( $characters );
+		$random_string     = '';
 		for ( $i = 0; $i < $length; $i ++ ) {
-			$randomString .= $characters[ rand( 0, $charactersLength - 1 ) ];
+			$random_string .= $characters[ rand( 0, $characters_length - 1 ) ];
 		}
 
-		return $randomString;
+		return $random_string;
 	}
 }
 
 
 if ( ! function_exists( 'fed_is_shortcode_in_content' ) ) {
 	/**
-	 * @param  null  $shortcodes
+	 * Is Shortcode in Content.
+	 *
+	 * @param  mixed $shortcodes  Shortcodes.
 	 *
 	 * @return bool
 	 */
 	function fed_is_shortcode_in_content( $shortcodes = null ) {
 		global $post;
-		if ( $shortcodes === null ) {
+		if ( null === $shortcodes ) {
 			$shortcodes = fed_shortcode_lists();
 		}
 
@@ -183,32 +210,42 @@ if ( ! function_exists( 'fed_is_shortcode_in_content' ) ) {
 
 if ( ! function_exists( 'fed_shortcode_lists' ) ) {
 	/**
+	 * Shortcode Lists.
+	 *
 	 * @return mixed|void
 	 */
 	function fed_shortcode_lists() {
-		return apply_filters( 'fed_shortcode_lists', array(
-			'fed_login',
-			'fed_login_only',
-			'fed_register_only',
-			'fed_forgot_password_only',
-			'fed_dashboard',
-			'fed_user',
-			'fed_transactions',
-		) );
+		return apply_filters(
+			'fed_shortcode_lists', array(
+				'fed_login',
+				'fed_login_only',
+				'fed_register_only',
+				'fed_forgot_password_only',
+				'fed_dashboard',
+				'fed_user',
+				'fed_transactions',
+			)
+		);
 	}
 }
 
 
 if ( ! function_exists( 'fed_js_translation' ) ) {
 	/**
+	 * JS Translation.
+	 *
 	 * @return array
 	 */
 	function fed_js_translation() {
 		return array(
 			'plugin_url'          => plugins_url( BC_FED_PLUGIN_NAME ),
 			'payment_info'        => 'no',
-			'fed_admin_form_post' => admin_url( 'admin-ajax.php?action=fed_admin_form_post&nonce=' . wp_create_nonce( "fed_admin_form_post" ) ),
-			'fed_login_form_post' => admin_url( 'admin-ajax.php?action=fed_login_form_post&nonce=' . wp_create_nonce( "fed_login_form_post" ) ),
+			'fed_admin_form_post' => admin_url(
+				'admin-ajax.php?action=fed_admin_form_post&nonce=' . wp_create_nonce( 'fed_admin_form_post' )
+			),
+			'fed_login_form_post' => admin_url(
+				'admin-ajax.php?action=fed_login_form_post&nonce=' . wp_create_nonce( 'fed_login_form_post' )
+			),
 			'alert'               => array(
 				'confirmation'                  => array(
 					'title'   => __( 'Are you sure?', 'frontend-dashboard' ),
@@ -221,8 +258,10 @@ if ( ! function_exists( 'fed_js_translation' ) ) {
 				'something_went_wrong'          => __( 'Something Went Wrong', 'frontend-dashboard' ),
 				'invalid_form_submission'       => __( 'Invalid form submission', 'frontend-dashboard' ),
 				'please_try_again'              => __( 'Please try again', 'frontend-dashboard' ),
-				'plugin_installed_successfully' => __( 'Plugin Installed and Activated Successfully',
-					'frontend-dashboard' ),
+				'plugin_installed_successfully' => __(
+					'Plugin Installed and Activated Successfully',
+					'frontend-dashboard'
+				),
 			),
 			'common'              => array(
 				'hide_add_new_menu' => __( 'Hide Add New Menu', 'frontend-dashboard' ),
@@ -234,7 +273,9 @@ if ( ! function_exists( 'fed_js_translation' ) ) {
 
 if ( ! function_exists( 'fed_get_ajax_form_action' ) ) {
 	/**
-	 * @param  null  $action
+	 * Fed Get AJAX Form Action.
+	 *
+	 * @param  null $action  Action.
 	 *
 	 * @return string|void
 	 */
@@ -249,7 +290,9 @@ if ( ! function_exists( 'fed_get_ajax_form_action' ) ) {
 
 if ( ! function_exists( 'fed_get_form_action' ) ) {
 	/**
-	 * @param  null  $action
+	 * Get Form Action.
+	 *
+	 * @param  null $action  Action.
 	 *
 	 * @return string|void
 	 */
@@ -266,8 +309,10 @@ if ( ! function_exists( 'fed_get_form_action' ) ) {
 if ( ! function_exists( 'fed_is_current_user_role' ) ) {
 
 	/**
-	 * @param  array  $allowed_roles
-	 * @param  bool  $is_key
+	 * Is Current User Role.
+	 *
+	 * @param  array $allowed_roles  Allowed Roles.
+	 * @param  bool  $is_key  Is Key.
 	 *
 	 * @return bool
 	 */
@@ -287,6 +332,8 @@ if ( ! function_exists( 'fed_is_current_user_role' ) ) {
 
 if ( ! function_exists( 'fed_is_admin' ) ) {
 	/**
+	 * Is Admin.
+	 *
 	 * @return bool
 	 */
 	function fed_is_admin() {
@@ -299,22 +346,28 @@ if ( ! function_exists( 'fed_is_admin' ) ) {
 
 if ( ! function_exists( 'fed_get_default_menu_type' ) ) {
 	/**
+	 * Get Default Menu Type.
+	 *
 	 * @return mixed|void
 	 */
 	function fed_get_default_menu_type() {
-		return apply_filters( 'fed_get_default_menu_type', array(
-			'post',
-			'user',
-			'logout',
-			'collapse',
-			'custom',
-		) );
+		return apply_filters(
+			'fed_get_default_menu_type', array(
+				'post',
+				'user',
+				'logout',
+				'collapse',
+				'custom',
+			)
+		);
 	}
 }
 
 if ( ! function_exists( 'fed_menu_split' ) ) {
 	/**
-	 * @param $string
+	 * Menu Split.
+	 *
+	 * @param  string $string  String.
 	 *
 	 * @return array
 	 */
@@ -325,6 +378,8 @@ if ( ! function_exists( 'fed_menu_split' ) ) {
 
 if ( ! function_exists( 'fed_get_menu_mobile_attributes' ) ) {
 	/**
+	 * Get Menu Mobile Attributes.
+	 *
 	 * @return array
 	 */
 	function fed_get_menu_mobile_attributes() {
@@ -333,7 +388,8 @@ if ( ! function_exists( 'fed_get_menu_mobile_attributes' ) ) {
 			$collapse['in']     = '';
 			$collapse['d']      = ' collapsed';
 			$collapse['expand'] = 'false';
-		} else {
+		}
+		else {
 			$collapse['in']     = 'in';
 			$collapse['d']      = ' ';
 			$collapse['expand'] = 'true';
@@ -345,18 +401,21 @@ if ( ! function_exists( 'fed_get_menu_mobile_attributes' ) ) {
 
 
 if ( ! function_exists( 'bcdump' ) ) {
-	/**
-	 * @param $var
-	 * @param  bool  $exit
+	/** Dump.
+	 *
+	 * @param  mixed $var  Variable.
+	 * @param  bool  $exit  Exit.
 	 */
 	function bcdump( $var, $exit = false ) {
 		echo '<pre style="font-size:11px;">';
 
 		if ( is_array( $var ) || is_object( $var ) ) {
 			echo htmlentities( print_r( $var, true ) );
-		} elseif ( is_string( $var ) ) {
+		}
+		elseif ( is_string( $var ) ) {
 			echo "string(" . strlen( $var ) . ") \"" . htmlentities( $var ) . "\"\n";
-		} else {
+		}
+		else {
 			var_dump( $var );
 		}
 
@@ -370,33 +429,39 @@ if ( ! function_exists( 'bcdump' ) ) {
 
 if ( ! function_exists( 'fed_create_new_instance' ) ) {
 	/**
-	 * @param $className
-	 * @param  array  $arguments
+	 * Create New Instance.
+	 *
+	 * @param  mixed $class_name  Class Name.
+	 * @param  array $arguments  Argument.
 	 *
 	 * @return bool|mixed
 	 */
-	function fed_create_new_instance( $className, array $arguments = array() ) {
-		if ( class_exists( $className ) ) {
+	function fed_create_new_instance( $class_name, array $arguments = array() ) {
+		if ( class_exists( $class_name ) ) {
 			try {
-				return call_user_func_array( array(
-					new ReflectionClass( $className ),
-					'newInstance',
-				),
-					$arguments );
+				return call_user_func_array(
+					array(
+						new ReflectionClass( $class_name ),
+						'newInstance',
+					),
+					$arguments
+				);
 			} catch ( ReflectionException $e ) {
-				wp_die( 'Class Name ' . $className . ' Doesnt exist' );
+				wp_die( 'Class Name ' . esc_attr( $class_name ) . ' Doesnt exist' );
 			}
 		}
 
-		wp_die( 'Class Name ' . $className . ' Doesnt exist' );
+		wp_die( 'Class Name ' . esc_attr( $class_name ) . ' Doesnt exist' );
 	}
 }
 
 if ( ! function_exists( 'fed_menu_page_url' ) ) {
 	/**
-	 * @param $page_slug
+	 * Menu Page URL
 	 *
-	 * @param  string  $parameters
+	 * @param  string $page_slug  Page Slug.
+	 *
+	 * @param  mixed  $parameters  Parameters.
 	 *
 	 * @return string|void
 	 */
@@ -411,7 +476,9 @@ if ( ! function_exists( 'fed_menu_page_url' ) ) {
 
 if ( ! function_exists( 'fed_encrypt' ) ) {
 	/**
-	 * @param $string
+	 * Encrypt.
+	 *
+	 * @param  string $string  String.
 	 *
 	 * @return bool|string
 	 */
@@ -419,7 +486,7 @@ if ( ! function_exists( 'fed_encrypt' ) ) {
 		$secret_key = wp_create_nonce();
 		$secret_iv  = fed_generate_secret();
 
-		$encrypt_method = "AES-128-CBC";
+		$encrypt_method = 'AES-128-CBC';
 		$key            = hash( 'sha256', $secret_key );
 		$iv             = substr( hash( 'sha256', $secret_iv ), 0, 16 );
 
@@ -430,7 +497,9 @@ if ( ! function_exists( 'fed_encrypt' ) ) {
 
 if ( ! function_exists( 'fed_decrypt' ) ) {
 	/**
-	 * @param $string
+	 * Decrypt.
+	 *
+	 * @param  string $string  String.
 	 *
 	 * @return string
 	 */
@@ -438,7 +507,7 @@ if ( ! function_exists( 'fed_decrypt' ) ) {
 		$secret_key = wp_create_nonce();
 		$secret_iv  = fed_generate_secret();
 
-		$encrypt_method = "AES-128-CBC";
+		$encrypt_method = 'AES-128-CBC';
 		$key            = hash( 'sha256', $secret_key );
 		$iv             = substr( hash( 'sha256', $secret_iv ), 0, 16 );
 
@@ -448,28 +517,36 @@ if ( ! function_exists( 'fed_decrypt' ) ) {
 
 if ( ! function_exists( 'fed_generate_secret' ) ) {
 	/**
+	 * Generate Secret.
+	 *
 	 * @return mixed|string
 	 */
 	function fed_generate_secret() {
-		if ( isset( $_SESSION['fed_secret'] ) && ! empty( $_SESSION['fed_secret'] ) ) {
-			return $_SESSION['fed_secret'];
+		$session = fed_sanitize_text_field( $_SESSION );
+		if ( isset( $session['fed_secret'] ) && ! empty( $session['fed_secret'] ) ) {
+			return $session['fed_secret'];
 		}
-		$_SESSION['fed_secret'] = fed_get_random_string( 5 );
+		$session['fed_secret'] = fed_get_random_string( 5 );
 
-		return $_SESSION['fed_secret'];
+		return $session['fed_secret'];
 	}
 }
 
 if ( ! function_exists( 'fed_add_admin_notifications' ) ) {
 	/**
-	 * @param  array  $array
+	 * Add Admin Notifications.
+	 *
+	 * @param  array $array  Array.
 	 */
 	function fed_add_admin_notifications( array $array ) {
-		$_SESSION['fed_admin_errors'] = $array;
+		$_SESSION['fed_admin_errors'] = fed_sanitize_text_field( $array );
 	}
 }
 
 add_action( 'init', 'fed_check_admin_notifications' );
+/**
+ * Check Admin Notifications.
+ */
 function fed_check_admin_notifications() {
 	if ( isset( $_SESSION['fed_admin_errors'] ) && count( $_SESSION['fed_admin_errors'] ) > 0 ) {
 		add_action( 'admin_notices', 'fed_show_notifications_message' );
@@ -477,17 +554,22 @@ function fed_check_admin_notifications() {
 }
 
 /**
- * @return string
+ * Show Notifications Message.
  */
 function fed_show_notifications_message() {
 	?>
-    <div class="error notice">
-        <p><?php echo fed_convert_array_value_to_string( $_SESSION['fed_admin_errors'], ',' ); ?></p>
-    </div>
+	<div class="error notice">
+		<p>
+			<?php echo fed_convert_array_value_to_string( $_SESSION['fed_admin_errors'], ',' ); ?>
+		</p>
+	</div>
 	<?php
 	fed_clear_admin_notification();
 }
 
+/**
+ * Clear Admin Notification.
+ */
 function fed_clear_admin_notification() {
 	if ( isset( $_SESSION['fed_admin_errors'] ) ) {
 		$_SESSION['fed_admin_errors'] = array();
@@ -496,63 +578,71 @@ function fed_clear_admin_notification() {
 
 
 /**
- * Recursively implodes an array with optional key inclusion
+ * Recursively implodes an array with optional key inclusion.
  *
  * Example of $include_keys output: key, value, key, value, key, value
  *
  * @access  public
  *
- * @param  array  $array  multi-dimensional array to recursively implode
- * @param  string  $glue  value that glues elements together
- * @param  bool  $include_keys  include keys before their values
- * @param  bool  $trim_all  trim ALL whitespace from string
+ * @param  array  $array  multi-dimensional array to recursively implode.
+ * @param  string $glue  value that glues elements together.
+ * @param  bool   $include_keys  include keys before their values.
+ * @param  bool   $trim_all  trim ALL whitespace from string.
  *
- * @return  string  imploded array
+ * @return  string  imploded array.
  */
 function fed_convert_array_value_to_string( array $array, $glue = ',', $include_keys = false, $trim_all = false ) {
 	$glued_string = '';
-	// Recursively iterates array and adds key/value to glued string
-	array_walk_recursive( $array, function ( $value, $key ) use ( $glue, $include_keys, &$glued_string ) {
+	// Recursively iterates array and adds key/value to glued string.
+	array_walk_recursive(
+		$array, function ( $value, $key ) use ( $glue, $include_keys, &$glued_string ) {
 		$include_keys and $glued_string .= $key . $glue;
 		$glued_string .= $value . $glue;
-	} );
-	// Removes last $glue from string
+	}
+	);
+	// Removes last $glue from string.
 	strlen( $glue ) > 0 and $glued_string = substr( $glued_string, 0, - strlen( $glue ) );
-	// Trim ALL whitespace
+	// Trim ALL whitespace.
 	$trim_all and $glued_string = preg_replace( "/(\s)/ixsm", '', $glued_string );
 
 	return (string) $glued_string;
 }
 
 /**
- * @param $message
- * @param  string  $type
+ * Show Alert Message.
+ *
+ * @param  string $message  Message.
+ * @param  string $type  Type.
  */
 function fed_show_alert_message( $message, $type = 'danger' ) {
 	?>
-    <div class="alert alert-<?php echo $type; ?>">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        <strong><?php echo $message; ?></strong>
-    </div>
+	<div class="alert alert-<?php echo esc_attr( $type ); ?>">
+		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		<strong><?php echo esc_attr( $message ); ?></strong>
+	</div>
 	<?php
 }
 
 
 /**
+ * Illegal User Names.
+ *
  * @return array
  */
 function fed_illegal_usernames() {
-	$login = get_option( 'fed_admin_login' );
-	FED_Log::writeLog( [ '$login' => $login ] );
-	$illegal = isset( $login['restrict_username'] ) && ! empty( $login['restrict_username'] ) ? explode( ',',
-		$login['restrict_username'] ) : array();
+	$login   = get_option( 'fed_admin_login' );
+	$illegal = isset( $login['restrict_username'] ) && ! empty( $login['restrict_username'] ) ? explode(
+		',',
+		$login['restrict_username']
+	) : array();
 
 	return apply_filters( 'fed_illegal_user_names', $illegal );
 }
 
 /**
+ * Validate User Name.
  *
- * @param $username
+ * @param  string $username  user Name.
  *
  * @return bool
  */
@@ -569,7 +659,9 @@ function fed_validate_username( $username ) {
 
 if ( ! function_exists( 'fed_is_shortcode_in_page' ) ) {
 	/**
-	 * @param $shorcode
+	 * Is Shortcode in Page.
+	 *
+	 * @param  string $shorcode  Shortcode.
 	 *
 	 * @return bool
 	 */
@@ -584,7 +676,9 @@ if ( ! function_exists( 'fed_is_shortcode_in_page' ) ) {
 }
 
 /**
- * @param  string  $key
+ * Get Current User.
+ *
+ * @param  string $key  User Column Key.
  *
  * @return bool|string
  */

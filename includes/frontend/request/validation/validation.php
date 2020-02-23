@@ -1,11 +1,17 @@
 <?php
-if ( ! defined('ABSPATH')) {
-    exit;
+/**
+ * Validation.
+ *
+ * @package Forntend Dashboard.
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 /**
  * Validate User Profile Form.
  *
- * @param array $post Request
+ * @param  array $post  Request
  *
  * @return bool|WP_Error
  */
@@ -20,12 +26,12 @@ function fed_validate_user_profile_form( $post ) {
 		unset( $mandatory_fields['confirmation_password'] );
 	}
 
-	if ( isset( $post['user_pass'] ) && $post['user_pass'] != '' && $post['user_pass'] !== $post['confirmation_password'] ) {
-		$fed_error->add( 'password_not_match', __( 'Password not match' ) );
+	if ( isset( $post['user_pass'] ) && ( '' != $post['user_pass'] ) && ( $post['user_pass'] !== $post['confirmation_password'] ) ) {
+		$fed_error->add( 'password_not_match', __( 'Password not match', 'frontend-dashboard' ) );
 	}
 
 	foreach ( $mandatory_fields as $key => $mandatory_field ) {
-		if ( $post[ $key ] == '' ) {
+		if ( '' == $post[ $key ] ) {
 			$fed_error->add( $key, $mandatory_field );
 		}
 	}
@@ -39,7 +45,8 @@ function fed_validate_user_profile_form( $post ) {
 
 /**
  * Validate New Manual Order
- * @param array $request Request
+ *
+ * @param  array $request  Request.
  *
  * @return bool|WP_Error
  */
@@ -47,7 +54,14 @@ function fed_order_add_validation( $request ) {
 	$fed_error = new WP_Error();
 
 	if ( empty( $request['user_id'] ) || ! isset( $request['user_id'] ) ) {
-		wp_send_json_error( array( 'message' => __( 'You can able to add only the registered user, So please use the search functionality to find the user', 'frontend-dashboard' ) ));
+		wp_send_json_error(
+			array(
+				'message' => __(
+					'You can able to add only the registered user, So please use the search functionality to find the user',
+					'frontend-dashboard'
+				),
+			)
+		);
 		exit();
 	}
 
@@ -58,10 +72,10 @@ function fed_order_add_validation( $request ) {
 		'amount'         => 'Amount',
 		'user_id'        => 'User ID',
 		'currency_type'  => 'Currency Type',
-		'payment_source' => 'Payment Source'
+		'payment_source' => 'Payment Source',
 	);
 	foreach ( $mandatory_fields as $key => $mandatory_field ) {
-		if ( $request[ $key ] == '' ) {
+		if ( '' == $request[ $key ] ) {
 			$fed_error->add( $key, $mandatory_field );
 		}
 	}
