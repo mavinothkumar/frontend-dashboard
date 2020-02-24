@@ -13,7 +13,7 @@ if ( ! shortcode_exists( 'fed_login_only' ) && ! function_exists( 'fed_fn_login_
 	 */
 	function fed_fn_login_only() {
 
-		$templates = new FED_Template_Loader;
+		$templates = new FED_Template_Loader();
 		ob_start();
 
 		if ( is_user_logged_in() ) {

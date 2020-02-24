@@ -1,4 +1,10 @@
 <?php
+/**
+ * Login.
+ *
+ * @package Frontend Dashboard.
+ */
+
 get_header(); ?>
 
 <div id="primary fed_login" class="container-fluid">

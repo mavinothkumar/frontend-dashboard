@@ -1,7 +1,13 @@
 <?php
+/**
+ * Dashboard.
+ *
+ * @package Frontend Dashboard.
+ */
+
 $dashboard_url = fed_get_dashboard_url();
 $login_page    = fed_get_login_url();
-$login_page    = $login_page === false ? wp_login_url() : $login_page;
+$login_page    = ( false === $login_page ) ? wp_login_url() : $login_page;
 $current_link  = get_permalink();
 if ( $dashboard_url === $current_link && ! is_user_logged_in() ) {
 	wp_safe_redirect( $login_page );

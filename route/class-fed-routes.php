@@ -1,131 +1,147 @@
 <?php
-if ( ! defined('ABSPATH')) {
-    exit;
+/**
+ * Routes.
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
-if ( ! class_exists('FED_Routes')) {
-    /**
-     * Class FED_Routes
-     */
-    class FED_Routes
-    {
+if ( ! class_exists( 'FED_Routes' ) ) {
+	/**
+	 * Class FED_Routes
+	 */
+	class FED_Routes {
 
-        public $request;
 
-        /**
-         * FED_Routes constructor.
-         *
-         * @param $request
-         * @param $error
-         */
-        public function __construct($request)
-        {
-            $this->request = $request;
-        }
+		/**
+		 * Request.
+		 *
+		 * @var array | String.
+		 */
+		public $request;
 
-        /**
-         * @param $menu
-         */
-        public function getDashboardContent($menu)
-        {
-            if ($menu['menu_request']['menu_type'] === 'user') {
-                fed_display_dashboard_profile($menu['menu_request']);
-            }
-            if ($menu['menu_request']['menu_type'] === 'logout') {
-                fed_logout_process();
-            }
+		/**
+		 * FED_Routes constructor.
+		 *
+		 * @param  array | string $request  Request.
+		 */
+		public function __construct( $request ) {
+			$this->request = $request;
+		}
 
-            do_action('fed_frontend_dashboard_menu_container', $this->request, $menu);
-        }
+		/**
+		 * Dashboard Content.
+		 *
+		 * @param  array $menu  Menu.
+		 */
+		public function getDashboardContent( $menu ) {
+			if ( 'user' === $menu['menu_request']['menu_type'] ) {
+				fed_display_dashboard_profile( $menu['menu_request'] );
+			}
+			if ( 'logout' === $menu['menu_request']['menu_type'] ) {
+				fed_logout_process();
+			}
 
-        /**
-         * @return array|bool|\WP_Error
-         */
-        public function setDashboardMenuQuery()
-        {
-            $menu              = fed_get_dashboard_menu_items_sort_data();
-            $first_element_key = array_keys($menu);
-            $first_element     = $first_element_key[0];
+			do_action( 'fed_frontend_dashboard_menu_container', $this->request, $menu );
+		}
 
-            if (count(array_diff($this->getDefaultMenuQuery(), array_keys($this->request))) !== 0) {
-                $menu_items = array(
-                        'menu_request' => array(
-                                'menu_type' => $menu[$first_element]['menu_type'],
-                                'menu_slug' => $menu[$first_element]['menu_slug'],
-                                'menu_id'   => $menu[$first_element]['id'],
-                                'fed_nonce' => wp_create_nonce('fed_nonce'),
-                        ),
-                );
-            } else {
-                $menu_items = array(
-                        'menu_request' => array(
-                                'menu_type' => $this->request['menu_type'],
-                                'menu_slug' => $this->request['menu_slug'],
-                                'menu_id'   => $this->request['menu_id'],
-                                'fed_nonce' => wp_create_nonce('fed_nonce'),
-                        ),
-                );
-            }
+		/**
+		 * Set Dashboard Menu Query.
+		 *
+		 * @return array|bool|\WP_Error
+		 */
+		public function setDashboardMenuQuery() {
+			$menu              = fed_get_dashboard_menu_items_sort_data();
+			$first_element_key = array_keys( $menu );
+			$first_element     = $first_element_key[0];
 
-            $menu_items['menu_items'] = $menu;
+			if ( count( array_diff( $this->getDefaultMenuQuery(), array_keys( $this->request ) ) ) !== 0 ) {
+				$menu_items = array(
+					'menu_request' => array(
+						'menu_type' => $menu[ $first_element ]['menu_type'],
+						'menu_slug' => $menu[ $first_element ]['menu_slug'],
+						'menu_id'   => $menu[ $first_element ]['id'],
+						'fed_nonce' => wp_create_nonce( 'fed_nonce' ),
+					),
+				);
+			} else {
+				$menu_items = array(
+					'menu_request' => array(
+						'menu_type' => $this->request['menu_type'],
+						'menu_slug' => $this->request['menu_slug'],
+						'menu_id'   => $this->request['menu_id'],
+						'fed_nonce' => wp_create_nonce( 'fed_nonce' ),
+					),
+				);
+			}
 
-            /**
-             * Check for Nonce
-             */
-            if ($this->validateNonce($menu_items['menu_request']) instanceof WP_Error) {
-                return $this->validateNonce($menu_items['menu_request']);
-            }
+			$menu_items['menu_items'] = $menu;
 
-            /**
-             * Check the Menu type is valid
-             */
-            if ( ! in_array($menu_items['menu_request']['menu_type'], $this->getDefaultMenuType(), true)) {
-                return new WP_Error('invalid_menu_type', 'Invalid Menu Type in URL 1');
-            }
-            /**
-             * Check is the menu is allowed for this user
-             */
+			/**
+			 * Check for Nonce
+			 */
+			if ( $this->validateNonce( $menu_items['menu_request'] ) instanceof WP_Error ) {
+				return $this->validateNonce( $menu_items['menu_request'] );
+			}
 
-            if (isset($this->request['menu_slug']) && ! in_array($this->request['menu_slug'],
-                            fed_get_keys_from_menu($menu))) {
-                return new WP_Error('invalid_menu_type', 'Invalid Menu Type in URL 2');
-            }
+			/**
+			 * Check the Menu type is valid
+			 */
+			if ( ! in_array( $menu_items['menu_request']['menu_type'], $this->getDefaultMenuType(), true ) ) {
+				return new WP_Error( 'invalid_menu_type', 'Invalid Menu Type in URL 1' );
+			}
+			/**
+			 * Check is the menu is allowed for this user
+			 */
 
-            set_query_var('fed_menu_items', $menu_items);
+			if (
+				isset( $this->request['menu_slug'] ) && ! in_array(
+					$this->request['menu_slug'],
+					fed_get_keys_from_menu( $menu )
+				)
+			) {
+				return new WP_Error( 'invalid_menu_type', 'Invalid Menu Type in URL 2' );
+			}
 
-            return $menu_items;
-        }
+			set_query_var( 'fed_menu_items', $menu_items );
 
-        /**
-         * @return mixed|void
-         */
-        public function getDefaultMenuQuery()
-        {
-            return apply_filters('fed_get_default_menu_query', array('menu_type', 'menu_slug', 'fed_nonce'));
-        }
+			return $menu_items;
+		}
 
-        /**
-         * @return mixed|void
-         */
-        public function getDefaultMenuType()
-        {
-            return fed_get_default_menu_type();
-        }
+		/**
+		 * Get Default Menu Query.
+		 *
+		 * @return mixed|void
+		 */
+		public function getDefaultMenuQuery() {
+			return apply_filters( 'fed_get_default_menu_query', array( 'menu_type', 'menu_slug', 'fed_nonce' ) );
+		}
 
-        /**
-         * @param $request
-         *
-         * @return bool|\WP_Error
-         */
-        private function validateNonce($request)
-        {
-            if ( ! isset($request['fed_nonce'])) {
-                return new WP_Error('invalid_request', 'Invalid Request');
-            }
-            if ( ! wp_verify_nonce($request['fed_nonce'], 'fed_nonce')) {
-                return new WP_Error('invalid_request', 'Invalid Request');
-            }
+		/**
+		 * Get Default Menu Type.
+		 *
+		 * @return mixed|void
+		 */
+		public function getDefaultMenuType() {
+			return fed_get_default_menu_type();
+		}
 
-            return true;
-        }
-    }
+		/**
+		 * Validate Nonce.
+		 *
+		 * @param  array $request  Request.
+		 *
+		 * @return bool|\WP_Error
+		 */
+		private function validateNonce( $request ) {
+			if ( ! isset( $request['fed_nonce'] ) ) {
+				return new WP_Error( 'invalid_request', 'Invalid Request' );
+			}
+			if ( ! wp_verify_nonce( $request['fed_nonce'], 'fed_nonce' ) ) {
+				return new WP_Error( 'invalid_request', 'Invalid Request' );
+			}
+
+			return true;
+		}
+	}
 }

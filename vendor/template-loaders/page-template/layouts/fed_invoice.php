@@ -1,4 +1,11 @@
+<?php
+/**
+ * Invoice.
+ *
+ * @package Frontend Dashboard.
+ */
 
+?>
 <div id="primary fed_invoice" class="content-area container">
 	<main id="main" class="site-main" role="main">
 		<?php

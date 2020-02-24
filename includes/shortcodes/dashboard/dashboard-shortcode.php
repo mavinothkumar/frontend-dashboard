@@ -12,8 +12,7 @@ if ( ! shortcode_exists( 'fed_dashboard' ) && ! function_exists( 'fed_fn_dashboa
 	 * @return string
 	 */
 	function fed_fn_dashboard() {
-
-		$templates = new FED_Template_Loader;
+		$templates = new FED_Template_Loader();
 
 		ob_start();
 
@@ -30,17 +29,20 @@ if ( ! shortcode_exists( 'fed_dashboard' ) && ! function_exists( 'fed_fn_dashboa
  */
 add_action( 'template_redirect', 'fed_dashboard_template_redirect' );
 
+/**
+ * Dashboard Template Redirect.
+ */
 function fed_dashboard_template_redirect() {
 
 	if ( ! is_user_logged_in() ) {
 		$location   = fed_get_dashboard_url();
 		$login_page = fed_get_login_url();
-		if ( $location != false && get_permalink() ==  $location) {
-			$login_page = $login_page == false ? wp_login_url() : $login_page;
+		if ( ( false != $location ) && ( get_permalink() == $location ) ) {
+			$login_page = ( false == $login_page ) ? esc_url( wp_login_url() ) : $login_page;
 
 			wp_safe_redirect( $login_page );
 		}
 	}
 }
 
-add_filter('widget_text','do_shortcode');
+add_filter( 'widget_text', 'do_shortcode' );

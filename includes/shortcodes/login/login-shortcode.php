@@ -1,6 +1,6 @@
 <?php
 /**
- * Login, Register, Forgot Password, Reset Password
+ * Login, Register, Forgot Password, Reset Password.
  *
  * @package frontend-dashboard
  */
@@ -13,7 +13,7 @@ if ( ! shortcode_exists( 'fed_login' ) && ! function_exists( 'fed_fn_login' ) ) 
 	 */
 	function fed_fn_login() {
 
-		$templates = new FED_Template_Loader;
+		$templates = new FED_Template_Loader();
 		ob_start();
 
 		if ( is_user_logged_in() ) {
@@ -33,12 +33,20 @@ if ( ! shortcode_exists( 'fed_login' ) && ! function_exists( 'fed_fn_login' ) ) 
  */
 add_action( 'template_redirect', 'fed_login_template_redirect' );
 
+/**
+ * Login Template Redirect.
+ */
 function fed_login_template_redirect() {
 	if ( is_user_logged_in() ) {
-		$location   = fed_get_login_redirect_url();
-		$login_page = fed_get_login_url();
-		if ( $login_page != false && is_page( url_to_postid( $login_page ) ) ) {
-			$location = $location == false ? home_url() : $location;
+		$login_page     = fed_get_login_url();
+		// Check if WordPress VIP.
+		$url_to_post_id = function_exists( 'wpcom_vip_url_to_postid' ) ? wpcom_vip_url_to_postid(
+			$login_page
+		) : url_to_postid( $login_page );
+		$location       = fed_get_login_redirect_url();
+
+		if ( ( false != $login_page ) && is_page( $url_to_post_id ) ) {
+			$location = ( false == $location ) ? home_url() : $location;
 
 			wp_safe_redirect( $location );
 		}

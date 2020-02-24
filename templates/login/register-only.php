@@ -1,9 +1,12 @@
 <?php
 /**
  * Logged in User form
+ *
+ * @package Frontend Dashboard.
  */
 
 $details = fed_register_only();
+$login   = fed_get_login_url();
 
 do_action( 'fed_before_register_only_form' );
 ?>
@@ -13,13 +16,13 @@ do_action( 'fed_before_register_only_form' );
 			<div class="col-md-6 col-md-offset-3">
 				<div class="panel panel-primary">
 					<div class="panel-heading">
-						<h3 class="panel-title"><?php echo $details['menu']['name']; ?></h3>
+						<h3 class="panel-title"><?php echo esc_attr( $details['menu']['name'] ); ?></h3>
 					</div>
 					<div class="panel-body">
 						<div class="fed_tab_content"
-							 data-id="<?php echo $details['menu']['id'] ?>">
+								data-id="<?php echo esc_attr( $details['menu']['id'] ); ?>">
 							<form method="post"
-								  class="fed_form_post"
+									class="fed_form_post"
 							>
 								<?php
 								$contents = $details['content'];
@@ -28,9 +31,8 @@ do_action( 'fed_before_register_only_form' );
 								foreach ( $contents as $content ) {
 									?>
 									<div class="form-group">
-
-										<label><?php echo $content['name'] ?></label>
-										<?php echo $content['input'] ?>
+										<label><?php echo esc_attr( $content['name'] ); ?></label>
+										<?php echo esc_attr( $content['input'] ); ?>
 									</div>
 									<?php
 								}
@@ -38,13 +40,20 @@ do_action( 'fed_before_register_only_form' );
 								<div class="row">
 									<div class="col-md-12 text-center">
 										<input type="hidden"
-											   name="submit"
-											   value="Register"/>
-										<button class="btn btn-primary" type="submit"><?php echo $details['button'] ?></button>
+												name="submit"
+												value="Register"/>
+										<button class="btn btn-primary"
+												type="submit"><?php echo esc_attr( $details['button'] ); ?></button>
 									</div>
-									<?php if ( $login = fed_get_login_url() ) { ?>
+									<?php if ( $login ) { ?>
 										<div class="col-md-12 padd_top_20 text-center">
-											<a href="<?php echo $login ?>"><?php _e( 'Already have an account?', 'frontend-dashboard' ) ?></a>
+											<a href="<?php echo esc_url( $login ); ?>">
+												<?php
+												esc_attr_e(
+													'Already have an account?', 'frontend-dashboard'
+												);
+												?>
+											</a>
 										</div>
 									<?php } ?>
 								</div>

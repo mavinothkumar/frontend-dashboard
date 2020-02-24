@@ -13,7 +13,7 @@ if ( ! shortcode_exists( 'fed_forgot_password_only' ) && ! function_exists( 'fed
 	 */
 	function fed_fn_forgot_password_only() {
 
-		$templates = new FED_Template_Loader;
+		$templates = new FED_Template_Loader();
 		ob_start();
 
 		if ( is_user_logged_in() ) {

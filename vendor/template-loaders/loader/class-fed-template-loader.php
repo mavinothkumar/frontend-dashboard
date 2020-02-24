@@ -90,8 +90,8 @@ if ( ! class_exists( 'FED_Template_Loader' ) ) {
 		/**
 		 * FED_Template_Loader constructor.
 		 *
-		 * @param  string  $plugin_directory  Plugin Directory.
-		 * @param  string  $plugin_template_directory  Plugin Template Directory.
+		 * @param  string $plugin_directory  Plugin Directory.
+		 * @param  string $plugin_template_directory  Plugin Template Directory.
 		 */
 		public function __construct( $plugin_directory = BC_FED_PLUGIN_DIR, $plugin_template_directory = 'templates' ) {
 			$this->plugin_directory          = $plugin_directory;
@@ -102,9 +102,9 @@ if ( ! class_exists( 'FED_Template_Loader' ) ) {
 		/**
 		 * Retrieve a template part.
 		 *
-		 * @param  string  $slug  Template slug.
-		 * @param  string  $name  Optional. Template variation name. Default null.
-		 * @param  bool  $load  Optional. Whether to load template. Default true.
+		 * @param  string $slug  Template slug.
+		 * @param  string $name  Optional. Template variation name. Default null.
+		 * @param  bool   $load  Optional. Whether to load template. Default true.
 		 *
 		 * @return string
 		 * @since 1.0.0
@@ -130,7 +130,7 @@ if ( ! class_exists( 'FED_Template_Loader' ) ) {
 		 * When an input key has a hyphen, you can use `$data->{foo-bar}` in the template.
 		 *
 		 * @param  array  $data  Custom data for the template.
-		 * @param  string  $var_name  Optional. Variable under which the custom data is available in the template.
+		 * @param  string $var_name  Optional. Variable under which the custom data is available in the template.
 		 *                         Default is 'data'.
 		 *
 		 * @since 1.2.0
@@ -171,8 +171,8 @@ if ( ! class_exists( 'FED_Template_Loader' ) ) {
 		/**
 		 * Given a slug and optional name, create the file names of templates.
 		 *
-		 * @param  string  $slug  Template slug.
-		 * @param  string  $name  Template variation name.
+		 * @param  string $slug  Template slug.
+		 * @param  string $name  Template variation name.
 		 *
 		 * @return array
 		 * @since 1.0.0
@@ -191,8 +191,8 @@ if ( ! class_exists( 'FED_Template_Loader' ) ) {
 			 * e.g. 0 => recipe-instructions.php, 1 => recipe.php
 			 *
 			 * @param  array  $templates  Names of template files that should be looked for, for given slug and name.
-			 * @param  string  $slug  Template slug.
-			 * @param  string  $name  Template variation name.
+			 * @param  string $slug  Template slug.
+			 * @param  string $name  Template variation name.
 			 *
 			 * @since 1.0.0
 			 *
@@ -207,9 +207,9 @@ if ( ! class_exists( 'FED_Template_Loader' ) ) {
 		 * inherit from a parent theme can just overload one file. If the template is
 		 * not found in either of those, it looks in the theme-compat folder last.
 		 *
-		 * @param  string|array  $template_names  Template file(s) to search for, in order.
-		 * @param  bool  $load  If true the template file will be loaded if it is found.
-		 * @param  bool  $require_once  Whether to require_once or require. Default true.
+		 * @param  string|array $template_names  Template file(s) to search for, in order.
+		 * @param  bool         $load  If true the template file will be loaded if it is found.
+		 * @param  bool         $require_once  Whether to require_once or require. Default true.
 		 *                                     Has no effect if $load is false.
 		 *
 		 * @return string The template filename if one is located.
@@ -284,7 +284,7 @@ if ( ! class_exists( 'FED_Template_Loader' ) ) {
 			/**
 			 * Allow ordered list of template paths to be amended.
 			 *
-			 * @param  array  $var  Default is directory in child theme at index 1, parent theme at 10, and plugin at 100.
+			 * @param  array $var  Default is directory in child theme at index 1, parent theme at 10, and plugin at 100.
 			 *
 			 * @since 1.0.0
 			 *
