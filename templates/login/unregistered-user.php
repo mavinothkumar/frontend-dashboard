@@ -90,9 +90,9 @@ $get_payload = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
 									<div class="form-group">
 										<?php
 										$content_name = ! empty( $content['name'] ) && ( null === $label ) ? '<label>' . $content['name'] . '</label>' : '';
-										echo esc_attr( $content_name );
+										echo wp_kses_post( $content_name );
 										?>
-										<?php echo esc_attr( $content['input'] ); ?>
+										<?php echo ( $content['input'] ); ?>
 										<?php
 										echo null !== $label ? '<label>' . esc_attr(
 												$content['name']
@@ -108,7 +108,7 @@ $get_payload = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
 												name="submit"
 												value="<?php echo esc_attr( $key ); ?>"/>
 										<button class="btn btn-primary" type="submit">
-											<?php echo esc_attr( $detail['button'] ); ?></button>
+											<?php echo wp_kses_post( $detail['button'] ); ?></button>
 									</div>
 								</div>
 							</form>

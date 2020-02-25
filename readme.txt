@@ -4,7 +4,7 @@ Tags: dashboard, frontend dashboard, custom login, custom register, custom roles
 Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 4.6
 Tested up to: 5.3.2
-Stable tag: 1.5.14
+Stable tag: 2.1
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -14,6 +14,8 @@ Frontend Dashboard is bundled with huge list of custom features which can easily
 
 = Frontend Dashboard Demo =
 [Frontend Dashboard Demo](https://demo.frontenddashboard.com/)
+
+= Frontend Dashboard Designed and Developed with WordPress Coding Standards =
 
 Frontend Dashboard is bundled with the huge list of custom features which can easily customise the User profile, Posts, Login, Register, Custom roles on the custom front page.
 
@@ -246,9 +248,14 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Changelog ==
 
+= 2.1 [25-Feb-2020] =
+* 2.0 Bug fixes: Login, Register, Forgot Password page, Admin status, add-on page.
+
+= 2.0 [24-Feb-2020] =
+* Refactored all codes to WordPress Coding Standards.
+
 = 1.5.14 [15-Feb-2020] =
 * Bug: All Menus are not visible to admin for sorting.
-
 
 = 1.5.13 [14-Jan-2020] =
 
@@ -564,9 +571,8 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Upgrade Notice ==
 
-= 1.5.13 [14-Jan-2020] =
-
-* Security Improved.
+= 2.1 [25-Feb-2020] =
+* 2.0 Bug fixes: Login, Register, Forgot Password page, Admin status, add-on page.
 
 == Screenshots ==
 1. Frontend Dashboard Settings | Login | Settings

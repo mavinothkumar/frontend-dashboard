@@ -24,9 +24,15 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 		 */
 		$fed_login           = get_option( 'fed_admin_login', array() );
 		$login_settings      = fed_enable_disable( isset( $fed_login['settings']['fed_login_url'] ) ? true : false );
-		$redirect_login_url  = fed_enable_disable( isset( $fed_login['settings']['fed_redirect_login_url'] ) ? true : false );
-		$redirect_logout_url = fed_enable_disable( isset( $fed_login['settings']['fed_redirect_logout_url'] ) ? true : false );
-		$dashboard           = fed_enable_disable( isset( $fed_login['settings']['fed_dashboard_url'] ) ? true : false );
+		$redirect_login_url  = fed_enable_disable(
+			isset( $fed_login['settings']['fed_redirect_login_url'] ) ? true : false
+		);
+		$redirect_logout_url = fed_enable_disable(
+			isset( $fed_login['settings']['fed_redirect_logout_url'] ) ? true : false
+		);
+		$dashboard           = fed_enable_disable(
+			isset( $fed_login['settings']['fed_dashboard_url'] ) ? true : false
+		);
 
 		/**
 		 * Post
@@ -80,7 +86,7 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 																esc_attr_e( 'Settings', 'frontend-dashboard' );
 																?>
 															</td>
-															<td><?php echo esc_attr( $fed_upl_settings ); ?></td>
+															<td><?php echo wp_kses_post( $fed_upl_settings ); ?></td>
 														</tr>
 														</tbody>
 													</table>
@@ -168,20 +174,20 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 														<tbody>
 														<tr>
 															<td class="fed_header_font_color">Settings</td>
-															<td><?php echo esc_attr( $fed_post_settings ); ?></td>
+															<td><?php echo wp_kses_post( $fed_post_settings ); ?></td>
 														</tr>
 														<tr>
 															<td class="fed_header_font_color">Dashboard Settings
 															</td>
-															<td><?php echo esc_attr( $fed_post_dashboard ); ?></td>
+															<td><?php echo wp_kses_post( $fed_post_dashboard ); ?></td>
 														</tr>
 														<tr>
 															<td class="fed_header_font_color">Menu</td>
-															<td><?php echo esc_attr( $fed_post_menu ); ?></td>
+															<td><?php echo wp_kses_post( $fed_post_menu ); ?></td>
 														</tr>
 														<tr>
 															<td class="fed_header_font_color">Permissions</td>
-															<td><?php echo esc_attr( $post_permissions ); ?></td>
+															<td><?php echo wp_kses_post( $post_permissions ); ?></td>
 														</tr>
 														</tbody>
 													</table>
@@ -217,7 +223,11 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 															<td class="fed_header_font_color">cURL</td>
 															<td>
 																<?php
-																echo esc_attr( fed_enable_disable( fed_check_extension_loaded( 'cURL' ) ) );
+																echo wp_kses_post(
+																	fed_enable_disable(
+																		fed_check_extension_loaded( 'cURL' )
+																	)
+																);
 																?>
 															</td>
 														</tr>
@@ -225,7 +235,11 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 															<td class="fed_header_font_color">JSON</td>
 															<td>
 																<?php
-																echo esc_attr( fed_enable_disable( fed_check_extension_loaded( 'JSON' ) ) );
+																echo wp_kses_post(
+																	fed_enable_disable(
+																		fed_check_extension_loaded( 'JSON' )
+																	)
+																);
 																?>
 															</td>
 														</tr>
@@ -233,7 +247,11 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 															<td class="fed_header_font_color">OpenSSL</td>
 															<td>
 																<?php
-																echo esc_attr( fed_enable_disable( fed_check_extension_loaded( 'OpenSSL' ) ) );
+																echo wp_kses_post(
+																	fed_enable_disable(
+																		fed_check_extension_loaded( 'OpenSSL' )
+																	)
+																);
 																?>
 															</td>
 														</tr>
@@ -268,9 +286,13 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 														<?php foreach ( fed_get_table_status() as $table ) { ?>
 															<tr>
 																<td class="fed_header_font_color">
-																	<?php echo esc_attr( $table['title'] ) . ' ( ' . esc_attr( $table['plugin_name'] ) . ' )'; ?>
+																	<?php echo esc_attr(
+																		           $table['title']
+																	           ) . ' ( ' . esc_attr(
+																		           $table['plugin_name']
+																	           ) . ' )'; ?>
 																</td>
-																<td><?php echo esc_attr( $table['status'] ); ?></td>
+																<td><?php echo wp_kses_post( $table['status'] ); ?></td>
 															</tr>
 														<?php } ?>
 														<?php do_action( 'fed_admin_menu_status_database_below' ); ?>
@@ -302,19 +324,19 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 														<tbody>
 														<tr>
 															<td>Login Page URL</td>
-															<td><?php echo esc_attr( $login_settings ); ?></td>
+															<td><?php echo wp_kses_post( $login_settings ); ?></td>
 														</tr>
 														<tr>
 															<td>Redirect After Logged in URL</td>
-															<td><?php echo esc_attr( $redirect_login_url ); ?></td>
+															<td><?php echo wp_kses_post( $redirect_login_url ); ?></td>
 														</tr>
 														<tr>
 															<td>Redirect After Logged out URL</td>
-															<td><?php echo esc_attr( $redirect_logout_url ); ?></td>
+															<td><?php echo wp_kses_post( $redirect_logout_url ); ?></td>
 														</tr>
 														<tr>
 															<td>Dashboard</td>
-															<td><?php echo esc_attr( $dashboard ); ?></td>
+															<td><?php echo wp_kses_post( $dashboard ); ?></td>
 														</tr>
 														</tbody>
 													</table>
@@ -381,7 +403,11 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 																	</td>
 																	<td>
 																		<form method="post" class="fed_ajax"
-																				action="<?php echo esc_url( fed_get_ajax_form_action( 'fed_status_delete_table' ) ); ?>">
+																				action="<?php echo esc_url(
+																					fed_get_ajax_form_action(
+																						'fed_status_delete_table'
+																					)
+																				); ?>">
 																			<?php
 																			fed_wp_nonce_field(
 																				'fed_nonce',
@@ -389,7 +415,9 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 																			);
 																			?>
 																			<input type="hidden" name="table_name"
-																					value="<?php echo esc_attr( $table_name ); ?>"/>
+																					value="<?php echo esc_attr(
+																						$table_name
+																					); ?>"/>
 																			<button type="submit"
 																					class="fed_is_delete btn btn-danger fed_no_background fed_red_color fed_no_p fed_no_m">
 																				<i class="fa fa-trash"></i>
@@ -441,7 +469,11 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 																	</td>
 																	<td>
 																		<form method="post" class="fed_ajax"
-																				action="<?php echo esc_url( fed_get_ajax_form_action( 'fed_status_empty_table' ) ); ?>">
+																				action="<?php echo esc_url(
+																					fed_get_ajax_form_action(
+																						'fed_status_empty_table'
+																					)
+																				); ?>">
 																			<?php
 																			fed_wp_nonce_field(
 																				'fed_nonce',
@@ -449,7 +481,9 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 																			);
 																			?>
 																			<input type="hidden" name="table_name"
-																					value="<?php echo esc_attr( $table_name ); ?>"/>
+																					value="<?php echo esc_attr(
+																						$table_name
+																					); ?>"/>
 																			<button type="submit"
 																					class="fed_is_delete btn btn-danger fed_no_background fed_red_color fed_no_p fed_no_m">
 																				<i class="fas fa-times-circle"></i>
@@ -495,7 +529,11 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 												<div class="col-md-12">
 													<div class="text-right">
 														<form method="post" class="fed_ajax"
-																action="<?php echo esc_url( fed_get_ajax_form_action( 'fed_status_delete_all_option' ) ); ?>">
+																action="<?php echo esc_url(
+																	fed_get_ajax_form_action(
+																		'fed_status_delete_all_option'
+																	)
+																); ?>">
 															<?php
 															fed_wp_nonce_field(
 																'fed_nonce',
@@ -527,7 +565,11 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 															</div>
 															<div class="">
 																<form method="post" class="fed_ajax"
-																		action="<?php echo esc_url( fed_get_ajax_form_action( 'fed_status_delete_option' ) ); ?>">
+																		action="<?php echo esc_url(
+																			fed_get_ajax_form_action(
+																				'fed_status_delete_option'
+																			)
+																		); ?>">
 																	<?php
 																	fed_wp_nonce_field(
 																		'fed_nonce',
@@ -535,7 +577,9 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 																	);
 																	?>
 																	<input type="hidden" name="option_id"
-																			value="<?php echo esc_attr( $option->option_id ); ?>"/>
+																			value="<?php echo esc_attr(
+																				$option->option_id
+																			); ?>"/>
 																	<button type="submit"
 																			class="fed_is_delete btn btn-warning fed_no_background fed_red_color fed_no_p fed_no_m">
 																		<i class="fa fa-trash"></i>
@@ -562,7 +606,8 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 							<h3 class="panel-title">Log File</h3>
 						</div>
 						<div class="panel-body">
-							<object data="<?php echo plugins_url( 'log/dashboard.log', BC_FED_PLUGIN ); ?>" width="1000"
+							<object data="<?php echo esc_url( plugins_url( 'log/dashboard.log', BC_FED_PLUGIN ) ); ?>"
+									width="1000"
 									height="700">
 								Not supported
 							</object>

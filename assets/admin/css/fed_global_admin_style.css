@@ -1,110 +1,110 @@
 #wp-admin-bar-frontend-dashboard-main img.ab-icon {
-    padding: 0 !important;
+	padding: 0 !important;
 }
 
 .fa {
-    display: inline-block;
-    font-family: 'Font Awesome 5 Free';
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+	display: inline-block;
+	font-family: 'Font Awesome 5 Free';
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 .bc_fed .margin_bottom_20 {
-    margin-bottom: 20px;
+	margin-bottom: 20px;
 }
 
 .bc_fed .m-r-10 {
-    margin-right: 10px !important;
+	margin-right: 10px !important;
 }
 
 .bc_fed .modal {
-    overflow: auto !important;
+	overflow: auto !important;
 }
 
 .bc_fed .margin_top_20 {
-    margin-top: 20px !important;
+	margin-top: 20px !important;
 }
 
 .bc_fed .fed_red_color, .bc_fed .fed_red_color:hover {
-    color: red;
+	color: red;
 !important;
 }
 
 .bc_fed .fed_no_p {
-    padding: 0 !important;
+	padding: 0 !important;
 }
 
 .fed_border_2px {
-    border: 2px solid #033333;
+	border: 2px solid #033333;
 }
 
 .fed_border_gray_2px {
-    border: 2px solid #e7e7e7;
+	border: 2px solid #e7e7e7;
 }
 
 .bc_fed .fed_equal_column_height {
-    display: flex;
-    display: -webkit-flex;
-    flex-wrap: wrap;
+	display: flex;
+	display: -webkit-flex;
+	flex-wrap: wrap;
 }
 
 .bc_fed .fed_no_m {
-    margin: 0 !important;
+	margin: 0 !important;
 }
 
 .fed_menu_icon {
-    padding-right: 5px;
+	padding-right: 5px;
 }
 
 .bc_fed .m-t-20 {
-    margin-top: 20px;
+	margin-top: 20px;
 }
 
 .bc_fed .panel-heading[data-toggle='collapse'].collapsed h4:after {
-    font-family: 'Font Awesome 5 Free';
-    content: '\f078';
-    float: right;
-    color: #FFFFFF;
-    font-weight: 900;
-    font-size: 20px;
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+	font-family: 'Font Awesome 5 Free';
+	content: '\f078';
+	float: right;
+	color: #FFFFFF;
+	font-weight: 900;
+	font-size: 20px;
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 .bc_fed .nav.nav-pills.nav-stacked .active a:after,
 .bc_fed .fed_dashboard_menus:not(.fed_collapse) .fed_menu_slug.active:after {
-    font-family: 'Font Awesome 5 Free';
-    content: '\f054';
-    float: right;
-    color: #FFFFFF;
-    font-size: 20px;
-    text-rendering: auto;
-    font-weight: 900;
+	font-family: 'Font Awesome 5 Free';
+	content: '\f054';
+	float: right;
+	color: #FFFFFF;
+	font-size: 20px;
+	text-rendering: auto;
+	font-weight: 900;
 }
 
 .bc_fed .panel-heading[data-toggle='collapse'] h4:after {
-    font-family: 'Font Awesome 5 Free';
-    content: "\f077";
-    float: right;
-    color: #FFFFFF;
-    font-size: 20px;
-    font-weight: 900;
+	font-family: 'Font Awesome 5 Free';
+	content: "\f077";
+	float: right;
+	color: #FFFFFF;
+	font-size: 20px;
+	font-weight: 900;
 }
 
 .bc_fed .fed_input_group {
-    width: 100% !important;
+	width: 100% !important;
 }
 
 .bc_fed .fed_input_group .input-group-btn {
-    width: auto !important;
+	width: auto !important;
 }
 
 .bc_fed .fed_no_background {
-    background: transparent !important;
-    border: 0 !important;
-    box-shadow: none !important;
+	background: transparent !important;
+	border: 0 !important;
+	box-shadow: none !important;
 }
 
 /*#wp-admin-bar-frontend-dashboard-main img {*/
@@ -112,146 +112,148 @@
 /*}*/
 
 .bc_fed .fed_remove_image {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: #033333;
-    color: #ffffff;
-    border-radius: 21px;
-    width: 22px;
-    text-align: center;
-    cursor: pointer;
-    font-size: 14px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	background: #033333;
+	color: #ffffff;
+	border-radius: 21px;
+	width: 22px;
+	text-align: center;
+	cursor: pointer;
+	font-size: 14px;
 }
 
 .bc_fed .fed_upload_wrapper {
-    position: relative;
-    width: 100px;
-    height: 100px;
+	position: relative;
+	width: 100px;
+	height: 100px;
 }
 
 .bc_fed .fed_menu_slug.list-group-item {
-    width: 100%;
+	width: 100%;
 }
 
 .bc_fed .panel .panel-heading {
-    cursor: pointer;
+	cursor: pointer;
 }
 
 .p-10 {
-    padding: 10px !important;
+	padding: 10px !important;
 }
 
 .p-20 {
-    padding: 20px !important;
+	padding: 20px !important;
 }
 
 .fed_p_l_20 {
-    padding-left: 20px !important;
+	padding-left: 20px !important;
 }
 
 .fed_p_l_10 {
-    padding-left: 10px !important;
+	padding-left: 10px !important;
 }
 
 .fed_p_b_10 {
-    padding-bottom: 10px !important;
+	padding-bottom: 10px !important;
 }
 
 .fed_sticky_item.fed_bg_addons {
-    background: #0AAAAA;
+	background: #0AAAAA;
 }
 
 .fed_font_size_20 {
-    font-size: 20px;
+	font-size: 20px;
 }
 
 .fed_m_l_10 {
-    margin-left: 10px !important;
+	margin-left: 10px !important;
 }
 
 .fed_show_cursor {
-    cursor: pointer !important;
+	cursor: pointer !important;
 }
 
 .fed_flex_start_center {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
 }
 
 
 .fed_flex_space_between {
-    display: flex;
-    justify-content: space-between;
+	display: flex;
+	justify-content: space-between;
 }
 
 .fed_white_font {
-    color: #ffffff !important;
+	color: #ffffff !important;
 }
 
 .bc_fed .fed_btn_padd_5 {
-    padding: 2px 10px !important;
+	padding: 2px 10px !important;
 }
 
 .bc_fed .fed_float_right {
-    float: right;
+	float: right;
 }
 
 .fed_flex {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 
 .fed_frontend_dashboard_menu .panel-body {
-    padding: 0 !important;
+	padding: 0 !important;
 }
 
 .fed_display_inline div {
-    display: inline;
+	display: inline;
 }
 
 .fed_flex_left {
-    display: flex;
-    justify-content: left;
+	display: flex;
+	justify-content: left;
 }
 
 .bc_fed .fed_frontend_dashboard_menu .panel {
-    margin-bottom: 1px;
+	margin-bottom: 1px;
 }
 
 .bc_fed .fed_input_group_select .input-group-addon, .bc_fed .fed_input_group_select .input-group-btn {
-    width: auto !important;
+	width: auto !important;
 }
 
 .bc_fed .fed_input_group_select .input-group-addon {
-    padding: 0 !important;
-    background-color: transparent !important;
-    border: none !important;
+	padding: 0 !important;
+	background-color: transparent !important;
+	border: none !important;
 }
 
 .bc_fed #fed_transaction_modal .modal-lg {
-    width: 1200px !important;
+	width: 1200px !important;
 }
 
 .bc_fed #fed_transaction_modal {
-    z-index: 9999;
+	z-index: 9999;
 }
 
 .bc_fed .fed_datatable td {
-    word-break: break-all;
+	word-break: break-all;
 }
+
 .bc_fed .select2-container {
-    width: 100% !important;
+	width: 100% !important;
 }
 
 .bc_fed .select2-container--default .select2-selection--multiple {
-    height: 34px;
-    border: 1px solid #cccccc;
-    border-radius: 0;
+	height: 34px;
+	border: 1px solid #cccccc;
+	border-radius: 0;
 }
+
 .bc_fed .select2-container--default .select2-selection--multiple .select2-selection__choice {
-    font-size: 12px;
+	font-size: 12px;
 }

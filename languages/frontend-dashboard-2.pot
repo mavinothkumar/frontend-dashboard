@@ -1,0 +1,1610 @@
+# Copyright (C) 2020 vinoth06
+# This file is distributed under the same license as the Frontend Dashboard plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Frontend Dashboard 1.5.14\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/frontend-dashboard\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2020-02-24T04:29:48+01:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.2.0\n"
+"X-Domain: frontend-dashboard\n"
+
+#. Plugin Name of the plugin
+#: includes/admin/layout/class-fed-admin-user-profile.php:36
+#: includes/admin/hooks/class-fed-action-hooks.php:243
+#: includes/admin/menu/class-fed-admin-menu.php:29
+#: includes/admin/menu/class-fed-admin-menu.php:30
+msgid "Frontend Dashboard"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://buffercode.com/plugin/frontend-dashboard"
+msgstr ""
+
+#. Description of the plugin
+msgid "Frontend dashboard makes you flexible way to customize the user dashboard on frontend rather than WordPress wp-admin dashboard."
+msgstr ""
+
+#. Author of the plugin
+msgid "vinoth06"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://buffercode.com/"
+msgstr ""
+
+#: includes/frontend/controller/logout.php:30
+msgid "Please click here to logout"
+msgstr ""
+
+#: includes/frontend/controller/menu.php:357
+msgid "Collapse Menu"
+msgstr ""
+
+#. translators: %s : Menu.
+#. translators: %s : Menu
+#. translators: %s : Name
+#: includes/frontend/controller/profile.php:41
+#: includes/frontend/controller/profile.php:51
+#: includes/admin/validation/class-fed-validation.php:57
+msgid "%s "
+msgstr ""
+
+#: includes/frontend/controller/profile.php:111
+#: includes/frontend/controller/posts.php:322
+#: includes/admin/layout/settings_tab/general/class-fed-admin-general.php:473
+#: includes/admin/layout/settings_tab/general/class-fed-admin-general.php:804
+msgid "Save"
+msgstr ""
+
+#: includes/frontend/controller/profile.php:120
+msgid "Sorry! there is no field associated to this menu"
+msgstr ""
+
+#: includes/frontend/controller/posts.php:111
+msgid "Please fill post title"
+msgstr ""
+
+#: includes/frontend/controller/posts.php:151
+msgid " Successfully Saved"
+msgstr ""
+
+#: includes/frontend/controller/posts.php:156
+msgid "Sorry! your are not allowed to do this action"
+msgstr ""
+
+#: includes/frontend/function-frontend.php:98
+msgid "Default Tables not installed, please contact support"
+msgstr ""
+
+#: includes/frontend/function-frontend.php:665
+msgid "Sorry!"
+msgstr ""
+
+#: includes/frontend/function-frontend.php:666
+msgid "No user found..."
+msgstr ""
+
+#: includes/frontend/function-frontend.php:850
+msgid "Recent Post by"
+msgstr ""
+
+#: includes/frontend/function-frontend.php:892
+msgid "Error (403)"
+msgstr ""
+
+#: includes/frontend/function-frontend.php:896
+msgid "Unauthorised Access"
+msgstr ""
+
+#: includes/frontend/function-frontend.php:899
+msgid "Click here to visit Dashboard"
+msgstr ""
+
+#: includes/frontend/request/login/login.php:45
+msgid "Successfully Logged in"
+msgstr ""
+
+#: includes/frontend/request/login/register.php:53
+msgid "Successfully Registered"
+msgstr ""
+
+#: includes/frontend/request/login/reset.php:27
+msgid "Please enter the Password"
+msgstr ""
+
+#: includes/frontend/request/login/reset.php:31
+msgid "Password not matched"
+msgstr ""
+
+#: includes/frontend/request/login/reset.php:49
+msgid "Invalid Key, Please try resetting the password again"
+msgstr ""
+
+#: includes/frontend/request/login/reset.php:54
+msgid "Something went wrong, Please try again later"
+msgstr ""
+
+#: includes/frontend/request/login/validation.php:28
+#: includes/frontend/request/validation/validation.php:30
+msgid "Password not match"
+msgstr ""
+
+#: includes/frontend/request/login/validation.php:38
+msgid "Invalid Role"
+msgstr ""
+
+#: includes/frontend/request/login/validation.php:42
+msgid "You are trying to hack the user role"
+msgstr ""
+
+#: includes/frontend/request/login/validation.php:47
+msgid "This Username is Illegal to use in this website"
+msgstr ""
+
+#: includes/frontend/request/login/forgot.php:42
+msgid "Someone has requested a password reset for the following account:"
+msgstr ""
+
+#: includes/frontend/request/login/forgot.php:46
+msgid "Username: "
+msgstr ""
+
+#: includes/frontend/request/login/forgot.php:47
+msgid "If this was a mistake, just ignore this email and nothing will happen."
+msgstr ""
+
+#: includes/frontend/request/login/forgot.php:51
+msgid "To reset your password, visit the following address:"
+msgstr ""
+
+#: includes/frontend/request/login/forgot.php:68
+msgid "Password Reset"
+msgstr ""
+
+#: includes/frontend/request/login/forgot.php:73
+msgid "The email could not be sent. Possible reason: your host may have disabled the mail() function."
+msgstr ""
+
+#: includes/frontend/request/login/forgot.php:87
+msgid "Reset email sent to your email address"
+msgstr ""
+
+#: includes/frontend/request/validation/validation.php:59
+msgid "You can able to add only the registered user, So please use the search functionality to find the user"
+msgstr ""
+
+#: includes/admin/install/install.php:510
+msgid "If you need help in configuring the frontend dashboard, please watch the videos here"
+msgstr ""
+
+#: includes/admin/install/install.php:518
+msgid "Frontend Dashboard Instructions"
+msgstr ""
+
+#: includes/admin/install/install.php:527
+msgid "Notice: Please check your default settings"
+msgstr ""
+
+#: includes/admin/install/install.php:530
+msgid "Here"
+msgstr ""
+
+#: includes/admin/install/install.php:533
+msgid "if everything is good, please  click Don't show again button"
+msgstr ""
+
+#: includes/admin/install/install.php:543
+msgid "Don't show again"
+msgstr ""
+
+#: includes/admin/install/class-fed-install-addons.php:42
+msgid "OOPs! Something went wrong while activating the plugin"
+msgstr ""
+
+#: includes/admin/install/class-fed-install-addons.php:48
+msgid "Plugin activated successfully"
+msgstr ""
+
+#: includes/admin/pro/plugins/class-fed-pp-pro.php:45
+#: includes/admin/layout/input_fields/email.php:33
+#: includes/admin/function-admin.php:93
+#: includes/admin/menu/class-fed-admin-menu.php:191
+msgid "Email"
+msgstr ""
+
+#: includes/admin/pro/plugins/class-fed-pp-pro.php:49
+msgid "Templates"
+msgstr ""
+
+#: includes/admin/pro/plugins/class-fed-sc-pro.php:39
+msgid "Social"
+msgstr ""
+
+#: includes/admin/pro/plugins/class-fed-mp-pro.php:54
+#: includes/admin/pro/plugins/class-fed-mp-pro.php:55
+#: includes/admin/pro/plugins/class-fed-mp-pro.php:224
+msgid "Membership Pro"
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice.php:42
+#: includes/admin/payment/class-fed-invoice.php:52
+msgid "Company Logo"
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice.php:58
+msgid "Logo Width (px)"
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice.php:62
+#: includes/admin/payment/class-fed-invoice.php:73
+msgid "Logo Width in Pixel"
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice.php:79
+msgid "Logo Height (px)"
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice.php:83
+#: includes/admin/payment/class-fed-invoice.php:94
+msgid "Logo Height in Pixel"
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice.php:100
+#: includes/admin/payment/class-fed-invoice.php:104
+#: includes/admin/payment/class-fed-invoice.php:112
+msgid "Company Name"
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice.php:118
+#: includes/admin/payment/class-fed-invoice.php:122
+#: includes/admin/payment/class-fed-invoice.php:130
+msgid "Door Number"
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice.php:136
+#: includes/admin/payment/class-fed-invoice.php:140
+#: includes/admin/payment/class-fed-invoice.php:148
+msgid "Street Name"
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice.php:154
+#: includes/admin/payment/class-fed-invoice.php:158
+#: includes/admin/payment/class-fed-invoice.php:165
+#: includes/admin/payment/class-fed-invoice.php:553
+#: includes/admin/payment/class-fed-invoice.php:564
+msgid "City"
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice.php:170
+#: includes/admin/payment/class-fed-invoice.php:174
+#: includes/admin/payment/class-fed-invoice.php:181
+#: includes/admin/payment/class-fed-invoice.php:570
+#: includes/admin/payment/class-fed-invoice.php:581
+msgid "State"
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice.php:186
+#: includes/admin/payment/class-fed-invoice.php:190
+#: includes/admin/payment/class-fed-invoice.php:198
+msgid "Postal Code"
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice.php:204
+#: includes/admin/payment/class-fed-invoice.php:216
+#: includes/admin/payment/class-fed-invoice.php:604
+#: includes/admin/payment/class-fed-invoice.php:615
+msgid "Country"
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice.php:222
+#: includes/admin/payment/class-fed-invoice.php:226
+#: includes/admin/payment/class-fed-invoice.php:234
+msgid "Footer Note"
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice.php:284
+msgid "Invoice Details Updated Successfully "
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice.php:315
+msgid "Please configure the Invoice Details ( FED | Payments | Invoice | Company Details )"
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice.php:382
+#: includes/admin/payment/class-fed-payment-menu.php:56
+msgid "Company Details"
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice.php:392
+msgid "Client Details"
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice.php:414
+#: includes/admin/payment/class-fed-invoice.php:519
+#: includes/admin/payment/class-fed-invoice.php:530
+#: includes/admin/menu/items/status.php:152
+msgid "Name"
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice.php:415
+#: templates/payments/transactions.php:48
+msgid "Amount"
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice.php:416
+msgid "Quantity"
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice.php:417
+msgid "Tax/Discount"
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice.php:418
+#: includes/admin/payment/class-fed-invoice.php:456
+msgid "Total"
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice.php:536
+#: includes/admin/payment/class-fed-invoice.php:547
+msgid "Address"
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice.php:587
+#: includes/admin/payment/class-fed-invoice.php:598
+msgid "Postcode"
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice.php:621
+#: includes/admin/payment/class-fed-invoice.php:632
+msgid "Telephone"
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice.php:672
+msgid "Invoice User Address Updated Successfully "
+msgstr ""
+
+#: includes/admin/payment/class-fed-payment-widgets.php:82
+msgid "No payment received yet"
+msgstr ""
+
+#: includes/admin/payment/payment.php:278
+msgid "Invalid %s"
+msgstr ""
+
+#: includes/admin/payment/payment.php:384
+msgid "Free"
+msgstr ""
+
+#: includes/admin/payment/payment.php:402
+msgid "One Time"
+msgstr ""
+
+#: includes/admin/payment/payment.php:406
+msgid "Recurring"
+msgstr ""
+
+#: includes/admin/payment/payment.php:422
+msgid "Success"
+msgstr ""
+
+#: includes/admin/payment/payment.php:423
+msgid "Pending"
+msgstr ""
+
+#: includes/admin/payment/payment.php:424
+msgid "Hold"
+msgstr ""
+
+#: includes/admin/payment/payment.php:425
+msgid "Refunded"
+msgstr ""
+
+#: includes/admin/payment/payment.php:426
+#: includes/common/function-common.php:257
+msgid "Cancelled"
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice-template.php:60
+msgid "Select to make default"
+msgstr ""
+
+#: includes/admin/payment/class-fed-invoice-template.php:74
+#: includes/admin/layout/add-edit-profile.php:231
+msgid "Submit"
+msgstr ""
+
+#: includes/admin/payment/class-fed-payment.php:62
+#: includes/admin/payment/class-fed-transaction.php:353
+#: includes/admin/payment/class-fed-transaction.php:372
+msgid "Gateway"
+msgstr ""
+
+#: includes/admin/payment/class-fed-payment.php:77
+msgid "By Checking this, you are enabling the Payment"
+msgstr ""
+
+#: includes/admin/payment/class-fed-payment.php:97
+#: includes/admin/payment/class-fed-payment.php:98
+#: includes/admin/payment/class-fed-payment-menu.php:79
+msgid "Payments"
+msgstr ""
+
+#: includes/admin/payment/class-fed-payment.php:127
+msgid "Payment Settings Successfully Saved"
+msgstr ""
+
+#: includes/admin/payment/class-fed-transaction.php:34
+msgid "Error 403: Please login to view this page"
+msgstr ""
+
+#: includes/admin/payment/class-fed-transaction.php:48
+msgid "Error 403: You are not allowed to view this page"
+msgstr ""
+
+#: includes/admin/payment/class-fed-transaction.php:56
+#: includes/admin/layout/settings_tab/email/class-fed-email.php:268
+#: includes/admin/layout/settings_tab/email/class-fed-email.php:271
+#: templates/payments/transactions.php:207
+msgid "User Name"
+msgstr ""
+
+#: includes/admin/payment/class-fed-transaction.php:58
+#: templates/payments/transactions.php:224
+#: templates/payments/transactions.php:239
+msgid "Transaction ID"
+msgstr ""
+
+#: includes/admin/payment/class-fed-transaction.php:64
+#: templates/payments/transactions.php:50
+#: templates/payments/transactions.php:252
+msgid "Purchase Date"
+msgstr ""
+
+#: includes/admin/payment/class-fed-transaction.php:70
+#: templates/payments/transactions.php:273
+msgid "Payment Source"
+msgstr ""
+
+#: includes/admin/payment/class-fed-transaction.php:76
+msgid "Payment Type"
+msgstr ""
+
+#: includes/admin/payment/class-fed-transaction.php:82
+msgid "Product Name"
+msgstr ""
+
+#: includes/admin/payment/class-fed-transaction.php:103
+msgid "Transaction Added Successfully"
+msgstr ""
+
+#: includes/admin/payment/class-fed-transaction.php:112
+msgid "OOPs! There is some issue in adding the record, please check the log"
+msgstr ""
+
+#: includes/admin/payment/class-fed-transaction.php:294
+#: includes/admin/payment/class-fed-payment-menu.php:90
+msgid "Something went wrong"
+msgstr ""
+
+#: includes/admin/payment/class-fed-transaction.php:318
+msgid "Please select your product"
+msgstr ""
+
+#: includes/admin/payment/class-fed-transaction.php:329
+msgid "Table not exist"
+msgstr ""
+
+#: includes/admin/payment/class-fed-transaction.php:391
+#: includes/admin/menu/class-fed-admin-menu.php:173
+msgid "User"
+msgstr ""
+
+#: includes/admin/payment/class-fed-payment-menu.php:31
+msgid "Payment Gateway"
+msgstr ""
+
+#: includes/admin/payment/class-fed-payment-menu.php:35
+#: includes/admin/layout/settings_tab/post/post-tab.php:44
+#: includes/admin/layout/settings_tab/login/login-tab.php:88
+#: includes/admin/layout/settings_tab/email/class-fed-email.php:43
+#: includes/admin/layout/settings_tab/user_profile/user-profile-tab.php:32
+#: includes/admin/hooks/class-fed-action-hooks.php:327
+#: includes/admin/menu/items/status.php:80
+msgid "Settings"
+msgstr ""
+
+#: includes/admin/payment/class-fed-payment-menu.php:42
+msgid "Transactions"
+msgstr ""
+
+#: includes/admin/payment/class-fed-payment-menu.php:46
+#: templates/payments/transactions.php:32
+#: templates/payments/transactions.php:195
+#: templates/payments/transactions.php:376
+msgid "Add New Transaction"
+msgstr ""
+
+#: includes/admin/payment/class-fed-payment-menu.php:52
+#: templates/payments/transactions.php:152
+msgid "Invoice"
+msgstr ""
+
+#: includes/admin/payment/class-fed-payment-menu.php:61
+msgid "Template"
+msgstr ""
+
+#: includes/admin/payment/class-fed-payment-menu.php:66
+msgid "User Address"
+msgstr ""
+
+#: includes/admin/payment/class-fed-payment-menu.php:252
+msgid "Under Construction"
+msgstr ""
+
+#: includes/admin/payment/class-fed-payment-menu.php:262
+msgid "Invalid Menu Item | Error FED|Admin|Payment|FEDPaymentMenu@body_content"
+msgstr ""
+
+#: includes/admin/payment/class-fed-payment-menu.php:282
+msgid "Ah! something missing | Error FED|Admin|Payment|FEDPaymentMenu@body_content"
+msgstr ""
+
+#: includes/admin/layout/add-edit-profile.php:26
+#: includes/admin/menu/items/dashboard-menu.php:166
+msgid "Select user role to show this input field"
+msgstr ""
+
+#: includes/admin/layout/add-edit-profile.php:52
+#: includes/admin/layout/add-edit-profile.php:58
+msgid "Menu Location"
+msgstr ""
+
+#: includes/admin/layout/add-edit-profile.php:73
+msgid "Disable in User Profile?"
+msgstr ""
+
+#: includes/admin/layout/add-edit-profile.php:100
+msgid "Only registered user can upload the files."
+msgstr ""
+
+#: includes/admin/layout/add-edit-profile.php:114
+msgid "Show in Register Form"
+msgstr ""
+
+#: includes/admin/layout/add-edit-profile.php:128
+msgid "Show in User Dashboard "
+msgstr ""
+
+#: includes/admin/layout/add-edit-profile.php:140
+msgid "Post Type"
+msgstr ""
+
+#: includes/admin/layout/add-edit-profile.php:159
+msgid "Is this required Field"
+msgstr ""
+
+#: includes/admin/layout/add-edit-profile.php:182
+msgid "Label Name *"
+msgstr ""
+
+#: includes/admin/layout/add-edit-profile.php:197
+msgid "Input Order"
+msgstr ""
+
+#: includes/admin/layout/add-edit-profile.php:246
+msgid "Input Meta *"
+msgstr ""
+
+#: includes/admin/layout/add-edit-profile.php:252
+msgid "Alpha Numeric and underscore only"
+msgstr ""
+
+#: includes/admin/layout/class-fed-admin-user-profile.php:41
+msgid "Sorry no extra fields added - Please add here "
+msgstr ""
+
+#: includes/admin/layout/error.php:25
+msgid "404!"
+msgstr ""
+
+#: includes/admin/layout/error.php:28
+msgid "Hope you have landed wrongly, please proceed to plugin"
+msgstr ""
+
+#: includes/admin/layout/error.php:35
+msgid "home page"
+msgstr ""
+
+#: includes/admin/layout/input_fields/radio.php:32
+#: includes/admin/function-admin.php:105
+msgid "Radio"
+msgstr ""
+
+#: includes/admin/layout/input_fields/radio.php:60
+#: includes/admin/layout/input_fields/select.php:69
+msgid "Values"
+msgstr ""
+
+#: includes/admin/layout/input_fields/radio.php:62
+#: includes/admin/layout/input_fields/select.php:71
+msgid "Please enter the value by key,value"
+msgstr ""
+
+#: includes/admin/layout/input_fields/radio.php:71
+#: includes/admin/layout/input_fields/select.php:80
+msgid "Examples:"
+msgstr ""
+
+#: includes/admin/layout/input_fields/radio.php:75
+#: includes/admin/layout/input_fields/select.php:84
+msgid "This will be output as"
+msgstr ""
+
+#: includes/admin/layout/input_fields/number.php:33
+#: includes/admin/function-admin.php:89
+msgid "Number"
+msgstr ""
+
+#: includes/admin/layout/input_fields/number.php:59
+msgid "Min Value"
+msgstr ""
+
+#: includes/admin/layout/input_fields/number.php:65
+msgid "Max Value"
+msgstr ""
+
+#: includes/admin/layout/input_fields/number.php:71
+msgid "Step [Increment by Step]"
+msgstr ""
+
+#: includes/admin/layout/input_fields/url.php:32
+#: includes/admin/function-admin.php:113
+msgid "URL"
+msgstr ""
+
+#: includes/admin/layout/input_fields/password.php:33
+#: includes/admin/layout/settings_tab/email/class-fed-email.php:158
+#: includes/admin/layout/settings_tab/email/class-fed-email.php:279
+#: includes/admin/layout/settings_tab/email/class-fed-email.php:282
+#: includes/admin/function-admin.php:109
+#: includes/shortcodes/login/login-data.php:166
+#: includes/shortcodes/login/login-data.php:169
+msgid "Password"
+msgstr ""
+
+#: includes/admin/layout/input_fields/textarea.php:33
+#: includes/admin/function-admin.php:85
+msgid "Multi-Line"
+msgstr ""
+
+#: includes/admin/layout/input_fields/textarea.php:56
+msgid "Textarea Row"
+msgstr ""
+
+#: includes/admin/layout/input_fields/select.php:33
+msgid "Select / Dropdown"
+msgstr ""
+
+#: includes/admin/layout/input_fields/select.php:62
+msgid "Enable Multi Select"
+msgstr ""
+
+#: includes/admin/layout/input_fields/checkbox.php:32
+#: includes/admin/function-admin.php:97
+msgid "Checkbox"
+msgstr ""
+
+#: includes/admin/layout/input_fields/common.php:18
+msgid "Placeholder Text"
+msgstr ""
+
+#: includes/admin/layout/input_fields/common.php:30
+msgid "Class Name"
+msgstr ""
+
+#: includes/admin/layout/input_fields/common.php:42
+msgid "ID Name"
+msgstr ""
+
+#: includes/admin/layout/input_fields/text.php:32
+#: includes/admin/function-admin.php:81
+msgid "Single Line"
+msgstr ""
+
+#: includes/admin/layout/metabox/post-meta-box.php:21
+msgid "Frontend Dashboard Custom Fields"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/post/post-tab.php:50
+#: includes/admin/menu/class-fed-admin-menu.php:65
+msgid "Dashboard Settings"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/post/post-tab.php:56
+msgid "Menu"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/post/post-tab.php:62
+msgid "Permissions"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/general/class-fed-admin-general.php:104
+msgid "Admin Scripts"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/general/class-fed-admin-general.php:385
+#: includes/admin/layout/settings_tab/general/class-fed-admin-general.php:716
+msgid "Note:"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/general/class-fed-admin-general.php:387
+#: includes/admin/layout/settings_tab/general/class-fed-admin-general.php:718
+msgid "Select the respective scripts or styles to dequeue from the page"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/general/class-fed-admin-general.php:395
+#: includes/admin/layout/settings_tab/general/class-fed-admin-general.php:726
+msgid "Caution:"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/general/class-fed-admin-general.php:397
+msgid "If you are not aware, please don't select any options, that may crash the Admin Section"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/general/class-fed-admin-general.php:728
+msgid "If you are not aware, please don't select any options, that may crash the Frontend Dashboard"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/user/user-upload.php:47
+#: includes/admin/layout/settings_tab/user/user-tab.php:84
+msgid "User Upload Permission"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/user/user-upload.php:53
+msgid "Allow User Roles to Upload Files"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/user/role.php:38
+msgid "Add New User Role"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/user/role.php:44
+#: includes/admin/layout/settings_tab/user/role.php:52
+msgid "Role Name"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/user/role.php:60
+#: includes/admin/layout/settings_tab/user/role.php:68
+msgid "Role Slug"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/user/role.php:77
+msgid "Add"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/user/role.php:88
+msgid "Custom User Roles"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/user/role.php:92
+msgid "Sorry! No custom user role added"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/user/user-tab.php:78
+msgid "Add/Delete Custom Role"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/login/login-tab.php:94
+#: includes/shortcodes/login/login-data.php:114
+#: includes/shortcodes/login/login-data.php:118
+msgid "Register"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/login/login-tab.php:100
+msgid "Restrict WP Admin Area"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/login/login-tab.php:106
+#: includes/admin/layout/settings_tab/login/restrict-username.php:48
+msgid "Restrict Username"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/login/login-tab.php:112
+msgid "Frontend Login Menu"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/login/settings.php:67
+msgid "Register Page URL"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/login/settings.php:85
+msgid "Forgot Password Page URL"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/login/settings.php:103
+msgid "Redirect After Register URL"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/login/settings.php:116
+msgid "Redirect After Logged in URL"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/login/settings.php:129
+msgid "Redirect After Logged out URL"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/login/settings.php:142
+msgid "Dashboard"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/login/frontend-login-menu.php:38
+msgid "Assign Login Menu"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/login/frontend-login-menu.php:49
+msgid "Select the respective menu items to show the Login, Logout and Dashboard Menu Items"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/email/class-fed-email.php:52
+msgid "SMTP"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/email/class-fed-email.php:128
+#: includes/admin/layout/settings_tab/email/class-fed-email.php:198
+msgid "Send Email Via"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/email/class-fed-email.php:129
+msgid "Email Address"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/email/class-fed-email.php:156
+#: includes/admin/layout/settings_tab/email/class-fed-email.php:257
+#: includes/admin/layout/settings_tab/email/class-fed-email.php:260
+msgid "Host Name"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/email/class-fed-email.php:160
+msgid "Username"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/email/class-fed-email.php:162
+#: includes/admin/layout/settings_tab/email/class-fed-email.php:290
+#: includes/admin/layout/settings_tab/email/class-fed-email.php:293
+msgid "Port"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/email/class-fed-email.php:212
+#: includes/admin/layout/settings_tab/email/class-fed-email.php:215
+msgid "Email From Address"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/email/class-fed-email.php:222
+#: includes/admin/layout/settings_tab/email/class-fed-email.php:225
+msgid "Email From Name"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/email/class-fed-email.php:301
+msgid "SMTP Encryption Type"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/email/class-fed-email.php:317
+msgid "SMTP Authentication"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/user_profile/settings.php:20
+msgid "Let it be default"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/user_profile/settings.php:48
+msgid "Change Profile Picture"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/user_profile/settings.php:58
+msgid "Image size should be min 600x600 px"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/user_profile/settings.php:63
+msgid "Disable Description"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/user_profile/settings.php:75
+msgid "Number of Recent Post to show"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/user_profile/settings.php:78
+msgid "Number of Recent Post to show on User Profile"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/user_profile/settings.php:87
+msgid "Collapse Menu Always"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/user_profile/settings.php:99
+msgid "Disable Logout"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/user_profile/settings.php:111
+msgid "Disable Collapse Menu"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/user_profile/settings.php:157
+msgid "Primary Background Color"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/user_profile/settings.php:169
+msgid "Primary Background Font Color"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/user_profile/settings.php:181
+msgid "Secondary Background Color"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/user_profile/settings.php:193
+msgid "Secondary Background Font Color"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/user_profile/settings.php:214
+msgid "Please install Frontend Dashboard Extra Plugin to activate this section"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/user_profile/settings.php:220
+msgid "Download"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/user_profile/settings.php:223
+msgid "Frontend Dashboard Extra"
+msgstr ""
+
+#: includes/admin/layout/settings_tab/user_profile/user-profile-tab.php:38
+msgid "Colors"
+msgstr ""
+
+#: includes/admin/function-admin.php:31
+msgid "Invalid Request - 700"
+msgstr ""
+
+#: includes/admin/function-admin.php:36
+msgid "Invalid Request - 701"
+msgstr ""
+
+#: includes/admin/function-admin.php:43
+msgid "Invalid Request - 702"
+msgstr ""
+
+#: includes/admin/function-admin.php:48
+msgid "Invalid Request - 703"
+msgstr ""
+
+#: includes/admin/function-admin.php:101
+msgid "Select"
+msgstr ""
+
+#: includes/admin/function-admin.php:2528
+msgid "Annually"
+msgstr ""
+
+#: includes/admin/function-admin.php:2529
+msgid "Monthly"
+msgstr ""
+
+#: includes/admin/function-admin.php:2530
+msgid "Custom Days"
+msgstr ""
+
+#: includes/admin/function-admin.php:2732
+msgid "Please Select one Image"
+msgstr ""
+
+#: includes/admin/function-admin.php:3033
+msgid "OOPS! You have not add the callable function ( %s ), please add to show the body container"
+msgstr ""
+
+#: includes/admin/function-admin.php:3070
+#: includes/admin/menu/class-fed-admin-menu.php:230
+msgid "OOPS! You have not add the callable function, please add "
+msgstr ""
+
+#: includes/admin/function-admin.php:3073
+#: includes/admin/menu/class-fed-admin-menu.php:232
+msgid " to show the body container"
+msgstr ""
+
+#: includes/admin/function-admin.php:3106
+msgid "Class %s does not exist"
+msgstr ""
+
+#: includes/admin/hooks/class-fed-action-hooks.php:264
+msgid ""
+"<span class=\"ab-icon\">\n"
+"                               <img style=\"margin-top:-4px;\" class=\"\" src=\""
+msgstr ""
+
+#: includes/admin/hooks/class-fed-action-hooks.php:290
+msgid "Demo"
+msgstr ""
+
+#: includes/admin/hooks/class-fed-action-hooks.php:294
+msgid "Docs/Videos"
+msgstr ""
+
+#: includes/admin/hooks/class-fed-action-hooks.php:298
+msgid "Donation"
+msgstr ""
+
+#: includes/admin/hooks/class-fed-action-hooks.php:303
+msgid "Support"
+msgstr ""
+
+#: includes/admin/hooks/class-fed-action-hooks.php:324
+msgid "Frontend Dashboard Settings"
+msgstr ""
+
+#: includes/admin/menu/class-fed-admin-menu.php:168
+#: includes/shortcodes/login/login-data.php:35
+#: includes/shortcodes/login/login-data.php:99
+msgid "Login"
+msgstr ""
+
+#: includes/admin/menu/class-fed-admin-menu.php:178
+msgid "User Profile Layout"
+msgstr ""
+
+#: includes/admin/menu/class-fed-admin-menu.php:183
+msgid "Common"
+msgstr ""
+
+#: includes/admin/menu/class-fed-admin-menu.php:202
+#: includes/admin/menu/items/add-profile-post-fields.php:93
+msgid "Post"
+msgstr ""
+
+#: includes/admin/menu/class-fed-admin-menu.php:247
+#: includes/admin/menu/class-fed-admin-menu.php:248
+msgid "Dashboard Menu"
+msgstr ""
+
+#: includes/admin/menu/class-fed-admin-menu.php:254
+#: includes/admin/menu/class-fed-admin-menu.php:255
+#: includes/admin/menu/items/user-profile.php:60
+msgid "User Profile"
+msgstr ""
+
+#: includes/admin/menu/class-fed-admin-menu.php:261
+#: includes/admin/menu/class-fed-admin-menu.php:262
+#: includes/admin/menu/items/post-fields.php:55
+msgid "Post Fields"
+msgstr ""
+
+#: includes/admin/menu/class-fed-admin-menu.php:268
+#: includes/admin/menu/class-fed-admin-menu.php:269
+msgid "Add Profile / Post Fields"
+msgstr ""
+
+#: includes/admin/menu/class-fed-admin-menu.php:276
+#: includes/admin/menu/class-fed-admin-menu.php:277
+#: includes/admin/menu/items/addons.php:30
+msgid "Add-Ons"
+msgstr ""
+
+#: includes/admin/menu/class-fed-admin-menu.php:283
+#: includes/admin/menu/class-fed-admin-menu.php:284
+#: includes/admin/menu/items/status.php:55
+#: includes/admin/menu/items/status.php:160
+#: templates/payments/transactions.php:49
+#: templates/payments/transactions.php:296
+msgid "Status"
+msgstr ""
+
+#: includes/admin/menu/class-fed-admin-menu.php:290
+#: includes/admin/menu/class-fed-admin-menu.php:291
+msgid "Help"
+msgstr ""
+
+#: includes/admin/menu/items/addons.php:153
+msgid "Install & Activate"
+msgstr ""
+
+#: includes/admin/menu/items/addons.php:224
+msgid "Sorry there is some issue in internet connectivity."
+msgstr ""
+
+#: includes/admin/menu/items/dashboard-menu.php:29
+msgid "Sort Dashboard Menu"
+msgstr ""
+
+#: includes/admin/menu/items/dashboard-menu.php:34
+msgid "Back"
+msgstr ""
+
+#: includes/admin/menu/items/dashboard-menu.php:75
+#: includes/admin/menu/items/dashboard-menu.php:202
+#: includes/admin/menu/items/dashboard-menu.php:256
+#: includes/admin/menu/items/user-profile.php:111
+#: includes/common/function-common.php:268
+msgid "Add New Menu"
+msgstr ""
+
+#: includes/admin/menu/items/dashboard-menu.php:89
+#: includes/admin/menu/items/dashboard-menu.php:337
+msgid "Menu Name"
+msgstr ""
+
+#: includes/admin/menu/items/dashboard-menu.php:102
+msgid "Menu Slug"
+msgstr ""
+
+#: includes/admin/menu/items/dashboard-menu.php:123
+#: includes/admin/menu/items/dashboard-menu.php:356
+msgid "Menu Icon"
+msgstr ""
+
+#: includes/admin/menu/items/dashboard-menu.php:138
+#: includes/admin/menu/items/dashboard-menu.php:377
+msgid "Menu Order"
+msgstr ""
+
+#: includes/admin/menu/items/dashboard-menu.php:151
+#: includes/admin/menu/items/dashboard-menu.php:405
+msgid "Disable User Profile"
+msgstr ""
+
+#: includes/admin/menu/items/dashboard-menu.php:231
+msgid "Menu Lists"
+msgstr ""
+
+#: includes/admin/menu/items/dashboard-menu.php:243
+msgid "Sort Menu"
+msgstr ""
+
+#: includes/admin/menu/items/dashboard-menu.php:266
+msgid "Search Menu Name..."
+msgstr ""
+
+#: includes/admin/menu/items/post-fields.php:78
+msgid "Add New Custom Post Field"
+msgstr ""
+
+#: includes/admin/menu/items/post-fields.php:97
+msgid "Sorry! there are no custom post fields added!"
+msgstr ""
+
+#: includes/admin/menu/items/add-profile-post-fields.php:18
+msgid "Add New "
+msgstr ""
+
+#: includes/admin/menu/items/add-profile-post-fields.php:23
+msgid "Edit "
+msgstr ""
+
+#: includes/admin/menu/items/add-profile-post-fields.php:41
+msgid "Add Extra Post Field"
+msgstr ""
+
+#: includes/admin/menu/items/add-profile-post-fields.php:55
+msgid "Add Extra User Profile Field"
+msgstr ""
+
+#: includes/admin/menu/items/add-profile-post-fields.php:63
+msgid "Profile"
+msgstr ""
+
+#: includes/admin/menu/items/add-profile-post-fields.php:131
+msgid "Back to"
+msgstr ""
+
+#: includes/admin/menu/items/add-profile-post-fields.php:138
+msgid " field"
+msgstr ""
+
+#: includes/admin/menu/items/add-profile-post-fields.php:147
+msgid "SELECT ANY"
+msgstr ""
+
+#: includes/admin/menu/items/help.php:25
+msgid "We will help you in better ways"
+msgstr ""
+
+#: includes/admin/menu/items/help.php:39
+msgid "How to Videos"
+msgstr ""
+
+#: includes/admin/menu/items/help.php:75
+msgid "How to Install and Configure"
+msgstr ""
+
+#: includes/admin/menu/items/help.php:156
+msgid "How to Contact Us"
+msgstr ""
+
+#: includes/admin/menu/items/help.php:178
+msgid "Chat"
+msgstr ""
+
+#: includes/admin/menu/items/help.php:198
+msgid "Mail"
+msgstr ""
+
+#: includes/admin/menu/items/help.php:218
+msgid "Rate us"
+msgstr ""
+
+#: includes/admin/menu/items/help.php:239
+msgid "Shortcodes"
+msgstr ""
+
+#: includes/admin/menu/items/help.php:266
+msgid "Filter Hooks [Developers]"
+msgstr ""
+
+#: includes/admin/menu/items/help.php:275
+#: includes/admin/menu/items/help.php:397
+msgid "Note: This is not completely documented"
+msgstr ""
+
+#: includes/admin/menu/items/help.php:388
+msgid "Action Hooks [Developers]"
+msgstr ""
+
+#: includes/admin/menu/items/status.php:96
+msgid "Versions"
+msgstr ""
+
+#: includes/admin/menu/items/status.php:199
+msgid "PHP Extensions"
+msgstr ""
+
+#: includes/admin/menu/items/status.php:251
+msgid "Database"
+msgstr ""
+
+#: includes/admin/menu/items/status.php:338
+msgid "Delete or Empty"
+msgstr ""
+
+#: includes/admin/menu/items/status.php:347
+msgid "Delete The Table"
+msgstr ""
+
+#: includes/admin/menu/items/status.php:357
+msgid "Table Name"
+msgstr ""
+
+#: includes/admin/menu/items/status.php:365
+msgid "Action"
+msgstr ""
+
+#: includes/admin/menu/items/status.php:417
+msgid "Empty The Table"
+msgstr ""
+
+#: includes/admin/menu/items/status.php:482
+msgid "Options"
+msgstr ""
+
+#: includes/admin/menu/items/status.php:490
+msgid "Delete The Options"
+msgstr ""
+
+#: includes/admin/menu/items/status.php:509
+msgid "Delete all Options"
+msgstr ""
+
+#: includes/admin/menu/items/user-profile.php:81
+msgid "Add New Extra User Profile Field"
+msgstr ""
+
+#. translators: %s: User Login Label
+#. Translators:  %s: User Login Placeholder
+#. translators: %s: User Password Label
+#. translators: %s: User Password Placeholder
+#: includes/admin/menu/items/user-profile.php:182
+#: includes/shortcodes/login/login-data.php:41
+#: includes/shortcodes/login/login-data.php:52
+#: includes/shortcodes/login/login-data.php:64
+#: includes/shortcodes/login/login-data.php:74
+msgid "%s"
+msgstr ""
+
+#: includes/admin/model/menu.php:22
+#: includes/admin/model/menu.php:48
+msgid "There is some trouble in installing the default value, please try to deactivate and activate the plugin or contact us on "
+msgstr ""
+
+#: includes/admin/model/common.php:46
+#: includes/admin/model/common.php:71
+msgid "Invalid ID"
+msgstr ""
+
+#: includes/admin/model/common.php:172
+msgid "There is some trouble in installing the default value, please try to deactivate and activate the plugin or contact us on"
+msgstr ""
+
+#: includes/admin/model/common.php:207
+msgid "Invalid query string out output"
+msgstr ""
+
+#. translators: %s: Message.
+#: includes/admin/request/tabs/login.php:46
+msgid "%s Settings Updated Successfully"
+msgstr ""
+
+#. translators: %s: Message
+#: includes/admin/request/tabs/post-options.php:55
+msgid "%s Updated Successfully "
+msgstr ""
+
+#. translators: %s : Message
+#: includes/admin/request/tabs/user.php:41
+msgid "%s Updated Successfully"
+msgstr ""
+
+#: includes/admin/request/tabs/user.php:80
+msgid "Sorry! You cannot add the default user roles %s"
+msgstr ""
+
+#: includes/admin/request/tabs/user.php:95
+msgid "Sorry! You have already added the user role %s"
+msgstr ""
+
+#: includes/admin/request/tabs/user.php:116
+msgid "%s User Role Added Successfully"
+msgstr ""
+
+#: includes/admin/request/tabs/user.php:145
+msgid "Sorry! You cannot delete the default user roles %s"
+msgstr ""
+
+#: includes/admin/request/tabs/user.php:160
+msgid "Sorry! The user role %s is not available."
+msgstr ""
+
+#: includes/admin/request/tabs/user.php:176
+msgid "User Role %s Deleted Successfully"
+msgstr ""
+
+#. Translators: %s : Label Name
+#: includes/admin/request/admin.php:121
+msgid "Sorry! you cannot add the default post value %s"
+msgstr ""
+
+#. Translators: %s : Label Name
+#: includes/admin/request/admin.php:141
+msgid "Sorry! you cannot add the default profile value %s"
+msgstr ""
+
+#: includes/admin/request/admin.php:176
+msgid "Please fill required fields"
+msgstr ""
+
+#: includes/admin/request/admin.php:188
+msgid "Sorry! please reload the page and try again"
+msgstr ""
+
+#: includes/admin/request/admin.php:320
+msgid "Successfully updated"
+msgstr ""
+
+#: includes/admin/request/user-profile.php:27
+msgid "Hey, you are trying something naughty"
+msgstr ""
+
+#. Translators: 1%s 2%s : 1. Label Name  2. Input Type
+#: includes/admin/request/user-profile.php:45
+msgid "Sorry, you have previously added %1$s with input type %2$s"
+msgstr ""
+
+#: includes/admin/request/user-profile.php:70
+msgid "Sorry no record found to update your new details"
+msgstr ""
+
+#. Translators: %1$s : Label Name, %2$s : Error Message 1, %3$s : Error Message 2
+#: includes/admin/request/user-profile.php:92
+msgid "Sorry, you have previously added %1$s  with input type %2$s on %3$s"
+msgstr ""
+
+#: includes/admin/request/user-profile.php:117
+#: includes/admin/request/orders.php:229
+msgid "Sorry, Something went wrong in storing values in DB, please try again later or contact support"
+msgstr ""
+
+#: includes/admin/request/orders.php:56
+msgid "Sorry no record found to update your details"
+msgstr ""
+
+#: includes/admin/request/orders.php:61
+msgid "Orders has been successfully updated"
+msgstr ""
+
+#. Translators: %s : Transaction ID
+#: includes/admin/request/orders.php:85
+msgid "Transaction ID %s has been deleted successfully"
+msgstr ""
+
+#: includes/admin/request/orders.php:96
+msgid "Something went wrong, please refresh the page and delete it again."
+msgstr ""
+
+#: includes/admin/request/orders.php:126
+msgid "The Order ID not available now, please refresh the page and try again."
+msgstr ""
+
+#: includes/admin/request/orders.php:146
+msgid "Please fill the search field"
+msgstr ""
+
+#: includes/admin/request/orders.php:154
+msgid "Sorry! No user found"
+msgstr ""
+
+#: includes/admin/request/orders.php:160
+msgid "Great! You have found an user"
+msgstr ""
+
+#. Translators: %s : Label Name
+#: includes/admin/request/orders.php:242
+msgid "New Transaction ID %s successfully added"
+msgstr ""
+
+#: includes/admin/widgets/class-fed-user-count-widget.php:30
+msgid "Frontend Dashboard User Statistics"
+msgstr ""
+
+#. Translators: %s Total Users
+#: includes/admin/widgets/class-fed-user-count-widget.php:52
+msgid "Total Users Count - %s"
+msgstr ""
+
+#: includes/admin/widgets/class-fed-user-count-widget.php:90
+msgid "No Users Subscribed yet"
+msgstr ""
+
+#: includes/admin/validation/class-fed-validation.php:153
+msgid "Please select "
+msgstr ""
+
+#: includes/shortcodes/widget/taxonomy.php:83
+msgid "Invalid Taxonomy, Please Check The Taxonomy Name"
+msgstr ""
+
+#: includes/shortcodes/widget/taxonomy.php:93
+msgid "Please Add Taxonomy Name like [fed_list_taxonomy taxonomy=TAXONOMY_NAME]"
+msgstr ""
+
+#: includes/shortcodes/login/login-data.php:91
+msgid "Remember Me"
+msgstr ""
+
+#: includes/shortcodes/login/login-data.php:133
+#: includes/shortcodes/login/login-data.php:147
+msgid "Forgot Password"
+msgstr ""
+
+#: includes/shortcodes/login/login-data.php:137
+#: includes/shortcodes/login/login-data.php:140
+msgid "User Name / Email Address"
+msgstr ""
+
+#: includes/shortcodes/login/login-data.php:162
+#: includes/shortcodes/login/login-data.php:200
+msgid "Reset Password"
+msgstr ""
+
+#: includes/shortcodes/login/login-data.php:174
+#: includes/shortcodes/login/login-data.php:177
+msgid "Confirmation Password"
+msgstr ""
+
+#: includes/shortcodes/login/login-data.php:222
+msgid "Please enter user name"
+msgstr ""
+
+#: includes/shortcodes/login/login-data.php:223
+msgid "Please enter user password"
+msgstr ""
+
+#: includes/common/function-common.php:251
+msgid "Are you sure?"
+msgstr ""
+
+#: includes/common/function-common.php:252
+msgid "You want to do this action?"
+msgstr ""
+
+#: includes/common/function-common.php:253
+msgid "Yes, Please Proceed"
+msgstr ""
+
+#: includes/common/function-common.php:254
+msgid "No, Cancel it"
+msgstr ""
+
+#: includes/common/function-common.php:256
+msgid "Please wait, you are redirecting.."
+msgstr ""
+
+#: includes/common/function-common.php:258
+msgid "Something Went Wrong"
+msgstr ""
+
+#: includes/common/function-common.php:259
+msgid "Invalid form submission"
+msgstr ""
+
+#: includes/common/function-common.php:260
+msgid "Please try again"
+msgstr ""
+
+#: includes/common/function-common.php:261
+msgid "Plugin Installed and Activated Successfully"
+msgstr ""
+
+#: includes/common/function-common.php:267
+msgid "Hide Add New Menu"
+msgstr ""
+
+#: templates/payments/transactions.php:43
+msgid "User Details"
+msgstr ""
+
+#: templates/payments/transactions.php:45
+msgid "Source"
+msgstr ""
+
+#: templates/payments/transactions.php:46
+msgid "Transaction"
+msgstr ""
+
+#: templates/payments/transactions.php:47
+msgid "Product"
+msgstr ""
+
+#: templates/payments/transactions.php:100
+msgid "More Info"
+msgstr ""
+
+#: templates/payments/transactions.php:169
+msgid "Sorry, you should login to view this page"
+msgstr ""
+
+#: templates/payments/transactions.php:260
+msgid "Purchase Date - dd/mm/yyyy"
+msgstr ""
+
+#: templates/payments/transactions.php:282
+msgid "Please select"
+msgstr ""
+
+#: templates/payments/transactions.php:317
+msgid "Payment for"
+msgstr ""
+
+#: templates/payments/transactions.php:343
+msgid "Please Select"
+msgstr ""
+
+#: templates/payments/transactions.php:368
+msgid "Close"
+msgstr ""
+
+#: templates/login/login-only.php:62
+msgid "Create an account"
+msgstr ""
+
+#: templates/login/login-only.php:73
+msgid "Lost Password?"
+msgstr ""
+
+#: templates/login/registered-user.php:12
+msgid "Visit Dashboard"
+msgstr ""
+
+#: templates/login/register-only.php:52
+msgid "Already have an account?"
+msgstr ""

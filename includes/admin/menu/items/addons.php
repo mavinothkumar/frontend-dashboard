@@ -86,7 +86,7 @@ function fed_get_plugin_pages_menu() {
 														</div>
 														<div class="">
 															<div class="fed_p_l_10">
-																<?php echo esc_attr( $type ); ?>
+																<?php echo wp_kses_post( $type ); ?>
 															</div>
 														</div>
 													</div>

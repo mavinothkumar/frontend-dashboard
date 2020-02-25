@@ -35,9 +35,10 @@ function fed_display_dashboard_profile( $menu_item ) {
 	$user     = get_userdata( get_current_user_id() );
 	$menus    = fed_process_dashboard_display_menu();
 
-	$index = $menu_item['menu_slug'];
-	/** Translators : %s : Menu. */
-	$menu_title        = sprintf( ucwords( __( '%s', 'frontend-dashboard' ) ), esc_attr( $menus[ $index ]['menu'] ) );
+	$index     = $menu_item['menu_slug'];
+	$menu_name = esc_attr( $menus[ $index ]['menu'] );
+	/* translators: %s : Menu. */
+	$menu_title        = sprintf( ucwords( __( '%s ', 'frontend-dashboard' ) ), $menu_name );
 	$menu_title_value  = apply_filters( 'fed_menu_title', $menu_title, $menus, $index );
 	$menu_default_page = apply_filters( 'fed_menu_default_page', true, $menus, $index );
 	?>
@@ -46,8 +47,8 @@ function fed_display_dashboard_profile( $menu_item ) {
 			<h3 class="panel-title">
 				<span class="<?php echo esc_attr( $menus[ $index ]['menu_image_id'] ); ?>"></span>
 				<?php
-				/** Translators : %s : Menu */
-				printf( __( '%s', 'frontend-dashboard' ), esc_attr( $menus[ $index ]['menu'] ) );
+				/* translators: %s : Menu */
+				printf( __( '%s ', 'frontend-dashboard' ), esc_attr( $menu_name ) );
 				?>
 			</h3>
 		</div>
@@ -112,8 +113,7 @@ function fed_display_dashboard_profile( $menu_item ) {
 						</div>
 					</form>
 					<?php
-				}
-				else {
+				} else {
 					?>
 					<h4>
 						<?php
@@ -122,8 +122,7 @@ function fed_display_dashboard_profile( $menu_item ) {
 					</h4>
 					<?php
 				}
-			}
-			else {
+			} else {
 				do_action( 'fed_override_default_page', $menus, $index );
 			}
 			?>
