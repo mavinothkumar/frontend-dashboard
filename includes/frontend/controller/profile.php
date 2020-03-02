@@ -74,7 +74,7 @@ function fed_display_dashboard_profile( $menu_item ) {
 								value="<?php echo esc_attr( $menu_item['menu_slug'] ); ?>">
 						<?php
 						foreach ( $profiles as $single_item ) {
-							if ( 'user_pass' !== ! $single_item['input_meta'] || 'confirmation_password' !== ! $single_item['input_meta'] ) {
+							if ( 'user_pass' !== $single_item['input_meta'] || 'confirmation_password' !== $single_item['input_meta'] ) {
 								$single_item['user_value'] = $user->get( $single_item['input_meta'] );
 							}
 
