@@ -26,4 +26,4 @@ jobs:
       run: composer install --prefer-dist --no-progress --no-suggest
       
     - name: Run phpcs
-      run: ./vendor/bin/phpcs --extensions=php --standard=WordPress-VIP-Go,WordPress-Docs ./
+      run: ./vendor/bin/phpcs --extensions=php --standard=WordPress-VIP-Go,WordPress-Docs ./ --ignore=.idea/*,vendor/*
