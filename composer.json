@@ -1,6 +1,6 @@
 {
-    "name": "proagrica/homeagain-wp",
-    "description": "Home again WordPress",
+    "name": "Frontend Dashboard",
+    "description": "Frontend Dashboard WordPress Plugin",
     "type": "project",
     "require": {
         "php": ">=7.3"
