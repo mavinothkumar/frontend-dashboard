@@ -1,5 +1,5 @@
 {
-    "name": "Frontend Dashboard",
+    "name": "buffercode/frontend-dashboard",
     "description": "Frontend Dashboard WordPress Plugin",
     "type": "project",
     "require": {
