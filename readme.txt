@@ -3,8 +3,8 @@ Contributors: vinoth06, buffercode
 Tags: dashboard, frontend dashboard, custom login, custom register, custom roles, custom profile, custom post type, custom taxonomies, custom dashboard, hide admin bar, widget
 Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 4.6
-Tested up to: 5.3.2
-Stable tag: 2.1
+Tested up to: 5.4
+Stable tag: 2.1.2
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -247,6 +247,12 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 8. [fed_list_taxonomy taxonomy=TAXONOMY_NAME] to generate taxonomy in list order
 
 == Changelog ==
+
+= 2.1.2 [14-Apr-2020] =
+* Bug fixes.
+
+= 2.1.1 [25-Feb-2020] =
+* 2.0 Bug fixes: Individual Login, Register, Forgot Password page and Menu page not saving.
 
 = 2.1 [25-Feb-2020] =
 * 2.0 Bug fixes: Login, Register, Forgot Password page, Admin status, add-on page.
@@ -532,11 +538,9 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 * Main menu search box added to search the menu by its name
 * Login failed and more bug fixes
 
-
 = v1.1.4.3 [27-September-2017] =
 * Customize the Frontend Dashboard Layout Color
 * Bug fixes
-
 
 = v1.1.4.2 [17-September-2017] =
 * Major Bug fixes
@@ -571,8 +575,8 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Upgrade Notice ==
 
-= 2.1 [25-Feb-2020] =
-* 2.0 Bug fixes: Login, Register, Forgot Password page, Admin status, add-on page.
+= 2.1.1 [25-Feb-2020] =
+* 2.0 Bug fixes: Individual Login, Register, Forgot Password page and Menu page not saving.
 
 == Screenshots ==
 1. Frontend Dashboard Settings | Login | Settings

@@ -211,11 +211,11 @@ function fed_plugin_activation() {
 
 	// Adding Three Column.
 	$payment_update_1 = $wpdb->get_row( "SELECT * FROM $payment_table" );
-	if ( ! array_key_exists( 'trail_period', $payment_update_1 ) ) {
+	if ( is_array( $payment_update_1 ) && ! array_key_exists( 'trail_period', $payment_update_1 ) ) {
 		$wpdb->query( "ALTER TABLE $payment_table ADD COLUMN trail_period VARCHAR(255) NULL AFTER `status`,  ADD COLUMN payment_method VARCHAR(255) NULL AFTER `status`, ADD COLUMN ends_at_time VARCHAR(255) NULL AFTER `ends_at`" );
 
 	}
-	if ( ! array_key_exists( 'invoice_id', $payment_update_1 ) ) {
+	if ( is_array( $payment_update_1 ) && ! array_key_exists( 'invoice_id', $payment_update_1 ) ) {
 		$wpdb->query( "ALTER TABLE $payment_table ADD COLUMN invoice_id VARCHAR(255) NULL AFTER `status`" );
 	}
 
@@ -538,7 +538,7 @@ function fed_admin_notice() {
 
 					<span class="fed_message_hide">Hide</span>
 					<span class="fed_message_delete"
-						  data-url="<?php echo esc_url( admin_url( 'admin-ajax.php?action=fed_message_form&fed_message_nonce=' . wp_create_nonce( 'fed_message_nonce' ) ) ); ?>">
+							data-url="<?php echo esc_url( admin_url( 'admin-ajax.php?action=fed_message_form&fed_message_nonce=' . wp_create_nonce( 'fed_message_nonce' ) ) ); ?>">
 												<?php
 												echo esc_attr__(
 													'Don\'t show again',

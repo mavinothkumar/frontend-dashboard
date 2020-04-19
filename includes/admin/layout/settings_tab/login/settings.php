@@ -161,7 +161,7 @@ function fed_admin_login_settings_tab( $fed_login_settings ) {
 			'footer' => '',
 		),
 	);
-	apply_filters( 'fed_admin_login_settings_template', $array, $fed_login_settings );
+	$array = apply_filters( 'fed_admin_login_settings_form', $array, $fed_login_settings );
 
 	fed_common_simple_layout( $array );
 }

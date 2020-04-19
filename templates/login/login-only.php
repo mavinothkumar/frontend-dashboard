@@ -38,8 +38,8 @@ do_action( 'fed_before_login_only_form' );
 									$content_name = ! empty( $content['name'] ) ? '<label>' . $content['name'] . '</label>' : '';
 									?>
 									<div class="form-group">
-										<?php echo esc_attr( $content_name ); ?>
-										<?php echo esc_attr( $content['input'] ); ?>
+										<?php echo wp_kses_post( $content_name ); ?>
+										<?php echo ( $content['input'] ); ?>
 									</div>
 									<?php
 								}
@@ -50,7 +50,7 @@ do_action( 'fed_before_login_only_form' );
 										<input type="hidden" name="submit" value="<?php echo esc_attr( $type ); ?>"/>
 										<button class="btn btn-primary"
 												type="submit">
-											<?php echo esc_attr( $details['button'] ); ?>
+											<?php echo wp_kses_post( $details['button'] ); ?>
 										</button>
 									</div>
 								</div>

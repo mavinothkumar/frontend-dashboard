@@ -15,7 +15,10 @@ $is_mobile = fed_get_menu_mobile_attributes();
 		<?php echo fed_loader() ?>
 		<?php do_action( 'fed_inside_dashboard_container_top' ); ?>
 		<?php echo fed_show_alert( 'fed_dashboard_top_message' ) ?>
-		<?php if ( ! $menu instanceof WP_Error ) { ?>
+		<?php if ( ! $menu instanceof WP_Error ) {
+			do_action( 'fed_dashboard_content_outside_top' );
+			do_action( 'fed_dashboard_content_outside_top_' . fed_get_data( 'menu_request.menu_slug', $menu ) );
+			?>
 			<div class="row fed_dashboard_wrapper">
 				<div class="col-md-3 fed_dashboard_menus default_template">
 					<div class="custom-collapse fed_menu_items">
@@ -45,11 +48,18 @@ $is_mobile = fed_get_menu_mobile_attributes();
 				</div>
 				<div class="col-md-9 fed_dashboard_items">
 					<?php
+					do_action( 'fed_dashboard_content_top' );
+					do_action( 'fed_dashboard_content_top_' . fed_get_data( 'menu_request.menu_slug', $menu ) );
 					$dashboard_container->getDashboardContent( $menu );
+					do_action( 'fed_dashboard_content_bottom' );
+					do_action( 'fed_dashboard_content_bottom_' . fed_get_data( 'menu_request.menu_slug', $menu ) );
 					?>
 				</div>
 			</div>
-		<?php }
+		<?php
+			do_action( 'fed_dashboard_content_outside_bottom' );
+			do_action( 'fed_dashboard_content_outside_bottom' . fed_get_data( 'menu_request.menu_slug', $menu ) );
+		}
 		if ( $menu instanceof WP_Error ) {
 			?>
 			<div class="row fed_dashboard_wrapper fed_error">

@@ -26,10 +26,11 @@ if ( ! class_exists( 'FED_ActionHooks' ) ) {
 			add_action( 'plugin_row_meta', array( $this, 'fed_plugin_row_meta' ), 10, 2 );
 			add_action( 'admin_footer_text', array( $this, 'fed_update_footer' ) );
 			add_action(
-				'plugin_action_links_' . BC_FED_PLUGIN_BASENAME, array(
-				$this,
-				'fed_plugin_action_links',
-			), 10, 2
+				'plugin_action_links_' . BC_FED_PLUGIN_BASENAME,
+				array(
+					$this,
+					'fed_plugin_action_links',
+				), 10, 2
 			);
 			add_action( 'phpmailer_init', array( $this, 'send_email_via_smtp' ) );
 		}
@@ -84,113 +85,126 @@ if ( ! class_exists( 'FED_ActionHooks' ) ) {
 				$sbg_color      = fed_get_data( 'color.fed_upl_color_sbg_color', $fed_colors, '#033333' );
 				$sbg_font_color = fed_get_data( 'color.fed_upl_color_sbg_font_color', $fed_colors, '#FFFFFF' );
 				?>
-                <style>
-                    .bc_fed .fed_header_font_color {
-                        color: <?php esc_attr_e( $pbg_color ); ?> !important;
-                        font-weight: bolder;
-                    }
+				<style>
+					.bc_fed .fed_header_font_color {
+						color: <?php echo esc_attr( $pbg_color ); ?> !important;
+						font-weight: bolder;
+					}
 
-                    .bc_fed .fed_menu_title, .bc_fed .fed_menu_icon {
-                        color: <?php esc_attr_e( $sbg_font_color ); ?> !important;
-                    }
+					.bc_fed .fed_menu_title, .bc_fed .fed_menu_icon {
+						color: <?php echo esc_attr( $sbg_font_color ); ?> !important;
+					}
 
-                    .bc_fed .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover,
-                    .bc_fed .btn-primary,
-                    .bc_fed .bg-primary,
-                    .bc_fed .nav-pills > li.active > a,
-                    .bc_fed .nav-pills > li.active > a:focus,
-                    .bc_fed .nav-pills > li.active > a:hover,
-                    .bc_fed .list-group-item.active,
-                    .bc_fed .list-group-item.active:focus,
-                    .bc_fed .list-group-item.active:hover,
-                    .bc_fed .panel-primary > .panel-heading,
-                    .bc_fed .btn-primary.focus, .btn-primary:focus,
-                    .bc_fed .btn-primary:hover,
-                    .bc_fed .btn.active, .btn:active,
-                    .bc_fed input[type="button"]:hover,
-                    .bc_fed input[type="button"]:focus,
-                    .bc_fed input[type="submit"]:hover,
-                    .bc_fed input[type="submit"]:focus,
-                    .bc_fed .popover-title {
-                        background-color: <?php esc_attr_e( $pbg_color ); ?>;
-                        background-image: none !important;
-                        border-color: <?php esc_attr_e( $pbg_color ); ?>;
-                        color: <?php esc_attr_e( $pbg_font_color ); ?>;
-                    }
+					.bc_fed .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover,
+					.bc_fed .btn-primary,
+					.bc_fed .bg-primary,
+					.bc_fed .nav-pills > li.active > a,
+					.bc_fed .nav-pills > li.active > a:focus,
+					.bc_fed .nav-pills > li.active > a:hover,
+					.bc_fed .list-group-item.active,
+					.bc_fed .list-group-item.active:focus,
+					.bc_fed .list-group-item.active:hover,
+					.bc_fed .panel-primary > .panel-heading,
+					.bc_fed .btn-primary.focus, .btn-primary:focus,
+					.bc_fed .btn-primary:hover,
+					.bc_fed .btn.active, .btn:active,
+					.bc_fed input[type="button"]:hover,
+					.bc_fed input[type="button"]:focus,
+					.bc_fed input[type="submit"]:hover,
+					.bc_fed input[type="submit"]:focus,
+					.bc_fed .popover-title {
+						background-color: <?php echo esc_attr( $pbg_color ); ?>;
+						background-image: none !important;
+						border-color: <?php echo esc_attr( $pbg_color ); ?>;
+						color: <?php echo esc_attr( $pbg_font_color ); ?>;
+					}
 
-                    .bc_fed .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover,
-                    .bc_fed .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
-                        background-color: <?php esc_attr_e( $pbg_color ); ?> !important;
-                        border-color: <?php esc_attr_e( $pbg_color ); ?> !important;
-                        color: <?php esc_attr_e( $pbg_font_color ); ?> !important;
-                    }
+					.bc_fed .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover,
+					.bc_fed .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+						background-color: <?php echo esc_attr( $pbg_color ); ?> !important;
+						border-color: <?php echo esc_attr( $pbg_color ); ?> !important;
+						color: <?php echo esc_attr( $pbg_font_color ); ?> !important;
+					}
 
-                    .fed_frontend_dashboard_menu .fed_menu_item {
-                        background: <?php esc_attr_e( $sbg_color ); ?> !important;
-                        color: <?php echo $sbg_font_color; ?> !important;
-                    }
+					.fed_frontend_dashboard_menu .fed_menu_item {
+						background: <?php echo esc_attr( $sbg_color ); ?> !important;
+						color: <?php echo esc_attr( $sbg_font_color ); ?> !important;
+					}
 
-                    .fed_frontend_dashboard_menu .panel-body .panel-title {
-                        padding: 10px;
-                        margin: 5px;
-                        background: <?php esc_attr_e( $sbg_color ); ?>;
-                        color: <?php echo $sbg_font_color; ?>;
-                    }
+					.fed_frontend_dashboard_menu .panel-body .panel-title {
+						padding: 10px;
+						margin: 5px;
+						background: <?php echo esc_attr( $sbg_color ); ?>;
+						color: <?php echo esc_attr( $sbg_font_color ); ?>;
+					}
 
-                    .bc_fed .fed_frontend_dashboard_menu .panel-heading.active,
-                    .bc_fed .fed_frontend_dashboard_menu .panel-body .panel-title.active {
-                        color: <?php esc_attr_e( $pbg_font_color ); ?>;
-                        background: <?php esc_attr_e( $pbg_color ); ?>;
-                    }
+					.bc_fed .fed_frontend_dashboard_menu .panel-heading.active,
+					.bc_fed .fed_frontend_dashboard_menu .panel-body .panel-title.active {
+						color: <?php echo esc_attr( $pbg_font_color ); ?>;
+						background: <?php echo esc_attr( $pbg_color ); ?>;
+					}
 
-                    .bc_fed .nav-tabs {
-                        border-bottom: 1px solid <?php esc_attr_e( $pbg_color ); ?> !important;
-                    }
+					.bc_fed .nav-tabs {
+						border-bottom: 1px solid <?php echo esc_attr( $pbg_color ); ?> !important;
+					}
 
-                    .bc_fed .panel-primary {
-                        border-color: <?php esc_attr_e( $pbg_color ); ?> !important;
-                    }
+					.bc_fed .panel-primary {
+						border-color: <?php echo esc_attr( $pbg_color ); ?> !important;
+					}
 
-                    .bc_fed .bg-primary-font {
-                        color: <?php esc_attr_e( $pbg_color ); ?>;
-                    }
+					.bc_fed .bg-primary-font {
+						color: <?php echo esc_attr( $pbg_color ); ?>;
+					}
 
-                    .bc_fed .fed_login_menus {
-                        background-color: <?php esc_attr_e( $pbg_color ); ?> !important;
-                        color: <?php esc_attr_e( $pbg_font_color ); ?> !important;
-                    }
+					.bc_fed .fed_login_menus {
+						background-color: <?php echo esc_attr( $pbg_color ); ?> !important;
+						color: <?php echo esc_attr( $pbg_font_color ); ?> !important;
+					}
 
-                    .bc_fed .fed_login_content {
-                        border: 1px solid <?php esc_attr_e( $pbg_color ); ?> !important;
-                        padding: 20px 40px;
-                    }
+					.bc_fed .fed_login_content {
+						border: 1px solid <?php echo esc_attr( $pbg_color ); ?> !important;
+						padding: 20px 40px;
+					}
 
-                    .bc_fed .list-group-item {
-                        background-color: <?php esc_attr_e( $sbg_color ); ?> !important;
-                        border-color: #ffffff !important;
-                        color: <?php echo $sbg_font_color; ?> !important;
-                    }
+					.bc_fed .list-group-item {
+						background-color: <?php echo esc_attr( $sbg_color ); ?> !important;
+						border-color: #ffffff !important;
+						color: <?php echo esc_attr( $sbg_font_color ); ?> !important;
+					}
 
-                    .bc_fed .swal2-icon.swal2-success [class^='swal2-success-line'] {
-                        background-color: <?php esc_attr_e( $pbg_color ); ?> !important;
-                    }
+					.bc_fed .swal2-icon.swal2-success [class^='swal2-success-line'] {
+						background-color: <?php echo esc_attr( $pbg_color ); ?> !important;
+					}
 
-                    .bc_fed .swal2-icon.swal2-success .swal2-success-ring {
-                        border: 4px solid <?php esc_attr_e( $pbg_color ); ?> !important;
-                    }
+					.bc_fed .swal2-icon.swal2-success .swal2-success-ring {
+						border: 4px solid <?php echo esc_attr( $pbg_color ); ?> !important;
+					}
 
-                    .bc_fed .list-group-item a {
-                        color: <?php esc_attr_e( $sbg_font_color ); ?> !important;
-                    }
+					.bc_fed .list-group-item a {
+						color: <?php echo esc_attr( $sbg_font_color ); ?> !important;
+					}
 
-                    .bc_fed .list-group-item.active, .bc_fed .list-group-item.active:hover, .bc_fed .list-group-item.active:focus {
-                        text-shadow: none !important;
-                    }
+					.bc_fed .list-group-item.active, .bc_fed .list-group-item.active:hover, .bc_fed .list-group-item.active:focus {
+						text-shadow: none !important;
+					}
 
-                    .bc_fed .btn-default, .bc_fed .btn-primary, .bc_fed .btn-success, .bc_fed .btn-info, .bc_fed .btn-warning, .bc_fed .btn-danger {
-                        text-shadow: none !important;
-                    }
-                </style>
+					.bc_fed .btn-default, .bc_fed .btn-primary, .bc_fed .btn-success, .bc_fed .btn-info, .bc_fed .btn-warning, .bc_fed .btn-danger {
+						text-shadow: none !important;
+					}
+
+					.swal2-icon.swal2-success {
+						border-color: <?php echo esc_attr( $pbg_color ); ?> !important;
+					}
+
+					.swal2-icon.swal2-success [class^='swal2-success-line'] {
+						background-color: <?php echo esc_attr( $pbg_color ); ?> !important;
+					}
+
+					.swal2-icon.swal2-success .swal2-success-ring {
+						width: 80px;
+						height: 80px;
+						border: 4px solid <?php echo esc_attr( $pbg_color ); ?> !important;
+				</style>
 
 				<?php
 				do_action(
@@ -212,10 +226,12 @@ if ( ! class_exists( 'FED_ActionHooks' ) ) {
 		 * @return string
 		 */
 		public function fed_update_footer( $text ) {
-			if ( isset( $_GET['page'] ) && in_array(
+			if (
+				isset( $_GET['page'] ) && in_array(
 					wp_unslash( $_GET['page'] ), fed_get_script_loading_pages(),
 					true
-				) ) {
+				)
+			) {
 				$text = '<span id="footer-thankyou">If you like <strong>Frontend Dashboard (v' . BC_FED_PLUGIN_VERSION . ')</strong>, Please leave us a rating <a 
 href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#new-post">
 <i class="fa fa-star fa-2x" aria-hidden="true"></i>
@@ -261,15 +277,16 @@ href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#
 					'meta'   => array(
 						'class' => 'menupop',
 					),
-					'title'  => __(
+					'title'  =>
 						'<span class="ab-icon">
-                               <img style="margin-top:-4px;" class="" src="' . plugins_url(
-							'/assets/frontend/images/d.png',
-							BC_FED_PLUGIN
+                               <img style="margin-top:-4px;" class="" src="' .
+						esc_url(
+							plugins_url(
+								'/assets/frontend/images/d.png',
+								BC_FED_PLUGIN
+							)
 						) . '" />
                                </span><span class="ab-label">Frontend Dashboard</span>',
-						'frontend-dashboard'
-					),
 					'href'   => $dashboard_url,
 				);
 				$wp_admin_bar->add_menu( $frontend_dashboard );
@@ -279,7 +296,7 @@ href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#
 		/**
 		 * Plugin Row Meta.
 		 *
-		 * @param  array $links  Links.
+		 * @param  array  $links  Links.
 		 * @param  string $file  File.
 		 *
 		 * @return array
@@ -291,10 +308,12 @@ href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#
 							'Demo',
 							'frontend-dashboard'
 						) . '</a>',
-					'docs/videos' => '<a href="' . esc_url( 'https://buffercode.com/category/name/frontend-dashboard' ) . '">' . esc_html__(
-							'Docs/Videos',
-							'frontend-dashboard'
-						) . '</a>',
+					'docs/videos' => '<a href="' . esc_url(
+							'https://buffercode.com/category/name/frontend-dashboard'
+						) . '">' . esc_html__(
+						                 'Docs/Videos',
+						                 'frontend-dashboard'
+					                 ) . '</a>',
 					'donation'    => '<a href="' . esc_url( 'https://www.paypal.me/buffercode' ) . '">' . esc_html__(
 							'Donation',
 							'frontend-dashboard'
@@ -321,10 +340,12 @@ href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#
 		 */
 		public function fed_plugin_action_links( $links ) {
 			$action_links = array(
-				'settings' => '<a href="' . admin_url( 'admin.php?page=fed_settings_menu' ) . '" aria-label="' . esc_attr__(
-						'Frontend Dashboard Settings',
-						'frontend-dashboard'
-					) . '">' . esc_html__( 'Settings', 'frontend-dashboard' ) . '</a>',
+				'settings' => '<a href="' . admin_url(
+						'admin.php?page=fed_settings_menu'
+					) . '" aria-label="' . esc_attr__(
+					              'Frontend Dashboard Settings',
+					              'frontend-dashboard'
+				              ) . '">' . esc_html__( 'Settings', 'frontend-dashboard' ) . '</a>',
 			);
 
 			return array_merge( $action_links, $links );

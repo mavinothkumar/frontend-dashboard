@@ -31,8 +31,8 @@ do_action( 'fed_before_register_only_form' );
 								foreach ( $contents as $content ) {
 									?>
 									<div class="form-group">
-										<label><?php echo esc_attr( $content['name'] ); ?></label>
-										<?php echo esc_attr( $content['input'] ); ?>
+										<label><?php echo wp_kses_post( $content['name'] ); ?></label>
+										<?php echo ( $content['input'] ); ?>
 									</div>
 									<?php
 								}
@@ -43,7 +43,7 @@ do_action( 'fed_before_register_only_form' );
 												name="submit"
 												value="Register"/>
 										<button class="btn btn-primary"
-												type="submit"><?php echo esc_attr( $details['button'] ); ?></button>
+												type="submit"><?php echo wp_kses_post( $details['button'] ); ?></button>
 									</div>
 									<?php if ( $login ) { ?>
 										<div class="col-md-12 padd_top_20 text-center">

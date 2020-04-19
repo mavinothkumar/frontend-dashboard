@@ -3586,25 +3586,25 @@ function fed_get_help_video_items() {
 	);
 }
 
-add_filter( 'contextual_help', 'fed_remove_contextual_help', 999, 3 );
-/**
- * Remove Contextual Help.
- *
- * @param  string $old_help  Old Help.
- * @param  string $screen_id  Screen ID.
- * @param  object $screen  Screen.
- *
- * @return string
- */
-function fed_remove_contextual_help( $old_help, $screen_id, $screen ) {
-	if ( $screen_id === 'toplevel_page_fed_settings_menu' ) {
-		$screen->remove_help_tabs();
-
-		return '';
-	}
-
-	return $old_help;
-}
+//add_filter( 'contextual_help', 'fed_remove_contextual_help', 999, 3 );
+///**
+// * Remove Contextual Help.
+// *
+// * @param  string $old_help  Old Help.
+// * @param  string $screen_id  Screen ID.
+// * @param  object $screen  Screen.
+// *
+// * @return string
+// */
+//function fed_remove_contextual_help( $old_help, $screen_id, $screen ) {
+//	if ( $screen_id === 'toplevel_page_fed_settings_menu' ) {
+//		$screen->remove_help_tabs();
+//
+//		return '';
+//	}
+//
+//	return $old_help;
+//}
 
 add_action( 'admin_footer_text', 'fed_show_help_icons' );
 /**

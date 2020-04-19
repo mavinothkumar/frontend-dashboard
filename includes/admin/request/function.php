@@ -107,6 +107,21 @@ function fed_get_dashboard_url() {
 }
 
 /**
+ * Check is Dashboard.
+ *
+ * @return bool
+ */
+function fed_is_dashboard() {
+	$current_page_id   = get_queried_object_id();
+	$fed_admin_options = get_option( 'fed_admin_login' );
+	if ( $fed_admin_options && isset( $fed_admin_options['settings']['fed_dashboard_url'] ) && '' != $fed_admin_options['settings']['fed_dashboard_url'] ) {
+		return (int) $fed_admin_options['settings']['fed_dashboard_url'] === (int) $current_page_id;
+	}
+
+	return false;
+}
+
+/**
  * Get Invoice URL.
  */
 function fed_get_invoice_url() {

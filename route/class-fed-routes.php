@@ -39,7 +39,7 @@ if ( ! class_exists( 'FED_Routes' ) ) {
 				fed_display_dashboard_profile( $menu['menu_request'] );
 			}
 			if ( 'logout' === $menu['menu_request']['menu_type'] ) {
-				fed_logout_process();
+				fed_logout_process( $menu['menu_request']);
 			}
 
 			do_action( 'fed_frontend_dashboard_menu_container', $this->request, $menu );

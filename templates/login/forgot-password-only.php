@@ -29,8 +29,8 @@ do_action( 'fed_before_forgot_password_only_form' );
 								foreach ( $contents as $content ) {
 									?>
 									<div class="form-group">
-										<label><?php echo esc_attr( $content['name'] ); ?></label>
-										<?php echo esc_attr( $content['input'] ); ?>
+										<label><?php echo wp_kses_post( $content['name'] ); ?></label>
+										<?php echo ( $content['input'] ); ?>
 									</div>
 									<?php
 								}
