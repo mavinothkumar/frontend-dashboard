@@ -41,7 +41,7 @@ function fed_admin_frontend_login_menu_tab( $fed_login_register ) {
 						'input_meta'  => 'menu_item',
 						'input_value' => array_merge(
 							array(
-								'' => __('Disable', 'dashboard-frontend')
+								'' => __('Disable', 'frontend-dashboard')
 							),
 							get_registered_nav_menus()
 						),
