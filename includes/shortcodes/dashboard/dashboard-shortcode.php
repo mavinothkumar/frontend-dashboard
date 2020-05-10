@@ -41,6 +41,7 @@ function fed_dashboard_template_redirect() {
 			$login_page = ( false == $login_page ) ? esc_url( wp_login_url() ) : $login_page;
 
 			wp_safe_redirect( $login_page );
+			exit();
 		}
 	}
 }

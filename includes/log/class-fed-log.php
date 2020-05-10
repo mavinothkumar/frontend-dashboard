@@ -67,7 +67,15 @@ class FED_Log {
 	 */
 	public static function get_file_name() {
 		if ( null == self::$filename ) {
-			self::$filename = BC_FED_PLUGIN_DIR . '/includes/log/dashboard.log';
+			$upload_dir = wp_get_upload_dir();
+			$dir        = $upload_dir['basedir'] . '/frontend-dashboard/log/';
+			$file       = 'fed.log';
+			if ( is_dir( $dir ) ) {
+				self::$filename = $dir . $file;
+			} else {
+				wp_mkdir_p( $dir );
+				self::$filename = $dir . $file;
+			}
 		}
 
 		return self::$filename;
@@ -82,45 +90,6 @@ class FED_Log {
 		self::$filename = $filename;
 	}
 
-	/**
-	 * Enable If.
-	 *
-	 * @param  bool $condition  Condition.
-	 */
-	public static function enable_if( $condition = true ) {
-		if ( (bool) $condition ) {
-			self::$enabled = true;
-		}
-	}
-
-	/**
-	 * Disable.
-	 */
-	public static function disable() {
-		self::$enabled = false;
-	}
-
-	/**
-	 * Write If Enabled.
-	 *
-	 * @param  string       $message  Message.
-	 * @param  int | string $level  Level.
-	 */
-	public static function write_if_enabled( $message, $level = self::DEBUG ) {
-		if ( self::$enabled ) {
-			self::write_log( $message, $level );
-		}
-	}
-
-	/**
-	 * Write Log.
-	 *
-	 * @param  string       $message  message.
-	 * @param  int | string $level  Level.
-	 */
-	public static function write_log( $message, $level = self::DEBUG ) {
-		self::get_instance()->write_line( $message, $level );
-	}
 	/**
 	 * Write Log. [Retaining for old actions.]
 	 *
@@ -166,8 +135,10 @@ class FED_Log {
 		$date    = new DateTime();
 		$en_tete = $date->format( 'd/m/Y H:i:s' );
 		$write   = sprintf( " \n \n ==================%s (%s) START================== \n \n", $en_tete, $level );
+		// phpcs:ignore
 		$write   .= print_r( $message, 1 );
 		$write   .= sprintf( " \n \n ==================%s (%s) END================== \n \n \n", $en_tete, $level );
+		// phpcs:ignore
 		fwrite( $this->file, $write );
 	}
 
@@ -191,6 +162,46 @@ class FED_Log {
 	 */
 	protected static function has_instance() {
 		return self::$instance instanceof self;
+	}
+
+	/**
+	 * Enable If.
+	 *
+	 * @param  bool $condition  Condition.
+	 */
+	public static function enable_if( $condition = true ) {
+		if ( (bool) $condition ) {
+			self::$enabled = true;
+		}
+	}
+
+	/**
+	 * Disable.
+	 */
+	public static function disable() {
+		self::$enabled = false;
+	}
+
+	/**
+	 * Write If Enabled.
+	 *
+	 * @param  string       $message  Message.
+	 * @param  int | string $level  Level.
+	 */
+	public static function write_if_enabled( $message, $level = self::DEBUG ) {
+		if ( self::$enabled ) {
+			self::write_log( $message, $level );
+		}
+	}
+
+	/**
+	 * Write Log.
+	 *
+	 * @param  string       $message  message.
+	 * @param  int | string $level  Level.
+	 */
+	public static function write_log( $message, $level = self::DEBUG ) {
+		self::get_instance()->write_line( $message, $level );
 	}
 
 	/**
@@ -223,6 +234,7 @@ class FED_Log {
 	 * Destruct.
 	 */
 	public function __destruct() {
+		// phpcs:ignore
 		fclose( $this->file );
 	}
 }

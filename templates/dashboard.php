@@ -12,7 +12,7 @@ do_action( 'fed_before_dashboard_container' );
 $is_mobile = fed_get_menu_mobile_attributes();
 ?>
 	<div class="bc_fed fed_dashboard_container">
-		<?php echo fed_loader() ?>
+		<?php echo fed_loader(); ?>
 		<?php do_action( 'fed_inside_dashboard_container_top' ); ?>
 		<?php echo fed_show_alert( 'fed_dashboard_top_message' ) ?>
 		<?php if ( ! $menu instanceof WP_Error ) {
@@ -56,7 +56,7 @@ $is_mobile = fed_get_menu_mobile_attributes();
 					?>
 				</div>
 			</div>
-		<?php
+			<?php
 			do_action( 'fed_dashboard_content_outside_bottom' );
 			do_action( 'fed_dashboard_content_outside_bottom' . fed_get_data( 'menu_request.menu_slug', $menu ) );
 		}

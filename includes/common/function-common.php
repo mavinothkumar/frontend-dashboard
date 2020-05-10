@@ -241,10 +241,10 @@ if ( ! function_exists( 'fed_js_translation' ) ) {
 			'plugin_url'          => plugins_url( BC_FED_PLUGIN_NAME ),
 			'payment_info'        => 'no',
 			'fed_admin_form_post' => admin_url(
-				'admin-ajax.php?action=fed_admin_form_post&nonce=' . wp_create_nonce( 'fed_admin_form_post' )
+				'admin-ajax.php?action=fed_admin_form_post&fed_nonce=' . wp_create_nonce( 'fed_nonce' )
 			),
 			'fed_login_form_post' => admin_url(
-				'admin-ajax.php?action=fed_login_form_post&nonce=' . wp_create_nonce( 'fed_login_form_post' )
+				'admin-ajax.php?action=fed_login_form_post&fed_nonce=' . wp_create_nonce( 'fed_nonce' )
 			),
 			'alert'               => array(
 				'confirmation'                  => array(

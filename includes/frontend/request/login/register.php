@@ -75,7 +75,7 @@ add_filter( 'insert_user_meta', 'fed_insert_user_meta', 10, 3 );
 function fed_insert_user_meta( $meta, $user, $update ) {
 	$get_profile_meta_by_menu = array();
 	if ( isset( $_REQUEST['tab_id'] ) ) {
-		$get_profile_meta_by_menu = fed_fetch_user_profile_columns( esc_attr( $_REQUEST['tab_id'] ) );
+		$get_profile_meta_by_menu = fed_fetch_user_profile_columns( sanitize_text_field( wp_unslash( $_REQUEST['tab_id'] ) ) );
 	}
 
 	if ( isset( $_REQUEST['fed_registration_form'] ) ) {
@@ -93,22 +93,20 @@ function fed_insert_user_meta( $meta, $user, $update ) {
 				)
 			) {
 				$meta[ $extra_field['input_meta'] ] = serialize(
+				// phpcs:ignore
 					fed_sanitize_text_field( $_REQUEST[ $extra_field['input_meta'] ] )
 				);
-			}
-			else {
+			} else {
 				if ( isset( $extra_field['input_type'] ) && 'wp_editor' === $extra_field['input_type'] ) {
 					$meta[ $extra_field['input_meta'] ] = isset( $_REQUEST[ $extra_field['input_meta'] ] ) ? wp_kses_post(
 						$_REQUEST[ $extra_field['input_meta'] ]
 					) : '';
-				}
-				elseif ( isset( $extra_field['input_type'] ) && 'multi_line' === $extra_field['input_type'] ) {
+				} elseif ( isset( $extra_field['input_type'] ) && 'multi_line' === $extra_field['input_type'] ) {
 					$meta[ $extra_field['input_meta'] ] = isset( $_REQUEST[ $extra_field['input_meta'] ] ) ? wp_kses(
 						$_REQUEST[ $extra_field['input_meta'] ],
 						array()
 					) : '';
-				}
-				else {
+				} else {
 					$meta[ $extra_field['input_meta'] ] = isset( $_REQUEST[ $extra_field['input_meta'] ] ) ? fed_sanitize_text_field(
 						$_REQUEST[ $extra_field['input_meta'] ]
 					) : '';

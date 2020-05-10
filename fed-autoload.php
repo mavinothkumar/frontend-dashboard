@@ -123,6 +123,9 @@ $files = array(
 	'/includes/frontend/controller/logout.php',
 	'/includes/frontend/request/user_profile/user-profile.php',
 	'/includes/frontend/request/validation/validation.php',
+	'/includes/widgets/class-fed-post-widget.php',
+	'/includes/admin/controllers/class-fed-terms.php',
+	'/includes/admin/controllers/class-fed-taxonomy.php',
 	'/includes/frontend/function-frontend.php',
 );
 

@@ -73,11 +73,12 @@ if ( ! function_exists( 'fed_script_front_end' ) ) {
 			// Pass PHP value to JavaScript.
 			$translation_array = apply_filters( 'fed_convert_php_js_var', fed_js_translation() );
 
-
 			wp_localize_script( 'fed_script', 'frontend_dashboard', $translation_array );
 
 			wp_enqueue_media();
 		}
+
+		wp_enqueue_style( 'fed_global_admin_style' );
 	}
 }
 
@@ -93,23 +94,23 @@ if ( ! function_exists( 'fed_enqueue_scripts' ) ) {
 		if ( 'scripts' === $index ) {
 			if ( true === $script['wp_core'] ) {
 				wp_enqueue_script( $key );
-			}
-			else {
-				wp_enqueue_script(
+			} else {
+				wp_register_script(
 					$key, $script['src'], $script['dependencies'], $script['version'],
 					$script['in_footer']
 				);
+				wp_enqueue_script( $key );
 			}
 		}
 		if ( 'styles' === $index ) {
 			if ( true === $script['wp_core'] ) {
 				wp_enqueue_style( $key );
-			}
-			else {
-				wp_enqueue_style(
+			} else {
+				wp_register_style(
 					$key, $script['src'], $script['dependencies'], $script['version'],
 					$script['media']
 				);
+				wp_enqueue_style( $key );
 			}
 		}
 	}

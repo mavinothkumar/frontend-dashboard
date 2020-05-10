@@ -67,6 +67,7 @@ function fed_forgot_form_submit( $post ) {
 
 	$title = __( 'Password Reset', 'frontend-dashboard' ) . $blogname;
 
+	// phpcs:ignore
 	if ( $message && ! wp_mail( $user_email, wp_specialchars_decode( $title ), $message, $headers ) ) {
 		wp_send_json_error(
 			array(

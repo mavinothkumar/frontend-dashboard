@@ -38,18 +38,17 @@ add_action( 'template_redirect', 'fed_login_template_redirect' );
  */
 function fed_login_template_redirect() {
 	if ( is_user_logged_in() ) {
-		$login_page     = fed_get_login_url();
+		$login_page = fed_get_login_url();
 		// Check if WordPress VIP.
-		$url_to_post_id = function_exists( 'wpcom_vip_url_to_postid' ) ? wpcom_vip_url_to_postid(
-			$login_page
-		) : url_to_postid( $login_page );
+		// phpcs:ignore
+		$url_to_post_id = function_exists( 'wpcom_vip_url_to_postid' ) ? wpcom_vip_url_to_postid( $login_page ) : url_to_postid( $login_page );
 		$location       = fed_get_login_redirect_url();
 
 		if ( ( false != $login_page ) && is_page( $url_to_post_id ) ) {
 			$location = ( false == $location ) ? home_url() : $location;
 
 			wp_safe_redirect( $location );
+			exit();
 		}
-
 	}
 }

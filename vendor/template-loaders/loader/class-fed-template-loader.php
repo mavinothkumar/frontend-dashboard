@@ -294,8 +294,6 @@ if ( ! class_exists( 'FED_Template_Loader' ) ) {
 			// Sort the file paths based on priority.
 			ksort( $file_paths, SORT_NUMERIC );
 
-//			bcdump( $file_paths);
-
 			return array_map( 'trailingslashit', $file_paths );
 		}
 

@@ -1,2 +1,7 @@
 <?php
-// Silence is golden.
+/**
+ * Silence is Good.
+ *
+ * @package frontend-dashboard.
+ */
+

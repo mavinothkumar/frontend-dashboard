@@ -79,9 +79,12 @@ function fed_get_current_page_url() {
  * @return string
  */
 function fed_current_page_url() {
+
 	global $wp;
 
-	return add_query_arg( $_SERVER['QUERY_STRING'], '', home_url( $wp->request ) );
+	$query_string = isset( $_SERVER['QUERY_STRING'] ) ? sanitize_text_field( wp_unslash( $_SERVER['QUERY_STRING'] ) ) : array();
+
+	return add_query_arg( $query_string, '', home_url( $wp->request ) );
 }
 
 /**
@@ -95,7 +98,7 @@ function fed_get_registration_content_fields() {
 	$role            = fed_role_with_pricing_flat( $fed_admin_login );
 
 	if ( $details instanceof WP_Error ) {
-		wp_die( __( 'Default Tables not installed, please contact support', 'frontend-dashboard' ) );
+		wp_die( esc_attr__( 'Default Tables not installed, please contact support', 'frontend-dashboard' ) );
 	}
 
 	$registration = array();
@@ -320,9 +323,7 @@ function fed_get_wp_editor( $content = '', $id, array $options = array() ) {
 	wp_editor( $content, $id, $options );
 
 	$temp = ob_get_clean();
-	// $temp .= \_WP_Editors::enqueue_scripts();
-	// print_footer_scripts();
-	// $temp .= \_WP_Editors::editor_js();
+
 	return $temp;
 }
 
@@ -545,7 +546,7 @@ function fed_get_payment_notification() {
 					aria-hidden="true">&times;
 			</button>
 			<strong>Payment Success!</strong>
-			Thanks for your payment - You transaction ID : <?php echo esc_attr( wp_unslash( $_REQUEST['tid'] ) ); ?>
+			Thanks for your payment - You transaction ID : <?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['tid'] ) ) ); ?>
 		</div>
 		<?php
 	}
@@ -607,7 +608,10 @@ function fed_show_users_by_role( $fed_user_attr ) {
 						<div class="col-md-3">
 							<div class="panel panel-primary">
 								<div class="panel-body">
-									<?php echo fed_get_avatar( $email, $name ); ?>
+									<?php
+									// phpcs:ignore
+									echo fed_get_avatar( $email, $name );
+									?>
 								</div>
 								<div class="panel-footer bg-primary">
 									<h3 class="panel-title">
@@ -716,7 +720,10 @@ function fed_show_user_profile_page( $user ) {
 								</div>
 							</div>
 							<div class="panel-body">
-								<?php echo fed_get_avatar( $user->ID, $user->display_name, 'img-responsive' ); ?>
+								<?php
+								// phpcs:ignore
+								echo fed_get_avatar( $user->ID, $user->display_name, 'img-responsive' );
+								?>
 							</div>
 
 							<div class="panel-footer">
@@ -825,12 +832,17 @@ function fed_show_user_profile_page( $user ) {
 										?>
 										<div class="row fed_dashboard_item_field">
 											<div class="fed_dashboard_label_name fed_header_font_color col-md-4 text-right-md text-right-not-sm text-right-not-xs">
-												<?php echo esc_attr(
+												<?php
+												echo esc_attr(
 													$single_item['label_name'], 'frontend-dashboard'
-												); ?>
+												);
+												?>
 											</div>
 											<div class="col-md-8">
-												<?php echo fed_process_author_details( $user, $single_item ); ?>
+												<?php
+												// phpcs:ignore
+												echo fed_process_author_details( $user, $single_item );
+												?>
 											</div>
 										</div>
 										<?php
@@ -940,77 +952,3 @@ function fed_show_alert( $key ) {
 
 	return $html;
 }
-
-/**
- * Disabled for future release
- */
-// function fed_dashboard_posts_nav($postsss) {
-//
-// if( is_singular() )
-// return;
-//
-// ** Stop execution if there's only 1 page */
-// if( $postsss->max_num_pages <= 1 )
-// return;
-//
-// $paged = get_query_var( 'paged' ) ? absint( get_query_var( 'paged' ) ) : 1;
-// $max   = intval( $postsss->max_num_pages );
-//
-// ** Add current page to the array */
-// if ( $paged >= 1 )
-// $links[] = $paged;
-//
-// ** Add the pages around the current page to the array */
-// if ( $paged >= 3 ) {
-// $links[] = $paged - 1;
-// $links[] = $paged - 2;
-// }
-//
-// if ( ( $paged + 2 ) <= $max ) {
-// $links[] = $paged + 2;
-// $links[] = $paged + 1;
-// }
-//
-// echo '<div class="navigation"><ul>' . "\n";
-//
-// ** Previous Post Link */
-// if ( get_previous_posts_link() )
-// printf( '<li>%s</li>' . "\n", get_previous_posts_link() );
-//
-// ** Link to first page, plus ellipses if necessary */
-// if ( ! in_array( 1, $links ) ) {
-// $class = 1 == $paged ? ' class="active"' : '';
-//
-// printf( '<li%s><a href="%s">%s</a></li>' . "\n", $class, esc_url( get_pagenum_link( 1 ) ), '1' );
-//
-// if ( ! in_array( 2, $links ) )
-// echo '<li>…</li>';
-// }
-//
-// ** Link to current page, plus 2 pages in either direction if necessary */
-// sort( $links );
-// foreach ( (array) $links as $link ) {
-// $class = $paged == $link ? ' class="active"' : '';
-// printf( '<li%s><a href="%s">%s</a></li>' . "\n", $class, esc_url( get_pagenum_link( $link ) ), $link );
-// }
-//
-// ** Link to last page, plus ellipses if necessary */
-// if ( ! in_array( $max, $links ) ) {
-// if ( ! in_array( $max - 1, $links ) )
-// echo '<li>…</li>' . "\n";
-//
-// $class = $paged == $max ? ' class="active"' : '';
-// printf( '<li%s><a href="%s">%s</a></li>' . "\n", $class, esc_url( get_pagenum_link( $max ) ), $max );
-// }
-//
-// ** Next Post Link */
-// if ( get_next_posts_link() )
-// printf( '<li>%s</li>' . "\n", get_next_posts_link() );
-//
-// echo '</ul></div>' . "\n";
-//
-// }
-// add_filter( 'dynamic_sidebar_params', 'fed_dynamic_sidebar_params' );
-// function fed_dynamic_sidebar_params( $params ) {
-// var_dump( $params );
-// }

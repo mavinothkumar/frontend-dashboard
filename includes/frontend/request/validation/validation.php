@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Validate User Profile Form.
  *
- * @param  array $post  Request
+ * @param  array $post  Request.
  *
  * @return bool|WP_Error
  */

@@ -629,6 +629,61 @@ jQuery( document ).ready(
 			}
 		);
 
+		body.on( 'change', '.fed_widget_taxonomy', function ( e ) {
+			var change = $( this );
+			var taxonomy = change.val();
+			var url = change.data( 'url' );
+			var terms = change.closest( '.fed_widget_items' ).find( '.fed_widget_term' );
+
+			fed_toggle_loader();
+			$.ajax( {
+				type: 'POST',
+				url: url,
+				data: { taxonomy: taxonomy },
+				success: function ( results ) {
+					fed_toggle_loader();
+					var output = [];
+					if ( results.success && results.data.message ) {
+						$.each( results.data.message, function ( key, value ) {
+							output.push( '<option value="' + key + '">' + value + '</option>' );
+						} );
+					}
+					terms.html( output.join( '' ) );
+				}
+			} );
+			e.preventDefault();
+		} );
+
+		body.on( 'change', '.fed_widget_post_type', function ( e ) {
+			var change = $( this );
+			var post_type = change.val();
+			var url = change.data( 'url' );
+			var taxonomy = change.closest( '.fed_widget_items' ).find( '.fed_widget_taxonomy' );
+			var terms = change.closest( '.fed_widget_items' ).find( '.fed_widget_term' );
+			taxonomy.html( '' );
+			terms.html( '<option value="">Please Select</option>' );
+			fed_toggle_loader();
+			$.ajax( {
+				type: 'POST',
+				url: url,
+				data: { post_type: post_type },
+				success: function ( results ) {
+					console.log( results );
+					// fed_toggle_loader();
+					var output = [];
+					if ( results.success && results.data.message ) {
+						$.each( results.data.message, function ( key, value ) {
+							output.push( '<option value="' + key + '">' + value + '</option>' );
+						} );
+					}
+					taxonomy.html( output.join( '' ) );
+				}
+			} );
+
+			e.preventDefault();
+		} );
+
+
 		$(
 			function () {
 				var hash = window.location.hash;

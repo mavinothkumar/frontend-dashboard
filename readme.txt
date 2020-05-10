@@ -3,8 +3,8 @@ Contributors: vinoth06, buffercode
 Tags: dashboard, frontend dashboard, custom login, custom register, custom roles, custom profile, custom post type, custom taxonomies, custom dashboard, hide admin bar, widget
 Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 4.6
-Tested up to: 5.4
-Stable tag: 2.1.2
+Tested up to: 5.4.1
+Stable tag: 2.1.7
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -248,7 +248,16 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Changelog ==
 
-= 2.1.2 [14-Apr-2020] =
+= 2.1.7 [10-May-2020] =
+* New (Feature): FED Post Widget - Enable/Disable Author, Date and Show post with Taxonomy or Terms.
+
+= 2.1.6 [9-May-2020] =
+* New: Widget - Listing Posts by Taxonomy and Terms
+
+= 2.1.4 [24-Apr-2020] =
+* Login redirect action hook and added few pluggable functions.
+
+= 2.1.3 [14-Apr-2020] =
 * Bug fixes.
 
 = 2.1.1 [25-Feb-2020] =

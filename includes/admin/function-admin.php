@@ -1879,6 +1879,7 @@ function fed_get_script_loading_pages() {
 		'user-edit.php',
 		'post-new.php',
 		'profile.php',
+		'widgets.php',
 	);
 
 	$items = array_merge( $default, $fed_menu_items );
