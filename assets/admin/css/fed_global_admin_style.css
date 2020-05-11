@@ -329,9 +329,21 @@
 .fed_post_widget_layout_item_image img {
 	width: 100%;
 }
+
 .fed_post_widget_layout_items_content_author_date {
 	display: flex;
+	font-size: 11px;
 }
+
 .fed_post_widget_layout_items_content_author {
 	margin-right: 10px;
+}
+
+.bc_fed .row.fed_dashboard_item_field > div {
+	margin-bottom: 10px;
+	word-break: break-all;
+}
+
+.fed_black_font {
+	color: #000 !important;
 }

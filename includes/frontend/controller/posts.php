@@ -26,7 +26,6 @@ function fed_process_dashboard_display_post( $post_type = 'post' ) {
 	$user  = get_userdata( get_current_user_id() );
 	$paged = isset( $_REQUEST['page_number'] ) ? absint( $_REQUEST['page_number'] ) : 1;
 	$args  = array(
-		'author'         => $user->ID,
 		'orderby'        => 'post_date',
 		'order'          => 'DESC',
 		'posts_per_page' => get_option( 'posts_per_page', 10 ),
@@ -34,6 +33,10 @@ function fed_process_dashboard_display_post( $post_type = 'post' ) {
 		'post_status'    => array( 'publish', 'pending' ),
 		'post_type'      => $post_type,
 	);
+
+	if ( ! fed_is_admin() ) {
+		$args['author'] = $user->ID;
+	}
 
 	return new WP_Query( $args );
 }

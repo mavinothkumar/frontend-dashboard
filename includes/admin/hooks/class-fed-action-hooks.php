@@ -204,6 +204,17 @@ if ( ! class_exists( 'FED_ActionHooks' ) ) {
 						width: 80px;
 						height: 80px;
 						border: 4px solid <?php echo esc_attr( $pbg_color ); ?> !important;
+					}
+
+					.fed_primary_font_color {
+						color: <?php echo esc_attr( $pbg_color ); ?> !important;
+					}
+
+					.swal2-confirm.swal2-styled {
+						background-color: <?php echo esc_attr( $pbg_color ); ?> !important;
+						border-left-color: <?php echo esc_attr( $pbg_color ); ?> !important;
+						border-right-color: <?php echo esc_attr( $pbg_color ); ?> !important;
+					}
 				</style>
 
 				<?php

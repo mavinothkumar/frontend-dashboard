@@ -169,7 +169,8 @@ jQuery( document ).ready( function ( $ ) {
 				data: data,
 				url: url,
 				success: function ( results ) {
-					// console.log(results);
+					console.log( results );
+					$( '#fed_post_id_hidden' ).val( results.data.id );
 					fedAlert.dashboardPostCommon( results );
 					fed_toggle_loader();
 				}
@@ -248,7 +249,6 @@ jQuery( document ).ready( function ( $ ) {
 				data: data,
 				url: url,
 				success: function ( results ) {
-					// console.log(results);
 					fedAlert.dashboardPostCommon( results );
 					fed_toggle_loader();
 				}
