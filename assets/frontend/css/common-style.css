@@ -79,7 +79,7 @@ body {
 .bc_fed.fed_dashboard_container .fed_dashboard_item_field {
 	background-color: #fff;
 	padding: 10px;
-	margin: 5px;
+	margin: 10px 0;
 }
 
 .bc_fed .fed_dashboard_panel_body {
@@ -887,6 +887,31 @@ Pricing
 }
 
 
+.fed_dashboard_item_field.pending {
+	border-left: 5px solid orange;
+}
+
+.fed_post_status_on_hover.pending {
+	background: orange;
+	color: black;
+}
+.fed_post_status_on_hover.publish {
+	background: green;
+	color: white;
+}
+
+.fed_post_status_on_hover.draft {
+	background: grey;
+	color: white;
+}
+
+.fed_dashboard_item_field.publish {
+	border-left: 5px solid green;
+}
+
+.fed_dashboard_item_field.draft {
+	border-left: 5px solid grey;
+}
 
 
 /*@media screen and (min-width: 768px) {*/

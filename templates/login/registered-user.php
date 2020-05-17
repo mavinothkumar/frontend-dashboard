@@ -7,7 +7,7 @@
 
 $dashboard = fed_get_dashboard_url();
 
-$dashboard = ( false == $dashboard ) ? get_dashboard_url() : $dashboard;
+$dashboard = ( false === $dashboard ) ? get_dashboard_url() : $dashboard;
 
 $dashboard_title = apply_filters( 'fed_frontend_dashboard_title_btn', __( 'Visit Dashboard', 'frontend-dashboard' ) );
 ?>

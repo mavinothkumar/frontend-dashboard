@@ -8,23 +8,20 @@ jQuery( document ).ready( function ( $ ) {
 		var b = $( 'body' );
 		var dashboard_menu = $( '.fed_dashboard_menus' );
 
-		b.popover( {
-			selector: '[data-toggle="popover"]',
-			trigger: 'focus'
-		} );
+		$( '[data-toggle="popover"]' ).popover();
 
 		// Login, Register, Reset Password TagButton Navigation.
-		$( '.fed_login_menus' ).on( 'click', '.fed_tab_menus', function () {
-			var click = $( this );
-			var click_id = click.attr( 'id' );
-			var fed_login_content = $( '.fed_login_content' );
-
-			click.closest( '.fed_login_wrapper' ).find( '.fed_tab_menus' ).removeClass( 'fed_selected' );
-			click.addClass( 'fed_selected' );
-
-			fed_login_content.find( '.fed_tab_content' ).addClass( 'hide ' ).animateCss( 'pulse' );
-			fed_login_content.find( "[data-id='" + click_id + "']" ).removeClass( 'hide' );
-		} );
+		// $( '.fed_login_menus' ).on( 'click', '.fed_tab_menus', function () {
+		// 	var click = $( this );
+		// 	var click_id = click.attr( 'id' );
+		// 	var fed_login_content = $( '.fed_login_content' );
+		//
+		// 	click.closest( '.fed_login_wrapper' ).find( '.fed_tab_menus' ).removeClass( 'fed_selected' );
+		// 	click.addClass( 'fed_selected' );
+		//
+		// 	fed_login_content.find( '.fed_tab_content' ).addClass( 'hide ' ).animateCss( 'pulse' );
+		// 	fed_login_content.find( "[data-id='" + click_id + "']" ).removeClass( 'hide' );
+		// } );
 
 		// All Front End submission.
 		$( 'form.fed_form_post' ).on( 'submit', function ( e ) {

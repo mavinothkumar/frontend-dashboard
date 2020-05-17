@@ -24,13 +24,13 @@ function fed_wp_ajax_fed_login_form_post() {
 	fed_verify_nonce();
 
 	if ( isset( $post_payload['submit'] ) ) {
-		if ( 'Login' === $post_payload['submit'] ) {
+		if ( 'login' === $post_payload['submit'] ) {
 			fed_login_form_submit( $post_payload );
-		} elseif ( 'Register' === $post_payload['submit'] ) {
+		} elseif ( 'register' === $post_payload['submit'] ) {
 			fed_register_form_submit( $post_payload );
-		} elseif ( 'Forgot Password' === $post_payload['submit'] ) {
+		} elseif ( 'forgot_password' === $post_payload['submit'] ) {
 			fed_forgot_form_submit( $post_payload );
-		} elseif ( 'Reset Password' === $post_payload['submit'] ) {
+		} elseif ( 'reset_password' === $post_payload['submit'] ) {
 			fed_reset_form_submit( $post_payload );
 		} else {
 			do_action( 'fed_login_form_submit_custom' );

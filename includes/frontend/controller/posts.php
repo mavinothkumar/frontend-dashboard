@@ -30,7 +30,7 @@ function fed_process_dashboard_display_post( $post_type = 'post' ) {
 		'order'          => 'DESC',
 		'posts_per_page' => get_option( 'posts_per_page', 10 ),
 		'paged'          => $paged,
-		'post_status'    => array( 'publish', 'pending' ),
+		'post_status'    => array_keys( fed_get_post_status() ),
 		'post_type'      => $post_type,
 	);
 

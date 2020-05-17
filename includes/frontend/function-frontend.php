@@ -476,16 +476,16 @@ function fed_get_categories_id_by_post_id( $post_id ) {
  */
 function fed_get_post_status_symbol( $status ) {
 	if ( 'publish' == $status ) {
-		return ' <i class="fa fa-check bg-primary-font" data-toggle="popover" data-trigger="hover" title="Post Status" 
- data-content="Awesome! This post as been published"></i>';
+		return ' <i class="fa fa-check bg-primary-font fed_popover" data-toggle="popover" data-trigger="hover" title="'.esc_attr($status).'" 
+ data-content="'.__('Awesome! This post as been published','frontend-dashboard').'"></i>';
 	}
 	if ( 'pending' == $status ) {
-		return ' <i class="fa fa-pause bg-info-font" data-toggle="popover" data-trigger="hover" title="Post Status" 
- data-content="Please wait, your post is in pending status, editor or admin will approve your post."></i>';
+		return ' <i class="fa fa-pause bg-info-font fed_popover" data-toggle="popover" data-trigger="hover" title="'.esc_attr($status).'" 
+ data-content="'.__('Please wait, your post is in pending status, editor or admin will approve your post.','frontend-dashboard').'"></i>';
 	}
 
-	return '<i class="fa fa-exclamation bg-danger-font" data-toggle="popover" data-trigger="hover" title="Post Status" 
- data-content="Oops! Something went wrong, please contact admin"></i>';
+	return '<i class="fa fa-exclamation bg-danger-font fed_popover" data-toggle="popover" data-trigger="hover" title="'.esc_attr($status).'" 
+ data-content="'.esc_attr($status).'"></i>';
 
 }
 

@@ -215,6 +215,11 @@ if ( ! class_exists( 'FED_ActionHooks' ) ) {
 						border-left-color: <?php echo esc_attr( $pbg_color ); ?> !important;
 						border-right-color: <?php echo esc_attr( $pbg_color ); ?> !important;
 					}
+
+					.fed_tab_menus.active {
+						font-weight: 700;
+						text-decoration: underline;
+					}
 				</style>
 
 				<?php

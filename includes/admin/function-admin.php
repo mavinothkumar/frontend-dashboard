@@ -23,30 +23,30 @@ function fed_verify_nonce( $request = null, $permission = null ) {
 	/**
 	 * Added in version 1.5
 	 */
-	if ( $request === null ) {
-		$request = isset( $_REQUEST ) ? $_REQUEST : null;
+	if ( null === $request ) {
+		$request = isset( $_REQUEST ) ? wp_unslash( $_REQUEST ) : null;
 	}
 
 	if ( ! $request || ! isset( $request['fed_nonce'] ) ) {
 		$message = __( 'Invalid Request - 700', 'frontend-dashboard' );
-		wp_doing_ajax() ? wp_send_json_error( array( 'message' => $message ) ) : wp_die( $message );
+		wp_doing_ajax() ? wp_send_json_error( array( 'message' => esc_attr( $message ) ) ) : wp_die( esc_attr( $message ) );
 	}
 
 	if ( ! $request || ! wp_verify_nonce( $request['fed_nonce'], 'fed_nonce' ) ) {
 		$message = __( 'Invalid Request - 701', 'frontend-dashboard' );
-		wp_doing_ajax() ? wp_send_json_error( array( 'message' => $message ) ) : wp_die( $message );
+		wp_doing_ajax() ? wp_send_json_error( array( 'message' => esc_attr( $message ) ) ) : wp_die( esc_attr( $message ) );
 	}
 
 	if ( $request && null !== $permission ) {
 		$user_role = fed_get_current_user_role_key();
 		if ( is_string( $permission ) && $user_role !== $permission ) {
 			$message = __( 'Invalid Request - 702', 'frontend-dashboard' );
-			wp_doing_ajax() ? wp_send_json_error( array( 'message' => $message ) ) : wp_die( $message );
+			wp_doing_ajax() ? wp_send_json_error( array( 'message' => esc_attr( $message ) ) ) : wp_die( esc_attr( $message ) );
 
 		}
 		if ( is_array( $permission ) && ! in_array( $user_role, $permission, true ) ) {
 			$message = __( 'Invalid Request - 703', 'frontend-dashboard' );
-			wp_doing_ajax() ? wp_send_json_error( array( 'message' => $message ) ) : wp_die( $message );
+			wp_doing_ajax() ? wp_send_json_error( array( 'message' => esc_attr( $message ) ) ) : wp_die( esc_attr( $message ) );
 		}
 	}
 }
@@ -385,8 +385,7 @@ function fed_get_empty_value_for_user_profile( $action ) {
 
 	if ( 'profile' == $action ) {
 		$default_value = array_merge( $default, $user_profile );
-	}
-	else {
+	} else {
 		$default_value = $default;
 	}
 
@@ -442,8 +441,7 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 				) : 'no',
 			);
 			$default['extended'] = serialize( $extended );
-		}
-		else {
+		} else {
 			$default['extended'] = $row['extended'];
 			if ( is_string( $row['extended'] ) ) {
 				$default['extended'] = unserialize( $row['extended'] );
@@ -457,8 +455,7 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 				'label' => isset( $row['extended']['label'] ) ? wp_kses_post( $row['extended']['label'] ) : '',
 			);
 			$default['extended'] = serialize( $extended );
-		}
-		else {
+		} else {
 			$default['extended'] = $row['extended'];
 			if ( is_string( $row['extended'] ) ) {
 				$default['extended'] = unserialize( $row['extended'] );
@@ -484,8 +481,7 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 					) : '24_hours',
 				);
 				$default['extended'] = serialize( $extended );
-			}
-			else {
+			} else {
 				if ( is_string( $row['extended'] ) ) {
 					$default['extended'] = unserialize( $row['extended'] );
 				}
@@ -493,8 +489,7 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 					$default['extended'] = $row['extended'];
 				}
 			}
-		}
-		else {
+		} else {
 			$default['extended'] = fed_default_extended_fields();
 		}
 	}
@@ -514,8 +509,7 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 
 		);
 		$default_value = array_merge( $default, $user_profile );
-	}
-	else {
+	} else {
 		$default_value = $default;
 	}
 
@@ -1781,12 +1775,10 @@ function fed_filter_show_register( $row ) {
 		 */
 		if ( 'file' === $row['input_type'] ) {
 			$required = 'Disable';
-		}
-		else {
+		} else {
 			$required = esc_attr( $row['show_register'] );
 		}
-	}
-	else {
+	} else {
 		$required = 'Disable';
 	}
 
@@ -1895,10 +1887,30 @@ function fed_get_script_loading_pages() {
 function fed_get_post_status() {
 	return apply_filters(
 		'fed_update_post_status', array(
+			'draft'   => 'Draft',
 			'pending' => 'Pending',
 			'publish' => 'Publish',
 		)
 	);
+}
+
+/**
+ * Get Post Status.
+ *
+ * @param  string $status  Status.
+ *
+ * @return string
+ */
+function fed_get_display_post_status( $status ) {
+	$post_status = apply_filters(
+		'fed_display_post_status', array(
+			'pending' => 'Pending',
+			'publish' => 'Published',
+			'draft'   => 'Draft',
+		)
+	);
+
+	return isset( $post_status[ $status ] ) ? $post_status[ $status ] : 'pending';
 }
 
 /**
@@ -2830,8 +2842,7 @@ function fed_get_category_tag_post_format( $post_type = 'post' ) {
 		if ( $taxonomy->public && $taxonomy->show_ui ) {
 			if ( $taxonomy->hierarchical === false ) {
 				$new_array['tag'][ $index ] = $taxonomy;
-			}
-			else {
+			} else {
 				$new_array['category'][ $index ] = $taxonomy;
 			}
 		}
@@ -2866,8 +2877,7 @@ function fed_array_sort( $array, $on, $order = SORT_ASC ) {
 						$sortable_array[ $k ] = $v2;
 					}
 				}
-			}
-			else {
+			} else {
 				$sortable_array[ $k ] = $v;
 			}
 		}
@@ -2970,8 +2980,7 @@ if ( ! function_exists( 'array_column' ) ) {
 		if ( isset( $params[2] ) ) {
 			if ( is_float( $params[2] ) || is_int( $params[2] ) ) {
 				$paramsIndexKey = (int) $params[2];
-			}
-			else {
+			} else {
 				$paramsIndexKey = (string) $params[2];
 			}
 		}
@@ -2986,16 +2995,14 @@ if ( ! function_exists( 'array_column' ) ) {
 			if ( $paramsColumnKey === null ) {
 				$valueSet = true;
 				$value    = $row;
-			}
-			elseif ( is_array( $row ) && array_key_exists( $paramsColumnKey, $row ) ) {
+			} elseif ( is_array( $row ) && array_key_exists( $paramsColumnKey, $row ) ) {
 				$valueSet = true;
 				$value    = $row[ $paramsColumnKey ];
 			}
 			if ( $valueSet ) {
 				if ( $keySet ) {
 					$resultArray[ $key ] = $value;
-				}
-				else {
+				} else {
 					$resultArray[] = $value;
 				}
 			}
@@ -3014,8 +3021,7 @@ function fed_call_function_method( $item ) {
 	if ( is_string( $item['callable'] ) && function_exists( $item['callable'] ) ) {
 		$parameter = isset( $item['arguments'] ) ? $item['arguments'] : '';
 		call_user_func( $item['callable'], $parameter );
-	}
-	elseif (
+	} elseif (
 		is_array( $item['callable'] ) && method_exists(
 			$item['callable']['object'],
 			$item['callable']['method']
@@ -3023,8 +3029,7 @@ function fed_call_function_method( $item ) {
 	) {
 		$parameter = isset( $item['arguments'] ) ? $item['arguments'] : '';
 		call_user_func( array( $item['callable']['object'], $item['callable']['method'] ), $parameter );
-	}
-	else {
+	} else {
 		?>
 		<div class="bc_fed fed_add_page_profile_container">
 			<?php
@@ -3053,8 +3058,7 @@ function fed_ajax_call_function_method( $item ) {
 	if ( is_string( $item['callable'] ) && function_exists( $item['callable'] ) ) {
 		$parameter = isset( $item['arguments'] ) ? $item['arguments'] : '';
 		call_user_func( $item['callable'], $parameter );
-	}
-	elseif (
+	} elseif (
 		is_array( $item['callable'] ) && method_exists(
 			$item['callable']['object'],
 			$item['callable']['method']
@@ -3062,8 +3066,7 @@ function fed_ajax_call_function_method( $item ) {
 	) {
 		$parameter = isset( $item['arguments'] ) ? $item['arguments'] : '';
 		call_user_func( array( $item['callable']['object'], $item['callable']['method'] ), $parameter );
-	}
-	else {
+	} else {
 		$error = is_array( $item['callable'] ) ? $item['callable']['method'] : $item['callable'];
 
 		wp_send_json_error(
@@ -3096,8 +3099,7 @@ function fed_execute_method_by_string( $item, $parameter = null ) {
 					'arguments' => $parameter,
 				)
 			);
-		}
-		else {
+		} else {
 			?>
 			<div class="bc_fed fed_add_page_profile_container">
 				<?php
@@ -3202,20 +3204,17 @@ function fed_get_data( $key, $target = null, $default = null, $sanitize = true )
 				return fed_get_value( $default, $sanitize );
 			}
 			$target = $target[ $segment ];
-		}
-		elseif ( $target instanceof ArrayAccess ) {
+		} elseif ( $target instanceof ArrayAccess ) {
 			if ( ! isset( $target[ $segment ] ) ) {
 				return fed_get_value( $default, $sanitize );
 			}
 			$target = $target[ $segment ];
-		}
-		elseif ( is_object( $target ) ) {
+		} elseif ( is_object( $target ) ) {
 			if ( ! isset( $target->{$segment} ) ) {
 				return fed_get_value( $default, $sanitize );
 			}
 			$target = $target->{$segment};
-		}
-		else {
+		} else {
 			return fed_get_value( $default, $sanitize );
 		}
 	}
@@ -3284,41 +3283,34 @@ if ( ! function_exists( 'fed_set_data' ) ) {
 				foreach ( $target as &$inner ) {
 					fed_set_data( $inner, $segments, $value, $overwrite );
 				}
-			}
-			elseif ( $overwrite ) {
+			} elseif ( $overwrite ) {
 				foreach ( $target as &$inner ) {
 					$inner = $value;
 				}
 			}
-		}
-		elseif ( fed_accessible( $target ) ) {
+		} elseif ( fed_accessible( $target ) ) {
 			if ( $segments ) {
 				if ( ! fed_exists( $target, $segment ) ) {
 					$target[ $segment ] = [];
 				}
 				fed_set_data( $target[ $segment ], $segments, $value, $overwrite );
-			}
-			elseif ( $overwrite || ! fed_exists( $target, $segment ) ) {
+			} elseif ( $overwrite || ! fed_exists( $target, $segment ) ) {
 				$target[ $segment ] = $value;
 			}
-		}
-		elseif ( is_object( $target ) ) {
+		} elseif ( is_object( $target ) ) {
 			if ( $segments ) {
 				if ( ! isset( $target->{$segment} ) ) {
 					$target->{$segment} = [];
 				}
 				fed_set_data( $target->{$segment}, $segments, $value, $overwrite );
-			}
-			elseif ( $overwrite || ! isset( $target->{$segment} ) ) {
+			} elseif ( $overwrite || ! isset( $target->{$segment} ) ) {
 				$target->{$segment} = $value;
 			}
-		}
-		else {
+		} else {
 			$target = [];
 			if ( $segments ) {
 				fed_set_data( $target[ $segment ], $segments, $value, $overwrite );
-			}
-			elseif ( $overwrite ) {
+			} elseif ( $overwrite ) {
 				$target[ $segment ] = $value;
 			}
 		}
@@ -3805,8 +3797,7 @@ function login_logout_menu( $items, $args ) {
 		if ( is_user_logged_in() ) {
 			$items .= '<li><a href="' . fed_get_dashboard_url() . '">Dashboard</a></li>';
 			$items .= '<li><a href="' . wp_logout_url() . '">Log Out</a></li>';
-		}
-		else {
+		} else {
 			$items .= '<li><a href="' . wp_login_url( get_permalink() ) . '">Log In</a></li>';
 		}
 	}

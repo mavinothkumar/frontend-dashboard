@@ -12,10 +12,22 @@
  */
 function fed_login_form() {
 	$form = array(
-		'Login'           => fed_login_only(),
-		'Register'        => fed_register_only(),
-		'Forgot Password' => fed_forgot_password_only(),
-		'Reset Password'  => fed_reset_password_only(),
+		'login'           => array(
+			'label' => __( 'Login', 'frontend-dashboard' ),
+			'html'  => fed_login_only(),
+		),
+		'register'        => array(
+			'label' => __( 'Register', 'frontend-dashboard' ),
+			'html'  => fed_register_only(),
+		),
+		'forgot_password' => array(
+			'label' => __( 'Forgot Password', 'frontend-dashboard' ),
+			'html'  => fed_forgot_password_only(),
+		),
+		'reset_password'  => array(
+			'label' => __( 'Reset Password', 'frontend-dashboard' ),
+			'html'  => fed_reset_password_only(),
+		),
 	);
 
 	return apply_filters( 'fed_login_form_filter', $form );
