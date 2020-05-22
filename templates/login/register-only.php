@@ -41,7 +41,7 @@ do_action( 'fed_before_register_only_form' );
 									<div class="col-md-12 text-center">
 										<input type="hidden"
 												name="submit"
-												value="Register"/>
+												value="register"/>
 										<button class="btn btn-primary"
 												type="submit"><?php echo wp_kses_post( $details['button'] ); ?></button>
 									</div>

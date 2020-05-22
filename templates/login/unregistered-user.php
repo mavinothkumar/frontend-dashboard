@@ -7,9 +7,17 @@
 
 $get_payload = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
 $menus       = fed_login_form();
-$page        = fed_get_data( 'page', $get_payload, 'login' );
-$page_name   = array_key_exists( $page, $menus ) ? $page : 'login';
-$menu        = isset( $menus[ $page_name ]['html'] ) ? $menus[ $page_name ]['html'] : false;
+if ( isset( $get_payload['page'] ) && 'reset_password' === $get_payload['page'] ) {
+	$menu      = $menus[ $get_payload['page'] ]['html'];
+	$page_name = 'reset_password';
+	unset( $menus['login'], $menus['register'], $menus['forgot_password'] );
+} else {
+	$page      = fed_get_data( 'page', $get_payload, 'login' );
+	$page_name = array_key_exists( $page, $menus ) ? $page : 'login';
+	$menu      = isset( $menus[ $page_name ]['html'] ) ? $menus[ $page_name ]['html'] : false;
+	unset( $menus['reset_password'] );
+}
+
 do_action( 'fed_before_login_form' );
 if ( $menu ) {
 	?>

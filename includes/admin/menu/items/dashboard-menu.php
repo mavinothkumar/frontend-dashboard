@@ -13,10 +13,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Dashboard Menu Items.
  */
 function fed_get_dashboard_menu_items() {
-	$menus      = fed_fetch_table_rows_with_key( BC_FED_TABLE_MENU, 'menu_slug' );
-	$user_roles = fed_get_user_roles();
+	$get_payload = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
+	$menus       = fed_fetch_table_rows_with_key( BC_FED_TABLE_MENU, 'menu_slug' );
+	$user_roles  = fed_get_user_roles();
 
-	if ( isset( $_GET, $_GET['sort'] ) ) {
+	if ( isset( $get_payload, $get_payload['sort'] ) ) {
 		?>
 		<div class="bc_fed container fed_dashboard_menu_sort_wrapper" style="position: relative;">
 			<div class="row padd_top_20">
@@ -46,6 +47,9 @@ function fed_get_dashboard_menu_items() {
 	} else {
 		?>
 		<div class="bc_fed container">
+			<?php
+			//phpcs:ignore
+			echo fed_loader(); ?>
 			<!-- Show Empty form to add Dashboard Menu-->
 			<?php fed_get_dashboard_menu_items_add( $menus, $user_roles ); ?>
 
@@ -78,9 +82,13 @@ function fed_get_dashboard_menu_items_add( $menus, $user_roles ) {
 				<div class="panel-body">
 					<form method="post"
 							class="fed_admin_menu fed_menu_ajax"
-							action="<?php echo esc_url(
+							action="
+							<?php
+							echo esc_url(
 								admin_url( 'admin-ajax.php?action=fed_admin_setting_form_dashboard_menu' )
-							); ?>">
+							);
+							?>
+							">
 						<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
 
 						<div class="row">
@@ -103,6 +111,7 @@ function fed_get_dashboard_menu_items_add( $menus, $user_roles ) {
 											<label>
 												<?php esc_attr_e( 'Menu Slug', 'frontend-dashboard' ); ?>
 												<?php
+												//phpcs:ignore
 												echo fed_show_help_message(
 													array(
 														'title'   => 'Info',
@@ -178,6 +187,7 @@ function fed_get_dashboard_menu_items_add( $menus, $user_roles ) {
 											?>
 											<div class="col-md-2">
 												<?php
+												//phpcs:ignore
 												echo fed_input_box(
 													'user_role',
 													array(
@@ -275,18 +285,22 @@ function fed_get_dashboard_menu_items_list( $menus, $user_roles ) {
 												<button class="btn btn-danger fed_menu_search_clear hide" type="button">
 													<i class="fa fa-times-circle" aria-hidden="true"></i>
 												</button>
-											  </span>
+									</span>
 								</div>
 							</div>
 						</div>
 						<div class="panel-group"
-								data-url="<?php echo esc_url(
+								data-url="
+								<?php
+								echo esc_url(
 									admin_url(
 										'admin-ajax.php?action=fed_admin_menu_sorting&table=fed_menu&fed_nonce=' . wp_create_nonce(
 											'fed_nonce'
 										)
 									)
-								); ?>"
+								);
+								?>
+								"
 								id="fedmenu" role="tablist" aria-multiselectable="true">
 							<?php
 							$collapse = 0;
@@ -300,9 +314,13 @@ function fed_get_dashboard_menu_items_list( $menus, $user_roles ) {
 								}
 								$collapse ++;
 								?>
-								<div class="fed_dashboard_menu_single_item ui-state-default <?php echo esc_attr(
+								<div class="fed_dashboard_menu_single_item ui-state-default 
+								<?php
+								echo esc_attr(
 									$menu['menu']
-								); ?>"
+								);
+								?>
+								"
 										id="<?php echo esc_attr( $menu['id'] ); ?>">
 									<div class="panel panel-secondary-heading">
 										<div class="panel-heading <?php echo esc_attr( $collapsed ); ?>"
@@ -315,8 +333,8 @@ function fed_get_dashboard_menu_items_list( $menus, $user_roles ) {
 												<a>
 													<?php
 													echo '<span class="' . esc_attr(
-															$menu['menu_image_id']
-														) . '"></span>';
+														$menu['menu_image_id']
+													) . '"></span>';
 													?>
 													<?php echo esc_attr( $menu['menu'] ); ?>
 												</a>
@@ -328,11 +346,15 @@ function fed_get_dashboard_menu_items_list( $menus, $user_roles ) {
 											<div class="panel-body">
 												<form method="post"
 														class="fed_admin_menu fed_menu_ajax"
-														action="<?php echo esc_url(
+														action="
+														<?php
+														echo esc_url(
 															admin_url(
 																'admin-ajax.php?action=fed_admin_setting_form_dashboard_menu'
 															)
-														); ?>">
+														);
+														?>
+														">
 
 													<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
 													<input type="hidden"
@@ -359,9 +381,13 @@ function fed_get_dashboard_menu_items_list( $menus, $user_roles ) {
 																			<input type="text"
 																					name="fed_menu_name"
 																					class="form-control fed_menu_name"
-																					value="<?php echo esc_attr(
+																					value="
+																					<?php
+																					echo esc_attr(
 																						$menu['menu']
-																					); ?>"
+																					);
+																					?>
+																					"
 																					required="required"
 																					placeholder="Menu Name"
 																			/>
@@ -379,18 +405,30 @@ function fed_get_dashboard_menu_items_list( $menus, $user_roles ) {
 																			</label>
 																			<input type="text"
 																					name="menu_image_id"
-																					class="form-control <?php echo esc_attr(
+																					class="form-control 
+																					<?php
+																					echo esc_attr(
 																						$menu['menu_slug']
-																					); ?>"
-																					value="<?php echo esc_attr(
+																					);
+																					?>
+																					"
+																					value="
+																					<?php
+																					echo esc_attr(
 																						$menu['menu_image_id']
-																					); ?>"
+																					);
+																					?>
+																					"
 																					data-toggle="modal"
 																					data-target=".fed_show_fa_list"
 																					placeholder="Menu Icon"
-																					data-fed_menu_box_id="<?php echo esc_attr(
+																					data-fed_menu_box_id="
+																					<?php
+																					echo esc_attr(
 																						$menu['menu_slug']
-																					); ?>"
+																					);
+																					?>
+																					"
 																			/>
 																		</div>
 																	</div>
@@ -407,11 +445,13 @@ function fed_get_dashboard_menu_items_list( $menus, $user_roles ) {
 																			<input type="number"
 																					name="fed_menu_order"
 																					class="form-control fed_menu_order"
-																					value="<?php
+																					value="
+																					<?php
 																					echo esc_attr(
 																						$menu['menu_order']
 																					)
-																					?>"
+																					?>
+																					"
 																					required="required"
 																					placeholder="Menu Order"
 																			/>
@@ -420,6 +460,7 @@ function fed_get_dashboard_menu_items_list( $menus, $user_roles ) {
 																	<div class="col-md-3">
 																		<div class="form-group text-center">
 																			<?php
+																			//phpcs:ignore
 																			echo fed_input_box(
 																				'show_user_profile',
 																				array(
@@ -453,7 +494,7 @@ function fed_get_dashboard_menu_items_list( $menus, $user_roles ) {
 																			<i class="fa fa-trash"></i>
 																		</button>
 																		<?php
-																	}
+}
 																	?>
 																</div>
 															</div>
@@ -465,9 +506,13 @@ function fed_get_dashboard_menu_items_list( $menus, $user_roles ) {
 															<div class="row">
 																<div class="col-md-12 padd_top_10">
 																	<div class="col-md-2">
-																		<label><?php esc_attr_e(
-																				'Select User Role(s)'
-																			); ?></label>
+																		<label>
+																		<?php
+																		esc_attr_e(
+																			'Select User Role(s)'
+																		);
+																			?>
+																			</label>
 																	</div>
 																	<?php
 																	foreach ( $user_roles as $key => $user_role ) {
@@ -484,6 +529,7 @@ function fed_get_dashboard_menu_items_list( $menus, $user_roles ) {
 																		?>
 																		<div class="col-md-2">
 																			<?php
+																			//phpcs:ignore
 																			echo fed_input_box(
 																				'user_role',
 																				array(
@@ -631,9 +677,13 @@ function fed_get_dashboard_menu_items_sort() {
 						<?php
 						foreach ( $submenu as $new_submenu ) {
 							?>
-							<li id="<?php echo esc_attr( $new_submenu['menu_type'] ) . '_' . esc_attr(
-									$new_submenu['id']
-								); ?>"
+							<li id="
+							<?php
+							echo esc_attr( $new_submenu['menu_type'] ) . '_' . esc_attr(
+								$new_submenu['id']
+							);
+								?>
+								"
 									class="<?php echo esc_attr( $menu_type ); ?>"
 									data-module="<?php echo esc_attr( $new_submenu['menu_type'] ); ?>">
 								<div>

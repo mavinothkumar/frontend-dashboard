@@ -29,14 +29,18 @@ function fed_get_avatar( $id_or_email, $alt = '', $class = '', $extra = '', $siz
 		$user_data = $user_id->ID;
 	}
 
-	if ( '' != $fed_upl['settings']['fed_upl_change_profile_pic'] ) {
+	if (
+		isset( $fed_upl['settings']['fed_upl_change_profile_pic'] ) &&
+		$fed_upl['settings']['fed_upl_change_profile_pic'] &&
+		! empty( $fed_upl['settings']['fed_upl_change_profile_pic'] )
+	) {
 		$user_obj = get_userdata( $user_data );
 
 		$gavatar_id = $user_obj->has_prop( $fed_upl['settings']['fed_upl_change_profile_pic'] ) ?
 			$user_obj->get( $fed_upl['settings']['fed_upl_change_profile_pic'] ) :
 			'';
 
-		if ( '' != $gavatar_id ) {
+		if ( ! empty( $gavatar_id ) && $gavatar_id ) {
 			return wp_get_attachment_image( (int) $gavatar_id, $size, false, $attr );
 		}
 
@@ -476,16 +480,17 @@ function fed_get_categories_id_by_post_id( $post_id ) {
  */
 function fed_get_post_status_symbol( $status ) {
 	if ( 'publish' == $status ) {
-		return ' <i class="fa fa-check bg-primary-font fed_popover" data-toggle="popover" data-trigger="hover" title="'.esc_attr($status).'" 
- data-content="'.__('Awesome! This post as been published','frontend-dashboard').'"></i>';
+		return ' <i class="fa fa-check bg-primary-font fed_popover" data-toggle="popover" data-trigger="hover" title="' . esc_attr( $status ) . '" 
+ data-content="' . __( 'Awesome! This post as been published', 'frontend-dashboard' ) . '"></i>';
 	}
 	if ( 'pending' == $status ) {
-		return ' <i class="fa fa-pause bg-info-font fed_popover" data-toggle="popover" data-trigger="hover" title="'.esc_attr($status).'" 
- data-content="'.__('Please wait, your post is in pending status, editor or admin will approve your post.','frontend-dashboard').'"></i>';
+		return ' <i class="fa fa-pause bg-info-font fed_popover" data-toggle="popover" data-trigger="hover" title="' . esc_attr( $status ) . '" 
+ data-content="' . __( 'Please wait, your post is in pending status, editor or admin will approve your post.',
+				'frontend-dashboard' ) . '"></i>';
 	}
 
-	return '<i class="fa fa-exclamation bg-danger-font fed_popover" data-toggle="popover" data-trigger="hover" title="'.esc_attr($status).'" 
- data-content="'.esc_attr($status).'"></i>';
+	return '<i class="fa fa-exclamation bg-danger-font fed_popover" data-toggle="popover" data-trigger="hover" title="' . esc_attr( $status ) . '" 
+ data-content="' . esc_attr( $status ) . '"></i>';
 
 }
 
