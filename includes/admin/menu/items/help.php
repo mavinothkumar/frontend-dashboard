@@ -53,8 +53,8 @@ if ( ! function_exists( 'fed_get_help_menu' ) ) {
 															<i class="<?php echo esc_attr( $item['icon'] ); ?>"
 																	aria-hidden="true"></i>
 															<a target="_blank"
-																	href="<?php echo esc_attr( $item['url'] ); ?>">
-																<?php echo $item['name']; ?>
+																	href="<?php echo esc_url( $item['url'] ); ?>">
+																<?php echo esc_attr( $item['name'] ); ?>
 															</a>
 														</h4>
 													</div>
@@ -263,7 +263,9 @@ if ( ! function_exists( 'fed_get_help_menu' ) ) {
 											<a class="collapsed" role="button" data-toggle="collapse"
 													data-parent="#fed_menu_help" href="#filters" aria-expanded="false"
 													aria-controls="filters">
-												<?php esc_attr_e( 'Filter Hooks [Developers]', 'frontend-dashboard' ); ?>
+												<?php
+												esc_attr_e( 'Filter Hooks [Developers]', 'frontend-dashboard' );
+												?>
 											</a>
 										</h4>
 									</div>
@@ -385,7 +387,8 @@ if ( ! function_exists( 'fed_get_help_menu' ) ) {
 											<a class="collapsed" role="button" data-toggle="collapse"
 													data-parent="#fed_menu_help" href="#actions" aria-expanded="false"
 													aria-controls="actions">
-												<?php esc_attr_e( 'Action Hooks [Developers]', 'frontend-dashboard' ); ?>
+												<?php esc_attr_e( 'Action Hooks [Developers]',
+													'frontend-dashboard' ); ?>
 											</a>
 										</h4>
 									</div>

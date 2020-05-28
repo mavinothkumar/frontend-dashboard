@@ -73,14 +73,16 @@ if ( $menu ) {
 								?>
 								<div class="form-group">
 									<?php
-									$content_name = ! empty( $content['name'] ) && ( null === $label ) ? '<label>' . $content['name'] . '</label>' : '';
+									$content_name = ! empty( $content['name'] ) && ( null === $label ) ? '<label>' . esc_attr__( $content['name'],
+											'frontend-dashboard' ) . '</label>' : '';
 									echo wp_kses_post( $content_name );
 									?>
-									<?php echo( $content['input'] ); ?>
 									<?php
-									echo null !== $label ? '<label>' . esc_attr(
-											$content['name']
-										) . '</label>' : '';
+									//phpcs:ignore
+									echo( $content['input'] ); ?>
+									<?php
+									echo null !== $label ? '<label>' . esc_attr__( $content['name'],
+											'frontend-dashboard' ) . '</label>' : '';
 									?>
 								</div>
 								<?php

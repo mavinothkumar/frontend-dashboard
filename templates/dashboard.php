@@ -58,7 +58,7 @@ $is_mobile = fed_get_menu_mobile_attributes();
 			</div>
 			<?php
 			do_action( 'fed_dashboard_content_outside_bottom' );
-			do_action( 'fed_dashboard_content_outside_bottom' . fed_get_data( 'menu_request.menu_slug', $menu ) );
+			do_action( 'fed_dashboard_content_outside_bottom_' . fed_get_data( 'menu_request.menu_slug', $menu ) );
 		}
 		if ( $menu instanceof WP_Error ) {
 			?>

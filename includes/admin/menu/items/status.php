@@ -286,11 +286,9 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 														<?php foreach ( fed_get_table_status() as $table ) { ?>
 															<tr>
 																<td class="fed_header_font_color">
-																	<?php echo esc_attr(
-																		           $table['title']
-																	           ) . ' ( ' . esc_attr(
-																		           $table['plugin_name']
-																	           ) . ' )'; ?>
+																	<?php
+																	echo esc_attr( $table['title'] ) . ' ( ' . esc_attr( $table['plugin_name'] ) . ' )';
+																	?>
 																</td>
 																<td><?php echo wp_kses_post( $table['status'] ); ?></td>
 															</tr>

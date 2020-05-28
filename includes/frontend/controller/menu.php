@@ -19,8 +19,7 @@ function fed_get_all_dashboard_display_menus() {
 	if ( isset( $settings['settings']['fed_upl_disable_logout'] ) && 'yes' === $settings['settings']['fed_upl_disable_logout']
 	) {
 		$logout = array();
-	}
-	else {
+	} else {
 		$logout = fed_get_logout_menu();
 	}
 
@@ -102,7 +101,7 @@ function fed_get_logout_menu() {
 			array(
 				'id'                => 'logout',
 				'menu_slug'         => 'logout',
-				'menu'              => 'Logout',
+				'menu'              => __( 'Logout', 'frontend-dashboard' ),
 				'menu_order'        => '900000',
 				'menu_image_id'     => 'fa fa-sign-out',
 				'show_user_profile' => 'disable',
@@ -284,8 +283,7 @@ function fed_format_menu_items( $menu, $index, $first_element, $dashboard_url, $
 		if ( $index === $get_payload['menu_type'] . '_' . $get_payload['menu_id'] ) {
 			$active = 'active';
 		}
-	}
-	else {
+	} else {
 		if ( $index === $first_element ) {
 			$active = 'active';
 		}
@@ -314,11 +312,11 @@ function fed_get_collapse_menu() {
 	) {
 		?>
 		<script>
-            jQuery(document).ready(function ($) {
-                if ($('.fed_dashboard_menus').length) {
-                    $('.fed_collapse_menu').trigger('click');
-                }
-            })
+			jQuery( document ).ready( function ( $ ) {
+				if ( $( '.fed_dashboard_menus' ).length ) {
+					$( '.fed_collapse_menu' ).trigger( 'click' );
+				}
+			} )
 		</script>
 		<?php
 	}

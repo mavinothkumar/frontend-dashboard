@@ -20,6 +20,9 @@ msgstr ""
 msgid "Single Line"
 msgstr "שורה אחת"
 
+msgid "Roll Number"
+msgstr "שורה אחת"
+
 #: admin/function-admin.php:49 admin/layout/input_fields/textarea.php:17
 msgid "Multi-Line"
 msgstr "שורות מרובות"

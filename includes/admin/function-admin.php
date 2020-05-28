@@ -3671,13 +3671,6 @@ function fed_show_help_icons() {
 						<div class="fed_sticky_title">Facebook</div>
 					</a>
 				</div>
-				<div class="fed_sticky_item">
-					<a href="https://buffercode.com/plugin/frontend-dashboard" target="_blank">
-						<i class="far fa-comment-alt fa-2x"></i>
-						<div class="fed_sticky_title">Chat</div>
-					</a>
-				</div>
-
 			</div>
 		</div>
 		<?php
@@ -3733,7 +3726,7 @@ function fed_search_index_from_array_recursively( $array, $index, $submenu = 'su
  * @return mixed
  */
 function fed_get_domain_name() {
-	$url = parse_url( home_url() );
+	$url = wp_parse_url( home_url() );
 
 	return $url['host'];
 }
@@ -3793,7 +3786,9 @@ add_filter( 'wp_nav_menu_items', 'login_logout_menu', 10, 2 );
 function login_logout_menu( $items, $args ) {
 	$fed_login = get_option( 'fed_admin_login' );
 
-	if ( $args->theme_location == fed_get_data( 'login_menu.menu_item', $fed_login ) ) {
+	if ( ! empty( $args->theme_location ) && $args->theme_location === fed_get_data( 'login_menu.menu_item',
+			$fed_login )
+	) {
 		if ( is_user_logged_in() ) {
 			$items .= '<li><a href="' . fed_get_dashboard_url() . '">Dashboard</a></li>';
 			$items .= '<li><a href="' . wp_logout_url() . '">Log Out</a></li>';

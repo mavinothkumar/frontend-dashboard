@@ -2,6 +2,5 @@
 /**
  * Silence is Good.
  *
- * @package frontend-dashboard.
+ * @package Frontend Dashboard
  */
-

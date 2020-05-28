@@ -31,7 +31,9 @@ function fed_get_plugin_pages_menu() {
 							</h3>
 						</div>
 						<div class="panel-body">
-							<?php echo fed_loader( 'hide', 'Please wait, its working' ) ?>
+							<?php
+							//phpcs:ignore
+							echo fed_loader( 'hide', 'Please wait, its working' ) ?>
 							<div class="row m-b-10">
 								<div class="col-md-12">
 									<a target="_blank" class="btn btn-secondary btn-lg"
@@ -43,7 +45,9 @@ function fed_get_plugin_pages_menu() {
 							</div>
 							<div class="row">
 								<div class="col-md-12">
-									<?php echo fed_show_alert( 'fed_activation_message' ); ?>
+									<?php
+									//phpcs:ignore
+									echo fed_show_alert( 'fed_activation_message' ); ?>
 								</div>
 							</div>
 							<div class="row">
@@ -128,7 +132,7 @@ function fed_get_plugin_pages_menu() {
 																				action="<?php echo esc_url( fed_get_form_action( 'fed_request' ) . '&fed_action_hook=FEDInstallAddons@activate' ); ?>">
 																			<?php fed_wp_nonce_field(); ?>
 																			<input type="hidden" name="plugin_name"
-																					value="<?php echo $single->install_slug . '/' . $single->install_slug . '.php'; ?>"/>
+																					value="<?php echo esc_attr( $single->install_slug . '/' . $single->install_slug . '.php' ); ?>"/>
 																			<button type="submit"
 																					class="btn btn-primary">
 																				Activate
@@ -144,7 +148,7 @@ function fed_get_plugin_pages_menu() {
 																			wp_nonce_field( 'updates' );
 																			?>
 																			<input type="hidden" name="slug"
-																					value="<?php echo isset( $single->install_slug ) ? $single->install_slug : $slug; ?>">
+																					value="<?php echo esc_attr( isset( $single->install_slug ) ? $single->install_slug : $slug ); ?>">
 																			<button type="submit"
 																					class="btn btn-primary">
 																				<i class="fa fa-download"
@@ -166,23 +170,23 @@ function fed_get_plugin_pages_menu() {
 																		<form method="post"
 																				action="<?php echo esc_url( $single->pricing->purchase_url ); ?>">
 																			<input type='hidden' name='redirect_url'
-																					value="<?php echo fed_current_page_url(); ?>"/>
+																					value="<?php echo esc_url( fed_current_page_url() ); ?>"/>
 																			<input type='hidden' name='domain'
-																					value="<?php echo fed_get_domain_name(); ?>"/>
+																					value="<?php echo esc_attr( fed_get_domain_name() ); ?>"/>
 																			<input type='hidden'
 																					name='contact_email'
-																					value="<?php echo fed_get_admin_email(); ?>"/>
+																					value="<?php echo esc_attr( fed_get_admin_email() ); ?>"/>
 																			<input type='hidden' name='plugin_name'
-																					value='<?php echo $slug; ?>'/>
+																					value='<?php echo esc_attr( $slug ); ?>'/>
 																			<input type='hidden' name='amount'
-																					value='<?php echo $amount->amount; ?>'/>
+																					value='<?php echo esc_attr( $amount->amount ); ?>'/>
 																			<input type='hidden' name='plan_type'
-																					value=<?php echo $atype; ?>/>
+																					value=<?php echo esc_attr( $atype ); ?>/>
 																			<button type="submit"
 																					class="btn btn-primary">
 																				<i class="fa fa-shopping-cart"
 																						aria-hidden="true"></i>
-																				<?php echo 'Buy ' . $amount->name . ' ' . $single->pricing->currency . $amount->amount; ?>
+																				<?php echo esc_attr( 'Buy ' . $amount->name . ' ' . $single->pricing->currency . $amount->amount ); ?>
 																			</button>
 																		</form>
 																		<?php
@@ -192,7 +196,7 @@ function fed_get_plugin_pages_menu() {
 																}
 															}
 															?>
-															<a href="<?php echo $single->download_url ?>">
+															<a href="<?php echo esc_url( $single->download_url ); ?>">
 																<button class="btn btn-warning">
 																	<i class="fa fa-eye"
 																			aria-hidden="true"></i>
@@ -225,7 +229,10 @@ function fed_get_plugin_pages_menu() {
 					?>
 				</strong>
 			</div>
-			<?php echo fed_loader( '' ); ?>
+			<?php
+			//phpcs:ignore
+			echo fed_loader( '' );
+			?>
 		</div>
 		<?php
 	}

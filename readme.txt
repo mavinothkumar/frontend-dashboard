@@ -4,7 +4,7 @@ Tags: dashboard, frontend dashboard, custom login, custom register, custom roles
 Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 4.6
 Tested up to: 5.4.1
-Stable tag: 2.1.12
+Stable tag: 2.1.13
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -48,6 +48,7 @@ Frontend Dashboard is bundled with the huge list of custom features which can ea
 * [Frontend Dashboard Captcha](https://buffercode.com/plugin/frontend-dashboard-captcha)
 * [Frontend Dashboard Templates](https://buffercode.com/plugin/frontend-dashboard-templates)
 * [Frontend Dashboard Social Chat](https://buffercode.com/plugin/frontend-dashboard-social-chat)
+* [Frontend Dashboard Notification](https://buffercode.com/plugin/frontend-dashboard-notification)
 * [Frontend Dashboard Custom Post and Taxonomies](https://buffercode.com/plugin/frontend-dashboard-custom-post-and-taxonomies)
 
 = Videos =
