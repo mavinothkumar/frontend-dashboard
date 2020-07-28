@@ -73,6 +73,7 @@ $files = array(
 	'/includes/admin/layout/custom_layout/helper.php',
 	'/includes/admin/hooks/class-fed-action-hooks.php',
 	'/includes/admin/validation/class-fed-validation.php',
+	'/includes/admin/validation/class-fed-validate.php',
 	'/includes/admin/payment/class-fed-payment-menu.php',
 	'/includes/admin/payment/class-fed-payment.php',
 	'/includes/admin/payment/class-fed-transaction.php',

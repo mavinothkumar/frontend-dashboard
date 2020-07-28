@@ -45,7 +45,9 @@ if ( $menu ) {
 								);
 								?>
 								">
-									<?php echo esc_attr( fed_get_data( 'label', $menu_item ) ); ?>
+									<?php
+									esc_attr_e( fed_get_data( 'label', $menu_item ), 'frontend-dashboard' );
+									?>
 								</a>
 							</div>
 							<?php
@@ -73,16 +75,14 @@ if ( $menu ) {
 								?>
 								<div class="form-group">
 									<?php
-									$content_name = ! empty( $content['name'] ) && ( null === $label ) ? '<label>' . esc_attr__( $content['name'],
-											'frontend-dashboard' ) . '</label>' : '';
+									$content_name = ! empty( $content['name'] ) && ( null === $label ) ? fed_show_form_label( $content ) : '';
 									echo wp_kses_post( $content_name );
 									?>
 									<?php
 									//phpcs:ignore
 									echo( $content['input'] ); ?>
 									<?php
-									echo null !== $label ? '<label>' . esc_attr__( $content['name'],
-											'frontend-dashboard' ) . '</label>' : '';
+									echo null !== $label ? fed_show_form_label( $content ) : '';
 									?>
 								</div>
 								<?php

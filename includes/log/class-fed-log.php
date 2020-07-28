@@ -93,8 +93,8 @@ class FED_Log {
 	/**
 	 * Write Log. [Retaining for old actions.]
 	 *
-	 * @param  string       $message  message.
-	 * @param  int | string $level  Level.
+	 * @param  string | array $message  message.
+	 * @param  int | string   $level  Level.
 	 */
 	public static function writeLog( $message, $level = self::DEBUG ) {
 		self::get_instance()->write_line( $message, $level );
@@ -136,8 +136,8 @@ class FED_Log {
 		$en_tete = $date->format( 'd/m/Y H:i:s' );
 		$write   = sprintf( " \n \n ==================%s (%s) START================== \n \n", $en_tete, $level );
 		// phpcs:ignore
-		$write   .= print_r( $message, 1 );
-		$write   .= sprintf( " \n \n ==================%s (%s) END================== \n \n \n", $en_tete, $level );
+		$write .= print_r( $message, 1 );
+		$write .= sprintf( " \n \n ==================%s (%s) END================== \n \n \n", $en_tete, $level );
 		// phpcs:ignore
 		fwrite( $this->file, $write );
 	}

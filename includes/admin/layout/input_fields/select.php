@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function fed_admin_input_fields_select( $row, $action, $menu_options ) {
 	?>
-    <div class="row fed_input_type_container fed_input_dropdown_container hide">
+    <div class="row fed_input_type_container fed_input_select_container hide">
         <form method="post"
               class="fed_admin_menu fed_ajax"
               action="<?php echo esc_url( admin_url( 'admin-ajax.php?action=fed_admin_setting_up_form' )) ?>">

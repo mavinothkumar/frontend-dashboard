@@ -80,7 +80,7 @@ function fed_admin_setting_form_function() {
  * Admin User Profile Page
  */
 function fed_admin_setting_up_form_function() {
-	$post = filter_input_array( INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS );
+	$post = $_POST; //filter_input_array( INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS );
 
 	if ( ! isset( $post['fed_action'] ) ) {
 		wp_send_json_error(
@@ -159,7 +159,6 @@ function fed_admin_setting_form_dashboard_menu_function() {
 	$post_all = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
 	parse_str( $post_all['data'], $post );
 	$action  = $post_all['fed_action'];
-	FED_Log::write_log( $post);
 	$post_id = ( isset( $post['menu_id'] ) && ! empty( $post['menu_id'] ) ) ? (int) $post['menu_id'] : '';
 	/**
 	 * Check for Nonce
@@ -179,6 +178,8 @@ function fed_admin_setting_form_dashboard_menu_function() {
 		}
 
 		$values = fed_process_menu( $post );
+
+		FED_Log::writeLog( $values );
 
 		fed_admin_menu_save( $values, $post_id );
 	}

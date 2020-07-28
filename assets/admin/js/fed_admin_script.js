@@ -229,6 +229,7 @@ jQuery( document ).ready(
 					}
 				).then(
 					function () {
+						fed_toggle_loader();
 						$.ajax(
 							{
 								type: 'POST',
@@ -240,6 +241,7 @@ jQuery( document ).ready(
 
 							}
 						);
+						fed_toggle_loader();
 					},
 					function ( dismiss ) {
 						if ( dismiss === 'cancel' ) {
@@ -253,7 +255,6 @@ jQuery( document ).ready(
 						}
 					}
 				);
-				fed_toggle_loader();
 				e.preventDefault();
 			}
 		);
@@ -335,51 +336,54 @@ jQuery( document ).ready(
 				btn_container.find( '.fed_button' ).removeClass( 'active' );
 				$( this ).addClass( 'active' );
 				$( '#fed_button_pointing_arrow' ).addClass( 'hide' );
-				switch ( selected ) {
-					case 'single_line':
-						closest.find( '.fed_input_single_line_container' ).removeClass( 'hide' );
-						break;
-					case 'number':
-						closest.find( '.fed_input_number_container' ).removeClass( 'hide' );
-						break;
-					case 'multi_line':
-						closest.find( '.fed_input_multi_line_container' ).removeClass( 'hide' );
-						break;
-					case 'email':
-						closest.find( '.fed_input_email_container' ).removeClass( 'hide' );
-						break;
-					case 'checkbox':
-						closest.find( '.fed_input_checkbox_container' ).removeClass( 'hide' );
-						break;
-					case 'select':
-						closest.find( '.fed_input_dropdown_container' ).removeClass( 'hide' );
-						break;
-					case 'radio':
-						closest.find( '.fed_input_radio_container' ).removeClass( 'hide' );
-						break;
-					case 'password':
-						closest.find( '.fed_input_password_container' ).removeClass( 'hide' );
-						break;
-					case 'url':
-						closest.find( '.fed_input_url_container' ).removeClass( 'hide' );
-						break;
-					case 'date':
-						closest.find( '.fed_input_date_container' ).removeClass( 'hide' );
-						break;
-					case 'file':
-						closest.find( '.fed_input_file_container' ).removeClass( 'hide' );
-						break;
-					case 'color':
-						closest.find( '.fed_input_color_container' ).removeClass( 'hide' );
-						break;
-					case 'wysiwyg':
-						closest.find( '.fed_input_wysiwyg_container' ).removeClass( 'hide' );
-						break;
-					case 'wp_editor':
-						closest.find( '.fed_input_wp_editor_container' ).removeClass( 'hide' );
-						break;
 
-				}
+				closest.find( '.fed_input_'+selected+'_container' ).removeClass( 'hide' );
+
+				// switch ( selected ) {
+				// 	case 'single_line':
+				// 		closest.find( '.fed_input_single_line_container' ).removeClass( 'hide' );
+				// 		break;
+				// 	case 'number':
+				// 		closest.find( '.fed_input_number_container' ).removeClass( 'hide' );
+				// 		break;
+				// 	case 'multi_line':
+				// 		closest.find( '.fed_input_multi_line_container' ).removeClass( 'hide' );
+				// 		break;
+				// 	case 'email':
+				// 		closest.find( '.fed_input_email_container' ).removeClass( 'hide' );
+				// 		break;
+				// 	case 'checkbox':
+				// 		closest.find( '.fed_input_checkbox_container' ).removeClass( 'hide' );
+				// 		break;
+				// 	case 'select':
+				// 		closest.find( '.fed_input_dropdown_container' ).removeClass( 'hide' );
+				// 		break;
+				// 	case 'radio':
+				// 		closest.find( '.fed_input_radio_container' ).removeClass( 'hide' );
+				// 		break;
+				// 	case 'password':
+				// 		closest.find( '.fed_input_password_container' ).removeClass( 'hide' );
+				// 		break;
+				// 	case 'url':
+				// 		closest.find( '.fed_input_url_container' ).removeClass( 'hide' );
+				// 		break;
+				// 	case 'date':
+				// 		closest.find( '.fed_input_date_container' ).removeClass( 'hide' );
+				// 		break;
+				// 	case 'file':
+				// 		closest.find( '.fed_input_file_container' ).removeClass( 'hide' );
+				// 		break;
+				// 	case 'color':
+				// 		closest.find( '.fed_input_color_container' ).removeClass( 'hide' );
+				// 		break;
+				// 	case 'wysiwyg':
+				// 		closest.find( '.fed_input_wysiwyg_container' ).removeClass( 'hide' );
+				// 		break;
+				// 	case 'wp_editor':
+				// 		closest.find( '.fed_input_wp_editor_container' ).removeClass( 'hide' );
+				// 		break;
+				//
+				// }
 				e.preventDefault();
 			}
 		);
@@ -925,12 +929,12 @@ var fedAdminAlert = {
 	}
 };
 
-jQuery.fed_toggle_loader = function () {
-	$( '.preview-area' ).toggleClass( 'hide' );
-	if ( $( '.fed_loader_message' ).length ) {
+jQuery.fed_toggle_loader = function ($) {
+	jQuery( '.preview-area' ).toggleClass( 'hide' );
+	if ( jQuery( '.fed_loader_message' ).length ) {
 		window.setTimeout(
 			function () {
-				$( '.fed_loader_message' ).toggleClass( 'hide' );
+				jQuery( '.fed_loader_message' ).toggleClass( 'hide' );
 			}, 2000
 		);
 	}

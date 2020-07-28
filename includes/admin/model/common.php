@@ -40,7 +40,8 @@ if ( ! function_exists( 'fed_fetch_table_row_by_id' ) ) {
 		global $wpdb;
 		$table_name = $wpdb->prefix . $table;
 
-		$result = $wpdb->get_row( "SELECT * FROM $table_name WHERE id = $id LIMIT 1", ARRAY_A );
+		$result = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE id = %d LIMIT 1", (int) $id ),
+			ARRAY_A );
 
 		if ( ( is_array( $result ) && count( $result ) <= 0 ) || ! $result ) {
 			return new WP_Error( 'fed_no_row_found_on_that_id', __( 'Invalid ID', 'frontend-dashboard' ) );
@@ -104,7 +105,11 @@ if ( ! function_exists( 'fed_fetch_table_rows_by_key_value' ) ) {
 
 		$order = $order ? 'ORDER BY id ' . $order : '';
 
-		return $wpdb->get_results( "SELECT * FROM $table_name WHERE {$key} $condition '{$value}' $order", $output );
+		return $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT * FROM $table_name WHERE $key $condition %s $order",
+				esc_attr( $value )
+			), $output );
 
 	}
 }

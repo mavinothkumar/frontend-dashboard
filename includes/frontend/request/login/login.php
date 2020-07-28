@@ -32,6 +32,8 @@ function fed_login_form_submit( $post ) {
 	}
 
 	$result = wp_signon( $credentials );
+	
+	FED_Log::writeLog( $result);
 
 	if ( $result instanceof WP_Error ) {
 		wp_send_json_error( array( 'user' => $result->get_error_messages() ) );

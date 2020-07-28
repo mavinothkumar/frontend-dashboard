@@ -12,12 +12,16 @@ $login    = fed_get_login_url();
 do_action( 'fed_before_forgot_password_only_form' );
 ?>
 	<div class="bc_fed container fed_login_container">
-		<?php echo fed_loader(); ?>
+		<?php
+		//phpcs:ignore
+		echo fed_loader();
+		?>
 		<div class="row">
 			<div class="col-md-6 col-md-offset-3">
 				<div class="panel panel-primary">
 					<div class="panel-heading">
-						<h3 class="panel-title"><?php echo esc_attr( $details['menu']['name'] ); ?></h3>
+						<h3 class="panel-title"><?php esc_attr_e( $details['menu']['name'],
+								'frontend-dashboard' ); ?></h3>
 					</div>
 					<div class="panel-body">
 						<div class="fed_tab_content"
@@ -31,8 +35,16 @@ do_action( 'fed_before_forgot_password_only_form' );
 								foreach ( $contents as $content ) {
 									?>
 									<div class="form-group">
-										<label><?php echo wp_kses_post( $content['name'] ); ?></label>
-										<?php echo( $content['input'] ); ?>
+										<label>
+											<?php
+											//phpcs:ignore
+											echo wp_kses_post( __( $content['name'], 'frontend-dashboard' ) );
+											?>
+										</label>
+										<?php
+										//phpcs:ignore
+										echo( $content['input'] );
+										?>
 									</div>
 									<?php
 								}
@@ -44,7 +56,7 @@ do_action( 'fed_before_forgot_password_only_form' );
 												name="submit"
 												value="forgot_password"/>
 										<button class="btn btn-primary" type="submit">
-											<?php echo esc_attr( $details['button'] ); ?>
+											<?php esc_attr_e( $details['button'], 'frontend-dashboard' ); ?>
 										</button>
 									</div>
 

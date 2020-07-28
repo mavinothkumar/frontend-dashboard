@@ -62,6 +62,7 @@ function fed_register_form_submit( $post ) {
  * Filter for add extra fields to save.
  */
 add_filter( 'insert_user_meta', 'fed_insert_user_meta', 10, 3 );
+add_filter( 'pre_user_login', 'fed_skip_user_name_on_registration' );
 
 /**
  * Insert User Meta.
@@ -117,4 +118,20 @@ function fed_insert_user_meta( $meta, $user, $update ) {
 
 	return apply_filters( 'fed_user_extra_fields_registration', $meta );
 
+}
+
+/**
+ * Skip User Name on Registration.
+ *
+ * @param  string $sanitized_user_login  Sanitized user name.
+ *
+ * @return string
+ */
+function fed_skip_user_name_on_registration( $sanitized_user_login ) {
+	$post_payload = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	if ( isset( $post_payload['submit'] ) && ! isset( $post_payload['user_login'] ) && 'register' === $post_payload['submit'] ) {
+		return sanitize_user( $post_payload['user_email'] . '_' . mt_rand( 1, 999 ), true );
+	}
+
+	return $sanitized_user_login;
 }

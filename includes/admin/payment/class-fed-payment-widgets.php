@@ -43,6 +43,7 @@ if ( ! class_exists( 'FEDPaymentWidgets' ) ) {
 			$currency = 'USD';
 
 			$payments = $wpdb->get_results( $query, ARRAY_A );
+
 			if ( $payments && count( $payments ) > 0 ) {
 				foreach ( $payments as $index => $payment ) {
 					$currency          = $payment['currency'];

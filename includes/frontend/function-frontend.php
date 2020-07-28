@@ -24,6 +24,17 @@ function fed_get_avatar( $id_or_email, $alt = '', $class = '', $extra = '', $siz
 	$fed_upl   = get_option( 'fed_admin_settings_upl' );
 	$user_data = $id_or_email;
 
+	if ( $url = get_user_meta( $id_or_email, 'fed_user_profile_image', true ) ) {
+		// send the default image.
+		return sprintf(
+			"<img alt='%s' src='%s' class='%s' %s />",
+			esc_attr( $alt ),
+			esc_url( $url ),
+			esc_attr( $class ),
+			$extra
+		);
+	}
+
 	if ( filter_var( $user_data, FILTER_VALIDATE_EMAIL ) ) {
 		$user_id   = get_user_by( 'email', $id_or_email );
 		$user_data = $user_id->ID;
@@ -128,6 +139,7 @@ function fed_get_registration_content_fields() {
 			),
 			'input_order' => $detail['input_order'],
 			'extended'    => $detail['extended'],
+			'input_type'  => $detail['input_type'],
 		);
 	}
 
@@ -663,7 +675,10 @@ function fed_show_user_by_role( $fed_user_attr, $user_id ) {
 			'role'    => $fed_user_attr->role,
 		)
 	);
-	if ( ! $user->get_total() ) {
+	if ( $user->get_total() > 0 ) {
+		$results = $user->get_results();
+		fed_show_user_profile_page( $results[0] );
+	} else {
 		?>
 		<div class="alert alert-info text-center">
 			<button type="button"
@@ -675,13 +690,7 @@ function fed_show_user_by_role( $fed_user_attr, $user_id ) {
 			<?php esc_attr_e( 'No user found...', 'frontend-dashboard' ); ?>
 		</div>
 		<?php
-	} else {
-		$results = $user->get_results();
-		fed_show_user_profile_page( $results[0] );
 	}
-	?>
-
-	<?php
 }
 
 /**
@@ -720,15 +729,19 @@ function fed_show_user_profile_page( $user ) {
 							<div class="panel-heading">
 								<div class="fed_profile_full_name text-center">
 									<h3 class="panel-title">
-										<?php echo esc_attr( $user->get( 'display_name' ) ); ?>
+										<a href="<?php echo esc_url( get_author_posts_url( $user->ID ) ); ?>">
+											<?php echo esc_attr( $user->get( 'display_name' ) ); ?>
+										</a>
 									</h3>
 								</div>
 							</div>
 							<div class="panel-body">
-								<?php
-								// phpcs:ignore
-								echo fed_get_avatar( $user->ID, $user->display_name, 'img-responsive' );
-								?>
+								<a href="<?php echo esc_url( get_author_posts_url( $user->ID ) ); ?>">
+									<?php
+									// phpcs:ignore
+									echo fed_get_avatar( $user->ID, $user->display_name, 'img-responsive' );
+									?>
+								</a>
 							</div>
 
 							<div class="panel-footer">
@@ -948,12 +961,32 @@ function fed_show_alert( $key ) {
 		if ( is_array( $value ) ) {
 			$value = $value[0];
 		}
-		$html .= '<div class="alert alert-success">
+		$html .= '<div class="alert alert-success m-y-10">
 							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-							<strong>' . esc_attr( $value ) . '</strong>
+							<strong>' . wp_kses_post( $value ) . '</strong>
 						</div>';
 		delete_transient( $key );
 	}
 
 	return $html;
+}
+
+
+/**
+ * Show Form Label
+ *
+ * @param $content
+ */
+function fed_show_form_label( $content ) {
+	$label = '';
+	if (
+		( ! isset( $content['input_type'] ) && ! empty( $content['name'] ) ) ||
+		( isset( $content['input_type'] ) && 'label' !== $content['input_type'] && ! empty( $content['name'] ) )
+	) {
+		$label = '<label>' . esc_attr__( $content['name'], 'frontend-dashboard' ) . '</label>';
+	}
+
+	$label = apply_filters( 'fed_show_form_label', $label, $content );
+
+	return $label;
 }

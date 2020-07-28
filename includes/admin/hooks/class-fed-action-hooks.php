@@ -95,6 +95,11 @@ if ( ! class_exists( 'FED_ActionHooks' ) ) {
 						color: <?php echo esc_attr( $sbg_font_color ); ?> !important;
 					}
 
+					.bcd_fed .fed_bg_primary {
+						background: <?php echo esc_attr( $pbg_color ); ?> !important;
+						color: <?php echo esc_attr( $pbg_font_color ); ?> !important;
+					}
+
 					.bc_fed .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover,
 					.bc_fed .btn-primary,
 					.bc_fed .bg-primary,

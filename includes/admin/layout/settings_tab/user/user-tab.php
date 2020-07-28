@@ -53,7 +53,7 @@ function fed_admin_user_options_tab() {
 							class="tab-pane <?php echo esc_attr( $active ); ?>"
 							id="<?php echo esc_attr( $index ); ?>">
 						<?php
-						call_user_func( $tab['callable'], $tab['arguments'] )
+						fed_call_function_method( $tab )
 						?>
 					</div>
 				<?php } ?>
@@ -72,7 +72,8 @@ function fed_admin_user_options_tab() {
  */
 function fed_get_admin_user_options( $fed_admin_options ) {
 	return apply_filters(
-		'fed_customize_admin_user_options', array(
+		'fed_customize_admin_user_options',
+		array(
 			'fed_admin_user_profile_settings'  => array(
 				'icon'      => 'fa fa-user-plus',
 				'name'      => __( 'Add/Delete Custom Role', 'frontend-dashboard' ),
@@ -85,6 +86,7 @@ function fed_get_admin_user_options( $fed_admin_options ) {
 				'callable'  => 'fed_admin_user_upload_permission_tab',
 				'arguments' => $fed_admin_options,
 			),
-		)
+		),
+		$fed_admin_options
 	);
 }

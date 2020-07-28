@@ -39,7 +39,7 @@ if ( ! class_exists( 'FED_Routes' ) ) {
 				fed_display_dashboard_profile( $menu['menu_request'] );
 			}
 			if ( 'logout' === $menu['menu_request']['menu_type'] ) {
-				fed_logout_process( $menu['menu_request']);
+				fed_logout_process( $menu['menu_request'] );
 			}
 
 			do_action( 'fed_frontend_dashboard_menu_container', $this->request, $menu );
@@ -104,6 +104,8 @@ if ( ! class_exists( 'FED_Routes' ) ) {
 			}
 
 			set_query_var( 'fed_menu_items', $menu_items );
+
+			wp_cache_set( 'fed_dashboard_menu_' . get_current_user_id(), $menu_items, 'frontend-dashboard', 60 );
 
 			return $menu_items;
 		}

@@ -381,13 +381,11 @@ function fed_get_dashboard_menu_items_list( $menus, $user_roles ) {
 																			<input type="text"
 																					name="fed_menu_name"
 																					class="form-control fed_menu_name"
-																					value="
-																					<?php
+																					value="<?php
 																					echo esc_attr(
 																						$menu['menu']
 																					);
-																					?>
-																					"
+																					?>"
 																					required="required"
 																					placeholder="Menu Name"
 																			/>
@@ -412,23 +410,19 @@ function fed_get_dashboard_menu_items_list( $menus, $user_roles ) {
 																					);
 																					?>
 																					"
-																					value="
-																					<?php
+																					value="<?php
 																					echo esc_attr(
 																						$menu['menu_image_id']
 																					);
-																					?>
-																					"
+																					?>"
 																					data-toggle="modal"
 																					data-target=".fed_show_fa_list"
 																					placeholder="Menu Icon"
-																					data-fed_menu_box_id="
-																					<?php
+																					data-fed_menu_box_id="<?php
 																					echo esc_attr(
 																						$menu['menu_slug']
 																					);
-																					?>
-																					"
+																					?>"
 																			/>
 																		</div>
 																	</div>
@@ -445,13 +439,11 @@ function fed_get_dashboard_menu_items_list( $menus, $user_roles ) {
 																			<input type="number"
 																					name="fed_menu_order"
 																					class="form-control fed_menu_order"
-																					value="
-																					<?php
+																					value="<?php
 																					echo esc_attr(
 																						$menu['menu_order']
 																					)
-																					?>
-																					"
+																					?>"
 																					required="required"
 																					placeholder="Menu Order"
 																			/>
@@ -557,7 +549,6 @@ function fed_get_dashboard_menu_items_list( $menus, $user_roles ) {
 														$menu
 													)
 													?>
-
 												</form>
 											</div>
 										</div>
@@ -677,13 +668,11 @@ function fed_get_dashboard_menu_items_sort() {
 						<?php
 						foreach ( $submenu as $new_submenu ) {
 							?>
-							<li id="
-							<?php
+							<li id="<?php
 							echo esc_attr( $new_submenu['menu_type'] ) . '_' . esc_attr(
 								$new_submenu['id']
 							);
-								?>
-								"
+								?>"
 									class="<?php echo esc_attr( $menu_type ); ?>"
 									data-module="<?php echo esc_attr( $new_submenu['menu_type'] ); ?>">
 								<div>

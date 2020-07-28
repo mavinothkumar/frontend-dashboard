@@ -45,10 +45,10 @@ function fed_process_dashboard_display_post( $post_type = 'post' ) {
 /**
  * Post Pagination.
  *
- * @param  WP_Query $post_object  Post.
- * @param  array    $menu  Menu.
+ * @param  WP_Query | \stdClass $post_object  Post.
+ * @param  array | null         $menu  Menu.
  */
-function fed_get_post_pagination( $post_object, $menu ) {
+function fed_get_post_pagination( $post_object, $menu = null ) {
 	$pagination_counts = ceil( $post_object->found_posts / get_option( 'posts_per_page', 10 ) );
 	$current_page      = isset( $_REQUEST['page_number'] ) ? absint( $_REQUEST['page_number'] ) : 1;
 
@@ -83,6 +83,73 @@ function fed_get_post_pagination( $post_object, $menu ) {
 	?>
 	</ul>
 	<?php
+}
+
+/**
+ * Get Pagination
+ *
+ * @param  int $current_page  Current Page.
+ * @param  int $total_pages  Total Page.
+ *
+ * @return string
+ */
+function fed_get_pagination( $current_page, $total_pages ) {
+
+	if ( $total_pages > 1 && $current_page <= $total_pages ) {
+		$i = max( 2, $current_page - 5 );
+		?>
+		<nav>
+			<ul class="pagination pagination-small fed_pagination">
+				<li <?php echo esc_attr( 1 === (int) $current_page ? 'class=active' : '' ); ?>>
+					<a href="<?php echo esc_url(
+						add_query_arg(
+							array(
+								'page_number' => 1,
+							)
+						), site_url()
+					); ?>">1
+					</a>
+				</li>
+				<?php
+				if ( $i > 2 ) {
+					echo '<li><a>...</a></li>';
+				}
+				for ( ; $i < min( $current_page + 6, $total_pages ); $i ++ ) {
+					$class = '';
+					if ( (int) $current_page === (int) $i ) {
+						$class = 'class=active';
+					}
+					?>
+					<li <?php echo esc_attr( $class ); ?>>
+						<a href="<?php echo esc_url(
+							add_query_arg(
+								array(
+									'page_number' => (int) $i,
+								)
+							), site_url()
+						); ?>"><?php echo (int) $i; ?></a>
+					</li>
+					<?php
+				}
+				if ( $i != $total_pages ) {
+					echo '<li><a>...</a></li>';
+				}
+				?>
+				<li <?php echo esc_attr( (int) $total_pages === (int) $current_page ? 'class=active' : '' ); ?>>
+					<a href="<?php echo esc_url(
+						add_query_arg(
+							array(
+								'page_number' => $total_pages,
+							)
+						), site_url()
+					); ?>">
+						<?php echo (int) $total_pages; ?>
+					</a>
+				</li>
+			</ul>
+		</nav>
+		<?php
+	}
 }
 
 

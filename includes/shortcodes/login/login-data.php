@@ -69,6 +69,7 @@ function fed_login_only() {
 					), 'single_line'
 				),
 				'input_order' => 7,
+				'input_type'  => 'single_line',
 			),
 			'user_password' => array(
 				'name'        => sprintf(
@@ -91,6 +92,7 @@ function fed_login_only() {
 					), 'password'
 				),
 				'input_order' => 9,
+				'input_type'  => 'single_line',
 			),
 			'remember'      => array(
 				'name'        => '',
@@ -105,6 +107,7 @@ function fed_login_only() {
 					), 'checkbox'
 				),
 				'input_order' => 15,
+				'input_type'  => '',
 			),
 		),
 		'selected' => true,

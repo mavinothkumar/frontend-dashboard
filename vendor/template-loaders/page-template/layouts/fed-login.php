@@ -5,7 +5,8 @@
  * @package Frontend Dashboard.
  */
 
-get_header(); ?>
+get_header();
+?>
 
 <div id="primary fed_login" class="container-fluid">
 	<main id="main" class="site-main" role="main">
@@ -16,4 +17,5 @@ get_header(); ?>
 		?>
 	</main>
 </div>
-<?php get_footer(); ?>
+<?php
+get_footer();

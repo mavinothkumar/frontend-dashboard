@@ -208,34 +208,63 @@ function fed_display_dashboard_menu( $menus ) {
 						<?php } ?>
 					</div>
 				</div>
-			<?php } else { ?>
-				<div class="panel-heading  <?php echo $index === $parent_id ? 'active' : ''; ?>" role="tab"
-						id="<?php echo esc_attr( $index ); ?>">
-					<h4 class="panel-title">
-						<a data-parent="#fed_default_template"
-								href="<?php echo esc_attr( $menu_format['menu_url'] ); ?>">
-							<div class="fed_display_inline">
-								<div>
-									<div class="fed_menu_icon">
-										<span class="<?php echo esc_attr( $menu['menu_image_id'] ); ?>"></span>
+				<?php
+			} else {
+
+				/**
+				 * Make logout to work on click (not to redirect to the respective page)
+				 */
+				if ( 'logout_logout' === $index ) {
+					?>
+					<div class="panel-heading  <?php echo $index === $parent_id ? 'active' : ''; ?>"
+							id="<?php echo esc_attr( $index ); ?>">
+						<h4 class="panel-title">
+							<a href="<?php echo wp_logout_url( fed_get_logout_redirect_url() ); ?>">
+								<div class="fed_display_inline">
+									<div>
+										<div class="fed_menu_icon">
+											<span class="<?php echo esc_attr( $menu['menu_image_id'] ); ?>"></span>
+										</div>
+										<div class="fed_menu_title">
+											<?php echo esc_attr( $menu_format['menu_name'] ); ?>
+										</div>
 									</div>
-									<div class="fed_menu_title">
-										<?php echo esc_attr( $menu_format['menu_name'] ); ?>
+									<div>
+										<?php echo esc_attr( $submenu_icon ); ?>
 									</div>
 								</div>
-								<div>
-									<?php echo esc_attr( $submenu_icon ); ?>
+							</a>
+						</h4>
+					</div>
+					<?php
+				} else {
+					?>
+					<div class="panel-heading  <?php echo $index === $parent_id ? 'active' : ''; ?>" role="tab"
+							id="<?php echo esc_attr( $index ); ?>">
+						<h4 class="panel-title">
+							<a href="<?php echo esc_attr( $menu_format['menu_url'] ); ?>">
+								<div class="fed_display_inline">
+									<div>
+										<div class="fed_menu_icon">
+											<span class="<?php echo esc_attr( $menu['menu_image_id'] ); ?>"></span>
+										</div>
+										<div class="fed_menu_title">
+											<?php echo esc_attr( $menu_format['menu_name'] ); ?>
+										</div>
+									</div>
+									<div>
+										<?php echo esc_attr( $submenu_icon ); ?>
+									</div>
 								</div>
-							</div>
-						</a>
-					</h4>
-				</div>
-			<?php } ?>
+							</a>
+						</h4>
+					</div>
+				<?php }
+			}
+			?>
 		</div>
 		<?php
 	}
-	?>
-	<?php
 }
 
 /**
@@ -312,11 +341,11 @@ function fed_get_collapse_menu() {
 	) {
 		?>
 		<script>
-			jQuery( document ).ready( function ( $ ) {
-				if ( $( '.fed_dashboard_menus' ).length ) {
-					$( '.fed_collapse_menu' ).trigger( 'click' );
-				}
-			} )
+          jQuery(document).ready(function ($) {
+            if ($('.fed_dashboard_menus').length) {
+              $('.fed_collapse_menu').trigger('click')
+            }
+          })
 		</script>
 		<?php
 	}

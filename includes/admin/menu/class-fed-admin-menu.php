@@ -174,8 +174,8 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 					'callable'   => 'fed_admin_user_options_tab',
 				),
 				'user_profile_layout' => array(
-					'icon_class' => 'fa fa-user-secret',
-					'name'       => __( 'User Profile Layout', 'frontend-dashboard' ),
+					'icon_class' => 'fa fa-dashboard',
+					'name'       => __( 'Dashboard', 'frontend-dashboard' ),
 					'callable'   => 'fed_user_profile_layout_design',
 				),
 				'general'             => array(

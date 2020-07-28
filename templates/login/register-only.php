@@ -16,7 +16,9 @@ do_action( 'fed_before_register_only_form' );
 			<div class="col-md-6 col-md-offset-3">
 				<div class="panel panel-primary">
 					<div class="panel-heading">
-						<h3 class="panel-title"><?php echo esc_attr( $details['menu']['name'] ); ?></h3>
+						<h3 class="panel-title">
+							<?php esc_attr_e( $details['menu']['name'], 'frontend-dashboard' ); ?>
+						</h3>
 					</div>
 					<div class="panel-body">
 						<div class="fed_tab_content"
@@ -31,8 +33,14 @@ do_action( 'fed_before_register_only_form' );
 								foreach ( $contents as $content ) {
 									?>
 									<div class="form-group">
-										<label><?php echo wp_kses_post( $content['name'] ); ?></label>
-										<?php echo ( $content['input'] ); ?>
+										<?php
+										//phpcs:ignore
+										echo fed_show_form_label( $content );
+										?>
+										<?php
+										//phpcs:ignore
+										echo( $content['input'] );
+										?>
 									</div>
 									<?php
 								}
@@ -42,8 +50,11 @@ do_action( 'fed_before_register_only_form' );
 										<input type="hidden"
 												name="submit"
 												value="register"/>
-										<button class="btn btn-primary"
-												type="submit"><?php echo wp_kses_post( $details['button'] ); ?></button>
+										<button class="btn btn-primary" type="submit">
+											<?php
+											echo wp_kses_post( __( $details['button'], 'frontend-dashboard' ) );
+											?>
+										</button>
 									</div>
 									<?php if ( $login ) { ?>
 										<div class="col-md-12 padd_top_20 text-center">

@@ -264,8 +264,10 @@ if ( ! function_exists( 'fed_js_translation' ) ) {
 				),
 			),
 			'common'              => array(
-				'hide_add_new_menu' => __( 'Hide Add New Menu', 'frontend-dashboard' ),
-				'add_new_menu'      => __( 'Add New Menu', 'frontend-dashboard' ),
+				'hide_add_new_menu'    => __( 'Hide Add New Menu', 'frontend-dashboard' ),
+				'add_new_menu'         => __( 'Add New Menu', 'frontend-dashboard' ),
+				'successfully_updated' => __( 'Successfully Updated', 'frontend-dashboard' ),
+				'successfully_added'   => __( 'Successfully Added', 'frontend-dashboard' ),
 			),
 		);
 	}
@@ -344,6 +346,22 @@ if ( ! function_exists( 'fed_is_admin' ) ) {
 	}
 }
 
+if ( ! function_exists( 'fed_is_user_role' ) ) {
+	/**
+	 * Check is User Role.
+	 *
+	 * @param  string $user_role  user role.
+	 *
+	 * @return bool
+	 */
+	function fed_is_user_role( $user_role ) {
+		$user = wp_get_current_user();
+
+		return in_array( $user_role, $user->roles ) ? true : false;
+
+	}
+}
+
 if ( ! function_exists( 'fed_get_default_menu_type' ) ) {
 	/**
 	 * Get Default Menu Type.
@@ -388,8 +406,7 @@ if ( ! function_exists( 'fed_get_menu_mobile_attributes' ) ) {
 			$collapse['in']     = '';
 			$collapse['d']      = ' collapsed';
 			$collapse['expand'] = 'false';
-		}
-		else {
+		} else {
 			$collapse['in']     = 'in';
 			$collapse['d']      = ' ';
 			$collapse['expand'] = 'true';
@@ -411,11 +428,9 @@ if ( ! function_exists( 'bcdump' ) ) {
 
 		if ( is_array( $var ) || is_object( $var ) ) {
 			echo htmlentities( print_r( $var, true ) );
-		}
-		elseif ( is_string( $var ) ) {
+		} elseif ( is_string( $var ) ) {
 			echo "string(" . strlen( $var ) . ") \"" . htmlentities( $var ) . "\"\n";
-		}
-		else {
+		} else {
 			var_dump( $var );
 		}
 
@@ -710,4 +725,108 @@ function fed_get_current_user( $key = 'id' ) {
 	}
 
 	return false;
+}
+
+/**
+ * Convert Timestamp to Date Format.
+ *
+ * @param  string $timestamp  Timestamp.
+ *
+ * @return false|string
+ */
+function fed_timestamp_to_date_format( $timestamp ) {
+	return $timestamp && ! empty( $timestamp ) ? date( get_option( 'date_format' ), $timestamp ) : 'ERROR';
+}
+
+/**
+ * Get Formatted Date,
+ *
+ * @param  string $date  Date.
+ *
+ * @return false|string
+ */
+function fed_get_formatted_date( $date ) {
+	return $date && ! empty( $date ) ? date( get_option( 'date_format' ), strtotime( $date ) ) : 'ERROR';
+}
+
+
+/**
+ * Get Menu URL by Slug
+ *
+ * @param  string $menu_slug  Menu Slug.
+ * @param  string $menu_type  Menu Type.
+ *
+ * @return array|array[]|bool|mixed|string|\WP_Error
+ */
+function fed_get_menu_url_by_slug( $menu_slug, $menu_type ) {
+	if ( $menu_slug && ! empty( $menu_slug ) && is_user_logged_in() ) {
+		$menu          = wp_cache_get( 'fed_dashboard_menu_' . get_current_user_id(), 'frontend-dashboard' );
+		$dashboard_url = fed_get_dashboard_url();
+		if ( $menu && isset( $menu['menu_items'] ) && is_array( $menu ) && count( $menu ) ) {
+			foreach ( $menu['menu_items'] as $key => $item ) {
+				if ( $item['menu_slug'] === $menu_slug ) {
+					return add_query_arg(
+						array(
+							'menu_type' => $menu_type,
+							'menu_slug' => $menu_slug,
+							'menu_id'   => fed_get_data( 'id', $item, 0 ),
+							'parent_id' => $key,
+							'fed_nonce' => wp_create_nonce(
+								'fed_nonce'
+							),
+						), $dashboard_url
+					);
+				}
+			}
+
+			return false;
+		} else {
+			$dashboard_container = new FED_Routes( $_REQUEST );
+
+			$menu = $dashboard_container->setDashboardMenuQuery();
+
+			foreach ( $menu['menu_items'] as $key => $item ) {
+				if ( $item['menu_slug'] === $menu_slug ) {
+					return add_query_arg(
+						array(
+							'menu_type' => $menu_type,
+							'menu_slug' => $menu_slug,
+							'menu_id'   => fed_get_data( 'id', $item, 0 ),
+							'parent_id' => $key,
+							'fed_nonce' => wp_create_nonce(
+								'fed_nonce'
+							),
+						), $dashboard_url
+					);
+				}
+			}
+
+			return false;
+		}
+	}
+
+	return false;
+}
+
+
+/**
+ * WordPress VIP Functions.
+ */
+
+
+/**
+ * Get User Meta
+ *
+ * @param  int    $user_id  User ID
+ * @param  string $key  User Meta Key
+ * @param  bool   $single  Single or array
+ *
+ * @return mixed
+ */
+function fed_get_user_meta( $user_id, $key = '', $single = false ) {
+	if ( defined( 'WPCOM_IS_VIP_ENV' ) && WPCOM_IS_VIP_ENV ) {
+		return get_user_attribute( $user_id, $key );
+	}
+
+	return get_user_meta( $user_id, $key, $single );
 }

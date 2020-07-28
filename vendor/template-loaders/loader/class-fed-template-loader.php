@@ -217,7 +217,6 @@ if ( ! class_exists( 'FED_Template_Loader' ) ) {
 		 *
 		 */
 		public function locate_template( $template_names, $load = false, $require_once = true ) {
-
 			// Use $template_names as a cache key - either first element of array or the variable itself if it's a string.
 			$cache_key = is_array( $template_names ) ? $template_names[0] : $template_names;
 

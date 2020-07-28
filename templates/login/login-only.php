@@ -22,7 +22,9 @@ do_action( 'fed_before_login_only_form' );
 			<div class="col-md-6 col-md-offset-3">
 				<div class="panel panel-primary">
 					<div class="panel-heading">
-						<h3 class="panel-title"><?php echo esc_attr( $details['menu']['name'] ); ?></h3>
+						<h3 class="panel-title">
+							<?php esc_attr_e( $details['menu']['name'], 'frontend-dashboard' ); ?>
+						</h3>
 					</div>
 					<div class="panel-body">
 						<div class="fed_tab_content"
@@ -38,8 +40,8 @@ do_action( 'fed_before_login_only_form' );
 									$content_name = ! empty( $content['name'] ) ? '<label>' . $content['name'] . '</label>' : '';
 									?>
 									<div class="form-group">
-										<?php echo wp_kses_post( $content_name ); ?>
-										<?php echo ( $content['input'] ); ?>
+										<?php echo fed_show_form_label( $content ); ?>
+										<?php echo( $content['input'] ); ?>
 									</div>
 									<?php
 								}
@@ -50,7 +52,9 @@ do_action( 'fed_before_login_only_form' );
 										<input type="hidden" name="submit" value="<?php echo esc_attr( $type ); ?>"/>
 										<button class="btn btn-primary"
 												type="submit">
-											<?php echo wp_kses_post( $details['button'] ); ?>
+											<?php
+											echo wp_kses_post( __( $details['button'], 'frontend-dashboard' ) );
+											?>
 										</button>
 									</div>
 								</div>

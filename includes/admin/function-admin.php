@@ -413,7 +413,7 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 		'placeholder'    => isset( $row['placeholder'] ) ? sanitize_text_field( $row['placeholder'] ) : '',
 		'class_name'     => isset( $row['class_name'] ) ? sanitize_text_field( $row['class_name'] ) : '',
 		'id_name'        => isset( $row['id_name'] ) ? sanitize_text_field( $row['id_name'] ) : '',
-		'input_value'    => isset( $row['input_value'] ) ? sanitize_text_field( $row['input_value'] ) : '',
+		'input_value'    => isset( $row['input_value'] ) ? wp_kses_post( $row['input_value'] ) : '',
 		'input_location' => isset( $row['location'] ) ? sanitize_text_field( $row['location'] ) : '',
 		'input_min'      => isset( $row['input_min'] ) ? sanitize_text_field( $row['input_min'] ) : '',
 		'input_max'      => isset( $row['input_max'] ) ? sanitize_text_field( $row['input_max'] ) : '',
@@ -525,16 +525,16 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
  */
 function fed_process_menu( $row ) {
 	$default_value = array(
-		'menu_slug'         => isset( $row['fed_menu_slug'] ) ? sanitize_text_field( $row['fed_menu_slug'] ) : 'ERROR',
-		'menu'              => isset( $row['fed_menu_name'] ) ? sanitize_text_field( $row['fed_menu_name'] ) : 'ERROR',
-		'menu_image_id'     => isset( $row['menu_image_id'] ) ? sanitize_text_field( $row['menu_image_id'] ) : 'ERROR',
+		'menu_slug'         => isset( $row['fed_menu_slug'] ) ? sanitize_text_field( trim( $row['fed_menu_slug'] ) ) : 'ERROR',
+		'menu'              => isset( $row['fed_menu_name'] ) ? sanitize_text_field( trim( $row['fed_menu_name'] ) ) : 'ERROR',
+		'menu_image_id'     => isset( $row['menu_image_id'] ) ? sanitize_text_field( trim( $row['menu_image_id'] ) ) : 'ERROR',
 		'show_user_profile' => isset( $row['show_user_profile'] ) ? sanitize_text_field(
-			$row['show_user_profile']
+			trim( $row['show_user_profile'] )
 		) : 'Enable',
-		'menu_order'        => isset( $row['fed_menu_order'] ) ? sanitize_text_field( $row['fed_menu_order'] ) : '9',
+		'menu_order'        => isset( $row['fed_menu_order'] ) ? sanitize_text_field( trim( $row['fed_menu_order'] ) ) : '9',
 		'user_role'         => ( isset( $row['user_role'] ) && ! empty( $row['user_role'] ) ) ? ( is_string(
 			$row['user_role']
-		) ) ? unserialize( $row['user_role'] ) : serialize( array_keys( $row['user_role'] ) ) : array(),
+		) ? unserialize( $row['user_role'] ) : serialize( array_keys( $row['user_role'] ) ) ) : '',
 		'extended'          => isset( $row['extended'] ) ? sanitize_text_field( $row['extended'] ) : '',
 
 	);
@@ -1751,6 +1751,27 @@ function fed_yes_no( $sort = 'DESC' ) {
 	$value = array(
 		'yes' => 'Yes',
 		'no'  => 'No',
+	);
+
+	if ( 'ASC' === $sort ) {
+		asort( $value );
+	}
+
+	return $value;
+
+}
+
+/**
+ * Show or Hide
+ *
+ * @param  string $sort  Yes or No.
+ *
+ * @return array
+ */
+function fed_show_hide( $sort = 'DESC' ) {
+	$value = array(
+		'show' => 'Show',
+		'hide' => 'Hide',
 	);
 
 	if ( 'ASC' === $sort ) {

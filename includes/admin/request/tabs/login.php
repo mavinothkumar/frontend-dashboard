@@ -36,7 +36,7 @@ function fed_admin_setting_login_request() {
 		$message                              = 'Restrict Username ';
 	}
 
-	apply_filters( 'fed_admin_login', $fed_admin_login );
+	$fed_admin_login = apply_filters( 'fed_admin_login', $fed_admin_login );
 
 	update_option( 'fed_admin_login', $fed_admin_login );
 
