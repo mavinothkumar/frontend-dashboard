@@ -498,3 +498,32 @@
 .fed_no_padding_col {
 	padding: 0 !important;
 }
+
+.fed_password_strength.bad {
+	background: red;
+	color: white;
+	font-size: 12px;
+	padding: 0 30px;
+}
+
+.fed_password_strength.good {
+	background: yellow;
+	color: black;
+	font-size: 12px;
+	padding: 0 30px;
+}
+
+.fed_password_strength.strong {
+	background: green;
+	color: white;
+	font-size: 12px;
+	padding: 0 30px;
+}
+
+.fed_password_strength.short {
+	background: orange;
+	color: white;
+	font-size: 12px;
+	padding: 0 30px;
+}
+

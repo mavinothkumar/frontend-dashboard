@@ -40,6 +40,8 @@ do_action( 'fed_before_register_only_form' );
 										<?php
 										//phpcs:ignore
 										echo( $content['input'] );
+
+										do_action( 'fed_register_below_form_field', $content );
 										?>
 									</div>
 									<?php

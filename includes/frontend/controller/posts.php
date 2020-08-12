@@ -34,7 +34,7 @@ function fed_process_dashboard_display_post( $post_type = 'post' ) {
 		'post_type'      => $post_type,
 	);
 
-	if ( ! fed_is_admin() ) {
+	if ( ! apply_filters( 'fed_show_all_post_to_admin', fed_is_admin() ) ) {
 		$args['author'] = $user->ID;
 	}
 
@@ -47,6 +47,9 @@ function fed_process_dashboard_display_post( $post_type = 'post' ) {
  *
  * @param  WP_Query | \stdClass $post_object  Post.
  * @param  array | null         $menu  Menu.
+ *
+ * @deprecated @ 2.1.22 Will be removed in future release
+ *
  */
 function fed_get_post_pagination( $post_object, $menu = null ) {
 	$pagination_counts = ceil( $post_object->found_posts / get_option( 'posts_per_page', 10 ) );

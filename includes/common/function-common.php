@@ -269,6 +269,14 @@ if ( ! function_exists( 'fed_js_translation' ) ) {
 				'successfully_updated' => __( 'Successfully Updated', 'frontend-dashboard' ),
 				'successfully_added'   => __( 'Successfully Added', 'frontend-dashboard' ),
 			),
+			'password_meter'      => array(
+				'empty'    => __( 'Strength indicator', 'frontend-dashboard' ),
+				'short'    => __( 'Very weak', 'frontend-dashboard' ),
+				'bad'      => __( 'Weak', 'frontend-dashboard' ),
+				'good'     => _x( 'Medium', 'password strength', 'frontend-dashboard' ),
+				'strong'   => __( 'Strong', 'frontend-dashboard' ),
+				'mismatch' => __( 'Mismatch', 'frontend-dashboard' ),
+			),
 		);
 	}
 }
@@ -830,3 +838,15 @@ function fed_get_user_meta( $user_id, $key = '', $single = false ) {
 
 	return get_user_meta( $user_id, $key, $single );
 }
+
+/**
+ * Show Password Meter
+ */
+
+add_action( 'fed_register_below_form_field', function ( $content ) {
+	if ( $content && ( 'user_pass' === $content['input_meta'] || 'confirmation_password' === $content['input_meta'] ) ) {
+		?>
+		<span class="fed_password_strength"></span>
+		<?php
+	}
+} );

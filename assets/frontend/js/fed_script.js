@@ -68,8 +68,7 @@ jQuery(document).ready(function ($) {
                 }
               })
             }
-          }
-          else {
+          } else {
             if (results.data.message) {
               swal({
                 title: results.data.message,
@@ -562,6 +561,21 @@ jQuery(document).ready(function ($) {
       $('.fed_datatable').dataTable({ 'autoWidth': false, 'order': [] })
     }
 
+    if ($('input[name=user_pass]').length && $('input[name=confirmation_password]').length) {
+      b.on('keyup', 'input[name=user_pass], input[name=confirmation_password]',
+        function (e) {
+          fed_check_password_strength(
+            $('input[name=user_pass]'),
+            $('input[name=confirmation_password]'),
+            $('.fed_password_strength'),
+            $('button[type=submit]'),
+            []
+          )
+          e.preventDefault()
+        }
+      )
+    }
+
     function fed_toggle_loader () {
       $('.preview-area').toggleClass('hide')
     }
@@ -591,4 +605,53 @@ var CaptchaCallback = function () {
     grecaptcha.render('fedLoginCaptcha', { 'sitekey': frontend_dashboard.fed_captcha_details.fed_captcha_site_key })
 
   }
+}
+
+function fed_check_password_strength ($pass1,
+  $pass2,
+  $strengthResult,
+  $submitButton,
+  blacklistArray) {
+  var pass1 = $pass1.val()
+  var pass2 = $pass2.val()
+
+  // Reset the form & meter
+  // $submitButton.attr('disabled', 'disabled')
+  $strengthResult.removeClass('short bad good strong')
+
+  // Extend our blacklist array with those from the inputs & site data
+  blacklistArray = blacklistArray.concat(wp.passwordStrength.userInputBlacklist())
+
+  // Get the password strength
+  var strength = wp.passwordStrength.meter(pass1, blacklistArray, pass2)
+
+  // Add the strength meter results
+  switch (strength) {
+
+    case 2:
+      $strengthResult.addClass('bad').html(frontend_dashboard.password_meter.bad)
+      break
+
+    case 3:
+      $strengthResult.addClass('good').html(frontend_dashboard.password_meter.good)
+      break
+
+    case 4:
+      $strengthResult.addClass('strong').html(frontend_dashboard.password_meter.strong)
+      break
+
+    case 5:
+      $strengthResult.addClass('short').html(frontend_dashboard.password_meter.mismatch)
+      break
+
+    default:
+      $strengthResult.addClass('short').html(frontend_dashboard.password_meter.short)
+
+  }
+
+  // if (4 === strength && '' !== pass2.trim()) {
+  //   $submitButton.removeAttr('disabled')
+  // }
+
+  return strength
 }

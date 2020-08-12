@@ -12,28 +12,30 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Save the User Profile data
  */
 
-add_action( 'template_redirect', 'fed_store_user_profile_save' );
+//add_action( 'template_redirect', 'fed_store_user_profile_save' );
+add_action( 'admin_post_fed_save_user_profile', 'fed_store_user_profile_save' );
+add_action( 'admin_post_nopriv_fed_save_user_profile', 'fed_block_the_action' );
 
 /**
  * Store User Profile.
  */
 function fed_store_user_profile_save() {
-	$post    = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	$post_payload    = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
 	$message = 'Something Went Wrong';
 
 	if (
-		isset( $_REQUEST, $post['tab_id'] ) &&
+		isset( $_REQUEST, $post_payload['tab_id'] ) &&
 		isset( $_REQUEST['menu_type'] ) &&
 		( 'user' === wp_slash( $_REQUEST['menu_type'] ) )
 	) {
-		fed_verify_nonce( $post );
+		fed_verify_nonce();
 
-		$validation = fed_validate_user_profile_form( $post );
+		$validation = fed_validate_user_profile_form( $post_payload );
 
 		if ( $validation instanceof WP_Error ) {
 			$message = $validation->get_error_messages();
 		} else {
-			$user_data = fed_process_update_user_profile( $post );
+			$user_data = fed_process_update_user_profile( $post_payload );
 
 			if ( wp_update_user( $user_data ) ) {
 				$message = 'Successfully Updated';
@@ -41,6 +43,9 @@ function fed_store_user_profile_save() {
 		}
 		fed_set_alert( 'fed_profile_save_message', $message );
 	}
+
+	wp_safe_redirect( add_query_arg( array( 'fed_nonce' => wp_create_nonce( 'fed_nonce' ) ),
+		$post_payload['_wp_http_referer'] ) );
 
 }
 

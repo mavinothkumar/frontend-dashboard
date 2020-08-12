@@ -44,8 +44,11 @@ function fed_register_form_submit( $post ) {
 		wp_set_current_user( $status );
 		wp_set_auth_cookie( $status );
 
-		$redirect_url = fed_registration_redirect();
+		$redirect_url = apply_filters( 'fed_registration_redirect_url', fed_registration_redirect(),
+			new WP_User( $status ) );
 	}
+
+	do_action( 'fed_registration_success', $status );
 
 	wp_send_json_success(
 		array(

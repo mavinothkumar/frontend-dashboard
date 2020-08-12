@@ -137,6 +137,23 @@ if ( ! function_exists( 'fed_is_dashboard' ) ) {
 	}
 }
 
+if ( ! function_exists( 'fed_is_register' ) ) {
+	/**
+	 * Check is Register Page.
+	 *
+	 * @return bool
+	 */
+	function fed_is_register() {
+		$current_page_id   = get_queried_object_id();
+		$fed_admin_options = get_option( 'fed_admin_login' );
+		if ( $fed_admin_options && isset( $fed_admin_options['settings']['fed_register_url'] ) && '' != $fed_admin_options['settings']['fed_register_url'] ) {
+			return (int) $fed_admin_options['settings']['fed_register_url'] === (int) $current_page_id;
+		}
+
+		return false;
+	}
+}
+
 if ( ! function_exists( 'fed_get_invoice_url' ) ) {
 	/**
 	 * Get Invoice URL.

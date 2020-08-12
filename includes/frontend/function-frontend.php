@@ -140,6 +140,7 @@ function fed_get_registration_content_fields() {
 			'input_order' => $detail['input_order'],
 			'extended'    => $detail['extended'],
 			'input_type'  => $detail['input_type'],
+			'input_meta'  => $detail['input_meta'],
 		);
 	}
 

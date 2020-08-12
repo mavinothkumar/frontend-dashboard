@@ -48,7 +48,7 @@ function fed_display_dashboard_profile( $menu_item ) {
 				<span class="<?php echo esc_attr( $menus[ $index ]['menu_image_id'] ); ?>"></span>
 				<?php
 				/* translators: %s : Menu */
-				printf( __( '%s ', 'frontend-dashboard' ), esc_attr( $menu_name ) );
+				esc_attr_e( apply_filters( 'fed_user_profile_menu_container_title', $menu_name, $menus[ $index ] ) );
 				?>
 			</h3>
 		</div>
@@ -64,8 +64,10 @@ function fed_display_dashboard_profile( $menu_item ) {
 						if ( $profiles ) {
 							usort( $profiles, 'fed_sort_by_order' );
 							?>
-							<form method="post" action="">
-								<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
+							<form method="post"
+									action="<?php echo esc_url( add_query_arg( array( 'fed_nonce' => wp_create_nonce( 'fed_nonce' ) ),
+										fed_get_form_action( 'fed_save_user_profile' ) ) ); ?>">
+								<?php wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
 								<input type="hidden"
 										name="tab_id"
 										value="<?php echo esc_attr( $index ); ?>"/>

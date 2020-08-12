@@ -4,7 +4,7 @@ Tags: dashboard, frontend dashboard, custom login, custom register, custom roles
 Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 4.6
 Tested up to: 5.4.2
-Stable tag: 2.1.22
+Stable tag: 2.1.23
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -250,8 +250,10 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Changelog ==
 
-= 2.1.22 [28-July-2020] =
-* Bug fixes
+= 2.1.24 [30-July-2020] =
+
+* Changed Frontend Dashboard Pagination.
+* Bug: on saving multiple time in user profile.
 
 = 2.1.20 [19-July-2020] =
 * Now logout will directly logout the user instead of showing a panel to click logout.
@@ -616,8 +618,10 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 
 == Upgrade Notice ==
 
-= 2.1.22 [28-July-2020] =
-* Bug fixes
+= 2.1.24 [30-July-2020] =
+
+* Changed Frontend Dashboard Pagination.
+* Bug: on saving multiple time in user profile.
 
 == Screenshots ==
 1. Frontend Dashboard Settings | Login | Settings
