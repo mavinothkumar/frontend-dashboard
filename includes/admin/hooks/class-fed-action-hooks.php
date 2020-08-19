@@ -248,8 +248,8 @@ if ( ! class_exists( 'FED_ActionHooks' ) ) {
 		 */
 		public function fed_update_footer( $text ) {
 			if (
-				isset( $_GET['page'] ) && in_array(
-					wp_unslash( $_GET['page'] ), fed_get_script_loading_pages(),
+				isset( $_GET['page_type'] ) && in_array(
+					wp_unslash( $_GET['page_type'] ), fed_get_script_loading_pages(),
 					true
 				)
 			) {
