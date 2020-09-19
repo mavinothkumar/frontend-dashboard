@@ -962,7 +962,7 @@ function fed_show_alert( $key ) {
 		if ( is_array( $value ) ) {
 			$value = $value[0];
 		}
-		$html .= '<div class="alert alert-success m-y-10">
+		$html .= '<div class="fkm_hide_alert alert alert-success m-y-10">
 							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 							<strong>' . wp_kses_post( $value ) . '</strong>
 						</div>';

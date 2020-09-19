@@ -41,7 +41,7 @@ do_action( 'fed_before_register_only_form' );
 										//phpcs:ignore
 										echo( $content['input'] );
 
-										do_action( 'fed_register_below_form_field', $content );
+										do_action( 'fed_register_below_form_field', $content['input_meta'], $content );
 										?>
 									</div>
 									<?php

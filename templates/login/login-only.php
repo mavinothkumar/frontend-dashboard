@@ -4,7 +4,6 @@
  *
  * @package Frontend Dashboard.
  */
-
 if ( isset( $_GET['action'], $_GET['key'], $_GET['login'] ) && ( 'fed_reset' === $_GET['action'] ) ) {
 	$details = fed_reset_password_only();
 	$type    = 'reset_password';

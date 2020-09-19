@@ -2,6 +2,15 @@
 	padding: 0 !important;
 }
 
+.fed_no_border {
+	border: none !important;
+	box-shadow: none !important;
+}
+
+.panel-body.fed_bg_white{
+	background: white !important;
+}
+
 .fa {
 	display: inline-block;
 	font-family: 'Font Awesome 5 Free';

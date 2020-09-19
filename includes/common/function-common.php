@@ -641,7 +641,7 @@ function fed_show_alert_message( $message, $type = 'danger' ) {
 	?>
 	<div class="alert alert-<?php echo esc_attr( $type ); ?>">
 		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-		<strong><?php echo esc_attr( $message ); ?></strong>
+		<strong><?php echo wp_kses_post( $message ); ?></strong>
 	</div>
 	<?php
 }
@@ -843,10 +843,10 @@ function fed_get_user_meta( $user_id, $key = '', $single = false ) {
  * Show Password Meter
  */
 
-add_action( 'fed_register_below_form_field', function ( $content ) {
-	if ( $content && ( 'user_pass' === $content['input_meta'] || 'confirmation_password' === $content['input_meta'] ) ) {
+add_action( 'fed_register_below_form_field', function ( $input_meta, $content ) {
+	if ( $content && ( 'user_pass' === $input_meta || 'confirmation_password' === $input_meta ) ) {
 		?>
 		<span class="fed_password_strength"></span>
 		<?php
 	}
-} );
+}, 10, 2 );

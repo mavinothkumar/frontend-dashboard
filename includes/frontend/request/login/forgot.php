@@ -49,7 +49,7 @@ function fed_forgot_form_submit( $post ) {
 	$message .= __( 'To reset your password, visit the following address:', 'frontend-dashboard' ) . "\r\n\r\n";
 	$message .= '<a href="' . add_query_arg(
 			array(
-				'page'   => 'reset_password',
+				'page_type'   => 'reset_password',
 				'action' => 'fed_reset',
 				'key'    => $key,
 				'login'  => rawurlencode( $user_login ),
@@ -107,7 +107,7 @@ add_filter( 'lostpassword_url', 'fed_lostpassword_url' );
 function fed_lostpassword_url( $lostpassword_url ) {
 
 	$fed_login_url    = fed_get_login_url();
-	$lostpassword_url = ( false == $fed_login_url ) ? $lostpassword_url : ( $fed_login_url . '?page=reset_password&action=fed_forgot' );
+	$lostpassword_url = ( false == $fed_login_url ) ? $lostpassword_url : ( $fed_login_url . '?page_type=reset_password&action=fed_forgot' );
 
 	return $lostpassword_url;
 }

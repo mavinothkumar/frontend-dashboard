@@ -57,7 +57,8 @@ if ( ! function_exists( 'fed_script_front_end' ) ) {
 	 * Frontend Script.
 	 */
 	function fed_script_front_end() {
-		if ( fed_is_shortcode_in_content() ) {
+		$custom_condition = apply_filters( 'fed_show_frontend_script_on_custom_condition', false );
+		if ( fed_is_shortcode_in_content() || $custom_condition ) {
 			$db_scripts      = get_option( 'fed_general_scripts_styles', array() );
 			$default_scripts = new FED_Admin_General();
 			foreach ( $default_scripts->default_frontend_script() as $index => $scripts ) {
@@ -71,7 +72,6 @@ if ( ! function_exists( 'fed_script_front_end' ) ) {
 			do_action( 'fed_enqueue_script_style_frontend' );
 
 			if ( fed_is_dashboard() || fed_is_register() ) {
-				FED_Log::writeLog( '$message');
 				wp_enqueue_script( 'password-strength-meter' );
 			}
 

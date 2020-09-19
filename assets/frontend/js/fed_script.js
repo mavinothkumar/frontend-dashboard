@@ -615,44 +615,44 @@ function fed_check_password_strength ($pass1,
   blacklistArray) {
   var pass1 = $pass1.val()
   var pass2 = $pass2.val()
-
-  // Reset the form & meter
-  // $submitButton.attr('disabled', 'disabled')
-  $strengthResult.removeClass('short bad good strong')
-
-  // Extend our blacklist array with those from the inputs & site data
-  blacklistArray = blacklistArray.concat(wp.passwordStrength.userInputBlacklist())
-
-  // Get the password strength
-  var strength = wp.passwordStrength.meter(pass1, blacklistArray, pass2)
-
-  // Add the strength meter results
-  switch (strength) {
-
-    case 2:
-      $strengthResult.addClass('bad').html(frontend_dashboard.password_meter.bad)
-      break
-
-    case 3:
-      $strengthResult.addClass('good').html(frontend_dashboard.password_meter.good)
-      break
-
-    case 4:
-      $strengthResult.addClass('strong').html(frontend_dashboard.password_meter.strong)
-      break
-
-    case 5:
-      $strengthResult.addClass('short').html(frontend_dashboard.password_meter.mismatch)
-      break
-
-    default:
-      $strengthResult.addClass('short').html(frontend_dashboard.password_meter.short)
-
+  if (pass1.length <= 8) {
+    strength = 3
+  } else if ( ! pass1.match(/[0-9]+/)) {
+    strength = 4
+  } else if ( ! pass1.match(/[a-z]+/)) {
+    strength = 5
+  } else if ( ! pass1.match(/[A-Z]+/)) {
+    strength = 6
+  } else if ( ! pass1.match(/[!@#$%^&*()]+/)) {
+    strength = 7
+  } else if (pass1 !== pass2 && pass2.length > 0) {
+    strength = 2
+  } else {
+    strength = 1
   }
 
-  // if (4 === strength && '' !== pass2.trim()) {
-  //   $submitButton.removeAttr('disabled')
-  // }
-
+  switch (strength) {
+    case 1:
+      $strengthResult.removeClass('bad').addClass('strong').html('Strong')
+      break
+    case 2:
+      $strengthResult.removeClass('strong').addClass('bad').html('Password Mismatch')
+      break
+    case 3:
+      $strengthResult.removeClass('strong').addClass('bad').html('Length should be greater than 8')
+      break
+    case 4:
+      $strengthResult.removeClass('strong').addClass('bad').html('At least one number')
+      break
+    case 5:
+      $strengthResult.removeClass('strong').addClass('bad').html('At least one lowercase')
+      break
+    case 6:
+      $strengthResult.removeClass('strong').addClass('bad').html('At least one uppercase')
+      break
+    case 7:
+      $strengthResult.removeClass('strong').addClass('bad').html('At least one Symbol ! @ # $ % ^ & * ( )')
+      break
+  }
   return strength
 }
