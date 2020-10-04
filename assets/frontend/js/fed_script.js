@@ -615,7 +615,7 @@ function fed_check_password_strength ($pass1,
   blacklistArray) {
   var pass1 = $pass1.val()
   var pass2 = $pass2.val()
-  if (pass1.length <= 8) {
+  if (pass1.length <= 7) {
     strength = 3
   } else if ( ! pass1.match(/[0-9]+/)) {
     strength = 4
@@ -633,13 +633,13 @@ function fed_check_password_strength ($pass1,
 
   switch (strength) {
     case 1:
-      $strengthResult.removeClass('bad').addClass('strong').html('Strong')
+      $strengthResult.removeClass('bad').addClass('strong').html('Match')
       break
     case 2:
       $strengthResult.removeClass('strong').addClass('bad').html('Password Mismatch')
       break
     case 3:
-      $strengthResult.removeClass('strong').addClass('bad').html('Length should be greater than 8')
+      $strengthResult.removeClass('strong').addClass('bad').html('Min length 8 Characters ')
       break
     case 4:
       $strengthResult.removeClass('strong').addClass('bad').html('At least one number')
