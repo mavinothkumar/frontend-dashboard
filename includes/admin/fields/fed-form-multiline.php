@@ -29,6 +29,16 @@ function fed_form_multi_line( $options ) {
 	$rows        = isset( $options['rows'] ) ? absint( $options['rows'] ) : 5;
 	$cols        = isset( $options['cols'] ) ? absint( $options['cols'] ) : 30;
 
+	$extended            = fed_get_data( 'extended', $options );
+	$unseralize          = $extended ? maybe_unserialize( $extended ) : null;
+	$disable_user_access = $unseralize ? fed_get_data( 'disable_user_access', $unseralize ) : null;
+
+	if ( 'Disable' === $disable_user_access && ! fed_is_admin() ) {
+		$name     = '';
+		$readonly = 'readonly=readonly';
+		$disabled = 'disabled=disabled';
+	}
+
 	return sprintf(
 		"<textarea name='%s' rows='%s' cols='%s' class='%s' placeholder='%s' %s %s %s %s %s >%s</textarea>",
 		$name,

@@ -25,6 +25,16 @@ function fed_form_radio( $options ) {
 	$disabled = ( true === fed_get_data( 'disabled', $options ) ) ? 'disabled=disabled' : null;
 	$extra    = isset( $options['extra'] ) ? $options['extra'] : null;
 
+	$extended            = fed_get_data( 'extended', $options );
+	$unseralize          = $extended ? maybe_unserialize( $extended ) : null;
+	$disable_user_access = $unseralize ? fed_get_data( 'disable_user_access', $unseralize ) : null;
+
+	if ( 'Disable' === $disable_user_access && ! fed_is_admin() ) {
+		$name     = '';
+		$readonly = 'readonly=readonly';
+		$disabled = 'disabled=disabled';
+	}
+
 	$html = '';
 
 	$options = fed_get_select_option_value( $options['input_value'] );

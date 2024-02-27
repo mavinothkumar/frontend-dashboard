@@ -31,6 +31,16 @@ function fed_form_checkbox( $options ) {
 	$label_value = $is_extended ? $is_extended : $label;
 	$checked     = checked( $value, $default_value, false );
 
+	$extended            = fed_get_data( 'extended', $options );
+	$unseralize          = $extended ? maybe_unserialize( $extended ) : null;
+	$disable_user_access = $unseralize ? fed_get_data( 'disable_user_access', $unseralize ) : null;
+
+	if ( 'Disable' === $disable_user_access && ! fed_is_admin() ) {
+		$name     = '';
+		$readonly = 'readonly=readonly';
+		$disabled = 'disabled=disabled';
+	}
+
 	return sprintf(
 		"
         <label>

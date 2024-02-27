@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Get Display Profile.
  *
- * @param  string $menu  Menu.
+ * @param string $menu Menu.
  *
  * @return array|bool
  */
@@ -24,7 +24,7 @@ function fed_process_dashboard_display_profile( $menu ) {
 /**
  * Get Display Dashboard Profile.
  *
- * @param  array $menu_item  Menu Item.
+ * @param array $menu_item Menu Item.
  */
 function fed_display_dashboard_profile( $menu_item ) {
 	/**
@@ -41,20 +41,26 @@ function fed_display_dashboard_profile( $menu_item ) {
 	$menu_title        = sprintf( ucwords( __( '%s ', 'frontend-dashboard' ) ), $menu_name );
 	$menu_title_value  = apply_filters( 'fed_menu_title', $menu_title, $menus, $index );
 	$menu_default_page = apply_filters( 'fed_menu_default_page', true, $menus, $index );
+	$save_button       = '<div class="row text-center">
+									<button type="submit" class="btn btn-primary">
+										<i class="fa fa-floppy-o"></i>
+										' . __( 'Save', 'frontend-dashboard' ) . '
+									</button>
+								</div>';
 	?>
-	<div class="panel panel-primary fed_dashboard_item">
-		<div class="panel-heading">
-			<h3 class="panel-title">
-				<span class="<?php echo esc_attr( $menus[ $index ]['menu_image_id'] ); ?>"></span>
+    <div class="panel panel-primary fed_dashboard_item">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <span class="<?php echo esc_attr( $menus[ $index ]['menu_image_id'] ); ?>"></span>
 				<?php
 				/* translators: %s : Menu */
 				esc_attr_e( apply_filters( 'fed_user_profile_menu_container_title', $menu_name, $menus[ $index ] ) );
 				?>
-			</h3>
-		</div>
-		<div class="panel-body">
-			<div class="row">
-				<div class="col-md-12">
+            </h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
 					<?php
 					do_action( 'fed_dashboard_panel_inside_top' );
 					do_action( 'fed_dashboard_panel_inside_top_' . fed_get_data( 'menu_slug', $menu_item ) );
@@ -64,20 +70,20 @@ function fed_display_dashboard_profile( $menu_item ) {
 						if ( $profiles ) {
 							usort( $profiles, 'fed_sort_by_order' );
 							?>
-							<form method="post"
-									action="<?php echo esc_url( add_query_arg( array( 'fed_nonce' => wp_create_nonce( 'fed_nonce' ) ),
-										fed_get_form_action( 'fed_save_user_profile' ) ) ); ?>">
+                            <form method="post"
+                                  action="<?php echo esc_url( add_query_arg( array( 'fed_nonce' => wp_create_nonce( 'fed_nonce' ) ),
+								      fed_get_form_action( 'fed_save_user_profile' ) ) ); ?>">
 								<?php wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
-								<input type="hidden"
-										name="tab_id"
-										value="<?php echo esc_attr( $index ); ?>"/>
-								<input type="hidden"
-										name="menu_type"
-										value="<?php echo esc_attr( $menu_item['menu_type'] ); ?>"/>
+                                <input type="hidden"
+                                       name="tab_id"
+                                       value="<?php echo esc_attr( $index ); ?>"/>
+                                <input type="hidden"
+                                       name="menu_type"
+                                       value="<?php echo esc_attr( $menu_item['menu_type'] ); ?>"/>
 
-								<input type="hidden"
-										name="menu_slug"
-										value="<?php echo esc_attr( $menu_item['menu_slug'] ); ?>"/>
+                                <input type="hidden"
+                                       name="menu_slug"
+                                       value="<?php echo esc_attr( $menu_item['menu_slug'] ); ?>"/>
 								<?php
 
 								do_action( 'fed_dashboard_profile_form_top' );
@@ -99,39 +105,36 @@ function fed_display_dashboard_profile( $menu_item ) {
 										continue;
 									}
 									?>
-									<div class="row fed_dashboard_item_field">
-										<div class="col-md-12 fo">
-											<label>
+                                    <div class="row fed_dashboard_item_field">
+                                        <div class="col-md-12 fo">
+                                            <label>
 												<?php
 												echo wp_kses_post( $single_item['label_name'] );
 												?>
-											</label>
+                                            </label>
 											<?php
 											// phpcs:ignore
 											echo fed_get_input_details( $single_item );
 											?>
-										</div>
-									</div>
+                                        </div>
+                                    </div>
 									<?php
 								}
 
 								do_action( 'fed_dashboard_profile_form_bottom' );
+
+								echo apply_filters( 'fed_dashboard_profile_form_save_button', $save_button );
 								?>
-								<div class="row text-center">
-									<button type="submit" class="btn btn-primary">
-										<i class="fa fa-floppy-o"></i>
-										<?php esc_attr_e( 'Save', 'frontend-dashboard' ); ?>
-									</button>
-								</div>
-							</form>
+
+                            </form>
 							<?php
 						} else {
 							?>
-							<h4>
+                            <h4>
 								<?php
 								esc_attr_e( 'Sorry! there is no field associated to this menu', 'frontend-dashboard' );
 								?>
-							</h4>
+                            </h4>
 							<?php
 						}
 					} else {
@@ -140,9 +143,9 @@ function fed_display_dashboard_profile( $menu_item ) {
 					do_action( 'fed_dashboard_panel_inside_bottom' );
 					do_action( 'fed_dashboard_panel_inside_bottom_' . fed_get_data( 'menu_slug', $menu_item ) );
 					?>
-				</div>
-			</div>
-		</div>
-	</div>
+                </div>
+            </div>
+        </div>
+    </div>
 	<?php
 }

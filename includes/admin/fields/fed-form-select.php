@@ -27,10 +27,19 @@ function fed_form_select( $attributes ) {
 		) ) ? ( 'id="' . esc_attr( $attributes['id_name'] ) . '"' ) : null;
 	$disabled = ( true === fed_get_data( 'disabled', $attributes ) ) ? 'disabled=disabled' : null;
 	$extra    = isset( $attributes['extra'] ) ? $attributes['extra'] : null;
-	$extended = isset( $attributes['extended'] ) ? ( is_string( $attributes['extended'] ) ? unserialize( $attributes['extended'] ) : $attributes['extended'] ) : array();
+	$extended = isset( $attributes['extended'] ) ? ( is_string( $attributes['extended'] ) ? maybe_unserialize( $attributes['extended'] ) : $attributes['extended'] ) : array();
 
 	$is_multiple = isset( $extended['multiple'] ) ? $extended['multiple'] : null;
 	$options     = fed_get_select_option_value( $attributes['input_value'] );
+
+	$extended            = fed_get_data( 'extended', $attributes );
+	$unseralize          = $extended ? maybe_unserialize( $extended ) : null;
+	$disable_user_access = $unseralize ? fed_get_data( 'disable_user_access', $unseralize ) : null;
+
+	if ( 'Disable' === $disable_user_access && ! fed_is_admin() ) {
+		$name     = '';
+		$disabled = 'disabled=disabled';
+	}
 
 	$multi_select = '';
 	$option       = '';
@@ -48,7 +57,7 @@ function fed_form_select( $attributes ) {
 			$checked = in_array( $key, $value ) ? 'selected' : '';
 			$option  .= '<option value="' . esc_attr( $key ) . '" ' . $checked . '>' . $label . '</option>';
 		} elseif ( is_serialized( $value ) ) {
-			$checked = in_array( $key, unserialize( $value ) ) ? 'selected' : '';
+			$checked = in_array( $key, maybe_unserialize( $value ) ) ? 'selected' : '';
 			$option  .= '<option value="' . esc_attr( $key ) . '" ' . $checked . '>' . $label . '</option>';
 		} else {
 			$option .= '<option

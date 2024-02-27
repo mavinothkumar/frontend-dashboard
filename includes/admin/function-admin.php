@@ -15,8 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Verify Nonce
  *
- * @param  array                 $request  (Added null in version 1.5)
- * @param  null | string | array $permission
+ * @param array $request (Added null in version 1.5)
+ * @param null | string | array $permission
  */
 function fed_verify_nonce( $request = null, $permission = null ) {
 
@@ -54,8 +54,8 @@ function fed_verify_nonce( $request = null, $permission = null ) {
 /**
  * Check for Nonce
  *
- * @param  array                 $request  Request.
- * @param  null | array | string $permission  Permission.
+ * @param array $request Request.
+ * @param null | array | string $permission Permission.
  *
  * @internal param string $nonce Nonce.
  * @internal param string $key Key.
@@ -68,7 +68,7 @@ function fed_nonce_check( $request, $permission = null ) {
 /**
  * Show form fields on admin dashboard.
  *
- * @param  string $selected  Selected.
+ * @param string $selected Selected.
  *
  * @return string | array
  */
@@ -124,7 +124,7 @@ function fed_admin_user_profile_select( $selected = '' ) {
 /**
  * Enable or Disable.
  *
- * @param  string|bool $condition  Condition.
+ * @param string|bool $condition Condition.
  *
  * @return string
  */
@@ -139,7 +139,7 @@ function fed_enable_disable( $condition = '' ) {
 /**
  * Is Required.
  *
- * @param  string $condition  Condition.
+ * @param string $condition Condition.
  *
  * @return string
  */
@@ -154,7 +154,7 @@ function fed_is_required( $condition = '' ) {
 /**
  * Is True or False.
  *
- * @param  string $condition  Condition.
+ * @param string $condition Condition.
  *
  * @return bool
  */
@@ -169,8 +169,8 @@ function fed_is_true_false( $condition = '' ) {
 /**
  * Profile Enable Disable.
  *
- * @param  string $condition  Condition.
- * @param  string $type  Type.
+ * @param string $condition Condition.
+ * @param string $type Type.
  *
  * @return array
  */
@@ -204,7 +204,7 @@ function fed_profile_enable_disable( $condition = '', $type = '' ) {
 /**
  * Get Input Details.
  *
- * @param  array $attr  Attributes.
+ * @param array $attr Attributes.
  *
  * @return string
  */
@@ -260,7 +260,7 @@ function fed_get_input_details( $attr ) {
 /**
  * Get Input Group.
  *
- * @param  array $attr  Attribute.
+ * @param array $attr Attribute.
  *
  * @return string
  */
@@ -280,7 +280,7 @@ function fed_get_input_group( $attr ) {
 /**
  * Get Select Option Value.
  *
- * @param  string|array $input_value  Input Value.
+ * @param string|array $input_value Input Value.
  *
  * @return array
  */
@@ -349,7 +349,7 @@ function fed_default_user_roles() {
 /**
  * Get Default value for User Profile
  *
- * @param  string $action  Action.
+ * @param string $action Action.
  *
  * @return array
  */
@@ -397,9 +397,9 @@ function fed_get_empty_value_for_user_profile( $action ) {
 /**
  * Process User Profile.
  *
- * @param  array  $row  User Profiles.
- * @param  string $action  Action.
- * @param  string $update  Status.
+ * @param array $row User Profiles.
+ * @param string $action Action.
+ * @param string $update Status.
  *
  * @return array
  */
@@ -428,6 +428,18 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 		) ) ? unserialize( $row['user_role'] ) : serialize( array_keys( $row['user_role'] ) ) : array(),
 	);
 
+	if ( $update === 'yes' ) {
+		$extended            = array(
+			'disable_user_access' => isset( $row['extended']['disable_user_access'] ) ? wp_kses_post( $row['extended']['disable_user_access'] ) : '',
+		);
+		$default['extended'] = serialize( $extended );
+	} else {
+		$default['extended'] = $row['extended'];
+		if ( is_string( $row['extended'] ) ) {
+			$default['extended'] = unserialize( $row['extended'] );
+		}
+	}
+
 	if ( $action === 'post' ) {
 		$default['post_type'] = ( isset( $row['post_type'] ) && fed_check_post_type(
 				$row['post_type']
@@ -439,6 +451,7 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 				'multiple' => isset( $row['extended']['multiple'] ) ? sanitize_text_field(
 					$row['extended']['multiple']
 				) : 'no',
+				'disable_user_access' => isset( $row['extended']['disable_user_access'] ) ? wp_kses_post( $row['extended']['disable_user_access'] ) : '',
 			);
 			$default['extended'] = serialize( $extended );
 		} else {
@@ -453,6 +466,7 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 		if ( $update === 'yes' ) {
 			$extended            = array(
 				'label' => isset( $row['extended']['label'] ) ? wp_kses_post( $row['extended']['label'] ) : '',
+				'disable_user_access' => isset( $row['extended']['disable_user_access'] ) ? wp_kses_post( $row['extended']['disable_user_access'] ) : '',
 			);
 			$default['extended'] = serialize( $extended );
 		} else {
@@ -519,7 +533,7 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 /**
  * Process Menu
  *
- * @param  array $row  Menu Items.
+ * @param array $row Menu Items.
  *
  * @return array
  */
@@ -545,7 +559,7 @@ function fed_process_menu( $row ) {
 /**
  * Convert comma separated and new line into key value pair.
  *
- * @param  string $text  String.
+ * @param string $text String.
  *
  * @return array
  */
@@ -565,7 +579,7 @@ function fed_convert_comma_separated_key_value( $text ) {
 /**
  * Check is the field is belongs to extra profile.
  *
- * @param  string $meta_key  Meta Key.
+ * @param string $meta_key Meta Key.
  *
  * @return bool
  */
@@ -608,7 +622,7 @@ function fed_no_update_fields() {
 /**
  * Changing Archive page author
  *
- * @param  string $single_template  Template.
+ * @param string $single_template Template.
  *
  * @return string
  */
@@ -1743,7 +1757,7 @@ function fed_font_awesome_list() {
 /**
  * Yes Or No
  *
- * @param  string $sort  Yes or No.
+ * @param string $sort Yes or No.
  *
  * @return array
  */
@@ -1764,7 +1778,7 @@ function fed_yes_no( $sort = 'DESC' ) {
 /**
  * Show or Hide
  *
- * @param  string $sort  Yes or No.
+ * @param string $sort Yes or No.
  *
  * @return array
  */
@@ -1785,7 +1799,7 @@ function fed_show_hide( $sort = 'DESC' ) {
 /**
  * Show Register Filter
  *
- * @param  array $row  Row.
+ * @param array $row Row.
  *
  * @return bool | string
  */
@@ -1830,7 +1844,7 @@ add_action( 'admin_init', 'fed_enable_file_uploads_by_role' );
 /**
  * Media Library Tab.
  *
- * @param  array $tabs
+ * @param array $tabs
  *
  * @return mixed
  */
@@ -1850,7 +1864,7 @@ add_action( 'pre_get_posts', 'fed_restrict_user_profile_picture' );
 /**
  * Restrict User Profile Picture.
  *
- * @param  WP_User_Query $wp_query_obj  user query
+ * @param WP_User_Query $wp_query_obj user query
  */
 function fed_restrict_user_profile_picture( $wp_query_obj ) {
 
@@ -1918,7 +1932,7 @@ function fed_get_post_status() {
 /**
  * Get Post Status.
  *
- * @param  string $status  Status.
+ * @param string $status Status.
  *
  * @return string
  */
@@ -1937,7 +1951,7 @@ function fed_get_display_post_status( $status ) {
 /**
  * Get all post meta.
  *
- * @param  string $postid  Post ID.
+ * @param string $postid Post ID.
  *
  * @return array | null
  *
@@ -1958,7 +1972,7 @@ function fed_get_all_post_meta( $postid ) {
 /**
  * Get all post meta key.
  *
- * @param  string $postid  Post ID.
+ * @param string $postid Post ID.
  *
  * @return array
  */
@@ -1975,7 +1989,7 @@ function fed_get_all_post_meta_key( $postid ) {
 /**
  * Check Extension Loaded.
  *
- * @param  string $extension  PHP Extensions.
+ * @param string $extension PHP Extensions.
  *
  * @return bool
  */
@@ -1990,7 +2004,7 @@ function fed_check_extension_loaded( $extension ) {
 /**
  * Get PayPal Admin Options
  *
- * @param  array $options  Options.
+ * @param array $options Options.
  *
  * @return array
  *
@@ -2099,7 +2113,7 @@ function fed_currency_type() {
 /**
  * Get Currency Symbol
  *
- * @param  string $currency  Currency.
+ * @param string $currency Currency.
  *
  * @return mixed
  */
@@ -2368,7 +2382,7 @@ function fed_get_country_code() {
 /**
  * Country Code by ID.
  *
- * @param  string $id  Country ID.
+ * @param string $id Country ID.
  *
  * @return mixed|string
  */
@@ -2568,8 +2582,8 @@ function fed_get_payment_cycles() {
 /**
  * Compare Two Array.
  *
- * @param  array $array1  Array 1.
- * @param  array $array2  Array 2.
+ * @param array $array1 Array 1.
+ * @param array $array2 Array 2.
  *
  * @return bool
  */
@@ -2580,7 +2594,7 @@ function fed_compare_two_array( $array1, $array2 ) {
 /**
  * Convert Payment Cycles to days.
  *
- * @param  array $payment_cycle  Payment Cycle.
+ * @param array $payment_cycle Payment Cycle.
  *
  * @return int|string
  *
@@ -2606,7 +2620,7 @@ function fed_convert_payment_cycles_to_days( $payment_cycle ) {
 /**
  * Get User Name by ID.
  *
- * @param  string $id  User ID.
+ * @param string $id User ID.
  *
  * @return string
  */
@@ -2619,7 +2633,7 @@ function fed_get_user_name_by_id( $id ) {
 /**
  * Display Name by ID.
  *
- * @param  string $id  User ID.
+ * @param string $id User ID.
  *
  * @return string
  */
@@ -2644,7 +2658,7 @@ function fed_redirect_to_404() {
 /**
  * Show helper message
  *
- * @param  array $message  Message.
+ * @param array $message Message.
  *
  * @return string
  */
@@ -2662,8 +2676,8 @@ function fed_show_help_message( array $message ) {
  * Convert to pricing
  * TODO: Payment
  *
- * @param  string $cycle  Cycle.
- * @param  string $custom  Custom.
+ * @param string $cycle Cycle.
+ * @param string $custom Custom.
  *
  * @return string
  */
@@ -2733,9 +2747,9 @@ function fed_plugin_versions() {
 /**
  * Convert this to that.
  *
- * @param  string $source  Source.
- * @param  string $_this  This.
- * @param  string $that  That.
+ * @param string $source Source.
+ * @param string $_this This.
+ * @param string $that That.
  *
  * @return mixed
  */
@@ -2748,29 +2762,29 @@ function fed_convert_this_to_that( $source, $_this, $that ) {
  */
 function fed_menu_icons_popup() {
 	?>
-	<div class="bc_fed">
-		<div class="modal fade fed_show_fa_list"
-				tabindex="-1"
-				role="dialog"
-		>
-			<div class="modal-dialog modal-lg"
-					role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button"
-								class="close"
-								data-dismiss="modal"
-								aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h4 class="modal-title"><?php _e( 'Please Select one Image', 'frontend-dashboard' ) ?></h4>
-					</div>
-					<div class="modal-body">
-						<input type="hidden"
-								id="fed_menu_box_id"
-								name="fed_menu_box_id"
-								value=""/>
-						<div class="row fed_fa_container">
+    <div class="bc_fed">
+        <div class="modal fade fed_show_fa_list"
+             tabindex="-1"
+             role="dialog"
+        >
+            <div class="modal-dialog modal-lg"
+                 role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button"
+                                class="close"
+                                data-dismiss="modal"
+                                aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title"><?php _e( 'Please Select one Image', 'frontend-dashboard' ) ?></h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden"
+                               id="fed_menu_box_id"
+                               name="fed_menu_box_id"
+                               value=""/>
+                        <div class="row fed_fa_container">
 							<?php foreach ( fed_font_awesome_list() as $key => $list ) {
 								echo '<div class="col-md-1 fed_single_fa" 
 							data-dismiss="modal"
@@ -2786,20 +2800,20 @@ function fed_menu_icons_popup() {
 									) . '"></span>
 							</div>';
 							} ?>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 	<?php
 }
 
 /**
  * Compare two array and get the second array value.
  *
- * @param  array $array1  Array 1.
- * @param  array $array2  Array 2.
+ * @param array $array1 Array 1.
+ * @param array $array2 Array 2.
  *
  * @return array
  */
@@ -2817,9 +2831,9 @@ function fed_compare_two_arrays_get_second_value( array $array1, array $array2 )
 /**
  * Get Key Value Array.
  *
- * @param  array  $array
- * @param  string $key
- * @param  null   $value
+ * @param array $array
+ * @param string $key
+ * @param null $value
  *
  * @return array
  */
@@ -2852,7 +2866,7 @@ function fed_get_key_value_array( array $array, $key, $value = null ) {
 /**
  * Get Category Tag Post format.
  *
- * @param  string $post_type  Post Type.
+ * @param string $post_type Post Type.
  *
  * @return array
  */
@@ -2881,7 +2895,7 @@ function fed_get_category_tag_post_format( $post_type = 'post' ) {
  *
  * @param      $array
  * @param      $on
- * @param  int $order
+ * @param int $order
  *
  * @return array
  */
@@ -2923,7 +2937,7 @@ function fed_array_sort( $array, $on, $order = SORT_ASC ) {
 /**
  * Request Empty.
  *
- * @param  string $request  Request.
+ * @param string $request Request.
  *
  * @return bool
  */
@@ -2944,12 +2958,12 @@ if ( ! function_exists( 'array_column' ) ) {
 	 * Optionally, you may provide an $indexKey to index the values in the returned
 	 * array by the values from the $indexKey column in the input array.
 	 *
-	 * @param  array $input  A multi-dimensional array (record set) from which to pull
+	 * @param array $input A multi-dimensional array (record set) from which to pull
 	 *                         a column of values.
-	 * @param  mixed $columnKey  The column of values to return. This value may be the
+	 * @param mixed $columnKey The column of values to return. This value may be the
 	 *                         integer key of the column you wish to retrieve, or it
 	 *                         may be the string key name for an associative array.
-	 * @param  mixed $indexKey  (Optional.) The column to use as the index/keys for
+	 * @param mixed $indexKey (Optional.) The column to use as the index/keys for
 	 *                         the returned array. This value may be the integer key
 	 *                         of the column, or it may be the string key name.
 	 *
@@ -3036,7 +3050,7 @@ if ( ! function_exists( 'array_column' ) ) {
 /**
  * Call Function Method.
  *
- * @param  array $item  Item.
+ * @param array $item Item.
  */
 function fed_call_function_method( $item ) {
 	if ( is_string( $item['callable'] ) && function_exists( $item['callable'] ) ) {
@@ -3052,7 +3066,7 @@ function fed_call_function_method( $item ) {
 		call_user_func( array( $item['callable']['object'], $item['callable']['method'] ), $parameter );
 	} else {
 		?>
-		<div class="bc_fed fed_add_page_profile_container">
+        <div class="bc_fed fed_add_page_profile_container">
 			<?php
 			$message = is_array( $item['callable'] ) ? $item['callable']['method'] : $item['callable'];
 			fed_show_alert_message(
@@ -3065,7 +3079,7 @@ function fed_call_function_method( $item ) {
 			);
 
 			?>
-		</div>
+        </div>
 		<?php
 	}
 }
@@ -3073,7 +3087,7 @@ function fed_call_function_method( $item ) {
 /**
  * AJAX Call Function Method.
  *
- * @param  array $item  Item.
+ * @param array $item Item.
  */
 function fed_ajax_call_function_method( $item ) {
 	if ( is_string( $item['callable'] ) && function_exists( $item['callable'] ) ) {
@@ -3104,8 +3118,8 @@ function fed_ajax_call_function_method( $item ) {
 /**
  * Execute Method by String.
  *
- * @param  string $item  Item.
- * @param  null   $parameter  Parameter
+ * @param string $item Item.
+ * @param null $parameter Parameter
  */
 function fed_execute_method_by_string( $item, $parameter = null ) {
 	$class = explode( '@', $item );
@@ -3122,7 +3136,7 @@ function fed_execute_method_by_string( $item, $parameter = null ) {
 			);
 		} else {
 			?>
-			<div class="bc_fed fed_add_page_profile_container">
+            <div class="bc_fed fed_add_page_profile_container">
 				<?php
 				fed_show_alert_message(
 					sprintf(
@@ -3132,7 +3146,7 @@ function fed_execute_method_by_string( $item, $parameter = null ) {
 					)
 				);
 				?>
-			</div>
+            </div>
 			<?php
 			// %s class name
 			// FED_Log::writeLog( 'Class ' . esc_html( $class[0] ) . ' does not exist' );
@@ -3145,8 +3159,8 @@ function fed_execute_method_by_string( $item, $parameter = null ) {
 /**
  * Isset.
  *
- * @param  string $value  Value.
- * @param  null   $default  Default.
+ * @param string $value Value.
+ * @param null $default Default.
  *
  * @return null
  */
@@ -3157,8 +3171,8 @@ function fed_isset( $value, $default = null ) {
 /**
  * Isset Sanitize.
  *
- * @param  string $value  Value.
- * @param  null   $default  Default.
+ * @param string $value Value.
+ * @param null $default Default.
  *
  * @return null|string
  */
@@ -3169,7 +3183,7 @@ function fed_isset_sanitize( $value, $default = null ) {
 /**
  * Sanitize Text Field.
  *
- * @param  array| string $var  Var.
+ * @param array| string $var Var.
  *
  * @return array|string
  */
@@ -3184,9 +3198,9 @@ function fed_sanitize_text_field( $var ) {
 /**
  * Isset Request.
  *
- * @param  array  $request  Request.
- * @param  string $key  Key.
- * @param  null   $default  Default.
+ * @param array $request Request.
+ * @param string $key Key.
+ * @param null $default Default.
  *
  * @return null|string
  */
@@ -3200,11 +3214,11 @@ function fed_isset_request( $request, $key, $default = null ) {
 /**
  * Get Dat.
  *
- * @param  string     $key  Key.
- * @param  null|array $target  Target.
- * @param  null|mixed $default  Default.
+ * @param string $key Key.
+ * @param null|array $target Target.
+ * @param null|mixed $default Default.
  *
- * @param  bool       $sanitize
+ * @param bool $sanitize
  *
  * @return mixed|null
  */
@@ -3246,8 +3260,8 @@ function fed_get_data( $key, $target = null, $default = null, $sanitize = true )
 /**
  * Get Value.
  *
- * @param  \Closure | array | string $value  Value.
- * @param  bool                      $sanitize  Sanitize.
+ * @param \Closure | array | string $value Value.
+ * @param bool $sanitize Sanitize.
  *
  * @return mixed
  */
@@ -3258,7 +3272,7 @@ function fed_get_value( $value, $sanitize = true ) {
 /**
  * Get Column Count.
  *
- * @param  string $value  Value.
+ * @param string $value Value.
  *
  * @return string
  */
@@ -3287,10 +3301,10 @@ if ( ! function_exists( 'fed_set_data' ) ) {
 	/**
 	 * Set an item on an array or object using dot notation.
 	 *
-	 * @param  mixed        $target  Target.
-	 * @param  string|array $key  Key.
-	 * @param  mixed        $value  Value.
-	 * @param  bool         $overwrite  Overwrite.
+	 * @param mixed $target Target.
+	 * @param string|array $key Key.
+	 * @param mixed $value Value.
+	 * @param bool $overwrite Overwrite.
 	 *
 	 * @return mixed
 	 */
@@ -3342,7 +3356,7 @@ if ( ! function_exists( 'fed_set_data' ) ) {
 /**
  * Determine whether the given value is array accessible.
  *
- * @param  mixed $value  Value.
+ * @param mixed $value Value.
  *
  * @return bool
  */
@@ -3353,8 +3367,8 @@ function fed_accessible( $value ) {
 /**
  * Determine if the given key exists in the provided array.
  *
- * @param  \ArrayAccess|array $array  Array Value.
- * @param  string|int         $key  Key.
+ * @param \ArrayAccess|array $array Array Value.
+ * @param string|int $key Key.
  *
  * @return bool
  */
@@ -3369,8 +3383,8 @@ function fed_exists( $array, $key ) {
 /**
  * Generate URL.
  *
- * @param  array  $parameters  Parameters.
- * @param  string $url  URL.
+ * @param array $parameters Parameters.
+ * @param string $url URL.
  *
  * @return string.
  */
@@ -3383,8 +3397,8 @@ function fed_generate_url( array $parameters, $url ) {
 /**
  * Array to Object Sort by Key.
  *
- * @param  object $a  Object One.
- * @param  object $b  Object two.
+ * @param object $a Object One.
+ * @param object $b Object two.
  *
  * @return int
  */
@@ -3467,8 +3481,8 @@ function fed_get_tables() {
 /**
  * Get Menu Value.
  *
- * @param  array $values  Values.
- * @param  array $menus  Menus.
+ * @param array $values Values.
+ * @param array $menus Menus.
  *
  * @return array
  */
@@ -3628,72 +3642,72 @@ function fed_show_help_icons() {
 	if ( isset( $_GET, $_GET['page'] ) && in_array( $_GET['page'], fed_get_script_loading_pages() ) ) {
 		?>
 
-		<div class="bc_fed fed_sticky_help_bar">
-			<div class="fed_sticky_close_open">
-				<div class="fed_sticky_open hide">
-					<i class="fas fa-angle-double-left fa-2x"></i>
-				</div>
-				<div class="fed_sticky_close">X</div>
-			</div>
-			<div class="fed_sticky_items">
-				<div class="fed_sticky_item fed_demo">
-					<a target="_blank"
-							href="https://demo.frontenddashboard.com">
-						<i class="fas fa-eye fa-2x bc_fed_jump"></i>
-						<div class="fed_sticky_title">
-							Demo
-						</div>
-					</a>
-				</div>
-				<div class="fed_sticky_item">
-					<a target="_blank"
-							href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#new-post">
-						<i class="fas fa-star fa-2x bc_fed_spin"></i>
-						<div class="fed_sticky_title">
-							Rate Us
-						</div>
-					</a>
-				</div>
-				<div class="fed_sticky_item fed_bg_red">
-					<a href="https://paypal.me/buffercode" target="_blank">
-						<i class="fas fa-hand-holding-usd fa-2x"></i>
-						<div class="fed_sticky_title">Donate</div>
-					</a>
-				</div>
-				<div class="fed_sticky_item fed_bg_addons">
-					<a href="<?php menu_page_url( 'fed_plugin_pages' ); ?>">
-						<i class="fas fa-puzzle-piece fa-2x"></i>
-						<div class="fed_sticky_title">Addons</div>
-					</a>
-				</div>
-				<div class="fed_sticky_item">
-					<a href="<?php menu_page_url( 'fed_help' ); ?>">
-						<i class="fas fa-question-circle fa-2x"></i>
-						<div class="fed_sticky_title">
-							Help!
-						</div>
-					</a>
-				</div>
-				<div class="fed_sticky_item">
-					<a href="https://buffercode.com/category/name/frontend-dashboard" target="_blank">
-						<i class="fab fa-youtube fa-2x"></i>
-						<div class="fed_sticky_title">Videos</div>
-					</a>
-				</div>
-				<div class="fed_sticky_item">
-					<a href="https://twitter.com/buffercode/" target="_blank">
-						<i class="fab fa-twitter fa-2x"></i>
-						<div class="fed_sticky_title">Twitter</div>
-					</a>
-				</div>
-				<div class="fed_sticky_item">
-					<a href="https://www.facebook.com/buffercode/" target="_blank">
-						<i class="fab fa-facebook fa-2x"></i>
-						<div class="fed_sticky_title">Facebook</div>
-					</a>
-				</div>
-			</div>
-		</div>
+        <div class="bc_fed fed_sticky_help_bar">
+            <div class="fed_sticky_close_open">
+                <div class="fed_sticky_open hide">
+                    <i class="fas fa-angle-double-left fa-2x"></i>
+                </div>
+                <div class="fed_sticky_close">X</div>
+            </div>
+            <div class="fed_sticky_items">
+                <div class="fed_sticky_item fed_demo">
+                    <a target="_blank"
+                       href="https://demo.frontenddashboard.com">
+                        <i class="fas fa-eye fa-2x bc_fed_jump"></i>
+                        <div class="fed_sticky_title">
+                            Demo
+                        </div>
+                    </a>
+                </div>
+                <div class="fed_sticky_item">
+                    <a target="_blank"
+                       href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#new-post">
+                        <i class="fas fa-star fa-2x bc_fed_spin"></i>
+                        <div class="fed_sticky_title">
+                            Rate Us
+                        </div>
+                    </a>
+                </div>
+                <div class="fed_sticky_item fed_bg_red">
+                    <a href="https://paypal.me/buffercode" target="_blank">
+                        <i class="fas fa-hand-holding-usd fa-2x"></i>
+                        <div class="fed_sticky_title">Donate</div>
+                    </a>
+                </div>
+                <div class="fed_sticky_item fed_bg_addons">
+                    <a href="<?php menu_page_url( 'fed_plugin_pages' ); ?>">
+                        <i class="fas fa-puzzle-piece fa-2x"></i>
+                        <div class="fed_sticky_title">Addons</div>
+                    </a>
+                </div>
+                <div class="fed_sticky_item">
+                    <a href="<?php menu_page_url( 'fed_help' ); ?>">
+                        <i class="fas fa-question-circle fa-2x"></i>
+                        <div class="fed_sticky_title">
+                            Help!
+                        </div>
+                    </a>
+                </div>
+                <div class="fed_sticky_item">
+                    <a href="https://buffercode.com/category/name/frontend-dashboard" target="_blank">
+                        <i class="fab fa-youtube fa-2x"></i>
+                        <div class="fed_sticky_title">Videos</div>
+                    </a>
+                </div>
+                <div class="fed_sticky_item">
+                    <a href="https://twitter.com/buffercode/" target="_blank">
+                        <i class="fab fa-twitter fa-2x"></i>
+                        <div class="fed_sticky_title">Twitter</div>
+                    </a>
+                </div>
+                <div class="fed_sticky_item">
+                    <a href="https://www.facebook.com/buffercode/" target="_blank">
+                        <i class="fab fa-facebook fa-2x"></i>
+                        <div class="fed_sticky_title">Facebook</div>
+                    </a>
+                </div>
+            </div>
+        </div>
 		<?php
 	}
 }
@@ -3702,7 +3716,7 @@ function fed_show_help_icons() {
 /**
  * Get Keys from Menu.
  *
- * @param  array $menus  Menus.
+ * @param array $menus Menus.
  *
  * @return array
  */
@@ -3722,9 +3736,9 @@ function fed_get_keys_from_menu( $menus ) {
 /**
  * Search Index From Array Recursively.
  *
- * @param  array  $array  Array Values.
- * @param  string $index  Array Index.
- * @param  string $submenu  Submenu.
+ * @param array $array Array Values.
+ * @param string $index Array Index.
+ * @param string $submenu Submenu.
  *
  * @return mixed
  */
@@ -3764,7 +3778,7 @@ function fed_get_admin_email() {
 /**
  * Get First Element In Array.
  *
- * @param  array $array  Array.
+ * @param array $array Array.
  *
  * @return bool|int|string|null
  */
@@ -3780,7 +3794,7 @@ function fed_get_first_element_in_array( $array ) {
 /**
  * Get First Key in Array.
  *
- * @param  array $array  Array.
+ * @param array $array Array.
  *
  * @return bool|int|string|null
  */
@@ -3799,8 +3813,8 @@ add_filter( 'wp_nav_menu_items', 'login_logout_menu', 10, 2 );
 /**
  * Login Logout Menu.
  *
- * @param  string $items  Items.
- * @param  object $args  Object.
+ * @param string $items Items.
+ * @param object $args Object.
  *
  * @return mixed|void
  */
@@ -3824,11 +3838,11 @@ function login_logout_menu( $items, $args ) {
 /**
  * User Role Checkboxes.
  *
- * @param  string $meta  Meta.
- * @param  array  $user_roles  User Roles.
- * @param  string $column  Column.
- * @param  array  $extra  Extra
- * @param  array  $remove  Remove.
+ * @param string $meta Meta.
+ * @param array $user_roles User Roles.
+ * @param string $column Column.
+ * @param array $extra Extra
+ * @param array $remove Remove.
  *
  * @return string
  */

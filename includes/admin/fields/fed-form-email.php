@@ -25,6 +25,16 @@ function fed_form_email( $options ) {
 	$disabled    = fed_get_data( 'disabled', $options ) === true ? 'disabled=disabled' : null;
 	$extra       = isset( $options['extra'] ) ? $options['extra'] : null;
 
+	$extended            = fed_get_data( 'extended', $options );
+	$unseralize          = $extended ? maybe_unserialize( $extended ) : null;
+	$disable_user_access = $unseralize ? fed_get_data( 'disable_user_access', $unseralize ) : null;
+
+	if ( 'Disable' === $disable_user_access && ! fed_is_admin() ) {
+		$name     = '';
+		$readonly = 'readonly=readonly';
+		$disabled = 'disabled=disabled';
+	}
+
 	return sprintf(
 		"<input type='email' name='%s' value='%s' class='%s' placeholder='%s' %s %s %s %s %s />",
 		$name,
