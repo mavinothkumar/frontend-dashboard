@@ -85,7 +85,7 @@ function fed_forgot_form_submit( $post ) {
 
 	wp_send_json_success(
 		array(
-			'user'    => $user_data,
+			'user'    => $user_data->ID,
 			'message' => __( 'Reset email sent to your email address', 'frontend-dashboard' ),
 			'url'     => $redirect_url,
 		)
