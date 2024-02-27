@@ -113,7 +113,7 @@ if ( ! class_exists( 'FED_AdminUserProfile' ) ) {
 						'input_value' => isset( $field['input_value'] ) ? esc_attr( $field['input_value'] ) : '',
 					);
 
-					update_user_meta( $user_id, $default_value['input_meta'], $_POST[ $default_value['input_meta'] ] );
+					update_user_meta( $user_id, $default_value['input_meta'], sanitize_text_field( $_POST[ $default_value['input_meta'] ] ) );
 				}
 			}
 
