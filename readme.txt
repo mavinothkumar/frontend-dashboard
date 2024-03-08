@@ -2,8 +2,8 @@
 Contributors: vinoth06, buffercode
 Tags: dashboard, frontend dashboard, custom login, custom register, custom roles, custom profile, custom post type, custom taxonomies, custom dashboard, hide admin bar, widget
 Donate link: https://www.paypal.com/paypalme2/buffercode
-Requires at least: 4.6
-Tested up to: 5.7
+Requires at least: 5.8
+Tested up to: 6.4.3
 Stable tag: 2.2.4
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
@@ -42,8 +42,6 @@ Frontend Dashboard is bundled with the huge list of custom features which can ea
 = Frontend Dashboard Plugins List =
 * [Frontend Dashboard User Management (Pro) ](https://buffercode.com/plugin/frontend-dashboard-user-management)
 * [Frontend Dashboard Social Connect (Pro) ](https://buffercode.com/plugin/frontend-dashboard-social-connect)
-* [Frontend Dashboard Membership (Pro) ](https://buffercode.com/plugin/frontend-dashboard-membership-pro)
-* [Frontend Dashboard Payment (Pro) ](https://buffercode.com/plugin/frontend-dashboard-payment-pro)
 * [Frontend Dashboard Pages](https://buffercode.com/plugin/frontend-dashboard-pages)
 * [Frontend Dashboard Extra](https://buffercode.com/plugin/frontend-dashboard-extra)
 * [Frontend Dashboard Captcha](https://buffercode.com/plugin/frontend-dashboard-captcha)
