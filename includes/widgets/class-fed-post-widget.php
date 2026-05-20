@@ -14,10 +14,7 @@ if ( ! class_exists( 'FED_Post_Widget' ) ) {
 		 * FED_Post_Widget constructor.
 		 */
 		public function __construct() {
-			parent::__construct(
-				'fed-post-widget',
-				__( 'FED Post Widget', 'frontend-dashboard' )
-			);
+			parent::__construct( 'fed-post-widget', 'FED Post Widget' );
 
 			add_action( 'widgets_init', function () {
 				register_widget( 'FED_Post_Widget' );
@@ -49,8 +46,8 @@ if ( ! class_exists( 'FED_Post_Widget' ) ) {
 		/**
 		 * Widget.
 		 *
-		 * @param  array $args  Arguments.
-		 * @param  array $instance  Instance.
+		 * @param  array  $args  Arguments.
+		 * @param  array  $instance  Instance.
 		 */
 		public function widget( $args, $instance ) {
 			$post_type                  = fed_get_data( 'fed_post_type', $instance );
@@ -151,7 +148,7 @@ if ( ! class_exists( 'FED_Post_Widget' ) ) {
 		/**
 		 * Form.
 		 *
-		 * @param  array $instance  Instance.
+		 * @param  array  $instance  Instance.
 		 *
 		 * @return string|void
 		 */
@@ -301,8 +298,8 @@ if ( ! class_exists( 'FED_Post_Widget' ) ) {
 		/**
 		 * Update.
 		 *
-		 * @param  array $new_instance  New Instance.
-		 * @param  array $old_instance  Old Instance.
+		 * @param  array  $new_instance  New Instance.
+		 * @param  array  $old_instance  Old Instance.
 		 *
 		 * @return array
 		 */
