@@ -3,8 +3,8 @@ Contributors: vinoth06, buffercode
 Tags: dashboard, frontend dashboard, custom login, custom register, custom profile
 Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 5.8.3
-Tested up to: 6.8.1
-Stable tag: 2.2.10
+Tested up to: 7.0
+Stable tag: 2.2.11
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -244,6 +244,9 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 8. [fed_list_taxonomy taxonomy=TAXONOMY_NAME] to generate taxonomy in list order
 
 == Changelog ==
+
+= 2.2.11 [12-August-2026] =
+* Security fix (Thanks to Austin Ginder: Wordfence team)
 
 = 2.2.10 [07-July-2025] =
 * Page template issue fix.
