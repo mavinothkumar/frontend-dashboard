@@ -36,7 +36,6 @@ if ( ! class_exists( 'FEDEmail' ) ) {
 		 * Show.
 		 */
 		public function show() {
-
 			$tabs = apply_filters( 'fed_customize_admin_email_options', array(
 				'settings' => array(
 					'icon'      => 'fas fa-cogs',
@@ -123,6 +122,10 @@ if ( ! class_exists( 'FEDEmail' ) ) {
 			$request = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
 			fed_verify_nonce( $request );
 
+			if ( ! current_user_can( 'administrator' ) ) {
+				wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
+			}
+
 			// Validation
 			$validate = new FED_Validation();
 			$validate->name( __( 'Send Email Via', 'frontend-dashboard' ) )->value( fed_get_data( 'via' ) )->required();
@@ -141,8 +144,6 @@ if ( ! class_exists( 'FEDEmail' ) ) {
 			update_option( 'fed_settings_email', $this->settings );
 
 			wp_send_json_success( array( 'message' => 'Email Settings Successfully Updated' ) );
-
-
 		}
 
 		/**
@@ -151,6 +152,10 @@ if ( ! class_exists( 'FEDEmail' ) ) {
 		public function update_smtp() {
 			$request = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
 			fed_verify_nonce( $request );
+
+			if ( ! current_user_can( 'administrator' ) ) {
+				wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
+			}
 
 			$validate = new FED_Validation();
 			$validate->name( __( 'Host Name',
@@ -177,8 +182,6 @@ if ( ! class_exists( 'FEDEmail' ) ) {
 			update_option( 'fed_settings_email', $this->settings );
 
 			wp_send_json_success( array( 'message' => 'SMTP Details Successfully Updated' ) );
-
-
 		}
 
 		/**
@@ -338,7 +341,7 @@ if ( ! class_exists( 'FEDEmail' ) ) {
 		/**
 		 * Sender Email.
 		 *
-		 * @param  string $email  Email.
+		 * @param  string  $email  Email.
 		 *
 		 * @return mixed|null
 		 */
@@ -349,12 +352,13 @@ if ( ! class_exists( 'FEDEmail' ) ) {
 		/**
 		 * Sender Name.
 		 *
-		 * @param  string $name  Name.
+		 * @param  string  $name  Name.
 		 *
 		 * @return mixed|null
 		 */
 		public function sender_name( $name ) {
 			return fed_get_data( 'credentials.from_name', $this->settings );
 		}
+
 	}
 }

@@ -11,29 +11,33 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Register Form Submit.
  *
- * @param  array $post  Post.
+ * @param  array  $form_data  Post.
  */
-function fed_register_form_submit( $post ) {
-
-	do_action( 'fed_register_before_validation', $post );
-
+function fed_register_form_submit( $form_data ) {
 	$redirect_url    = fed_registration_redirect();
 	$fed_admin_login = get_option( 'fed_admin_login' );
-	$notification    = isset( $fed_admin_login['register']['register_email_notification'] ) ? $fed_admin_login['register']['register_email_notification'] : '';
+	$notification    = $fed_admin_login['register']['register_email_notification'] ?? '';
 
-	$errors = fed_validate_registration_form( $post );
+	do_action( 'fed_register_before_validation', $form_data );
 
-	if ( $errors instanceof WP_Error ) {
-		wp_send_json_error( array( 'user' => $errors->get_error_messages() ) );
+	if ( is_user_logged_in() ) {
+		wp_send_json_error( [ 'user' => __( 'You are already logged in.', 'frontend-dashboard' ), 'error_code'=> 299 ] );
 		exit();
 	}
 
-	apply_filters( 'fed_register_form_submit', $post );
+	$form_data = fed_validate_registration_form( $form_data );
 
-	$status = wp_insert_user( $post );
+	if ( $form_data instanceof WP_Error ) {
+		wp_send_json_error( array( 'user' => $form_data->get_error_messages(), 'error_code'=> 300 ) );
+		exit();
+	}
+
+	apply_filters( 'fed_register_form_submit', $form_data );
+
+	$status = wp_insert_user( $form_data );
 
 	if ( $status instanceof WP_Error ) {
-		wp_send_json_error( array( 'user' => $status->get_error_messages() ) );
+		wp_send_json_error( array( 'user' => $status->get_error_messages(), 'error_code'=> 301 ) );
 		exit();
 	}
 
@@ -57,7 +61,6 @@ function fed_register_form_submit( $post ) {
 			'url'     => $redirect_url,
 		)
 	);
-
 }
 
 
@@ -70,16 +73,16 @@ add_filter( 'pre_user_login', 'fed_skip_user_name_on_registration' );
 /**
  * Insert User Meta.
  *
- * @param  array    $meta  Meta.
- * @param  \WP_User $user  User.
- * @param  bool     $update  Update.
+ * @param  array  $meta  Meta.
+ * @param  \WP_User  $user  User.
+ * @param  bool  $update  Update.
  *
  * @return mixed|void
  */
 function fed_insert_user_meta( $meta, $user, $update ) {
 	$get_profile_meta_by_menu = array();
 	if ( isset( $_REQUEST['tab_id'] ) ) {
-		$get_profile_meta_by_menu = fed_fetch_user_profile_columns( sanitize_text_field( wp_unslash( $_REQUEST['tab_id'] ) ) );
+		$get_profile_meta_by_menu = fed_fetch_user_profile_columns( sanitize_key( wp_unslash( $_REQUEST['tab_id'] ) ) );
 	}
 
 	if ( isset( $_REQUEST['fed_registration_form'] ) ) {
@@ -120,13 +123,12 @@ function fed_insert_user_meta( $meta, $user, $update ) {
 	}
 
 	return apply_filters( 'fed_user_extra_fields_registration', $meta );
-
 }
 
 /**
  * Skip User Name on Registration.
  *
- * @param  string $sanitized_user_login  Sanitized user name.
+ * @param  string  $sanitized_user_login  Sanitized user name.
  *
  * @return string
  */

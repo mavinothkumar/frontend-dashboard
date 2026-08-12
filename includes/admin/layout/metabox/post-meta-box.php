@@ -67,7 +67,7 @@ add_action( 'save_post', 'fed_save_meta_boxes_display', 10, 2 );
  * @return mixed
  */
 function fed_save_meta_boxes_display( $post_id, $post ) {
-	$post_payload = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	$post_payload = wp_unslash( $_POST );
 	/* Verify the nonce before proceeding */
 	if ( ! isset( $post_payload['fed_nonce'], $post_payload['fed_meta'] ) || ! wp_verify_nonce( $post_payload['fed_nonce'], 'fed_nonce' ) ) {
 		return $post_id;

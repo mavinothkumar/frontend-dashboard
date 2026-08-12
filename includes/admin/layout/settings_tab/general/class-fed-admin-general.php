@@ -127,6 +127,9 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 		public function save_admin_script() {
 			$request = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
 			fed_verify_nonce( $request );
+			if ( ! current_user_can( 'administrator' ) ) {
+				wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
+			}
 			$db_value = get_option( 'fed_general_scripts_styles', array() );
 			$type     = 'admin';
 			$default  = $this->default_admin_script();

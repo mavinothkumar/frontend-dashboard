@@ -78,7 +78,7 @@ if ( ! class_exists( 'FEDInvoiceTemplate' ) ) {
 			}
 			else {
 				$template = new FEDMPPRO();
-				$template->pro();
+				//$template->pro();
 			}
 		}
 
@@ -88,6 +88,11 @@ if ( ! class_exists( 'FEDInvoiceTemplate' ) ) {
 		 * @param  array $request  Request.
 		 */
 		public function update( $request ) {
+			fed_verify_nonce( $request );
+
+			if ( ! current_user_can( 'administrator' ) ) {
+				wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
+			}
 			$validate = new FED_Validation();
 			$validate->name( 'Template' )->value( $request['template'] )->required();
 

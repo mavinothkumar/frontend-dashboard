@@ -11,12 +11,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Get Avatar.
  *
- * @param  string  $id_or_email  ID or Email.
- * @param  string  $alt  Alt.
- * @param  string  $class  Class.
- * @param  string  $extra  Extra.
- * @param  string  $size  Size.
- * @param  string  $attr  Attr.
+ * @param  string $id_or_email  ID or Email.
+ * @param  string $alt  Alt.
+ * @param  string $class  Class.
+ * @param  string $extra  Extra.
+ * @param  string $size  Size.
+ * @param  string $attr  Attr.
  *
  * @return string
  */
@@ -197,7 +197,7 @@ function fed_process_user_profile_required_field() {
 /**
  * Process User Profile Required by Menu.
  *
- * @param  string  $menu  Menu.
+ * @param  string $menu  Menu.
  *
  * @return mixed
  */
@@ -219,7 +219,7 @@ function fed_process_user_profile_required_by_menu( $menu ) {
 /**
  * Process Author Input Record.
  *
- * @param  object  $user  User Object.
+ * @param  object $user  User Object.
  * @param  array  $single_item  Single Item.
  *
  * @return string
@@ -328,13 +328,13 @@ function fed_input_mandatory_required_fields() {
 /**
  * Get WP Editor.
  *
- * @param  string  $content  Content.
- * @param  string  $id  ID.
+ * @param  string $content  Content.
+ * @param  string $id  ID.
  * @param  array  $options  Options.
  *
  * @return string
  */
-function fed_get_wp_editor( $content = '', $id = '', array $options = array() ) {
+function fed_get_wp_editor( $content = '', $id='', array $options = array() ) {
 	ob_start();
 
 	wp_editor( $content, $id, $options );
@@ -347,8 +347,8 @@ function fed_get_wp_editor( $content = '', $id = '', array $options = array() ) 
 /**
  * Get Dashboard Display Categories.
  *
- * @param  string  $post  Post.
- * @param  string  $cpt  CPT.
+ * @param  string $post  Post.
+ * @param  string $cpt  CPT.
  *
  * @return string
  */
@@ -371,8 +371,8 @@ function fed_get_dashboard_display_categories( $post = '', $cpt = '' ) {
 /**
  * Get Dashboard Display Tags.
  *
- * @param  string  $post  Post.
- * @param  string  $cpt  CPT.
+ * @param  string $post  Post.
+ * @param  string $cpt  CPT.
  *
  * @return string
  */
@@ -395,8 +395,8 @@ function fed_get_dashboard_display_tags( $post = '', $cpt = '' ) {
  * Convert Array to ID Name.
  *
  * @param  array  $array  Array.
- * @param  string  $key  Key.
- * @param  string  $type  Type.
+ * @param  string $key  Key.
+ * @param  string $type  Type.
  * @param  array  $compare  Compare.
  *
  * @return string
@@ -455,7 +455,7 @@ function fed_dashboard_get_post_format() {
 /**
  * Get post meta 0th element.
  *
- * @param  int  $id  post ID.
+ * @param  int $id  post ID.
  *
  * @return array.
  */
@@ -474,7 +474,7 @@ function fed_get_post_meta( $id ) {
 /**
  * Get Categories ID By Post ID.
  *
- * @param  int  $post_id  Post ID.
+ * @param  int $post_id  Post ID.
  *
  * @return array
  */
@@ -487,7 +487,7 @@ function fed_get_categories_id_by_post_id( $post_id ) {
 /**
  * Get Post Status Symbol.
  *
- * @param  string  $status  Status.
+ * @param  string $status  Status.
  *
  * @return string
  */
@@ -510,7 +510,7 @@ function fed_get_post_status_symbol( $status ) {
 /**
  * Get Tags ID by Post ID.
  *
- * @param  int  $post_id  Post ID.
+ * @param  int $post_id  Post ID.
  *
  * @return array
  */
@@ -524,8 +524,8 @@ function fed_get_tags_id_by_post_id( $post_id ) {
  * Convert Array Object to Key Value.
  *
  * @param  array  $array  Array.
- * @param  string  $key  Key.
- * @param  string  $value  Value.
+ * @param  string $key  Key.
+ * @param  string $value  Value.
  *
  * @return array
  */
@@ -573,7 +573,7 @@ function fed_get_payment_notification() {
 /**
  * Show Users By Role.
  *
- * @param  object  $fed_user_attr  User Attribute.
+ * @param  object $fed_user_attr  User Attribute.
  */
 function fed_show_users_by_role( $fed_user_attr ) {
 	$user_roles    = fed_get_user_roles();
@@ -666,8 +666,8 @@ function fed_show_users_by_role( $fed_user_attr ) {
 /**
  * Show User by Role.
  *
- * @param  object  $fed_user_attr  FED User Attr.
- * @param  int  $user_id  User ID.
+ * @param  object $fed_user_attr  FED User Attr.
+ * @param  int    $user_id  User ID.
  */
 function fed_show_user_by_role( $fed_user_attr, $user_id ) {
 	$user = new WP_User_Query(
@@ -697,7 +697,7 @@ function fed_show_user_by_role( $fed_user_attr, $user_id ) {
 /**
  * Show user profile page by user ID.
  *
- * @param  object  $user  User Data.
+ * @param  object $user  User Data.
  */
 function fed_show_user_profile_page( $user ) {
 	/**
@@ -941,8 +941,8 @@ function fed_get_403_error_page() {
 /**
  * Set Alert.
  *
- * @param  string  $key  Key.
- * @param  string  $message  Message.
+ * @param  string $key  Key.
+ * @param  string $message  Message.
  */
 function fed_set_alert( $key, $message ) {
 	set_transient( $key, $message, MINUTE_IN_SECONDS );
@@ -951,7 +951,7 @@ function fed_set_alert( $key, $message ) {
 /**
  * Show Alert.
  *
- * @param  string  $key  Key.
+ * @param  string $key  Key.
  *
  * @return string
  */

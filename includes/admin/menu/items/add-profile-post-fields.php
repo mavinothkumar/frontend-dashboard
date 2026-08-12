@@ -13,11 +13,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Add Profile Post Fields.
  */
 function fed_get_add_profile_post_fields() {
-	$get_payload     = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
+	$get_payload     = wp_unslash( $_GET );
 	$id              = '';
 	$add_edit_action = __( 'Add New ', 'frontend-dashboard' );
 	$selected        = '';
-	$action          = isset( $get_payload['fed_action'] ) ? esc_attr( $get_payload['fed_action'] ) : '';
+	$action          = isset( $get_payload['fed_action'] ) ? sanitize_text_field( $get_payload['fed_action'] ) : '';
 	if ( isset( $get_payload['fed_input_id'] ) ) {
 		$id              = (int) $get_payload['fed_input_id'];
 		$add_edit_action = __( 'Edit ', 'frontend-dashboard' );

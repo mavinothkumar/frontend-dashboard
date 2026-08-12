@@ -93,22 +93,23 @@ class FED_Page_Template {
 	 * @return mixed
 	 */
 	public function register_project_templates( $atts ) {
-		// Create the key used for the themes cache.
-		$cache_key = 'page_templates-' . md5( get_theme_root() . '/' . get_stylesheet() );
-		// Retrieve the cache list.
-		// If it doesn't exist, or it's empty prepare an array.
-		$templates = wp_get_theme()->get_page_templates();
-		if ( empty( $templates ) ) {
-			$templates = array();
+		$theme = wp_get_theme();
+		$cache_key = 'page_templates-' . md5( get_theme_root() . '/' . $theme->get_stylesheet() );
+
+		// Get the existing templates from theme.
+		$existing_templates = $theme->get_page_templates();
+
+		// Merge only if it's an array
+		if ( ! is_array( $existing_templates ) ) {
+			$existing_templates = array();
 		}
-		// New cache, therefore remove the old one.
+
+		// Add our templates, but keep existing intact
+		$merged_templates = array_merge( $existing_templates, $this->templates );
+
+		// Remove old cache and add updated one
 		wp_cache_delete( $cache_key, 'themes' );
-		// Now add our template to the list of templates by merging our templates
-		// with the existing templates array from the cache.
-		$templates = array_merge( $templates, $this->templates );
-		// Add the modified cache to allow WordPress to pick it up for listing
-		// available templates.
-		wp_cache_add( $cache_key, $templates, 'themes', 1800 );
+		wp_cache_add( $cache_key, $merged_templates, 'themes', 1800 );
 
 		return $atts;
 	}
@@ -137,7 +138,7 @@ class FED_Page_Template {
 		if ( file_exists( $file ) ) {
 			return $file;
 		} else {
-			echo $file;
+			error_log( '[FED] Missing page template file: ' . $file );
 		}
 
 		// Return template.

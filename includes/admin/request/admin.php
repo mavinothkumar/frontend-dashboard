@@ -24,12 +24,11 @@ add_action( 'wp_ajax_fed_is_registered', 'fed_is_registered' );
  * Admin Setting Page.
  */
 function fed_admin_setting_form_function() {
-
 	$request = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
-	/**
-	 * Check for Nonce
-	 */
-	fed_verify_nonce();
+	fed_verify_nonce( $request );
+	if ( ! current_user_can( 'administrator' ) ) {
+		wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
+	}
 
 	/**
 	 * Process the Admin page request.
@@ -315,6 +314,10 @@ function fed_message_form_function() {
 	if ( ! wp_verify_nonce( $_REQUEST['fed_message_nonce'], 'fed_message_nonce' ) ) {
 		wp_send_json_error( array( 'message' => 'Invalid Request' ) );
 		exit();
+	}
+
+	if ( ! current_user_can( 'administrator' ) ) {
+		wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
 	}
 	update_option( 'fed_admin_message_notification', 'remove' );
 	wp_send_json_success(

@@ -11,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function fed_admin_setting_post_options_request() {
 	$message                 = '';
 	$request                 = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+
 	$fed_admin_settings_post = get_option( 'fed_admin_settings_post' );
 
 	/**

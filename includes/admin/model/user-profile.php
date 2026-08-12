@@ -17,7 +17,7 @@ function fed_fetch_user_profile_by_registration() {
 	global $wpdb;
 	$table_name = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
 
-	$result = $wpdb->get_results( "SELECT * FROM $table_name WHERE show_register LIKE 'Enable'", ARRAY_A );
+	$result = $wpdb->get_results( "SELECT * FROM $table_name WHERE show_register = 'Enable'", ARRAY_A );
 	if ( count( $result ) <= 0 ) {
 		return new WP_Error( 'fed_no_row_found_on_that_id', 'All fields are disabled to show on Registration form ' );
 	}
@@ -40,17 +40,30 @@ function fed_fetch_user_profile_required_by_menu( $menu = 'profile' ) {
 	global $wpdb;
 	$table_name = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
 
-	$result = $wpdb->get_results(
-		"SELECT * FROM $table_name WHERE (menu LIKE '{$menu}' AND is_required LIKE 'true') ", ARRAY_A
+	$menu = sanitize_key( $menu );
+
+	$like_menu = '%' . $wpdb->esc_like( $menu ) . '%';
+
+	$sql = $wpdb->prepare(
+		"SELECT *
+           FROM $table_name
+          WHERE menu       LIKE %s
+            AND is_required = %s",
+		$like_menu,
+		'true'
 	);
-	if ( count( $result ) <= 0 ) {
-		return array();
-	}
-	if ( null == $result ) {
-		return new WP_Error( 'fed_invalid_query_string_r_output_required', 'Invalid query string out output' );
+
+	$rows = $wpdb->get_results( $sql, ARRAY_A );
+
+	if ( null === $rows ) {
+		return new WP_Error( 'fed_invalid_query', 'Database query failed.' );
 	}
 
-	return $result;
+	if ( empty( $rows ) ) {
+		return array();
+	}
+
+	return $rows;
 }
 
 /**
@@ -60,7 +73,7 @@ function fed_fetch_user_profile_extra_fields() {
 	global $wpdb;
 	$table_name = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
 
-	$result = $wpdb->get_results( "SELECT * FROM $table_name WHERE extra LIKE 'yes'", ARRAY_A );
+	$result = $wpdb->get_results( "SELECT * FROM $table_name WHERE extra = 'yes'", ARRAY_A );
 
 	if ( ( null === $result ) || ( count( $result ) <= 0 ) ) {
 		return false;
@@ -92,7 +105,7 @@ function fed_fetch_user_profile_not_extra_fields() {
 	global $wpdb;
 	$table_name = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
 
-	$result = $wpdb->get_results( "SELECT * FROM $table_name WHERE extra LIKE 'no'", ARRAY_A );
+	$result = $wpdb->get_results( "SELECT * FROM $table_name WHERE extra = 'no'", ARRAY_A );
 	if ( null === $result || count( $result ) <= 0 ) {
 		return false;
 	}
@@ -124,7 +137,7 @@ function fed_fetch_user_profile_by_dashboard() {
 	global $wpdb;
 	$table_name = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
 
-	$results = $wpdb->get_results( "SELECT * FROM $table_name WHERE show_dashboard LIKE 'Enable'", ARRAY_A );
+	$results = $wpdb->get_results( "SELECT * FROM $table_name WHERE show_dashboard = 'Enable'", ARRAY_A );
 
 	if ( count( $results ) <= 0 ) {
 		return false;
@@ -144,15 +157,22 @@ function fed_fetch_user_profile_by_menu_slug( $menu_slug = '' ) {
 	global $wpdb;
 	$table_name = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
 
-	$results = $wpdb->get_results(
-		"SELECT * FROM $table_name WHERE show_dashboard LIKE 'Enable' AND menu LIKE '{$menu_slug}' ", ARRAY_A
+	$menu_slug = sanitize_key( $menu_slug );
+
+	$like = '%' . $wpdb->esc_like( $menu_slug ) . '%';
+
+	$sql = $wpdb->prepare(
+		"SELECT *
+           FROM $table_name
+          WHERE show_dashboard = %s
+            AND menu LIKE %s",
+		'Enable',
+		$like
 	);
 
-	if ( count( $results ) <= 0 ) {
-		return false;
-	}
+	$results = $wpdb->get_results( $sql, ARRAY_A );
 
-	return $results;
+	return empty( $results ) ? false : $results;
 }
 
 /**
@@ -282,10 +302,16 @@ function fed_fetch_user_profile_columns( $value ) {
 	global $wpdb;
 	$table_name = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
 
-	$columns = $wpdb->get_results(
-		"SELECT input_meta, input_type FROM $table_name WHERE menu = '{$value}' AND show_dashboard = 'Enable' AND extra = 'yes' ",
-		ARRAY_A
+	$sql = $wpdb->prepare(
+		"SELECT input_meta, input_type
+           FROM $table_name
+          WHERE menu = %s
+            AND show_dashboard = %s
+            AND extra = %s",
+		$value,
+		'Enable',
+		'yes'
 	);
 
-	return $columns;
+	return $wpdb->get_results( $sql, ARRAY_A );
 }

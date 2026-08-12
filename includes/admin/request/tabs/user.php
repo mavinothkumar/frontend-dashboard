@@ -51,6 +51,11 @@ function fed_admin_user_options_request() {
  */
 function fed_admin_tab_post_role( $request ) {
 	global $wpdb;
+	fed_verify_nonce( $request );
+
+	if ( ! current_user_can( 'administrator' ) ) {
+		wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
+	}
 	$user_roles = $wpdb->prefix . 'user_roles';
 	$roles      = get_option( $user_roles );
 	$role_name  = esc_attr( $request['user']['role']['role_name'] );
@@ -128,6 +133,11 @@ function fed_admin_tab_post_role( $request ) {
  */
 function fed_admin_tab_post_role_delete( $request ) {
 	global $wpdb;
+	fed_verify_nonce( $request );
+
+	if ( ! current_user_can( 'administrator' ) ) {
+		wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
+	}
 	$user_roles = $wpdb->prefix . 'user_roles';
 	$roles      = get_option( $user_roles );
 	$role_name  = esc_attr( $request['user']['role']['role_name'] );
@@ -189,6 +199,11 @@ function fed_admin_tab_post_role_delete( $request ) {
  * @param  array $request  Request.
  */
 function fed_admin_tab_user_upload( $request ) {
+	fed_verify_nonce( $request );
+
+	if ( ! current_user_can( 'administrator' ) ) {
+		wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
+	}
 	$user_options         = get_option( 'fed_admin_settings_user' );
 	$user_options['user'] = array(
 		'upload_permission' => isset( $request['user']['upload_permission'] ) ? $request['user']['upload_permission'] : array(),

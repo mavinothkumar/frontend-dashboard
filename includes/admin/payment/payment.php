@@ -107,240 +107,343 @@ if ( ! function_exists( 'fed_payment_gateway' ) ) {
 
 if ( ! function_exists( 'fed_get_transactions_with_meta' ) ) {
 	/**
-	 * Get Transactions With Meta.
+	 * Get transactions with payment metadata.
 	 *
-	 * @return array|object|void|null
+	 * @return array
 	 */
 	function fed_get_transactions_with_meta() {
 		global $wpdb;
+
 		$transactions = fed_get_transactions();
-		if ( count( $transactions ) ) {
-			$table_payment_items = $wpdb->prefix . BC_FED_TABLE_PAYMENT_ITEMS;
 
-			foreach ( $transactions as $index => $transaction ) {
-				$transaction_id                          = $transaction['id'];
-				$m                                       = $wpdb->get_results(
-					"SELECT * FROM $table_payment_items WHERE payment_id = $transaction_id ORDER BY  payment_item_id DESC",
-					ARRAY_A
-				);
-				$transactions[ $index ]['payment_items'] = $m;
-			}
-
-			return $transactions;
+		if ( empty( $transactions ) || ! is_array( $transactions ) ) {
+			return array();
 		}
 
-		return;
+		$table_payment_items = $wpdb->prefix . BC_FED_TABLE_PAYMENT_ITEMS;
+
+		foreach ( $transactions as $index => $transaction ) {
+			$transaction_id = isset( $transaction['id'] )
+				? absint( $transaction['id'] )
+				: 0;
+
+			if ( ! $transaction_id ) {
+				$transactions[ $index ]['payment_items'] = array();
+				continue;
+			}
+
+			$transactions[ $index ]['payment_items'] = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT * FROM {$table_payment_items} WHERE payment_id = %d ORDER BY payment_item_id DESC",
+					$transaction_id
+				),
+				ARRAY_A
+			);
+		}
+
+		return $transactions;
 	}
 }
 if ( ! function_exists( 'fed_get_transactions' ) ) {
-
 	/**
-	 * Get Transactions.
+	 * Get transactions.
 	 *
-	 * @return array|object|null
+	 * @return array
 	 */
 	function fed_get_transactions() {
 		global $wpdb;
+
 		$table_payment = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
-		$table_user    = $wpdb->prefix . 'users';
+		$table_user    = $wpdb->users;
+
 		if ( fed_is_admin() ) {
-
 			return $wpdb->get_results(
-				"
-	SELECT      *
-	FROM        $table_payment payment
-	INNER JOIN  $table_user users
-	            ON payment.user_id = users.id
-	ORDER BY    payment.id DESC
-	", ARRAY_A
+				"SELECT *
+				FROM {$table_payment} AS payment
+				INNER JOIN {$table_user} AS users ON payment.user_id = users.id
+				ORDER BY payment.id DESC",
+				ARRAY_A
 			);
 		}
-		else {
-			$user_id = get_current_user_id();
-			// FED_Log::writeLog(['$user_id' => $user_id]);.
-			$result = $wpdb->get_results(
-				"
-	SELECT      *
-	FROM        $table_payment payment
-	INNER JOIN  $table_user users
-	            ON payment.user_id = users.id
-    WHERE       payment.user_id = $user_id
-	ORDER BY    payment.id DESC
-	", ARRAY_A
-			);
 
-			// FED_Log::writeLog(['$result' => $result]);.
-			return $result;
-		}
+		$user_id = get_current_user_id();
+
+		return $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT *
+				FROM {$table_payment} AS payment
+				INNER JOIN {$table_user} AS users ON payment.user_id = users.id
+				WHERE payment.user_id = %d
+				ORDER BY payment.id DESC",
+				(int) $user_id
+			),
+			ARRAY_A
+		);
 	}
 }
 
-if ( ! function_exists( 'fed_get_active_transactions' ) ) {
 
+if ( ! function_exists( 'fed_get_active_transactions' ) ) {
 	/**
-	 * Get Active Transactions.
+	 * Get active transactions.
 	 *
-	 * @return array|object|null
+	 * @return array
 	 */
 	function fed_get_active_transactions() {
 		global $wpdb;
+
 		$table_payment = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
-		$table_user    = $wpdb->prefix . 'users';
+		$table_user    = $wpdb->users;
+
 		if ( fed_is_admin() ) {
-
 			return $wpdb->get_results(
-				"
-	SELECT      *
-	FROM        $table_payment payment
-	INNER JOIN  $table_user users
-	            ON payment.user_id = users.id
-    WHERE ends_at = 'active'
-	ORDER BY    payment.id DESC
-	", ARRAY_A
+				"SELECT *
+				FROM {$table_payment} AS payment
+				INNER JOIN {$table_user} AS users ON payment.user_id = users.id
+				WHERE payment.ends_at = 'active'
+				ORDER BY payment.id DESC",
+				ARRAY_A
 			);
 		}
-		else {
-			$user_id = get_current_user_id();
-			// FED_Log::writeLog(['$user_id' => $user_id]);.
-			$result = $wpdb->get_results(
-				"
-	SELECT      *
-	FROM        $table_payment payment
-	INNER JOIN  $table_user users
-	            ON payment.user_id = users.id
-    WHERE       payment.user_id = $user_id AND
-                status = 'active'
-	ORDER BY    payment.id DESC
-	", ARRAY_A
-			);
 
-			return $result;
-		}
+		$user_id = get_current_user_id();
+
+		return $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT *
+				FROM {$table_payment} AS payment
+				INNER JOIN {$table_user} AS users ON payment.user_id = users.id
+				WHERE payment.user_id = %d
+				AND payment.status = %s
+				ORDER BY payment.id DESC",
+				absint( $user_id ),
+				'active'
+			),
+			ARRAY_A
+		);
 	}
 }
+
 if ( ! function_exists( 'fed_get_transaction_with_meta' ) ) {
 	/**
-	 * Get Transaction With Meta.
+	 * Get one transaction with payment metadata.
 	 *
-	 * @param  string|int $id  ID.
-	 * @param  string     $column  Column.
-	 *
-	 * @return array|object|void|null
+	 * @param int|string $id Transaction value.
+	 * @param string     $column Allowed lookup column.
+	 * @return array|WP_Error
 	 */
 	function fed_get_transaction_with_meta( $id, $column = 'id' ) {
 		global $wpdb;
-		$transaction         = fed_get_transaction( $id, $column );
-		$table_payment_items = $wpdb->prefix . BC_FED_TABLE_PAYMENT_ITEMS;
 
-		$transaction_id               = $transaction['id'];
-		$m                            = $wpdb->get_results(
-			"SELECT * FROM $table_payment_items WHERE payment_id = $transaction_id ORDER BY  payment_item_id DESC",
+		$transaction = fed_get_transaction( $id, $column );
+
+		if ( is_wp_error( $transaction ) ) {
+			return $transaction;
+		}
+
+		$transaction_id = isset( $transaction['id'] )
+			? absint( $transaction['id'] )
+			: 0;
+
+		if ( ! $transaction_id ) {
+			return new WP_Error(
+				'fed_invalid_transaction_id',
+				__( 'Invalid transaction ID.', 'frontend-dashboard' )
+			);
+		}
+
+		$table_payment_items = $wpdb->prefix . BC_FED_TABLE_PAYMENT_ITEMS;
+		$transaction['payment_items'] = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT * FROM {$table_payment_items}
+				WHERE payment_id = %d
+				ORDER BY payment_item_id DESC",
+				$transaction_id
+			),
 			ARRAY_A
 		);
-		$transaction['payment_items'] = $m;
 
 		return $transaction;
 	}
 }
+
 if ( ! function_exists( 'fed_get_transaction' ) ) {
 	/**
-	 * Get Transaction.
+	 * Get one transaction safely.
 	 *
-	 * @param  string|int $id  ID.
-	 * @param  string     $column  Column.
-	 *
-	 * @return array|object|\WP_Error|null
+	 * @param int|string $id Transaction value.
+	 * @param string     $column Allowed lookup column.
+	 * @return array|WP_Error
 	 */
 	function fed_get_transaction( $id, $column = 'id' ) {
-		if ( is_user_logged_in() ) {
-			global $wpdb;
-			$table_payment = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
-			$table_user    = $wpdb->prefix . 'users';
-
-			$result = $wpdb->get_results(
-				"
-	SELECT      *
-	FROM        $table_payment payment
-	INNER JOIN  $table_user users
-	            ON payment.user_id = users.id
-    WHERE payment.$column = $id	            
-	            ", ARRAY_A
+		if ( ! is_user_logged_in() ) {
+			return new WP_Error(
+				'fed_not_logged_in',
+				__( 'You must be logged in.', 'frontend-dashboard' )
 			);
-
-			if ( isset( $result[0] ) && count( $result[0] ) > 0 ) {
-				return $result[0];
-			}
 		}
 
-		// translator: %s Column Name.
+		global $wpdb;
+
+		$allowed_columns = array(
+			'id'         => 'payment.id',
+			'user_id'    => 'payment.user_id',
+			'order_id'   => 'payment.order_id',
+			'transaction_id' => 'payment.transaction_id',
+		);
+
+		$column = sanitize_key( $column );
+
+		if ( ! isset( $allowed_columns[ $column ] ) ) {
+			return new WP_Error(
+				'fed_invalid_transaction_column',
+				__( 'Invalid transaction column.', 'frontend-dashboard' )
+			);
+		}
+
+		$table_payment = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
+		$table_user    = $wpdb->users;
+		$column_sql    = $allowed_columns[ $column ];
+		$value         = ( 'id' === $column || 'user_id' === $column )
+			? absint( $id )
+			: sanitize_text_field( (string) $id );
+		$placeholder   = ( 'id' === $column || 'user_id' === $column ) ? '%d' : '%s';
+
+		if ( ! $value ) {
+			return new WP_Error(
+				'fed_invalid_transaction_value',
+				__( 'Invalid transaction value.', 'frontend-dashboard' )
+			);
+		}
+
+		$result = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT *
+				FROM {$table_payment} AS payment
+				INNER JOIN {$table_user} AS users ON payment.user_id = users.id
+				WHERE {$column_sql} = {$placeholder}
+				LIMIT 1",
+				$value
+			),
+			ARRAY_A
+		);
+
+		if ( ! empty( $result[0] ) ) {
+			return $result[0];
+		}
+
 		return new WP_Error(
 			'fed_no_row_found_on_that_id',
-			sprintf( __( 'Invalid %s', 'frontend-dashboard' ), $column )
+			sprintf(
+			/* translators: %s: column name. */
+				__( 'Invalid %s.', 'frontend-dashboard' ),
+				esc_html( $column )
+			)
 		);
 	}
 }
 
 if ( ! function_exists( 'fed_get_transaction_meta' ) ) {
 	/**
-	 * Get Transaction Meta.
+	 * Get transaction metadata safely.
 	 *
-	 * @param  int|string $id  ID.
-	 * @param  string     $column  Column.
-	 *
-	 * @return array|object|void|null
+	 * @param int|string $id Transaction value.
+	 * @param string     $column Allowed metadata column.
+	 * @return array
 	 */
-	function fed_get_transaction_meta( $id, $column = 'id' ) {
+	function fed_get_transaction_meta( $id, $column = 'payment_id' ) {
 		global $wpdb;
+
+		$allowed_columns = array(
+			'payment_id'      => 'payment_id',
+			'payment_item_id' => 'payment_item_id',
+		);
+		$column = sanitize_key( $column );
+
+		if ( ! isset( $allowed_columns[ $column ] ) ) {
+			return array();
+		}
+
+		$id = absint( $id );
+
+		if ( ! $id ) {
+			return array();
+		}
+
 		$table_payment_items = $wpdb->prefix . BC_FED_TABLE_PAYMENT_ITEMS;
-		$transaction         = $wpdb->get_results(
-			"SELECT * FROM $table_payment_items WHERE $column = $id ORDER BY  payment_item_id DESC",
+
+		return $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT * FROM {$table_payment_items}
+				WHERE {$allowed_columns[ $column ]} = %d
+				ORDER BY payment_item_id DESC",
+				$id
+			),
 			ARRAY_A
 		);
-
-		return $transaction;
-
 	}
 }
 
 if ( ! function_exists( 'fed_transaction_product_details' ) ) {
 	/**
-	 * Transaction Product Details.
+	 * Build transaction product details without unsafe object deserialization.
 	 *
-	 * @param  array $transaction  Transaction.
-	 *
-	 * @return mixed
+	 * @param array $transaction Transaction data.
+	 * @return string
 	 */
 	function fed_transaction_product_details( $transaction ) {
 		$items = '';
+
+		if ( empty( $transaction['payment_items'] ) || ! is_array( $transaction['payment_items'] ) ) {
+			return $items;
+		}
+
 		foreach ( $transaction['payment_items'] as $products ) {
-			$item  = unserialize( $products['object_items'] );
+			if ( empty( $products['object_items'] ) || ! is_string( $products['object_items'] ) ) {
+				continue;
+			}
+
+			$item = maybe_unserialize( $products['object_items'] );
+
+			if ( ! is_array( $item ) ) {
+				continue;
+			}
+
+			$payment_type = isset( $transaction['payment_type'] )
+				? sanitize_text_field( $transaction['payment_type'] )
+				: '';
+			$plan_name = isset( $item['plan_name'] ) ? sanitize_text_field( $item['plan_name'] ) : '';
+			$amount    = isset( $item['amount'] ) ? (float) $item['amount'] : 0;
+			$currency   = isset( $item['currency'] ) ? sanitize_text_field( $item['currency'] ) : '';
+			$plan_type  = isset( $item['plan_type'] ) ? sanitize_key( $item['plan_type'] ) : '';
+
+			$discount = '';
+			if ( isset( $item['discount_value'], $item['discount'] ) && '' !== $item['discount_value'] ) {
+				$discount = (float) $item['discount_value'] . ' ' . esc_html( fed_get_discount_type( sanitize_key( $item['discount'] ) ) );
+			}
+
+			$tax = 'NA';
+			if ( isset( $item['tax_value'], $item['tax'] ) && '' !== $item['tax_value'] ) {
+				$tax = (float) $item['tax_value'] . ' ' . esc_html( fed_get_discount_type( sanitize_key( $item['tax'] ) ) );
+			}
+
 			$items .= sprintf(
-				'<strong>%s</strong> <br> <strong>Name:</strong> %s <br> <strong>Amount:</strong> %s %s<br> <strong>Plan Type:</strong> %s <br> <strong>Discount:</strong> %s <br> <strong>Tax:</strong> %s <br> <br>',
-				esc_attr( mb_strtoupper( $transaction['payment_type'] ) ),
-				esc_attr( $item['plan_name'] ),
-				esc_attr( $item['amount'] ),
-				esc_attr( $item['currency'] ),
-				ucfirst( fed_convert_this_to_that( esc_attr( $item['plan_type'] ), '_', ' ' ) ),
-				isset( $item['discount_value'] ) && ! empty( $item['discount_value'] ) ?
-					esc_attr(
-						$item['discount_value']
-					) . ' ' . esc_attr(
-						fed_get_discount_type(
-							$item['discount']
-						)
-					) : '',
-				isset( $item['tax_value'] ) && ! empty( $item['tax_value'] ) ?
-					esc_attr(
-						$item['tax_value']
-					) . ' ' . esc_attr(
-						fed_get_discount_type( $item['tax'] )
-					) : 'NA'
+				'%s Name: %s Amount: %s %s Plan Type: %s Discount: %s Tax: %s ',
+				esc_html( mb_strtoupper( $payment_type ) ),
+				esc_html( $plan_name ),
+				esc_html( (string) $amount ),
+				esc_html( $currency ),
+				esc_html( ucfirst( fed_convert_this_to_that( $plan_type, '_', ' ' ) ) ),
+				esc_html( $discount ),
+				esc_html( $tax )
 			);
 		}
 
 		return $items;
 	}
 }
+
+
 if ( ! function_exists( 'fed_get_exact_amount' ) ) {
 	/**
 	 * Get Exact Amount.

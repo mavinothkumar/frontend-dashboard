@@ -11,11 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Registration Form Validation
  *
- * @param  array $post  post.
+ * @param  array $form_data  post.
  *
- * @return bool|WP_Error
+ * @return WP_Error
  */
-function fed_validate_registration_form( $post ) {
+function fed_validate_registration_form( $form_data ) {
 	/**
 	 * Both Password Match.
 	 */
@@ -23,26 +23,46 @@ function fed_validate_registration_form( $post ) {
 	$mandatory_fields = fed_registration_mandatory_fields();
 	$role             = fed_is_role_in_registration();
 
+	if ( isset( $form_data['ID'] ) ) {
+		unset( $form_data['ID'] );
+	}
+	$allowed_fields = [
+		'user_login',
+		'user_pass',
+		'confirmation_password',
+		'user_email',
+		'first_name',
+		'last_name',
+		'nickname',
+		'display_name',
+		'description',
+	];
 
-	if ( $post['user_pass'] !== $post['confirmation_password'] ) {
+	$sanitized_input = array_intersect_key( $form_data, array_flip( $allowed_fields ) );
+
+	foreach ( $sanitized_input as $key => $value ) {
+		$sanitized_input[ $key ] = sanitize_text_field( $value );
+	}
+
+	if ( $form_data['user_pass'] !== $form_data['confirmation_password'] ) {
 		$fed_error->add( 'password_not_match', __( 'Password not match', 'frontend-dashboard' ) );
 	}
 
 	foreach ( $mandatory_fields as $key => $mandatory_field ) {
-		if ( '' == $post[ $key ] ) {
+		if ( '' == $form_data[ $key ] ) {
 			$fed_error->add( $key, $mandatory_field );
 		}
 	}
 
-	if ( $role && ! array_key_exists( $post['role'], $role ) ) {
+	if ( $role && ! array_key_exists( $form_data['role'], $role ) ) {
 		$fed_error->add( 'invalid_role', __( 'Invalid Role', 'frontend-dashboard' ) );
 	}
 
-	if ( ! $role && isset( $post['role'] ) ) {
+	if ( ! $role && isset( $form_data['role'] ) ) {
 		$fed_error->add( 'invalid_role', __( 'You are trying to hack the user role', 'frontend-dashboard' ) );
 	}
 
-	if ( isset( $post['user_login'] ) && fed_validate_username( $post['user_login'] ) ) {
+	if ( isset( $form_data['user_login'] ) && fed_validate_username( $form_data['user_login'] ) ) {
 		$fed_error->add(
 			'invalid_username', __( 'This Username is Illegal to use in this website', 'frontend-dashboard' )
 		);
@@ -52,7 +72,7 @@ function fed_validate_registration_form( $post ) {
 		return $fed_error;
 	}
 
-	return true;
+	return $form_data;
 }
 
 /**

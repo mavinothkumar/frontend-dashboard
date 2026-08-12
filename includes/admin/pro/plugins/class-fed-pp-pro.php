@@ -59,21 +59,21 @@ if ( ! class_exists( 'FEDPPPRO' ) && ! defined( 'BC_FED_PP_PLUGIN' ) ) {
 		 * Stripe.
 		 */
 		public function stripe() {
-			$this->pro();
+			//$this->pro();
 		}
 
 		/**
 		 * Braintree.
 		 */
 		public function braintree() {
-			$this->pro();
+			//$this->pro();
 		}
 
 		/**
 		 * Templates.
 		 */
 		public function templates() {
-			$this->pro();
+			//$this->pro();
 		}
 
 		/**

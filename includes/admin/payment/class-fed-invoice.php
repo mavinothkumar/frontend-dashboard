@@ -247,6 +247,12 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 		 * @param  array $request  Request.
 		 */
 		public function update( $request ) {
+			fed_verify_nonce( $request );
+
+			if ( ! current_user_can( 'administrator' ) ) {
+				wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
+			}
+
 			$invoice            = get_option( 'fed_invoice_settings' );
 			$invoice['details'] = array(
 				'logo'         => isset( $request['logo'] ) ? (int) $request['logo'] : '',
@@ -649,6 +655,11 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 		 * @param  array $request  Request.
 		 */
 		public function store_user( $request ) {
+			fed_verify_nonce( $request );
+
+			if ( ! current_user_can( 'administrator' ) ) {
+				wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
+			}
 			$invoice                 = get_option( 'fed_invoice_settings' );
 			$invoice['user_address'] = array(
 				'name'      => isset( $request['name'] ) ? (int) $request['name'] : '',

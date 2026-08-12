@@ -1,19 +1,16 @@
 === Frontend Dashboard ===
 Contributors: vinoth06, buffercode
-Tags: dashboard, frontend dashboard, custom login, custom register, custom roles, custom profile, custom post type, custom taxonomies, custom dashboard, hide admin bar, widget
+Tags: dashboard, frontend dashboard, custom login, custom register, custom profile
 Donate link: https://www.paypal.com/paypalme2/buffercode
-Requires at least: 5.8
-Tested up to: 6.4.3
-Stable tag: 2.3
+Requires at least: 5.8.3
+Tested up to: 6.8.1
+Stable tag: 2.2.10
 License: GPL V3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
-Frontend Dashboard is bundled with huge list of custom features which can easily customise the User profile, Posts, Login, Register, Custom roles on custom front page.
+Frontend Dashboard is bundled with huge list of custom features which can easily customise the User profile, Posts, Login, Register, Custom roles.
 
 == Description ==
-
-= Frontend Dashboard Demo =
-[Frontend Dashboard Demo](https://demo.frontenddashboard.com/)
 
 = Frontend Dashboard Designed and Developed with WordPress Coding Standards =
 
@@ -247,6 +244,24 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 8. [fed_list_taxonomy taxonomy=TAXONOMY_NAME] to generate taxonomy in list order
 
 == Changelog ==
+
+= 2.2.10 [07-July-2025] =
+* Page template issue fix.
+
+= 2.2.9 [31-May-2025] =
+* Security fix (Thanks to muhammad yudha. (Darius Sveikauskas: patchstack))
+
+= 2.2.8 [09-May-2025] =
+* Security fix (Thanks to kr0d (Peter Greaves: Wordfence))
+
+= 2.2.7 [06-May-2025] =
+* Security fix (Thanks to kr0d (Tiffany T: Wordfence))
+
+= 2.2.6 [17-April-2025] =
+* Security fix (Thanks to Nguyen Ngoc Quang Bach (maysbachs))
+
+= 2.2.5 [07-Sep-2024] =
+* Security fix (Thanks to Tiffany Tyson, Wordfence)
 
 = 2.2.4 [27-Feb-2024] =
 

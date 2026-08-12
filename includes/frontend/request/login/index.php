@@ -19,9 +19,9 @@ add_action( 'wp_ajax_nopriv_fed_login_form_post', 'fed_wp_ajax_fed_login_form_po
  * Login Form Post.
  */
 function fed_wp_ajax_fed_login_form_post() {
-	$post_payload = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
-
+	$post_payload = $_POST;
 	fed_verify_nonce();
+
 
 	if ( isset( $post_payload['submit'] ) ) {
 		if ( 'login' === $post_payload['submit'] ) {

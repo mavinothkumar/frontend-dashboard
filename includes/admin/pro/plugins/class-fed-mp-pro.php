@@ -89,7 +89,7 @@ if ( ! class_exists( 'FEDMPPRO' ) && ! defined( 'BC_FED_MP_PLUGIN' ) ) {
 									</div>
 									<div class="panel-body">
 										<?php
-										$this->pro();
+										//$this->pro();
 										?>
 									</div>
 								</div>
@@ -194,21 +194,21 @@ if ( ! class_exists( 'FEDMPPRO' ) && ! defined( 'BC_FED_MP_PLUGIN' ) ) {
 		 * Membership.
 		 */
 		public function membership() {
-			$this->pro();
+			//$this->pro();
 		}
 
 		/**
 		 * Settings.
 		 */
 		public function settings() {
-			$this->pro();
+			//$this->pro();
 		}
 
 		/**
 		 * Template.
 		 */
 		public function template() {
-			$this->pro();
+			//$this->pro();
 		}
 
 		/**

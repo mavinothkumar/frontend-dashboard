@@ -65,15 +65,30 @@ if ( ! function_exists( 'fed_fetch_table_row_by_ids' ) ) {
 		global $wpdb;
 		$table_name = $wpdb->prefix . $table;
 
-		$result = $wpdb->get_results( "SELECT * FROM $table_name WHERE id IN (" . implode( ',',
-				array_map( 'intval', $ids ) ) . ")", ARRAY_A );
+		if ( empty( $ids ) || ! is_array( $ids ) ) {
+			return new WP_Error( 'fed_no_ids', __( 'No IDs supplied', 'frontend-dashboard' ) );
+		}
+		$ids = array_map( 'absint', $ids );
 
-		if ( ( is_array( $result ) && count( $result ) <= 0 ) || ! $result ) {
-			return new WP_Error( 'fed_no_row_found_on_that_id', __( 'Invalid ID', 'frontend-dashboard' ) );
+		$placeholders = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
+
+		$sql          = $wpdb->prepare(
+			"SELECT *
+           FROM {$table_name}
+          WHERE id IN ( $placeholders )",
+			$ids
+		);
+
+		$rows = $wpdb->get_results( $sql, ARRAY_A );
+
+		if ( null === $rows || empty( $rows ) ) {
+			return new WP_Error(
+				'fed_no_row_found_on_that_id',
+				__( 'Invalid ID', 'frontend-dashboard' )
+			);
 		}
 
-		return $result;
-
+		return $rows;
 	}
 }
 
@@ -200,7 +215,7 @@ if ( ! function_exists( 'fed_fetch_table_by_is_required' ) ) {
 		$table_name = $wpdb->prefix . $table;
 
 		$result = $wpdb->get_results(
-			"SELECT * FROM $table_name WHERE is_required LIKE 'true' AND show_register LIKE 'Enable'",
+			"SELECT * FROM $table_name WHERE is_required = 'true' AND show_register = 'Enable'",
 			ARRAY_A
 		);
 		if ( count( $result ) <= 0 ) {

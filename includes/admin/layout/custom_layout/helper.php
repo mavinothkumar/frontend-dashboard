@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Common Simple Layout.
  *
- * @param  array  $form  Form.
+ * @param  array $form  Form.
  */
 function fed_common_simple_layout( $form ) {
 	$form_method       = isset( $form['form']['method'] ) && ! empty( $form['form']['method'] ) ? esc_attr(
@@ -49,13 +49,13 @@ function fed_common_simple_layout( $form ) {
 		$form_action = admin_url( 'admin-ajax.php?action=fed_admin_setting_form' );
 	}
 	?>
-	<div class="p-20">
+    <div class="p-20">
 		<?php
 		echo isset( $form['note']['header'] ) && ! empty( $form['note']['header'] ) ? esc_attr( $form['note']['header'] ) : '';
 		?>
-		<form method="<?php echo esc_attr( $form_method ); ?>"
-				class="<?php echo esc_attr( $form_class ); ?>" <?php echo esc_attr( $form_attr ); ?>
-				action="<?php echo esc_attr( $form_action ); ?>">
+        <form method="<?php esc_attr_e( $form_method ); ?>"
+              class="<?php esc_attr_e( $form_class ); ?>" <?php esc_attr_e( $form_attr ); ?>
+              action="<?php esc_attr_e( $form_action ); ?>">
 
 			<?php fed_wp_nonce_field( $form_nonce_action, $form_nonce_name ); ?>
 
@@ -68,7 +68,7 @@ function fed_common_simple_layout( $form ) {
 				}
 			}
 			?>
-			<div class="row">
+            <div class="row">
 				<?php
 				if ( isset( $form['input'] ) && is_array( $form['input'] ) && count( $form['input'] ) ) {
 					foreach ( $form['input'] as $iindex => $input ) {
@@ -76,22 +76,22 @@ function fed_common_simple_layout( $form ) {
 						$class = isset( $input['class'] ) && ! empty( $input['class'] ) ? $input['class'] : '';
 						$name  = isset( $input['name'] ) && ! empty( $input['name'] ) ? $input['name'] : $iindex;
 						?>
-						<div class="<?php echo $col . $class; ?> ">
-							<div class="form-group">
+                        <div class="<?php echo $col . $class; ?> ">
+                            <div class="form-group">
 								<?php if ( isset( $input['name'] ) && null !== $input['name'] ) { ?>
-									<label>
+                                    <label>
 										<?php echo isset( $input['required'] ) ? '<span class="bg-red-font">' . esc_attr( $name ) . '</span>' : esc_attr( $name ); ?>
 										<?php echo isset( $input['help_message'] ) ? ( $input['help_message'] ) : ''; ?>
-									</label>
+                                    </label>
 								<?php } ?>
 
 								<?php if ( isset( $input['header'] ) ) { ?>
-									<div class="p-t-10 p-b-10">
-										<label>
+                                    <div class="p-t-10 p-b-10">
+                                        <label>
 											<?php echo isset( $input['required'] ) ? '<span class="bg-red-font">' . esc_attr( $input['header'] ) . '</span>' : esc_attr( $input['header'] ); ?>
 											<?php echo isset( $input['help_message'] ) ? ( $input['help_message'] ) : ''; ?>
-										</label>
-									</div>
+                                        </label>
+                                    </div>
 								<?php } ?>
 								<?php
 								if ( isset( $input['input'] ) ) {
@@ -105,35 +105,35 @@ function fed_common_simple_layout( $form ) {
 									$sub_col = isset( $input['sub_col'] ) ? $input['sub_col'] : 'col-md-6';
 									foreach ( $input['extra']['input'] as $eindex => $extra ) {
 										?>
-										<div class="<?php echo $sub_col; ?> p-b-10">
+                                        <div class="<?php echo $sub_col; ?> p-b-10">
 											<?php
 											echo fed_get_input_details( $extra );
 											?>
-										</div>
+                                        </div>
 										<?php
 									}
 								}
 								?>
-							</div>
-						</div>
+                            </div>
+                        </div>
 						<?php
 					}
 
 					do_action( 'fed_admin_login_settings_template', $form );
 					?>
 
-					<div class="col-md-12">
-						<input type="submit" class="btn btn-primary" value="Submit"/>
-					</div>
+                    <div class="col-md-12">
+                        <input type="submit" class="btn btn-primary" value="Submit"/>
+                    </div>
 					<?php
 				}
 				?>
-			</div>
-		</form>
+            </div>
+        </form>
 		<?php
 		echo isset( $form['note']['footer'] ) && ! empty( $form['note']['footer'] ) ? esc_attr( $form['note']['footer'] ) : '';
 		?>
-	</div>
+    </div>
 	<?php
 }
 
@@ -141,64 +141,64 @@ function fed_common_simple_layout( $form ) {
 /**
  * Common Layouts Admin Settings.
  *
- * @param  array  $fed_admin_options  Admin Options.
- * @param  array  $tabs  Tabs.
+ * @param  array $fed_admin_options  Admin Options.
+ * @param  array $tabs  Tabs.
  */
 function fed_common_layouts_admin_settings( $fed_admin_options, $tabs ) {
 	?>
-	<div class="bc_fed row">
-		<div class="col-md-3 padd_top_20">
-			<ul class="nav nav-pills nav-stacked"
-					id="fed_admin_setting_user_profile_layout_tabs"
-					role="tablist">
+    <div class="bc_fed row">
+        <div class="col-md-3 padd_top_20">
+            <ul class="nav nav-pills nav-stacked"
+                id="fed_admin_setting_user_profile_layout_tabs"
+                role="tablist">
 				<?php
 				$menu_count = 0;
 				foreach ( $tabs as $index => $tab ) {
 					$active = ( 0 === $menu_count ) ? 'active' : '';
 					$menu_count ++;
 					?>
-					<li role="presentation"
-							class="<?php echo esc_attr( $active ); ?>">
-						<a href="#<?php echo esc_attr( $index ); ?>"
-								aria-controls="<?php echo esc_attr( $index ); ?>"
-								role="tab"
-								data-toggle="tab">
-							<i class="<?php echo $tab['icon']; ?>"></i>
-							<?php echo esc_attr( $tab['name'] ); ?>
-						</a>
-					</li>
+                    <li role="presentation"
+                        class="<?php esc_attr_e( $active ); ?>">
+                        <a href="#<?php esc_attr_e( $index ); ?>"
+                           aria-controls="<?php esc_attr_e( $index ); ?>"
+                           role="tab"
+                           data-toggle="tab">
+                            <i class="<?php echo $tab['icon']; ?>"></i>
+							<?php esc_attr_e( $tab['name'] ); ?>
+                        </a>
+                    </li>
 				<?php } ?>
-			</ul>
-		</div>
-		<div class="col-md-9">
-			<!-- Tab panes -->
-			<div class="tab-content">
+            </ul>
+        </div>
+        <div class="col-md-9">
+            <!-- Tab panes -->
+            <div class="tab-content">
 				<?php
 				$content_count = 0;
 				foreach ( $tabs as $index => $tab ) {
 					$active = $content_count === 0 ? 'active' : '';
 					$content_count ++;
 					?>
-					<div role="tabpanel"
-							class="tab-pane <?php echo $active; ?>"
-							id="<?php echo $index; ?>">
-						<div class="panel panel-primary">
-							<div class="panel-heading">
-								<span class="<?php echo $tab['icon']; ?>"></span>
+                    <div role="tabpanel"
+                         class="tab-pane <?php echo $active; ?>"
+                         id="<?php echo $index; ?>">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <span class="<?php echo $tab['icon']; ?>"></span>
 								<?php echo $tab['name']; ?>
-							</div>
-							<div class="panel-body">
+                            </div>
+                            <div class="panel-body">
 								<?php
 								fed_call_function_method( $tab );
 								// call_user_func( $tab['callable'], $tab['arguments'] )
 								?>
-							</div>
-						</div>
+                            </div>
+                        </div>
 
-					</div>
+                    </div>
 				<?php } ?>
-			</div>
-		</div>
-	</div>
+            </div>
+        </div>
+    </div>
 	<?php
 }

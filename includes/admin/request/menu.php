@@ -127,8 +127,11 @@ add_action( 'wp_ajax_fed_menu_sorting_items', 'fed_menu_sorting_items' );
  * Menu Sorting Items.
  */
 function fed_menu_sorting_items() {
-
 	$request           = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	fed_verify_nonce( $request );
+	if ( ! current_user_can( 'administrator' ) ) {
+		wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
+	}
 	$default_menu_type = fed_get_default_menu_type();
 	$menus             = array();
 

@@ -43,6 +43,7 @@ function fed_admin_setting_upl_request() {
  */
 function fed_admin_setting_upl_color_request() {
 	$request                         = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+
 	$fed_admin_settings_upl          = get_option( 'fed_admin_setting_upl_color' );
 	$fed_admin_settings_upl['color'] = array(
 		'fed_upl_color_bg_color'       => isset( $request['color']['fed_upl_color_bg_color'] ) ? sanitize_text_field(

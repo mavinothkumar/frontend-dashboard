@@ -68,6 +68,13 @@ function fed_admin_frontend_login_menu_tab( $fed_login_register ) {
  * @param  array $request  Request.
  */
 function fed_admin_frontend_login_menu_save( $request ) {
+
+	fed_verify_nonce( $request );
+
+	if ( ! current_user_can( 'administrator' ) ) {
+		wp_send_json_error( array( 'message' => 'Insufficient permissions' ) );
+	}
+
 	$fed_login = get_option( 'fed_admin_login' );
 
 	$fed_login['login_menu']['menu_item'] = fed_get_data( 'menu_item', $request );
