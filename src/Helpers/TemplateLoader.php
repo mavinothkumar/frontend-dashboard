@@ -5,15 +5,16 @@
  * @package Frontend Dashboard.
  */
 
+namespace FED\Helpers;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-if ( ! class_exists( 'FED_Template_Loader' ) ) {
 
-	/**
-	 * Class FED_Template_Loader
-	 */
-	class FED_Template_Loader {
+/**
+ * Class TemplateLoader
+ */
+class TemplateLoader {
 		/**
 		 * Prefix for filter names.
 		 *
@@ -309,4 +310,3 @@ if ( ! class_exists( 'FED_Template_Loader' ) ) {
 			return trailingslashit( $this->plugin_directory ) . $this->plugin_template_directory;
 		}
 	}
-}

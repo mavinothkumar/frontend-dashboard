@@ -46,6 +46,10 @@ define( 'BC_FED_PLUGIN_NAME', trim( dirname( BC_FED_PLUGIN_BASENAME ), '/' ) );
  * Plugin Directory
  */
 define( 'BC_FED_PLUGIN_DIR', untrailingslashit( dirname( BC_FED_PLUGIN ) ) );
+/**
+ * Plugin URL
+ */
+define( 'BC_FED_PLUGIN_URL', untrailingslashit( plugin_dir_url( BC_FED_PLUGIN ) ) );
 
 /**
  * User Profile Table Name
