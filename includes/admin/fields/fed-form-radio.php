@@ -1,9 +1,10 @@
 <?php
 /**
- * Form Radio.
+ * Radio Field.
  *
- * @package Frontend Dashboard
+ * @package Frontend Dashboard.
  */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -11,56 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Form Radio.
  *
- * @param  array $options  Options.
- *
+ * @param array $options Options.
  * @return string
  */
 function fed_form_radio( $options ) {
-	$name     = fed_get_data( 'input_meta', $options );
-	$value    = fed_get_data( 'user_value', $options );
-	$class    = fed_get_data( 'class_name', $options );
-	$required = ( 'true' == fed_get_data( 'is_required', $options ) ) ? 'required="required"' : null;
-	$id       = ( '' != fed_get_data( 'id_name', $options ) ) ? ( 'id="' . esc_attr( $options['id_name'] ) . '"' ) : null;
-	$readonly = ( true === fed_get_data( 'readonly', $options ) ) ? 'readonly=readonly' : null;
-	$disabled = ( true === fed_get_data( 'disabled', $options ) ) ? 'disabled=disabled' : null;
-	$extra    = isset( $options['extra'] ) ? $options['extra'] : null;
-
-	$extended            = fed_get_data( 'extended', $options );
-	$unseralize          = $extended ? maybe_unserialize( $extended ) : null;
-	$disable_user_access = $unseralize ? fed_get_data( 'disable_user_access', $unseralize ) : null;
-
-	if ( 'Disable' === $disable_user_access && ! fed_is_admin() ) {
-		$name     = '';
-		$readonly = 'readonly=readonly';
-		$disabled = 'disabled=disabled';
-	}
-
-	$html = '';
-
-	$options = fed_get_select_option_value( $options['input_value'] );
-	$html    .= '<br>';
-	foreach ( $options as $key => $label ) {
-		$checked = checked( $value, $key, false );
-		$html    .= sprintf(
-			"
-            <div class='radio %s'>
-        <label for='%s'><input type='radio' name='%s' value='%s' class='%s' %s %s %s %s %s %s />%s</label>
-        </div>
-        ",
-			$disabled,
-			$key,
-			$name,
-			$key,
-			$class,
-			$checked,
-			$extra,
-			$disabled,
-			$id,
-			$readonly,
-			$required,
-			$label
-		);
-	}
-
-	return $html;
+	return \FED\Services\Fields\FieldFactory::render( 'radio', $options );
 }

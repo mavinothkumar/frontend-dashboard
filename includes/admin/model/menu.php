@@ -40,7 +40,7 @@ function fed_fetch_menu() {
 function fed_fetch_table_rows_with_key_front_end( $table, $key ) {
 	$results     = apply_filters( 'fed_add_custom_menu', fed_fetch_rows_by_table( $table ) );
 	$user_role   = fed_get_current_user_role_key();
-	$get_payload = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
+	$get_payload = \FED\Helpers\InputHelper::get();
 
 	if ( count( $results ) <= 0 && BC_FED_TABLE_POST !== $table ) {
 		return new WP_Error(

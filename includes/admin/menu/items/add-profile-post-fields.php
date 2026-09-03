@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Add Profile Post Fields.
  */
 function fed_get_add_profile_post_fields() {
-	$get_payload     = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
+	$get_payload     = \FED\Helpers\InputHelper::get();
 	$id              = '';
 	$add_edit_action = __( 'Add New ', 'frontend-dashboard' );
 	$selected        = '';

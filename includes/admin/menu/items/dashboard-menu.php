@@ -13,7 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Dashboard Menu Items.
  */
 function fed_get_dashboard_menu_items() {
-	$get_payload = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
+	$raw_get     = filter_input_array( INPUT_GET, FILTER_DEFAULT );
+	$get_payload = is_array( $raw_get ) ? map_deep( $raw_get, 'sanitize_text_field' ) : array();
 	$menus       = fed_fetch_table_rows_with_key( BC_FED_TABLE_MENU, 'menu_slug' );
 	$user_roles  = fed_get_user_roles();
 
