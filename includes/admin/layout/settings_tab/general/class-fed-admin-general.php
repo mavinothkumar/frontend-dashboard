@@ -31,62 +31,7 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 		public function fed_admin_general_tab() {
 			$fed_general = get_option( 'fed_admin_general' );
 			$tabs        = $this->fed_get_admin_general_options( $fed_general );
-			?>
-            <div class="row">
-                <div class="col-md-3 padd_top_20">
-                    <ul class="nav nav-pills nav-stacked"
-                        id="fed_admin_setting_login_tabs"
-                        role="tablist">
-						<?php
-						$menu_count = 0;
-						foreach ( $tabs as $index => $tab ) {
-							$active = $menu_count === 0 ? 'active' : '';
-							$menu_count ++;
-							?>
-                            <li role="presentation"
-                                class="<?php echo $active; ?>">
-                                <a href="#<?php echo $index; ?>"
-                                   aria-controls="<?php echo $index; ?>"
-                                   role="tab"
-                                   data-toggle="tab">
-                                    <i class="<?php echo $tab['icon']; ?>"></i>
-									<?php echo $tab['name']; ?>
-                                </a>
-                            </li>
-						<?php } ?>
-                    </ul>
-                </div>
-                <div class="col-md-9">
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-						<?php
-						$content_count = 0;
-						foreach ( $tabs as $index => $tab ) {
-							$active = $content_count === 0 ? 'active' : '';
-							$content_count ++;
-							?>
-                            <div role="tabpanel"
-                                 class="tab-pane <?php echo $active; ?>"
-                                 id="<?php echo $index; ?>">
-                                <div class="panel panel-primary">
-                                    <div class="panel-heading">
-                                        <h3 class="panel-title">
-                                            <span class="<?php echo $tab['icon']; ?>"></span>
-											<?php echo $tab['name']; ?>
-                                        </h3>
-                                    </div>
-                                    <div class="panel-body">
-										<?php
-										fed_call_function_method( $tab )
-										?>
-                                    </div>
-                                </div>
-                            </div>
-						<?php } ?>
-                    </div>
-                </div>
-            </div>
-			<?php
+			fed_common_layouts_admin_settings( $fed_general, $tabs );
 		}
 
 		/**

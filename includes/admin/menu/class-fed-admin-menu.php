@@ -104,56 +104,343 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 		/**
 		 * Common Settings.
 		 */
+		/**
+		 * Common Settings.
+		 */
 		public function common_settings() {
 			$menu            = $this->admin_dashboard_settings_menu_header();
 			$menu_counter    = 0;
 			$content_counter = 0;
+			$total_tabs      = is_array( $menu ) ? count( $menu ) : 0;
 			?>
+			<!-- Scoped Styles for Settings Dashboard -->
+			<style>
+				.fed-btn-primary,
+				button.fed-btn-primary,
+				a.fed-btn-primary {
+					background-color: #4f46e5 !important;
+					color: #ffffff !important;
+					border: 1px solid #4338ca !important;
+					box-shadow: 0 2px 4px -1px rgba(79, 70, 229, 0.2) !important;
+				}
+				.fed-btn-primary:hover,
+				button.fed-btn-primary:hover,
+				a.fed-btn-primary:hover {
+					background-color: #4338ca !important;
+					color: #ffffff !important;
+				}
+				.fed-btn-secondary,
+				button.fed-btn-secondary,
+				a.fed-btn-secondary {
+					background-color: #ffffff !important;
+					color: #334155 !important;
+					border: 1px solid #e2e8f0 !important;
+				}
+				.fed-btn-secondary:hover,
+				button.fed-btn-secondary:hover,
+				a.fed-btn-secondary:hover {
+					background-color: #f8fafc !important;
+					border-color: #cbd5e1 !important;
+					color: #0f172a !important;
+				}
+				.fed-btn-delete,
+				button.fed-btn-delete {
+					color: #475569 !important;
+					background-color: #f8fafc !important;
+					border: 1px solid #e2e8f0 !important;
+				}
+				.fed-btn-delete:hover,
+				button.fed-btn-delete:hover {
+					color: #e11d48 !important;
+					background-color: #fff1f2 !important;
+					border-color: #fecdd3 !important;
+				}
 
-			<div class="bc_fed container fed_tabs_container">
-				<h3 class="fed_header_font_color">
-					<?php esc_attr_e( 'Dashboard Settings', 'frontend-dashboard' ); ?>
-				</h3>
-				<div class="row">
-					<div class="col-md-12">
-						<ul class="nav nav-tabs"
-								id="fed_admin_setting_tabs"
-								role="tablist">
-							<?php foreach ( $menu as $index => $item ) { ?>
-								<li role="presentation"
-										class="<?php echo ( 0 === $menu_counter ) ? 'active' : ''; ?>">
-									<a href="#<?php echo esc_attr( $index ); ?>"
-											aria-controls="<?php echo esc_attr( $index ); ?>"
-											role="tab"
-											data-toggle="tab">
-										<i class="<?php echo esc_attr( $item['icon_class'] ); ?>"></i>
-										<?php echo esc_attr( $item['name'] ); ?>
-									</a>
-								</li>
-								<?php
-								$menu_counter ++;
-							}
-							?>
-						</ul>
-						<!-- Tab panes -->
-						<div class="tab-content">
-							<?php foreach ( $menu as $index => $item ) { ?>
-								<div role="tabpanel"
-										class="tab-pane <?php echo ( 0 === $content_counter ) ? 'active' : ''; ?>"
-										id="<?php echo esc_attr( $index ); ?>">
-									<?php
-									$this->call_function_method( $item );
-									?>
-								</div>
-								<?php
-								$content_counter ++;
-							}
-							?>
+				/* Top Main Tabs Navigation Styling */
+				.fed-main-tab-btn,
+				a.fed-main-tab-btn {
+					display: inline-flex !important;
+					align-items: center !important;
+					gap: 8px !important;
+					padding: 9px 18px !important;
+					border-radius: 12px !important;
+					font-size: 12px !important;
+					font-weight: 600 !important;
+					color: #64748b !important;
+					background-color: transparent !important;
+					border: 1px solid transparent !important;
+					text-decoration: none !important;
+					transition: all 0.15s ease !important;
+					box-shadow: none !important;
+					cursor: pointer !important;
+				}
+				.fed-main-tab-btn:hover,
+				a.fed-main-tab-btn:hover {
+					color: #0f172a !important;
+					background-color: #f1f5f9 !important;
+				}
+				.fed-main-tab-btn.fed-tab-active,
+				a.fed-main-tab-btn.fed-tab-active {
+					background-color: #4f46e5 !important;
+					color: #ffffff !important;
+					border-color: #4338ca !important;
+					font-weight: 700 !important;
+					box-shadow: 0 2px 6px -1px rgba(79, 70, 229, 0.35) !important;
+				}
+				.fed-main-tab-btn.fed-tab-active i,
+				.fed-main-tab-btn.fed-tab-active span,
+				a.fed-main-tab-btn.fed-tab-active i,
+				a.fed-main-tab-btn.fed-tab-active span {
+					color: #ffffff !important;
+				}
+
+				/* Sidebar Subtabs Navigation Styling */
+				.fed-subtab-link,
+				a.fed-subtab-link {
+					display: flex !important;
+					align-items: center !important;
+					gap: 12px !important;
+					padding: 10px 14px !important;
+					border-radius: 14px !important;
+					font-size: 12px !important;
+					font-weight: 600 !important;
+					color: #475569 !important;
+					background-color: transparent !important;
+					border: 1px solid transparent !important;
+					text-decoration: none !important;
+					transition: all 0.15s ease !important;
+					cursor: pointer !important;
+				}
+				.fed-subtab-link:hover,
+				a.fed-subtab-link:hover {
+					background-color: #f8fafc !important;
+					color: #0f172a !important;
+				}
+				.fed-subtab-link.fed-subtab-active,
+				a.fed-subtab-link.fed-subtab-active {
+					background-color: #eef2ff !important;
+					border-color: #c7d2fe !important;
+					color: #4338ca !important;
+					font-weight: 700 !important;
+					box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+				}
+				.fed-subtab-link .fed-subtab-icon-box {
+					width: 32px !important;
+					height: 32px !important;
+					border-radius: 10px !important;
+					display: flex !important;
+					align-items: center !important;
+					justify-content: center !important;
+					background-color: #f1f5f9 !important;
+					color: #64748b !important;
+					flex-shrink: 0 !important;
+					transition: all 0.15s ease !important;
+				}
+				.fed-subtab-link.fed-subtab-active .fed-subtab-icon-box {
+					background-color: #4f46e5 !important;
+					color: #ffffff !important;
+				}
+				.fed-subtab-link.fed-subtab-active .fed-subtab-icon-box i {
+					color: #ffffff !important;
+				}
+
+				.bc_fed input[type="text"],
+				.bc_fed input[type="number"],
+				.bc_fed input[type="email"],
+				.bc_fed input[type="password"],
+				.bc_fed input[type="url"],
+				.bc_fed input[type="color"],
+				.bc_fed select,
+				.bc_fed textarea {
+					border: 1px solid #e2e8f0 !important;
+					border-radius: 12px !important;
+					background-color: #f8fafc !important;
+					padding: 8px 12px !important;
+					font-size: 12px !important;
+					color: #1e293b !important;
+					width: 100% !important;
+					box-sizing: border-box !important;
+					transition: all 0.15s ease !important;
+				}
+				.bc_fed input[type="text"]:focus,
+				.bc_fed input[type="number"]:focus,
+				.bc_fed input[type="email"]:focus,
+				.bc_fed input[type="password"]:focus,
+				.bc_fed input[type="url"]:focus,
+				.bc_fed select:focus,
+				.bc_fed textarea:focus {
+					border-color: #6366f1 !important;
+					background-color: #ffffff !important;
+					box-shadow: 0 0 0 1px #6366f1 !important;
+					outline: none !important;
+				}
+				.bc_fed input[type="color"] {
+					height: 42px !important;
+					padding: 4px !important;
+					cursor: pointer;
+				}
+			</style>
+
+			<div class="bc_fed fed-admin-wrap w-full max-w-none px-4 sm:px-8 py-6 sm:py-8 font-sans text-slate-800">
+				<?php echo fed_loader(); ?>
+
+				<!-- Toast Notification Element -->
+				<div id="fed_toast_notification" class="fixed bottom-6 right-6 transform translate-y-16 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-3 bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-slate-700" style="z-index: 99999999 !important;">
+					<span id="fed_toast_icon" class="text-emerald-400 text-base"><i class="fas fa-check-circle"></i></span>
+					<span id="fed_toast_message" class="text-xs font-semibold tracking-wide">Settings saved successfully.</span>
+				</div>
+
+				<!-- Page Header -->
+				<div class="bg-white rounded-2xl p-5 sm:p-6 shadow-xs border border-slate-200/80 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+					<div class="flex items-center gap-3.5">
+						<div class="w-10 h-10 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-xs shrink-0" style="background-color: #4f46e5 !important; color: #ffffff !important;">
+							<i class="fas fa-sliders-h text-sm" style="color: #ffffff !important;"></i>
+						</div>
+						<div>
+							<div class="flex items-center gap-2.5">
+								<h1 class="text-base sm:text-lg font-bold text-slate-900 tracking-tight m-0 p-0">
+									<?php esc_html_e( 'Dashboard Settings', 'frontend-dashboard' ); ?>
+								</h1>
+								<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100">
+									<?php echo (int) $total_tabs; ?> <?php esc_html_e( 'Modules', 'frontend-dashboard' ); ?>
+								</span>
+							</div>
+							<p class="text-xs text-slate-500 m-0 mt-0.5 font-medium">
+								<?php esc_html_e( 'Configure frontend dashboard login, user permissions, layout design, email notifications, and general settings.', 'frontend-dashboard' ); ?>
+							</p>
 						</div>
 					</div>
+
+					<div class="flex items-center gap-2.5 shrink-0">
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=fed_dashboard_menu' ) ); ?>" class="fed-btn-secondary h-10 inline-flex items-center justify-center gap-2 px-4 rounded-xl font-semibold text-xs transition-all cursor-pointer shadow-2xs no-underline">
+							<i class="fas fa-bars text-xs"></i>
+							<span><?php esc_html_e( 'Dashboard Menus', 'frontend-dashboard' ); ?></span>
+						</a>
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=fed_user_profile' ) ); ?>" class="fed-btn-secondary h-10 inline-flex items-center justify-center gap-2 px-4 rounded-xl font-semibold text-xs transition-all cursor-pointer shadow-2xs no-underline">
+							<i class="fas fa-id-card text-xs"></i>
+							<span><?php esc_html_e( 'User Profile', 'frontend-dashboard' ); ?></span>
+						</a>
+					</div>
 				</div>
+
+				<!-- Main Navigation Tabs Bar -->
+				<div class="bg-white rounded-2xl p-1.5 shadow-xs border border-slate-200/80 mb-6 flex flex-wrap gap-1.5" id="fed_main_settings_tabs_bar" role="tablist">
+					<?php 
+					$btn_counter = 0;
+					foreach ( $menu as $index => $item ) : 
+						$is_first = ( 0 === $btn_counter );
+						$btn_counter ++;
+					?>
+						<a href="#<?php echo esc_attr( $index ); ?>"
+						   data-tab="<?php echo esc_attr( $index ); ?>"
+						   role="tab"
+						   class="fed-main-tab-btn <?php echo $is_first ? 'fed-tab-active' : ''; ?>">
+							<i class="<?php echo esc_attr( $item['icon_class'] ); ?>"></i>
+							<span><?php echo esc_html( $item['name'] ); ?></span>
+						</a>
+					<?php endforeach; ?>
+				</div>
+
+				<!-- Main Tab Content Panes -->
+				<div class="fed-main-tabs-content-wrap">
+					<?php 
+					$pane_counter = 0;
+					foreach ( $menu as $index => $item ) : 
+						$is_first = ( 0 === $pane_counter );
+						$pane_counter ++;
+					?>
+						<div role="tabpanel"
+							 class="fed-main-tab-pane <?php echo $is_first ? 'block' : 'hidden'; ?>"
+							 id="tab_pane_<?php echo esc_attr( $index ); ?>"
+							 data-pane="<?php echo esc_attr( $index ); ?>">
+							<?php $this->call_function_method( $item ); ?>
+						</div>
+					<?php endforeach; ?>
+				</div>
+
 				<?php fed_menu_icons_popup(); ?>
 			</div>
+
+			<!-- Dynamic Tab Switching & AJAX Toast Script -->
+			<script>
+				(function($) {
+					'use strict';
+
+					function showToast(message, isSuccess = true) {
+						var $toast = $('#fed_toast_notification');
+						var $icon = $('#fed_toast_icon');
+						var $msg = $('#fed_toast_message');
+
+						$msg.text(message || (isSuccess ? 'Changes saved successfully.' : 'An error occurred.'));
+						if (isSuccess) {
+							$icon.html('<i class="fas fa-check-circle"></i>').removeClass('text-rose-400').addClass('text-emerald-400');
+						} else {
+							$icon.html('<i class="fas fa-exclamation-circle"></i>').removeClass('text-emerald-400').addClass('text-rose-400');
+						}
+
+						$toast.removeClass('opacity-0 translate-y-16 pointer-events-none').addClass('opacity-100 translate-y-0');
+						setTimeout(function() {
+							$toast.removeClass('opacity-100 translate-y-0').addClass('opacity-0 translate-y-16 pointer-events-none');
+						}, 3000);
+					}
+
+					$(document).ready(function() {
+						// Primary Main Tab Switcher
+						function switchMainTab(tabKey) {
+							if (!tabKey) return;
+							$('.fed-main-tab-btn').removeClass('fed-tab-active');
+							$('.fed-main-tab-btn[data-tab="' + tabKey + '"]').addClass('fed-tab-active');
+
+							$('.fed-main-tab-pane').addClass('hidden').removeClass('block');
+							$('.fed-main-tab-pane[data-pane="' + tabKey + '"]').removeClass('hidden').addClass('block');
+						}
+
+						$(document).on('click', '.fed-main-tab-btn', function(e) {
+							e.preventDefault();
+							var tabKey = $(this).data('tab');
+							switchMainTab(tabKey);
+							if (history.pushState) {
+								history.pushState(null, null, '#' + tabKey);
+							} else {
+								location.hash = '#' + tabKey;
+							}
+						});
+
+						// Handle hash on initial load
+						var initialHash = window.location.hash ? window.location.hash.replace('#', '') : '';
+						if (initialHash && $('.fed-main-tab-btn[data-tab="' + initialHash + '"]').length) {
+							switchMainTab(initialHash);
+						}
+
+						// Subtab Switcher
+						$(document).on('click', '.fed-subtab-link', function(e) {
+							e.preventDefault();
+							var $this = $(this);
+							var $wrap = $this.closest('.fed-settings-subtab-container');
+							var targetSelector = $this.data('target');
+
+							$wrap.find('.fed-subtab-link').removeClass('fed-subtab-active');
+							$this.addClass('fed-subtab-active');
+
+							$wrap.find('.tab-pane').addClass('hidden').removeClass('active block');
+							$wrap.find(targetSelector).removeClass('hidden').addClass('active block');
+						});
+
+						// Global AJAX listener for setting forms to display toast
+						$(document).ajaxSuccess(function(event, xhr, settings) {
+							if (settings.url && settings.url.indexOf('admin-ajax.php') !== -1) {
+								try {
+									var res = typeof xhr.responseJSON !== 'undefined' ? xhr.responseJSON : JSON.parse(xhr.responseText);
+									if (res && res.success) {
+										var msg = (res.data && res.data.message) ? res.data.message : 'Settings saved successfully.';
+										showToast(msg, true);
+									}
+								} catch(e) {}
+							}
+						});
+					});
+				})(jQuery);
+			</script>
 			<?php
 		}
 
