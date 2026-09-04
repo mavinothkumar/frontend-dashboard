@@ -538,6 +538,9 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 															<i class="fas fa-star text-[9px]"></i> <?php esc_html_e( 'Custom', 'frontend-dashboard' ); ?>
 														</span>
 													<?php endif; ?>
+
+													<!-- User Roles Summary Badge with +N -->
+													<?php echo fed_render_user_roles_badge( isset( $field['user_role'] ) ? $field['user_role'] : array() ); ?>
 												</div>
 											</div>
 

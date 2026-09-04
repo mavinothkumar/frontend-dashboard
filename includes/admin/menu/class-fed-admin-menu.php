@@ -417,25 +417,20 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 							e.preventDefault();
 							var $this = $(this);
 							var $wrap = $this.closest('.fed-settings-subtab-container');
-							var targetSelector = $this.data('target');
+							var targetSelector = $this.data('target') || $this.attr('href');
 
 							$wrap.find('.fed-subtab-link').removeClass('fed-subtab-active');
 							$this.addClass('fed-subtab-active');
 
 							$wrap.find('.tab-pane').addClass('hidden').removeClass('active block');
-							$wrap.find(targetSelector).removeClass('hidden').addClass('active block');
-						});
-
-						// Global AJAX listener for setting forms to display toast
-						$(document).ajaxSuccess(function(event, xhr, settings) {
-							if (settings.url && settings.url.indexOf('admin-ajax.php') !== -1) {
-								try {
-									var res = typeof xhr.responseJSON !== 'undefined' ? xhr.responseJSON : JSON.parse(xhr.responseText);
-									if (res && res.success) {
-										var msg = (res.data && res.data.message) ? res.data.message : 'Settings saved successfully.';
-										showToast(msg, true);
-									}
-								} catch(e) {}
+							
+							var $target = $wrap.find(targetSelector);
+							if (!$target.length && targetSelector && targetSelector.indexOf('#') === 0) {
+								var rawKey = targetSelector.replace('#', '');
+								$target = $wrap.find('#' + rawKey + ', [data-pane="' + rawKey + '"]');
+							}
+							if ($target.length) {
+								$target.removeClass('hidden').addClass('active block');
 							}
 						});
 					});

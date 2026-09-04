@@ -2953,8 +2953,8 @@ function fed_array_sort( $array, $on, $order = SORT_ASC ) {
  *
  * @return bool
  */
-function fed_request_empty( $request ) {
-	if ( '' == trim( $request ) ) {
+function fed_request_empty( $request = null ) {
+	if ( null === $request || '' === trim( (string) $request ) ) {
 		return true;
 	}
 

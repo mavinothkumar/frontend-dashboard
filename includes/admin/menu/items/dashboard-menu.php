@@ -420,26 +420,8 @@ function fed_get_dashboard_menu_items() {
 									<?php endif; ?>
 								</span>
 
-								<!-- Roles Summary Pill -->
-								<span class="fed-badge-item inline-flex items-center gap-1.5 text-[11px] text-slate-500 font-medium pl-1 shrink-0 whitespace-nowrap">
-									<i class="fas fa-users text-slate-400 text-[10px]"></i>
-									<?php
-									if ( empty( $selected_roles ) || count( $selected_roles ) >= count( $user_roles ) ) {
-										esc_html_e( 'All Roles', 'frontend-dashboard' );
-									} else {
-										$role_names = array();
-										foreach ( $selected_roles as $r_key ) {
-											if ( isset( $user_roles[ $r_key ] ) ) {
-												$role_names[] = $user_roles[ $r_key ];
-											}
-										}
-										echo esc_html( implode( ', ', array_slice( $role_names, 0, 2 ) ) );
-										if ( count( $role_names ) > 2 ) {
-											echo ' +' . ( count( $role_names ) - 2 );
-										}
-									}
-									?>
-								</span>
+								<!-- Roles Summary Pill with +N -->
+								<?php echo fed_render_user_roles_badge( $selected_roles, $user_roles ); ?>
 							</div>
 						</div>
 

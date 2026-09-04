@@ -831,101 +831,79 @@ jQuery( document ).ready(
 );
 
 var fedAdminAlert = {
-	adminSettings: function ( results ) {
-		if ( results.success ) {
-			swal(
-				{
-					title: results.data.message || frontend_dashboard.alert.something_went_wrong,
-					type: "success",
-					confirmButtonColor: '#0AAAAA',
-				}
-			).then(
-				function () {
-					if ( results.data.reload ) {
-						if ( window.location == results.data.reload ) {
-							window.location.reload();
-						} else {
-							window.location = results.data.reload
-						}
-					}
-				}
+	showToast: function ( message, isError ) {
+		var $toast = jQuery( '#fed_toast_notification' );
+		if ( ! $toast.length ) {
+			jQuery( 'body' ).append(
+				'<div id="fed_toast_notification" class="fixed bottom-6 right-6 transform translate-y-16 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-3 bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-slate-700" style="z-index: 99999999 !important;">' +
+					'<span id="fed_toast_icon" class="text-emerald-400 text-base"><i class="fas fa-check-circle"></i></span>' +
+					'<span id="fed_toast_message" class="text-xs font-semibold tracking-wide"></span>' +
+				'</div>'
 			);
-		} else if ( ( results.success ) === false ) {
-			swal(
-				{
-					title: results.data.message || frontend_dashboard.alert.something_went_wrong,
-					type: "error",
-					confirmButtonColor: "#DD6B55"
-				}
-			).then(
-				function () {
-					if ( results.data.reload ) {
-						if ( window.location == results.data.reload ) {
-							location.reload();
-						} else {
-							window.location = results.data.reload
-						}
-					}
-				}
-			);
+			$toast = jQuery( '#fed_toast_notification' );
+		}
+		var $msg = $toast.find( '#fed_toast_message' );
+		var $icon = $toast.find( '#fed_toast_icon' );
+
+		$msg.text( message || ( isError ? 'An error occurred.' : 'Settings saved successfully.' ) );
+		if ( isError ) {
+			$icon.html( '<i class="fas fa-exclamation-circle"></i>' ).removeClass( 'text-emerald-400' ).addClass( 'text-rose-400' );
+			$toast.addClass( 'border-rose-500/50' );
 		} else {
-			swal(
-				{
-					title: frontend_dashboard.alert.invalid_form_submission,
-					text: frontend_dashboard.alert.please_try_again,
-					type: "error",
-					confirmButtonColor: "#DD6B55"
-				}
-			).then(
-				function () {
-					if ( results.data.reload ) {
-						if ( window.location == results.data.reload ) {
-							location.reload();
-						} else {
-							window.location = results.data.reload
-						}
-					}
-				}
-			);
+			$icon.html( '<i class="fas fa-check-circle"></i>' ).removeClass( 'text-rose-400' ).addClass( 'text-emerald-400' );
+			$toast.removeClass( 'border-rose-500/50' );
 		}
 
+		$toast.removeClass( 'translate-y-16 opacity-0 pointer-events-none' ).addClass( 'translate-y-0 opacity-100' );
+		
+		if ( window.fedToastTimer ) {
+			clearTimeout( window.fedToastTimer );
+		}
+		window.fedToastTimer = setTimeout( function () {
+			$toast.removeClass( 'translate-y-0 opacity-100' ).addClass( 'translate-y-16 opacity-0 pointer-events-none' );
+		}, 3500 );
 	},
-	adminAlertSettings: function ( results ) {
-		if ( results.success ) {
-			swal(
-				{
-					title: results.data.message || frontend_dashboard.alert.something_went_wrong,
-					type: "success",
-					confirmButtonColor: '#0AAAAA',
+
+	adminSettings: function ( results ) {
+		var isSuccess = results && results.success;
+		var msg = '';
+		if ( results && results.data && results.data.message ) {
+			msg = results.data.message;
+		} else if ( typeof frontend_dashboard !== 'undefined' && frontend_dashboard.alert ) {
+			msg = isSuccess ? 'Settings saved successfully.' : ( results === false ? frontend_dashboard.alert.invalid_form_submission : frontend_dashboard.alert.something_went_wrong );
+		} else {
+			msg = isSuccess ? 'Settings saved successfully.' : 'An error occurred.';
+		}
+
+		fedAdminAlert.showToast( msg, ! isSuccess );
+
+		if ( results && results.data && results.data.reload ) {
+			setTimeout( function () {
+				if ( window.location == results.data.reload ) {
+					window.location.reload();
+				} else {
+					window.location = results.data.reload;
 				}
-			);
-		} else if ( results.success === false ) {
-			var error;
+			}, 800 );
+		}
+	},
+
+	adminAlertSettings: function ( results ) {
+		var isSuccess = results && results.success;
+		var error = '';
+		if ( results && results.data && results.data.message ) {
 			if ( results.data.message instanceof Array ) {
-				error = results.data.message.join( '</br>' );
+				error = results.data.message.join( ', ' );
 			} else {
 				error = results.data.message;
 			}
-			swal(
-				{
-					title: error,
-					type: "error",
-					confirmButtonColor: "#DD6B55",
-					html: true
-
-				}
-			);
+		} else if ( typeof frontend_dashboard !== 'undefined' && frontend_dashboard.alert ) {
+			error = isSuccess ? 'Settings saved successfully.' : frontend_dashboard.alert.invalid_form_submission;
 		} else {
-			swal(
-				{
-					title: frontend_dashboard.alert.invalid_form_submission,
-					text: frontend_dashboard.alert.please_try_again,
-					type: "error",
-					confirmButtonColor: "#DD6B55"
-				}
-			);
+			error = isSuccess ? 'Settings saved successfully.' : 'An error occurred.';
 		}
 
+		fedAdminAlert.showToast( error, ! isSuccess );
 	}
 };
 

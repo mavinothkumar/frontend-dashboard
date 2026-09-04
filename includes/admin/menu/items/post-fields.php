@@ -481,6 +481,9 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 															<?php esc_html_e( 'Required', 'frontend-dashboard' ); ?>
 														</span>
 													<?php endif; ?>
+
+													<!-- User Roles Summary Badge with +N -->
+													<?php echo fed_render_user_roles_badge( isset( $field['user_role'] ) ? $field['user_role'] : array() ); ?>
 												</div>
 											</div>
 

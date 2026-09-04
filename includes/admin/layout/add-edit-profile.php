@@ -157,68 +157,20 @@ function fed_get_admin_up_role_based( $row, $action, $menu_options ) {
 		<?php endif; ?>
 
 		<!-- Sub-Section: User Role Permissions -->
-		<div class="fed_role_section pt-6 border-t border-slate-100 space-y-4">
-			<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-				<div>
-					<h4 class="text-xs sm:text-sm font-bold text-slate-800 m-0"><?php esc_html_e( 'User Role Access Permissions', 'frontend-dashboard' ); ?></h4>
-					<p class="text-[11px] text-slate-400 m-0 mt-0.5"><?php esc_html_e( 'Specify which user roles are permitted to view and use this field.', 'frontend-dashboard' ); ?></p>
-				</div>
-
-				<!-- Role Mode Segmented Selector -->
-				<div class="inline-flex p-1 bg-slate-100 rounded-xl shrink-0 border border-slate-200/60">
-					<button type="button" class="fed_role_mode_all_btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer <?php echo $is_all_roles_mode ? 'bg-white text-indigo-700 shadow-2xs' : 'text-slate-600 hover:text-slate-900'; ?>">
-						<i class="fas fa-globe mr-1.5 text-[10px]"></i> <?php esc_html_e( 'All Roles', 'frontend-dashboard' ); ?>
-					</button>
-					<button type="button" class="fed_role_mode_specific_btn px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer <?php echo ! $is_all_roles_mode ? 'bg-white text-indigo-700 shadow-2xs' : 'text-slate-600 hover:text-slate-900'; ?>">
-						<i class="fas fa-user-lock mr-1.5 text-[10px]"></i> <?php esc_html_e( 'Specific Roles', 'frontend-dashboard' ); ?>
-					</button>
-				</div>
-			</div>
-
-			<!-- Searchable Specific Roles Container -->
-			<div class="fed_specific_roles_wrapper space-y-3 pt-2 <?php echo $is_all_roles_mode ? 'hidden' : ''; ?>">
-				<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-					<div class="relative flex-1 max-w-sm">
-						<span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400 text-xs">
-							<i class="fas fa-search"></i>
-						</span>
-						<input type="text" placeholder="<?php echo esc_attr( sprintf( __( 'Filter %d user roles...', 'frontend-dashboard' ), $total_roles_count ) ); ?>" class="fed_role_search_filter w-full pr-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-indigo-500 transition-all outline-none font-medium" style="padding-left: 36px !important; height: 38px !important;" />
-					</div>
-
-					<div class="flex items-center gap-2 shrink-0 text-xs">
-						<span class="fed_role_selected_count text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-100">
-							<span class="fed_role_selected_num"><?php echo ( $is_all_roles_mode ? $total_roles_count : $active_roles_count ); ?></span> / <?php echo $total_roles_count; ?> <?php esc_html_e( 'Roles Selected', 'frontend-dashboard' ); ?>
-						</span>
-						<button type="button" class="fed_roles_select_all text-xs font-bold text-indigo-600 hover:text-indigo-800 px-2.5 py-1 rounded-lg bg-indigo-50/60 hover:bg-indigo-50 cursor-pointer">
-							<?php esc_html_e( 'Select All', 'frontend-dashboard' ); ?>
-						</button>
-						<span class="text-slate-300">|</span>
-						<button type="button" class="fed_roles_deselect_all text-xs font-bold text-slate-500 hover:text-slate-700 px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200/60 cursor-pointer">
-							<?php esc_html_e( 'Clear All', 'frontend-dashboard' ); ?>
-						</button>
-					</div>
-				</div>
-
-				<!-- Scrollable Chips Container -->
-				<div class="fed_roles_chips_container flex flex-wrap gap-2.5 max-h-44 overflow-y-auto p-3.5 border border-slate-200/80 rounded-2xl bg-slate-50/70">
-					<?php
-					foreach ( $all_roles as $key => $role ) {
-						$c_value    = ( $is_all_roles_mode || in_array( $key, $user_roles, true ) ) ? 'Enable' : 'Disable';
-						$is_checked = ( 'Enable' === $c_value );
-						?>
-						<label class="fed-role-chip inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border transition-all cursor-pointer select-none <?php echo $is_checked ? 'bg-indigo-50/80 border-indigo-200 text-indigo-900 font-semibold' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'; ?>"
-							data-role-name="<?php echo esc_attr( strtolower( $role ) ); ?>"
-							data-role-key="<?php echo esc_attr( strtolower( $key ) ); ?>">
-							<input type="checkbox"
-								name="user_role[<?php echo esc_attr( $key ); ?>]"
-								value="Enable"
-								class="fed-role-checkbox rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-3.5 h-3.5 cursor-pointer"
-								<?php checked( $is_checked, true ); ?> />
-							<span class="text-xs truncate max-w-[140px]"><?php echo esc_html( $role ); ?></span>
-						</label>
-					<?php } ?>
-				</div>
-			</div>
+		<div class="fed_role_section pt-6 border-t border-slate-100">
+			<?php
+			fed_render_user_roles_selector(
+				array(
+					'name_prefix'         => 'user_role',
+					'selected'            => $user_roles,
+					'all_roles'           => $all_roles,
+					'show_mode_switch'    => true,
+					'default_all_checked' => true,
+					'title'               => __( 'User Role Access Permissions', 'frontend-dashboard' ),
+					'description'         => __( 'Specify which user roles are permitted to view and use this field.', 'frontend-dashboard' ),
+				)
+			);
+			?>
 		</div>
 	</div>
 	<?php

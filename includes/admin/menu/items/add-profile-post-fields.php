@@ -733,11 +733,10 @@ function fed_get_add_profile_post_fields() {
 						var message = (response && response.data && response.data.message) ? response.data.message : 'Field settings saved successfully.';
 						if (!isSuccess && response && response.data && response.data.errorMessage) {
 							message = response.data.errorMessage;
-						}
-						showToast(message, !isSuccess);
-
-						if (isSuccess && typeof fedAdminAlert !== 'undefined' && fedAdminAlert.adminSettings) {
+						if (typeof fedAdminAlert !== 'undefined' && fedAdminAlert.adminSettings) {
 							fedAdminAlert.adminSettings(response);
+						} else {
+							showToast(message, !isSuccess);
 						}
 					},
 					error: function() {

@@ -14,120 +14,83 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param  array $fed_login_register  Login Register.
  */
 function fed_admin_register_settings_tab( $fed_login_register ) {
-	$user_role  = isset( $fed_login_register['register']['role'] ) ? array_keys( $fed_login_register['register']['role'] ) : array();
-	$name       = isset( $fed_login_register['register']['name'] ) ? $fed_login_register['register']['name'] : 'User Role';
-	$position   = isset( $fed_login_register['register']['position'] ) ? $fed_login_register['register']['position'] : 999;
-	$auto_login = isset( $fed_login_register['register']['auto_login'] ) ? $fed_login_register['register']['auto_login'] : '';
-	$user_roles = fed_get_user_roles();
+	$user_role   = isset( $fed_login_register['register']['role'] ) ? array_keys( $fed_login_register['register']['role'] ) : array();
+	$name        = isset( $fed_login_register['register']['name'] ) ? $fed_login_register['register']['name'] : 'User Role';
+	$position    = isset( $fed_login_register['register']['position'] ) ? $fed_login_register['register']['position'] : 999;
+	$auto_login  = isset( $fed_login_register['register']['auto_login'] ) ? $fed_login_register['register']['auto_login'] : '';
+	$user_roles  = fed_get_user_roles();
+	$email_notif = fed_get_data( 'register.register_email_notification', $fed_login_register );
+	?>
+	<form method="post"
+		  class="fed_admin_menu fed_ajax space-y-6"
+		  action="<?php echo esc_url( admin_url( 'admin-ajax.php?action=fed_admin_setting_form' ) ); ?>">
 
-	$array = array(
-		'form'   => array(
-			'method' => '',
-			'class'  => 'fed_admin_menu fed_ajax',
-			'attr'   => '',
-			'action' => array(
-				'url'    => '',
-				'action' => 'fed_admin_setting_form',
-			),
-			'nonce'  => array(
-				'action' => '',
-				'name'   => '',
-			),
-			'loader' => '',
-		),
-		'hidden' => array(
-			'fed_admin_unique'       => array(
-				'input_type' => 'hidden',
-				'user_value' => 'fed_login_details',
-				'input_meta' => 'fed_admin_unique',
-			),
-			'fed_admin_unique_login' => array(
-				'input_type' => 'hidden',
-				'user_value' => 'fed_register_settings',
-				'input_meta' => 'fed_admin_unique_login',
-			),
-		),
-		'input'  => array(
-			'Menu Name'                         => array(
-				'col'   => 'col-md-6',
-				'name'  => 'Menu Name',
-				'input' => fed_get_input_details(
-					array(
-						'placeholder' => '(eg) User Role',
-						'input_meta'  => 'fed_admin_login[name]',
-						'user_value'  => $name,
-						'input_type'  => 'single_line',
-						'required'    => true,
-					)
-				),
-			),
-			'Menu Name Order'                   => array(
-				'col'   => 'col-md-6',
-				'name'  => 'Menu Name Order',
-				'input' => fed_get_input_details(
-					array(
-						'placeholder' => '(eg) 40',
-						'input_meta'  => 'fed_admin_login[position]',
-						'user_value'  => $position,
-						'input_type'  => 'number',
-						'required'    => true,
-					)
-				),
-			),
-			'Auto Login'                        => array(
-				'col'   => 'col-md-6',
-				'name'  => 'Auto Login after Register?',
-				'input' => fed_get_input_details(
-					array(
-						'input_meta'  => 'fed_admin_login[auto_login]',
-						'user_value'  => $auto_login,
-						'input_type'  => 'select',
-						'input_value' => array( '' => 'Please Select' ) + fed_yes_no(),
-					)
-				),
-			),
-			'Email Notification after Register' => array(
-				'col'   => 'col-md-6',
-				'name'  => 'Email Notification after Register',
-				'input' => fed_get_input_details(
-					array(
-						'input_meta'  => 'fed_admin_login[register_email_notification]',
-						'user_value'  => fed_get_data( 'register.register_email_notification', $fed_login_register ),
-						'input_type'  => 'select',
-						'input_value' => array(
-							''      => 'Please Select',
-							'user'  => 'Only User',
-							'admin' => 'Only Admin',
-							'both'  => 'Both User and Admin',
-						),
-					)
-				),
-			),
-			'sur'                               => array(
-				'col'     => 'col-md-12',
-				'header'  => 'Show User Role(s) in Register Form',
-				'sub_col' => 'col-md-4',
-			),
-		),
-		'note'   => array(
-			'header' => '',
-			'footer' => '',
-		),
-	);
+		<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
+		<?php echo fed_loader(); ?>
 
-	foreach ( $user_roles as $key => $role ) {
-		$c_value                                         = in_array( $key, $user_role, false ) ? 'Enable' : 'Disable';
-		$array['input']['sur']['extra']['input'][ $key ] = array(
-			'input_meta'    => 'fed_admin_login[role][' . $key . ']',
-			'user_value'    => $c_value,
-			'input_type'    => 'checkbox',
-			'label'         => $role,
-			'default_value' => 'Enable',
-		);
-	}
+		<input type="hidden" name="fed_admin_unique" value="fed_login_details"/>
+		<input type="hidden" name="fed_admin_unique_login" value="fed_register_settings"/>
 
-	apply_filters( 'fed_admin_login_register_template', $array, $fed_login_register );
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+			<div class="space-y-1.5">
+				<label class="block text-xs font-bold text-slate-700">
+					<?php esc_html_e( 'Menu Name', 'frontend-dashboard' ); ?> <span class="text-rose-500">*</span>
+				</label>
+				<input type="text" name="fed_admin_login[name]" value="<?php echo esc_attr( $name ); ?>" placeholder="<?php esc_attr_e( '(eg) User Role', 'frontend-dashboard' ); ?>" required class="w-full px-3.5 py-2.5 bg-slate-50/70 focus:bg-white border border-slate-200 focus:border-indigo-500 rounded-xl text-xs text-slate-800 transition-colors shadow-2xs font-medium" />
+			</div>
 
-	fed_common_simple_layout( $array );
+			<div class="space-y-1.5">
+				<label class="block text-xs font-bold text-slate-700">
+					<?php esc_html_e( 'Menu Order Position', 'frontend-dashboard' ); ?> <span class="text-rose-500">*</span>
+				</label>
+				<input type="number" name="fed_admin_login[position]" value="<?php echo esc_attr( $position ); ?>" placeholder="40" required class="w-full px-3.5 py-2.5 bg-slate-50/70 focus:bg-white border border-slate-200 focus:border-indigo-500 rounded-xl text-xs text-slate-800 transition-colors shadow-2xs font-medium" />
+			</div>
 
+			<div class="space-y-1.5">
+				<label class="block text-xs font-bold text-slate-700">
+					<?php esc_html_e( 'Auto Login after Register?', 'frontend-dashboard' ); ?>
+				</label>
+				<select name="fed_admin_login[auto_login]" class="w-full px-3.5 py-2.5 bg-slate-50/70 focus:bg-white border border-slate-200 focus:border-indigo-500 rounded-xl text-xs text-slate-800 transition-colors shadow-2xs font-medium">
+					<option value=""><?php esc_html_e( 'Please Select', 'frontend-dashboard' ); ?></option>
+					<option value="yes" <?php selected( $auto_login, 'yes' ); ?>><?php esc_html_e( 'Yes', 'frontend-dashboard' ); ?></option>
+					<option value="no" <?php selected( $auto_login, 'no' ); ?>><?php esc_html_e( 'No', 'frontend-dashboard' ); ?></option>
+				</select>
+			</div>
+
+			<div class="space-y-1.5">
+				<label class="block text-xs font-bold text-slate-700">
+					<?php esc_html_e( 'Email Notification after Register', 'frontend-dashboard' ); ?>
+				</label>
+				<select name="fed_admin_login[register_email_notification]" class="w-full px-3.5 py-2.5 bg-slate-50/70 focus:bg-white border border-slate-200 focus:border-indigo-500 rounded-xl text-xs text-slate-800 transition-colors shadow-2xs font-medium">
+					<option value=""><?php esc_html_e( 'Please Select', 'frontend-dashboard' ); ?></option>
+					<option value="user" <?php selected( $email_notif, 'user' ); ?>><?php esc_html_e( 'Only User', 'frontend-dashboard' ); ?></option>
+					<option value="admin" <?php selected( $email_notif, 'admin' ); ?>><?php esc_html_e( 'Only Admin', 'frontend-dashboard' ); ?></option>
+					<option value="both" <?php selected( $email_notif, 'both' ); ?>><?php esc_html_e( 'Both User and Admin', 'frontend-dashboard' ); ?></option>
+				</select>
+			</div>
+		</div>
+
+		<!-- User Roles Selector Widget -->
+		<div class="pt-4 border-t border-slate-100">
+			<?php
+			fed_render_user_roles_selector(
+				array(
+					'name_prefix' => 'fed_admin_login[role]',
+					'selected'    => $user_role,
+					'all_roles'   => $user_roles,
+					'title'       => __( 'Show User Role(s) in Register Form', 'frontend-dashboard' ),
+					'description' => __( 'Select which user roles will be selectable by users during registration.', 'frontend-dashboard' ),
+				)
+			);
+			?>
+		</div>
+
+		<div class="pt-4 border-t border-slate-100 flex items-center justify-end">
+			<button type="submit" class="fed-btn-primary h-11 inline-flex items-center justify-center gap-2 px-6 rounded-xl font-semibold text-xs tracking-wide shadow-sm transition-all active:scale-95 cursor-pointer">
+				<i class="fas fa-save text-xs" style="color: #ffffff !important;"></i>
+				<span style="color: #ffffff !important;"><?php esc_html_e( 'Save Changes', 'frontend-dashboard' ); ?></span>
+			</button>
+		</div>
+	</form>
+	<?php
 }
