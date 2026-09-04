@@ -1898,7 +1898,12 @@ function fed_get_script_loading_pages() {
 	$fed_menus      = new FED_AdminMenu();
 	$fed_menu_items = array_keys( $fed_menus->fed_get_main_sub_menu() );
 	$default        = array(
+		'fed_dashboard',
+		'fed_settings',
 		'fed_settings_menu',
+		'fed_user_profile',
+		'fed_post_fields',
+		'fed_add_user_profile',
 		'fed_user_profile_layout',
 		'fed_orders',
 		'fed_payments',

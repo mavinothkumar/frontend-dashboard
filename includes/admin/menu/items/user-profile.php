@@ -14,6 +14,14 @@ if ( ! function_exists( 'fed_get_user_profile_menu' ) ) {
 	 * User Profile Menu.
 	 */
 	function fed_get_user_profile_menu() {
+		$get_payload = \FED\Helpers\InputHelper::get();
+		if ( isset( $get_payload['fed_action'] ) && 'profile' === $get_payload['fed_action'] ) {
+			if ( function_exists( 'fed_get_add_profile_post_fields' ) ) {
+				fed_get_add_profile_post_fields();
+				return;
+			}
+		}
+
 		$user_profile = fed_fetch_table_rows_with_key( BC_FED_TABLE_USER_PROFILE, 'input_meta' );
 
 		if ( $user_profile instanceof WP_Error ) {
@@ -70,7 +78,7 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 									echo esc_url(
 										add_query_arg(
 											array( 'fed_action' => 'profile' ), menu_page_url(
-												'fed_add_user_profile',
+												'fed_user_profile',
 												false
 											)
 										)
@@ -231,7 +239,7 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 																						'fed_input_id' => $profile['id'],
 																						'fed_action'   => 'profile',
 																					), menu_page_url(
-																						'fed_add_user_profile',
+																						'fed_user_profile',
 																						false
 																					)
 																				)

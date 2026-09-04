@@ -536,3 +536,63 @@
 	padding: 0 30px;
 }
 
+/**
+ * Enterprise Form Controls (Checkbox & Radio Fix)
+ */
+.bc_fed input[type="checkbox"],
+.bc_fed input[type="radio"],
+.fed-custom-checkbox,
+.fed-custom-radio {
+	width: 18px !important;
+	height: 18px !important;
+	min-width: 18px !important;
+	max-width: 18px !important;
+	min-height: 18px !important;
+	max-height: 18px !important;
+	display: inline-block !important;
+	vertical-align: middle !important;
+	margin: 0 8px 0 0 !important;
+	padding: 0 !important;
+	border: 1.5px solid #94a3b8 !important;
+	border-radius: 4px !important;
+	background-color: #ffffff !important;
+	cursor: pointer !important;
+	outline: none !important;
+	box-shadow: none !important;
+	-webkit-appearance: checkbox !important;
+	appearance: checkbox !important;
+	accent-color: #0aaaaa !important;
+}
+
+.bc_fed input[type="radio"],
+.fed-custom-radio {
+	border-radius: 50% !important;
+	-webkit-appearance: radio !important;
+	appearance: radio !important;
+}
+
+.bc_fed label.fed_checkbox_label,
+.bc_fed label.fed_radio_label,
+.bc_fed label.fed-control-label,
+.bc_fed .fed_checkbox_group label,
+.bc_fed .fed_radio_group label {
+	display: inline-flex !important;
+	align-items: center !important;
+	font-weight: 500 !important;
+	font-size: 14px !important;
+	color: #334155 !important;
+	cursor: pointer !important;
+	margin-bottom: 6px !important;
+	margin-top: 4px !important;
+	line-height: 1.4 !important;
+}
+
+.bc_fed .fed_checkbox_group,
+.bc_fed .fed_radio_group {
+	display: flex !important;
+	flex-wrap: wrap !important;
+	gap: 12px 20px !important;
+	padding: 6px 0 !important;
+}
+
+

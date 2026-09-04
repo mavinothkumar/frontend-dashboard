@@ -14,6 +14,14 @@ if ( ! function_exists( 'fed_get_post_fields_menu' ) ) {
 	 * Get post field
 	 */
 	function fed_get_post_fields_menu() {
+		$get_payload = \FED\Helpers\InputHelper::get();
+		if ( isset( $get_payload['fed_action'] ) && 'post' === $get_payload['fed_action'] ) {
+			if ( function_exists( 'fed_get_add_profile_post_fields' ) ) {
+				fed_get_add_profile_post_fields();
+				return;
+			}
+		}
+
 		$post_fields = fed_fetch_table_rows_with_key( BC_FED_TABLE_POST, 'input_meta' );
 		if ( $post_fields instanceof WP_Error ) {
 			?>
@@ -67,10 +75,13 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 									href="
 									<?php
 									echo esc_url(
-										menu_page_url(
-											'fed_add_user_profile',
-											false
-										) . '&fed_action=post'
+										add_query_arg(
+											array( 'fed_action' => 'post' ),
+											menu_page_url(
+												'fed_post_fields',
+												false
+											)
+										)
 									);
 									?>
 											">
@@ -183,10 +194,16 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 																			href="
 																		<?php
 																			echo esc_url(
-																				menu_page_url(
-																					'fed_add_user_profile',
-																					false
-																				) . '&fed_input_id=' . $profile['id'] . '&fed_action=post'
+																				add_query_arg(
+																					array(
+																						'fed_input_id' => $profile['id'],
+																						'fed_action'   => 'post',
+																					),
+																					menu_page_url(
+																						'fed_post_fields',
+																						false
+																					)
+																				)
 																			);
 																			?>
 																			   ">

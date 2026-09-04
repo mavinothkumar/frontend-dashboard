@@ -120,150 +120,79 @@ function fed_display_dashboard_menu( $menus ) {
 	$first_element_key = array_keys( $menus['menu_items'] );
 	$first_element     = $first_element_key[0];
 	$dashboard_url     = fed_get_dashboard_url();
-	$get_payload       = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
+	$get_payload       = \FED\Helpers\InputHelper::get();
 
 	foreach ( $menus['menu_items'] as $index => $menu ) {
 		$menu_format  = fed_format_menu_items( $menu, $index, $first_element, $dashboard_url, $index );
-		$is_submenu   = '';
-		$submenu_icon = '';
-		$parent_id    = isset( $get_payload, $get_payload['parent_id'] ) ? fed_sanitize_text_field(
-			$get_payload['parent_id']
-		) : '';
-		if ( isset( $menu['submenu'] ) ) {
-			$is_submenu   = true;
-			$submenu_icon = '<span class="fed_float_right"><i class="fas fa-chevron-right"></i></span>';
-			$submenus     = $menu['submenu'];
+		$is_submenu   = false;
+		$parent_id    = isset( $get_payload['parent_id'] ) ? sanitize_text_field( $get_payload['parent_id'] ) : '';
+		
+		if ( isset( $menu['submenu'] ) && ! empty( $menu['submenu'] ) ) {
+			$is_submenu = true;
+			$submenus   = $menu['submenu'];
 			uasort( $submenus, 'fed_sort_by_order' );
 		}
 
+		$isActive     = ! empty( $menu_format['active'] );
 		$random_number = fed_get_random_string( 5 );
-		?>
-		<div class="panel panel-secondary fed_menu_item">
-			<?php
-			if ( $is_submenu ) {
-				$top_class = $index === $parent_id ? 'active' : '';
-				?>
-				<div class="panel-heading <?php echo esc_attr( $top_class . ' ' . $menu_format['active'] ); ?>"
-						role="tab" id="<?php echo esc_attr( $index ); ?>">
-					<h4 class="panel-title">
-						<a role="button" data-toggle="collapse" data-parent="#fed_default_template"
-								href="#<?php echo esc_attr( $index . $random_number ); ?>"
-								aria-expanded="true" aria-controls="<?php echo esc_attr( $index ); ?>">
-							<div class="fed_display_inline">
-								<div>
-									<div class="fed_menu_icon">
-										<span class="<?php echo esc_attr( $menu['menu_image_id'] ); ?>"></span>
-									</div>
-									<div class="fed_menu_title">
-										<?php
-										echo esc_attr( $menu_format['menu_name'] );
-										?>
-									</div>
-								</div>
-								<div>
-									<?php echo wp_kses_post( $submenu_icon ); ?>
-								</div>
-							</div>
-						</a>
 
-					</h4>
-				</div>
-				<div id="<?php echo esc_attr( $index . $random_number ); ?>"
-						class="panel-collapse collapse <?php echo $index === $parent_id ? 'in' : ''; ?>"
-						role="tabpanel"
-						aria-labelledby="<?php echo esc_attr( $index ); ?>">
-					<div class="panel-body">
-						<h4 class="panel-title">
-							<a href="<?php echo esc_attr( $menu_format['menu_url'] ); ?>">
-								<div class="flex">
-									<div class="fed_menu_icon">
-										<span class="<?php echo esc_attr( $menu['menu_image_id'] ); ?>"></span>
-									</div>
-									<div class="fed_menu_title">
-										<?php echo esc_attr( $menu_format['menu_name'] ); ?>
-									</div>
-								</div>
-							</a>
-
-						</h4>
-						<?php
-						foreach ( $submenus as $sub_index => $sub_menu ) {
-							$sub_menu_format = fed_format_menu_items(
-								$sub_menu, $sub_index, $first_element,
-								$dashboard_url, $index
-							);
-							?>
-							<h4 class="panel-title <?php echo esc_attr( $sub_menu_format['active'] ); ?>">
-								<a href="<?php echo esc_url( $sub_menu_format['menu_url'] ); ?>">
-									<div class="flex">
-										<div class="fed_menu_icon">
-											<span class="<?php echo esc_attr( $sub_menu['menu_image_id'] ); ?>"></span>
-										</div>
-										<div class="fed_menu_title">
-											<?php echo esc_attr( $sub_menu_format['menu_name'] ); ?>
-										</div>
-									</div>
-								</a>
-							</h4>
-						<?php } ?>
+		if ( $is_submenu ) {
+			$isParentActive = $index === $parent_id || $isActive;
+			?>
+			<div class="fed_menu_item mb-1">
+				<button type="button"
+						class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 <?php echo $isParentActive ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'; ?>"
+						data-toggle="collapse"
+						data-target="#sub_<?php echo esc_attr( $index . $random_number ); ?>"
+						aria-expanded="<?php echo $isParentActive ? 'true' : 'false'; ?>">
+					<div class="flex items-center gap-3">
+						<span class="w-5 text-center text-base <?php echo esc_attr( $menu['menu_image_id'] ); ?> <?php echo $isParentActive ? 'text-indigo-600' : 'text-gray-400'; ?>"></span>
+						<span><?php echo esc_html( $menu_format['menu_name'] ); ?></span>
 					</div>
+					<svg class="w-4 h-4 transform transition-transform duration-200 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+				</button>
+				<div id="sub_<?php echo esc_attr( $index . $random_number ); ?>"
+						class="pl-7 pr-2 py-1 space-y-1 <?php echo $isParentActive ? 'block' : 'hidden'; ?>">
+					<a href="<?php echo esc_url( $menu_format['menu_url'] ); ?>"
+							class="block px-3 py-1.5 rounded-md text-xs font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors">
+						<?php echo esc_html( $menu_format['menu_name'] ); ?> (Overview)
+					</a>
+					<?php
+					foreach ( $submenus as $sub_index => $sub_menu ) {
+						$sub_menu_format = fed_format_menu_items( $sub_menu, $sub_index, $first_element, $dashboard_url, $index );
+						$isSubActive     = ! empty( $sub_menu_format['active'] );
+						?>
+						<a href="<?php echo esc_url( $sub_menu_format['menu_url'] ); ?>"
+								class="block px-3 py-1.5 rounded-md text-xs font-medium transition-colors <?php echo $isSubActive ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'; ?>">
+							<?php echo esc_html( $sub_menu_format['menu_name'] ); ?>
+						</a>
+					<?php } ?>
+				</div>
+			</div>
+			<?php
+		} else {
+			if ( 'logout_logout' === $index || 'logout' === $menu['menu_slug'] ) {
+				?>
+				<div class="fed_menu_item mt-3 pt-3 border-t border-gray-100">
+					<a href="<?php echo wp_logout_url( fed_get_logout_redirect_url() ); ?>"
+							class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 hover:text-red-700 transition-all duration-150">
+						<span class="w-5 text-center text-base <?php echo esc_attr( $menu['menu_image_id'] ); ?> text-red-500"></span>
+						<span><?php echo esc_html( $menu_format['menu_name'] ); ?></span>
+					</a>
 				</div>
 				<?php
 			} else {
-
-				/**
-				 * Make logout to work on click (not to redirect to the respective page)
-				 */
-				if ( 'logout_logout' === $index ) {
-					?>
-					<div class="panel-heading  <?php echo $index === $parent_id ? 'active' : ''; ?>"
-							id="<?php echo esc_attr( $index ); ?>">
-						<h4 class="panel-title">
-							<a href="<?php echo wp_logout_url( fed_get_logout_redirect_url() ); ?>">
-								<div class="fed_display_inline">
-									<div>
-										<div class="fed_menu_icon">
-											<span class="<?php echo esc_attr( $menu['menu_image_id'] ); ?>"></span>
-										</div>
-										<div class="fed_menu_title">
-											<?php echo esc_attr( $menu_format['menu_name'] ); ?>
-										</div>
-									</div>
-									<div>
-										<?php echo esc_attr( $submenu_icon ); ?>
-									</div>
-								</div>
-							</a>
-						</h4>
-					</div>
-					<?php
-				} else {
-					?>
-					<div class="panel-heading  <?php echo $index === $parent_id ? 'active' : ''; ?>" role="tab"
-							id="<?php echo esc_attr( $index ); ?>">
-						<h4 class="panel-title">
-							<a href="<?php echo esc_attr( $menu_format['menu_url'] ); ?>">
-								<div class="fed_display_inline">
-									<div>
-										<div class="fed_menu_icon">
-											<span class="<?php echo esc_attr( $menu['menu_image_id'] ); ?>"></span>
-										</div>
-										<div class="fed_menu_title">
-											<?php echo esc_attr( $menu_format['menu_name'] ); ?>
-										</div>
-									</div>
-									<div>
-										<?php echo esc_attr( $submenu_icon ); ?>
-									</div>
-								</div>
-							</a>
-						</h4>
-					</div>
-				<?php }
+				?>
+				<div class="fed_menu_item mb-1">
+					<a href="<?php echo esc_url( $menu_format['menu_url'] ); ?>"
+							class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 <?php echo $isActive ? 'bg-indigo-50 text-indigo-700 font-semibold shadow-xs' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'; ?>">
+						<span class="w-5 text-center text-base <?php echo esc_attr( $menu['menu_image_id'] ); ?> <?php echo $isActive ? 'text-indigo-600' : 'text-gray-400'; ?>"></span>
+						<span><?php echo esc_html( $menu_format['menu_name'] ); ?></span>
+					</a>
+				</div>
+				<?php
 			}
-			?>
-		</div>
-		<?php
+		}
 	}
 }
 
@@ -274,18 +203,17 @@ function fed_display_dashboard_menu( $menus ) {
  * @param  string       $index  Index.
  * @param  string       $first_element  First Element.
  * @param  string       $dashboard_url  Dashboard URL.
- *
  * @param  string | int $parent_id  Parent ID.
  *
  * @return array
  */
 function fed_format_menu_items( $menu, $index, $first_element, $dashboard_url, $parent_id ) {
-	$get_payload = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
+	$get_payload = \FED\Helpers\InputHelper::get();
 	$active      = null;
 	$menu_type   = isset( $menu['menu_type'] ) ? $menu['menu_type'] : 'custom';
 	$menu_slug   = isset( $menu['menu_slug'] ) ? $menu['menu_slug'] : 'fed_slug_error';
 	$menu_id     = isset( $menu['id'] ) ? $menu['id'] : 0;
-	$menu_name   = isset( $menu['menu'] ) ? $menu['menu'] : 'MISSING';
+	$menu_name   = isset( $menu['menu'] ) ? $menu['menu'] : ( isset( $menu['menu_name'] ) ? $menu['menu_name'] : 'MISSING' );
 	$menu_url    = add_query_arg(
 		array(
 			'menu_type' => $menu_type,
@@ -300,16 +228,13 @@ function fed_format_menu_items( $menu, $index, $first_element, $dashboard_url, $
 	$menu_url    = apply_filters( 'fed_convert_dashboard_menu_url', $menu_url, $menu );
 	$target      = '_self';
 
-	/*
-	 * This check for menu to be open in new or same window.
-	 */
 	if ( is_array( $menu_url ) && isset( $menu_url['url'] ) ) {
 		$target   = isset( $menu_url['target'] ) ? $menu_url['target'] : $target;
 		$menu_url = $menu_url['url'];
 	}
 
 	if ( isset( $get_payload['menu_type'], $get_payload['menu_id'] ) ) {
-		if ( $index === $get_payload['menu_type'] . '_' . $get_payload['menu_id'] ) {
+		if ( $index === $get_payload['menu_type'] . '_' . $get_payload['menu_id'] || $menu_slug === ( $get_payload['menu_slug'] ?? '' ) ) {
 			$active = 'active';
 		}
 	} else {

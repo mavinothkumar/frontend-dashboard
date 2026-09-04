@@ -19,6 +19,38 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 		 */
 		public function __construct() {
 			add_action( 'admin_menu', array( $this, 'menu' ) );
+			add_action( 'admin_init', array( $this, 'handle_legacy_redirects' ) );
+			add_action( 'admin_head', array( $this, 'ensure_admin_page_title' ), 1 );
+		}
+
+		/**
+		 * Handle legacy URL redirects for bookmarks
+		 */
+		public function handle_legacy_redirects() {
+			if ( isset( $_GET['page'] ) && 'fed_settings_menu' === $_GET['page'] ) {
+				wp_safe_redirect( admin_url( 'admin.php?page=fed_settings' ) );
+				exit;
+			}
+			if ( isset( $_GET['page'] ) && 'fed_add_user_profile' === $_GET['page'] ) {
+				$action = isset( $_GET['fed_action'] ) && 'post' === $_GET['fed_action'] ? 'post' : 'profile';
+				$target = ( 'post' === $action ) ? 'fed_post_fields' : 'fed_user_profile';
+				$params = $_GET;
+				$params['page'] = $target;
+				wp_safe_redirect( add_query_arg( $params, admin_url( 'admin.php' ) ) );
+				exit;
+			}
+		}
+
+		/**
+		 * Ensure global $title is always a non-null string for FED admin pages to avoid PHP 8.1+ strip_tags(null) notice.
+		 */
+		public function ensure_admin_page_title() {
+			global $title;
+			if ( null === $title || '' === $title ) {
+				if ( isset( $_GET['page'] ) && 0 === strpos( (string) $_GET['page'], 'fed_' ) ) {
+					$title = __( 'Frontend Dashboard', 'frontend-dashboard' );
+				}
+			}
 		}
 
 		/**
@@ -29,8 +61,8 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 				__( 'Frontend Dashboard', 'frontend-dashboard' ),
 				__( 'Frontend Dashboard', 'frontend-dashboard' ),
 				'manage_options',
-				'fed_settings_menu',
-				array( $this, 'common_settings' ),
+				'fed_dashboard',
+				array( $this, 'dashboard_overview' ),
 				plugins_url( '/assets/frontend/images/d.png', BC_FED_PLUGIN ),
 				2
 			);
@@ -38,7 +70,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 			$main_menu = $this->fed_get_main_sub_menu();
 			foreach ( $main_menu as $index => $menu ) {
 				add_submenu_page(
-					'fed_settings_menu',
+					'fed_dashboard',
 					$menu['page_title'],
 					$menu['menu_title'],
 					$menu['capability'],
@@ -49,6 +81,24 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 
 			do_action( 'fed_add_main_sub_menu_action' );
 
+		}
+
+		/**
+		 * Executive Overview Dashboard
+		 */
+		public function dashboard_overview() {
+			if ( class_exists( '\FED\Controllers\Admin\DashboardOverviewController' ) ) {
+				( new \FED\Controllers\Admin\DashboardOverviewController() )->render();
+			}
+		}
+
+		/**
+		 * Payments & Invoices
+		 */
+		public function payments() {
+			if ( class_exists( 'FEDPaymentMenu' ) ) {
+				( new FEDPaymentMenu() )->index();
+			}
 		}
 
 		/**
@@ -243,12 +293,19 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 		 */
 		public function fed_get_main_sub_menu() {
 			$menu = array(
+				'fed_dashboard'        => array(
+					'page_title' => __( 'Overview', 'frontend-dashboard' ),
+					'menu_title' => __( 'Overview', 'frontend-dashboard' ),
+					'capability' => 'manage_options',
+					'callback'   => array( $this, 'dashboard_overview' ),
+					'position'   => 1,
+				),
 				'fed_dashboard_menu'   => array(
 					'page_title' => __( 'Dashboard Menu', 'frontend-dashboard' ),
 					'menu_title' => __( 'Dashboard Menu', 'frontend-dashboard' ),
 					'capability' => 'manage_options',
 					'callback'   => array( $this, 'dashboard_menu' ),
-					'position'   => 7,
+					'position'   => 10,
 				),
 				'fed_user_profile'     => array(
 					'page_title' => __( 'User Profile', 'frontend-dashboard' ),
@@ -264,19 +321,18 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 					'callback'   => array( $this, 'post_fields' ),
 					'position'   => 25,
 				),
-				'fed_add_user_profile' => array(
-					'page_title' => __( 'Add Profile / Post Fields', 'frontend-dashboard' ),
-					'menu_title' => __( 'Add Profile / Post Fields', 'frontend-dashboard' ),
+				'fed_payments'         => array(
+					'page_title' => __( 'Payments', 'frontend-dashboard' ),
+					'menu_title' => __( 'Payments', 'frontend-dashboard' ),
 					'capability' => 'manage_options',
-					'callback'   => array( $this, 'add_user_profile' ),
-					'position'   => 30,
-
+					'callback'   => array( $this, 'payments' ),
+					'position'   => 40,
 				),
-				'fed_plugin_pages'     => array(
-					'page_title' => __( 'Add-Ons', 'frontend-dashboard' ),
-					'menu_title' => __( 'Add-Ons', 'frontend-dashboard' ),
+				'fed_settings'         => array(
+					'page_title' => __( 'Settings', 'frontend-dashboard' ),
+					'menu_title' => __( 'Settings', 'frontend-dashboard' ),
 					'capability' => 'manage_options',
-					'callback'   => array( $this, 'plugin_pages' ),
+					'callback'   => array( $this, 'common_settings' ),
 					'position'   => 50,
 				),
 				'fed_status'           => array(
@@ -286,6 +342,13 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 					'callback'   => array( $this, 'status' ),
 					'position'   => 70,
 				),
+				'fed_plugin_pages'     => array(
+					'page_title' => __( 'Add-Ons', 'frontend-dashboard' ),
+					'menu_title' => __( 'Add-Ons', 'frontend-dashboard' ),
+					'capability' => 'manage_options',
+					'callback'   => array( $this, 'plugin_pages' ),
+					'position'   => 80,
+				),
 				'fed_help'             => array(
 					'page_title' => __( 'Help', 'frontend-dashboard' ),
 					'menu_title' => __( 'Help', 'frontend-dashboard' ),
@@ -293,13 +356,6 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 					'callback'   => array( $this, 'help' ),
 					'position'   => 100,
 				),
-				// 'fed_test'             => array(
-				// 'page_title' => __('Test', 'frontend-dashboard'),
-				// 'menu_title' => __('Test', 'frontend-dashboard'),
-				// 'capability' => 'manage_options',
-				// 'callback'   => array($this, 'test'),
-				// 'position'   => 100,
-				// ),
 			);
 
 			$main_menu = apply_filters( 'fed_add_main_sub_menu', $menu );

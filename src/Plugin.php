@@ -82,6 +82,17 @@ class Plugin {
 		// Register Admin Menus
 		$admin_menu_controller = new \FED\Controllers\Admin\AdminMenuController();
 		$admin_menu_controller->register_hooks( $this->loader );
+
+		// Register REST API Endpoints
+		$api_manager = $this->app->make( \FED\Api\ApiManager::class );
+		$api_manager->register_hooks( $this->loader );
+
+		// Register Theme Tokens & Cron Scheduler
+		$theme_manager = $this->app->make( \FED\Services\Ui\ThemeManager::class );
+		$theme_manager->register_hooks( $this->loader );
+
+		$cron_manager = $this->app->make( \FED\Services\Cron\CronManager::class );
+		$cron_manager->register_hooks( $this->loader );
 	}
 
 	private function load_dependencies() {
