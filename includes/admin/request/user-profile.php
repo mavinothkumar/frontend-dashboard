@@ -136,24 +136,35 @@ add_action( 'wp_ajax_fed_admin_menu_sorting', 'fed_admin_menu_sorting' );
 function fed_admin_menu_sorting() {
 	global $wpdb;
 
+	fed_verify_nonce();
+
 	$request_post = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
 	$request_get  = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
 
-	fed_verify_nonce( $request_get );
+	$table_key = isset( $request_post['table'] ) ? $request_post['table'] : ( isset( $request_get['table'] ) ? $request_get['table'] : 'fed_menu' );
+	$tables    = fed_get_tables();
 
-	$tables = fed_get_tables();
+	$sort_items = isset( $request_post['order'] ) ? $request_post['order'] : ( isset( $request_post['sort'] ) ? $request_post['sort'] : array() );
 
-	if ( isset( $request_get['table'] ) && array_key_exists( $request_get['table'], $tables ) ) {
-		foreach ( $request_post['sort'] as $sort => $id ) {
-			$wpdb->update(
-				$wpdb->prefix . fed_sanitize_text_field( $request_get['table'] ),
-				array( $tables[ $request_get['table'] ]['order'] => $sort + 1 ),
-				array( 'id' => (int) $id )
-			);
+	if ( array_key_exists( $table_key, $tables ) && ! empty( $sort_items ) && is_array( $sort_items ) ) {
+		$table_name = $wpdb->get_blog_prefix() . fed_sanitize_text_field( $table_key );
+		$order_col  = $tables[ $table_key ]['order'];
+
+		foreach ( $sort_items as $sort => $id ) {
+			$item_id = (int) $id;
+			if ( $item_id > 0 ) {
+				$wpdb->update(
+					$table_name,
+					array( $order_col => (int) $sort + 1 ),
+					array( 'id' => $item_id ),
+					array( '%d' ),
+					array( '%d' )
+				);
+			}
 		}
 
-		wp_send_json_success( array( 'message' => 'Successfully sorted' ) );
+		wp_send_json_success( array( 'message' => __( 'Successfully sorted', 'frontend-dashboard' ) ) );
 	}
 
-	wp_send_json_error( array( 'message' => 'Something went wrong' ) );
+	wp_send_json_error( array( 'message' => __( 'Something went wrong', 'frontend-dashboard' ) ) );
 }
