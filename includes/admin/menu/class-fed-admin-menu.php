@@ -244,24 +244,88 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 					color: #ffffff !important;
 				}
 
+				.bc_fed label:not(.fed-role-chip):not(.role-checkbox-label):not(.cursor-pointer) {
+					display: block !important;
+					width: 100% !important;
+					float: none !important;
+					margin: 0 0 6px 0 !important;
+					padding: 0 !important;
+					font-size: 12px !important;
+					font-weight: 700 !important;
+					color: #334155 !important;
+					text-align: left !important;
+				}
+				.bc_fed label.fed-role-chip,
+				.bc_fed .role-checkbox-label,
+				.bc_fed label.cursor-pointer,
+				.bc_fed .fed-role-chips-wrap label {
+					display: flex !important;
+					width: auto !important;
+					margin: 0 !important;
+				}
+
 				.bc_fed input[type="text"],
 				.bc_fed input[type="number"],
 				.bc_fed input[type="email"],
 				.bc_fed input[type="password"],
 				.bc_fed input[type="url"],
-				.bc_fed input[type="color"],
-				.bc_fed select,
 				.bc_fed textarea {
+					display: block !important;
 					border: 1px solid #e2e8f0 !important;
-					border-radius: 12px !important;
+					border-radius: 14px !important;
 					background-color: #f8fafc !important;
-					padding: 8px 12px !important;
+					padding: 10px 14px !important;
 					font-size: 12px !important;
+					font-weight: 500 !important;
+					line-height: 1.5 !important;
 					color: #1e293b !important;
 					width: 100% !important;
+					min-height: 42px !important;
 					box-sizing: border-box !important;
+					box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02) !important;
 					transition: all 0.15s ease !important;
 				}
+
+				.bc_fed select,
+				.bc_fed select.form-control,
+				.bc_fed select.fed_multi_select {
+					display: block !important;
+					border: 1px solid #e2e8f0 !important;
+					border-radius: 14px !important;
+					background-color: #f8fafc !important;
+					padding: 10px 38px 10px 14px !important;
+					font-size: 12px !important;
+					font-weight: 500 !important;
+					line-height: 1.5 !important;
+					color: #1e293b !important;
+					width: 100% !important;
+					max-width: 100% !important;
+					min-height: 42px !important;
+					height: 42px !important;
+					box-sizing: border-box !important;
+					box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02) !important;
+					-webkit-appearance: none !important;
+					-moz-appearance: none !important;
+					appearance: none !important;
+					background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important;
+					background-position: right 14px center !important;
+					background-repeat: no-repeat !important;
+					background-size: 16px 16px !important;
+					transition: all 0.15s ease !important;
+					cursor: pointer !important;
+				}
+
+				.bc_fed input[type="text"]:hover,
+				.bc_fed input[type="number"]:hover,
+				.bc_fed input[type="email"]:hover,
+				.bc_fed input[type="password"]:hover,
+				.bc_fed input[type="url"]:hover,
+				.bc_fed select:hover,
+				.bc_fed textarea:hover {
+					border-color: #cbd5e1 !important;
+					background-color: #ffffff !important;
+				}
+
 				.bc_fed input[type="text"]:focus,
 				.bc_fed input[type="number"]:focus,
 				.bc_fed input[type="email"]:focus,
@@ -274,10 +338,13 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 					box-shadow: 0 0 0 1px #6366f1 !important;
 					outline: none !important;
 				}
+
 				.bc_fed input[type="color"] {
 					height: 42px !important;
 					padding: 4px !important;
 					cursor: pointer;
+					border-radius: 12px !important;
+					border: 1px solid #e2e8f0 !important;
 				}
 			</style>
 

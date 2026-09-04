@@ -33,24 +33,24 @@ function fed_admin_register_settings_tab( $fed_login_register ) {
 
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 			<div class="space-y-1.5">
-				<label class="block text-xs font-bold text-slate-700">
+				<label class="block text-xs font-bold text-slate-700 m-0 mb-1.5">
 					<?php esc_html_e( 'Menu Name', 'frontend-dashboard' ); ?> <span class="text-rose-500">*</span>
 				</label>
-				<input type="text" name="fed_admin_login[name]" value="<?php echo esc_attr( $name ); ?>" placeholder="<?php esc_attr_e( '(eg) User Role', 'frontend-dashboard' ); ?>" required class="w-full px-3.5 py-2.5 bg-slate-50/70 focus:bg-white border border-slate-200 focus:border-indigo-500 rounded-xl text-xs text-slate-800 transition-colors shadow-2xs font-medium" />
+				<input type="text" name="fed_admin_login[name]" value="<?php echo esc_attr( $name ); ?>" placeholder="<?php esc_attr_e( '(eg) User Role', 'frontend-dashboard' ); ?>" required class="w-full" />
 			</div>
 
 			<div class="space-y-1.5">
-				<label class="block text-xs font-bold text-slate-700">
+				<label class="block text-xs font-bold text-slate-700 m-0 mb-1.5">
 					<?php esc_html_e( 'Menu Order Position', 'frontend-dashboard' ); ?> <span class="text-rose-500">*</span>
 				</label>
-				<input type="number" name="fed_admin_login[position]" value="<?php echo esc_attr( $position ); ?>" placeholder="40" required class="w-full px-3.5 py-2.5 bg-slate-50/70 focus:bg-white border border-slate-200 focus:border-indigo-500 rounded-xl text-xs text-slate-800 transition-colors shadow-2xs font-medium" />
+				<input type="number" name="fed_admin_login[position]" value="<?php echo esc_attr( $position ); ?>" placeholder="40" required class="w-full" />
 			</div>
 
 			<div class="space-y-1.5">
-				<label class="block text-xs font-bold text-slate-700">
+				<label class="block text-xs font-bold text-slate-700 m-0 mb-1.5">
 					<?php esc_html_e( 'Auto Login after Register?', 'frontend-dashboard' ); ?>
 				</label>
-				<select name="fed_admin_login[auto_login]" class="w-full px-3.5 py-2.5 bg-slate-50/70 focus:bg-white border border-slate-200 focus:border-indigo-500 rounded-xl text-xs text-slate-800 transition-colors shadow-2xs font-medium">
+				<select name="fed_admin_login[auto_login]" class="w-full">
 					<option value=""><?php esc_html_e( 'Please Select', 'frontend-dashboard' ); ?></option>
 					<option value="yes" <?php selected( $auto_login, 'yes' ); ?>><?php esc_html_e( 'Yes', 'frontend-dashboard' ); ?></option>
 					<option value="no" <?php selected( $auto_login, 'no' ); ?>><?php esc_html_e( 'No', 'frontend-dashboard' ); ?></option>
@@ -58,10 +58,10 @@ function fed_admin_register_settings_tab( $fed_login_register ) {
 			</div>
 
 			<div class="space-y-1.5">
-				<label class="block text-xs font-bold text-slate-700">
+				<label class="block text-xs font-bold text-slate-700 m-0 mb-1.5">
 					<?php esc_html_e( 'Email Notification after Register', 'frontend-dashboard' ); ?>
 				</label>
-				<select name="fed_admin_login[register_email_notification]" class="w-full px-3.5 py-2.5 bg-slate-50/70 focus:bg-white border border-slate-200 focus:border-indigo-500 rounded-xl text-xs text-slate-800 transition-colors shadow-2xs font-medium">
+				<select name="fed_admin_login[register_email_notification]" class="w-full">
 					<option value=""><?php esc_html_e( 'Please Select', 'frontend-dashboard' ); ?></option>
 					<option value="user" <?php selected( $email_notif, 'user' ); ?>><?php esc_html_e( 'Only User', 'frontend-dashboard' ); ?></option>
 					<option value="admin" <?php selected( $email_notif, 'admin' ); ?>><?php esc_html_e( 'Only Admin', 'frontend-dashboard' ); ?></option>
