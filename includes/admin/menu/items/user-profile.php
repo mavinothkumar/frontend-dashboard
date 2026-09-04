@@ -252,6 +252,15 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 			.bc_fed .fed-field-card.hidden {
 				display: none !important;
 			}
+			.bc_fed .text-center {
+				text-align: center !important;
+			}
+			.bc_fed .text-center p,
+			.bc_fed p.text-center {
+				text-align: center !important;
+				margin-left: auto !important;
+				margin-right: auto !important;
+			}
 			.bc_fed #fed_toast_notification {
 				z-index: 99999999 !important;
 			}
@@ -378,6 +387,17 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 								$tab_idx++;
 							endforeach;
 							?>
+						</div>
+
+						<!-- Add New Menu Action -->
+						<div class="pt-2 border-t border-slate-100 mt-2">
+							<a href="<?php echo esc_url( $dashboard_menu_url ); ?>" class="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl border border-dashed border-indigo-200/90 bg-indigo-50/40 hover:bg-indigo-50 hover:border-indigo-400 text-indigo-600 hover:text-indigo-700 text-xs font-semibold transition-all duration-150 cursor-pointer no-underline group shadow-2xs">
+								<span class="w-5 h-5 rounded-lg bg-indigo-100 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white flex items-center justify-center text-[10px] transition-colors">
+									<i class="fas fa-plus"></i>
+								</span>
+								<span><?php esc_html_e( 'Add New Menu', 'frontend-dashboard' ); ?></span>
+								<i class="fas fa-arrow-right text-[10px] opacity-60 group-hover:translate-x-0.5 group-hover:opacity-100 transition-all ml-0.5"></i>
+							</a>
 						</div>
 					</div>
 
@@ -570,14 +590,14 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 									}
 								} else {
 									?>
-									<div class="bg-white rounded-2xl p-8 text-center border border-slate-200/80 shadow-2xs">
-										<div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl mx-auto mb-3">
+									<div class="bg-white rounded-2xl p-8 sm:p-12 text-center border border-slate-200/80 shadow-2xs flex flex-col items-center justify-center">
+										<div class="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-xl mb-3">
 											<i class="fas fa-layer-group"></i>
 										</div>
-										<h4 class="text-sm font-bold text-slate-800 mb-1">
+										<h4 class="text-sm font-bold text-slate-800 mb-1 text-center w-full">
 											<?php esc_html_e( 'No Form Fields in this Menu', 'frontend-dashboard' ); ?>
 										</h4>
-										<p class="text-xs text-slate-500 max-w-sm mx-auto mb-4">
+										<p class="text-xs text-slate-500 max-w-sm mx-auto mb-4 text-center">
 											<?php
 											/* translators: %s: Menu Name */
 											printf( esc_html__( 'No form fields are currently assigned to "%s". Click below to add your first field.', 'frontend-dashboard' ), esc_html( $m_name ) );
@@ -593,14 +613,14 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 								?>
 
 								<!-- Dynamic No Search Results Container -->
-								<div class="fed-search-no-results hidden bg-white rounded-2xl p-8 text-center border border-slate-200/80 shadow-2xs">
-									<div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-400 flex items-center justify-center text-base mx-auto mb-2.5">
+								<div class="fed-search-no-results hidden bg-white rounded-2xl p-8 sm:p-12 text-center border border-slate-200/80 shadow-2xs flex flex-col items-center justify-center">
+									<div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-400 flex items-center justify-center text-base mb-2.5">
 										<i class="fas fa-search"></i>
 									</div>
-									<h4 class="text-xs sm:text-sm font-bold text-slate-800 mb-1">
+									<h4 class="text-xs sm:text-sm font-bold text-slate-800 mb-1 text-center w-full">
 										<?php esc_html_e( 'No fields match your search in this menu', 'frontend-dashboard' ); ?>
 									</h4>
-									<p class="text-[11px] text-slate-500 max-w-sm mx-auto mb-3 fed-other-tabs-match-hint"></p>
+									<p class="text-[11px] text-slate-500 max-w-sm mx-auto mb-3 text-center fed-other-tabs-match-hint"></p>
 									<button type="button" class="fed-btn-secondary fed-clear-search-btn h-8 inline-flex items-center gap-1.5 px-3.5 rounded-lg text-xs font-semibold cursor-pointer">
 										<i class="fas fa-times text-[10px]"></i>
 										<span><?php esc_html_e( 'Clear Search', 'frontend-dashboard' ); ?></span>

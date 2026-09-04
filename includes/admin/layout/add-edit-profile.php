@@ -36,8 +36,12 @@ function fed_get_admin_up_role_based( $row, $action, $menu_options ) {
 				<i class="fas fa-user-shield"></i>
 			</div>
 			<div>
-				<h3 class="text-sm sm:text-base font-bold text-slate-900 m-0"><?php esc_html_e( 'Access Control & Menu Placement', 'frontend-dashboard' ); ?></h3>
-				<p class="text-xs text-slate-500 m-0 mt-0.5"><?php esc_html_e( 'Configure dashboard menu placement and user role access permissions.', 'frontend-dashboard' ); ?></p>
+				<h3 class="text-sm sm:text-base font-bold text-slate-900 m-0">
+					<?php echo ( 'post' === $action ) ? esc_html__( 'Access Control & Post Type Placement', 'frontend-dashboard' ) : esc_html__( 'Access Control & Menu Placement', 'frontend-dashboard' ); ?>
+				</h3>
+				<p class="text-xs text-slate-500 m-0 mt-0.5">
+					<?php echo ( 'post' === $action ) ? esc_html__( 'Configure target post type and user role access permissions.', 'frontend-dashboard' ) : esc_html__( 'Configure dashboard menu placement and user role access permissions.', 'frontend-dashboard' ); ?>
+				</p>
 			</div>
 		</div>
 
@@ -85,6 +89,49 @@ function fed_get_admin_up_role_based( $row, $action, $menu_options ) {
 						<p class="text-[11px] text-slate-400 m-0"><?php esc_html_e( 'Hide this field on standard profile tab.', 'frontend-dashboard' ); ?></p>
 					</div>
 				<?php endif; ?>
+
+				<!-- Read-Only / Disable User Edit Toggle -->
+				<div class="space-y-2">
+					<label class="block text-xs font-bold text-slate-700">
+						<?php esc_html_e( 'User Edit Permissions', 'frontend-dashboard' ); ?>
+					</label>
+					<div class="p-4 bg-slate-50/80 border border-slate-200/80 rounded-2xl flex items-center justify-between gap-3">
+						<span class="text-xs font-semibold text-slate-700"><?php esc_html_e( 'Admin-Only Edit (Read-Only)?', 'frontend-dashboard' ); ?></span>
+						<?php
+						echo fed_input_box(
+							'extended[disable_user_access]',
+							array(
+								'default_value' => 'Disable',
+								'value'         => fed_get_data( 'extended.disable_user_access', $row, 'Enable' ),
+							),
+							'checkbox'
+						);
+						?>
+					</div>
+					<p class="text-[11px] text-slate-400 m-0"><?php esc_html_e( 'Only Administrator can update this field.', 'frontend-dashboard' ); ?></p>
+				</div>
+			</div>
+		<?php else : ?>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+				<!-- Target Post Type Dropdown -->
+				<div class="space-y-2">
+					<label class="block text-xs font-bold text-slate-700">
+						<?php esc_html_e( 'Target Post Type *', 'frontend-dashboard' ); ?>
+					</label>
+					<?php
+					echo fed_input_box(
+						'post_type',
+						array(
+							'default_value' => 'post',
+							'label'         => __( 'Post Type', 'frontend-dashboard' ),
+							'value'         => isset( $row['post_type'] ) ? $row['post_type'] : 'post',
+							'options'       => fed_get_public_post_types(),
+						),
+						'select'
+					);
+					?>
+					<p class="text-[11px] text-slate-400 m-0"><?php esc_html_e( 'The WordPress post type where this custom field will be attached.', 'frontend-dashboard' ); ?></p>
+				</div>
 
 				<!-- Read-Only / Disable User Edit Toggle -->
 				<div class="space-y-2">
@@ -242,26 +289,6 @@ function fed_get_admin_up_display_permission( $row, $action, $type = '' ) {
 					?>
 				</div>
 			<?php } ?>
-
-			<?php if ( 'post' === $action ) : ?>
-				<!-- Post Type Dropdown -->
-				<div class="space-y-2">
-					<label class="block text-xs font-bold text-slate-700">
-						<?php esc_html_e( 'Post Type', 'frontend-dashboard' ); ?>
-					</label>
-					<?php
-					echo fed_input_box(
-						'post_type',
-						array(
-							'default_value' => 'Post',
-							'value'         => isset( $row['post_type'] ) ? $row['post_type'] : 'post',
-							'options'       => fed_get_public_post_types(),
-						),
-						'select'
-					);
-					?>
-				</div>
-			<?php endif; ?>
 
 			<!-- Is Required Toggle -->
 			<?php

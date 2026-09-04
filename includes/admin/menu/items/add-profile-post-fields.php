@@ -15,12 +15,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 function fed_get_add_profile_post_fields() {
 	wp_enqueue_script( 'jquery-ui-sortable' );
 
-	$get_payload     = \FED\Helpers\InputHelper::get();
-	$id              = '';
-	$add_edit_action = __( 'Add New ', 'frontend-dashboard' );
-	$selected        = 'single_line';
-	$action          = isset( $get_payload['fed_action'] ) ? esc_attr( $get_payload['fed_action'] ) : 'profile';
-	$preselect_menu  = isset( $get_payload['menu'] ) ? esc_attr( $get_payload['menu'] ) : 'profile';
+	$get_payload         = array_merge( \FED\Helpers\InputHelper::get(), \FED\Helpers\InputHelper::post() );
+	$id                  = '';
+	$add_edit_action     = __( 'Add New ', 'frontend-dashboard' );
+	$selected            = 'single_line';
+	$action              = isset( $get_payload['fed_action'] ) ? esc_attr( $get_payload['fed_action'] ) : 'profile';
+	$preselect_menu      = isset( $get_payload['menu'] ) ? esc_attr( $get_payload['menu'] ) : 'profile';
+	$preselect_post_type = isset( $get_payload['post_type'] ) ? esc_attr( $get_payload['post_type'] ) : 'post';
 
 	if ( isset( $get_payload['fed_input_id'] ) && ! empty( $get_payload['fed_input_id'] ) ) {
 		$id              = (int) $get_payload['fed_input_id'];
@@ -85,6 +86,9 @@ function fed_get_add_profile_post_fields() {
 			$selected = ! empty( $row['input_type'] ) ? $row['input_type'] : 'single_line';
 		} else {
 			$row = fed_get_empty_value_for_user_profile( $action );
+			if ( ! empty( $preselect_post_type ) ) {
+				$row['post_type'] = $preselect_post_type;
+			}
 		}
 	}
 
@@ -117,12 +121,18 @@ function fed_get_add_profile_post_fields() {
 		}
 	}
 
-	// Menu display title
-	$active_menu_name = ucfirst( $field_menu );
-	foreach ( $menu_options as $m_opt ) {
-		if ( isset( $m_opt['menu_slug'] ) && $m_opt['menu_slug'] === $field_menu ) {
-			$active_menu_name = $m_opt['menu'];
-			break;
+	// Menu / Post Type display title
+	if ( 'post' === $action ) {
+		$public_pts       = fed_get_public_post_types();
+		$field_post_type  = isset( $row['post_type'] ) && ! empty( $row['post_type'] ) ? $row['post_type'] : $preselect_post_type;
+		$active_menu_name = isset( $public_pts[ $field_post_type ] ) ? $public_pts[ $field_post_type ] : ucfirst( $field_post_type );
+	} else {
+		$active_menu_name = ucfirst( $field_menu );
+		foreach ( $menu_options as $m_opt ) {
+			if ( isset( $m_opt['menu_slug'] ) && $m_opt['menu_slug'] === $field_menu ) {
+				$active_menu_name = $m_opt['menu'];
+				break;
+			}
 		}
 	}
 
@@ -270,9 +280,9 @@ function fed_get_add_profile_post_fields() {
 					<div class="flex items-center gap-2.5">
 						<h1 class="text-base sm:text-lg font-bold text-slate-900 m-0 p-0">
 							<?php if ( $is_editing ) : ?>
-								<?php esc_html_e( 'Edit Form Field', 'frontend-dashboard' ); ?>: <span class="text-indigo-600 font-bold"><?php echo esc_html( $field_label ); ?></span>
+								<?php echo ( 'post' === $action ) ? esc_html__( 'Edit Post Field', 'frontend-dashboard' ) : esc_html__( 'Edit Form Field', 'frontend-dashboard' ); ?>: <span class="text-indigo-600 font-bold"><?php echo esc_html( $field_label ); ?></span>
 							<?php else : ?>
-								<?php esc_html_e( 'Add New Form Field', 'frontend-dashboard' ); ?>
+								<?php echo ( 'post' === $action ) ? esc_html__( 'Add New Post Field', 'frontend-dashboard' ) : esc_html__( 'Add New Form Field', 'frontend-dashboard' ); ?>
 							<?php endif; ?>
 						</h1>
 						<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100">
