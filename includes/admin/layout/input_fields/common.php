@@ -14,9 +14,24 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param  array $row  Row.
  */
 function fed_get_placeholder_field( array $row ) {
+	$val = isset( $row['placeholder'] ) ? $row['placeholder'] : '';
 	?>
-    <label for=""><?php _e( 'Placeholder Text', 'frontend-dashboard' ) ?></label>
-	<?php echo fed_input_box( 'placeholder', array( 'value' => $row['placeholder'] ), 'single_line' ); ?>
+	<div class="space-y-1.5">
+		<label class="block text-xs font-bold text-slate-700">
+			<?php esc_html_e( 'Placeholder Text', 'frontend-dashboard' ); ?>
+		</label>
+		<?php
+		echo fed_input_box(
+			'placeholder',
+			array(
+				'value' => $val,
+				'class' => 'fed-live-preview-placeholder',
+			),
+			'single_line'
+		);
+		?>
+		<p class="text-[11px] text-slate-400 m-0"><?php esc_html_e( 'Hint text shown inside the input when empty.', 'frontend-dashboard' ); ?></p>
+	</div>
 	<?php
 }
 
@@ -26,9 +41,23 @@ function fed_get_placeholder_field( array $row ) {
  * @param  array $row  Row.
  */
 function fed_get_class_field( array $row ) {
+	$val = isset( $row['class_name'] ) ? $row['class_name'] : '';
 	?>
-    <label for=""><?php _e( 'Class Name', 'frontend-dashboard' ) ?></label>
-	<?php echo fed_input_box( 'class_name', array( 'value' => $row['class_name'] ), 'single_line' ); ?>
+	<div class="space-y-1.5">
+		<label class="block text-xs font-bold text-slate-700">
+			<?php esc_html_e( 'Custom CSS Class', 'frontend-dashboard' ); ?>
+		</label>
+		<?php
+		echo fed_input_box(
+			'class_name',
+			array(
+				'value' => $val,
+			),
+			'single_line'
+		);
+		?>
+		<p class="text-[11px] text-slate-400 m-0"><?php esc_html_e( 'Additional CSS classes separated by space.', 'frontend-dashboard' ); ?></p>
+	</div>
 	<?php
 }
 
@@ -38,8 +67,22 @@ function fed_get_class_field( array $row ) {
  * @param  array $row  Row.
  */
 function fed_get_id_field( array $row ) {
+	$val = isset( $row['id_name'] ) ? $row['id_name'] : '';
 	?>
-    <label for=""><?php _e( 'ID Name', 'frontend-dashboard' ) ?></label>
-	<?php echo fed_input_box( 'id_name', array( 'value' => $row['id_name'] ), 'single_line' ); ?>
+	<div class="space-y-1.5">
+		<label class="block text-xs font-bold text-slate-700">
+			<?php esc_html_e( 'Element ID', 'frontend-dashboard' ); ?>
+		</label>
+		<?php
+		echo fed_input_box(
+			'id_name',
+			array(
+				'value' => $val,
+			),
+			'single_line'
+		);
+		?>
+		<p class="text-[11px] text-slate-400 m-0"><?php esc_html_e( 'Unique HTML ID attribute for this field.', 'frontend-dashboard' ); ?></p>
+	</div>
 	<?php
 }

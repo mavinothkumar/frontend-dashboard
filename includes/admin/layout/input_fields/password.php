@@ -16,54 +16,47 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param  array  $menu_options  Menu Options.
  */
 function fed_admin_input_fields_password( $row, $action, $menu_options ) {
+	$is_active = ( isset( $row['input_type'] ) && 'password' === $row['input_type'] );
 	?>
-    <div class="row fed_input_type_container fed_input_password_container hide">
-        <form method="post"
-              class="fed_admin_menu fed_ajax"
-              action="<?php echo admin_url( 'admin-ajax.php?action=fed_admin_setting_up_form' ); ?>">
+	<div class="fed_input_type_container fed_input_password_container space-y-7 <?php echo $is_active ? '' : 'hide hidden'; ?>" data-field-type="password">
+		<form method="post"
+			  class="fed_admin_menu fed_ajax space-y-7"
+			  action="<?php echo admin_url( 'admin-ajax.php?action=fed_admin_setting_up_form' ); ?>">
 
 			<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
-
 			<?php echo fed_loader(); ?>
 
-            <div class="col-md-12">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">
-                            <b><?php _e( 'Password', 'frontend-dashboard' ); ?></b>
-                        </h3>
-                    </div>
-                    <div class="panel-body">
-                        <div class="fed_input_text">
-							<?php fed_get_admin_up_label_input_order( $row ); ?>
-                            <div class="row">
-								<?php fed_get_admin_up_input_meta( $row ); ?>
+			<!-- Card: Basic Field Settings -->
+			<div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-6 sm:space-y-7">
+				<div class="flex items-center gap-3.5 pb-5 border-b border-slate-100">
+					<div class="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-base shrink-0 shadow-2xs">
+						<i class="fas fa-key"></i>
+					</div>
+					<div>
+						<h3 class="text-sm sm:text-base font-bold text-slate-900 m-0"><?php esc_html_e( 'Password Field', 'frontend-dashboard' ); ?></h3>
+						<p class="text-xs text-slate-500 m-0 mt-0.5"><?php esc_html_e( 'Secure masked password input field.', 'frontend-dashboard' ); ?></p>
+					</div>
+				</div>
 
-                                <div class="form-group col-md-6">
-									<?php fed_get_placeholder_field( $row ); ?>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6">
-									<?php fed_get_class_field( $row ); ?>
-                                </div>
+				<div class="space-y-5">
+					<?php fed_get_admin_up_label_input_order( $row ); ?>
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+						<?php fed_get_admin_up_input_meta( $row ); ?>
+						<?php fed_get_placeholder_field( $row ); ?>
+					</div>
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+						<?php fed_get_class_field( $row ); ?>
+						<?php fed_get_id_field( $row ); ?>
+					</div>
+				</div>
+			</div>
 
-                                <div class="form-group col-md-6">
-									<?php fed_get_id_field( $row ); ?>
-                                </div>
-                            </div>
-							<?php
-							fed_get_admin_up_display_permission( $row, $action );
-
-							fed_get_admin_up_role_based( $row, $action, $menu_options );
-
-							fed_get_input_type_and_submit_btn( 'password', $action );
-							?>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
+			<?php
+			fed_get_admin_up_display_permission( $row, $action );
+			fed_get_admin_up_role_based( $row, $action, $menu_options );
+			fed_get_input_type_and_submit_btn( 'password', $action );
+			?>
+		</form>
+	</div>
 	<?php
 }

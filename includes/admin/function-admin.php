@@ -550,8 +550,15 @@ function fed_process_menu( $row ) {
 			$row['user_role']
 		) ? unserialize( $row['user_role'] ) : serialize( array_keys( $row['user_role'] ) ) ) : '',
 		'extended'          => isset( $row['extended'] ) ? sanitize_text_field( $row['extended'] ) : '',
-
+		'menu_key'          => isset( $row['fed_menu_key'] ) ? sanitize_text_field( $row['fed_menu_key'] ) : null,
+		'menu_value'        => '',
 	);
+
+	if ( isset( $row['fed_menu_key'] ) && 'yes' === $row['fed_menu_key'] && isset( $row['fed_menu_value'] ) ) {
+		$default_value['menu_value'] = sanitize_text_field( $row['fed_menu_value'] );
+	} elseif ( isset( $row['fed_menu_key'] ) && 'url' === $row['fed_menu_key'] && isset( $row['fed_menu_value_url'] ) ) {
+		$default_value['menu_value'] = serialize( $row['fed_menu_value_url'] );
+	}
 
 	return apply_filters( 'fed_process_menu', $default_value, $row );
 }

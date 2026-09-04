@@ -19,6 +19,22 @@ add_action( 'wp_ajax_fed_admin_setting_form_dashboard_menu', 'fed_admin_setting_
 add_action( 'wp_ajax_fed_user_profile_delete', 'fed_user_profile_delete_function' );
 add_action( 'wp_ajax_fed_message_form', 'fed_message_form_function' );
 add_action( 'wp_ajax_fed_is_registered', 'fed_is_registered' );
+add_action( 'wp_ajax_fed_get_field_builder_modal', 'fed_get_field_builder_modal_function' );
+
+/**
+ * Render Field Builder Modal Markup via AJAX.
+ */
+function fed_get_field_builder_modal_function() {
+	fed_verify_nonce();
+
+	ob_start();
+	if ( function_exists( 'fed_get_add_profile_post_fields' ) ) {
+		fed_get_add_profile_post_fields();
+	}
+	$html = ob_get_clean();
+
+	wp_send_json_success( array( 'html' => $html ) );
+}
 
 /**
  * Admin Setting Page.
@@ -324,3 +340,56 @@ function fed_message_form_function() {
 	);
 	exit();
 }
+
+/**
+ * AJAX Search WordPress Pages (Paginated & Searchable on Demand).
+ */
+add_action( 'wp_ajax_fed_search_wp_pages', 'fed_search_wp_pages_ajax' );
+function fed_search_wp_pages_ajax() {
+	fed_verify_nonce();
+
+	$query       = isset( $_REQUEST['q'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['q'] ) ) : '';
+	$selected_id = isset( $_REQUEST['selected_id'] ) ? (int) $_REQUEST['selected_id'] : 0;
+
+	$args = array(
+		'post_type'      => 'page',
+		'post_status'    => 'publish',
+		'posts_per_page' => 25,
+		'orderby'        => 'title',
+		'order'          => 'ASC',
+	);
+
+	if ( ! empty( $query ) ) {
+		$args['s'] = $query;
+	}
+
+	$pages   = get_posts( $args );
+	$results = array();
+
+	// If a specific selected_id is requested and not in the first 25, prepend it
+	if ( $selected_id > 0 ) {
+		$found = false;
+		foreach ( $pages as $p ) {
+			if ( (int) $p->ID === $selected_id ) {
+				$found = true;
+				break;
+			}
+		}
+		if ( ! $found ) {
+			$sel_post = get_post( $selected_id );
+			if ( $sel_post && 'page' === $sel_post->post_type ) {
+				array_unshift( $pages, $sel_post );
+			}
+		}
+	}
+
+	foreach ( $pages as $p ) {
+		$results[] = array(
+			'id'    => $p->ID,
+			'title' => $p->post_title ? $p->post_title : sprintf( __( '(Page #%d no title)', 'frontend-dashboard' ), $p->ID ),
+		);
+	}
+
+	wp_send_json_success( array( 'pages' => $results ) );
+}
+
