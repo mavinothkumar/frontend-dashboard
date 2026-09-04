@@ -75,6 +75,12 @@ if ( ! function_exists( 'fed_get_profile_field_type_icon' ) ) {
 				return 'fas fa-calendar-alt';
 			case 'color':
 				return 'fas fa-palette';
+			case 'wp_editor':
+				return 'fas fa-edit';
+			case 'label':
+				return 'fas fa-tag';
+			case 'table':
+				return 'fas fa-table';
 			default:
 				return 'fas fa-pen-nib';
 		}
@@ -640,7 +646,7 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 				<button type="button" class="fed-close-builder-modal fixed top-5 right-6 z-[1000000] w-10 h-10 rounded-2xl bg-white hover:bg-slate-200 border border-slate-200/80 text-slate-700 shadow-md flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95" title="<?php esc_attr_e( 'Close & Return to Form Fields', 'frontend-dashboard' ); ?>">
 					<i class="fas fa-times text-sm"></i>
 				</button>
-				<div id="fed_field_builder_modal_content" class="w-full max-w-7xl">
+				<div id="fed_field_builder_modal_content" class="w-full">
 					<!-- Dynamically injected builder markup -->
 				</div>
 			</div>
