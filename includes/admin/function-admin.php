@@ -3638,78 +3638,293 @@ function fed_get_help_video_items() {
 
 add_action( 'admin_footer_text', 'fed_show_help_icons' );
 /**
- * Show Help Icons.
+ * Show Modern Floating Quick Resources Hub.
  */
 function fed_show_help_icons() {
 	if ( isset( $_GET, $_GET['page'] ) && in_array( $_GET['page'], fed_get_script_loading_pages() ) ) {
 		?>
+		<style>
+			.fed-floating-hub {
+				position: fixed !important;
+				bottom: 24px !important;
+				right: 24px !important;
+				z-index: 99990 !important;
+				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif !important;
+				box-sizing: border-box !important;
+			}
+			.fed-floating-hub * {
+				box-sizing: border-box !important;
+			}
+			.fed-hub-fab {
+				width: 52px !important;
+				height: 52px !important;
+				border-radius: 50% !important;
+				background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+				color: #ffffff !important;
+				border: 2px solid #ffffff !important;
+				outline: none !important;
+				cursor: pointer !important;
+				display: flex !important;
+				align-items: center !important;
+				justify-content: center !important;
+				box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.45), 0 8px 10px -6px rgba(37, 99, 235, 0.3) !important;
+				transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+			}
+			.fed-hub-fab:hover {
+				transform: scale(1.08) !important;
+				box-shadow: 0 14px 28px -5px rgba(37, 99, 235, 0.55), 0 10px 12px -6px rgba(37, 99, 235, 0.35) !important;
+			}
+			.fed-hub-fab.is-active {
+				background: #0f172a !important;
+				transform: scale(1.02) !important;
+				box-shadow: 0 10px 20px -5px rgba(15, 23, 42, 0.4) !important;
+			}
+			.fed-hub-menu-panel {
+				position: absolute !important;
+				bottom: 64px !important;
+				right: 0 !important;
+				width: 250px !important;
+				background: #ffffff !important;
+				border-radius: 18px !important;
+				border: 1px solid rgba(226, 232, 240, 0.9) !important;
+				box-shadow: 0 20px 35px -10px rgba(15, 23, 42, 0.2), 0 1px 3px 0 rgba(0, 0, 0, 0.05) !important;
+				overflow: hidden !important;
+				transform-origin: bottom right !important;
+				transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+			}
+			.fed-hub-menu-panel.is-hidden {
+				opacity: 0 !important;
+				transform: scale(0.9) translateY(12px) !important;
+				pointer-events: none !important;
+				display: none !important;
+			}
+			.fed-hub-header {
+				background: linear-gradient(135deg, #1e293b, #0f172a) !important;
+				padding: 12px 14px !important;
+				color: #ffffff !important;
+			}
+			.fed-hub-title {
+				display: block !important;
+				font-size: 13px !important;
+				font-weight: 700 !important;
+				color: #ffffff !important;
+				line-height: 1.2 !important;
+			}
+			.fed-hub-subtitle {
+				display: block !important;
+				font-size: 10px !important;
+				color: #94a3b8 !important;
+				margin-top: 2px !important;
+			}
+			.fed-hub-items {
+				padding: 6px !important;
+				max-height: 360px !important;
+				overflow-y: auto !important;
+			}
+			.fed-hub-item {
+				display: flex !important;
+				align-items: center !important;
+				padding: 7px 10px !important;
+				border-radius: 10px !important;
+				text-decoration: none !important;
+				color: #334155 !important;
+				transition: background 0.15s ease-in-out !important;
+				margin-bottom: 2px !important;
+			}
+			.fed-hub-item:hover {
+				background: #f1f5f9 !important;
+				text-decoration: none !important;
+			}
+			.fed-hub-icon-wrap {
+				width: 30px !important;
+				height: 30px !important;
+				border-radius: 8px !important;
+				display: flex !important;
+				align-items: center !important;
+				justify-content: center !important;
+				font-size: 13px !important;
+				margin-right: 10px !important;
+				flex-shrink: 0 !important;
+				color: #ffffff !important;
+			}
+			.fed-hub-item-label {
+				font-size: 12px !important;
+				font-weight: 600 !important;
+				color: #1e293b !important;
+				line-height: 1.2 !important;
+			}
+			.fed-hub-item-sub {
+				font-size: 10px !important;
+				color: #64748b !important;
+				line-height: 1.1 !important;
+			}
+		</style>
 
-		<div class="bc_fed fed_sticky_help_bar">
-			<div class="fed_sticky_close_open">
-				<div class="fed_sticky_open hide">
-					<i class="fas fa-angle-double-left fa-2x"></i>
+		<div class="bc_fed fed-floating-hub" id="fed_floating_hub">
+			<!-- Collapsible Menu Panel -->
+			<div class="fed-hub-menu-panel is-hidden" id="fed_hub_menu_panel">
+				<div class="fed-hub-header">
+					<span class="fed-hub-title"><?php esc_html_e( 'Quick Resources', 'frontend-dashboard' ); ?></span>
+					<span class="fed-hub-subtitle"><?php esc_html_e( 'Frontend Dashboard Hub', 'frontend-dashboard' ); ?></span>
 				</div>
-				<div class="fed_sticky_close">X</div>
+				<div class="fed-hub-items">
+					<!-- Demo -->
+					<a target="_blank" rel="noopener noreferrer" href="https://demo.frontenddashboard.com" class="fed-hub-item">
+						<div class="fed-hub-icon-wrap" style="background: linear-gradient(135deg, #ec4899, #f43f5e);">
+							<i class="fas fa-eye"></i>
+						</div>
+						<div>
+							<div class="fed-hub-item-label"><?php esc_html_e( 'Live Demo', 'frontend-dashboard' ); ?></div>
+							<div class="fed-hub-item-sub"><?php esc_html_e( 'Interactive preview', 'frontend-dashboard' ); ?></div>
+						</div>
+					</a>
+					<!-- Rate Us -->
+					<a target="_blank" rel="noopener noreferrer" href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#new-post" class="fed-hub-item">
+						<div class="fed-hub-icon-wrap" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+							<i class="fas fa-star"></i>
+						</div>
+						<div>
+							<div class="fed-hub-item-label"><?php esc_html_e( 'Rate 5 Stars', 'frontend-dashboard' ); ?></div>
+							<div class="fed-hub-item-sub"><?php esc_html_e( 'Support plugin', 'frontend-dashboard' ); ?></div>
+						</div>
+					</a>
+					<!-- Donate -->
+					<a target="_blank" rel="noopener noreferrer" href="https://paypal.me/buffercode" class="fed-hub-item">
+						<div class="fed-hub-icon-wrap" style="background: linear-gradient(135deg, #10b981, #059669);">
+							<i class="fas fa-hand-holding-usd"></i>
+						</div>
+						<div>
+							<div class="fed-hub-item-label"><?php esc_html_e( 'Donate', 'frontend-dashboard' ); ?></div>
+							<div class="fed-hub-item-sub"><?php esc_html_e( 'Support creation', 'frontend-dashboard' ); ?></div>
+						</div>
+					</a>
+					<!-- Addons -->
+					<a href="<?php menu_page_url( 'fed_plugin_pages' ); ?>" class="fed-hub-item">
+						<div class="fed-hub-icon-wrap" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
+							<i class="fas fa-puzzle-piece"></i>
+						</div>
+						<div>
+							<div class="fed-hub-item-label"><?php esc_html_e( 'Add-Ons', 'frontend-dashboard' ); ?></div>
+							<div class="fed-hub-item-sub"><?php esc_html_e( 'Extensions store', 'frontend-dashboard' ); ?></div>
+						</div>
+					</a>
+					<!-- Help & Docs -->
+					<a href="<?php menu_page_url( 'fed_help' ); ?>" class="fed-hub-item">
+						<div class="fed-hub-icon-wrap" style="background: linear-gradient(135deg, #0284c7, #0369a1);">
+							<i class="fas fa-question-circle"></i>
+						</div>
+						<div>
+							<div class="fed-hub-item-label"><?php esc_html_e( 'Help & Docs', 'frontend-dashboard' ); ?></div>
+							<div class="fed-hub-item-sub"><?php esc_html_e( 'Documentation', 'frontend-dashboard' ); ?></div>
+						</div>
+					</a>
+					<!-- Videos -->
+					<a target="_blank" rel="noopener noreferrer" href="https://buffercode.com/category/name/frontend-dashboard" class="fed-hub-item">
+						<div class="fed-hub-icon-wrap" style="background: linear-gradient(135deg, #ef4444, #b91c1c);">
+							<i class="fab fa-youtube"></i>
+						</div>
+						<div>
+							<div class="fed-hub-item-label"><?php esc_html_e( 'Video Tutorials', 'frontend-dashboard' ); ?></div>
+							<div class="fed-hub-item-sub"><?php esc_html_e( 'Watch guides', 'frontend-dashboard' ); ?></div>
+						</div>
+					</a>
+					<!-- Twitter / X -->
+					<a target="_blank" rel="noopener noreferrer" href="https://twitter.com/buffercode/" class="fed-hub-item">
+						<div class="fed-hub-icon-wrap" style="background: #0f172a;">
+							<i class="fab fa-twitter"></i>
+						</div>
+						<div>
+							<div class="fed-hub-item-label"><?php esc_html_e( 'Twitter / X', 'frontend-dashboard' ); ?></div>
+							<div class="fed-hub-item-sub"><?php esc_html_e( '@buffercode', 'frontend-dashboard' ); ?></div>
+						</div>
+					</a>
+					<!-- Facebook -->
+					<a target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/buffercode/" class="fed-hub-item">
+						<div class="fed-hub-icon-wrap" style="background: #1877f2;">
+							<i class="fab fa-facebook-f"></i>
+						</div>
+						<div>
+							<div class="fed-hub-item-label"><?php esc_html_e( 'Community', 'frontend-dashboard' ); ?></div>
+							<div class="fed-hub-item-sub"><?php esc_html_e( 'Facebook group', 'frontend-dashboard' ); ?></div>
+						</div>
+					</a>
+				</div>
 			</div>
-			<div class="fed_sticky_items">
-				<div class="fed_sticky_item fed_demo">
-					<a target="_blank"
-							href="https://demo.frontenddashboard.com">
-						<i class="fas fa-eye fa-2x bc_fed_jump"></i>
-						<div class="fed_sticky_title">
-							Demo
-						</div>
-					</a>
-				</div>
-				<div class="fed_sticky_item">
-					<a target="_blank"
-							href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#new-post">
-						<i class="fas fa-star fa-2x bc_fed_spin"></i>
-						<div class="fed_sticky_title">
-							Rate Us
-						</div>
-					</a>
-				</div>
-				<div class="fed_sticky_item fed_bg_red">
-					<a href="https://paypal.me/buffercode" target="_blank">
-						<i class="fas fa-hand-holding-usd fa-2x"></i>
-						<div class="fed_sticky_title">Donate</div>
-					</a>
-				</div>
-				<div class="fed_sticky_item fed_bg_addons">
-					<a href="<?php menu_page_url( 'fed_plugin_pages' ); ?>">
-						<i class="fas fa-puzzle-piece fa-2x"></i>
-						<div class="fed_sticky_title">Addons</div>
-					</a>
-				</div>
-				<div class="fed_sticky_item">
-					<a href="<?php menu_page_url( 'fed_help' ); ?>">
-						<i class="fas fa-question-circle fa-2x"></i>
-						<div class="fed_sticky_title">
-							Help!
-						</div>
-					</a>
-				</div>
-				<div class="fed_sticky_item">
-					<a href="https://buffercode.com/category/name/frontend-dashboard" target="_blank">
-						<i class="fab fa-youtube fa-2x"></i>
-						<div class="fed_sticky_title">Videos</div>
-					</a>
-				</div>
-				<div class="fed_sticky_item">
-					<a href="https://twitter.com/buffercode/" target="_blank">
-						<i class="fab fa-twitter fa-2x"></i>
-						<div class="fed_sticky_title">Twitter</div>
-					</a>
-				</div>
-				<div class="fed_sticky_item">
-					<a href="https://www.facebook.com/buffercode/" target="_blank">
-						<i class="fab fa-facebook fa-2x"></i>
-						<div class="fed_sticky_title">Facebook</div>
-					</a>
-				</div>
-			</div>
+
+			<!-- Circular FAB Trigger -->
+			<button type="button" id="fed_floating_hub_btn" class="fed-hub-fab" title="<?php esc_attr_e( 'Frontend Dashboard Quick Resources', 'frontend-dashboard' ); ?>" aria-label="<?php esc_attr_e( 'Help & Resources', 'frontend-dashboard' ); ?>">
+				<i id="fed_hub_fab_icon" class="fas fa-question text-lg"></i>
+			</button>
 		</div>
+
+		<script>
+		(function() {
+			const hubBtn = document.getElementById('fed_floating_hub_btn');
+			const hubPanel = document.getElementById('fed_hub_menu_panel');
+			const hubIcon = document.getElementById('fed_hub_fab_icon');
+			const storageKey = 'fed_floating_hub_state';
+
+			if (!hubBtn || !hubPanel) return;
+
+			function openHub(saveState) {
+				hubPanel.classList.remove('is-hidden');
+				hubBtn.classList.add('is-active');
+				if (hubIcon) {
+					hubIcon.className = 'fas fa-times text-lg';
+				}
+				if (saveState) {
+					localStorage.setItem(storageKey, 'open');
+				}
+			}
+
+			function closeHub(saveState) {
+				hubPanel.classList.add('is-hidden');
+				hubBtn.classList.remove('is-active');
+				if (hubIcon) {
+					hubIcon.className = 'fas fa-question text-lg';
+				}
+				if (saveState) {
+					localStorage.setItem(storageKey, 'closed');
+				}
+			}
+
+			// Initialize from localStorage (default is closed)
+			const savedState = localStorage.getItem(storageKey);
+			if (savedState === 'open') {
+				openHub(false);
+			} else {
+				closeHub(false);
+			}
+
+			// Toggle on button click
+			hubBtn.addEventListener('click', function(e) {
+				e.stopPropagation();
+				if (hubPanel.classList.contains('is-hidden')) {
+					openHub(true);
+				} else {
+					closeHub(true);
+				}
+			});
+
+			// Close when clicking outside
+			document.addEventListener('click', function(e) {
+				if (!e.target.closest('#fed_floating_hub')) {
+					if (!hubPanel.classList.contains('is-hidden')) {
+						closeHub(true);
+					}
+				}
+			});
+
+			// Close on Escape key
+			document.addEventListener('keydown', function(e) {
+				if (e.key === 'Escape') {
+					if (!hubPanel.classList.contains('is-hidden')) {
+						closeHub(true);
+					}
+				}
+			});
+		})();
+		</script>
 		<?php
 	}
 }
