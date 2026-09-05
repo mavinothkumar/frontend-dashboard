@@ -10,179 +10,295 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Get Built-in Catalog of Frontend Dashboard Add-ons
+ * Get Built-in & Remote Catalog of Frontend Dashboard Add-ons
  *
  * @return array
  */
 function fed_get_addons_catalog() {
-	return array(
-		'frontend-dashboard-custom-post'    => array(
-			'slug'          => 'frontend-dashboard-custom-post',
-			'file'          => 'frontend-dashboard-custom-post/frontend-dashboard-custom-post.php',
-			'title'         => __( 'Custom Post & Taxonomies', 'frontend-dashboard' ),
-			'version'       => '3.0',
-			'category'      => 'core',
-			'category_name' => __( 'Core & Posts', 'frontend-dashboard' ),
-			'description'   => __( 'Empower users to submit, edit, and manage custom post types (Products, Portfolios, Listings, Articles) and custom taxonomies directly from frontend with role permissions.', 'frontend-dashboard' ),
-			'tags'          => array( 'Custom Posts', 'Taxonomies', 'Frontend Submissions', 'Field Builder' ),
-			'icon'          => 'fas fa-layer-group',
-			'icon_bg'       => 'bg-gradient-to-br from-indigo-500 to-blue-600 text-white',
-			'settings_url'  => admin_url( 'admin.php?page=fed_custom_post' ),
-			'docs_url'      => 'https://buffercode.com/plugin/frontend-dashboard-custom-post-and-taxonomies',
-			'is_pro'        => false,
-		),
-		'frontend-dashboard-captcha'        => array(
-			'slug'          => 'frontend-dashboard-captcha',
-			'file'          => 'frontend-dashboard-captcha/frontend-dashboard-captcha.php',
-			'title'         => __( 'Captcha & Anti-Spam Security', 'frontend-dashboard' ),
-			'version'       => '3.0.0',
-			'category'      => 'security',
-			'category_name' => __( 'Security & Auth', 'frontend-dashboard' ),
-			'description'   => __( 'Protect your login, register, and password-reset forms against spam bots with Google reCAPTCHA v2/v3, Cloudflare Turnstile, and Math Captcha challenges.', 'frontend-dashboard' ),
-			'tags'          => array( 'reCAPTCHA v2/v3', 'Cloudflare Turnstile', 'Math Captcha', 'Anti-Spam' ),
-			'icon'          => 'fas fa-shield-alt',
-			'icon_bg'       => 'bg-gradient-to-br from-emerald-500 to-teal-600 text-white',
-			'settings_url'  => admin_url( 'admin.php?page=fed_settings_login' ),
-			'docs_url'      => 'https://buffercode.com/plugin/frontend-dashboard-captcha',
-			'is_pro'        => false,
-		),
-		'frontend-dashboard-social-connect' => array(
-			'slug'          => 'frontend-dashboard-social-connect',
-			'file'          => 'frontend-dashboard-social-connect/frontend-dashboard-social-connect.php',
-			'title'         => __( 'Social Connect & 1-Click Login', 'frontend-dashboard' ),
-			'version'       => '1.5',
-			'category'      => 'security',
-			'category_name' => __( 'Security & Auth', 'frontend-dashboard' ),
-			'description'   => __( 'Enable seamless 1-click social logins and registrations with 20+ major providers including Google, Facebook, Twitter (X), LinkedIn, GitHub, Apple, and Discord.', 'frontend-dashboard' ),
-			'tags'          => array( 'OAuth 2.0', 'Google Login', 'Facebook Login', '1-Click Sign-in' ),
-			'icon'          => 'fas fa-users',
-			'icon_bg'       => 'bg-gradient-to-br from-cyan-500 to-blue-600 text-white',
-			'settings_url'  => admin_url( 'admin.php?page=fed_settings_login' ),
-			'docs_url'      => 'https://buffercode.com/plugin/frontend-dashboard-social-connect',
-			'is_pro'        => false,
-		),
-		'frontend-dashboard-user-management' => array(
-			'slug'          => 'frontend-dashboard-user-management',
-			'file'          => 'frontend-dashboard-user-management/frontend-dashboard-user-management.php',
-			'title'         => __( 'Frontend User Management', 'frontend-dashboard' ),
-			'version'       => '1.0',
+	// 1. Base Metadata & Visual Definitions
+	$meta_registry = array(
+		'frontend-dashboard-user-management'            => array(
 			'category'      => 'user',
 			'category_name' => __( 'User Management', 'frontend-dashboard' ),
-			'description'   => __( 'Allow team managers and admins to search, filter, view, edit, approve, or delete user accounts directly on the frontend dashboard without wp-admin access.', 'frontend-dashboard' ),
-			'tags'          => array( 'User Table', 'Role Filter', 'Bulk Actions', 'Manager Dashboard' ),
 			'icon'          => 'fas fa-user-shield',
 			'icon_bg'       => 'bg-gradient-to-br from-violet-500 to-purple-600 text-white',
+			'tags'          => array( 'User Table', 'Role Filter', 'Bulk Actions', 'Frontend Manager' ),
 			'settings_url'  => admin_url( 'admin.php?page=fed_user_profile' ),
-			'docs_url'      => 'https://buffercode.com/plugin/frontend-dashboard-user-management',
-			'is_pro'        => false,
 		),
-		'frontend-dashboard-templates'      => array(
-			'slug'          => 'frontend-dashboard-templates',
-			'file'          => 'frontend-dashboard-templates/frontend-dashboard-templates.php',
-			'title'         => __( 'Custom Layouts & Themes', 'frontend-dashboard' ),
-			'version'       => '1.8',
-			'category'      => 'templates',
-			'category_name' => __( 'UI & Templates', 'frontend-dashboard' ),
-			'description'   => __( 'Upgrade your user area with pre-built dashboard layouts, customizable sidebars, modern login/register landing themes, and sleek card grid layouts.', 'frontend-dashboard' ),
-			'tags'          => array( 'Layout Engine', 'Sidebar Variations', 'Login Themes', 'Responsive UI' ),
-			'icon'          => 'fas fa-palette',
-			'icon_bg'       => 'bg-gradient-to-br from-pink-500 to-rose-600 text-white',
-			'settings_url'  => admin_url( 'admin.php?page=fed_dashboard_menu' ),
-			'docs_url'      => 'https://buffercode.com/plugin/frontend-dashboard',
-			'is_pro'        => false,
+		'frontend-dashboard-social-connect'            => array(
+			'category'      => 'security',
+			'category_name' => __( 'Security & Auth', 'frontend-dashboard' ),
+			'icon'          => 'fas fa-users',
+			'icon_bg'       => 'bg-gradient-to-br from-cyan-500 to-blue-600 text-white',
+			'tags'          => array( 'OAuth 2.0', 'Google Login', 'Facebook Login', '1-Click Sign-in' ),
+			'settings_url'  => admin_url( 'admin.php?page=fed_settings_login' ),
 		),
-		'frontend-dashboard-social-chat'    => array(
-			'slug'          => 'frontend-dashboard-social-chat',
-			'file'          => 'frontend-dashboard-social-chat/frontend-dashboard-social-chat.php',
-			'title'         => __( 'Live Chat & Support Helpdesk', 'frontend-dashboard' ),
-			'version'       => '1.3',
+		'frontend-dashboard-notification'              => array(
 			'category'      => 'communication',
 			'category_name' => __( 'Communication', 'frontend-dashboard' ),
-			'description'   => __( 'Embed floating live chat widgets including WhatsApp direct message, Telegram channel/bot triggers, and live support chat right inside your dashboard.', 'frontend-dashboard' ),
-			'tags'          => array( 'WhatsApp Support', 'Telegram Widget', 'Floating Chat', 'Member Helpdesk' ),
-			'icon'          => 'fas fa-comments',
-			'icon_bg'       => 'bg-gradient-to-br from-emerald-500 to-green-600 text-white',
-			'settings_url'  => admin_url( 'admin.php?page=fed_dashboard_menu' ),
-			'docs_url'      => 'https://buffercode.com/plugin/frontend-dashboard-social-chat',
-			'is_pro'        => false,
-		),
-		'frontend-dashboard-message'        => array(
-			'slug'          => 'frontend-dashboard-message',
-			'file'          => 'frontend-dashboard-message/frontend-dashboard-notification.php',
-			'title'         => __( 'Private Messaging & Inbox', 'frontend-dashboard' ),
-			'version'       => '1.0',
-			'category'      => 'communication',
-			'category_name' => __( 'Communication', 'frontend-dashboard' ),
-			'description'   => __( 'Full peer-to-peer and admin-to-user private messaging system featuring threaded conversations, attachments, unread counters, and email triggers.', 'frontend-dashboard' ),
-			'tags'          => array( 'Inbox & Sent', 'Conversation Threads', 'File Attachments', 'Email Alerts' ),
-			'icon'          => 'fas fa-envelope-open-text',
-			'icon_bg'       => 'bg-gradient-to-br from-sky-500 to-blue-600 text-white',
-			'settings_url'  => admin_url( 'admin.php?page=fed_dashboard_menu' ),
-			'docs_url'      => 'https://buffercode.com/plugin/frontend-dashboard-message',
-			'is_pro'        => false,
-		),
-		'frontend-dashboard-notification'   => array(
-			'slug'          => 'frontend-dashboard-notification',
-			'file'          => 'frontend-dashboard-notification/frontend-dashboard-notification.php',
-			'title'         => __( 'Realtime Notifications & Alerts', 'frontend-dashboard' ),
-			'version'       => '1.1',
-			'category'      => 'communication',
-			'category_name' => __( 'Communication', 'frontend-dashboard' ),
-			'description'   => __( 'Deliver instant in-app alerts, bell dropdown notifications, and toast alerts for user events, submission status changes, and announcements.', 'frontend-dashboard' ),
-			'tags'          => array( 'Notification Bell', 'Toast Popups', 'Broadcast Alerts', 'Trigger Events' ),
 			'icon'          => 'fas fa-bell',
 			'icon_bg'       => 'bg-gradient-to-br from-amber-500 to-orange-600 text-white',
+			'tags'          => array( 'Notification Bell', 'Toast Popups', 'Broadcast Alerts', 'Trigger Events' ),
 			'settings_url'  => admin_url( 'admin.php?page=fed_dashboard_menu' ),
-			'docs_url'      => 'https://buffercode.com/plugin/frontend-dashboard-notification',
-			'is_pro'        => false,
 		),
-		'frontend-dashboard-pages'          => array(
-			'slug'          => 'frontend-dashboard-pages',
-			'file'          => 'frontend-dashboard-pages/frontend-dashboard-pages.php',
-			'title'         => __( 'Custom Pages & Tab Builder', 'frontend-dashboard' ),
-			'version'       => '1.5.5',
+		'frontend-dashboard-custom-post-and-taxonomies' => array(
 			'category'      => 'core',
 			'category_name' => __( 'Core & Posts', 'frontend-dashboard' ),
-			'description'   => __( 'Effortlessly map any standard WordPress page, custom template, or shortcode-powered content directly into custom tabs inside user dashboard navigation.', 'frontend-dashboard' ),
-			'tags'          => array( 'Page Mapping', 'Shortcode Embeds', 'Custom Tabs', 'Access Control' ),
+			'icon'          => 'fas fa-layer-group',
+			'icon_bg'       => 'bg-gradient-to-br from-indigo-500 to-blue-600 text-white',
+			'tags'          => array( 'Custom Posts', 'Taxonomies', 'Frontend Submissions', 'Field Builder' ),
+			'settings_url'  => admin_url( 'admin.php?page=fed_custom_post' ),
+		),
+		'frontend-dashboard-custom-post'                => array(
+			'category'      => 'core',
+			'category_name' => __( 'Core & Posts', 'frontend-dashboard' ),
+			'icon'          => 'fas fa-layer-group',
+			'icon_bg'       => 'bg-gradient-to-br from-indigo-500 to-blue-600 text-white',
+			'tags'          => array( 'Custom Posts', 'Taxonomies', 'Frontend Submissions', 'Field Builder' ),
+			'settings_url'  => admin_url( 'admin.php?page=fed_custom_post' ),
+		),
+		'frontend-dashboard-templates'                 => array(
+			'category'      => 'templates',
+			'category_name' => __( 'UI & Templates', 'frontend-dashboard' ),
+			'icon'          => 'fas fa-palette',
+			'icon_bg'       => 'bg-gradient-to-br from-pink-500 to-rose-600 text-white',
+			'tags'          => array( 'Layout Engine', 'Sidebar Variations', 'Login Themes', 'Responsive UI' ),
+			'settings_url'  => admin_url( 'admin.php?page=fed_dashboard_menu' ),
+		),
+		'frontend-dashboard-pages'                     => array(
+			'category'      => 'core',
+			'category_name' => __( 'Core & Posts', 'frontend-dashboard' ),
 			'icon'          => 'fas fa-file-alt',
 			'icon_bg'       => 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white',
+			'tags'          => array( 'Page Mapping', 'Shortcode Embeds', 'Custom Tabs', 'Access Control' ),
 			'settings_url'  => admin_url( 'admin.php?page=fed_dashboard_menu' ),
-			'docs_url'      => 'https://buffercode.com/plugin/frontend-dashboard-pages',
-			'is_pro'        => false,
 		),
-		'frontend-dashboard-extra'          => array(
-			'slug'          => 'frontend-dashboard-extra',
-			'file'          => 'frontend-dashboard-extra/frontend-dashboard-extra.php',
-			'title'         => __( 'Extra Tools & Widgets Pack', 'frontend-dashboard' ),
-			'version'       => '3.0',
+		'frontend-dashboard-extra'                     => array(
 			'category'      => 'core',
 			'category_name' => __( 'Core & Posts', 'frontend-dashboard' ),
-			'description'   => __( 'Extend your member dashboard with extra profile widgets, user count badges, quick actions, role-based shortcodes, and utility helper blocks.', 'frontend-dashboard' ),
-			'tags'          => array( 'Profile Widgets', 'Statistics Badges', 'Role Shortcuts', 'Helper Tools' ),
 			'icon'          => 'fas fa-puzzle-piece',
 			'icon_bg'       => 'bg-gradient-to-br from-teal-500 to-emerald-600 text-white',
+			'tags'          => array( 'Profile Widgets', 'Statistics Badges', 'Role Shortcuts', 'Helper Tools' ),
 			'settings_url'  => admin_url( 'admin.php?page=fed_user_profile' ),
-			'docs_url'      => 'https://buffercode.com/plugin/frontend-dashboard-extra',
-			'is_pro'        => false,
 		),
-		'frontend-dashboard-payment'        => array(
-			'slug'          => 'frontend-dashboard-payment',
-			'file'          => 'frontend-dashboard-payment/frontend-dashboard-payment.php',
-			'title'         => __( 'Payments & Billing Pro', 'frontend-dashboard' ),
-			'version'       => '3.0',
+		'frontend-dashboard-social-chat'               => array(
+			'category'      => 'communication',
+			'category_name' => __( 'Communication', 'frontend-dashboard' ),
+			'icon'          => 'fas fa-comments',
+			'icon_bg'       => 'bg-gradient-to-br from-emerald-500 to-green-600 text-white',
+			'tags'          => array( 'WhatsApp Support', 'Telegram Widget', 'Floating Chat', 'Member Helpdesk' ),
+			'settings_url'  => admin_url( 'admin.php?page=fed_dashboard_menu' ),
+		),
+		'frontend-dashboard-captcha'                   => array(
+			'category'      => 'security',
+			'category_name' => __( 'Security & Auth', 'frontend-dashboard' ),
+			'icon'          => 'fas fa-shield-alt',
+			'icon_bg'       => 'bg-gradient-to-br from-emerald-500 to-teal-600 text-white',
+			'tags'          => array( 'reCAPTCHA v2/v3', 'Cloudflare Turnstile', 'Math Captcha', 'Anti-Spam' ),
+			'settings_url'  => admin_url( 'admin.php?page=fed_settings_login' ),
+		),
+		'frontend-dashboard-message'                   => array(
+			'category'      => 'communication',
+			'category_name' => __( 'Communication', 'frontend-dashboard' ),
+			'icon'          => 'fas fa-envelope-open-text',
+			'icon_bg'       => 'bg-gradient-to-br from-sky-500 to-blue-600 text-white',
+			'tags'          => array( 'Inbox & Sent', 'Conversation Threads', 'Attachments', 'Email Alerts' ),
+			'settings_url'  => admin_url( 'admin.php?page=fed_dashboard_menu' ),
+		),
+		'frontend-dashboard-payment'                   => array(
 			'category'      => 'monetization',
 			'category_name' => __( 'Monetization', 'frontend-dashboard' ),
-			'description'   => __( 'Monetize post submissions, paid membership tiers, and user subscriptions with integrated PayPal, Stripe, PDF invoices, and automated billing.', 'frontend-dashboard' ),
-			'tags'          => array( 'Stripe Checkout', 'PayPal Express', 'PDF Invoices', 'Pay-per-Post' ),
 			'icon'          => 'fas fa-credit-card',
 			'icon_bg'       => 'bg-gradient-to-br from-amber-500 to-yellow-600 text-white',
+			'tags'          => array( 'Stripe Checkout', 'PayPal Express', 'PDF Invoices', 'Pay-per-Post' ),
 			'settings_url'  => admin_url( 'admin.php?page=fed_payment' ),
-			'docs_url'      => 'https://buffercode.com/plugin/frontend-dashboard',
-			'is_pro'        => true,
-			'purchase_url'  => 'https://buffercode.com/plugin/frontend-dashboard',
 		),
 	);
+
+	// 2. Fetch or load cached API data
+	$api_data = get_transient( 'fed_plugin_list_api' );
+	if ( false === $api_data && function_exists( 'get_plugin_list' ) ) {
+		$api_data = get_plugin_list();
+		if ( $api_data ) {
+			set_transient( 'fed_plugin_list_api', $api_data, 12 * HOUR_IN_SECONDS );
+		}
+	}
+
+	$plugins_raw = array();
+	if ( $api_data ) {
+		$decoded = json_decode( $api_data );
+		if ( isset( $decoded->plugins ) ) {
+			$plugins_raw = (array) $decoded->plugins;
+		}
+	}
+
+	// 3. Fallback Built-in Official Catalog if API response is empty
+	if ( empty( $plugins_raw ) ) {
+		$plugins_raw = array(
+			'frontend-dashboard-user-management'            => (object) array(
+				'id'           => 'BC_FED_UM_PLUGIN',
+				'version'      => '1.0',
+				'directory'    => 'frontend-dashboard-user-management/frontend-dashboard-user-management.php',
+				'title'        => 'Frontend Dashboard User Management',
+				'description'  => 'Frontend Dashboard User Management will allow the allowed users to manage the users by adding, editing and deleting.',
+				'thumbnail'    => 'https://buffercode.com/photos/1/plugins/frontend-dashboard-user-management/user-management-banner-600.png',
+				'download_url' => 'https://buffercode.com/plugin/frontend-dashboard-user-management',
+				'pricing'      => (object) array(
+					'type'         => 'Pro',
+					'amount'       => (object) array(
+						'annual'   => (object) array( 'name' => 'Annual', 'amount' => '29' ),
+						'lifetime' => (object) array( 'name' => 'Life Time', 'amount' => '99' ),
+					),
+					'currency'     => '$',
+					'currency_code'=> 'USD',
+					'purchase_url' => 'https://buffercode.com/payment/bc/payment_start',
+				),
+			),
+			'frontend-dashboard-social-connect'            => (object) array(
+				'id'           => 'BC_FED_SC_PLUGIN',
+				'version'      => '1.5',
+				'directory'    => 'frontend-dashboard-social-connect/frontend-dashboard-social-connect.php',
+				'title'        => 'Frontend Dashboard Social Connect',
+				'description'  => 'Frontend Dashboard Social Connect to Register and Login with 20+ Social Networks.',
+				'thumbnail'    => 'https://buffercode.com/photos/1/plugins/social-connect/social-connect-600.jpg',
+				'download_url' => 'https://buffercode.com/plugin/frontend-dashboard-social-connect',
+				'pricing'      => (object) array(
+					'type'         => 'Pro',
+					'amount'       => (object) array(
+						'annual'   => (object) array( 'name' => 'Annual', 'amount' => '29' ),
+						'lifetime' => (object) array( 'name' => 'Life Time', 'amount' => '99' ),
+					),
+					'currency'     => '$',
+					'currency_code'=> 'USD',
+					'purchase_url' => 'https://buffercode.com/payment/bc/payment_start',
+				),
+			),
+			'frontend-dashboard-notification'              => (object) array(
+				'id'           => 'BC_FED_NTF_PLUGIN',
+				'version'      => '1.1',
+				'directory'    => 'frontend-dashboard-notification/frontend-dashboard-notification.php',
+				'title'        => 'Frontend Dashboard Notification',
+				'description'  => 'Frontend Dashboard Notification is an add-on for Frontend Dashboard WordPress plugin which allows user to show notification in Frontend Dashboard page.',
+				'thumbnail'    => 'https://buffercode.com/photos/1/plugins/frontend-dashboard-notification/frontend-dashboard-notification-600.png',
+				'download_url' => 'https://buffercode.com/plugin/frontend-dashboard-notification',
+				'install_slug' => 'frontend-dashboard-notification',
+				'pricing'      => (object) array( 'type' => 'Free', 'amount' => '0', 'currency' => '$', 'currency_code' => 'USD', 'purchase_url' => '' ),
+			),
+			'frontend-dashboard-custom-post-and-taxonomies' => (object) array(
+				'id'           => 'FED_CP_PLUGIN',
+				'version'      => '3.0',
+				'directory'    => 'frontend-dashboard-custom-post/frontend-dashboard-custom-post.php',
+				'title'        => 'Frontend Dashboard Custom Post and Taxonomies',
+				'description'  => 'Frontend Dashboard Custom Post is an add-on to add and customize the custom posts and taxonomies (category and tag) inside the Frontend Dashboard.',
+				'thumbnail'    => 'https://buffercode.com/photos/1/plugins/frontend-dashboard-custom-post-taxonomies/custom_900.png',
+				'download_url' => 'https://buffercode.com/plugin/frontend-dashboard-custom-post-and-taxonomies',
+				'install_slug' => 'frontend-dashboard-custom-post',
+				'pricing'      => (object) array( 'type' => 'Free', 'amount' => '0', 'currency' => '$', 'currency_code' => 'USD', 'purchase_url' => '' ),
+			),
+			'frontend-dashboard-templates'                 => (object) array(
+				'id'           => 'FED_TEMPLATES_PLUGIN',
+				'version'      => '1.8',
+				'directory'    => 'frontend-dashboard-templates/frontend-dashboard-templates.php',
+				'title'        => 'Frontend Dashboard Templates',
+				'description'  => 'Frontend Dashboard template will have customised layouts with logo, varieties colors for layouts, extendable by widget and layouts.',
+				'thumbnail'    => 'https://buffercode.com/photos/1/plugins/frontend-dashboard-templates/template_600.png',
+				'download_url' => 'https://buffercode.com/plugin/frontend-dashboard-templates',
+				'install_slug' => 'frontend-dashboard-templates',
+				'pricing'      => (object) array( 'type' => 'Free', 'amount' => '0', 'currency' => '$', 'currency_code' => 'USD', 'purchase_url' => '' ),
+			),
+			'frontend-dashboard-pages'                     => (object) array(
+				'id'           => 'FED_PAGES_PLUGIN',
+				'version'      => '1.5.5',
+				'directory'    => 'frontend-dashboard-pages/frontend-dashboard-pages.php',
+				'title'        => 'Frontend Dashboard Pages',
+				'description'  => 'Frontend Dashboard Pages is a plugin to show pages inside the Frontend Dashboard menu. The assigning page may contain content, images and even shortcodes.',
+				'thumbnail'    => 'https://buffercode.com/photos/1/plugins/frontend_dashboard_pages/frontend_dashboard_pages_600.jpg',
+				'download_url' => 'https://buffercode.com/plugin/frontend-dashboard-pages',
+				'install_slug' => 'frontend-dashboard-pages',
+				'pricing'      => (object) array( 'type' => 'Free', 'amount' => '0', 'currency' => '$', 'currency_code' => 'USD', 'purchase_url' => '' ),
+			),
+			'frontend-dashboard-extra'                     => (object) array(
+				'id'           => 'BC_FED_EXTRA_PLUGIN',
+				'version'      => '3.0',
+				'directory'    => 'frontend-dashboard-extra/frontend-dashboard-extra.php',
+				'title'        => 'Frontend Dashboard Extra',
+				'description'  => 'Frontend Dashboard Extra WordPress plugin is a supportive plugin for Frontend Dashboard with supportive additional features likes extra Calendar for selecting date and time, Colors and File Upload for images.',
+				'thumbnail'    => 'https://buffercode.com/photos/1/plugins/frontend-dashboard-extra/images/frontend_dashboard_extra_600.jpg',
+				'download_url' => 'https://buffercode.com/plugin/frontend-dashboard-extra',
+				'install_slug' => 'frontend-dashboard-extra',
+				'pricing'      => (object) array( 'type' => 'Free', 'amount' => '0', 'currency' => '$', 'currency_code' => 'USD', 'purchase_url' => '' ),
+			),
+			'frontend-dashboard-social-chat'               => (object) array(
+				'id'           => 'BC_FED_SCHAT_PLUGIN',
+				'version'      => '1.3',
+				'directory'    => 'frontend-dashboard-social-chat/frontend-dashboard-social-chat.php',
+				'title'        => 'Frontend Dashboard Social Chat',
+				'description'  => 'Frontend Dashboard Social Chat WordPress plugin makes users to connect the website support or technical teams via WhatsApp.',
+				'thumbnail'    => 'https://buffercode.com/photos/1/plugins/social-chat/frontend-dashboard-social-chat-600.png',
+				'download_url' => 'https://buffercode.com/plugin/frontend-dashboard-social-chat',
+				'install_slug' => 'frontend-dashboard-social-chat',
+				'pricing'      => (object) array( 'type' => 'Free', 'amount' => '0', 'currency' => '$', 'currency_code' => 'USD', 'purchase_url' => '' ),
+			),
+			'frontend-dashboard-captcha'                   => (object) array(
+				'id'           => 'BC_FED_CAPTCHA_PLUGIN',
+				'version'      => '3.0.0',
+				'directory'    => 'frontend-dashboard-captcha/frontend-dashboard-captcha.php',
+				'title'        => 'Frontend Dashboard Captcha',
+				'description'  => 'Frontend Dashboard Captcha WordPress plugin is a supportive plugin for Frontend Dashboard to protect against spam in Login and Register form.',
+				'thumbnail'    => 'https://buffercode.com/photos/1/plugins/frontend-dashboard-captcha/captcha-600.png',
+				'download_url' => 'https://buffercode.com/plugin/frontend-dashboard-captcha',
+				'install_slug' => 'frontend-dashboard-captcha',
+				'pricing'      => (object) array( 'type' => 'Free', 'amount' => '0', 'currency' => '$', 'currency_code' => 'USD', 'purchase_url' => '' ),
+			),
+		);
+	}
+
+	// 4. Also check local plugins directory for any local add-ons (e.g. message, payment)
+	if ( ! isset( $plugins_raw['frontend-dashboard-message'] ) && file_exists( WP_PLUGIN_DIR . '/frontend-dashboard-message/frontend-dashboard-notification.php' ) ) {
+		$plugins_raw['frontend-dashboard-message'] = (object) array(
+			'id'           => 'BC_FED_MSG_PLUGIN',
+			'version'      => '1.0',
+			'directory'    => 'frontend-dashboard-message/frontend-dashboard-notification.php',
+			'title'        => 'Frontend Dashboard Message',
+			'description'  => 'Internal peer-to-peer and admin-to-user private messaging system with conversations, attachments, and email notifications.',
+			'thumbnail'    => '',
+			'download_url' => 'https://buffercode.com/plugin/frontend-dashboard-message',
+			'install_slug' => 'frontend-dashboard-message',
+			'pricing'      => (object) array( 'type' => 'Free', 'amount' => '0', 'currency' => '$', 'currency_code' => 'USD', 'purchase_url' => '' ),
+		);
+	}
+
+	// 5. Build standardized, rich catalog array
+	$catalog = array();
+	foreach ( $plugins_raw as $slug => $item ) {
+		$meta = isset( $meta_registry[ $slug ] ) ? $meta_registry[ $slug ] : array();
+
+		$directory = isset( $item->directory ) ? $item->directory : ( $slug . '/' . $slug . '.php' );
+		$is_pro    = isset( $item->pricing->type ) && 'Pro' === $item->pricing->type;
+
+		$catalog[ $slug ] = array(
+			'slug'          => $slug,
+			'id'            => isset( $item->id ) ? $item->id : '',
+			'title'         => isset( $item->title ) ? $item->title : $slug,
+			'version'       => isset( $item->version ) ? $item->version : '1.0',
+			'directory'     => $directory,
+			'file'          => $directory,
+			'description'   => isset( $item->description ) ? $item->description : '',
+			'thumbnail'     => isset( $item->thumbnail ) ? $item->thumbnail : '',
+			'download_url'  => isset( $item->download_url ) ? $item->download_url : 'https://buffercode.com/',
+			'install_slug'  => isset( $item->install_slug ) ? $item->install_slug : $slug,
+			'pricing'       => isset( $item->pricing ) ? $item->pricing : (object) array( 'type' => 'Free' ),
+			'is_pro'        => $is_pro,
+			'category'      => isset( $meta['category'] ) ? $meta['category'] : ( $is_pro ? 'monetization' : 'core' ),
+			'category_name' => isset( $meta['category_name'] ) ? $meta['category_name'] : ( $is_pro ? __( 'Monetization & Pro', 'frontend-dashboard' ) : __( 'Core & Posts', 'frontend-dashboard' ) ),
+			'icon'          => isset( $meta['icon'] ) ? $meta['icon'] : ( $is_pro ? 'fas fa-crown' : 'fas fa-puzzle-piece' ),
+			'icon_bg'       => isset( $meta['icon_bg'] ) ? $meta['icon_bg'] : 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white',
+			'tags'          => isset( $meta['tags'] ) ? $meta['tags'] : array( 'Official Extension', $is_pro ? 'Pro Feature' : 'Free' ),
+			'settings_url'  => isset( $meta['settings_url'] ) ? $meta['settings_url'] : '',
+		);
+	}
+
+	return $catalog;
 }
 
 /**
@@ -205,6 +321,18 @@ function fed_get_plugin_pages_menu() {
 		$file = $item['file'];
 		$item['is_installed'] = file_exists( WP_PLUGIN_DIR . '/' . $file );
 		$item['is_active']    = $item['is_installed'] && is_plugin_active( $file );
+
+		// Local version detection
+		$local_version = '';
+		if ( ! empty( $item['id'] ) ) {
+			if ( defined( $item['id'] . '_VERSION' ) ) {
+				$local_version = constant( $item['id'] . '_VERSION' );
+			} elseif ( defined( $item['id'] ) ) {
+				$local_version = constant( $item['id'] );
+			}
+		}
+		$item['local_version'] = $local_version;
+		$item['has_update']    = ( $item['is_active'] && ! empty( $local_version ) && version_compare( $item['version'], $local_version, '>' ) );
 
 		if ( $item['is_active'] ) {
 			$active_count++;
@@ -370,7 +498,7 @@ function fed_get_plugin_pages_menu() {
 						<span class="ml-2 text-xs font-medium text-emerald-600"><?php esc_html_e( 'Running', 'frontend-dashboard' ); ?></span>
 					</div>
 				</div>
-				<!-- Installed / Inactive -->
+				<!-- Installed Total -->
 				<div class="bg-blue-50/80 rounded-xl p-4 border border-blue-100">
 					<div class="text-xs font-semibold uppercase tracking-wider text-blue-700">
 						<?php esc_html_e( 'Installed Total', 'frontend-dashboard' ); ?>
@@ -380,14 +508,14 @@ function fed_get_plugin_pages_menu() {
 						<span class="ml-2 text-xs font-medium text-blue-600"><?php esc_html_e( 'On Server', 'frontend-dashboard' ); ?></span>
 					</div>
 				</div>
-				<!-- Pro & Premium -->
+				<!-- Pro & Monetization -->
 				<div class="bg-purple-50/80 rounded-xl p-4 border border-purple-100">
 					<div class="text-xs font-semibold uppercase tracking-wider text-purple-700">
 						<?php esc_html_e( 'Pro & Monetization', 'frontend-dashboard' ); ?>
 					</div>
 					<div class="text-2xl font-extrabold text-purple-700 mt-1 flex items-baseline">
 						<?php echo esc_html( $pro_count ); ?>
-						<span class="ml-2 text-xs font-medium text-purple-600"><?php esc_html_e( 'Integrations', 'frontend-dashboard' ); ?></span>
+						<span class="ml-2 text-xs font-medium text-purple-600"><?php esc_html_e( 'Premium', 'frontend-dashboard' ); ?></span>
 					</div>
 				</div>
 			</div>
@@ -454,9 +582,11 @@ function fed_get_plugin_pages_menu() {
 		<div id="fed_addons_grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
 			<?php foreach ( $catalog as $slug => $addon ) : ?>
 				<?php
-				$is_active    = $addon['is_active'];
-				$is_installed = $addon['is_installed'];
-				$is_pro       = ! empty( $addon['is_pro'] );
+				$is_active     = $addon['is_active'];
+				$is_installed  = $addon['is_installed'];
+				$is_pro        = ! empty( $addon['is_pro'] );
+				$has_update    = ! empty( $addon['has_update'] );
+				$local_version = ! empty( $addon['local_version'] ) ? $addon['local_version'] : $addon['version'];
 
 				$status_attr = 'available';
 				if ( $is_active ) {
@@ -478,91 +608,143 @@ function fed_get_plugin_pages_menu() {
 					data-desc="<?php echo esc_attr( strtolower( $addon['description'] ) ); ?>"
 					data-tags="<?php echo esc_attr( strtolower( implode( ' ', $addon['tags'] ) ) ); ?>">
 					
-					<div class="p-6">
-						<!-- Card Top -->
-						<div class="flex items-start justify-between gap-4 mb-4">
-							<div class="flex items-center space-x-3.5">
-								<div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl shadow-sm <?php echo esc_attr( $addon['icon_bg'] ); ?>">
-									<i class="<?php echo esc_attr( $addon['icon'] ); ?>"></i>
+					<div>
+						<!-- Card Thumbnail Image or Banner -->
+						<?php if ( ! empty( $addon['thumbnail'] ) ) : ?>
+							<div class="relative w-full h-36 bg-slate-100 overflow-hidden border-b border-slate-100 flex items-center justify-center">
+								<img src="<?php echo esc_url( $addon['thumbnail'] ); ?>" alt="<?php echo esc_attr( $addon['title'] ); ?>" class="w-full h-full object-cover object-center transition-transform duration-300 hover:scale-105" loading="lazy" />
+								<div class="absolute top-3 left-3">
+									<span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold bg-slate-900/70 text-white backdrop-blur-sm">
+										<?php echo esc_html( $addon['category_name'] ); ?>
+									</span>
 								</div>
-								<div>
-									<h3 class="font-bold text-slate-900 text-base leading-snug">
-										<?php echo esc_html( $addon['title'] ); ?>
-									</h3>
-									<div class="flex items-center space-x-2 mt-1">
-										<span class="text-xs font-semibold text-slate-400">
-											v<?php echo esc_html( $addon['version'] ); ?>
+								<div class="absolute top-3 right-3">
+									<?php if ( $is_active ) : ?>
+										<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500 text-white shadow-sm backdrop-blur-sm">
+											<span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse mr-1.5"></span>
+											<?php esc_html_e( 'Active', 'frontend-dashboard' ); ?>
 										</span>
-										<span class="inline-block w-1 h-1 rounded-full bg-slate-300"></span>
-										<span class="text-xs font-medium text-slate-500">
-											<?php echo esc_html( $addon['category_name'] ); ?>
+									<?php elseif ( $is_installed ) : ?>
+										<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-800/80 text-white backdrop-blur-sm">
+											<?php esc_html_e( 'Inactive', 'frontend-dashboard' ); ?>
 										</span>
+									<?php elseif ( $is_pro ) : ?>
+										<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-purple-600 text-white shadow-sm">
+											<i class="fas fa-crown text-[10px] mr-1"></i>
+											<?php esc_html_e( 'Pro', 'frontend-dashboard' ); ?>
+										</span>
+									<?php else : ?>
+										<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-600 text-white shadow-sm">
+											<?php esc_html_e( 'Free', 'frontend-dashboard' ); ?>
+										</span>
+									<?php endif; ?>
+								</div>
+							</div>
+						<?php endif; ?>
+
+						<div class="p-5">
+							<!-- Card Top Row (Icon + Title if no thumbnail) -->
+							<div class="flex items-start justify-between gap-3 mb-3">
+								<div class="flex items-center space-x-3">
+									<?php if ( empty( $addon['thumbnail'] ) ) : ?>
+										<div class="w-11 h-11 rounded-xl flex items-center justify-center text-lg shadow-sm flex-shrink-0 <?php echo esc_attr( $addon['icon_bg'] ); ?>">
+											<i class="<?php echo esc_attr( $addon['icon'] ); ?>"></i>
+										</div>
+									<?php endif; ?>
+									<div>
+										<h3 class="font-bold text-slate-900 text-base leading-snug">
+											<?php echo esc_html( $addon['title'] ); ?>
+										</h3>
+										<div class="flex items-center space-x-2 mt-1">
+											<span class="text-xs font-semibold text-slate-500">
+												v<?php echo esc_html( $is_active ? $local_version : $addon['version'] ); ?>
+											</span>
+											<?php if ( empty( $addon['thumbnail'] ) ) : ?>
+												<span class="inline-block w-1 h-1 rounded-full bg-slate-300"></span>
+												<span class="text-xs font-medium text-slate-500">
+													<?php echo esc_html( $addon['category_name'] ); ?>
+												</span>
+											<?php endif; ?>
+											<?php if ( $has_update ) : ?>
+												<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
+													<i class="fas fa-arrow-circle-up mr-1"></i>
+													v<?php echo esc_html( $addon['version'] ); ?> Available
+												</span>
+											<?php endif; ?>
+										</div>
 									</div>
 								</div>
-							</div>
 
-							<!-- Status Pill -->
-							<div>
-								<?php if ( $is_active ) : ?>
-									<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/80">
-										<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse mr-1.5"></span>
-										<?php esc_html_e( 'Active', 'frontend-dashboard' ); ?>
-									</span>
-								<?php elseif ( $is_installed ) : ?>
-									<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
-										<?php esc_html_e( 'Inactive', 'frontend-dashboard' ); ?>
-									</span>
-								<?php elseif ( $is_pro ) : ?>
-									<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200">
-										<i class="fas fa-crown text-[10px] mr-1 text-purple-500"></i>
-										<?php esc_html_e( 'Pro Extension', 'frontend-dashboard' ); ?>
-									</span>
-								<?php else : ?>
-									<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-sky-50 text-sky-700 border border-sky-200">
-										<?php esc_html_e( 'Available', 'frontend-dashboard' ); ?>
-									</span>
+								<?php if ( empty( $addon['thumbnail'] ) ) : ?>
+									<div>
+										<?php if ( $is_active ) : ?>
+											<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/80">
+												<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse mr-1.5"></span>
+												<?php esc_html_e( 'Active', 'frontend-dashboard' ); ?>
+											</span>
+										<?php elseif ( $is_installed ) : ?>
+											<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+												<?php esc_html_e( 'Inactive', 'frontend-dashboard' ); ?>
+											</span>
+										<?php elseif ( $is_pro ) : ?>
+											<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200">
+												<i class="fas fa-crown text-[10px] mr-1 text-purple-500"></i>
+												<?php esc_html_e( 'Pro Extension', 'frontend-dashboard' ); ?>
+											</span>
+										<?php else : ?>
+											<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-sky-50 text-sky-700 border border-sky-200">
+												<?php esc_html_e( 'Available', 'frontend-dashboard' ); ?>
+											</span>
+										<?php endif; ?>
+									</div>
 								<?php endif; ?>
 							</div>
-						</div>
 
-						<!-- Description -->
-						<p class="text-slate-600 text-sm leading-relaxed mb-4">
-							<?php echo esc_html( $addon['description'] ); ?>
-						</p>
+							<!-- Description -->
+							<p class="text-slate-600 text-xs leading-relaxed mb-4 line-clamp-3">
+								<?php echo esc_html( $addon['description'] ); ?>
+							</p>
 
-						<!-- Feature Tags -->
-						<div class="flex flex-wrap gap-1.5 mb-2">
-							<?php foreach ( $addon['tags'] as $tag ) : ?>
-								<span class="px-2 py-0.5 rounded-md text-[11px] font-medium bg-slate-100 text-slate-600">
-									<?php echo esc_html( $tag ); ?>
-								</span>
-							<?php endforeach; ?>
+							<!-- Feature Tags -->
+							<div class="flex flex-wrap gap-1.5 mb-2">
+								<?php foreach ( $addon['tags'] as $tag ) : ?>
+									<span class="px-2 py-0.5 rounded-md text-[11px] font-medium bg-slate-100 text-slate-600">
+										<?php echo esc_html( $tag ); ?>
+									</span>
+								<?php endforeach; ?>
+							</div>
 						</div>
 					</div>
 
 					<!-- Card Footer / Actions -->
-					<div class="px-6 py-4 bg-slate-50/70 border-t border-slate-100 flex items-center justify-between gap-3">
+					<div class="px-5 py-3.5 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between gap-2 flex-wrap">
 						<div>
-							<?php if ( ! empty( $addon['docs_url'] ) ) : ?>
-								<a href="<?php echo esc_url( $addon['docs_url'] ); ?>" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold text-slate-500 hover:text-blue-600 transition-colors inline-flex items-center">
-									<i class="fas fa-book-open mr-1.5 text-slate-400"></i>
-									<?php esc_html_e( 'Docs', 'frontend-dashboard' ); ?>
+							<?php if ( ! empty( $addon['download_url'] ) ) : ?>
+								<a href="<?php echo esc_url( $addon['download_url'] ); ?>" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold text-slate-500 hover:text-blue-600 transition-colors inline-flex items-center">
+									<i class="fas fa-external-link-alt mr-1.5 text-slate-400 text-[10px]"></i>
+									<?php esc_html_e( 'Details', 'frontend-dashboard' ); ?>
 								</a>
 							<?php endif; ?>
 						</div>
 
-						<div class="flex items-center space-x-2">
+						<div class="flex items-center space-x-2 flex-wrap">
 							<?php if ( $is_active ) : ?>
+								<?php if ( $has_update ) : ?>
+									<a href="<?php echo esc_url( $addon['download_url'] ); ?>" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded-lg transition-all shadow-sm">
+										<i class="fas fa-sync-alt mr-1"></i>
+										<?php esc_html_e( 'Update', 'frontend-dashboard' ); ?>
+									</a>
+								<?php endif; ?>
 								<?php if ( ! empty( $addon['settings_url'] ) ) : ?>
 									<a href="<?php echo esc_url( $addon['settings_url'] ); ?>" class="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg transition-all shadow-sm">
 										<i class="fas fa-sliders-h mr-1.5"></i>
 										<?php esc_html_e( 'Configure', 'frontend-dashboard' ); ?>
 									</a>
 								<?php endif; ?>
-								<button type="button" class="fed-btn-deactivate inline-flex items-center px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-lg transition-all border border-rose-200"
+								<button type="button" class="fed-btn-deactivate inline-flex items-center px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-lg transition-all border border-rose-200"
 									data-plugin="<?php echo esc_attr( $addon['file'] ); ?>"
 									data-title="<?php echo esc_attr( $addon['title'] ); ?>">
-									<i class="fas fa-power-off mr-1.5"></i>
+									<i class="fas fa-power-off mr-1"></i>
 									<?php esc_html_e( 'Deactivate', 'frontend-dashboard' ); ?>
 								</button>
 							<?php elseif ( $is_installed ) : ?>
@@ -573,15 +755,37 @@ function fed_get_plugin_pages_menu() {
 									<?php esc_html_e( 'Activate', 'frontend-dashboard' ); ?>
 								</button>
 							<?php elseif ( $is_pro ) : ?>
-								<a href="<?php echo esc_url( $addon['purchase_url'] ); ?>" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-3.5 py-1.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-xs font-bold rounded-lg transition-all shadow-sm">
-									<i class="fas fa-shopping-cart mr-1.5"></i>
-									<?php esc_html_e( 'Get Pro', 'frontend-dashboard' ); ?>
-								</a>
+								<?php if ( ! empty( $addon['pricing']->amount ) && is_object( $addon['pricing']->amount ) ) : ?>
+									<?php foreach ( $addon['pricing']->amount as $atype => $amount_obj ) : ?>
+										<form method="post" action="<?php echo esc_url( $addon['pricing']->purchase_url ); ?>" class="inline-block">
+											<input type="hidden" name="redirect_url" value="<?php echo esc_url( fed_current_page_url() ); ?>"/>
+											<input type="hidden" name="domain" value="<?php echo esc_attr( fed_get_domain_name() ); ?>"/>
+											<input type="hidden" name="contact_email" value="<?php echo esc_attr( fed_get_admin_email() ); ?>"/>
+											<input type="hidden" name="plugin_name" value="<?php echo esc_attr( $slug ); ?>"/>
+											<input type="hidden" name="amount" value="<?php echo esc_attr( $amount_obj->amount ); ?>"/>
+											<input type="hidden" name="plan_type" value="<?php echo esc_attr( $atype ); ?>"/>
+											<button type="submit" class="inline-flex items-center px-2.5 py-1.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-xs font-bold rounded-lg transition-all shadow-sm">
+												<i class="fas fa-shopping-cart mr-1 text-[11px]"></i>
+												<?php echo esc_html( $amount_obj->name . ' ' . $addon['pricing']->currency . $amount_obj->amount ); ?>
+											</button>
+										</form>
+									<?php endforeach; ?>
+								<?php else : ?>
+									<a href="<?php echo esc_url( $addon['download_url'] ); ?>" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-3.5 py-1.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-xs font-bold rounded-lg transition-all shadow-sm">
+										<i class="fas fa-crown mr-1.5"></i>
+										<?php esc_html_e( 'Get Pro', 'frontend-dashboard' ); ?>
+									</a>
+								<?php endif; ?>
 							<?php else : ?>
-								<a href="<?php echo esc_url( $addon['docs_url'] ); ?>" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg transition-all shadow-sm">
-									<i class="fas fa-download mr-1.5"></i>
-									<?php esc_html_e( 'Install', 'frontend-dashboard' ); ?>
-								</a>
+								<form method="post" class="fed_ajax_plugin_install inline-block"
+									action="<?php echo esc_url( fed_get_ajax_form_action( 'fed_api_ajax_request' ) . '&fed_action_hook=FEDInstallAddons@install' ); ?>">
+									<?php wp_nonce_field( 'updates' ); ?>
+									<input type="hidden" name="slug" value="<?php echo esc_attr( $addon['install_slug'] ); ?>">
+									<button type="submit" class="inline-flex items-center px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg transition-all shadow-sm">
+										<i class="fas fa-download mr-1.5"></i>
+										<?php esc_html_e( 'Install & Activate', 'frontend-dashboard' ); ?>
+									</button>
+								</form>
 							<?php endif; ?>
 						</div>
 					</div>
