@@ -96,6 +96,16 @@ class Plugin {
 	}
 
 	private function load_dependencies() {
+		// Load Page Template Manager
+		if ( file_exists( BC_FED_PLUGIN_DIR . '/template-loaders/page-template/class-fed-page-template.php' ) ) {
+			require_once BC_FED_PLUGIN_DIR . '/template-loaders/page-template/class-fed-page-template.php';
+		}
+
+		// Load Gutenberg Blocks Manager
+		if ( file_exists( BC_FED_PLUGIN_DIR . '/src/Blocks/class-fed-blocks.php' ) ) {
+			require_once BC_FED_PLUGIN_DIR . '/src/Blocks/class-fed-blocks.php';
+		}
+
 		// Load legacy procedural dependencies for backward compatibility
 		if ( file_exists( BC_FED_PLUGIN_DIR . '/includes/function.php' ) ) {
 			require_once BC_FED_PLUGIN_DIR . '/includes/function.php';

@@ -39,9 +39,8 @@ class Taxonomy {
 	 * @return array
 	 */
 	public function get_taxonomy_by_post_type() {
-
-		$post_payload = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
-		$get_payload  = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
+		$post_payload = isset( $_POST ) ? wp_unslash( $_POST ) : array();
+		$get_payload  = isset( $_GET ) ? array_map( 'sanitize_text_field', wp_unslash( $_GET ) ) : array();
 
 		fed_verify_nonce( $get_payload );
 
