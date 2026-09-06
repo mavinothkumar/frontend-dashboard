@@ -96,13 +96,7 @@ if ( ! class_exists( 'FEDPaymentMenu' ) ) {
 								<h2 style="font-size: 21px; font-weight: 800; margin: 0; color: #ffffff; letter-spacing: -0.01em;">
 									<?php esc_html_e( 'Payments & Billing Engine', 'frontend-dashboard' ); ?>
 								</h2>
-								<span style="background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); color: #6ee7b7; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 9999px; text-transform: uppercase; letter-spacing: 0.05em;">
-									<?php esc_html_e( 'Enterprise 3.0', 'frontend-dashboard' ); ?>
-								</span>
 							</div>
-							<p style="margin: 5px 0 0 44px; font-size: 13px; color: #cbd5e1; max-width: 650px; line-height: 1.4;">
-								<?php esc_html_e( 'Manage live transactions, recurring subscriptions, connected payment gateways, and automated customer invoices.', 'frontend-dashboard' ); ?>
-							</p>
 						</div>
 
 						<div style="display: flex; align-items: center; gap: 10px;">
