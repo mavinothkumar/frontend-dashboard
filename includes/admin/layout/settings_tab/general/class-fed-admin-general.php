@@ -70,7 +70,7 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 		 * Save Admin Script Menu
 		 */
 		public function save_admin_script() {
-			$request = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+			$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 			fed_verify_nonce( $request );
 			$db_value = get_option( 'fed_general_scripts_styles', array() );
 			$type     = 'admin';

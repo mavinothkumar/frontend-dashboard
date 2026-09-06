@@ -138,8 +138,8 @@ function fed_admin_menu_sorting() {
 
 	fed_verify_nonce();
 
-	$request_post = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
-	$request_get  = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
+	$request_post = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
+	$request_get  = isset( $_GET ) ? fed_sanitize_text_field( wp_unslash( $_GET ) ) : array();
 
 	$table_key = isset( $request_post['table'] ) ? $request_post['table'] : ( isset( $request_get['table'] ) ? $request_get['table'] : 'fed_menu' );
 	$tables    = fed_get_tables();

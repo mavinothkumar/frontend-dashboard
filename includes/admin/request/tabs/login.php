@@ -13,9 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function fed_admin_setting_login_request() {
 	$message         = '';
-	$requests        = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	$requests        = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	$fed_admin_login = get_option( 'fed_admin_login' );
-	$request         = $requests['fed_admin_login'];
+	$request         = isset( $requests['fed_admin_login'] ) ? $requests['fed_admin_login'] : array();
 
 	if ( isset( $requests['fed_admin_unique_login'] ) && 'fed_login_settings' === $requests['fed_admin_unique_login'] ) {
 		$fed_admin_login['settings'] = fed_admin_login_settings_save( $request );
@@ -58,13 +58,13 @@ function fed_admin_setting_login_request() {
  */
 function fed_admin_login_settings_save( $request ) {
 	return array(
-		'fed_login_url'             => isset( $request['settings']['fed_login_url'] ) ? (int) $request['settings']['fed_login_url'] : '',
-		'fed_register_url'          => isset( $request['settings']['fed_register_url'] ) ? (int) $request['settings']['fed_register_url'] : '',
-		'fed_forgot_password_url'   => isset( $request['settings']['fed_forgot_password_url'] ) ? (int) $request['settings']['fed_forgot_password_url'] : '',
-		'fed_redirect_login_url'    => isset( $request['settings']['fed_redirect_login_url'] ) ? (int) $request['settings']['fed_redirect_login_url'] : '',
-		'fed_redirect_register_url' => isset( $request['settings']['fed_redirect_register_url'] ) ? (int) $request['settings']['fed_redirect_register_url'] : '',
-		'fed_redirect_logout_url'   => isset( $request['settings']['fed_redirect_logout_url'] ) ? (int) $request['settings']['fed_redirect_logout_url'] : '',
-		'fed_dashboard_url'         => isset( $request['settings']['fed_dashboard_url'] ) ? (int) $request['settings']['fed_dashboard_url'] : '',
+		'fed_login_url'             => ! empty( $request['settings']['fed_login_url'] ) && (int) $request['settings']['fed_login_url'] > 0 ? (int) $request['settings']['fed_login_url'] : '',
+		'fed_register_url'          => ! empty( $request['settings']['fed_register_url'] ) && (int) $request['settings']['fed_register_url'] > 0 ? (int) $request['settings']['fed_register_url'] : '',
+		'fed_forgot_password_url'   => ! empty( $request['settings']['fed_forgot_password_url'] ) && (int) $request['settings']['fed_forgot_password_url'] > 0 ? (int) $request['settings']['fed_forgot_password_url'] : '',
+		'fed_redirect_login_url'    => ! empty( $request['settings']['fed_redirect_login_url'] ) && (int) $request['settings']['fed_redirect_login_url'] > 0 ? (int) $request['settings']['fed_redirect_login_url'] : '',
+		'fed_redirect_register_url' => ! empty( $request['settings']['fed_redirect_register_url'] ) && (int) $request['settings']['fed_redirect_register_url'] > 0 ? (int) $request['settings']['fed_redirect_register_url'] : '',
+		'fed_redirect_logout_url'   => ! empty( $request['settings']['fed_redirect_logout_url'] ) && (int) $request['settings']['fed_redirect_logout_url'] > 0 ? (int) $request['settings']['fed_redirect_logout_url'] : '',
+		'fed_dashboard_url'         => ! empty( $request['settings']['fed_dashboard_url'] ) && (int) $request['settings']['fed_dashboard_url'] > 0 ? (int) $request['settings']['fed_dashboard_url'] : '',
 	);
 
 }

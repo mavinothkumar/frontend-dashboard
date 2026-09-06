@@ -65,7 +65,7 @@ if ( ! class_exists( 'FEDEmail' ) ) {
 		 * Save Admin Script Menu
 		 */
 		public function update() {
-			$request = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+			$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 			fed_verify_nonce( $request );
 
 			// Validation
@@ -94,7 +94,7 @@ if ( ! class_exists( 'FEDEmail' ) ) {
 		 * Update SMTP.
 		 */
 		public function update_smtp() {
-			$request = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+			$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 			fed_verify_nonce( $request );
 
 			$validate = new FED_Validation();

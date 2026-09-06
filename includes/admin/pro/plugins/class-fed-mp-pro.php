@@ -65,7 +65,7 @@ if ( ! class_exists( 'FEDMPPRO' ) && ! defined( 'BC_FED_MP_PLUGIN' ) ) {
 		 * Menu
 		 */
 		public function menu() {
-			$get_payload = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
+			$get_payload = isset( $_GET ) ? fed_sanitize_text_field( wp_unslash( $_GET ) ) : array();
 			$action      = ( isset( $get_payload, $get_payload['action'] ) && ! empty( $get_payload['action'] ) ) ? urldecode(
 				$get_payload['action']
 			) : false;
@@ -120,7 +120,7 @@ if ( ! class_exists( 'FEDMPPRO' ) && ! defined( 'BC_FED_MP_PLUGIN' ) ) {
 		 * Header Menu.
 		 */
 		public function header_menu() {
-			$get_payload = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
+			$get_payload = isset( $_GET ) ? fed_sanitize_text_field( wp_unslash( $_GET ) ) : array();
 			?>
 			<div class="bc_fed">
 				<div class="m-t-10">

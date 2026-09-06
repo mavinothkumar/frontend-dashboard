@@ -20,7 +20,7 @@ add_action( 'admin_post_nopriv_fed_save_user_profile', 'fed_block_the_action' );
  * Store User Profile.
  */
 function fed_store_user_profile_save() {
-	$post_payload    = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	$post_payload    = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	$message = 'Something Went Wrong';
 
 	if (

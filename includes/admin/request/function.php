@@ -17,8 +17,9 @@ if ( ! function_exists( 'fed_get_login_url' ) ) {
 	 */
 	function fed_get_login_url() {
 		$fed_admin_options = get_option( 'fed_admin_login' );
-		if ( $fed_admin_options && isset( $fed_admin_options['settings']['fed_login_url'] ) && ( '' != $fed_admin_options['settings']['fed_login_url'] ) ) {
-			return get_permalink( $fed_admin_options['settings']['fed_login_url'] );
+		if ( $fed_admin_options && ! empty( $fed_admin_options['settings']['fed_login_url'] ) && (int) $fed_admin_options['settings']['fed_login_url'] > 0 ) {
+			$url = get_permalink( (int) $fed_admin_options['settings']['fed_login_url'] );
+			return $url ?: false;
 		}
 
 		return false;
@@ -31,8 +32,9 @@ if ( ! function_exists( 'fed_get_registration_url' ) ) {
 	 */
 	function fed_get_registration_url() {
 		$fed_admin_options = get_option( 'fed_admin_login' );
-		if ( $fed_admin_options && isset( $fed_admin_options['settings']['fed_register_url'] ) && '' != $fed_admin_options['settings']['fed_register_url'] ) {
-			return get_permalink( $fed_admin_options['settings']['fed_register_url'] );
+		if ( $fed_admin_options && ! empty( $fed_admin_options['settings']['fed_register_url'] ) && (int) $fed_admin_options['settings']['fed_register_url'] > 0 ) {
+			$url = get_permalink( (int) $fed_admin_options['settings']['fed_register_url'] );
+			return $url ?: false;
 		}
 
 		return false;
@@ -48,8 +50,9 @@ if ( ! function_exists( 'fed_get_forgot_password_url' ) ) {
 	 */
 	function fed_get_forgot_password_url() {
 		$fed_admin_options = get_option( 'fed_admin_login' );
-		if ( $fed_admin_options && isset( $fed_admin_options['settings']['fed_forgot_password_url'] ) && '' != $fed_admin_options['settings']['fed_forgot_password_url'] ) {
-			return get_permalink( $fed_admin_options['settings']['fed_forgot_password_url'] );
+		if ( $fed_admin_options && ! empty( $fed_admin_options['settings']['fed_forgot_password_url'] ) && (int) $fed_admin_options['settings']['fed_forgot_password_url'] > 0 ) {
+			$url = get_permalink( (int) $fed_admin_options['settings']['fed_forgot_password_url'] );
+			return $url ?: false;
 		}
 
 		return false;
@@ -64,8 +67,9 @@ if ( ! function_exists( 'fed_get_login_redirect_url' ) ) {
 	 */
 	function fed_get_login_redirect_url() {
 		$fed_admin_options = get_option( 'fed_admin_login' );
-		if ( $fed_admin_options && isset( $fed_admin_options['settings']['fed_redirect_login_url'] ) && '' != $fed_admin_options['settings']['fed_redirect_login_url'] ) {
-			return get_permalink( $fed_admin_options['settings']['fed_redirect_login_url'] );
+		if ( $fed_admin_options && ! empty( $fed_admin_options['settings']['fed_redirect_login_url'] ) && (int) $fed_admin_options['settings']['fed_redirect_login_url'] > 0 ) {
+			$url = get_permalink( (int) $fed_admin_options['settings']['fed_redirect_login_url'] );
+			return $url ?: false;
 		}
 
 		return false;
@@ -80,8 +84,9 @@ if ( ! function_exists( 'fed_get_logout_redirect_url' ) ) {
 	 */
 	function fed_get_logout_redirect_url() {
 		$fed_admin_options = get_option( 'fed_admin_login' );
-		if ( $fed_admin_options && isset( $fed_admin_options['settings']['fed_redirect_logout_url'] ) && '' != $fed_admin_options['settings']['fed_redirect_logout_url'] ) {
-			return get_permalink( $fed_admin_options['settings']['fed_redirect_logout_url'] );
+		if ( $fed_admin_options && ! empty( $fed_admin_options['settings']['fed_redirect_logout_url'] ) && (int) $fed_admin_options['settings']['fed_redirect_logout_url'] > 0 ) {
+			$url = get_permalink( (int) $fed_admin_options['settings']['fed_redirect_logout_url'] );
+			return $url ?: false;
 		}
 
 		return false;
@@ -96,8 +101,9 @@ if ( ! function_exists( 'fed_get_register_redirect_url' ) ) {
 	 */
 	function fed_get_register_redirect_url() {
 		$fed_admin_options = get_option( 'fed_admin_login' );
-		if ( $fed_admin_options && isset( $fed_admin_options['settings']['fed_redirect_register_url'] ) && '' != $fed_admin_options['settings']['fed_redirect_register_url'] ) {
-			return get_permalink( $fed_admin_options['settings']['fed_redirect_register_url'] );
+		if ( $fed_admin_options && ! empty( $fed_admin_options['settings']['fed_redirect_register_url'] ) && (int) $fed_admin_options['settings']['fed_redirect_register_url'] > 0 ) {
+			$url = get_permalink( (int) $fed_admin_options['settings']['fed_redirect_register_url'] );
+			return $url ?: false;
 		}
 
 		return false;
@@ -112,8 +118,9 @@ if ( ! function_exists( 'fed_get_dashboard_url' ) ) {
 	 */
 	function fed_get_dashboard_url() {
 		$fed_admin_options = get_option( 'fed_admin_login' );
-		if ( $fed_admin_options && isset( $fed_admin_options['settings']['fed_dashboard_url'] ) && '' != $fed_admin_options['settings']['fed_dashboard_url'] ) {
-			return get_permalink( $fed_admin_options['settings']['fed_dashboard_url'] );
+		if ( $fed_admin_options && ! empty( $fed_admin_options['settings']['fed_dashboard_url'] ) && (int) $fed_admin_options['settings']['fed_dashboard_url'] > 0 ) {
+			$url = get_permalink( (int) $fed_admin_options['settings']['fed_dashboard_url'] );
+			return $url ?: false;
 		}
 
 		return false;
@@ -129,7 +136,7 @@ if ( ! function_exists( 'fed_is_dashboard' ) ) {
 	function fed_is_dashboard() {
 		$current_page_id   = get_queried_object_id();
 		$fed_admin_options = get_option( 'fed_admin_login' );
-		if ( $fed_admin_options && isset( $fed_admin_options['settings']['fed_dashboard_url'] ) && '' != $fed_admin_options['settings']['fed_dashboard_url'] ) {
+		if ( $fed_admin_options && ! empty( $fed_admin_options['settings']['fed_dashboard_url'] ) && (int) $fed_admin_options['settings']['fed_dashboard_url'] > 0 ) {
 			return (int) $fed_admin_options['settings']['fed_dashboard_url'] === (int) $current_page_id;
 		}
 
@@ -146,7 +153,7 @@ if ( ! function_exists( 'fed_is_register' ) ) {
 	function fed_is_register() {
 		$current_page_id   = get_queried_object_id();
 		$fed_admin_options = get_option( 'fed_admin_login' );
-		if ( $fed_admin_options && isset( $fed_admin_options['settings']['fed_register_url'] ) && '' != $fed_admin_options['settings']['fed_register_url'] ) {
+		if ( $fed_admin_options && ! empty( $fed_admin_options['settings']['fed_register_url'] ) && (int) $fed_admin_options['settings']['fed_register_url'] > 0 ) {
 			return (int) $fed_admin_options['settings']['fed_register_url'] === (int) $current_page_id;
 		}
 
@@ -160,8 +167,9 @@ if ( ! function_exists( 'fed_get_invoice_url' ) ) {
 	 */
 	function fed_get_invoice_url() {
 		$fed_admin_options = get_option( 'fed_admin_settings_invoice' );
-		if ( $fed_admin_options && isset( $fed_admin_options['settings']['invoice_url'] ) && '' != $fed_admin_options['settings']['invoice_url'] ) {
-			return get_permalink( $fed_admin_options['settings']['invoice_url'] );
+		if ( $fed_admin_options && ! empty( $fed_admin_options['settings']['invoice_url'] ) && (int) $fed_admin_options['settings']['invoice_url'] > 0 ) {
+			$url = get_permalink( (int) $fed_admin_options['settings']['invoice_url'] );
+			return $url ?: false;
 		}
 
 		return false;

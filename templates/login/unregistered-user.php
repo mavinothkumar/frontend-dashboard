@@ -5,7 +5,7 @@
  * @package Frontend Dashboard.
  */
 
-$get_payload = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
+$get_payload = isset( $_GET ) ? fed_sanitize_text_field( wp_unslash( $_GET ) ) : array();
 $menus       = fed_login_form();
 if ( isset( $get_payload['page_type'] ) && 'reset_password' === $get_payload['page_type'] ) {
 	$menu      = isset( $menus[ $get_payload['page_type'] ]['html'] ) ? $menus[ $get_payload['page_type'] ]['html'] : false;

@@ -40,8 +40,10 @@ function fed_dashboard_template_redirect() {
 		if ( ( false != $location ) && ( get_permalink() == $location ) ) {
 			$login_page = ( false == $login_page ) ? esc_url( wp_login_url() ) : $login_page;
 
-			wp_safe_redirect( $login_page );
-			exit();
+			if ( $login_page && get_permalink() !== $login_page ) {
+				wp_safe_redirect( $login_page );
+				exit();
+			}
 		}
 	}
 }

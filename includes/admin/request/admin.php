@@ -41,7 +41,7 @@ function fed_get_field_builder_modal_function() {
  */
 function fed_admin_setting_form_function() {
 
-	$request = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	/**
 	 * Check for Nonce
 	 */
@@ -172,7 +172,7 @@ function fed_admin_setting_up_form_function() {
  * Edit Dashboard menu.
  */
 function fed_admin_setting_form_dashboard_menu_function() {
-	$post_all = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	$post_all = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	parse_str( $post_all['data'], $post );
 	$action  = $post_all['fed_action'];
 	$post_id = ( isset( $post['menu_id'] ) && ! empty( $post['menu_id'] ) ) ? (int) $post['menu_id'] : '';
@@ -269,7 +269,7 @@ function fed_admin_setting_upl_form_function() {
  * Delete User Profile
  */
 function fed_user_profile_delete_function() {
-	$post_all = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	$post_all = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	parse_str( $post_all['data'], $post );
 	$action = $post_all['fed_up_action'];
 

@@ -35,7 +35,7 @@ function fed_status_delete_table() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied. Administrator access required.', 'frontend-dashboard' ) ) );
 	}
 
-	$request = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	fed_verify_nonce( $request );
 
 	if ( ! empty( $request['table_name'] ) ) {
@@ -71,7 +71,7 @@ function fed_status_empty_table() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied. Administrator access required.', 'frontend-dashboard' ) ) );
 	}
 
-	$request = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	fed_verify_nonce( $request );
 
 	if ( ! empty( $request['table_name'] ) ) {
@@ -107,7 +107,7 @@ function fed_status_create_table() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied. Administrator access required.', 'frontend-dashboard' ) ) );
 	}
 
-	$request = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	fed_verify_nonce( $request );
 
 	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
@@ -135,7 +135,7 @@ function fed_status_optimize_tables() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied. Administrator access required.', 'frontend-dashboard' ) ) );
 	}
 
-	$request = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	fed_verify_nonce( $request );
 
 	global $wpdb;
@@ -165,7 +165,7 @@ function fed_status_delete_option() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied. Administrator access required.', 'frontend-dashboard' ) ) );
 	}
 
-	$request = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	fed_verify_nonce( $request );
 
 	if ( ! empty( $request['option_id'] ) ) {
@@ -195,7 +195,7 @@ function fed_status_delete_all_option() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied. Administrator access required.', 'frontend-dashboard' ) ) );
 	}
 
-	$request = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	fed_verify_nonce( $request );
 
 	global $wpdb;
@@ -220,7 +220,7 @@ function fed_status_clear_log() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied. Administrator access required.', 'frontend-dashboard' ) ) );
 	}
 
-	$request = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	fed_verify_nonce( $request );
 
 	$log_file = BC_FED_PLUGIN_DIR . '/log/dashboard.log';
@@ -245,7 +245,7 @@ function fed_status_run_cron() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied. Administrator access required.', 'frontend-dashboard' ) ) );
 	}
 
-	$request = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	fed_verify_nonce( $request );
 
 	if ( ! empty( $request['hook'] ) ) {

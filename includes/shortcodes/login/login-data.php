@@ -169,7 +169,7 @@ function fed_forgot_password_only() {
  * @return array
  */
 function fed_reset_password_only() {
-	$get_payload = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
+	$get_payload = isset( $_GET ) ? fed_sanitize_text_field( wp_unslash( $_GET ) ) : array();
 
 	return array(
 		'menu'     => array(

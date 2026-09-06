@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 function fed_admin_setting_post_options_request() {
 	$message                 = '';
-	$request                 = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	$request                 = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	$fed_admin_settings_post = get_option( 'fed_admin_settings_post' );
 
 	/**

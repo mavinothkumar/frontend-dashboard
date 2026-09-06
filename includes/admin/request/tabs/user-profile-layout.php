@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Admin Setting User Profile Request
  */
 function fed_admin_setting_upl_request() {
-	$request                            = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	$request                            = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	$fed_admin_settings_upl             = get_option( 'fed_admin_settings_upl' );
 	$fed_admin_settings_upl['settings'] = array(
 		'fed_upl_change_profile_pic'    => isset( $request['settings']['fed_upl_change_profile_pic'] ) ? sanitize_text_field(
@@ -42,7 +42,7 @@ function fed_admin_setting_upl_request() {
  * Admin Setting User Profile Level Color request.
  */
 function fed_admin_setting_upl_color_request() {
-	$request                         = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	$request                         = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	$fed_admin_settings_upl          = get_option( 'fed_admin_setting_upl_color' );
 	$fed_admin_settings_upl['color'] = array(
 		'fed_upl_color_bg_color'       => isset( $request['color']['fed_upl_color_bg_color'] ) ? sanitize_text_field(

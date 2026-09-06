@@ -467,7 +467,7 @@ function fed_plugin_meta_data() {
  * Admin Notice
  */
 function fed_admin_notice() {
-	$get_payload = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
+	$get_payload = isset( $_GET ) ? fed_sanitize_text_field( wp_unslash( $_GET ) ) : array();
 	if ( isset( $get_payload['page'] ) && in_array( $get_payload['page'], fed_get_script_loading_pages(), false ) ) {
 		$get_notification = get_option( 'fed_admin_message_notification' );
 		$api              = get_transient( 'fed_plugin_list_api' );

@@ -128,7 +128,7 @@ add_action( 'wp_ajax_fed_menu_sorting_items', 'fed_menu_sorting_items' );
  */
 function fed_menu_sorting_items() {
 
-	$request           = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	$request           = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	$default_menu_type = fed_get_default_menu_type();
 	$menus             = array();
 
