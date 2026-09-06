@@ -102,7 +102,7 @@ if ( ! class_exists( 'FEDPaymentMenu' ) ) {
 		 * @param  array $menus  Menus.
 		 */
 		public function header_menu( $menus ) {
-			$get_payload = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
+			$get_payload = isset( $_GET ) ? array_map( 'sanitize_text_field', wp_unslash( $_GET ) ) : array();
 			?>
 			<ul class="nav nav-tabs" id="" role="tablist">
 				<?php

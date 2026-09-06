@@ -4057,38 +4057,185 @@ function login_logout_menu( $items, $args ) {
  *
  * @param  string  $meta  Meta.
  * @param  array  $user_roles  User Roles.
- * @param  string  $column  Column.
- * @param  array  $extra  Extra
- * @param  array  $remove  Remove.
+/**
+ * Render Reusable Modern User Role Checkboxes Component.
+ * Features: Live instant search, Select All, Clear All, selected counter, and responsive card layout.
  *
- * @return string
+ * @param  string  $meta        Field name prefix (e.g. 'settings[users][allow]').
+ * @param  array   $user_roles  Currently selected user roles array/keys.
+ * @param  string  $column      Column size (legacy support: '3', '4', '6', '12').
+ * @param  array   $extra       Extra custom roles (e.g. array('unregistered' => 'Unregistered')).
+ * @param  array   $remove      Roles to exclude from list.
+ *
+ * @return string  Rendered HTML.
  */
-function fed_user_role_checkboxes( $meta, $user_roles = array(), $column = '6', $extra = array(), $remove = null ) {
-	$all_roles = array_merge( fed_get_user_roles(), $extra );
-	if ( $remove ) {
+function fed_user_role_checkboxes( $meta, $user_roles = array(), $column = '4', $extra = array(), $remove = null ) {
+	$all_roles = array_merge( $extra, fed_get_user_roles() );
+	if ( $remove && is_array( $remove ) ) {
 		foreach ( $remove as $remove_user_role ) {
 			unset( $all_roles[ $remove_user_role ] );
 		}
 	}
-	$html = '';
-	$html .= '<div class="row">';
-	foreach ( $all_roles as $key => $role ) {
-		$c_value = array_key_exists( $key, $user_roles ) ? 'Enable' : 'Disable';
 
-		$html .= '<div class="col-md-' . $column . '">
-                    ' . fed_form_checkbox(
-				array(
-					'input_meta'    => $meta . '[' . $key . ']',
-					'default_value' => 'Enable',
-					'label'         => $role,
-					'user_value'    => $c_value,
-				)
-			) . '
-                </div>';
+	if ( empty( $all_roles ) ) {
+		return '<div style="color: #94a3b8; font-size: 13px; font-style: italic;">' . esc_html__( 'No user roles found.', 'frontend-dashboard' ) . '</div>';
 	}
-	$html .= '</div>';
 
-	return $html;
+	// Normalize selected roles into simple array of keys
+	$selected_keys = array();
+	if ( is_array( $user_roles ) ) {
+		foreach ( $user_roles as $k => $v ) {
+			if ( is_numeric( $k ) && is_string( $v ) ) {
+				$selected_keys[] = $v;
+			} elseif ( ! empty( $v ) && 'Disable' !== $v ) {
+				$selected_keys[] = (string) $k;
+			}
+		}
+	}
+
+	$unique_id = 'fed_roles_' . wp_rand( 1000, 9999 );
+	$total_roles = count( $all_roles );
+	$selected_count = count( array_intersect( array_keys( $all_roles ), $selected_keys ) );
+
+	ob_start();
+	?>
+	<div class="fed-user-roles-component" id="<?php echo esc_attr( $unique_id ); ?>" style="font-family: inherit; margin-top: 6px;">
+		
+		<!-- Search & Quick Action Toolbar -->
+		<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap;">
+			
+			<!-- Search Bar -->
+			<div style="position: relative; flex: 1; min-width: 200px; max-width: 320px;">
+				<i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 13px; pointer-events: none;"></i>
+				<input type="text" class="fed-role-search-input" placeholder="<?php esc_attr_e( 'Search user roles...', 'frontend-dashboard' ); ?>" style="width: 100%; border: 1px solid #cbd5e1; border-radius: 8px; padding: 7px 12px 7px 34px; font-size: 13px; color: #1e293b; background: #ffffff; outline: none; box-shadow: 0 1px 2px rgba(0,0,0,0.02); transition: border-color 0.15s ease;" />
+			</div>
+
+			<!-- Select All / Clear All & Badge Counter -->
+			<div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+				<button type="button" class="fed-role-select-all" style="background: #ffffff; border: 1px solid #cbd5e1; color: #334155; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s ease;">
+					<i class="fas fa-check-double" style="color: #16a34a; font-size: 11px;"></i> <?php esc_html_e( 'Select All', 'frontend-dashboard' ); ?>
+				</button>
+				<button type="button" class="fed-role-clear-all" style="background: #ffffff; border: 1px solid #cbd5e1; color: #334155; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s ease;">
+					<i class="fas fa-times" style="color: #ef4444; font-size: 11px;"></i> <?php esc_html_e( 'Clear All', 'frontend-dashboard' ); ?>
+				</button>
+				<span class="fed-role-counter-pill" style="background: #f1f5f9; color: #475569; font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 9999px; border: 1px solid #e2e8f0; display: inline-flex; align-items: center; gap: 4px;">
+					<span class="fed-role-selected-count"><?php echo esc_html( $selected_count ); ?></span> / <?php echo esc_html( $total_roles ); ?> <?php esc_html_e( 'selected', 'frontend-dashboard' ); ?>
+				</span>
+			</div>
+
+		</div>
+
+		<!-- Roles Card Grid -->
+		<div class="fed-roles-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;">
+			<?php
+			foreach ( $all_roles as $key => $role ) {
+				$is_checked = in_array( (string) $key, $selected_keys, true );
+				$card_bg    = $is_checked ? '#f0fdf4' : '#f8fafc';
+				$card_border = $is_checked ? '#86efac' : '#e2e8f0';
+				$card_color = $is_checked ? '#15803d' : '#334155';
+				?>
+				<label class="fed-role-item" data-role-name="<?php echo esc_attr( strtolower( $role . ' ' . $key ) ); ?>" style="display: flex; align-items: center; gap: 10px; background: <?php echo esc_attr( $card_bg ); ?>; border: 1px solid <?php echo esc_attr( $card_border ); ?>; padding: 10px 14px; border-radius: 8px; cursor: pointer; transition: all 0.15s ease; user-select: none; margin: 0;">
+					<input type="checkbox" name="<?php echo esc_attr( $meta . '[' . $key . ']' ); ?>" value="<?php echo esc_attr( $key ); ?>" class="fed-role-checkbox" <?php checked( $is_checked ); ?> style="width: 16px; height: 16px; accent-color: #128c7e; cursor: pointer; flex-shrink: 0;" />
+					<span class="fed-role-name" style="font-size: 13px; font-weight: <?php echo $is_checked ? '700' : '500'; ?>; color: <?php echo esc_attr( $card_color ); ?>; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+						<?php echo esc_html( $role ); ?>
+					</span>
+				</label>
+			<?php } ?>
+		</div>
+
+		<!-- No Results Found Message (Hidden by default) -->
+		<div class="fed-roles-no-results" style="display: none; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 18px; text-align: center; color: #64748b; font-size: 13px; margin-top: 8px;">
+			<i class="fas fa-search" style="margin-right: 6px; color: #94a3b8;"></i> <?php esc_html_e( 'No matching user roles found.', 'frontend-dashboard' ); ?>
+		</div>
+
+		<!-- Interactive Helper Script for Search, Select All, Clear All -->
+		<script type="text/javascript">
+		(function() {
+			if ( typeof window.fedInitRoleSelectors === 'undefined' ) {
+				window.fedInitRoleSelectors = function() {
+					if ( typeof jQuery === 'undefined' ) return;
+					var $ = jQuery;
+
+					// Live Search Filter
+					$( document ).off( 'input.fedRoleSearch', '.fed-role-search-input' ).on( 'input.fedRoleSearch', '.fed-role-search-input', function() {
+						var query = $( this ).val().toLowerCase().trim();
+						var $container = $( this ).closest( '.fed-user-roles-component' );
+						var $items = $container.find( '.fed-role-item' );
+						var visibleCount = 0;
+
+						$items.each( function() {
+							var name = $( this ).data( 'role-name' ) || '';
+							if ( ! query || name.indexOf( query ) > -1 ) {
+								$( this ).show();
+								visibleCount++;
+							} else {
+								$( this ).hide();
+							}
+						} );
+
+						$container.find( '.fed-roles-no-results' ).toggle( visibleCount === 0 );
+					} );
+
+					// Update Card State & Selected Counter
+					function updateRoleComponentState( $container ) {
+						var $checkboxes = $container.find( '.fed-role-checkbox' );
+						var selected = 0;
+
+						$checkboxes.each( function() {
+							var checked = $( this ).is( ':checked' );
+							var $item = $( this ).closest( '.fed-role-item' );
+							var $name = $item.find( '.fed-role-name' );
+
+							if ( checked ) {
+								selected++;
+								$item.css( { 'background': '#f0fdf4', 'border-color': '#86efac' } );
+								$name.css( { 'color': '#15803d', 'font-weight': '700' } );
+							} else {
+								$item.css( { 'background': '#f8fafc', 'border-color': '#e2e8f0' } );
+								$name.css( { 'color': '#334155', 'font-weight': '500' } );
+							}
+						} );
+
+						$container.find( '.fed-role-selected-count' ).text( selected );
+					}
+
+					// Checkbox Change Handler
+					$( document ).off( 'change.fedRoleCheck', '.fed-role-checkbox' ).on( 'change.fedRoleCheck', '.fed-role-checkbox', function() {
+						var $container = $( this ).closest( '.fed-user-roles-component' );
+						updateRoleComponentState( $container );
+					} );
+
+					// Select All Button
+					$( document ).off( 'click.fedRoleSelectAll', '.fed-role-select-all' ).on( 'click.fedRoleSelectAll', '.fed-role-select-all', function( e ) {
+						e.preventDefault();
+						var $container = $( this ).closest( '.fed-user-roles-component' );
+						$container.find( '.fed-role-item:visible .fed-role-checkbox' ).prop( 'checked', true );
+						updateRoleComponentState( $container );
+					} );
+
+					// Clear All Button
+					$( document ).off( 'click.fedRoleClearAll', '.fed-role-clear-all' ).on( 'click.fedRoleClearAll', '.fed-role-clear-all', function( e ) {
+						e.preventDefault();
+						var $container = $( this ).closest( '.fed-user-roles-component' );
+						$container.find( '.fed-role-item:visible .fed-role-checkbox' ).prop( 'checked', false );
+						updateRoleComponentState( $container );
+					} );
+				};
+
+				if ( document.readyState === 'loading' ) {
+					document.addEventListener( 'DOMContentLoaded', window.fedInitRoleSelectors );
+				} else {
+					window.fedInitRoleSelectors();
+				}
+			} else {
+				window.fedInitRoleSelectors();
+			}
+		})();
+		</script>
+
+	</div>
+	<?php
+	return ob_get_clean();
 }
 
 /**
