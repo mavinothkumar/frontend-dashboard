@@ -19,8 +19,8 @@ $activeSlug  = is_array( $menu ) && isset( $menu['menu_request']['menu_slug'] ) 
 	<?php do_action( 'fed_inside_dashboard_container_top' ); ?>
 
 	<!-- Top App Shell Header -->
-	<header class="sticky top-0 z-30 bg-white border-b border-slate-200/80 shadow-xs backdrop-blur-md bg-white/95">
-		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+	<header class="sticky top-0 z-30 bg-white border-b border-slate-200/80 shadow-xs backdrop-blur-md bg-white/95 fed_dashboard_top_header">
+		<div class="w-full px-4 sm:px-6 lg:px-8 xl:px-10">
 			<div class="flex items-center justify-between h-16">
 				
 				<!-- Left: Brand / Section Title -->
@@ -63,14 +63,14 @@ $activeSlug  = is_array( $menu ) && isset( $menu['menu_request']['menu_slug'] ) 
 	</header>
 
 	<!-- Main App Shell Body -->
-	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+	<div class="w-full px-4 sm:px-6 lg:px-8 xl:px-10 py-6">
 		<?php echo fed_show_alert( 'fed_dashboard_top_message' ); ?>
 
 		<?php if ( ! $menu instanceof WP_Error ) {
 			do_action( 'fed_dashboard_content_outside_top' );
 			do_action( 'fed_dashboard_content_outside_top_' . fed_get_data( 'menu_request.menu_slug', $menu ) );
 			?>
-			<div class="flex flex-col lg:flex-row gap-8 fed_dashboard_wrapper">
+			<div class="flex flex-col lg:flex-row gap-6 xl:gap-8 fed_dashboard_wrapper w-full">
 				
 				<!-- Sidebar Navigation -->
 				<aside class="w-full lg:w-72 flex-shrink-0 fed_dashboard_menus">

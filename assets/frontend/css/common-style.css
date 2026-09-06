@@ -914,9 +914,64 @@ Pricing
 	border-left: 5px solid grey;
 }
 
+/* ==========================================================================
+   Frontend Dashboard App Shell & Sticky Header Admin Bar Offset
+   ========================================================================== */
 
-/*@media screen and (min-width: 768px) {*/
-/*    .bc_fed .custom-collapse .collapse{*/
-/*        display:block;*/
-/*    }*/
-/*}*/
+.admin-bar .fed_dashboard_container header.fed_dashboard_top_header,
+.admin-bar .fed_dashboard_container header.sticky {
+	top: 32px !important;
+}
+
+@media screen and (max-width: 782px) {
+	.admin-bar .fed_dashboard_container header.fed_dashboard_top_header,
+	.admin-bar .fed_dashboard_container header.sticky {
+		top: 46px !important;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	.admin-bar .fed_dashboard_container header.fed_dashboard_top_header,
+	.admin-bar .fed_dashboard_container header.sticky {
+		top: 0 !important;
+	}
+}
+
+/* Full Width Standalone Canvas Overrides */
+.fed-canvas-body {
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+.fed-template-canvas-full,
+.fed-template-full-width,
+#fed-canvas-full-wrapper,
+#fed-full-width-wrapper {
+	width: 100% !important;
+	max-width: 100% !important;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+.fed_dashboard_container {
+	width: 100% !important;
+	max-width: 100% !important;
+}
+
+.fed_dashboard_wrapper {
+	width: 100% !important;
+	max-width: 100% !important;
+}
+
+/* FSE Block Theme Full Width Override */
+.wp-site-blocks > main.alignfull,
+.wp-block-group.alignfull > .wp-block-post-content.alignfull,
+.wp-block-post-content.alignfull > .fed-block-dashboard-wrapper.alignfull,
+.fed-block-dashboard-wrapper.alignfull {
+	width: 100% !important;
+	max-width: 100% !important;
+	margin-left: 0 !important;
+	margin-right: 0 !important;
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+}
