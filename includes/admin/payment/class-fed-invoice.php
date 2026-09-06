@@ -17,7 +17,17 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 		 * Details.
 		 */
 		public function details() {
-			$settings = get_option( 'fed_invoice_settings' );
+			$settings = get_option( 'fed_invoice_settings', array() );
+			?>
+			<div style="margin-bottom: 20px;">
+				<h4 style="font-size: 16px; font-weight: 800; color: #0f172a; margin: 0 0 6px 0;">
+					<?php esc_html_e( 'Company & Organization Billing Profile', 'frontend-dashboard' ); ?>
+				</h4>
+				<p style="font-size: 13.5px; color: #64748b; margin: 0;">
+					<?php esc_html_e( 'These details will appear in the header and issuer section of customer receipts, invoices, and payment statements.', 'frontend-dashboard' ); ?>
+				</p>
+			</div>
+			<?php
 			$array    = array(
 				'form'  => array(
 					'method' => '',
@@ -37,9 +47,27 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 					'loader' => '',
 				),
 				'input' => array(
+					'Company Name' => array(
+						'col'          => 'col-md-6',
+						'name'         => __( 'Company / Business Name', 'frontend-dashboard' ),
+						'input'        => fed_get_input_details(
+							array(
+								'placeholder' => __( 'e.g. Acme Corporation LLC', 'frontend-dashboard' ),
+								'input_meta'  => 'company_name',
+								'user_value'  => isset( $settings['details']['company_name'] ) ? $settings['details']['company_name'] : '',
+								'input_type'  => 'single_line',
+								'class_name'  => 'form-control',
+							)
+						),
+						'help_message' => fed_show_help_message(
+							array(
+								'content' => __( 'Official legal business name displayed on all invoices.', 'frontend-dashboard' ),
+							)
+						),
+					),
 					'Company Logo' => array(
-						'col'          => 'col-md-12',
-						'name'         => __( 'Company Logo', 'frontend-dashboard' ),
+						'col'          => 'col-md-6',
+						'name'         => __( 'Company Logo (Image ID / URL)', 'frontend-dashboard' ),
 						'input'        => fed_get_input_details(
 							array(
 								'input_meta' => 'logo',
@@ -49,189 +77,165 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 						),
 						'help_message' => fed_show_help_message(
 							array(
-								'content' => __( 'Company Logo', 'frontend-dashboard' ),
+								'content' => __( 'Upload your official brand logo for invoices and receipts.', 'frontend-dashboard' ),
 							)
 						),
 					),
 					'Logo Width'   => array(
-						'col'          => 'col-md-6',
+						'col'          => 'col-md-3',
 						'name'         => __( 'Logo Width (px)', 'frontend-dashboard' ),
-						'input'        =>
-							fed_get_input_details(
-								array(
-									'placeholder' => __(
-										'Logo Width in Pixel',
-										'frontend-dashboard'
-									),
-									'input_meta'  => 'width',
-									'user_value'  => isset( $settings['details']['width'] ) ? $settings['details']['width'] : '',
-									'input_type'  => 'single_line',
-								)
-							),
+						'input'        => fed_get_input_details(
+							array(
+								'placeholder' => '160',
+								'input_meta'  => 'width',
+								'user_value'  => isset( $settings['details']['width'] ) ? $settings['details']['width'] : '',
+								'input_type'  => 'single_line',
+								'class_name'  => 'form-control',
+							)
+						),
 						'help_message' => fed_show_help_message(
 							array(
-								'content' => __( 'Logo Width in Pixel', 'frontend-dashboard' ),
+								'content' => __( 'Display width in pixels (e.g. 160).', 'frontend-dashboard' ),
 							)
 						),
 					),
 					'Logo Height'  => array(
-						'col'          => 'col-md-6',
+						'col'          => 'col-md-3',
 						'name'         => __( 'Logo Height (px)', 'frontend-dashboard' ),
-						'input'        =>
-							fed_get_input_details(
-								array(
-									'placeholder' => __(
-										'Logo Height in Pixel',
-										'frontend-dashboard'
-									),
-									'input_meta'  => 'height',
-									'user_value'  => isset( $settings['details']['height'] ) ? $settings['details']['height'] : '',
-									'input_type'  => 'single_line',
-								)
-							),
-						'help_message' => fed_show_help_message(
+						'input'        => fed_get_input_details(
 							array(
-								'content' => __( 'Logo Height in Pixel', 'frontend-dashboard' ),
+								'placeholder' => '60',
+								'input_meta'  => 'height',
+								'user_value'  => isset( $settings['details']['height'] ) ? $settings['details']['height'] : '',
+								'input_type'  => 'single_line',
+								'class_name'  => 'form-control',
 							)
 						),
-					),
-					'Company Name' => array(
-						'col'          => 'col-md-12',
-						'name'         => __( 'Company Name', 'frontend-dashboard' ),
-						'input'        =>
-							fed_get_input_details(
-								array(
-									'placeholder' => __( 'Company Name', 'frontend-dashboard' ),
-									'input_meta'  => 'company_name',
-									'user_value'  => isset( $settings['details']['company_name'] ) ? $settings['details']['company_name'] : '',
-									'input_type'  => 'single_line',
-								)
-							),
 						'help_message' => fed_show_help_message(
 							array(
-								'content' => __( 'Company Name', 'frontend-dashboard' ),
+								'content' => __( 'Display height in pixels (e.g. 60).', 'frontend-dashboard' ),
 							)
 						),
 					),
 					'Door Number'  => array(
 						'col'          => 'col-md-6',
-						'name'         => __( 'Door Number', 'frontend-dashboard' ),
-						'input'        =>
-							fed_get_input_details(
-								array(
-									'placeholder' => __( 'Door Number', 'frontend-dashboard' ),
-									'input_meta'  => 'door_number',
-									'user_value'  => isset( $settings['details']['door_number'] ) ? $settings['details']['door_number'] : '',
-									'input_type'  => 'single_line',
-								)
-							),
+						'name'         => __( 'Suite / Door / Building No.', 'frontend-dashboard' ),
+						'input'        => fed_get_input_details(
+							array(
+								'placeholder' => __( 'Suite 400 / Building B', 'frontend-dashboard' ),
+								'input_meta'  => 'door_number',
+								'user_value'  => isset( $settings['details']['door_number'] ) ? $settings['details']['door_number'] : '',
+								'input_type'  => 'single_line',
+								'class_name'  => 'form-control',
+							)
+						),
 						'help_message' => fed_show_help_message(
 							array(
-								'content' => __( 'Door Number', 'frontend-dashboard' ),
+								'content' => __( 'Building, unit, or suite number.', 'frontend-dashboard' ),
 							)
 						),
 					),
 					'Street Name'  => array(
 						'col'          => 'col-md-6',
-						'name'         => __( 'Street Name', 'frontend-dashboard' ),
-						'input'        =>
-							fed_get_input_details(
-								array(
-									'placeholder' => __( 'Street Name', 'frontend-dashboard' ),
-									'input_meta'  => 'street_name',
-									'user_value'  => isset( $settings['details']['street_name'] ) ? $settings['details']['street_name'] : '',
-									'input_type'  => 'single_line',
-								)
-							),
+						'name'         => __( 'Street Address', 'frontend-dashboard' ),
+						'input'        => fed_get_input_details(
+							array(
+								'placeholder' => __( '123 Enterprise Way', 'frontend-dashboard' ),
+								'input_meta'  => 'street_name',
+								'user_value'  => isset( $settings['details']['street_name'] ) ? $settings['details']['street_name'] : '',
+								'input_type'  => 'single_line',
+								'class_name'  => 'form-control',
+							)
+						),
 						'help_message' => fed_show_help_message(
 							array(
-								'content' => __( 'Street Name', 'frontend-dashboard' ),
+								'content' => __( 'Street address line.', 'frontend-dashboard' ),
 							)
 						),
 					),
 					'City'         => array(
-						'col'          => 'col-md-6',
+						'col'          => 'col-md-4',
 						'name'         => __( 'City', 'frontend-dashboard' ),
-						'input'        =>
-							fed_get_input_details(
-								array(
-									'placeholder' => __( 'City', 'frontend-dashboard' ),
-									'input_meta'  => 'city',
-									'user_value'  => isset( $settings['details']['city'] ) ? $settings['details']['city'] : '',
-									'input_type'  => 'single_line',
-								)
-							),
+						'input'        => fed_get_input_details(
+							array(
+								'placeholder' => __( 'San Francisco', 'frontend-dashboard' ),
+								'input_meta'  => 'city',
+								'user_value'  => isset( $settings['details']['city'] ) ? $settings['details']['city'] : '',
+								'input_type'  => 'single_line',
+								'class_name'  => 'form-control',
+							)
+						),
 						'help_message' => fed_show_help_message(
-							array( 'content' => __( 'City', 'frontend-dashboard' ) )
+							array( 'content' => __( 'City name.', 'frontend-dashboard' ) )
 						),
 					),
 					'State'        => array(
-						'col'          => 'col-md-6',
-						'name'         => __( 'State', 'frontend-dashboard' ),
-						'input'        =>
-							fed_get_input_details(
-								array(
-									'placeholder' => __( 'State', 'frontend-dashboard' ),
-									'input_meta'  => 'state',
-									'user_value'  => isset( $settings['details']['state'] ) ? $settings['details']['state'] : '',
-									'input_type'  => 'single_line',
-								)
-							),
+						'col'          => 'col-md-4',
+						'name'         => __( 'State / Province', 'frontend-dashboard' ),
+						'input'        => fed_get_input_details(
+							array(
+								'placeholder' => __( 'California', 'frontend-dashboard' ),
+								'input_meta'  => 'state',
+								'user_value'  => isset( $settings['details']['state'] ) ? $settings['details']['state'] : '',
+								'input_type'  => 'single_line',
+								'class_name'  => 'form-control',
+							)
+						),
 						'help_message' => fed_show_help_message(
-							array( 'content' => __( 'State', 'frontend-dashboard' ) )
+							array( 'content' => __( 'State, region, or province.', 'frontend-dashboard' ) )
 						),
 					),
 					'Postal Code'  => array(
-						'col'          => 'col-md-6',
-						'name'         => __( 'Postal Code', 'frontend-dashboard' ),
-						'input'        =>
-							fed_get_input_details(
-								array(
-									'placeholder' => __( 'Postal Code', 'frontend-dashboard' ),
-									'input_meta'  => 'postal_code',
-									'user_value'  => isset( $settings['details']['postal_code'] ) ? $settings['details']['postal_code'] : '',
-									'input_type'  => 'single_line',
-								)
-							),
+						'col'          => 'col-md-4',
+						'name'         => __( 'ZIP / Postal Code', 'frontend-dashboard' ),
+						'input'        => fed_get_input_details(
+							array(
+								'placeholder' => '94105',
+								'input_meta'  => 'postal_code',
+								'user_value'  => isset( $settings['details']['postal_code'] ) ? $settings['details']['postal_code'] : '',
+								'input_type'  => 'single_line',
+								'class_name'  => 'form-control',
+							)
+						),
 						'help_message' => fed_show_help_message(
 							array(
-								'content' => __( 'Postal Code', 'frontend-dashboard' ),
+								'content' => __( 'Postal code or ZIP code.', 'frontend-dashboard' ),
 							)
 						),
 					),
 					'Country'      => array(
 						'col'          => 'col-md-6',
 						'name'         => __( 'Country', 'frontend-dashboard' ),
-						'input'        =>
-							fed_get_input_details(
-								array(
-									'input_value' => fed_get_country_code(),
-									'input_meta'  => 'country',
-									'user_value'  => isset( $settings['details']['country'] ) ? $settings['details']['country'] : '',
-									'input_type'  => 'select',
-								)
-							),
+						'input'        => fed_get_input_details(
+							array(
+								'input_value' => function_exists( 'fed_get_country_code' ) ? fed_get_country_code() : array(),
+								'input_meta'  => 'country',
+								'user_value'  => isset( $settings['details']['country'] ) ? $settings['details']['country'] : '',
+								'input_type'  => 'select',
+								'class_name'  => 'form-control',
+							)
+						),
 						'help_message' => fed_show_help_message(
 							array(
-								'content' => __( 'Country', 'frontend-dashboard' ),
+								'content' => __( 'Country where your organization is registered.', 'frontend-dashboard' ),
 							)
 						),
 					),
 					'Footer Note'  => array(
 						'col'          => 'col-md-12',
-						'name'         => __( 'Footer Note', 'frontend-dashboard' ),
-						'input'        =>
-							fed_get_input_details(
-								array(
-									'placeholder' => __( 'Footer Note', 'frontend-dashboard' ),
-									'input_meta'  => 'footer_note',
-									'user_value'  => isset( $settings['details']['footer_note'] ) ? $settings['details']['footer_note'] : '',
-									'input_type'  => 'multi_line',
-								)
-							),
+						'name'         => __( 'Invoice Footer Note & Payment Terms', 'frontend-dashboard' ),
+						'input'        => fed_get_input_details(
+							array(
+								'placeholder' => __( 'Thank you for your business! Payment is due within 30 days of issuance. For billing inquiries, contact billing@example.com.', 'frontend-dashboard' ),
+								'input_meta'  => 'footer_note',
+								'user_value'  => isset( $settings['details']['footer_note'] ) ? $settings['details']['footer_note'] : '',
+								'input_type'  => 'multi_line',
+								'class_name'  => 'form-control',
+							)
+						),
 						'help_message' => fed_show_help_message(
 							array(
-								'content' => __( 'Footer Note', 'frontend-dashboard' ),
+								'content' => __( 'Terms of payment, tax disclaimer, bank wiring instructions, or thank-you note printed at the bottom of the invoice.', 'frontend-dashboard' ),
 							)
 						),
 					),
@@ -481,7 +485,7 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 		}
 
 		/**
-		 * User.
+		 * User Address Mapping.
 		 */
 		public function user() {
 			global $wpdb;
@@ -489,11 +493,21 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 			$table         = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
 			$user_profiles = $wpdb->get_results( "SELECT id, label_name FROM $table" );
 
-			$profiles = array( '' => __( 'Hide this field' ) ) + (array) fed_convert_array_object_to_key_value(
+			$profiles = array( '' => __( '&mdash; Hide this field from invoice &mdash;', 'frontend-dashboard' ) ) + (array) fed_convert_array_object_to_key_value(
 					$user_profiles,
 					'id', 'label_name'
 				);
-			$settings = get_option( 'fed_invoice_settings' );
+			$settings = get_option( 'fed_invoice_settings', array() );
+			?>
+			<div style="margin-bottom: 20px;">
+				<h4 style="font-size: 16px; font-weight: 800; color: #0f172a; margin: 0 0 6px 0;">
+					<?php esc_html_e( 'Customer Billing Address Field Mapping', 'frontend-dashboard' ); ?>
+				</h4>
+				<p style="font-size: 13.5px; color: #64748b; margin: 0;">
+					<?php esc_html_e( 'Map the corresponding User Profile fields configured in Frontend Dashboard to extract customer address details automatically on generated invoices and receipts.', 'frontend-dashboard' ); ?>
+				</p>
+			</div>
+			<?php
 
 			$array = array(
 				'form'  => array(
@@ -514,42 +528,44 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 					'loader' => '',
 				),
 				'input' => array(
-					'Name'      => array(
-						'col'          => 'col-md-7',
-						'name'         => __( 'Name', 'frontend-dashboard' ),
+					'Customer Name' => array(
+						'col'          => 'col-md-6',
+						'name'         => __( 'Customer Full Name', 'frontend-dashboard' ),
 						'input'        => fed_get_input_details(
 							array(
 								'input_value' => $profiles,
 								'input_meta'  => 'name',
 								'user_value'  => isset( $settings['user_address']['name'] ) ? $settings['user_address']['name'] : '',
 								'input_type'  => 'select',
+								'class_name'  => 'form-control',
 							)
 						),
 						'help_message' => fed_show_help_message(
 							array(
-								'content' => __( 'Name', 'frontend-dashboard' ),
+								'content' => __( 'Profile field used for the customer/client full name.', 'frontend-dashboard' ),
 							)
 						),
 					),
-					'Address'   => array(
-						'col'          => 'col-md-7',
-						'name'         => __( 'Address', 'frontend-dashboard' ),
+					'Street Address' => array(
+						'col'          => 'col-md-6',
+						'name'         => __( 'Street Address', 'frontend-dashboard' ),
 						'input'        => fed_get_input_details(
 							array(
 								'input_value' => $profiles,
 								'input_meta'  => 'address',
 								'user_value'  => isset( $settings['user_address']['address'] ) ? $settings['user_address']['address'] : '',
 								'input_type'  => 'select',
+								'class_name'  => 'form-control',
 							)
 						),
 						'help_message' => fed_show_help_message(
 							array(
-								'content' => __( 'Address', 'frontend-dashboard' ),
+								'content' => __( 'Profile field containing customer street address.', 'frontend-dashboard' ),
 							)
 						),
 					),
-					'City'      => array(
-						'col'          => 'col-md-7',
+					'City' => array(
+						'col'          => 'col-md-4',
 						'name'         => __( 'City', 'frontend-dashboard' ),
 						'input'        => fed_get_input_details(
 							array(
@@ -557,50 +573,53 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 								'input_meta'  => 'city',
 								'user_value'  => isset( $settings['user_address']['city'] ) ? $settings['user_address']['city'] : '',
 								'input_type'  => 'select',
+								'class_name'  => 'form-control',
 							)
 						),
 						'help_message' => fed_show_help_message(
 							array(
-								'content' => __( 'City', 'frontend-dashboard' ),
+								'content' => __( 'Profile field containing city name.', 'frontend-dashboard' ),
 							)
 						),
 					),
-					'State'     => array(
-						'col'          => 'col-md-7',
-						'name'         => __( 'State', 'frontend-dashboard' ),
+					'State' => array(
+						'col'          => 'col-md-4',
+						'name'         => __( 'State / Province', 'frontend-dashboard' ),
 						'input'        => fed_get_input_details(
 							array(
 								'input_value' => $profiles,
 								'input_meta'  => 'state',
 								'user_value'  => isset( $settings['user_address']['state'] ) ? $settings['user_address']['state'] : '',
 								'input_type'  => 'select',
+								'class_name'  => 'form-control',
 							)
 						),
 						'help_message' => fed_show_help_message(
 							array(
-								'content' => __( 'State', 'frontend-dashboard' ),
+								'content' => __( 'Profile field containing state/province.', 'frontend-dashboard' ),
 							)
 						),
 					),
-					'Postcode'  => array(
-						'col'          => 'col-md-7',
-						'name'         => __( 'Postcode', 'frontend-dashboard' ),
+					'Postal Code' => array(
+						'col'          => 'col-md-4',
+						'name'         => __( 'Postal / ZIP Code', 'frontend-dashboard' ),
 						'input'        => fed_get_input_details(
 							array(
 								'input_value' => $profiles,
 								'input_meta'  => 'postcode',
 								'user_value'  => isset( $settings['user_address']['postcode'] ) ? $settings['user_address']['postcode'] : '',
 								'input_type'  => 'select',
+								'class_name'  => 'form-control',
 							)
 						),
 						'help_message' => fed_show_help_message(
 							array(
-								'content' => __( 'Postcode', 'frontend-dashboard' ),
+								'content' => __( 'Profile field containing postal code.', 'frontend-dashboard' ),
 							)
 						),
 					),
-					'Country'   => array(
-						'col'          => 'col-md-7',
+					'Country' => array(
+						'col'          => 'col-md-6',
 						'name'         => __( 'Country', 'frontend-dashboard' ),
 						'input'        => fed_get_input_details(
 							array(
@@ -608,38 +627,36 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 								'input_meta'  => 'country',
 								'user_value'  => isset( $settings['user_address']['country'] ) ? $settings['user_address']['country'] : '',
 								'input_type'  => 'select',
+								'class_name'  => 'form-control',
 							)
 						),
 						'help_message' => fed_show_help_message(
 							array(
-								'content' => __( 'Country', 'frontend-dashboard' ),
+								'content' => __( 'Profile field containing customer country.', 'frontend-dashboard' ),
 							)
 						),
 					),
 					'Telephone' => array(
-						'col'          => 'col-md-7',
-						'name'         => __( 'Telephone', 'frontend-dashboard' ),
+						'col'          => 'col-md-6',
+						'name'         => __( 'Phone / Telephone', 'frontend-dashboard' ),
 						'input'        => fed_get_input_details(
 							array(
 								'input_value' => $profiles,
 								'input_meta'  => 'telephone',
 								'user_value'  => isset( $settings['user_address']['telephone'] ) ? $settings['user_address']['telephone'] : '',
 								'input_type'  => 'select',
+								'class_name'  => 'form-control',
 							)
 						),
 						'help_message' => fed_show_help_message(
 							array(
-								'content' => __( 'Telephone', 'frontend-dashboard' ),
+								'content' => __( 'Profile field containing customer phone number.', 'frontend-dashboard' ),
 							)
 						),
 					),
 				),
 			);
 			$array = apply_filters( 'fed_invoice_user_address_data', $array );
-
-			?>
-			<h4><?php echo esc_attr( 'Map the respective field for User Address', 'frontend-dashboard' ); ?></h4>
-			<?php
 			fed_common_simple_layout( $array );
 		}
 

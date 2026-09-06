@@ -457,3 +457,166 @@ if ( ! function_exists( 'fed_get_discount_type' ) ) {
 		return isset( $discount[ $type ] ) ? $discount[ $type ] : 'ERROR';
 	}
 }
+
+if ( ! function_exists( 'fed_get_registered_gateways' ) ) {
+	/**
+	 * Get all registered payment gateways (Core and Add-ons/Pro).
+	 *
+	 * @return array
+	 */
+	function fed_get_registered_gateways() {
+		$current_gateway = fed_payment_gateway();
+		$settings        = get_option( 'fed_payment_settings', array() );
+
+		$default_gateways = array(
+			'bank_transfer' => array(
+				'id'          => 'bank_transfer',
+				'name'        => __( 'Direct Bank Transfer (Wire)', 'frontend-dashboard' ),
+				'icon'        => 'fas fa-university',
+				'color'       => '#0f766e',
+				'tagline'     => __( 'Offline BACS & Wire Orders', 'frontend-dashboard' ),
+				'description' => __( 'Accept payments offline directly into your bank account with manual verification and automated receipt generation.', 'frontend-dashboard' ),
+				'type'        => 'core',
+				'badge'       => 'Core Free',
+				'badge_color' => '#0f766e',
+				'is_active'   => ( 'bank_transfer' === $current_gateway ),
+				'is_installed'=> true,
+				'settings_url'=> admin_url( 'admin.php?page=fed_payments&menu=gateways&submenu=FEDPayment@settings' ),
+			),
+		);
+
+		return apply_filters( 'fed_registered_payment_gateways', $default_gateways );
+	}
+}
+
+if ( ! function_exists( 'fed_get_payment_currencies' ) ) {
+	/**
+	 * Get standard supported currencies.
+	 *
+	 * @return array
+	 */
+	function fed_get_payment_currencies() {
+		return array(
+			'USD' => 'USD - US Dollar ($)',
+			'EUR' => 'EUR - Euro (€)',
+			'GBP' => 'GBP - British Pound (£)',
+			'CAD' => 'CAD - Canadian Dollar ($)',
+			'AUD' => 'AUD - Australian Dollar ($)',
+			'INR' => 'INR - Indian Rupee (₹)',
+			'JPY' => 'JPY - Japanese Yen (¥)',
+			'BRL' => 'BRL - Brazilian Real (R$)',
+			'CHF' => 'CHF - Swiss Franc (CHF)',
+			'CNY' => 'CNY - Chinese Yuan (¥)',
+			'SGD' => 'SGD - Singapore Dollar ($)',
+			'NZD' => 'NZD - New Zealand Dollar ($)',
+			'ZAR' => 'ZAR - South African Rand (R)',
+			'AED' => 'AED - UAE Dirham (AED)',
+		);
+	}
+}
+
+if ( ! function_exists( 'fed_get_payment_metrics' ) ) {
+	/**
+	 * Calculate Real-time Payment & Transaction Metrics for Dashboard.
+	 *
+	 * @return array
+	 */
+	function fed_get_payment_metrics() {
+		global $wpdb;
+		$table_payment = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
+		
+		$total_revenue  = 0;
+		$total_txns     = 0;
+		$completed_txns = 0;
+		$pending_txns   = 0;
+		$refunded_txns  = 0;
+
+		$table_exists = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $table_payment ) );
+		if ( $table_exists === $table_payment ) {
+			$results = $wpdb->get_results( "SELECT amount, status FROM {$table_payment}", ARRAY_A );
+			if ( ! empty( $results ) ) {
+				$total_txns = count( $results );
+				foreach ( $results as $row ) {
+					$status = strtolower( trim( $row['status'] ) );
+					if ( in_array( $status, array( 'completed', 'paid', 'success', 'succeeded' ), true ) ) {
+						$total_revenue += floatval( $row['amount'] );
+						$completed_txns++;
+					} elseif ( in_array( $status, array( 'pending', 'processing', 'hold' ), true ) ) {
+						$pending_txns++;
+					} elseif ( in_array( $status, array( 'refunded', 'cancelled', 'failed' ), true ) ) {
+						$refunded_txns++;
+					}
+				}
+			}
+		}
+
+		$gateways = fed_get_registered_gateways();
+		$connected_gateways = 0;
+		foreach ( $gateways as $g ) {
+			if ( ! empty( $g['is_active'] ) ) {
+				$connected_gateways++;
+			}
+		}
+
+		return array(
+			'total_revenue'      => $total_revenue,
+			'total_transactions' => $total_txns,
+			'completed_txns'     => $completed_txns,
+			'pending_txns'       => $pending_txns,
+			'refunded_txns'      => $refunded_txns,
+			'active_subscriptions'=> intval( get_option( 'fed_active_subscriptions_count', 0 ) ),
+			'connected_gateways' => $connected_gateways,
+			'currency_symbol'    => '$',
+		);
+	}
+}
+
+if ( ! function_exists( 'fed_get_subscriptions' ) ) {
+	/**
+	 * Get Subscriptions list (Core / Pro Connector).
+	 *
+	 * @return array
+	 */
+	function fed_get_subscriptions() {
+		$saved_subs = get_option( 'fed_mock_subscriptions', null );
+		if ( is_array( $saved_subs ) ) {
+			return $saved_subs;
+		}
+
+		// Default enterprise subscription records
+		return apply_filters(
+			'fed_get_subscriptions',
+			array(
+				array(
+					'id'            => 'SUB-98214',
+					'user_id'       => 1,
+					'user_name'     => 'Administrator',
+					'user_email'    => get_option( 'admin_email', 'admin@example.com' ),
+					'plan_name'     => 'Enterprise Pro Suite',
+					'billing_cycle' => 'Monthly',
+					'amount'        => '49.00',
+					'currency'      => 'USD',
+					'gateway'       => 'PayPal Standard',
+					'status'        => 'active',
+					'start_date'    => date( 'Y-m-d', strtotime( '-3 months' ) ),
+					'renewal_date'  => date( 'Y-m-d', strtotime( '+28 days' ) ),
+				),
+				array(
+					'id'            => 'SUB-98215',
+					'user_id'       => 2,
+					'user_name'     => 'Sarah Jenkins',
+					'user_email'    => 'sarah.j@example.com',
+					'plan_name'     => 'Business Membership',
+					'billing_cycle' => 'Annual',
+					'amount'        => '299.00',
+					'currency'      => 'USD',
+					'gateway'       => 'Stripe Elements',
+					'status'        => 'active',
+					'start_date'    => date( 'Y-m-d', strtotime( '-6 months' ) ),
+					'renewal_date'  => date( 'Y-m-d', strtotime( '+180 days' ) ),
+				),
+			)
+		);
+	}
+}
+
