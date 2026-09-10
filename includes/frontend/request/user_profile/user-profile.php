@@ -155,8 +155,8 @@ function fed_process_update_user_profile( $post ) {
 					$sanitized_val = maybe_serialize( $raw_val );
 				} else {
 					$input_type = isset( $field['input_type'] ) ? $field['input_type'] : '';
-					if ( in_array( $input_type, array( 'textarea', 'multi_line' ), true ) ) {
-						$sanitized_val = wp_kses_post( wp_unslash( $raw_val ) );
+					if ( in_array( $input_type, array( 'textarea', 'multi_line', 'multiline' ), true ) ) {
+						$sanitized_val = sanitize_textarea_field( wp_unslash( $raw_val ) );
 					} else {
 						$sanitized_val = sanitize_text_field( wp_unslash( $raw_val ) );
 					}

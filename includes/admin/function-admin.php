@@ -3306,7 +3306,10 @@ function fed_isset_sanitize( $value, $default = null ) {
 /**
  * Sanitize Text Field.
  *
- * @param  array| string  $var  Var.
+ * Recursively sanitizes string scalars preserving multi-line enters/newlines
+ * while stripping tags and invalid UTF-8 bytes.
+ *
+ * @param  array|string  $var  Var.
  *
  * @return array|string
  */
@@ -3315,7 +3318,7 @@ function fed_sanitize_text_field( $var ) {
 		return array_map( 'fed_sanitize_text_field', $var );
 	}
 
-	return is_scalar( $var ) ? sanitize_text_field( $var ) : $var;
+	return is_scalar( $var ) ? sanitize_textarea_field( (string) $var ) : $var;
 }
 
 /**

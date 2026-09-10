@@ -105,10 +105,9 @@ function fed_insert_user_meta( $meta, $user, $update ) {
 					$meta[ $extra_field['input_meta'] ] = isset( $_REQUEST[ $extra_field['input_meta'] ] ) ? wp_kses_post(
 						$_REQUEST[ $extra_field['input_meta'] ]
 					) : '';
-				} elseif ( isset( $extra_field['input_type'] ) && 'multi_line' === $extra_field['input_type'] ) {
-					$meta[ $extra_field['input_meta'] ] = isset( $_REQUEST[ $extra_field['input_meta'] ] ) ? wp_kses(
-						$_REQUEST[ $extra_field['input_meta'] ],
-						array()
+				} elseif ( isset( $extra_field['input_type'] ) && in_array( $extra_field['input_type'], array( 'multi_line', 'textarea', 'multiline' ), true ) ) {
+					$meta[ $extra_field['input_meta'] ] = isset( $_REQUEST[ $extra_field['input_meta'] ] ) ? sanitize_textarea_field(
+						$_REQUEST[ $extra_field['input_meta'] ]
 					) : '';
 				} else {
 					$meta[ $extra_field['input_meta'] ] = isset( $_REQUEST[ $extra_field['input_meta'] ] ) ? fed_sanitize_text_field(

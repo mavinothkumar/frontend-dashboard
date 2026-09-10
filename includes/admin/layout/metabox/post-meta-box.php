@@ -91,7 +91,12 @@ function fed_save_meta_boxes_display( $post_id, $post ) {
 		foreach ( $post_meta as $index => $extra ) {
 			if ( isset( $post_payload['fed_meta'] ) ) {
 				if ( array_key_exists( $index, $post_payload['fed_meta'] ) ) {
-					$meta_value = isset( $post_payload['fed_meta'][ $index ] ) ? sanitize_text_field( $post_payload['fed_meta'][ $index ] ) : '';
+					$input_type = isset( $extra['input_type'] ) ? $extra['input_type'] : '';
+					if ( in_array( $input_type, array( 'textarea', 'multi_line', 'multiline' ), true ) ) {
+						$meta_value = isset( $post_payload['fed_meta'][ $index ] ) ? sanitize_textarea_field( $post_payload['fed_meta'][ $index ] ) : '';
+					} else {
+						$meta_value = isset( $post_payload['fed_meta'][ $index ] ) ? sanitize_text_field( $post_payload['fed_meta'][ $index ] ) : '';
+					}
 					update_post_meta( $post_id, $index, $meta_value );
 				} else {
 					/**

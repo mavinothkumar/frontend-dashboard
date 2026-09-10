@@ -211,7 +211,12 @@ function fed_process_dashboard_add_new_post( $post ) {
 		}
 
 		foreach ( $extras as $index => $extra ) {
-			$default['meta_input'][ $index ] = isset( $post[ $index ] ) ? sanitize_text_field( $post[ $index ] ) : '';
+			$input_type = isset( $extra['input_type'] ) ? $extra['input_type'] : '';
+			if ( in_array( $input_type, array( 'textarea', 'multi_line', 'multiline' ), true ) ) {
+				$default['meta_input'][ $index ] = isset( $post[ $index ] ) ? sanitize_textarea_field( $post[ $index ] ) : '';
+			} else {
+				$default['meta_input'][ $index ] = isset( $post[ $index ] ) ? sanitize_text_field( $post[ $index ] ) : '';
+			}
 		}
 
 		$success = wp_insert_post( $default );

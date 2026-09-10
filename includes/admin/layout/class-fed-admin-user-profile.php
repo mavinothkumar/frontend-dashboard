@@ -113,7 +113,17 @@ if ( ! class_exists( 'FED_AdminUserProfile' ) ) {
 						'input_value' => isset( $field['input_value'] ) ? esc_attr( $field['input_value'] ) : '',
 					);
 
-					update_user_meta( $user_id, $default_value['input_meta'], sanitize_text_field( $_POST[ $default_value['input_meta'] ] ) );
+					if ( isset( $_POST[ $default_value['input_meta'] ] ) ) {
+						$raw_val = $_POST[ $default_value['input_meta'] ];
+						if ( is_array( $raw_val ) ) {
+							$sanitized = maybe_serialize( $raw_val );
+						} elseif ( in_array( $default_value['input_type'], array( 'multi_line', 'textarea', 'multiline' ), true ) ) {
+							$sanitized = sanitize_textarea_field( wp_unslash( $raw_val ) );
+						} else {
+							$sanitized = sanitize_text_field( wp_unslash( $raw_val ) );
+						}
+						update_user_meta( $user_id, $default_value['input_meta'], $sanitized );
+					}
 				}
 			}
 
