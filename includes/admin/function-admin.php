@@ -662,6 +662,27 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 
 /**
  * Process Menu
+/**
+ * Normalize icon class string to prevent missing spaces or malformed prefixes.
+ *
+ * @param string $icon Icon class string.
+ * @return string
+ */
+function fed_normalize_icon_class( $icon ) {
+	$icon = trim( (string) $icon );
+	if ( empty( $icon ) || 'ERROR' === $icon ) {
+		return 'fas fa-link';
+	}
+	// Correct missing space e.g. fasfa-xxx -> fas fa-xxx, fafa-xxx -> fa fa-xxx
+	$icon = preg_replace( '/^(fa[sbr]?)(fa-)/i', '$1 $2', $icon );
+	if ( 0 === strpos( $icon, 'fa-' ) ) {
+		$icon = 'fas ' . $icon;
+	}
+	return $icon;
+}
+
+/**
+ * Process Menu.
  *
  * @param  array  $row  Menu Items.
  *
@@ -671,7 +692,7 @@ function fed_process_menu( $row ) {
 	$default_value = array(
 		'menu_slug'         => isset( $row['fed_menu_slug'] ) ? sanitize_text_field( trim( $row['fed_menu_slug'] ) ) : 'ERROR',
 		'menu'              => isset( $row['fed_menu_name'] ) ? sanitize_text_field( trim( $row['fed_menu_name'] ) ) : 'ERROR',
-		'menu_image_id'     => isset( $row['menu_image_id'] ) ? sanitize_text_field( trim( $row['menu_image_id'] ) ) : 'ERROR',
+		'menu_image_id'     => isset( $row['menu_image_id'] ) ? fed_normalize_icon_class( sanitize_text_field( trim( $row['menu_image_id'] ) ) ) : 'fas fa-link',
 		'show_user_profile' => isset( $row['show_user_profile'] ) ? sanitize_text_field(
 			trim( $row['show_user_profile'] )
 		) : 'Enable',
@@ -2912,14 +2933,52 @@ function fed_menu_icons_popup() {
 	$rendered = true;
 	$icons = fed_font_awesome_list();
 	?>
+	<style>
+		#fed_icon_picker_modal {
+			overflow: hidden !important;
+		}
+		#fed_icon_picker_modal .fed-icon-modal-dialog {
+			overflow: hidden !important;
+		}
+		#fed_icon_picker_modal .fed-icon-modal-body {
+			overflow-y: auto !important;
+			overflow-x: hidden !important;
+			flex: 1 1 auto !important;
+			min-height: 0 !important;
+			scrollbar-width: thin;
+			scrollbar-color: #cbd5e1 #f8fafc;
+		}
+		#fed_icon_picker_modal .fed-icon-modal-body::-webkit-scrollbar {
+			width: 6px;
+		}
+		#fed_icon_picker_modal .fed-icon-modal-body::-webkit-scrollbar-track {
+			background: #f8fafc;
+		}
+		#fed_icon_picker_modal .fed-icon-modal-body::-webkit-scrollbar-thumb {
+			background-color: #cbd5e1;
+			border-radius: 9999px;
+		}
+		#fed_icon_picker_modal .fed_fa_container {
+			max-height: none !important;
+			overflow: visible !important;
+		}
+		#fed_icon_picker_modal #fed_global_icon_search {
+			padding-left: 38px !important;
+			padding-right: 14px !important;
+			min-height: 42px !important;
+			height: 42px !important;
+			border-radius: 12px !important;
+			box-sizing: border-box !important;
+		}
+	</style>
 	<div class="bc_fed">
-		<div id="fed_icon_picker_modal" class="fed_show_fa_list modal fixed inset-0 z-[99999] bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 transition-all duration-200 hidden opacity-0 pointer-events-none" style="display: none;" tabindex="-1" role="dialog">
-			<div class="fed-icon-modal-dialog bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-3xl w-full max-h-[85vh] flex flex-col overflow-hidden transform scale-95 transition-all duration-200" role="document">
+		<div id="fed_icon_picker_modal" class="fed_show_fa_list fixed inset-0 z-[99999] bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6 md:p-8 transition-all duration-200 hidden opacity-0 pointer-events-none" style="display: none; overflow: hidden !important;" tabindex="-1" role="dialog">
+			<div class="fed-icon-modal-dialog bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-4xl w-full h-[82vh] max-h-[720px] min-h-[480px] flex flex-col overflow-hidden transform scale-95 transition-all duration-200" role="document">
 				<!-- Header -->
 				<div class="px-6 py-4 bg-slate-50 border-b border-slate-200/80 flex items-center justify-between shrink-0">
 					<div class="flex items-center gap-3">
 						<div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-base font-semibold shadow-2xs">
-							<i class="fas fa-icons"></i>
+							<i class="fa fa-th-large"></i>
 						</div>
 						<div>
 							<h3 class="text-sm font-bold text-slate-900 m-0"><?php esc_html_e( 'Select Icon', 'frontend-dashboard' ); ?></h3>
@@ -2933,16 +2992,16 @@ function fed_menu_icons_popup() {
 
 				<!-- Search Bar -->
 				<div class="p-4 border-b border-slate-100 bg-white shrink-0">
-					<div class="relative">
-						<span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400 text-xs">
-							<i class="fas fa-search"></i>
+					<div class="relative flex items-center" style="position: relative !important;">
+						<span class="fed-search-icon-wrapper" style="position: absolute !important; left: 14px !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 10 !important; pointer-events: none !important; color: #94a3b8 !important; display: flex !important; align-items: center !important;">
+							<i class="fas fa-search text-xs" style="font-size: 13px !important; color: #94a3b8 !important;"></i>
 						</span>
-						<input type="text" id="fed_global_icon_search" placeholder="<?php esc_attr_e( 'Search icons (e.g. user, chart, settings, bell, star)...', 'frontend-dashboard' ); ?>" class="w-full pl-9 pr-4 py-2 text-xs text-slate-800 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all outline-none" />
+						<input type="text" id="fed_global_icon_search" placeholder="<?php esc_attr_e( 'Search icons (e.g. user, chart, settings, bell, star)...', 'frontend-dashboard' ); ?>" class="w-full text-xs text-slate-800 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all outline-none" style="padding-left: 38px !important; padding-right: 14px !important; min-height: 42px !important; height: 42px !important; border-radius: 12px !important; box-sizing: border-box !important;" />
 					</div>
 				</div>
 
-				<!-- Body: Icons Grid -->
-				<div class="modal-body p-5 overflow-y-auto flex-1 max-h-[50vh]">
+				<!-- Body: Icons Grid (Single scrollable container) -->
+				<div class="fed-icon-modal-body p-5 overflow-y-auto flex-1 min-h-0" style="overflow-y: auto !important; overflow-x: hidden !important;">
 					<input type="hidden" id="fed_menu_box_id" name="fed_menu_box_id" value="" />
 					<div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2.5 fed_fa_container" id="fed_global_icons_grid">
 						<?php foreach ( $icons as $key => $unicode ) : 

@@ -54,19 +54,20 @@ function fed_fetch_table_rows_with_key_front_end( $table, $key ) {
 	$result_with_key = array();
 	foreach ( $results as $result ) {
 		$res = isset( $result['user_role'] ) && ! empty( $result['user_role'] ) ? $result['user_role'] : false;
-		/**
-		 * Lets compare the user role with the admin saved user role
-		 */
-		if ( ! $res ) {
-			continue;
+		
+		// If specific user_role restrictions exist, check role permissions
+		if ( $res ) {
+			$allowed_roles = maybe_unserialize( $res );
+			if ( is_array( $allowed_roles ) && ! empty( $allowed_roles ) ) {
+				if ( ! in_array( $user_role, $allowed_roles, true ) &&
+				     ! isset( $get_payload, $get_payload['fed_dashboard_menu'], $get_payload['sort'] ) &&
+				     ! fed_is_admin()
+				) {
+					continue;
+				}
+			}
 		}
-		// Enable the all menu for Admin.
-		if ( ! in_array( $user_role, unserialize( $res ), true ) &&
-		     ! isset( $get_payload, $get_payload['fed_dashboard_menu'], $get_payload['sort'] ) &&
-		     ! fed_is_admin()
-		) {
-			continue;
-		}
+
 		$result['menu_type']                = isset( $result['menu_type'] ) ? $result['menu_type'] : 'user';
 		$result_with_key[ $result[ $key ] ] = $result;
 	}

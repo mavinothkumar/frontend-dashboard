@@ -419,8 +419,8 @@ Upload Image
 }
 
 .bc_fed .fed_fa_container {
-	max-height: 500px !important;
-	overflow-y: auto;
+	max-height: none !important;
+	overflow: visible !important;
 }
 
 .bc_fed .fed_order_search_container select.form-control {

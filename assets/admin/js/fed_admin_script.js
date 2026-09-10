@@ -574,10 +574,20 @@ jQuery( document ).ready(
 			$modal.find( '#fed_global_icon_count_display' ).text( matched + ' icons matching' );
 		} );
 
+		function normalizeIconClass( icon ) {
+			if ( ! icon ) return 'fas fa-link';
+			icon = $.trim( String( icon ) );
+			icon = icon.replace( /^(fa[sbr]?)(fa-)/i, '$1 $2' );
+			if ( icon.indexOf( 'fa-' ) === 0 ) {
+				icon = 'fas ' + icon;
+			}
+			return icon;
+		}
+
 		// Icon Selected
 		body.on( 'click', '.fed_single_fa', function ( e ) {
 			e.preventDefault();
-			var iconClass = $( this ).data( 'id' );
+			var iconClass = normalizeIconClass( $( this ).data( 'id' ) );
 			var $modal = getIconModal();
 			var targetName = $modal.find( '#fed_menu_box_id' ).val();
 

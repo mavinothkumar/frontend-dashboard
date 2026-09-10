@@ -321,7 +321,7 @@ function fed_get_dashboard_menu_items() {
 					$menu_id           = (int) $menu['id'];
 					$menu_name         = esc_attr( $menu['menu'] );
 					$menu_slug         = esc_attr( $menu['menu_slug'] );
-					$menu_icon         = ! empty( $menu['menu_image_id'] ) ? esc_attr( $menu['menu_image_id'] ) : 'fas fa-link';
+					$menu_icon         = ! empty( $menu['menu_image_id'] ) ? esc_attr( fed_normalize_icon_class( $menu['menu_image_id'] ) ) : 'fas fa-link';
 					$menu_order        = (int) $menu['menu_order'];
 					$is_extra          = ( isset( $menu['extra'] ) && 'no' === $menu['extra'] ) ? 'no' : 'yes';
 					$is_system_core    = ( 'no' === $is_extra || in_array( $menu_slug, array( 'profile', 'logout', 'post' ), true ) );
@@ -1216,6 +1216,37 @@ function fed_get_dashboard_menu_items() {
 					$(this).hide();
 				}
 			});
+		});
+
+		// Role Helper Functions
+		function updateRolesCounter() {
+			var total = $('.fed-role-checkbox').length;
+			var checked = $('.fed-role-checkbox:checked').length;
+			$('#fed_role_selected_count').text(checked + ' / ' + total);
+		}
+
+		function setRoleMode(mode) {
+			if (mode === 'all') {
+				$('#fed_role_mode_all_btn').addClass('bg-white text-indigo-700 shadow-2xs').removeClass('text-slate-600');
+				$('#fed_role_mode_specific_btn').removeClass('bg-white text-indigo-700 shadow-2xs').addClass('text-slate-600');
+				$('#fed_specific_roles_wrapper').addClass('hidden');
+				$('.fed-role-checkbox').prop('checked', true);
+			} else {
+				$('#fed_role_mode_specific_btn').addClass('bg-white text-indigo-700 shadow-2xs').removeClass('text-slate-600');
+				$('#fed_role_mode_all_btn').removeClass('bg-white text-indigo-700 shadow-2xs').addClass('text-slate-600');
+				$('#fed_specific_roles_wrapper').removeClass('hidden');
+			}
+			updateRolesCounter();
+		}
+
+		$('#fed_role_mode_all_btn').on('click', function(e) {
+			e.preventDefault();
+			setRoleMode('all');
+		});
+
+		$('#fed_role_mode_specific_btn').on('click', function(e) {
+			e.preventDefault();
+			setRoleMode('specific');
 		});
 
 		// Role Selection Quick Actions
