@@ -278,20 +278,149 @@ function fed_get_input_group( $attr ) {
 }
 
 /**
+ * Unified Field Options Parser.
+ *
+ * Seamlessly parses JSON objects/arrays, serialized PHP strings, multi-line strings,
+ * and legacy pipe/comma delimited values into a normalized [key => label] array.
+ *
+ * @param  mixed  $input_value  Raw option value in any supported format.
+ * @return array Normalized associative array of [key => label].
+ */
+function fed_parse_field_options( $input_value ) {
+	if ( empty( $input_value ) && '0' !== $input_value ) {
+		return array();
+	}
+
+	// 1. Array handling
+	if ( is_array( $input_value ) ) {
+		$parsed = array();
+		foreach ( $input_value as $k => $v ) {
+			if ( is_array( $v ) ) {
+				$key   = isset( $v['key'] ) ? $v['key'] : ( isset( $v['value'] ) ? $v['value'] : ( isset( $v['id'] ) ? $v['id'] : $k ) );
+				$label = isset( $v['label'] ) ? $v['label'] : ( isset( $v['text'] ) ? $v['text'] : ( isset( $v['name'] ) ? $v['name'] : ( isset( $v['title'] ) ? $v['title'] : (string) reset( $v ) ) ) );
+				$parsed[ (string) $key ] = (string) $label;
+			} elseif ( is_numeric( $k ) && is_string( $v ) ) {
+				$parsed[ (string) $v ] = (string) $v;
+			} else {
+				$parsed[ (string) $k ] = (string) $v;
+			}
+		}
+		return $parsed;
+	}
+
+	if ( ! is_string( $input_value ) ) {
+		return array();
+	}
+
+	$unslashed = function_exists( 'wp_unslash' ) ? wp_unslash( $input_value ) : stripslashes( $input_value );
+	$trimmed   = trim( $unslashed );
+	if ( '' === $trimmed ) {
+		return array();
+	}
+
+	// 2. Serialized PHP string
+	if ( ( str_starts_with( $trimmed, 'a:' ) || str_starts_with( $trimmed, 's:' ) || str_starts_with( $trimmed, 'O:' ) ) && @unserialize( $trimmed ) !== false ) {
+		$unserialized = @unserialize( $trimmed );
+		if ( is_array( $unserialized ) ) {
+			return fed_parse_field_options( $unserialized );
+		}
+	}
+
+	// 3. JSON format (array or object) - test multiple decoded variations
+	$json_candidates = array(
+		$trimmed,
+		stripslashes( $trimmed ),
+		html_entity_decode( $trimmed, ENT_QUOTES, 'UTF-8' ),
+		stripslashes( html_entity_decode( $trimmed, ENT_QUOTES, 'UTF-8' ) ),
+		trim( $input_value ),
+	);
+
+	foreach ( $json_candidates as $candidate ) {
+		$cand_trimmed = trim( $candidate );
+		if ( ( str_starts_with( $cand_trimmed, '[' ) && str_ends_with( $cand_trimmed, ']' ) ) ||
+		     ( str_starts_with( $cand_trimmed, '{' ) && str_ends_with( $cand_trimmed, '}' ) ) ) {
+			$json = json_decode( $cand_trimmed, true );
+			if ( is_array( $json ) ) {
+				return fed_parse_field_options( $json );
+			}
+		}
+	}
+
+	// 4. Multi-line and delimited strings
+	$result = array();
+	$lines  = preg_split( '/\r\n|\r|\n/', $trimmed );
+
+	foreach ( $lines as $line ) {
+		$line = trim( $line );
+		if ( '' === $line ) {
+			continue;
+		}
+
+		$segments = array( $line );
+		if ( substr_count( $line, '|' ) > 1 || ( substr_count( $line, '|' ) >= 1 && substr_count( $line, ',' ) >= 1 ) ) {
+			$segments = explode( '|', $line );
+		}
+
+		foreach ( $segments as $segment ) {
+			$segment = trim( $segment );
+			if ( '' === $segment ) {
+				continue;
+			}
+
+			if ( strpos( $segment, '=>' ) !== false ) {
+				$parts = explode( '=>', $segment, 2 );
+				$key   = trim( $parts[0] );
+				$label = trim( $parts[1] );
+			} elseif ( strpos( $segment, '|' ) !== false ) {
+				$parts = explode( '|', $segment, 2 );
+				$key   = trim( $parts[0] );
+				$label = trim( $parts[1] );
+			} elseif ( strpos( $segment, ',' ) !== false ) {
+				$parts = explode( ',', $segment, 2 );
+				$key   = trim( $parts[0] );
+				$label = trim( $parts[1] );
+			} elseif ( strpos( $segment, ':' ) !== false ) {
+				$parts = explode( ':', $segment, 2 );
+				$key   = trim( $parts[0] );
+				$label = trim( $parts[1] );
+			} else {
+				$key   = $segment;
+				$label = $segment;
+			}
+
+			if ( '' !== $key || '' !== $label ) {
+				if ( '' === $key ) {
+					$key = $label;
+				}
+				if ( '' === $label ) {
+					$label = $key;
+				}
+				$result[ (string) $key ] = (string) $label;
+			}
+		}
+	}
+
+	return $result;
+}
+
+/**
  * Get Select Option Value.
  *
  * @param  string|array  $input_value  Input Value.
- *
  * @return array
  */
 function fed_get_select_option_value( $input_value ) {
-	if ( is_string( $input_value ) ) {
-		return strlen( $input_value ) > 0 ? fed_convert_comma_separated_key_value( $input_value ) : array();
-	}
-	if ( is_array( $input_value ) ) {
-		return count( $input_value ) > 0 ? $input_value : array();
-	}
+	return fed_parse_field_options( $input_value );
+}
 
+/**
+ * Get Radio Option Value.
+ *
+ * @param  string|array  $input_value  Input Value.
+ * @return array
+ */
+function fed_get_radio_option_value( $input_value ) {
+	return fed_parse_field_options( $input_value );
 }
 
 /**
@@ -414,7 +543,7 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 		'placeholder'    => isset( $row['placeholder'] ) ? sanitize_text_field( $row['placeholder'] ) : '',
 		'class_name'     => isset( $row['class_name'] ) ? sanitize_text_field( $row['class_name'] ) : '',
 		'id_name'        => isset( $row['id_name'] ) ? sanitize_text_field( $row['id_name'] ) : '',
-		'input_value'    => isset( $row['input_value'] ) ? wp_kses_post( $row['input_value'] ) : '',
+		'input_value'    => isset( $row['input_value'] ) ? ( function_exists( 'wp_unslash' ) ? wp_unslash( $row['input_value'] ) : stripslashes( $row['input_value'] ) ) : '',
 		'input_location' => isset( $row['location'] ) ? sanitize_text_field( $row['location'] ) : '',
 		'input_min'      => isset( $row['input_min'] ) ? sanitize_text_field( $row['input_min'] ) : '',
 		'input_max'      => isset( $row['input_max'] ) ? sanitize_text_field( $row['input_max'] ) : '',
@@ -572,16 +701,7 @@ function fed_process_menu( $row ) {
  * @return array
  */
 function fed_convert_comma_separated_key_value( $text ) {
-	$s = array();
-	if ( is_string( $text ) ) {
-		$n = explode( '|', $text );
-		foreach ( $n as $m ) {
-			$mm          = explode( ',', $m );
-			$s[ $mm[0] ] = $mm[1];
-		}
-	}
-
-	return $s;
+	return fed_parse_field_options( $text );
 }
 
 /**

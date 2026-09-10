@@ -394,12 +394,47 @@ jQuery( document ).ready(
 		$( '.fed_add_edit_input_container .fed_button.active' ).trigger( 'click' );
 
 		/**
-		 * Auto populate Input Meta
+		 * Auto populate Input Meta Key from Label Name
 		 */
-		$( '.fed_input_type_container' ).on(
-			'change', '.fed_input_label_for_onchange', function () {
-				var value = $( this ).val().replace( /[^a-zA-Z0-9 ]/g, "" ).split( ' ' ).join( '_' ).toLowerCase();
-				$( this ).closest( 'form' ).find( '.row .form-group .fed_admin_input_meta' ).val( value.substring( 0, 13 ) );
+		function fedSlugifyInputMeta( text ) {
+			if ( ! text ) return '';
+			return text.toString()
+				.toLowerCase()
+				.trim()
+				.replace( /[^a-z0-9_ ]/g, '' )
+				.replace( /\s+/g, '_' )
+				.replace( /_+/g, '_' )
+				.replace( /^_+|_+$/g, '' )
+				.substring( 0, 32 );
+		}
+
+		$( document ).on(
+			'input keyup paste change', 'input[name="label_name"]', function () {
+				var $labelInput = $( this );
+				var $form = $labelInput.closest( 'form' );
+				var $metaInput = $form.find( 'input[name="input_meta"]' );
+
+				if ( ! $metaInput.length || $metaInput.prop( 'readonly' ) || $metaInput.hasClass( 'bg-slate-100' ) || $metaInput.data( 'locked' ) ) {
+					return;
+				}
+
+				if ( $metaInput.data( 'fed-manual' ) && $metaInput.val() !== '' ) {
+					return;
+				}
+
+				var slug = fedSlugifyInputMeta( $labelInput.val() );
+				$metaInput.val( slug );
+			}
+		);
+
+		$( document ).on(
+			'input keyup', 'input[name="input_meta"]', function () {
+				var $metaInput = $( this );
+				if ( $metaInput.val() === '' ) {
+					$metaInput.removeData( 'fed-manual' );
+				} else {
+					$metaInput.data( 'fed-manual', true );
+				}
 			}
 		);
 
@@ -941,3 +976,290 @@ jQuery.fed_toggle_loader = function ($) {
 		return false;
 	};
 } )( jQuery );
+
+/**
+ * Interactive Choices & Options Repeater Builder
+ */
+( function ( $ ) {
+	'use strict';
+
+	function slugifyOption( text ) {
+		return text.toString().toLowerCase().trim()
+			.replace( /\s+/g, '_' )
+			.replace( /[^\w\-]+/g, '' )
+			.replace( /\-\-+/g, '_' )
+			.replace( /^_+/, '' )
+			.replace( /_+$/, '' );
+	}
+
+	function escapeHtml( str ) {
+		return $( '<div>' ).text( str || '' ).html();
+	}
+
+	function updateBuilderState( $builder ) {
+		if ( ! $builder || ! $builder.length ) return;
+		var type = $builder.data( 'type' ) || 'select';
+		var isMulti = $builder.find( '.fed-multi-select-toggle' ).is( ':checked' );
+		var choices = [];
+
+		$builder.find( '.fed-choice-row' ).each( function ( index ) {
+			var $row = $( this );
+			$row.find( '.fed-row-num' ).text( index + 1 );
+			var label = $.trim( $row.find( '.fed-choice-label' ).val() );
+			var key   = $.trim( $row.find( '.fed-choice-key' ).val() );
+
+			if ( ! key && label ) {
+				key = slugifyOption( label );
+			}
+			if ( label || key ) {
+				choices.push( {
+					key: key || label,
+					label: label || key
+				} );
+			}
+		} );
+
+		// Sync hidden JSON into the form
+		$builder.find( '.fed-choices-raw-sync' ).val( JSON.stringify( choices ) );
+
+		// Update count badge
+		$builder.find( '.fed-choices-count-badge' ).text( choices.length + ' Choices' );
+
+		// Update Live Preview Area
+		var $preview = $builder.find( '.fed-preview-render-area' );
+		if ( type === 'select' ) {
+			if ( isMulti ) {
+				var selectHtml = '<div class="w-full space-y-1.5">' +
+					'<select class="w-full rounded-xl border border-slate-200 bg-white text-xs text-slate-800 p-2 outline-none cursor-pointer fed-live-multi-select" multiple="multiple" style="width:100% !important;">';
+				if ( choices.length === 0 ) {
+					selectHtml += '<option disabled class="text-slate-400 italic">No choices configured yet</option>';
+				} else {
+					$.each( choices, function ( i, item ) {
+						var isSelected = ( i === 0 || i === 1 ) ? 'selected="selected"' : '';
+						selectHtml += '<option value="' + escapeHtml( item.key ) + '" ' + isSelected + '>' + escapeHtml( item.label ) + '</option>';
+					} );
+				}
+				selectHtml += '</select>' +
+					'<span class="text-[10px] text-slate-400 block italic">Interactive Select2 preview — click to pick choices & search</span>' +
+				'</div>';
+				$preview.html( selectHtml );
+
+				if ( typeof $.fn.select2 !== 'undefined' ) {
+					try {
+						$preview.find( '.fed-live-multi-select' ).select2( {
+							width: '100%',
+							placeholder: 'Click to select options...',
+							dropdownCssClass: 'bc_fed_select2_dropdown',
+							containerCssClass: 'bc_fed_select2'
+						} );
+					} catch ( err ) {
+						// fallback to native multi-select
+					}
+				}
+			} else {
+				var selectHtml = '<select class="w-full rounded-xl border border-slate-200 bg-white text-xs text-slate-800 p-2.5 outline-none cursor-pointer hover:border-indigo-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all fed-live-preview-select">';
+				selectHtml += '<option value="">-- ' + ( typeof frontend_dashboard !== 'undefined' && frontend_dashboard.select_option ? frontend_dashboard.select_option : 'Select Option' ) + ' --</option>';
+				if ( choices.length === 0 ) {
+					selectHtml += '<option disabled class="text-slate-400 italic">No choices configured yet</option>';
+				} else {
+					$.each( choices, function ( i, item ) {
+						selectHtml += '<option value="' + escapeHtml( item.key ) + '">' + escapeHtml( item.label ) + '</option>';
+					} );
+				}
+				selectHtml += '</select>';
+				$preview.html( selectHtml );
+			}
+		} else {
+			var radioHtml = '<div class="flex flex-wrap gap-2.5 text-xs text-slate-700">';
+			if ( choices.length === 0 ) {
+				radioHtml += '<span class="text-slate-400 italic text-xs">No choices configured yet</span>';
+			} else {
+				$.each( choices, function ( i, item ) {
+					radioHtml += '<label class="inline-flex items-center gap-1.5 p-1.5 px-3 bg-slate-50 hover:bg-slate-100/80 border border-slate-200 rounded-xl cursor-pointer transition-all">';
+					radioHtml += '<input type="radio" name="preview_radio_' + $builder.attr( 'id' ) + '" class="text-indigo-600 cursor-pointer" ' + ( i === 0 ? 'checked' : '' ) + ' />';
+					radioHtml += '<span class="font-medium text-slate-700">' + escapeHtml( item.label ) + '</span></label>';
+				} );
+			}
+			radioHtml += '</div>';
+			$preview.html( radioHtml );
+		}
+	}
+
+	window.fedInitChoicesBuilders = function () {
+		$( '.fed-choices-builder' ).each( function () {
+			updateBuilderState( $( this ) );
+		} );
+	};
+
+	$( document ).ready( function () {
+		fedInitChoicesBuilders();
+	} );
+
+	$( document ).ajaxComplete( function () {
+		fedInitChoicesBuilders();
+	} );
+
+	// Auto-slugify on Label Input
+	$( document ).on( 'input', '.fed-choice-label', function () {
+		var $row = $( this ).closest( '.fed-choice-row' );
+		var $keyInput = $row.find( '.fed-choice-key' );
+		var isManual = $keyInput.data( 'manual-edit' );
+		if ( ! isManual ) {
+			var val = $( this ).val();
+			$keyInput.val( slugifyOption( val ) );
+		}
+		updateBuilderState( $( this ).closest( '.fed-choices-builder' ) );
+	} );
+
+	// Mark key as manually edited if user types into Key input
+	$( document ).on( 'input', '.fed-choice-key', function () {
+		$( this ).data( 'manual-edit', true );
+		updateBuilderState( $( this ).closest( '.fed-choices-builder' ) );
+	} );
+
+	// Add Option button
+	$( document ).on( 'click', '.fed-btn-add-choice', function ( e ) {
+		e.preventDefault();
+		var $builder = $( this ).closest( '.fed-choices-builder' );
+		var $list = $builder.find( '.fed-choices-list' );
+		var rowCount = $list.find( '.fed-choice-row' ).length + 1;
+
+		var rowHtml = '<div class="fed-choice-row group flex items-center gap-2 p-2 bg-slate-50/60 hover:bg-slate-50 border border-slate-200/80 rounded-2xl transition-all">' +
+			'<div class="fed-row-num w-6 h-6 rounded-lg bg-white border border-slate-200/90 text-[10px] font-bold text-slate-500 flex items-center justify-center shrink-0 shadow-2xs">' + rowCount + '</div>' +
+			'<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 flex-1">' +
+				'<div><input type="text" class="fed-choice-label w-full rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 outline-none transition-all" placeholder="e.g. Option Label" value="" /></div>' +
+				'<div><input type="text" class="fed-choice-key w-full rounded-xl border border-slate-200 bg-white/80 px-3 py-1.5 text-xs font-mono text-slate-600 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500/10 outline-none transition-all" placeholder="e.g. option_key" value="" /></div>' +
+			'</div>' +
+			'<div class="flex items-center gap-1 shrink-0">' +
+				'<button type="button" class="fed-choice-duplicate-btn p-1.5 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all cursor-pointer" title="Duplicate"><i class="fas fa-copy text-xs"></i></button>' +
+				'<button type="button" class="fed-choice-delete-btn p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-all cursor-pointer" title="Delete Option"><i class="fas fa-trash-alt text-xs"></i></button>' +
+			'</div>' +
+		'</div>';
+
+		var $newRow = $( rowHtml ).appendTo( $list );
+		$newRow.find( '.fed-choice-label' ).focus();
+		$list.scrollTop( $list[0].scrollHeight );
+		updateBuilderState( $builder );
+	} );
+
+	// Duplicate Option button
+	$( document ).on( 'click', '.fed-choice-duplicate-btn', function ( e ) {
+		e.preventDefault();
+		var $row = $( this ).closest( '.fed-choice-row' );
+		var $builder = $( this ).closest( '.fed-choices-builder' );
+		var $clone = $row.clone();
+		var currentLabel = $row.find( '.fed-choice-label' ).val();
+		var currentKey = $row.find( '.fed-choice-key' ).val();
+		$clone.find( '.fed-choice-label' ).val( currentLabel ? currentLabel + ' (Copy)' : '' );
+		$clone.find( '.fed-choice-key' ).val( currentKey ? currentKey + '_copy' : '' );
+		$clone.find( '.fed-choice-key' ).data( 'manual-edit', true );
+		$row.after( $clone );
+		updateBuilderState( $builder );
+	} );
+
+	// Delete Option button
+	$( document ).on( 'click', '.fed-choice-delete-btn', function ( e ) {
+		e.preventDefault();
+		var $builder = $( this ).closest( '.fed-choices-builder' );
+		var $list = $builder.find( '.fed-choices-list' );
+		if ( $list.find( '.fed-choice-row' ).length <= 1 ) {
+			$list.find( '.fed-choice-label' ).val( '' );
+			$list.find( '.fed-choice-key' ).val( '' );
+		} else {
+			$( this ).closest( '.fed-choice-row' ).remove();
+		}
+		updateBuilderState( $builder );
+	} );
+
+	// Clear All button
+	$( document ).on( 'click', '.fed-btn-clear-all', function ( e ) {
+		e.preventDefault();
+		var $builder = $( this ).closest( '.fed-choices-builder' );
+		$builder.find( '.fed-choices-list' ).empty();
+		$builder.find( '.fed-btn-add-choice' ).trigger( 'click' );
+	} );
+
+	// Bulk Drawer Toggle
+	$( document ).on( 'click', '.fed-btn-bulk-toggle', function ( e ) {
+		e.preventDefault();
+		var $builder = $( this ).closest( '.fed-choices-builder' );
+		$builder.find( '.fed-bulk-drawer' ).toggleClass( 'hidden' );
+		$builder.find( '.fed-bulk-textarea' ).focus();
+	} );
+
+	$( document ).on( 'click', '.fed-btn-bulk-cancel', function ( e ) {
+		e.preventDefault();
+		$( this ).closest( '.fed-bulk-drawer' ).addClass( 'hidden' );
+	} );
+
+	// Bulk Append / Replace
+	function processBulkChoices( $builder, replace ) {
+		var $drawer = $builder.find( '.fed-bulk-drawer' );
+		var text = $.trim( $drawer.find( '.fed-bulk-textarea' ).val() );
+		if ( ! text ) return;
+
+		var $list = $builder.find( '.fed-choices-list' );
+		if ( replace ) {
+			$list.empty();
+		}
+
+		var lines = text.split( /\r\n|\r|\n/ );
+		$.each( lines, function ( i, line ) {
+			line = $.trim( line );
+			if ( ! line ) return;
+			var key = '', label = '';
+			if ( line.indexOf( '=>' ) !== -1 ) {
+				var p = line.split( '=>' );
+				key = $.trim( p[0] ); label = $.trim( p[1] );
+			} else if ( line.indexOf( '|' ) !== -1 ) {
+				var p = line.split( '|' );
+				key = $.trim( p[0] ); label = $.trim( p[1] );
+			} else if ( line.indexOf( ',' ) !== -1 ) {
+				var p = line.split( ',' );
+				key = $.trim( p[0] ); label = $.trim( p[1] );
+			} else if ( line.indexOf( ':' ) !== -1 ) {
+				var p = line.split( ':' );
+				key = $.trim( p[0] ); label = $.trim( p[1] );
+			} else {
+				label = line;
+				key = slugifyOption( line );
+			}
+			if ( ! key ) key = slugifyOption( label );
+			if ( ! label ) label = key;
+
+			var rowHtml = '<div class="fed-choice-row group flex items-center gap-2 p-2 bg-slate-50/60 hover:bg-slate-50 border border-slate-200/80 rounded-2xl transition-all">' +
+				'<div class="fed-row-num w-6 h-6 rounded-lg bg-white border border-slate-200/90 text-[10px] font-bold text-slate-500 flex items-center justify-center shrink-0 shadow-2xs">0</div>' +
+				'<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 flex-1">' +
+					'<div><input type="text" class="fed-choice-label w-full rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 outline-none transition-all" placeholder="e.g. Option Label" value="' + escapeHtml( label ) + '" /></div>' +
+					'<div><input type="text" class="fed-choice-key w-full rounded-xl border border-slate-200 bg-white/80 px-3 py-1.5 text-xs font-mono text-slate-600 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500/10 outline-none transition-all" placeholder="e.g. option_key" value="' + escapeHtml( key ) + '" /></div>' +
+				'</div>' +
+				'<div class="flex items-center gap-1 shrink-0">' +
+					'<button type="button" class="fed-choice-duplicate-btn p-1.5 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all cursor-pointer" title="Duplicate"><i class="fas fa-copy text-xs"></i></button>' +
+					'<button type="button" class="fed-choice-delete-btn p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-all cursor-pointer" title="Delete Option"><i class="fas fa-trash-alt text-xs"></i></button>' +
+				'</div>' +
+			'</div>';
+			$list.append( rowHtml );
+		} );
+
+		$drawer.find( '.fed-bulk-textarea' ).val( '' );
+		$drawer.addClass( 'hidden' );
+		updateBuilderState( $builder );
+	}
+
+	$( document ).on( 'click', '.fed-btn-bulk-append', function ( e ) {
+		e.preventDefault();
+		processBulkChoices( $( this ).closest( '.fed-choices-builder' ), false );
+	} );
+
+	$( document ).on( 'click', '.fed-btn-bulk-replace', function ( e ) {
+		e.preventDefault();
+		processBulkChoices( $( this ).closest( '.fed-choices-builder' ), true );
+	} );
+
+	// Multi-select toggle live preview sync
+	$( document ).on( 'change', '.fed-multi-select-toggle', function () {
+		updateBuilderState( $( this ).closest( '.fed-choices-builder' ) );
+	} );
+
+} )( jQuery );
+

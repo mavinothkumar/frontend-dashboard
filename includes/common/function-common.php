@@ -884,3 +884,39 @@ add_action( 'fed_register_below_form_field', function ( $input_meta, $content ) 
 		<?php
 	}
 }, 10, 2 );
+
+/**
+ * Get Incompatible Add-ons (< 3.0.0).
+ *
+ * @return array
+ */
+function fed_get_incompatible_addons() {
+	if ( class_exists( '\FED\Services\Diagnostics\AddonCompatibilityManager' ) ) {
+		return \FED\Services\Diagnostics\AddonCompatibilityManager::instance()->get_incompatible_addons();
+	}
+	return array();
+}
+
+/**
+ * Check if there are incompatible add-ons.
+ *
+ * @return bool
+ */
+function fed_has_incompatible_addons() {
+	if ( class_exists( '\FED\Services\Diagnostics\AddonCompatibilityManager' ) ) {
+		return \FED\Services\Diagnostics\AddonCompatibilityManager::instance()->has_incompatible_addons();
+	}
+	return false;
+}
+
+/**
+ * Render Header Banner for Incompatible Add-ons.
+ *
+ * @return string HTML
+ */
+function fed_render_addon_compatibility_banner() {
+	if ( class_exists( '\FED\Services\Diagnostics\AddonCompatibilityManager' ) ) {
+		return \FED\Services\Diagnostics\AddonCompatibilityManager::instance()->render_in_app_banner();
+	}
+	return '';
+}

@@ -93,6 +93,10 @@ class Plugin {
 
 		$cron_manager = $this->app->make( \FED\Services\Cron\CronManager::class );
 		$cron_manager->register_hooks( $this->loader );
+
+		// Register Add-on Version & Compatibility Validation
+		$addon_compatibility = \FED\Services\Diagnostics\AddonCompatibilityManager::instance();
+		$addon_compatibility->register_hooks( $this->loader );
 	}
 
 	private function load_dependencies() {

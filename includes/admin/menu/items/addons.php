@@ -435,6 +435,10 @@ function fed_get_plugin_pages_menu() {
 
 	<div class="fed-addons-wrap w-full pr-6 py-6">
 		
+		<?php if ( function_exists( 'fed_render_addon_compatibility_banner' ) ) : ?>
+			<?php echo fed_render_addon_compatibility_banner(); ?>
+		<?php endif; ?>
+
 		<!-- Top Notification Banner -->
 		<div id="fed_addons_alert" class="hidden mb-6 rounded-xl p-4 text-sm font-medium border flex items-center justify-between shadow-sm">
 			<div class="flex items-center space-x-3">
@@ -585,8 +589,9 @@ function fed_get_plugin_pages_menu() {
 				$is_active     = $addon['is_active'];
 				$is_installed  = $addon['is_installed'];
 				$is_pro        = ! empty( $addon['is_pro'] );
-				$has_update    = ! empty( $addon['has_update'] );
-				$local_version = ! empty( $addon['local_version'] ) ? $addon['local_version'] : $addon['version'];
+				$has_update      = ! empty( $addon['has_update'] );
+				$local_version   = ! empty( $addon['local_version'] ) ? $addon['local_version'] : $addon['version'];
+				$is_incompatible = ( $is_active && ! empty( $local_version ) && version_compare( $local_version, '3.0.0', '<' ) );
 
 				$status_attr = 'available';
 				if ( $is_active ) {
@@ -597,13 +602,18 @@ function fed_get_plugin_pages_menu() {
 				if ( $is_pro ) {
 					$status_attr .= ' pro';
 				}
+				if ( $is_incompatible ) {
+					$status_attr .= ' incompatible';
+				}
+				$card_border_class = $is_incompatible ? 'border-rose-300 ring-2 ring-rose-200/80 shadow-md shadow-rose-100/50' : 'border-slate-200/80 shadow-sm';
 				?>
-				<div class="fed-addon-card bg-white rounded-2xl border border-slate-200/80 shadow-sm flex flex-col justify-between overflow-hidden"
+				<div class="fed-addon-card bg-white rounded-2xl border <?php echo esc_attr( $card_border_class ); ?> flex flex-col justify-between overflow-hidden"
 					data-category="<?php echo esc_attr( $addon['category'] ); ?>"
 					data-status="<?php echo esc_attr( $status_attr ); ?>"
 					data-installed="<?php echo $is_installed ? 'true' : 'false'; ?>"
 					data-active="<?php echo $is_active ? 'true' : 'false'; ?>"
 					data-pro="<?php echo $is_pro ? 'true' : 'false'; ?>"
+					data-incompatible="<?php echo $is_incompatible ? 'true' : 'false'; ?>"
 					data-title="<?php echo esc_attr( strtolower( $addon['title'] ) ); ?>"
 					data-desc="<?php echo esc_attr( strtolower( $addon['description'] ) ); ?>"
 					data-tags="<?php echo esc_attr( strtolower( implode( ' ', $addon['tags'] ) ) ); ?>">
@@ -619,7 +629,12 @@ function fed_get_plugin_pages_menu() {
 									</span>
 								</div>
 								<div class="absolute top-3 right-3">
-									<?php if ( $is_active ) : ?>
+									<?php if ( $is_active && $is_incompatible ) : ?>
+										<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-rose-600 text-white shadow-sm backdrop-blur-sm">
+											<i class="fas fa-exclamation-triangle text-[10px] mr-1.5"></i>
+											<?php esc_html_e( 'v3.0.0+ Required', 'frontend-dashboard' ); ?>
+										</span>
+									<?php elseif ( $is_active ) : ?>
 										<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500 text-white shadow-sm backdrop-blur-sm">
 											<span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse mr-1.5"></span>
 											<?php esc_html_e( 'Active', 'frontend-dashboard' ); ?>

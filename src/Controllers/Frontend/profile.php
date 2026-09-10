@@ -100,7 +100,17 @@ function fed_display_dashboard_profile( $menu_item ) {
 
 					foreach ( $profiles as $single_item ) {
 						if ( 'user_pass' !== $single_item['input_meta'] && 'confirmation_password' !== $single_item['input_meta'] ) {
-							$single_item['user_value'] = $user ? $user->get( $single_item['input_meta'] ) : '';
+							$meta_key  = $single_item['input_meta'];
+							$field_val = '';
+							if ( $user && $user->ID ) {
+								$meta_val = get_user_meta( $user->ID, $meta_key, true );
+								if ( '' !== $meta_val && false !== $meta_val ) {
+									$field_val = maybe_unserialize( $meta_val );
+								} elseif ( $user->has_prop( $meta_key ) ) {
+									$field_val = $user->get( $meta_key );
+								}
+							}
+							$single_item['user_value'] = $field_val;
 						} else {
 							// Password fields are optional during profile edit
 							$single_item['is_required'] = false;
@@ -184,6 +194,8 @@ function fed_display_dashboard_profile( $menu_item ) {
 													esc_html_e( 'Usernames are unique across the platform and cannot be modified.', 'frontend-dashboard' );
 												} elseif ( $is_email ) {
 													esc_html_e( 'Used for account notifications and security alerts.', 'frontend-dashboard' );
+												} elseif ( 'url' === ( $field['input_type'] ?? '' ) || 'user_url' === ( $field['input_meta'] ?? '' ) ) {
+													esc_html_e( 'Please include http:// or https:// (e.g. https://example.com)', 'frontend-dashboard' );
 												}
 												?>
 											</p>
@@ -251,7 +263,9 @@ function fed_display_dashboard_profile( $menu_item ) {
 								<div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
 									<?php
 									foreach ( $extra_fields as $single_item ) {
-										$isFullWidth = in_array( $single_item['input_type'] ?? '', [ 'textarea', 'multiline', 'address' ], true );
+										$isFullWidth = in_array( $single_item['input_type'] ?? '', [ 'multi_line', 'textarea', 'multiline', 'address' ], true );
+										$isUrl       = ( 'url' === ( $single_item['input_type'] ?? '' ) || 'user_url' === ( $single_item['input_meta'] ?? '' ) );
+										$isEmail     = ( 'email' === ( $single_item['input_type'] ?? '' ) || 'user_email' === ( $single_item['input_meta'] ?? '' ) );
 										?>
 										<div class="fed_dashboard_item_field <?php echo $isFullWidth ? 'md:col-span-2' : ''; ?>">
 											<label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
@@ -263,6 +277,16 @@ function fed_display_dashboard_profile( $menu_item ) {
 											<div class="mt-1">
 												<?php echo fed_get_input_details( $single_item ); ?>
 											</div>
+											<?php if ( $isUrl ) : ?>
+												<p class="text-xs text-slate-400 mt-1.5 flex items-center gap-1">
+													<svg class="w-3.5 h-3.5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+													<?php esc_html_e( 'Please include http:// or https:// (e.g. https://example.com)', 'frontend-dashboard' ); ?>
+												</p>
+											<?php elseif ( $isEmail ) : ?>
+												<p class="text-xs text-slate-400 mt-1.5">
+													<?php esc_html_e( 'Used for contact and notification purposes.', 'frontend-dashboard' ); ?>
+												</p>
+											<?php endif; ?>
 										</div>
 										<?php
 									}

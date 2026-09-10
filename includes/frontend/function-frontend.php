@@ -976,7 +976,7 @@ function fed_show_alert( $key ) {
 			$message = __( 'Successfully Updated', 'frontend-dashboard' );
 		}
 
-		$is_error   = ( 'danger' === $type || 'error' === $type || stripos( $message, 'error' ) !== false || stripos( $message, 'sorry' ) !== false || stripos( $message, 'failed' ) !== false );
+		$is_error   = ( 'danger' === $type || 'error' === $type || stripos( $message, 'error' ) !== false || stripos( $message, 'sorry' ) !== false || stripos( $message, 'failed' ) !== false || stripos( $message, 'please' ) !== false || stripos( $message, 'invalid' ) !== false || stripos( $message, 'match' ) !== false || stripos( $message, 'already' ) !== false || stripos( $message, 'wrong' ) !== false );
 		$is_warning = ( 'warning' === $type );
 		$is_info    = ( 'info' === $type );
 

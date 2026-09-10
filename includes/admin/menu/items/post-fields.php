@@ -254,6 +254,10 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 				</div>
 			</div>
 
+			<?php if ( function_exists( 'fed_render_addon_compatibility_banner' ) ) : ?>
+				<?php echo fed_render_addon_compatibility_banner(); ?>
+			<?php endif; ?>
+
 			<!-- Page Header & Action Bar (Full Width) -->
 			<div class="bg-white rounded-2xl p-5 sm:p-6 shadow-xs border border-slate-200/80 mb-6 relative overflow-hidden">
 				<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 relative z-10">
@@ -1048,10 +1052,25 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 						data: form.serialize(),
 						success: function(response) {
 							hideLoading();
-							var isSuccess = (response && (response.success || response.status === 'success' || (typeof response === 'object' && !response.error)));
-							var message = (response && response.data && response.data.message) ? response.data.message : 'Field settings saved successfully.';
-							if (!isSuccess && response && response.data && response.data.errorMessage) {
-								message = response.data.errorMessage;
+							var isSuccess = !!(response && (response.success === true || response.status === 'success' || (response.data && response.data.status === 'success')));
+							var message = '';
+							if (response) {
+								if (response.data) {
+									if (typeof response.data === 'string') {
+										message = response.data;
+									} else if (response.data.message) {
+										message = response.data.message;
+									} else if (response.data.errorMessage) {
+										message = response.data.errorMessage;
+									} else if (response.data.error) {
+										message = response.data.error;
+									}
+								} else if (response.message) {
+									message = response.message;
+								}
+							}
+							if (!message) {
+								message = isSuccess ? 'Field settings saved successfully.' : 'Validation error: Please check all required fields.';
 							}
 							showToast(message, !isSuccess);
 
@@ -1068,11 +1087,32 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 									reloadUrl.searchParams.set('tab', savedPostType);
 									window.location.href = reloadUrl.toString();
 								}, 600);
+							} else {
+								// Keep the popup open and show inline notice inside the modal
+								var $modalNotice = $('#fed_field_builder_modal').find('.fed-modal-inline-error');
+								if (!$modalNotice.length) {
+									$('#fed_field_builder_modal form.fed_ajax').prepend(
+										'<div class="fed-modal-inline-error flex items-center gap-3 p-4 mb-6 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-xs font-semibold shadow-xs">' +
+										'<i class="fas fa-exclamation-circle text-rose-500 text-base shrink-0"></i>' +
+										'<span class="flex-1">' + message + '</span>' +
+										'<button type="button" class="text-rose-400 hover:text-rose-600 p-1 cursor-pointer" onclick="$(this).parent().remove();"><i class="fas fa-times"></i></button>' +
+										'</div>'
+									);
+								} else {
+									$modalNotice.find('span').text(message);
+									$modalNotice.removeClass('hidden').show();
+								}
+								// Scroll modal to top so user sees error clearly
+								$('#fed_field_builder_modal').animate({ scrollTop: 0 }, 200);
 							}
 						},
-						error: function() {
+						error: function(xhr) {
 							hideLoading();
-							showToast('An error occurred while saving field settings.', true);
+							var errMsg = 'An error occurred while saving field settings.';
+							if (xhr && xhr.responseJSON && xhr.responseJSON.data && xhr.responseJSON.data.message) {
+								errMsg = xhr.responseJSON.data.message;
+							}
+							showToast(errMsg, true);
 						}
 					});
 				});

@@ -546,6 +546,10 @@ function fed_get_add_profile_post_fields() {
 
 				// Update scoped roles counter for newly activated container
 				updateRolesCounter($activeContainer);
+
+				if (window.fedInitChoicesBuilders) {
+					window.fedInitChoicesBuilders();
+				}
 			}
 
 			// Initialize with selected type
@@ -685,6 +689,45 @@ function fed_get_add_profile_post_fields() {
 			// Initialize roles counters across all rendered forms
 			updateRolesCounter();
 
+			// Auto populate Input Meta Key live as user types Label Name
+			function fedSlugifyMeta(text) {
+				if (!text) return '';
+				return text.toString()
+					.toLowerCase()
+					.trim()
+					.replace(/[^a-z0-9_ ]/g, '')
+					.replace(/\s+/g, '_')
+					.replace(/_+/g, '_')
+					.replace(/^_+|_+$/g, '')
+					.substring(0, 32);
+			}
+
+			$(document).on('input keyup paste change', 'input[name="label_name"]', function() {
+				var $labelInput = $(this);
+				var $form = $labelInput.closest('form');
+				var $metaInput = $form.find('input[name="input_meta"]');
+
+				if (!$metaInput.length || $metaInput.prop('readonly') || $metaInput.hasClass('bg-slate-100') || $metaInput.data('locked')) {
+					return;
+				}
+
+				if ($metaInput.data('fed-manual') && $metaInput.val() !== '') {
+					return;
+				}
+
+				var slug = fedSlugifyMeta($labelInput.val());
+				$metaInput.val(slug);
+			});
+
+			$(document).on('input keyup', 'input[name="input_meta"]', function() {
+				var $metaInput = $(this);
+				if ($metaInput.val() === '') {
+					$metaInput.removeData('fed-manual');
+				} else {
+					$metaInput.data('fed-manual', true);
+				}
+			});
+
 			// Header Save Button
 			$('.fed-header-save-btn').on('click', function(e) {
 				e.preventDefault();
@@ -733,10 +776,25 @@ function fed_get_add_profile_post_fields() {
 						data: form.serialize(),
 						success: function(response) {
 							$loader.addClass('hidden');
-							var isSuccess = (response && (response.success || response.status === 'success' || (typeof response === 'object' && !response.error)));
-							var message = (response && response.data && response.data.message) ? response.data.message : 'Field settings saved successfully.';
-							if (!isSuccess && response && response.data && response.data.errorMessage) {
-								message = response.data.errorMessage;
+							var isSuccess = !!(response && (response.success === true || response.status === 'success' || (response.data && response.data.status === 'success')));
+							var message = '';
+							if (response) {
+								if (response.data) {
+									if (typeof response.data === 'string') {
+										message = response.data;
+									} else if (response.data.message) {
+										message = response.data.message;
+									} else if (response.data.errorMessage) {
+										message = response.data.errorMessage;
+									} else if (response.data.error) {
+										message = response.data.error;
+									}
+								} else if (response.message) {
+									message = response.message;
+								}
+							}
+							if (!message) {
+								message = isSuccess ? 'Field settings saved successfully.' : 'Validation error: Please check all required fields.';
 							}
 							if (typeof fedAdminAlert !== 'undefined' && fedAdminAlert.adminSettings) {
 								fedAdminAlert.adminSettings(response);
@@ -744,9 +802,13 @@ function fed_get_add_profile_post_fields() {
 								showToast(message, !isSuccess);
 							}
 						},
-						error: function() {
+						error: function(xhr) {
 							$loader.addClass('hidden');
-							showToast('An error occurred while saving field settings.', true);
+							var errMsg = 'An error occurred while saving field settings.';
+							if (xhr && xhr.responseJSON && xhr.responseJSON.data && xhr.responseJSON.data.message) {
+								errMsg = xhr.responseJSON.data.message;
+							}
+							showToast(errMsg, true);
 						}
 					});
 				});

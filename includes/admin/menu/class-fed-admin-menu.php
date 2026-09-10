@@ -351,6 +351,10 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 			<div class="bc_fed fed-admin-wrap w-full max-w-none px-4 sm:px-8 py-6 sm:py-8 font-sans text-slate-800">
 				<?php echo fed_loader(); ?>
 
+				<?php if ( function_exists( 'fed_render_addon_compatibility_banner' ) ) : ?>
+					<?php echo fed_render_addon_compatibility_banner(); ?>
+				<?php endif; ?>
+
 				<!-- Toast Notification Element -->
 				<div id="fed_toast_notification" class="fixed bottom-6 right-6 transform translate-y-16 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-3 bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-slate-700" style="z-index: 99999999 !important;">
 					<span id="fed_toast_icon" class="text-emerald-400 text-base"><i class="fas fa-check-circle"></i></span>

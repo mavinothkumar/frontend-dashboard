@@ -33,12 +33,31 @@ function fed_store_user_profile_save() {
 		$validation = fed_validate_user_profile_form( $post_payload );
 
 		if ( $validation instanceof WP_Error ) {
-			$message = $validation->get_error_messages();
+			$message = array(
+				'type'    => 'danger',
+				'message' => implode( '<br>', $validation->get_error_messages() ),
+			);
 		} else {
 			$user_data = fed_process_update_user_profile( $post_payload );
 
-			if ( wp_update_user( $user_data ) ) {
-				$message = 'Successfully Updated';
+			if ( is_wp_error( $user_data ) ) {
+				$message = array(
+					'type'    => 'danger',
+					'message' => implode( '<br>', $user_data->get_error_messages() ),
+				);
+			} else {
+				$saved = wp_update_user( $user_data );
+				if ( is_wp_error( $saved ) ) {
+					$message = array(
+						'type'    => 'danger',
+						'message' => implode( '<br>', $saved->get_error_messages() ),
+					);
+				} else {
+					$message = array(
+						'type'    => 'success',
+						'message' => __( 'Successfully Updated', 'frontend-dashboard' ),
+					);
+				}
 			}
 		}
 		fed_set_alert( 'fed_profile_save_message', $message );
@@ -92,6 +111,62 @@ function fed_process_update_user_profile( $post ) {
 				) : fed_sanitize_text_field( $post[ $site_option ] );
 			} else {
 				$new_value[ $site_option ] = $user_obj->has_prop( $site_option ) ? $user_obj->get( $site_option ) : '';
+			}
+		}
+	}
+
+	// Process and save custom extra user profile fields into WordPress user meta
+	global $wpdb;
+	$all_fields = array();
+	if ( function_exists( 'fed_fetch_rows_by_table' ) ) {
+		$all_fields = fed_fetch_rows_by_table( BC_FED_TABLE_USER_PROFILE );
+	}
+	if ( empty( $all_fields ) && ! empty( $wpdb ) ) {
+		$tbl = $wpdb->prefix . ( defined( 'BC_FED_TABLE_USER_PROFILE' ) ? BC_FED_TABLE_USER_PROFILE : 'fed_user_profile' );
+		$all_fields = $wpdb->get_results( "SELECT * FROM $tbl", ARRAY_A );
+	}
+	if ( is_array( $all_fields ) ) {
+		$core_keys = array(
+			'user_login',
+			'user_pass',
+			'confirmation_password',
+			'user_email',
+			'user_nicename',
+			'display_name',
+			'first_name',
+			'last_name',
+			'nickname',
+			'description',
+			'show_admin_bar_front',
+			'user_url',
+		);
+
+		$submitted_tab = isset( $post['tab_id'] ) ? $post['tab_id'] : ( isset( $post['menu_slug'] ) ? $post['menu_slug'] : '' );
+
+		foreach ( $all_fields as $field ) {
+			$meta_key = isset( $field['input_meta'] ) ? $field['input_meta'] : '';
+			if ( empty( $meta_key ) || in_array( $meta_key, $core_keys, true ) ) {
+				continue;
+			}
+
+			if ( array_key_exists( $meta_key, $post ) ) {
+				$raw_val = $post[ $meta_key ];
+				if ( is_array( $raw_val ) ) {
+					$sanitized_val = maybe_serialize( $raw_val );
+				} else {
+					$input_type = isset( $field['input_type'] ) ? $field['input_type'] : '';
+					if ( in_array( $input_type, array( 'textarea', 'multi_line' ), true ) ) {
+						$sanitized_val = wp_kses_post( wp_unslash( $raw_val ) );
+					} else {
+						$sanitized_val = sanitize_text_field( wp_unslash( $raw_val ) );
+					}
+				}
+				update_user_meta( $current_user->ID, $meta_key, $sanitized_val );
+			} elseif ( ! empty( $submitted_tab ) && isset( $field['menu'] ) && $field['menu'] === $submitted_tab ) {
+				$input_type = isset( $field['input_type'] ) ? $field['input_type'] : '';
+				if ( in_array( $input_type, array( 'checkbox', 'select', 'radio' ), true ) ) {
+					update_user_meta( $current_user->ID, $meta_key, '' );
+				}
 			}
 		}
 	}

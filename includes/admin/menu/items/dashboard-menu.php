@@ -260,6 +260,10 @@ function fed_get_dashboard_menu_items() {
 			<span id="fed_toast_message" class="text-xs font-semibold tracking-wide">Changes saved successfully.</span>
 		</div>
 
+		<?php if ( function_exists( 'fed_render_addon_compatibility_banner' ) ) : ?>
+			<?php echo fed_render_addon_compatibility_banner(); ?>
+		<?php endif; ?>
+
 		<!-- Page Header & Action Bar (Full Width) -->
 		<div class="bg-white rounded-2xl p-5 sm:p-6 shadow-xs border border-slate-200/80 mb-6 relative overflow-hidden">
 			<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 relative z-10">
