@@ -4239,17 +4239,102 @@ function fed_user_role_checkboxes( $meta, $user_roles = array(), $column = '4', 
 }
 
 /**
- * The below code tested to check input tag works in Custom Label.
+ * Append message to the plugin debug/activity log file.
+ *
+ * @param string|array|object $message
  */
-//add_filter('wp_kses_allowed_html', 'fed_wp_kses_add_input', 10, 2);
-//
-//function fed_wp_kses_add_input($tags, $context)
-//{
-//    $tags['input'] = array(
-//            'type'    => true,
-//            'name'    => true,
-//            'value'   => true,
-//            'checked' => true,
-//    );
-//    return $tags;
-//}
+if ( ! function_exists( 'fed_log' ) ) {
+	function fed_log( $message ) {
+		$log_file = BC_FED_PLUGIN_DIR . '/log/dashboard.log';
+		$dir = dirname( $log_file );
+		if ( ! file_exists( $dir ) ) {
+			wp_mkdir_p( $dir );
+		}
+		$text = is_string( $message ) ? $message : wp_json_encode( $message );
+		$formatted = '[' . current_time( 'Y-m-d H:i:s' ) . '] ' . $text . PHP_EOL;
+		@file_put_contents( $log_file, $formatted, FILE_APPEND );
+	}
+}
+
+/**
+ * Log an administrative / system activity to the Database and Log File.
+ *
+ * @param string $action_type e.g. 'seeder', 'database', 'option', 'cron', 'settings', 'auth'
+ * @param string $action_title e.g. 'Seeder: 1-Click Bootstrap Suite'
+ * @param string|array $description Detailed description or data
+ * @param string $status 'success' | 'warning' | 'error'
+ * @param int|null $user_id Optional user ID
+ * @return int|false Insert ID or false
+ */
+if ( ! function_exists( 'fed_log_activity' ) ) {
+	function fed_log_activity( $action_type, $action_title, $description = '', $status = 'success', $user_id = null ) {
+		global $wpdb;
+
+		if ( null === $user_id ) {
+			$user_id = get_current_user_id();
+		}
+
+		$user              = $user_id ? get_userdata( $user_id ) : null;
+		$user_login        = $user ? $user->user_login : ( 0 === (int) $user_id ? 'System' : 'Guest' );
+		$user_email        = $user ? $user->user_email : '';
+		$user_display_name = $user ? $user->display_name : ( 0 === (int) $user_id ? 'System / Cron' : 'Guest' );
+
+		$ip_address = '';
+		if ( ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
+			$ip_address = sanitize_text_field( wp_unslash( $_SERVER['HTTP_CLIENT_IP'] ) );
+		} elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
+			$ip_address = sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ) );
+		} elseif ( ! empty( $_SERVER['REMOTE_ADDR'] ) ) {
+			$ip_address = sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) );
+		}
+
+		if ( is_array( $description ) || is_object( $description ) ) {
+			$description = wp_json_encode( $description, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
+		}
+
+		$table_name = $wpdb->prefix . ( defined( 'BC_FED_TABLE_ACTIVITY_LOG' ) ? BC_FED_TABLE_ACTIVITY_LOG : 'fed_activity_log' );
+
+		// Ensure table exists
+		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" ) !== $table_name ) {
+			if ( function_exists( 'fed_plugin_activation' ) ) {
+				fed_plugin_activation();
+			}
+		}
+
+		$user_agent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? substr( sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ), 0, 255 ) : '';
+
+		// Map status to PSR level
+		$level = $status;
+		if ( 'success' === $status ) {
+			$level = 'info';
+		}
+
+		$data = array(
+			'user_id'           => (int) $user_id,
+			'user_login'        => sanitize_text_field( $user_login ),
+			'user_email'        => sanitize_email( $user_email ),
+			'user_display_name' => sanitize_text_field( $user_display_name ),
+			'channel'           => sanitize_text_field( $action_type ),
+			'level'             => sanitize_text_field( $level ),
+			'action'            => sanitize_text_field( $action_title ),
+			'message'           => (string) $description,
+			'context'           => is_array( $description ) ? wp_json_encode( $description ) : null,
+			'action_type'       => sanitize_text_field( $action_type ),
+			'action_title'      => sanitize_text_field( $action_title ),
+			'description'       => (string) $description,
+			'status'            => sanitize_text_field( $status ),
+			'ip_address'        => sanitize_text_field( $ip_address ),
+			'user_agent'        => sanitize_text_field( $user_agent ),
+			'created_at'        => current_time( 'mysql' ),
+		);
+
+		$inserted = $wpdb->insert( $table_name, $data );
+
+		// Also write to file log
+		if ( function_exists( 'fed_log' ) ) {
+			fed_log( sprintf( '[%s] [%s] %s by %s (%s) - %s', strtoupper( $status ), strtoupper( $action_type ), $action_title, $user_login, $ip_address, substr( wp_strip_all_tags( (string) $description ), 0, 200 ) ) );
+		}
+
+		return $inserted ? $wpdb->insert_id : false;
+	}
+}

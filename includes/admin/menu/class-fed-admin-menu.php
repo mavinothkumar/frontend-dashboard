@@ -549,8 +549,12 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 		}
 
 		/**
-		 * Status.
+		 * Tools / Status.
 		 */
+		public function tools() {
+			fed_get_status_menu();
+		}
+
 		public function status() {
 			fed_get_status_menu();
 		}
@@ -684,11 +688,11 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 					'callback'   => array( $this, 'common_settings' ),
 					'position'   => 50,
 				),
-				'fed_status'           => array(
-					'page_title' => __( 'Status', 'frontend-dashboard' ),
-					'menu_title' => __( 'Status', 'frontend-dashboard' ),
+				'fed_tools'            => array(
+					'page_title' => __( 'Tools', 'frontend-dashboard' ),
+					'menu_title' => __( 'Tools', 'frontend-dashboard' ),
 					'capability' => 'manage_options',
-					'callback'   => array( $this, 'status' ),
+					'callback'   => array( $this, 'tools' ),
 					'position'   => 70,
 				),
 				'fed_plugin_pages'     => array(

@@ -219,6 +219,41 @@ function fed_plugin_activation() {
 		$wpdb->query( "ALTER TABLE $payment_table ADD COLUMN invoice_id VARCHAR(255) NULL AFTER `status`" );
 	}
 
+	$activity_log_table  = $wpdb->prefix . ( defined( 'BC_FED_TABLE_ACTIVITY_LOG' ) ? BC_FED_TABLE_ACTIVITY_LOG : 'fed_activity_log' );
+	$activity_log_sql    = "CREATE TABLE `{$activity_log_table}` (
+	  id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+	  user_id BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
+	  user_login VARCHAR(60) NOT NULL DEFAULT '',
+	  user_email VARCHAR(100) NOT NULL DEFAULT '',
+	  user_display_name VARCHAR(250) NOT NULL DEFAULT '',
+	  channel VARCHAR(50) NOT NULL DEFAULT 'system',
+	  level VARCHAR(20) NOT NULL DEFAULT 'info',
+	  action VARCHAR(255) NOT NULL DEFAULT '',
+	  message TEXT NULL,
+	  context LONGTEXT NULL,
+	  action_type VARCHAR(100) NOT NULL DEFAULT 'system',
+	  action_title VARCHAR(255) NOT NULL DEFAULT '',
+	  description TEXT NULL,
+	  status VARCHAR(20) NOT NULL DEFAULT 'info',
+	  ip_address VARCHAR(45) NOT NULL DEFAULT '',
+	  user_agent VARCHAR(255) NULL DEFAULT '',
+	  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	  PRIMARY KEY  (id),
+	  KEY user_id (user_id),
+	  KEY channel (channel),
+	  KEY level (level),
+	  KEY action_type (action_type),
+	  KEY created_at (created_at)
+	) $charset_collate;";
+
+	dbDelta( $activity_log_sql );
+
+	// Clean up legacy redundant fed_logs table if it exists
+	$legacy_logs_table = $wpdb->prefix . 'fed_logs';
+	if ( $wpdb->get_var( "SHOW TABLES LIKE '{$legacy_logs_table}'" ) === $legacy_logs_table ) {
+		$wpdb->query( "DROP TABLE IF EXISTS `{$legacy_logs_table}`" );
+	}
+
 	update_option( 'fed_plugin_version', BC_FED_PLUGIN_VERSION );
 
 }

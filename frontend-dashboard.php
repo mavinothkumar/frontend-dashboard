@@ -66,6 +66,7 @@ define( 'BC_FED_TABLE_MENU_META', 'fed_menu_meta' );
 define( 'BC_FED_TABLE_POST', 'fed_post' );
 define( 'BC_FED_TABLE_PAYMENT', 'fed_payment' );
 define( 'BC_FED_TABLE_PAYMENT_ITEMS', 'fed_payment_items' );
+define( 'BC_FED_TABLE_ACTIVITY_LOG', 'fed_activity_log' );
 /**
  * Plugin URL
  */

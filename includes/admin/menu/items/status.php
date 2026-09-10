@@ -67,6 +67,7 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 			$wpdb->prefix . BC_FED_TABLE_MENU_META    => array( 'label' => 'Dashboard Menu Metadata', 'schema' => 'BC_FED_TABLE_MENU_META' ),
 			$wpdb->prefix . BC_FED_TABLE_PAYMENT      => array( 'label' => 'Payments', 'schema' => 'BC_FED_TABLE_PAYMENT' ),
 			$wpdb->prefix . BC_FED_TABLE_PAYMENT_ITEMS=> array( 'label' => 'Payment Items', 'schema' => 'BC_FED_TABLE_PAYMENT_ITEMS' ),
+			$wpdb->prefix . ( defined( 'BC_FED_TABLE_ACTIVITY_LOG' ) ? BC_FED_TABLE_ACTIVITY_LOG : 'fed_activity_log' ) => array( 'label' => 'Activity & Audit Log', 'schema' => 'BC_FED_TABLE_ACTIVITY_LOG' ),
 		);
 
 		$db_existing_tables = $wpdb->get_col( "SHOW TABLES LIKE '{$wpdb->prefix}fed%'" );
@@ -157,16 +158,62 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 		});
 
 		// ----------------------------------------------------
-		// 6. DATA GATHERING: Log File Content
+		// 6. DATA GATHERING: Activity Logs & File Console
 		// ----------------------------------------------------
-		$log_lines = array();
-		if ( file_exists( $log_file ) && is_readable( $log_file ) ) {
-			$raw_log = file_get_contents( $log_file );
-			if ( ! empty( $raw_log ) ) {
-				$lines = explode( "\n", trim( $raw_log ) );
-				$log_lines = array_slice( $lines, -150 ); // last 150 lines
+		$activity_log_table = $wpdb->prefix . ( defined( 'BC_FED_TABLE_ACTIVITY_LOG' ) ? BC_FED_TABLE_ACTIVITY_LOG : 'fed_activity_log' );
+		$db_activity_logs   = array();
+		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$activity_log_table}'" ) === $activity_log_table ) {
+			$db_activity_logs = $wpdb->get_results( "SELECT * FROM `{$activity_log_table}` ORDER BY id DESC LIMIT 500", ARRAY_A );
+		}
+
+		// Memory-efficient reader: safely extract the most recent N lines even if log file is 10MB+
+		if ( ! function_exists( 'fed_tail_file' ) ) {
+			function fed_tail_file( $filepath, $lines = 200 ) {
+				if ( ! file_exists( $filepath ) || ! is_readable( $filepath ) ) {
+					return array();
+				}
+				$filesize = filesize( $filepath );
+				if ( $filesize === 0 ) {
+					return array();
+				}
+
+				// Small files (< 512KB): read directly
+				if ( $filesize < 512 * 1024 ) {
+					$raw = file_get_contents( $filepath );
+					if ( empty( $raw ) ) {
+						return array();
+					}
+					$all = explode( "\n", trim( $raw ) );
+					return array_slice( $all, -$lines );
+				}
+
+				// Large files: seek backward in chunks to avoid memory spikes
+				$handle = fopen( $filepath, 'rb' );
+				if ( ! $handle ) {
+					return array();
+				}
+
+				$buffer    = '';
+				$chunkSize = 8192;
+				$pos       = $filesize;
+				$lineCount = 0;
+
+				while ( $pos > 0 && $lineCount <= $lines ) {
+					$readSize = min( $chunkSize, $pos );
+					$pos     -= $readSize;
+					fseek( $handle, $pos );
+					$chunk     = fread( $handle, $readSize );
+					$buffer    = $chunk . $buffer;
+					$lineCount = substr_count( $buffer, "\n" );
+				}
+				fclose( $handle );
+
+				$all = explode( "\n", trim( $buffer ) );
+				return array_slice( $all, -$lines );
 			}
 		}
+
+		$log_lines = fed_tail_file( $log_file, 200 );
 		?>
 
 		<!-- Scoped Styles for System Status Dashboard -->
@@ -356,6 +403,19 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 				transform: scale(1) !important;
 				opacity: 1 !important;
 			}
+			.status-modal-content button {
+				font-family: inherit !important;
+				cursor: pointer !important;
+			}
+			.fed-cancel-status-modal-btn {
+				background-color: #ffffff !important;
+				color: #334155 !important;
+				border: 1px solid #cbd5e1 !important;
+			}
+			.fed-cancel-status-modal-btn:hover {
+				background-color: #f1f5f9 !important;
+				color: #0f172a !important;
+			}
 
 			.fed-status-loader-wrap {
 				position: fixed !important;
@@ -386,12 +446,12 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 			<div class="bg-white rounded-3xl p-6 sm:p-8 shadow-xs border border-slate-200/90 mb-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
 				<div class="flex items-center gap-4">
 					<div class="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-xl shadow-xs shrink-0" style="background-color: #4f46e5 !important; color: #ffffff !important;">
-						<i class="fas fa-heartbeat" style="color: #ffffff !important;"></i>
+						<i class="fas fa-tools" style="color: #ffffff !important;"></i>
 					</div>
 					<div>
 						<div class="flex items-center gap-2.5 flex-wrap">
 							<h1 class="text-lg sm:text-xl font-bold text-slate-900 tracking-tight m-0 p-0">
-								<?php esc_html_e( 'System Status & Maintenance', 'frontend-dashboard' ); ?>
+								<?php esc_html_e( 'Tools & Maintenance', 'frontend-dashboard' ); ?>
 							</h1>
 							<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
 								<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span>
@@ -399,7 +459,7 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 							</span>
 						</div>
 						<p class="text-xs text-slate-500 m-0 mt-1 font-medium">
-							<?php esc_html_e( 'Comprehensive health diagnostics, database table management, options store, scheduled crons, and log audits.', 'frontend-dashboard' ); ?>
+							<?php esc_html_e( 'Health diagnostics, database utilities, options store, scheduled crons, activity logs, and environment seeder.', 'frontend-dashboard' ); ?>
 						</p>
 					</div>
 				</div>
@@ -431,21 +491,21 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 					<i class="fas fa-stethoscope text-xs"></i>
 					<span><?php esc_html_e( 'System & Health', 'frontend-dashboard' ); ?></span>
 				</a>
-				<a href="#database_tables" data-tab="database_tables" role="tab" class="fed-main-tab-btn">
+				<a href="#database" data-tab="database" role="tab" class="fed-main-tab-btn">
 					<i class="fas fa-database text-xs"></i>
-					<span><?php esc_html_e( 'Database Tables', 'frontend-dashboard' ); ?></span>
+					<span><?php esc_html_e( 'Database', 'frontend-dashboard' ); ?></span>
 				</a>
-				<a href="#plugin_options" data-tab="plugin_options" role="tab" class="fed-main-tab-btn">
-					<i class="fas fa-sliders-h text-xs"></i>
-					<span><?php esc_html_e( 'Options Store', 'frontend-dashboard' ); ?></span>
-				</a>
-				<a href="#cron_jobs" data-tab="cron_jobs" role="tab" class="fed-main-tab-btn">
+				<a href="#scheduled_crons" data-tab="scheduled_crons" role="tab" class="fed-main-tab-btn">
 					<i class="fas fa-clock text-xs"></i>
 					<span><?php esc_html_e( 'Scheduled Crons', 'frontend-dashboard' ); ?></span>
 				</a>
-				<a href="#file_logs" data-tab="file_logs" role="tab" class="fed-main-tab-btn">
+				<a href="#activity_log" data-tab="activity_log" role="tab" class="fed-main-tab-btn">
 					<i class="fas fa-terminal text-xs"></i>
-					<span><?php esc_html_e( 'Activity & File Logs', 'frontend-dashboard' ); ?></span>
+					<span><?php esc_html_e( 'Activity Log', 'frontend-dashboard' ); ?></span>
+				</a>
+				<a href="#seeder" data-tab="seeder" role="tab" class="fed-main-tab-btn">
+					<i class="fas fa-seedling text-xs"></i>
+					<span><?php esc_html_e( 'Seeder', 'frontend-dashboard' ); ?></span>
 				</a>
 			</div>
 
@@ -632,190 +692,208 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 				</div>
 			</div>
 
-			<!-- Tab 2: Database Tables Manager -->
-			<div class="fed-status-pane hidden space-y-6" id="pane_database_tables" data-pane="database_tables">
-				<div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-6">
-					<!-- Top Actions Bar -->
-					<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100">
-						<div class="flex items-center gap-3">
-							<div class="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-sm">
-								<i class="fas fa-table"></i>
-							</div>
-							<div>
-								<h3 class="text-sm font-bold text-slate-900 m-0"><?php esc_html_e( 'Plugin Database Tables', 'frontend-dashboard' ); ?></h3>
-								<p class="text-[11px] text-slate-500 m-0 mt-0.5"><?php esc_html_e( 'Manage custom tables, schema integrity, and storage consumption.', 'frontend-dashboard' ); ?></p>
-							</div>
-						</div>
-
-						<div class="flex items-center gap-2.5 flex-wrap">
-							<button type="button" id="fed_action_create_all_tables_btn" class="fed-btn-secondary h-9 px-3.5 rounded-xl font-semibold text-xs inline-flex items-center gap-1.5 cursor-pointer shadow-2xs">
-								<i class="fas fa-plus text-[10px]"></i>
-								<span><?php esc_html_e( 'Create / Repair Schema', 'frontend-dashboard' ); ?></span>
-							</button>
-							<button type="button" id="fed_action_optimize_tables_btn" class="fed-btn-secondary h-9 px-3.5 rounded-xl font-semibold text-xs inline-flex items-center gap-1.5 cursor-pointer shadow-2xs">
-								<i class="fas fa-wrench text-[10px]"></i>
-								<span><?php esc_html_e( 'Optimize & Repair All', 'frontend-dashboard' ); ?></span>
-							</button>
-						</div>
+			<!-- Tab 2: Database Operations (Tables & Option Store) -->
+			<div class="fed-status-pane hidden space-y-6" id="pane_database" data-pane="database">
+				<!-- Sub-navigation Pills for Database Category -->
+				<div class="flex items-center justify-between bg-white rounded-2xl p-2 border border-slate-200/80 shadow-xs">
+					<div class="flex items-center gap-2" role="tablist">
+						<button type="button" class="fed-sub-tab-btn fed-subtab-active px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer bg-indigo-50 text-indigo-700 border border-indigo-200" data-subtab="database_tables">
+							<i class="fas fa-table mr-1.5"></i> <?php esc_html_e( 'Database Tables', 'frontend-dashboard' ); ?>
+						</button>
+						<button type="button" class="fed-sub-tab-btn px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all cursor-pointer border border-transparent" data-subtab="plugin_options">
+							<i class="fas fa-sliders-h mr-1.5"></i> <?php esc_html_e( 'Option Store', 'frontend-dashboard' ); ?>
+						</button>
 					</div>
+					<span class="text-[11px] text-slate-400 font-medium hidden sm:inline px-3">
+						<?php esc_html_e( 'Manage MySQL tables and WordPress wp_options settings', 'frontend-dashboard' ); ?>
+					</span>
+				</div>
 
-					<!-- Tables Grid / List -->
-					<div class="overflow-x-auto rounded-2xl border border-slate-200/80">
-						<table class="w-full text-left border-collapse text-xs">
-							<thead>
-								<tr class="bg-slate-50/90 border-b border-slate-200/80 text-slate-500 font-bold uppercase tracking-wider text-[11px]">
-									<th class="py-3 px-4"><?php esc_html_e( 'Table Name & Purpose', 'frontend-dashboard' ); ?></th>
-									<th class="py-3 px-4"><?php esc_html_e( 'Status', 'frontend-dashboard' ); ?></th>
-									<th class="py-3 px-4"><?php esc_html_e( 'Engine', 'frontend-dashboard' ); ?></th>
-									<th class="py-3 px-4 text-center"><?php esc_html_e( 'Rows', 'frontend-dashboard' ); ?></th>
-									<th class="py-3 px-4 text-center"><?php esc_html_e( 'Data Size', 'frontend-dashboard' ); ?></th>
-									<th class="py-3 px-4 text-center"><?php esc_html_e( 'Total Size', 'frontend-dashboard' ); ?></th>
-									<th class="py-3 px-4 text-right"><?php esc_html_e( 'Actions', 'frontend-dashboard' ); ?></th>
-								</tr>
-							</thead>
-							<tbody class="divide-y divide-slate-100 bg-white">
-								<?php foreach ( $tables_data as $tbl_name => $tbl_info ) : ?>
-									<tr class="hover:bg-slate-50/60 transition-colors">
-										<td class="py-3.5 px-4 font-mono font-bold text-slate-800">
-											<?php echo esc_html( $tbl_name ); ?>
-											<span class="block font-sans font-normal text-[11px] text-slate-400 mt-0.5"><?php echo esc_html( $tbl_info['label'] ); ?></span>
-										</td>
-										<td class="py-3.5 px-4">
-											<?php if ( $tbl_info['exists'] ) : ?>
-												<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-													<i class="fas fa-check text-[9px] mr-1"></i> <?php esc_html_e( 'Active', 'frontend-dashboard' ); ?>
-												</span>
-											<?php else : ?>
-												<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
-													<i class="fas fa-exclamation-triangle text-[9px] mr-1"></i> <?php esc_html_e( 'Missing', 'frontend-dashboard' ); ?>
-												</span>
-											<?php endif; ?>
-										</td>
-										<td class="py-3.5 px-4 font-mono text-slate-600"><?php echo esc_html( $tbl_info['engine'] ); ?></td>
-										<td class="py-3.5 px-4 font-mono text-center font-semibold text-slate-700"><?php echo esc_html( number_format_i18n( $tbl_info['rows'] ) ); ?></td>
-										<td class="py-3.5 px-4 font-mono text-center text-slate-600"><?php echo esc_html( $tbl_info['data_size'] ); ?></td>
-										<td class="py-3.5 px-4 font-mono text-center font-bold text-slate-800"><?php echo esc_html( $tbl_info['total_size'] ); ?></td>
-										<td class="py-3.5 px-4 text-right">
-											<div class="inline-flex items-center gap-1.5 justify-end">
+				<!-- Sub-Pane: Database Tables -->
+				<div class="fed-sub-pane block space-y-6" id="subpane_database_tables">
+					<div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-6">
+						<!-- Top Actions Bar -->
+						<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+							<div class="flex items-center gap-3">
+								<div class="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-sm">
+									<i class="fas fa-table"></i>
+								</div>
+								<div>
+									<h3 class="text-sm font-bold text-slate-900 m-0"><?php esc_html_e( 'Plugin Database Tables', 'frontend-dashboard' ); ?></h3>
+									<p class="text-[11px] text-slate-500 m-0 mt-0.5"><?php esc_html_e( 'Manage custom tables, schema integrity, and storage consumption.', 'frontend-dashboard' ); ?></p>
+								</div>
+							</div>
+
+							<div class="flex items-center gap-2.5 flex-wrap">
+								<button type="button" id="fed_action_create_all_tables_btn" class="fed-btn-secondary h-9 px-3.5 rounded-xl font-semibold text-xs inline-flex items-center gap-1.5 cursor-pointer shadow-2xs">
+									<i class="fas fa-plus text-[10px]"></i>
+									<span><?php esc_html_e( 'Create / Repair Schema', 'frontend-dashboard' ); ?></span>
+								</button>
+								<button type="button" id="fed_action_optimize_tables_btn" class="fed-btn-secondary h-9 px-3.5 rounded-xl font-semibold text-xs inline-flex items-center gap-1.5 cursor-pointer shadow-2xs">
+									<i class="fas fa-wrench text-[10px]"></i>
+									<span><?php esc_html_e( 'Optimize & Repair All', 'frontend-dashboard' ); ?></span>
+								</button>
+							</div>
+						</div>
+
+						<!-- Tables Grid / List -->
+						<div class="overflow-x-auto rounded-2xl border border-slate-200/80">
+							<table class="w-full text-left border-collapse text-xs">
+								<thead>
+									<tr class="bg-slate-50/90 border-b border-slate-200/80 text-slate-500 font-bold uppercase tracking-wider text-[11px]">
+										<th class="py-3 px-4"><?php esc_html_e( 'Table Name & Purpose', 'frontend-dashboard' ); ?></th>
+										<th class="py-3 px-4"><?php esc_html_e( 'Status', 'frontend-dashboard' ); ?></th>
+										<th class="py-3 px-4"><?php esc_html_e( 'Engine', 'frontend-dashboard' ); ?></th>
+										<th class="py-3 px-4 text-center"><?php esc_html_e( 'Rows', 'frontend-dashboard' ); ?></th>
+										<th class="py-3 px-4 text-center"><?php esc_html_e( 'Data Size', 'frontend-dashboard' ); ?></th>
+										<th class="py-3 px-4 text-center"><?php esc_html_e( 'Total Size', 'frontend-dashboard' ); ?></th>
+										<th class="py-3 px-4 text-right"><?php esc_html_e( 'Actions', 'frontend-dashboard' ); ?></th>
+									</tr>
+								</thead>
+								<tbody class="divide-y divide-slate-100 bg-white">
+									<?php foreach ( $tables_data as $tbl_name => $tbl_info ) : ?>
+										<tr class="hover:bg-slate-50/60 transition-colors">
+											<td class="py-3.5 px-4 font-mono font-bold text-slate-800">
+												<?php echo esc_html( $tbl_name ); ?>
+												<span class="block font-sans font-normal text-[11px] text-slate-400 mt-0.5"><?php echo esc_html( $tbl_info['label'] ); ?></span>
+											</td>
+											<td class="py-3.5 px-4">
 												<?php if ( $tbl_info['exists'] ) : ?>
-													<button type="button"
-															class="fed-trigger-empty-table p-2 rounded-xl text-amber-600 hover:bg-amber-50 transition-colors cursor-pointer"
-															data-table="<?php echo esc_attr( $tbl_name ); ?>"
-															title="<?php esc_attr_e( 'Empty / Truncate Table', 'frontend-dashboard' ); ?>">
-														<i class="fas fa-eraser text-xs"></i>
-													</button>
-													<button type="button"
-															class="fed-trigger-delete-table p-2 rounded-xl text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
-															data-table="<?php echo esc_attr( $tbl_name ); ?>"
-															title="<?php esc_attr_e( 'Drop / Delete Table', 'frontend-dashboard' ); ?>">
-														<i class="fas fa-trash-alt text-xs"></i>
-													</button>
+													<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+														<i class="fas fa-check text-[9px] mr-1"></i> <?php esc_html_e( 'Active', 'frontend-dashboard' ); ?>
+													</span>
 												<?php else : ?>
-													<button type="button"
-															class="fed-trigger-create-table px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs transition-colors cursor-pointer"
-															data-table="<?php echo esc_attr( $tbl_name ); ?>">
-														<i class="fas fa-plus text-[10px] mr-1"></i> <?php esc_html_e( 'Create', 'frontend-dashboard' ); ?>
-													</button>
+													<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
+														<i class="fas fa-exclamation-triangle text-[9px] mr-1"></i> <?php esc_html_e( 'Missing', 'frontend-dashboard' ); ?>
+													</span>
 												<?php endif; ?>
-											</div>
-										</td>
+											</td>
+											<td class="py-3.5 px-4 font-mono text-slate-600"><?php echo esc_html( $tbl_info['engine'] ); ?></td>
+											<td class="py-3.5 px-4 font-mono text-center font-semibold text-slate-700"><?php echo esc_html( number_format_i18n( $tbl_info['rows'] ) ); ?></td>
+											<td class="py-3.5 px-4 font-mono text-center text-slate-600"><?php echo esc_html( $tbl_info['data_size'] ); ?></td>
+											<td class="py-3.5 px-4 font-mono text-center font-bold text-slate-800"><?php echo esc_html( $tbl_info['total_size'] ); ?></td>
+											<td class="py-3.5 px-4 text-right">
+												<div class="inline-flex items-center gap-1.5 justify-end">
+													<?php if ( $tbl_info['exists'] ) : ?>
+														<button type="button"
+																class="fed-trigger-empty-table p-2 rounded-xl text-amber-600 hover:bg-amber-50 transition-colors cursor-pointer"
+																data-table="<?php echo esc_attr( $tbl_name ); ?>"
+																title="<?php esc_attr_e( 'Empty / Truncate Table', 'frontend-dashboard' ); ?>">
+															<i class="fas fa-eraser text-xs"></i>
+														</button>
+														<button type="button"
+																class="fed-trigger-delete-table p-2 rounded-xl text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+																data-table="<?php echo esc_attr( $tbl_name ); ?>"
+																title="<?php esc_attr_e( 'Drop / Delete Table', 'frontend-dashboard' ); ?>">
+															<i class="fas fa-trash-alt text-xs"></i>
+														</button>
+													<?php else : ?>
+														<button type="button"
+																class="fed-trigger-create-table px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs transition-colors cursor-pointer"
+																data-table="<?php echo esc_attr( $tbl_name ); ?>">
+															<i class="fas fa-plus text-[10px] mr-1"></i> <?php esc_html_e( 'Create', 'frontend-dashboard' ); ?>
+														</button>
+													<?php endif; ?>
+												</div>
+											</td>
+										</tr>
+									<?php endforeach; ?>
+								</tbody>
+								<tfoot>
+									<tr class="bg-slate-50 border-t border-slate-200/80 font-bold text-xs text-slate-800">
+										<td class="py-3 px-4" colspan="3"><?php esc_html_e( 'Total Plugin Storage & Records', 'frontend-dashboard' ); ?></td>
+										<td class="py-3 px-4 text-center font-mono"><?php echo esc_html( number_format_i18n( $total_db_rows ) ); ?></td>
+										<td class="py-3 px-4 text-center font-mono">-</td>
+										<td class="py-3 px-4 text-center font-mono"><?php echo esc_html( size_format( $total_db_size, 2 ) ); ?></td>
+										<td class="py-3 px-4"></td>
 									</tr>
-								<?php endforeach; ?>
-							</tbody>
-							<tfoot>
-								<tr class="bg-slate-50 border-t border-slate-200/80 font-bold text-xs text-slate-800">
-									<td class="py-3 px-4" colspan="3"><?php esc_html_e( 'Total Plugin Storage & Records', 'frontend-dashboard' ); ?></td>
-									<td class="py-3 px-4 text-center font-mono"><?php echo esc_html( number_format_i18n( $total_db_rows ) ); ?></td>
-									<td class="py-3 px-4 text-center font-mono">-</td>
-									<td class="py-3 px-4 text-center font-mono"><?php echo esc_html( size_format( $total_db_size, 2 ) ); ?></td>
-									<td class="py-3 px-4"></td>
-								</tr>
-							</tfoot>
-						</table>
+								</tfoot>
+							</table>
+						</div>
+					</div>
+				</div>
+
+				<!-- Sub-Pane: Option Store -->
+				<div class="fed-sub-pane hidden space-y-6" id="subpane_plugin_options">
+					<div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-6">
+						<!-- Header & Actions -->
+						<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+							<div class="flex items-center gap-3">
+								<div class="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-sm">
+									<i class="fas fa-sliders-h"></i>
+								</div>
+								<div>
+									<h3 class="text-sm font-bold text-slate-900 m-0"><?php esc_html_e( 'Frontend Dashboard Options Store', 'frontend-dashboard' ); ?></h3>
+									<p class="text-[11px] text-slate-500 m-0 mt-0.5"><?php esc_html_e( 'Browse, inspect raw payloads, and purge individual or all plugin settings.', 'frontend-dashboard' ); ?></p>
+								</div>
+							</div>
+
+							<div class="flex items-center gap-3">
+								<div class="fed-search-input-wrap">
+									<span class="fed-search-icon">
+										<i class="fas fa-search"></i>
+									</span>
+									<input type="text" id="fed_options_search_input" placeholder="<?php esc_attr_e( 'Filter options...', 'frontend-dashboard' ); ?>" class="fed-status-search-input" />
+								</div>
+								<button type="button" id="fed_action_delete_all_options_btn" class="px-3.5 h-[38px] rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-semibold text-xs inline-flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs">
+									<i class="fas fa-trash-alt text-[10px]"></i>
+									<span><?php esc_html_e( 'Delete All Options', 'frontend-dashboard' ); ?></span>
+								</button>
+							</div>
+						</div>
+
+						<!-- Options Table -->
+						<div class="overflow-x-auto rounded-2xl border border-slate-200/80">
+							<table class="w-full text-left border-collapse text-xs" id="fed_options_table">
+								<thead>
+									<tr class="bg-slate-50/90 border-b border-slate-200/80 text-slate-500 font-bold uppercase tracking-wider text-[11px]">
+										<th class="py-3 px-4"><?php esc_html_e( 'Option Key', 'frontend-dashboard' ); ?></th>
+										<th class="py-3 px-4"><?php esc_html_e( 'Value Preview', 'frontend-dashboard' ); ?></th>
+										<th class="py-3 px-4 text-center"><?php esc_html_e( 'Autoload', 'frontend-dashboard' ); ?></th>
+										<th class="py-3 px-4 text-center"><?php esc_html_e( 'Size', 'frontend-dashboard' ); ?></th>
+										<th class="py-3 px-4 text-right"><?php esc_html_e( 'Action', 'frontend-dashboard' ); ?></th>
+									</tr>
+								</thead>
+								<tbody class="divide-y divide-slate-100 bg-white">
+									<?php foreach ( $options_query as $opt ) : 
+										$val_len = strlen( (string) $opt->option_value );
+										$is_serialized = is_serialized( $opt->option_value );
+										$preview = wp_trim_words( esc_html( $opt->option_value ), 12, '...' );
+									?>
+										<tr class="fed-option-row hover:bg-slate-50/60 transition-colors" data-name="<?php echo esc_attr( strtolower( $opt->option_name ) ); ?>">
+											<td class="py-3 px-4 font-mono font-bold text-slate-800"><?php echo esc_html( $opt->option_name ); ?></td>
+											<td class="py-3 px-4 font-mono text-slate-600 max-w-xs truncate" title="<?php echo esc_attr( $opt->option_value ); ?>">
+												<?php if ( $is_serialized ) : ?>
+													<span class="inline-block px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 text-[10px] font-sans mr-1">Array/Object</span>
+												<?php endif; ?>
+												<?php echo esc_html( $preview ); ?>
+											</td>
+											<td class="py-3 px-4 text-center font-mono">
+												<span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold <?php echo 'yes' === $opt->autoload ? 'bg-indigo-50 text-indigo-700' : 'bg-slate-100 text-slate-500'; ?>">
+													<?php echo esc_html( strtoupper( $opt->autoload ) ); ?>
+												</span>
+											</td>
+											<td class="py-3 px-4 text-center font-mono text-slate-500"><?php echo size_format( $val_len, 2 ); ?></td>
+											<td class="py-3 px-4 text-right">
+												<button type="button"
+														class="fed-trigger-delete-option p-2 rounded-xl text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+														data-id="<?php echo esc_attr( $opt->option_id ); ?>"
+														data-name="<?php echo esc_attr( $opt->option_name ); ?>"
+														title="<?php esc_attr_e( 'Delete Option', 'frontend-dashboard' ); ?>">
+													<i class="fas fa-trash-alt text-xs"></i>
+												</button>
+											</td>
+										</tr>
+									<?php endforeach; ?>
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>
 
-			<!-- Tab 3: Options Store -->
-			<div class="fed-status-pane hidden space-y-6" id="pane_plugin_options" data-pane="plugin_options">
-				<div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-6">
-					<!-- Header & Actions -->
-					<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100">
-						<div class="flex items-center gap-3">
-							<div class="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-sm">
-								<i class="fas fa-sliders-h"></i>
-							</div>
-							<div>
-								<h3 class="text-sm font-bold text-slate-900 m-0"><?php esc_html_e( 'Frontend Dashboard Options Store', 'frontend-dashboard' ); ?></h3>
-								<p class="text-[11px] text-slate-500 m-0 mt-0.5"><?php esc_html_e( 'Browse, inspect raw payloads, and purge individual or all plugin settings.', 'frontend-dashboard' ); ?></p>
-							</div>
-						</div>
-
-						<div class="flex items-center gap-3">
-							<div class="fed-search-input-wrap">
-								<span class="fed-search-icon">
-									<i class="fas fa-search"></i>
-								</span>
-								<input type="text" id="fed_options_search_input" placeholder="<?php esc_attr_e( 'Filter options...', 'frontend-dashboard' ); ?>" class="fed-status-search-input" />
-							</div>
-							<button type="button" id="fed_action_delete_all_options_btn" class="px-3.5 h-[38px] rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-semibold text-xs inline-flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs">
-								<i class="fas fa-trash-alt text-[10px]"></i>
-								<span><?php esc_html_e( 'Delete All Options', 'frontend-dashboard' ); ?></span>
-							</button>
-						</div>
-					</div>
-
-					<!-- Options Table -->
-					<div class="overflow-x-auto rounded-2xl border border-slate-200/80">
-						<table class="w-full text-left border-collapse text-xs" id="fed_options_table">
-							<thead>
-								<tr class="bg-slate-50/90 border-b border-slate-200/80 text-slate-500 font-bold uppercase tracking-wider text-[11px]">
-									<th class="py-3 px-4"><?php esc_html_e( 'Option Key', 'frontend-dashboard' ); ?></th>
-									<th class="py-3 px-4"><?php esc_html_e( 'Value Preview', 'frontend-dashboard' ); ?></th>
-									<th class="py-3 px-4 text-center"><?php esc_html_e( 'Autoload', 'frontend-dashboard' ); ?></th>
-									<th class="py-3 px-4 text-center"><?php esc_html_e( 'Size', 'frontend-dashboard' ); ?></th>
-									<th class="py-3 px-4 text-right"><?php esc_html_e( 'Action', 'frontend-dashboard' ); ?></th>
-								</tr>
-							</thead>
-							<tbody class="divide-y divide-slate-100 bg-white">
-								<?php foreach ( $options_query as $opt ) : 
-									$val_len = strlen( (string) $opt->option_value );
-									$is_serialized = is_serialized( $opt->option_value );
-									$preview = wp_trim_words( esc_html( $opt->option_value ), 12, '...' );
-								?>
-									<tr class="fed-option-row hover:bg-slate-50/60 transition-colors" data-name="<?php echo esc_attr( strtolower( $opt->option_name ) ); ?>">
-										<td class="py-3 px-4 font-mono font-bold text-slate-800"><?php echo esc_html( $opt->option_name ); ?></td>
-										<td class="py-3 px-4 font-mono text-slate-600 max-w-xs truncate" title="<?php echo esc_attr( $opt->option_value ); ?>">
-											<?php if ( $is_serialized ) : ?>
-												<span class="inline-block px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 text-[10px] font-sans mr-1">Array/Object</span>
-											<?php endif; ?>
-											<?php echo esc_html( $preview ); ?>
-										</td>
-										<td class="py-3 px-4 text-center font-mono">
-											<span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold <?php echo 'yes' === $opt->autoload ? 'bg-indigo-50 text-indigo-700' : 'bg-slate-100 text-slate-500'; ?>">
-												<?php echo esc_html( strtoupper( $opt->autoload ) ); ?>
-											</span>
-										</td>
-										<td class="py-3 px-4 text-center font-mono text-slate-500"><?php echo size_format( $val_len, 2 ); ?></td>
-										<td class="py-3 px-4 text-right">
-											<button type="button"
-													class="fed-trigger-delete-option p-2 rounded-xl text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
-													data-id="<?php echo esc_attr( $opt->option_id ); ?>"
-													data-name="<?php echo esc_attr( $opt->option_name ); ?>"
-													title="<?php esc_attr_e( 'Delete Option', 'frontend-dashboard' ); ?>">
-												<i class="fas fa-trash-alt text-xs"></i>
-											</button>
-										</td>
-									</tr>
-								<?php endforeach; ?>
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-
-			<!-- Tab 4: Scheduled Cron Jobs -->
-			<div class="fed-status-pane hidden space-y-6" id="pane_cron_jobs" data-pane="cron_jobs">
+			<!-- Tab 3: Scheduled Cron Jobs -->
+			<div class="fed-status-pane hidden space-y-6" id="pane_scheduled_crons" data-pane="scheduled_crons">
 				<div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-6">
 					<div class="flex items-center gap-3 pb-5 border-b border-slate-100">
 						<div class="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-sm">
@@ -877,62 +955,515 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 				</div>
 			</div>
 
-			<!-- Tab 5: File Logs & Activity Console -->
-			<div class="fed-status-pane hidden space-y-6" id="pane_file_logs" data-pane="file_logs">
-				<div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-6">
-					<!-- Console Header & Actions -->
-					<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-100">
-						<div class="flex items-center gap-3">
-							<div class="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center text-sm shadow-xs">
-								<i class="fas fa-terminal"></i>
+			<!-- Tab 4: Activity Log (DB Log vs File Log) -->
+			<div class="fed-status-pane hidden space-y-6" id="pane_activity_log" data-pane="activity_log">
+				
+				<!-- Sub-navigation Pills for Activity Log Category -->
+				<div class="flex items-center justify-between bg-white rounded-2xl p-2 border border-slate-200/80 shadow-xs">
+					<div class="flex items-center gap-2" role="tablist">
+						<button type="button" class="fed-sub-tab-btn fed-subtab-active px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer bg-indigo-50 text-indigo-700 border border-indigo-200" data-subtab="activity_db_log">
+							<i class="fas fa-database mr-1.5"></i> <?php esc_html_e( 'DB Log', 'frontend-dashboard' ); ?>
+						</button>
+						<button type="button" class="fed-sub-tab-btn px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all cursor-pointer border border-transparent" data-subtab="activity_file_log">
+							<i class="fas fa-file-code mr-1.5"></i> <?php esc_html_e( 'File Log', 'frontend-dashboard' ); ?>
+						</button>
+					</div>
+					<span class="text-[11px] text-slate-400 font-medium hidden sm:inline px-3">
+						<?php esc_html_e( 'Switch between database audit logs and raw dashboard.log file', 'frontend-dashboard' ); ?>
+					</span>
+				</div>
+
+				<!-- Sub-Pane 1: DB Log (Database Table) -->
+				<div class="fed-sub-pane block space-y-6" id="subpane_activity_db_log">
+					<div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-5">
+						<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+							<div class="flex items-center gap-3">
+								<div class="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-base shadow-xs" style="background-color: #eef2ff !important; color: #4f46e5 !important;">
+									<i class="fas fa-history" style="color: #4f46e5 !important;"></i>
+								</div>
+								<div>
+									<div class="flex items-center gap-2">
+										<h3 class="text-sm font-bold text-slate-900 m-0"><?php esc_html_e( 'Activity & Audit Log (Database)', 'frontend-dashboard' ); ?></h3>
+										<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200" id="fed_activity_count_badge">
+											<?php echo count( $db_activity_logs ); ?> <?php esc_html_e( 'events', 'frontend-dashboard' ); ?>
+										</span>
+									</div>
+									<p class="text-[11px] text-slate-500 m-0 mt-0.5"><?php esc_html_e( 'Real-time audit trail of administrative operations, seeder executions, schema migrations, and system tasks in MySQL.', 'frontend-dashboard' ); ?></p>
+								</div>
+							</div>
+
+							<!-- Filter & Action Controls -->
+							<div class="flex items-center gap-2.5 flex-wrap">
+								<!-- Search Input -->
+								<div class="fed-search-input-wrap">
+									<i class="fas fa-search fed-search-icon"></i>
+									<input type="text" id="fed_activity_search_input" placeholder="<?php esc_attr_e( 'Search audit logs...', 'frontend-dashboard' ); ?>" class="fed-status-search-input text-xs" style="width: 200px !important; min-width: 180px !important;" />
+								</div>
+
+								<!-- Category Filter Dropdown -->
+								<select id="fed_activity_filter_select" class="h-[38px] px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 text-xs font-semibold focus:bg-white focus:border-indigo-500 focus:outline-none transition-all cursor-pointer">
+									<option value=""><?php esc_html_e( 'All Categories', 'frontend-dashboard' ); ?></option>
+									<option value="seeder"><?php esc_html_e( 'Seeder / Purge', 'frontend-dashboard' ); ?></option>
+									<option value="database"><?php esc_html_e( 'Database Tables', 'frontend-dashboard' ); ?></option>
+									<option value="option"><?php esc_html_e( 'Options Store', 'frontend-dashboard' ); ?></option>
+									<option value="cron"><?php esc_html_e( 'Crons', 'frontend-dashboard' ); ?></option>
+									<option value="log"><?php esc_html_e( 'System Logs', 'frontend-dashboard' ); ?></option>
+								</select>
+
+								<!-- Refresh Button -->
+								<button type="button" id="fed_action_refresh_activity_btn" class="fed-btn-secondary h-[38px] px-3.5 rounded-xl font-semibold text-xs inline-flex items-center gap-1.5 cursor-pointer shadow-2xs">
+									<i class="fas fa-sync-alt text-[10px]"></i>
+									<span><?php esc_html_e( 'Refresh', 'frontend-dashboard' ); ?></span>
+								</button>
+
+								<!-- Clear Database Log Button -->
+								<button type="button" id="fed_action_clear_activity_btn" class="h-[38px] px-3.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-semibold text-xs inline-flex items-center gap-1.5 transition-colors cursor-pointer">
+									<i class="fas fa-trash-alt text-[10px]"></i>
+									<span><?php esc_html_e( 'Clear Audit History', 'frontend-dashboard' ); ?></span>
+								</button>
+							</div>
+						</div>
+
+						<!-- Real-Time Activity Log Table -->
+						<div class="overflow-x-auto rounded-2xl border border-slate-200/80 max-h-[600px] overflow-y-auto">
+							<table class="w-full text-left border-collapse">
+								<thead class="sticky top-0 z-10 shadow-xs">
+									<tr>
+										<th class="w-48"><?php esc_html_e( 'User / Actor', 'frontend-dashboard' ); ?></th>
+										<th class="w-32"><?php esc_html_e( 'Category', 'frontend-dashboard' ); ?></th>
+										<th><?php esc_html_e( 'Action & Description', 'frontend-dashboard' ); ?></th>
+										<th class="w-28 text-center"><?php esc_html_e( 'Status', 'frontend-dashboard' ); ?></th>
+										<th class="w-40 text-right"><?php esc_html_e( 'Timestamp', 'frontend-dashboard' ); ?></th>
+									</tr>
+								</thead>
+								<tbody class="divide-y divide-slate-100" id="fed_activity_log_tbody">
+									<?php if ( ! empty( $db_activity_logs ) ) : ?>
+										<?php foreach ( $db_activity_logs as $act ) : 
+											$action_cat   = ! empty( $act['channel'] ) ? $act['channel'] : ( ! empty( $act['action_type'] ) ? $act['action_type'] : 'system' );
+											$act_status   = ! empty( $act['status'] ) ? $act['status'] : ( ! empty( $act['level'] ) ? $act['level'] : 'info' );
+											$action_title = ! empty( $act['action'] ) ? $act['action'] : ( ! empty( $act['action_title'] ) ? $act['action_title'] : __( 'System Event', 'frontend-dashboard' ) );
+											$act_desc     = ! empty( $act['description'] ) ? $act['description'] : ( ! empty( $act['message'] ) && $act['message'] !== $action_title ? $act['message'] : '' );
+											$search_str   = strtolower( ( $act['user_login'] ?? '' ) . ' ' . ( $act['user_display_name'] ?? '' ) . ' ' . $action_title . ' ' . $act_desc . ' ' . ( $act['ip_address'] ?? '' ) . ' ' . $action_cat );
+											
+											// Category Badge Style
+											$cat_badge_cls = 'bg-slate-100 text-slate-700 border-slate-200';
+											$cat_icon = 'fa-cog';
+											if ( $action_cat === 'seeder' ) {
+												$cat_badge_cls = 'bg-indigo-50 text-indigo-700 border-indigo-200';
+												$cat_icon = 'fa-seedling';
+											} elseif ( $action_cat === 'database' ) {
+												$cat_badge_cls = 'bg-amber-50 text-amber-700 border-amber-200';
+												$cat_icon = 'fa-database';
+											} elseif ( $action_cat === 'option' ) {
+												$cat_badge_cls = 'bg-sky-50 text-sky-700 border-sky-200';
+												$cat_icon = 'fa-sliders-h';
+											} elseif ( $action_cat === 'cron' ) {
+												$cat_badge_cls = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+												$cat_icon = 'fa-clock';
+											} elseif ( $action_cat === 'log' ) {
+												$cat_badge_cls = 'bg-purple-50 text-purple-700 border-purple-200';
+												$cat_icon = 'fa-terminal';
+											}
+
+											// Status Badge Style
+											$status_badge_cls = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+											$status_icon = 'fa-check-circle text-emerald-500';
+											if ( $act_status === 'warning' ) {
+												$status_badge_cls = 'bg-amber-50 text-amber-700 border-amber-200';
+												$status_icon = 'fa-exclamation-triangle text-amber-500';
+											} elseif ( in_array( $act_status, [ 'error', 'critical' ], true ) ) {
+												$status_badge_cls = 'bg-rose-50 text-rose-700 border-rose-200';
+												$status_icon = 'fa-times-circle text-rose-500';
+											}
+
+											$time_unix = ! empty( $act['created_at'] ) ? strtotime( $act['created_at'] ) : time();
+											$time_diff = human_time_diff( $time_unix, time() ) . ' ' . __( 'ago', 'frontend-dashboard' );
+											$time_exact = date_i18n( 'M j, Y H:i:s', $time_unix );
+										?>
+											<tr class="fed-activity-row hover:bg-slate-50 transition-colors" data-category="<?php echo esc_attr( $action_cat ); ?>" data-search="<?php echo esc_attr( $search_str ); ?>">
+												<!-- User / Actor Column -->
+												<td>
+													<div class="flex items-center gap-2.5">
+														<div class="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-xs text-slate-600 font-bold shrink-0 overflow-hidden">
+															<?php if ( ! empty( $act['user_id'] ) ) : ?>
+																<?php echo get_avatar( $act['user_id'], 32, '', '', array( 'class' => 'w-full h-full object-cover' ) ); ?>
+															<?php else : ?>
+																<i class="fas fa-user-shield text-indigo-500 text-xs"></i>
+															<?php endif; ?>
+														</div>
+														<div class="min-w-0">
+															<span class="block font-bold text-slate-800 truncate text-xs">
+																<?php echo esc_html( ! empty( $act['user_display_name'] ) ? $act['user_display_name'] : ( $act['user_login'] ?? 'System' ) ); ?>
+															</span>
+															<span class="block text-[10px] text-slate-400 font-mono">
+																<?php echo esc_html( ! empty( $act['ip_address'] ) ? $act['ip_address'] : '127.0.0.1' ); ?>
+															</span>
+														</div>
+													</div>
+												</td>
+
+												<!-- Category Column -->
+												<td>
+													<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold border <?php echo esc_attr( $cat_badge_cls ); ?>">
+														<i class="fas <?php echo esc_attr( $cat_icon ); ?> text-[9px]"></i>
+														<span><?php echo esc_html( ucfirst( $action_cat ) ); ?></span>
+													</span>
+												</td>
+
+												<!-- Action Title & Description Column -->
+												<td>
+													<div class="space-y-1">
+														<span class="font-bold text-slate-900 text-xs block">
+															<?php echo esc_html( $action_title ); ?>
+														</span>
+														<?php if ( ! empty( $act_desc ) ) : ?>
+															<div class="text-[11px] text-slate-600 leading-relaxed whitespace-pre-wrap font-sans bg-slate-50/70 p-2 rounded-xl border border-slate-100">
+																<?php echo esc_html( $act_desc ); ?>
+															</div>
+														<?php endif; ?>
+													</div>
+												</td>
+
+												<!-- Status Column -->
+												<td class="text-center">
+													<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold border <?php echo esc_attr( $status_badge_cls ); ?>">
+														<i class="fas <?php echo esc_attr( $status_icon ); ?> text-[9px]"></i>
+														<span><?php echo esc_html( ucfirst( $act_status ) ); ?></span>
+													</span>
+												</td>
+
+												<!-- Timestamp Column -->
+												<td class="text-right">
+													<span class="font-bold text-slate-700 text-xs block">
+														<?php echo esc_html( $time_diff ); ?>
+													</span>
+													<span class="text-[10px] text-slate-400 font-mono block" title="<?php echo esc_attr( $time_exact ); ?>">
+														<?php echo esc_html( $time_exact ); ?>
+													</span>
+												</td>
+											</tr>
+										<?php endforeach; ?>
+									<?php else : ?>
+										<tr id="fed_activity_empty_row">
+											<td colspan="5" class="py-12 text-center text-slate-400">
+												<i class="fas fa-inbox text-3xl mb-2 text-slate-300 block"></i>
+												<span class="text-xs font-medium"><?php esc_html_e( 'No activity records found in the database. Perform any action to generate logs.', 'frontend-dashboard' ); ?></span>
+											</td>
+										</tr>
+									<?php endif; ?>
+									<tr id="fed_activity_no_search_results_row" class="hidden">
+										<td colspan="5" class="py-12 text-center text-slate-400">
+											<i class="fas fa-search text-3xl mb-2 text-slate-300 block"></i>
+											<span class="text-xs font-medium"><?php esc_html_e( 'No activity records matched your search query or filter.', 'frontend-dashboard' ); ?></span>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+						<!-- Pagination Toolbar for DB Activity Log -->
+						<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-slate-100" id="fed_activity_pagination_bar">
+							<div class="flex items-center gap-3 text-xs text-slate-500 flex-wrap">
+								<span id="fed_activity_pagination_info"><?php esc_html_e( 'Showing entries...', 'frontend-dashboard' ); ?></span>
+								<div class="flex items-center gap-1.5 pl-3 border-l border-slate-200">
+									<label for="fed_activity_per_page" class="text-slate-400 font-medium text-[11px]"><?php esc_html_e( 'Per page:', 'frontend-dashboard' ); ?></label>
+									<select id="fed_activity_per_page" class="h-7 px-2 py-0.5 rounded-lg border border-slate-200 bg-slate-50 text-slate-700 text-xs font-semibold focus:outline-none focus:bg-white cursor-pointer">
+										<option value="15">15</option>
+										<option value="25" selected>25</option>
+										<option value="50">50</option>
+										<option value="100">100</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="flex items-center gap-1" id="fed_activity_pagination_controls">
+								<button type="button" class="fed-page-nav-btn h-8 px-2.5 rounded-xl border border-slate-200 bg-white text-slate-600 text-xs font-semibold hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-all" id="fed_activity_prev_btn" title="<?php esc_attr_e( 'Previous Page', 'frontend-dashboard' ); ?>">
+									<i class="fas fa-chevron-left text-[10px]"></i>
+								</button>
+								<div class="flex items-center gap-1" id="fed_activity_page_numbers">
+									<!-- Dynamically injected page numbers -->
+								</div>
+								<button type="button" class="fed-page-nav-btn h-8 px-2.5 rounded-xl border border-slate-200 bg-white text-slate-600 text-xs font-semibold hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-all" id="fed_activity_next_btn" title="<?php esc_attr_e( 'Next Page', 'frontend-dashboard' ); ?>">
+									<i class="fas fa-chevron-right text-[10px]"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Sub-Pane 2: File Log (Raw Monospace File Log Console dashboard.log) -->
+				<div class="fed-sub-pane hidden space-y-6" id="subpane_activity_file_log">
+					<div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-4">
+						<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+							<div class="flex items-center gap-3">
+								<div class="w-9 h-9 rounded-xl bg-slate-900 text-white flex items-center justify-center text-sm shadow-xs">
+									<i class="fas fa-terminal"></i>
+								</div>
+								<div>
+									<div class="flex items-center gap-2 flex-wrap">
+										<h3 class="text-sm font-bold text-slate-900 m-0"><?php esc_html_e( 'Raw File Log Console', 'frontend-dashboard' ); ?></h3>
+										<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
+											<i class="fas fa-eye text-[9px] mr-1 text-indigo-600"></i> <?php echo sprintf( esc_html__( 'Showing latest %d lines', 'frontend-dashboard' ), count( $log_lines ) ); ?>
+										</span>
+										<?php if ( file_exists( $log_file ) && filesize( $log_file ) > 1024 * 1024 ) : ?>
+											<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+												<i class="fas fa-info-circle text-[9px] mr-1"></i> <?php esc_html_e( 'Large file (>1MB) • Download for complete history', 'frontend-dashboard' ); ?>
+											</span>
+										<?php endif; ?>
+									</div>
+									<p class="text-[11px] text-slate-500 m-0 mt-0.5 font-mono"><?php echo esc_html( $log_file ); ?> (<?php echo esc_html( $log_file_size ); ?>)</p>
+								</div>
+							</div>
+
+							<div class="flex items-center gap-2.5 flex-wrap">
+								<button type="button" id="fed_action_refresh_log_btn" class="fed-btn-secondary h-9 px-3.5 rounded-xl font-semibold text-xs inline-flex items-center gap-1.5 cursor-pointer shadow-2xs">
+									<i class="fas fa-sync-alt text-[10px]"></i>
+									<span><?php esc_html_e( 'Refresh File', 'frontend-dashboard' ); ?></span>
+								</button>
+								<a href="<?php echo esc_url( plugins_url( 'log/dashboard.log', BC_FED_PLUGIN ) ); ?>" download="frontend-dashboard.log" class="fed-btn-secondary h-9 px-3.5 rounded-xl font-semibold text-xs inline-flex items-center gap-1.5 no-underline shadow-2xs">
+									<i class="fas fa-download text-[10px]"></i>
+									<span><?php esc_html_e( 'Download', 'frontend-dashboard' ); ?></span>
+								</a>
+								<button type="button" id="fed_action_clear_log_btn" class="px-3.5 h-9 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-semibold text-xs inline-flex items-center gap-1.5 transition-colors cursor-pointer">
+									<i class="fas fa-trash-alt text-[10px]"></i>
+									<span><?php esc_html_e( 'Clear File Log', 'frontend-dashboard' ); ?></span>
+								</button>
+							</div>
+						</div>
+
+						<!-- Dark-Mode Monospace Terminal Console -->
+						<div class="rounded-2xl bg-slate-950 p-4 border border-slate-800 text-slate-200 font-mono text-xs overflow-x-auto max-h-[480px] overflow-y-auto space-y-1 shadow-inner" id="fed_log_terminal">
+							<?php if ( ! empty( $log_lines ) ) : ?>
+								<?php foreach ( $log_lines as $idx => $line ) : 
+									$line_class = 'text-slate-300';
+									if ( stripos( $line, 'error' ) !== false || stripos( $line, 'fatal' ) !== false ) {
+										$line_class = 'text-rose-400 font-bold';
+									} elseif ( stripos( $line, 'warn' ) !== false ) {
+										$line_class = 'text-amber-300 font-semibold';
+									} elseif ( stripos( $line, 'info' ) !== false || stripos( $line, 'success' ) !== false ) {
+										$line_class = 'text-emerald-400';
+									}
+								?>
+									<div class="flex items-start gap-3 hover:bg-slate-900/60 px-1 py-0.5 rounded">
+										<span class="text-slate-600 select-none text-[11px] w-8 text-right shrink-0"><?php echo esc_html( $idx + 1 ); ?></span>
+										<span class="<?php echo esc_attr( $line_class ); ?> whitespace-pre-wrap break-all"><?php echo esc_html( $line ); ?></span>
+									</div>
+								<?php endforeach; ?>
+							<?php else : ?>
+								<div class="py-8 text-center text-slate-500 font-sans">
+									<i class="fas fa-check-circle text-2xl mb-2 text-slate-600"></i>
+									<p class="m-0 text-xs"><?php esc_html_e( 'Log file is clean and empty. No errors or notices reported.', 'frontend-dashboard' ); ?></p>
+								</div>
+							<?php endif; ?>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Tab 5: Seeder & Demo Engine -->
+			<div class="fed-status-pane hidden space-y-6" id="pane_seeder" data-pane="seeder">
+				
+				<!-- Primary Recommended Hero: Complete 1-Click Bootstrap Suite -->
+				<div class="rounded-3xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden" style="background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%) !important; color: #ffffff !important; border: 1px solid #312e81 !important;">
+					<div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+						<div class="space-y-3 max-w-2xl">
+							<div class="flex items-center gap-2">
+								<span class="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold" style="background-color: rgba(99, 102, 241, 0.25) !important; color: #c7d2fe !important; border: 1px solid rgba(129, 140, 248, 0.35) !important;">
+									<i class="fas fa-magic text-[10px] mr-1.5 text-amber-400"></i> <?php esc_html_e( 'Recommended Setup', 'frontend-dashboard' ); ?>
+								</span>
+								<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-extrabold" style="background-color: rgba(16, 185, 129, 0.2) !important; color: #6ee7b7 !important; border: 1px solid rgba(52, 211, 153, 0.3) !important;">
+									<?php esc_html_e( '1-Click Complete', 'frontend-dashboard' ); ?>
+								</span>
+							</div>
+							<h2 class="text-xl sm:text-2xl font-extrabold tracking-tight m-0" style="color: #ffffff !important;">
+								<?php esc_html_e( 'Complete 1-Click Bootstrap Suite', 'frontend-dashboard' ); ?>
+							</h2>
+							<p class="text-xs sm:text-sm leading-relaxed m-0" style="color: #c7d2fe !important;">
+								<?php esc_html_e( 'Initialize your entire Frontend Dashboard in a single action. Automatically repairs database tables, creates essential frontend pages with canvas templates & shortcodes, binds authentication routes, populates standard navigation menus, and bootstraps default user profile fields.', 'frontend-dashboard' ); ?>
+							</p>
+
+							<!-- Key Inclusions Checklist -->
+							<div class="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs" style="color: #e0e7ff !important;">
+								<div class="flex items-center gap-2">
+									<i class="fas fa-check-circle text-emerald-400 text-xs shrink-0"></i>
+									<span style="color: #e0e7ff !important;"><?php esc_html_e( 'Core Pages (/dashboard, /login, /register, /forgot-password)', 'frontend-dashboard' ); ?></span>
+								</div>
+								<div class="flex items-center gap-2">
+									<i class="fas fa-check-circle text-emerald-400 text-xs shrink-0"></i>
+									<span style="color: #e0e7ff !important;"><?php esc_html_e( 'Auto-bind to Dashboard Login Settings', 'frontend-dashboard' ); ?></span>
+								</div>
+								<div class="flex items-center gap-2">
+									<i class="fas fa-check-circle text-emerald-400 text-xs shrink-0"></i>
+									<span style="color: #e0e7ff !important;"><?php esc_html_e( 'Standard Navigation Tabs & Menu Order', 'frontend-dashboard' ); ?></span>
+								</div>
+								<div class="flex items-center gap-2">
+									<i class="fas fa-check-circle text-emerald-400 text-xs shrink-0"></i>
+									<span style="color: #e0e7ff !important;"><?php esc_html_e( 'Default User Profile Metadata Fields', 'frontend-dashboard' ); ?></span>
+								</div>
+							</div>
+						</div>
+
+						<div class="lg:shrink-0 flex flex-col sm:flex-row lg:flex-col items-stretch sm:items-center lg:items-end justify-center gap-3">
+							<!-- 1-Click Suite Execution -->
+							<button type="button" id="fed_action_seed_all_btn" class="px-6 h-12 rounded-2xl font-extrabold text-xs inline-flex items-center justify-center gap-2.5 cursor-pointer shadow-lg shadow-indigo-900/50 hover:shadow-indigo-800/80 active:scale-95 transition-all text-nowrap" style="background-color: #6366f1 !important; color: #ffffff !important;">
+								<i class="fas fa-bolt text-amber-300 text-sm"></i>
+								<span class="text-sm tracking-wide" style="color: #ffffff !important;"><?php esc_html_e( 'Run Complete Suite', 'frontend-dashboard' ); ?></span>
+							</button>
+
+							<!-- 1-Click Purge / Reset Button -->
+							<button type="button" id="fed_action_purge_all_btn" class="px-5 h-11 rounded-2xl font-bold text-xs inline-flex items-center justify-center gap-2 cursor-pointer transition-all border active:scale-95 text-nowrap hover:bg-rose-900/30" style="background-color: rgba(244, 63, 94, 0.15) !important; color: #fecdd3 !important; border-color: rgba(244, 63, 94, 0.4) !important;">
+								<i class="fas fa-trash-alt text-rose-400 text-xs"></i>
+								<span style="color: #fecdd3 !important;"><?php esc_html_e( 'Purge / Reset Seeded Data', 'frontend-dashboard' ); ?></span>
+							</button>
+
+							<span class="text-[11px] text-center lg:text-right" style="color: #94a3b8 !important;">
+								<?php esc_html_e( 'Audit recorded in Activity Log table', 'frontend-dashboard' ); ?>
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- Section Divider & Title: Individual Module Seeders -->
+				<div class="pt-2">
+					<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 pb-3 border-b border-slate-200/80">
+						<div>
+							<h3 class="text-sm font-bold text-slate-900 m-0">
+								<i class="fas fa-cubes text-indigo-600 mr-1.5"></i>
+								<?php esc_html_e( 'Individual Module Seeders', 'frontend-dashboard' ); ?>
+							</h3>
+							<p class="text-[11px] text-slate-500 m-0 mt-0.5">
+								<?php esc_html_e( 'Run individual seeders if you only want to install or repair specific modules.', 'frontend-dashboard' ); ?>
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- 3-Column Grid for Individual Modules -->
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+					
+					<!-- Card 1: Core Pages & Login Settings -->
+					<div class="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-xs flex flex-col justify-between space-y-5">
+						<div class="space-y-3.5">
+							<div class="flex items-center justify-between">
+								<div class="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-base">
+									<i class="fas fa-file-invoice"></i>
+								</div>
+								<?php if ( $login_configured ) : ?>
+									<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+										<i class="fas fa-check text-[9px] mr-1"></i> <?php esc_html_e( 'Configured', 'frontend-dashboard' ); ?>
+									</span>
+								<?php else : ?>
+									<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+										<i class="fas fa-exclamation text-[9px] mr-1"></i> <?php esc_html_e( 'Action Needed', 'frontend-dashboard' ); ?>
+									</span>
+								<?php endif; ?>
 							</div>
 							<div>
-								<h3 class="text-sm font-bold text-slate-900 m-0"><?php esc_html_e( 'System & Activity Log Console', 'frontend-dashboard' ); ?></h3>
-								<p class="text-[11px] text-slate-500 m-0 mt-0.5"><?php echo esc_html( $log_file ); ?> (<?php echo esc_html( $log_file_size ); ?>)</p>
+								<h3 class="text-sm font-bold text-slate-900 m-0"><?php esc_html_e( 'Core Pages & Login Settings', 'frontend-dashboard' ); ?></h3>
+								<p class="text-xs text-slate-500 m-0 mt-1 leading-relaxed">
+									<?php esc_html_e( 'Creates essential pages with canvas templates and binds them automatically to Dashboard Settings > Login > Settings.', 'frontend-dashboard' ); ?>
+								</p>
 							</div>
-						</div>
-
-						<div class="flex items-center gap-2.5 flex-wrap">
-							<button type="button" id="fed_action_refresh_log_btn" class="fed-btn-secondary h-9 px-3.5 rounded-xl font-semibold text-xs inline-flex items-center gap-1.5 cursor-pointer shadow-2xs">
-								<i class="fas fa-sync-alt text-[10px]"></i>
-								<span><?php esc_html_e( 'Refresh', 'frontend-dashboard' ); ?></span>
-							</button>
-							<a href="<?php echo esc_url( plugins_url( 'log/dashboard.log', BC_FED_PLUGIN ) ); ?>" download="frontend-dashboard.log" class="fed-btn-secondary h-9 px-3.5 rounded-xl font-semibold text-xs inline-flex items-center gap-1.5 no-underline shadow-2xs">
-								<i class="fas fa-download text-[10px]"></i>
-								<span><?php esc_html_e( 'Download', 'frontend-dashboard' ); ?></span>
-							</a>
-							<button type="button" id="fed_action_clear_log_btn" class="px-3.5 h-9 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-semibold text-xs inline-flex items-center gap-1.5 transition-colors cursor-pointer">
-								<i class="fas fa-trash-alt text-[10px]"></i>
-								<span><?php esc_html_e( 'Clear Log', 'frontend-dashboard' ); ?></span>
-							</button>
-						</div>
-					</div>
-
-					<!-- Dark-Mode Monospace Terminal Console -->
-					<div class="rounded-2xl bg-slate-950 p-4 border border-slate-800 text-slate-200 font-mono text-xs overflow-x-auto max-h-[500px] overflow-y-auto space-y-1 shadow-inner" id="fed_log_terminal">
-						<?php if ( ! empty( $log_lines ) ) : ?>
-							<?php foreach ( $log_lines as $idx => $line ) : 
-								$line_class = 'text-slate-300';
-								if ( stripos( $line, 'error' ) !== false || stripos( $line, 'fatal' ) !== false ) {
-									$line_class = 'text-rose-400 font-bold';
-								} elseif ( stripos( $line, 'warn' ) !== false ) {
-									$line_class = 'text-amber-300 font-semibold';
-								} elseif ( stripos( $line, 'info' ) !== false || stripos( $line, 'success' ) !== false ) {
-									$line_class = 'text-emerald-400';
-								}
-							?>
-								<div class="flex items-start gap-3 hover:bg-slate-900/60 px-1 py-0.5 rounded">
-									<span class="text-slate-600 select-none text-[11px] w-8 text-right shrink-0"><?php echo esc_html( $idx + 1 ); ?></span>
-									<span class="<?php echo esc_attr( $line_class ); ?> whitespace-pre-wrap break-all"><?php echo esc_html( $line ); ?></span>
+							<div class="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5 text-xs">
+								<div class="flex items-center justify-between">
+									<span class="text-slate-500 font-mono text-[11px]">/dashboard/</span>
+									<code class="text-[10px] font-mono text-indigo-600 bg-indigo-50/70 px-1 py-0.5 rounded">[fed_dashboard]</code>
 								</div>
-							<?php endforeach; ?>
-						<?php else : ?>
-							<div class="py-12 text-center text-slate-500 font-sans">
-								<i class="fas fa-check-circle text-2xl mb-2 text-slate-600"></i>
-								<p class="m-0 text-xs"><?php esc_html_e( 'Log file is clean and empty. No errors or notices reported.', 'frontend-dashboard' ); ?></p>
+								<div class="flex items-center justify-between">
+									<span class="text-slate-500 font-mono text-[11px]">/login/</span>
+									<code class="text-[10px] font-mono text-indigo-600 bg-indigo-50/70 px-1 py-0.5 rounded">[fed_login]</code>
+								</div>
+								<div class="flex items-center justify-between">
+									<span class="text-slate-500 font-mono text-[11px]">/register/</span>
+									<code class="text-[10px] font-mono text-indigo-600 bg-indigo-50/70 px-1 py-0.5 rounded">[fed_register_only]</code>
+								</div>
+								<div class="flex items-center justify-between">
+									<span class="text-slate-500 font-mono text-[11px]">/forgot-password/</span>
+									<code class="text-[10px] font-mono text-indigo-600 bg-indigo-50/70 px-1 py-0.5 rounded">[fed_forgot_password_only]</code>
+								</div>
 							</div>
-						<?php endif; ?>
+						</div>
+						<div class="pt-2">
+							<button type="button" id="fed_action_seed_pages_btn" class="w-full fed-btn-primary h-10 rounded-2xl font-bold text-xs inline-flex items-center justify-center gap-2 cursor-pointer shadow-sm active:scale-95 transition-all" style="background-color: #4f46e5 !important; color: #ffffff !important;">
+								<i class="fas fa-file-medical text-xs" style="color: #ffffff !important;"></i>
+								<span style="color: #ffffff !important;"><?php esc_html_e( 'Seed Pages & Map Settings', 'frontend-dashboard' ); ?></span>
+							</button>
+						</div>
 					</div>
+
+					<!-- Card 2: Default Navigation Menus -->
+					<div class="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-xs flex flex-col justify-between space-y-5">
+						<div class="space-y-3.5">
+							<div class="flex items-center justify-between">
+								<div class="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-base">
+									<i class="fas fa-bars"></i>
+								</div>
+								<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
+									<?php esc_html_e( 'Menu Engine', 'frontend-dashboard' ); ?>
+								</span>
+							</div>
+							<div>
+								<h3 class="text-sm font-bold text-slate-900 m-0"><?php esc_html_e( 'Standard Navigation Menus', 'frontend-dashboard' ); ?></h3>
+								<p class="text-xs text-slate-500 m-0 mt-1 leading-relaxed">
+									<?php esc_html_e( 'Populates default dashboard navigation tabs in the database table if not already present, ensuring full sidebar visibility for user roles.', 'frontend-dashboard' ); ?>
+								</p>
+							</div>
+							<div class="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5 text-xs font-mono text-slate-700">
+								<div class="flex items-center justify-between">
+									<span class="font-sans text-slate-500 font-medium text-[11px]">Dashboard</span>
+									<span class="text-indigo-600 font-bold text-[11px]">#1 (Overview)</span>
+								</div>
+								<div class="flex items-center justify-between">
+									<span class="font-sans text-slate-500 font-medium text-[11px]">Profile</span>
+									<span class="text-indigo-600 font-bold text-[11px]">#2 (User Edit)</span>
+								</div>
+								<div class="flex items-center justify-between">
+									<span class="font-sans text-slate-500 font-medium text-[11px]">Posts</span>
+									<span class="text-indigo-600 font-bold text-[11px]">#3 (Submissions)</span>
+								</div>
+								<div class="flex items-center justify-between">
+									<span class="font-sans text-slate-500 font-medium text-[11px]">Payments</span>
+									<span class="text-indigo-600 font-bold text-[11px]">#4 (Transactions)</span>
+								</div>
+							</div>
+						</div>
+						<div class="pt-2">
+							<button type="button" id="fed_action_seed_menus_btn" class="w-full fed-btn-primary h-10 rounded-2xl font-bold text-xs inline-flex items-center justify-center gap-2 cursor-pointer shadow-sm active:scale-95 transition-all" style="background-color: #4f46e5 !important; color: #ffffff !important;">
+								<i class="fas fa-sitemap text-xs" style="color: #ffffff !important;"></i>
+								<span style="color: #ffffff !important;"><?php esc_html_e( 'Seed Standard Menus', 'frontend-dashboard' ); ?></span>
+							</button>
+						</div>
+					</div>
+
+					<!-- Card 3: Standard Profile Fields -->
+					<div class="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-xs flex flex-col justify-between space-y-5">
+						<div class="space-y-3.5">
+							<div class="flex items-center justify-between">
+								<div class="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-base">
+									<i class="fas fa-user-edit"></i>
+								</div>
+								<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
+									<?php esc_html_e( 'Profile Schema', 'frontend-dashboard' ); ?>
+								</span>
+							</div>
+							<div>
+								<h3 class="text-sm font-bold text-slate-900 m-0"><?php esc_html_e( 'User Profile Fields & Meta', 'frontend-dashboard' ); ?></h3>
+								<p class="text-xs text-slate-500 m-0 mt-1 leading-relaxed">
+									<?php esc_html_e( 'Initializes default user profile fields (First Name, Last Name, Nickname, Email, Website, Bio, Password) in the profile metadata table.', 'frontend-dashboard' ); ?>
+								</p>
+							</div>
+							<div class="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs text-slate-600 leading-relaxed">
+								<?php esc_html_e( 'Standard inputs configured with optimal positions, validation rules, and role permissions for all registered subscribers and administrators.', 'frontend-dashboard' ); ?>
+							</div>
+						</div>
+						<div class="pt-2">
+							<button type="button" id="fed_action_seed_profile_fields_btn" class="w-full fed-btn-primary h-10 rounded-2xl font-bold text-xs inline-flex items-center justify-center gap-2 cursor-pointer shadow-sm active:scale-95 transition-all" style="background-color: #4f46e5 !important; color: #ffffff !important;">
+								<i class="fas fa-user-plus text-xs" style="color: #ffffff !important;"></i>
+								<span style="color: #ffffff !important;"><?php esc_html_e( 'Seed Profile Fields', 'frontend-dashboard' ); ?></span>
+							</button>
+						</div>
+					</div>
+
 				</div>
 			</div>
 
@@ -952,20 +1483,20 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 			<!-- Modal 1: Drop Table Confirmation -->
 			<div id="fed_status_delete_table_modal" class="fed-status-modal">
 				<div class="status-modal-content">
-					<div class="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-100 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-4 shadow-xs">
-						<i class="fas fa-trash-alt"></i>
+					<div class="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-100 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-4 shadow-xs" style="background-color: #fff1f2 !important; color: #e11d48 !important;">
+						<i class="fas fa-trash-alt" style="color: #e11d48 !important;"></i>
 					</div>
-					<h3 class="text-base sm:text-lg font-bold text-slate-900 mb-1.5">
+					<h3 class="text-base sm:text-lg font-bold text-slate-900 mb-1.5" style="color: #0f172a !important;">
 						<?php esc_html_e( 'Drop Database Table?', 'frontend-dashboard' ); ?>
 					</h3>
-					<p class="text-xs text-slate-500 leading-relaxed mb-6" id="fed_drop_table_desc">
+					<p class="text-xs text-slate-500 leading-relaxed mb-6" id="fed_drop_table_desc" style="color: #64748b !important;">
 						<?php esc_html_e( 'Are you sure you want to drop this table? All records and table schema will be permanently removed from MySQL.', 'frontend-dashboard' ); ?>
 					</p>
 					<div class="flex items-center justify-center gap-3">
-						<button type="button" class="fed-cancel-status-modal-btn px-5 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs sm:text-sm font-semibold transition-all cursor-pointer">
+						<button type="button" class="fed-cancel-status-modal-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer" style="background-color: #ffffff !important; color: #334155 !important; border: 1px solid #cbd5e1 !important;">
 							<?php esc_html_e( 'Cancel', 'frontend-dashboard' ); ?>
 						</button>
-						<button type="button" id="fed_confirm_drop_table_btn" class="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm active:scale-95" style="background-color: #e11d48 !important; color: #ffffff !important;">
+						<button type="button" id="fed_confirm_drop_table_btn" class="px-5 py-2.5 rounded-xl text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm active:scale-95" style="background-color: #e11d48 !important; color: #ffffff !important;">
 							<?php esc_html_e( 'Yes, Drop Table', 'frontend-dashboard' ); ?>
 						</button>
 					</div>
@@ -975,20 +1506,20 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 			<!-- Modal 2: Empty Table Confirmation -->
 			<div id="fed_status_empty_table_modal" class="fed-status-modal">
 				<div class="status-modal-content">
-					<div class="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-100 text-amber-600 flex items-center justify-center text-2xl mx-auto mb-4 shadow-xs">
-						<i class="fas fa-eraser"></i>
+					<div class="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-100 text-amber-600 flex items-center justify-center text-2xl mx-auto mb-4 shadow-xs" style="background-color: #fffbeb !important; color: #d97706 !important;">
+						<i class="fas fa-eraser" style="color: #d97706 !important;"></i>
 					</div>
-					<h3 class="text-base sm:text-lg font-bold text-slate-900 mb-1.5">
+					<h3 class="text-base sm:text-lg font-bold text-slate-900 mb-1.5" style="color: #0f172a !important;">
 						<?php esc_html_e( 'Empty / Truncate Table?', 'frontend-dashboard' ); ?>
 					</h3>
-					<p class="text-xs text-slate-500 leading-relaxed mb-6" id="fed_empty_table_desc">
+					<p class="text-xs text-slate-500 leading-relaxed mb-6" id="fed_empty_table_desc" style="color: #64748b !important;">
 						<?php esc_html_e( 'Are you sure you want to empty all records from this table? The table structure will be retained, but all data will be cleared.', 'frontend-dashboard' ); ?>
 					</p>
 					<div class="flex items-center justify-center gap-3">
-						<button type="button" class="fed-cancel-status-modal-btn px-5 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs sm:text-sm font-semibold transition-all cursor-pointer">
+						<button type="button" class="fed-cancel-status-modal-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer" style="background-color: #ffffff !important; color: #334155 !important; border: 1px solid #cbd5e1 !important;">
 							<?php esc_html_e( 'Cancel', 'frontend-dashboard' ); ?>
 						</button>
-						<button type="button" id="fed_confirm_empty_table_btn" class="px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm active:scale-95">
+						<button type="button" id="fed_confirm_empty_table_btn" class="px-5 py-2.5 rounded-xl text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm active:scale-95" style="background-color: #d97706 !important; color: #ffffff !important;">
 							<?php esc_html_e( 'Yes, Empty Table', 'frontend-dashboard' ); ?>
 						</button>
 					</div>
@@ -998,20 +1529,20 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 			<!-- Modal 3: Delete Option Confirmation -->
 			<div id="fed_status_delete_option_modal" class="fed-status-modal">
 				<div class="status-modal-content">
-					<div class="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-100 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-4 shadow-xs">
-						<i class="fas fa-trash-alt"></i>
+					<div class="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-100 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-4 shadow-xs" style="background-color: #fff1f2 !important; color: #e11d48 !important;">
+						<i class="fas fa-trash-alt" style="color: #e11d48 !important;"></i>
 					</div>
-					<h3 class="text-base sm:text-lg font-bold text-slate-900 mb-1.5">
+					<h3 class="text-base sm:text-lg font-bold text-slate-900 mb-1.5" style="color: #0f172a !important;">
 						<?php esc_html_e( 'Delete Option?', 'frontend-dashboard' ); ?>
 					</h3>
-					<p class="text-xs text-slate-500 leading-relaxed mb-6" id="fed_delete_option_desc">
+					<p class="text-xs text-slate-500 leading-relaxed mb-6" id="fed_delete_option_desc" style="color: #64748b !important;">
 						<?php esc_html_e( 'Are you sure you want to delete this option key from WordPress?', 'frontend-dashboard' ); ?>
 					</p>
 					<div class="flex items-center justify-center gap-3">
-						<button type="button" class="fed-cancel-status-modal-btn px-5 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs sm:text-sm font-semibold transition-all cursor-pointer">
+						<button type="button" class="fed-cancel-status-modal-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer" style="background-color: #ffffff !important; color: #334155 !important; border: 1px solid #cbd5e1 !important;">
 							<?php esc_html_e( 'Cancel', 'frontend-dashboard' ); ?>
 						</button>
-						<button type="button" id="fed_confirm_delete_option_btn" class="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm active:scale-95" style="background-color: #e11d48 !important; color: #ffffff !important;">
+						<button type="button" id="fed_confirm_delete_option_btn" class="px-5 py-2.5 rounded-xl text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm active:scale-95" style="background-color: #e11d48 !important; color: #ffffff !important;">
 							<?php esc_html_e( 'Yes, Delete', 'frontend-dashboard' ); ?>
 						</button>
 					</div>
@@ -1021,20 +1552,20 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 			<!-- Modal 4: Delete All Options Confirmation -->
 			<div id="fed_status_delete_all_options_modal" class="fed-status-modal">
 				<div class="status-modal-content">
-					<div class="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-100 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-4 shadow-xs">
-						<i class="fas fa-radiation-alt"></i>
+					<div class="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-100 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-4 shadow-xs" style="background-color: #fff1f2 !important; color: #e11d48 !important;">
+						<i class="fas fa-radiation-alt" style="color: #e11d48 !important;"></i>
 					</div>
-					<h3 class="text-base sm:text-lg font-bold text-rose-600 mb-1.5">
+					<h3 class="text-base sm:text-lg font-bold mb-1.5" style="color: #e11d48 !important;">
 						<?php esc_html_e( 'Delete All Options?', 'frontend-dashboard' ); ?>
 					</h3>
-					<p class="text-xs text-slate-600 leading-relaxed mb-6">
+					<p class="text-xs leading-relaxed mb-6" style="color: #64748b !important;">
 						<?php esc_html_e( 'WARNING: This will permanently delete ALL Frontend Dashboard settings and configuration options from WordPress database. This action cannot be reversed.', 'frontend-dashboard' ); ?>
 					</p>
 					<div class="flex items-center justify-center gap-3">
-						<button type="button" class="fed-cancel-status-modal-btn px-5 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs sm:text-sm font-semibold transition-all cursor-pointer">
+						<button type="button" class="fed-cancel-status-modal-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer" style="background-color: #ffffff !important; color: #334155 !important; border: 1px solid #cbd5e1 !important;">
 							<?php esc_html_e( 'Cancel', 'frontend-dashboard' ); ?>
 						</button>
-						<button type="button" id="fed_confirm_delete_all_options_btn" class="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm active:scale-95" style="background-color: #e11d48 !important; color: #ffffff !important;">
+						<button type="button" id="fed_confirm_delete_all_options_btn" class="px-5 py-2.5 rounded-xl text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm active:scale-95" style="background-color: #e11d48 !important; color: #ffffff !important;">
 							<?php esc_html_e( 'Yes, Delete All Options', 'frontend-dashboard' ); ?>
 						</button>
 					</div>
@@ -1044,20 +1575,20 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 			<!-- Modal 5: Run Cron Confirmation -->
 			<div id="fed_status_run_cron_modal" class="fed-status-modal">
 				<div class="status-modal-content">
-					<div class="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-2xl mx-auto mb-4 shadow-xs">
-						<i class="fas fa-play"></i>
+					<div class="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-2xl mx-auto mb-4 shadow-xs" style="background-color: #eef2ff !important; color: #4f46e5 !important;">
+						<i class="fas fa-play" style="color: #4f46e5 !important;"></i>
 					</div>
-					<h3 class="text-base sm:text-lg font-bold text-slate-900 mb-1.5">
+					<h3 class="text-base sm:text-lg font-bold text-slate-900 mb-1.5" style="color: #0f172a !important;">
 						<?php esc_html_e( 'Execute Scheduled Cron?', 'frontend-dashboard' ); ?>
 					</h3>
-					<p class="text-xs text-slate-500 leading-relaxed mb-6">
-						<?php esc_html_e( 'Are you sure you want to manually trigger the cron hook', 'frontend-dashboard' ); ?> <span id="fed_run_cron_hook_name" class="font-mono font-bold text-indigo-600"></span> <?php esc_html_e( 'now?', 'frontend-dashboard' ); ?>
+					<p class="text-xs text-slate-500 leading-relaxed mb-6" style="color: #64748b !important;">
+						<?php esc_html_e( 'Are you sure you want to manually trigger the cron hook', 'frontend-dashboard' ); ?> <span id="fed_run_cron_hook_name" class="font-mono font-bold" style="color: #4f46e5 !important;"></span> <?php esc_html_e( 'now?', 'frontend-dashboard' ); ?>
 					</p>
 					<div class="flex items-center justify-center gap-3">
-						<button type="button" class="fed-cancel-status-modal-btn px-5 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs sm:text-sm font-semibold transition-all cursor-pointer">
+						<button type="button" class="fed-cancel-status-modal-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer" style="background-color: #ffffff !important; color: #334155 !important; border: 1px solid #cbd5e1 !important;">
 							<?php esc_html_e( 'Cancel', 'frontend-dashboard' ); ?>
 						</button>
-						<button type="button" id="fed_confirm_run_cron_btn" class="fed-btn-primary px-5 py-2.5 rounded-xl text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm active:scale-95" style="background-color: #4f46e5 !important; color: #ffffff !important;">
+						<button type="button" id="fed_confirm_run_cron_btn" class="px-5 py-2.5 rounded-xl text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm active:scale-95" style="background-color: #4f46e5 !important; color: #ffffff !important;">
 							<?php esc_html_e( 'Run Cron Task', 'frontend-dashboard' ); ?>
 						</button>
 					</div>
@@ -1067,20 +1598,20 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 			<!-- Modal 6: Clear Log Confirmation -->
 			<div id="fed_status_clear_log_modal" class="fed-status-modal">
 				<div class="status-modal-content">
-					<div class="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-100 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-4 shadow-xs">
-						<i class="fas fa-trash-alt"></i>
+					<div class="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-100 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-4 shadow-xs" style="background-color: #fff1f2 !important; color: #e11d48 !important;">
+						<i class="fas fa-trash-alt" style="color: #e11d48 !important;"></i>
 					</div>
-					<h3 class="text-base sm:text-lg font-bold text-slate-900 mb-1.5">
+					<h3 class="text-base sm:text-lg font-bold text-slate-900 mb-1.5" style="color: #0f172a !important;">
 						<?php esc_html_e( 'Clear System Activity Log?', 'frontend-dashboard' ); ?>
 					</h3>
-					<p class="text-xs text-slate-500 leading-relaxed mb-6">
+					<p class="text-xs text-slate-500 leading-relaxed mb-6" style="color: #64748b !important;">
 						<?php esc_html_e( 'Are you sure you want to clear dashboard.log? All recorded errors and debug records will be permanently erased.', 'frontend-dashboard' ); ?>
 					</p>
 					<div class="flex items-center justify-center gap-3">
-						<button type="button" class="fed-cancel-status-modal-btn px-5 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs sm:text-sm font-semibold transition-all cursor-pointer">
+						<button type="button" class="fed-cancel-status-modal-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer" style="background-color: #ffffff !important; color: #334155 !important; border: 1px solid #cbd5e1 !important;">
 							<?php esc_html_e( 'Cancel', 'frontend-dashboard' ); ?>
 						</button>
-						<button type="button" id="fed_confirm_clear_log_btn" class="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm active:scale-95" style="background-color: #e11d48 !important; color: #ffffff !important;">
+						<button type="button" id="fed_confirm_clear_log_btn" class="px-5 py-2.5 rounded-xl text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm active:scale-95" style="background-color: #e11d48 !important; color: #ffffff !important;">
 							<?php esc_html_e( 'Yes, Clear Log', 'frontend-dashboard' ); ?>
 						</button>
 					</div>
@@ -1090,20 +1621,20 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 			<!-- Modal 7: Create All Tables Confirmation -->
 			<div id="fed_status_create_tables_modal" class="fed-status-modal">
 				<div class="status-modal-content">
-					<div class="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-2xl mx-auto mb-4 shadow-xs">
-						<i class="fas fa-tools"></i>
+					<div class="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-2xl mx-auto mb-4 shadow-xs" style="background-color: #eef2ff !important; color: #4f46e5 !important;">
+						<i class="fas fa-tools" style="color: #4f46e5 !important;"></i>
 					</div>
-					<h3 class="text-base sm:text-lg font-bold text-slate-900 mb-1.5">
+					<h3 class="text-base sm:text-lg font-bold text-slate-900 mb-1.5" style="color: #0f172a !important;">
 						<?php esc_html_e( 'Create / Repair Database Schema?', 'frontend-dashboard' ); ?>
 					</h3>
-					<p class="text-xs text-slate-500 leading-relaxed mb-6">
+					<p class="text-xs text-slate-500 leading-relaxed mb-6" style="color: #64748b !important;">
 						<?php esc_html_e( 'This will verify and build any missing plugin tables and update the database schema using dbDelta. Existing data will not be lost.', 'frontend-dashboard' ); ?>
 					</p>
 					<div class="flex items-center justify-center gap-3">
-						<button type="button" class="fed-cancel-status-modal-btn px-5 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs sm:text-sm font-semibold transition-all cursor-pointer">
+						<button type="button" class="fed-cancel-status-modal-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer" style="background-color: #ffffff !important; color: #334155 !important; border: 1px solid #cbd5e1 !important;">
 							<?php esc_html_e( 'Cancel', 'frontend-dashboard' ); ?>
 						</button>
-						<button type="button" id="fed_confirm_create_tables_btn" class="fed-btn-primary px-5 py-2.5 rounded-xl text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm active:scale-95" style="background-color: #4f46e5 !important; color: #ffffff !important;">
+						<button type="button" id="fed_confirm_create_tables_btn" class="px-5 py-2.5 rounded-xl text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm active:scale-95" style="background-color: #4f46e5 !important; color: #ffffff !important;">
 							<?php esc_html_e( 'Run Schema Builder', 'frontend-dashboard' ); ?>
 						</button>
 					</div>
@@ -1113,21 +1644,162 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 			<!-- Modal 8: Optimize Tables Confirmation -->
 			<div id="fed_status_optimize_tables_modal" class="fed-status-modal">
 				<div class="status-modal-content">
-					<div class="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-2xl mx-auto mb-4 shadow-xs">
-						<i class="fas fa-wrench"></i>
+					<div class="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-2xl mx-auto mb-4 shadow-xs" style="background-color: #eef2ff !important; color: #4f46e5 !important;">
+						<i class="fas fa-wrench" style="color: #4f46e5 !important;"></i>
 					</div>
-					<h3 class="text-base sm:text-lg font-bold text-slate-900 mb-1.5">
+					<h3 class="text-base sm:text-lg font-bold text-slate-900 mb-1.5" style="color: #0f172a !important;">
 						<?php esc_html_e( 'Optimize & Repair All Tables?', 'frontend-dashboard' ); ?>
 					</h3>
-					<p class="text-xs text-slate-500 leading-relaxed mb-6">
+					<p class="text-xs text-slate-500 leading-relaxed mb-6" style="color: #64748b !important;">
 						<?php esc_html_e( 'This will perform MySQL table optimization and defragmentation on all Frontend Dashboard database tables.', 'frontend-dashboard' ); ?>
 					</p>
 					<div class="flex items-center justify-center gap-3">
-						<button type="button" class="fed-cancel-status-modal-btn px-5 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs sm:text-sm font-semibold transition-all cursor-pointer">
+						<button type="button" class="fed-cancel-status-modal-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer" style="background-color: #ffffff !important; color: #334155 !important; border: 1px solid #cbd5e1 !important;">
 							<?php esc_html_e( 'Cancel', 'frontend-dashboard' ); ?>
 						</button>
-						<button type="button" id="fed_confirm_optimize_tables_btn" class="fed-btn-primary px-5 py-2.5 rounded-xl text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm active:scale-95" style="background-color: #4f46e5 !important; color: #ffffff !important;">
+						<button type="button" id="fed_confirm_optimize_tables_btn" class="px-5 py-2.5 rounded-xl text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm active:scale-95" style="background-color: #4f46e5 !important; color: #ffffff !important;">
 							<?php esc_html_e( 'Start Optimization', 'frontend-dashboard' ); ?>
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- Modal 9: Seed Pages Confirmation -->
+			<div id="fed_status_seed_pages_modal" class="fed-status-modal">
+				<div class="status-modal-content">
+					<div class="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-2xl mx-auto mb-4 shadow-xs" style="background-color: #eef2ff !important; color: #4f46e5 !important;">
+						<i class="fas fa-file-invoice" style="color: #4f46e5 !important;"></i>
+					</div>
+					<h3 class="text-base sm:text-lg font-bold text-slate-900 mb-1.5" style="color: #0f172a !important;">
+						<?php esc_html_e( 'Seed Core Pages & Login Settings?', 'frontend-dashboard' ); ?>
+					</h3>
+					<p class="text-xs text-slate-500 leading-relaxed mb-6" style="color: #64748b !important;">
+						<?php esc_html_e( 'This will create or verify essential pages (/dashboard/, /login/, /register/, /forgot-password/) and automatically assign their IDs into Dashboard Settings > Login > Settings.', 'frontend-dashboard' ); ?>
+					</p>
+					<div class="flex items-center justify-center gap-3">
+						<button type="button" class="fed-cancel-status-modal-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer" style="background-color: #ffffff !important; color: #334155 !important; border: 1px solid #cbd5e1 !important;">
+							<?php esc_html_e( 'Cancel', 'frontend-dashboard' ); ?>
+						</button>
+						<button type="button" id="fed_confirm_seed_pages_btn" class="px-5 py-2.5 rounded-xl text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm active:scale-95" style="background-color: #4f46e5 !important; color: #ffffff !important;">
+							<?php esc_html_e( 'Seed & Map Pages', 'frontend-dashboard' ); ?>
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- Modal 10: Seed Menus Confirmation -->
+			<div id="fed_status_seed_menus_modal" class="fed-status-modal">
+				<div class="status-modal-content">
+					<div class="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-2xl mx-auto mb-4 shadow-xs" style="background-color: #eef2ff !important; color: #4f46e5 !important;">
+						<i class="fas fa-bars" style="color: #4f46e5 !important;"></i>
+					</div>
+					<h3 class="text-base sm:text-lg font-bold text-slate-900 mb-1.5" style="color: #0f172a !important;">
+						<?php esc_html_e( 'Seed Standard Menus?', 'frontend-dashboard' ); ?>
+					</h3>
+					<p class="text-xs text-slate-500 leading-relaxed mb-6" style="color: #64748b !important;">
+						<?php esc_html_e( 'This will populate the standard frontend dashboard sidebar navigation items (Dashboard, Profile, Posts, Payments, Logout) in the database table.', 'frontend-dashboard' ); ?>
+					</p>
+					<div class="flex items-center justify-center gap-3">
+						<button type="button" class="fed-cancel-status-modal-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer" style="background-color: #ffffff !important; color: #334155 !important; border: 1px solid #cbd5e1 !important;">
+							<?php esc_html_e( 'Cancel', 'frontend-dashboard' ); ?>
+						</button>
+						<button type="button" id="fed_confirm_seed_menus_btn" class="px-5 py-2.5 rounded-xl text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm active:scale-95" style="background-color: #4f46e5 !important; color: #ffffff !important;">
+							<?php esc_html_e( 'Seed Menus', 'frontend-dashboard' ); ?>
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- Modal 11: Seed Profile Fields Confirmation -->
+			<div id="fed_status_seed_profile_fields_modal" class="fed-status-modal">
+				<div class="status-modal-content">
+					<div class="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-2xl mx-auto mb-4 shadow-xs" style="background-color: #eef2ff !important; color: #4f46e5 !important;">
+						<i class="fas fa-user-edit" style="color: #4f46e5 !important;"></i>
+					</div>
+					<h3 class="text-base sm:text-lg font-bold text-slate-900 mb-1.5" style="color: #0f172a !important;">
+						<?php esc_html_e( 'Seed Profile Fields Schema?', 'frontend-dashboard' ); ?>
+					</h3>
+					<p class="text-xs text-slate-500 leading-relaxed mb-6" style="color: #64748b !important;">
+						<?php esc_html_e( 'This will initialize the standard profile field metadata schema (First Name, Last Name, Email, Bio, etc.) for frontend user editing.', 'frontend-dashboard' ); ?>
+					</p>
+					<div class="flex items-center justify-center gap-3">
+						<button type="button" class="fed-cancel-status-modal-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer" style="background-color: #ffffff !important; color: #334155 !important; border: 1px solid #cbd5e1 !important;">
+							<?php esc_html_e( 'Cancel', 'frontend-dashboard' ); ?>
+						</button>
+						<button type="button" id="fed_confirm_seed_profile_fields_btn" class="px-5 py-2.5 rounded-xl text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm active:scale-95" style="background-color: #4f46e5 !important; color: #ffffff !important;">
+							<?php esc_html_e( 'Seed Profile Fields', 'frontend-dashboard' ); ?>
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- Modal 12: Run Full Suite Confirmation -->
+			<div id="fed_status_seed_all_modal" class="fed-status-modal">
+				<div class="status-modal-content">
+					<div class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 shadow-xs" style="background-color: #1e1b4b !important; color: #fbbf24 !important; border: 1px solid #312e81 !important;">
+						<i class="fas fa-bolt" style="color: #fbbf24 !important;"></i>
+					</div>
+					<h3 class="text-base sm:text-lg font-bold text-slate-900 mb-1.5" style="color: #0f172a !important;">
+						<?php esc_html_e( 'Run Complete Bootstrap Suite?', 'frontend-dashboard' ); ?>
+					</h3>
+					<p class="text-xs text-slate-500 leading-relaxed mb-6" style="color: #64748b !important;">
+						<?php esc_html_e( 'This will execute the entire setup: repair tables, create & map core pages to login settings, populate navigation menus, and seed profile fields.', 'frontend-dashboard' ); ?>
+					</p>
+					<div class="flex items-center justify-center gap-3">
+						<button type="button" class="fed-cancel-status-modal-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer" style="background-color: #ffffff !important; color: #334155 !important; border: 1px solid #cbd5e1 !important;">
+							<?php esc_html_e( 'Cancel', 'frontend-dashboard' ); ?>
+						</button>
+						<button type="button" id="fed_confirm_seed_all_btn" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer shadow-sm active:scale-95" style="background-color: #4f46e5 !important; color: #ffffff !important;">
+							<i class="fas fa-bolt text-amber-300 text-xs mr-1" style="color: #fde047 !important;"></i>
+							<span style="color: #ffffff !important;"><?php esc_html_e( 'Run Complete Suite', 'frontend-dashboard' ); ?></span>
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- Modal 13: Purge / Reset Seeded Data Confirmation -->
+			<div id="fed_status_purge_all_modal" class="fed-status-modal">
+				<div class="status-modal-content">
+					<div class="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-100 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-4 shadow-xs" style="background-color: #fff1f2 !important; color: #e11d48 !important;">
+						<i class="fas fa-trash-alt" style="color: #e11d48 !important;"></i>
+					</div>
+					<h3 class="text-base sm:text-lg font-bold text-slate-900 mb-1.5" style="color: #0f172a !important;">
+						<?php esc_html_e( 'Purge / Reset Seeded Data?', 'frontend-dashboard' ); ?>
+					</h3>
+					<p class="text-xs text-slate-500 leading-relaxed mb-6" style="color: #64748b !important;">
+						<?php esc_html_e( 'This will permanently delete the seeded pages (/dashboard, /login, /register, /forgot-password), unbind login page mappings from settings, and remove standard navigation menu items. This action is logged to the Activity Log.', 'frontend-dashboard' ); ?>
+					</p>
+					<div class="flex items-center justify-center gap-3">
+						<button type="button" class="fed-cancel-status-modal-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer" style="background-color: #ffffff !important; color: #334155 !important; border: 1px solid #cbd5e1 !important;">
+							<?php esc_html_e( 'Cancel', 'frontend-dashboard' ); ?>
+						</button>
+						<button type="button" id="fed_confirm_purge_all_btn" class="px-5 py-2.5 rounded-xl text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm active:scale-95" style="background-color: #e11d48 !important; color: #ffffff !important;">
+							<i class="fas fa-trash-alt text-xs mr-1" style="color: #ffffff !important;"></i>
+							<span style="color: #ffffff !important;"><?php esc_html_e( 'Yes, Purge Seeded Data', 'frontend-dashboard' ); ?></span>
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- Modal 14: Clear Activity Log History Confirmation -->
+			<div id="fed_status_clear_activity_modal" class="fed-status-modal">
+				<div class="status-modal-content">
+					<div class="w-14 h-14 rounded-2xl bg-rose-50 border border-rose-100 text-rose-600 flex items-center justify-center text-2xl mx-auto mb-4 shadow-xs" style="background-color: #fff1f2 !important; color: #e11d48 !important;">
+						<i class="fas fa-history" style="color: #e11d48 !important;"></i>
+					</div>
+					<h3 class="text-base sm:text-lg font-bold text-slate-900 mb-1.5" style="color: #0f172a !important;">
+						<?php esc_html_e( 'Clear Audit & Activity History?', 'frontend-dashboard' ); ?>
+					</h3>
+					<p class="text-xs text-slate-500 leading-relaxed mb-6" style="color: #64748b !important;">
+						<?php esc_html_e( 'Are you sure you want to truncate the activity log table? All audit trail entries recorded in MySQL will be permanently removed.', 'frontend-dashboard' ); ?>
+					</p>
+					<div class="flex items-center justify-center gap-3">
+						<button type="button" class="fed-cancel-status-modal-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer" style="background-color: #ffffff !important; color: #334155 !important; border: 1px solid #cbd5e1 !important;">
+							<?php esc_html_e( 'Cancel', 'frontend-dashboard' ); ?>
+						</button>
+						<button type="button" id="fed_confirm_clear_activity_btn" class="px-5 py-2.5 rounded-xl text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm active:scale-95" style="background-color: #e11d48 !important; color: #ffffff !important;">
+							<i class="fas fa-trash-alt text-xs mr-1" style="color: #ffffff !important;"></i>
+							<span style="color: #ffffff !important;"><?php esc_html_e( 'Yes, Clear Audit Log', 'frontend-dashboard' ); ?></span>
 						</button>
 					</div>
 				</div>
@@ -1189,14 +1861,49 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 					}, 3500);
 				}
 
-				// Tab Navigation
+				// Main Tab Navigation
 				function switchTab(tabKey) {
 					if (!tabKey) return;
+					
+					// Normalize tab aliases
+					if (tabKey === 'cron_jobs') tabKey = 'scheduled_crons';
+					if (tabKey === 'file_logs' || tabKey === 'activity_file_log') {
+						tabKey = 'activity_log';
+						switchSubTab('activity_file_log');
+					} else if (tabKey === 'activity_db_log') {
+						tabKey = 'activity_log';
+						switchSubTab('activity_db_log');
+					} else if (tabKey === 'database_tables' || tabKey === 'plugin_options') {
+						var subKey = tabKey;
+						tabKey = 'database';
+						switchSubTab(subKey);
+					}
+
 					$('.fed-main-tab-btn').removeClass('fed-tab-active');
 					$('.fed-main-tab-btn[data-tab="' + tabKey + '"]').addClass('fed-tab-active');
 
 					$('.fed-status-pane').addClass('hidden').removeClass('block');
 					$('#pane_' + tabKey).removeClass('hidden').addClass('block');
+				}
+
+				// Sub-Tab Navigation (Scoped to active parent tab)
+				function switchSubTab(subKey) {
+					if (!subKey) return;
+					var $btn = $('.fed-sub-tab-btn[data-subtab="' + subKey + '"]');
+					var $bar = $btn.closest('[role="tablist"]');
+					if ($bar.length) {
+						$bar.find('.fed-sub-tab-btn').removeClass('fed-subtab-active bg-indigo-50 text-indigo-700 border-indigo-200').addClass('text-slate-600 border-transparent');
+						$btn.addClass('fed-subtab-active bg-indigo-50 text-indigo-700 border-indigo-200').removeClass('text-slate-600 border-transparent');
+					}
+
+					var $subpane = $('#subpane_' + subKey);
+					if ($subpane.length) {
+						var $parentPane = $subpane.closest('.fed-status-pane');
+						if ($parentPane.length) {
+							$parentPane.find('.fed-sub-pane').addClass('hidden').removeClass('block');
+							$subpane.removeClass('hidden').addClass('block');
+						}
+					}
 				}
 
 				$(document).on('click', '.fed-main-tab-btn', function(e) {
@@ -1210,9 +1917,33 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 					}
 				});
 
+				$(document).on('click', '.fed-sub-tab-btn', function(e) {
+					e.preventDefault();
+					var subKey = $(this).data('subtab');
+					switchSubTab(subKey);
+					if (history.pushState) {
+						history.pushState(null, null, '#' + subKey);
+					} else {
+						location.hash = '#' + subKey;
+					}
+				});
+
 				var hash = window.location.hash ? window.location.hash.replace('#', '') : '';
-				if (hash && $('#pane_' + hash).length) {
-					switchTab(hash);
+				if (hash) {
+					if ($('#pane_' + hash).length) {
+						switchTab(hash);
+					} else if (hash === 'database_tables' || hash === 'plugin_options') {
+						switchTab('database');
+						switchSubTab(hash);
+					} else if (hash === 'activity_db_log' || hash === 'activity_file_log') {
+						switchTab('activity_log');
+						switchSubTab(hash);
+					} else if (hash === 'cron_jobs') {
+						switchTab('scheduled_crons');
+					} else if (hash === 'file_logs') {
+						switchTab('activity_log');
+						switchSubTab('activity_file_log');
+					}
 				}
 
 				// Modal Helpers
@@ -1566,6 +2297,365 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 						location.reload();
 					}, 300);
 				});
+
+				// ==========================================
+				// SEEDER ACTIONS & TRIGGERS
+				// ==========================================
+				
+				// 1. Seed Core Pages Trigger
+				$('#fed_action_seed_pages_btn').on('click', function(e) {
+					e.preventDefault();
+					openModal($('#fed_status_seed_pages_modal'));
+				});
+
+				$('#fed_confirm_seed_pages_btn').on('click', function(e) {
+					e.preventDefault();
+					closeModal($('#fed_status_seed_pages_modal'));
+					showLoader('Bootstrapping Core Pages', 'Creating /dashboard/, /login/, /register/, /forgot-password/ and updating Settings...');
+
+					$.ajax({
+						type: 'POST',
+						url: ajaxUrl,
+						data: {
+							action: 'fed_tools_seed_pages',
+							fed_nonce: nonce
+						},
+						success: function(res) {
+							hideLoader();
+							if (res && res.success) {
+								showToast(res.data.message, false);
+								setTimeout(function() { location.reload(); }, 700);
+							} else {
+								showToast(res.data && res.data.message ? res.data.message : 'Error seeding pages.', true);
+							}
+						},
+						error: function() {
+							hideLoader();
+							showToast('Server error creating pages.', true);
+						}
+					});
+				});
+
+				// 2. Seed Menus Trigger
+				$('#fed_action_seed_menus_btn').on('click', function(e) {
+					e.preventDefault();
+					openModal($('#fed_status_seed_menus_modal'));
+				});
+
+				$('#fed_confirm_seed_menus_btn').on('click', function(e) {
+					e.preventDefault();
+					closeModal($('#fed_status_seed_menus_modal'));
+					showLoader('Seeding Navigation Menus', 'Populating standard dashboard sidebar menu tabs...');
+
+					$.ajax({
+						type: 'POST',
+						url: ajaxUrl,
+						data: {
+							action: 'fed_tools_seed_menus',
+							fed_nonce: nonce
+						},
+						success: function(res) {
+							hideLoader();
+							if (res && res.success) {
+								showToast(res.data.message, false);
+								setTimeout(function() { location.reload(); }, 700);
+							} else {
+								showToast(res.data && res.data.message ? res.data.message : 'Error seeding menus.', true);
+							}
+						},
+						error: function() {
+							hideLoader();
+							showToast('Server error seeding menus.', true);
+						}
+					});
+				});
+
+				// 3. Seed Profile Fields Trigger
+				$('#fed_action_seed_profile_fields_btn').on('click', function(e) {
+					e.preventDefault();
+					openModal($('#fed_status_seed_profile_fields_modal'));
+				});
+
+				$('#fed_confirm_seed_profile_fields_btn').on('click', function(e) {
+					e.preventDefault();
+					closeModal($('#fed_status_seed_profile_fields_modal'));
+					showLoader('Seeding Profile Schema', 'Initializing default user profile fields...');
+
+					$.ajax({
+						type: 'POST',
+						url: ajaxUrl,
+						data: {
+							action: 'fed_tools_seed_profile_fields',
+							fed_nonce: nonce
+						},
+						success: function(res) {
+							hideLoader();
+							if (res && res.success) {
+								showToast(res.data.message, false);
+								setTimeout(function() { location.reload(); }, 700);
+							} else {
+								showToast(res.data && res.data.message ? res.data.message : 'Error seeding profile fields.', true);
+							}
+						},
+						error: function() {
+							hideLoader();
+							showToast('Server error seeding profile fields.', true);
+						}
+					});
+				});
+
+				// 4. Seed All 1-Click Suite Trigger
+				$('#fed_action_seed_all_btn').on('click', function(e) {
+					e.preventDefault();
+					openModal($('#fed_status_seed_all_modal'));
+				});
+
+				$('#fed_confirm_seed_all_btn').on('click', function(e) {
+					e.preventDefault();
+					closeModal($('#fed_status_seed_all_modal'));
+					showLoader('Running Bootstrap Suite', 'Executing full installation: DB tables, core pages, login mapping, menus, and profile schema...');
+
+					$.ajax({
+						type: 'POST',
+						url: ajaxUrl,
+						data: {
+							action: 'fed_tools_seed_all',
+							fed_nonce: nonce
+						},
+						success: function(res) {
+							hideLoader();
+							if (res && res.success) {
+								showToast(res.data.message, false);
+								setTimeout(function() { location.reload(); }, 800);
+							} else {
+								showToast(res.data && res.data.message ? res.data.message : 'Error running bootstrap suite.', true);
+							}
+						},
+						error: function() {
+							hideLoader();
+							showToast('Server error running bootstrap suite.', true);
+						}
+					});
+				});
+
+				// 5. Purge / Reset Seeded Data Trigger
+				$('#fed_action_purge_all_btn').on('click', function(e) {
+					e.preventDefault();
+					openModal($('#fed_status_purge_all_modal'));
+				});
+
+				$('#fed_confirm_purge_all_btn').on('click', function(e) {
+					e.preventDefault();
+					closeModal($('#fed_status_purge_all_modal'));
+					showLoader('Purging Seeded Data', 'Deleting core pages, unbinding login routes, and removing default menus...');
+
+					$.ajax({
+						type: 'POST',
+						url: ajaxUrl,
+						data: {
+							action: 'fed_tools_purge_all',
+							fed_nonce: nonce
+						},
+						success: function(res) {
+							hideLoader();
+							if (res && res.success) {
+								showToast(res.data.message, false);
+								setTimeout(function() { location.reload(); }, 800);
+							} else {
+								showToast(res.data && res.data.message ? res.data.message : 'Error purging seeded data.', true);
+							}
+						},
+						error: function() {
+							hideLoader();
+							showToast('Server error during purge operation.', true);
+						}
+					});
+				});
+
+				// ==========================================
+				// ACTIVITY LOG AUDIT ACTIONS & PAGINATION
+				// ==========================================
+
+				var activityCurrentPage = 1;
+				var activityPageSize    = parseInt($('#fed_activity_per_page').val(), 10) || 25;
+				var matchingRows        = [];
+
+				function renderActivityPagination() {
+					var q   = $.trim($('#fed_activity_search_input').val()).toLowerCase();
+					var cat = $.trim($('#fed_activity_filter_select').val()).toLowerCase();
+					matchingRows = [];
+
+					// 1. Identify all matching rows based on search & category
+					$('.fed-activity-row').each(function() {
+						var rowSearch = ($(this).data('search') || '').toString().toLowerCase();
+						var rowCat    = ($(this).data('category') || '').toString().toLowerCase();
+
+						var matchSearch = (!q || rowSearch.indexOf(q) !== -1);
+						var matchCat    = (!cat || rowCat === cat);
+
+						if (matchSearch && matchCat) {
+							matchingRows.push($(this));
+						} else {
+							$(this).addClass('hidden');
+						}
+					});
+
+					var totalMatching = matchingRows.length;
+					var totalPages    = Math.ceil(totalMatching / activityPageSize) || 1;
+
+					if (activityCurrentPage > totalPages) {
+						activityCurrentPage = totalPages;
+					}
+					if (activityCurrentPage < 1) {
+						activityCurrentPage = 1;
+					}
+
+					var startIndex = (activityCurrentPage - 1) * activityPageSize;
+					var endIndex   = Math.min(startIndex + activityPageSize, totalMatching);
+
+					// 2. Hide all rows first, then reveal only current page slice
+					$('.fed-activity-row').addClass('hidden');
+					for (var i = startIndex; i < endIndex; i++) {
+						matchingRows[i].removeClass('hidden');
+					}
+
+					// 3. Show/hide empty search state
+					if (totalMatching === 0 && $('.fed-activity-row').length > 0) {
+						$('#fed_activity_no_search_results_row').removeClass('hidden');
+						$('#fed_activity_pagination_bar').addClass('hidden');
+					} else {
+						$('#fed_activity_no_search_results_row').addClass('hidden');
+						$('#fed_activity_pagination_bar').removeClass('hidden');
+					}
+
+					// 4. Update info label
+					if (totalMatching > 0) {
+						$('#fed_activity_pagination_info').text('Showing ' + (startIndex + 1) + ' to ' + endIndex + ' of ' + totalMatching + ' entries');
+					} else {
+						$('#fed_activity_pagination_info').text('Showing 0 entries');
+					}
+
+					// 5. Update prev/next button states
+					$('#fed_activity_prev_btn').prop('disabled', activityCurrentPage <= 1);
+					$('#fed_activity_next_btn').prop('disabled', activityCurrentPage >= totalPages);
+
+					// 6. Build page number buttons (smart window around current page)
+					var $numWrap = $('#fed_activity_page_numbers');
+					$numWrap.empty();
+
+					if (totalPages > 1) {
+						var startPage = Math.max(1, activityCurrentPage - 2);
+						var endPage   = Math.min(totalPages, activityCurrentPage + 2);
+
+						if (startPage > 1) {
+							$numWrap.append('<button type="button" class="fed-page-btn h-8 w-8 rounded-xl border border-slate-200 bg-white text-slate-700 text-xs font-semibold hover:bg-slate-50 cursor-pointer" data-page="1">1</button>');
+							if (startPage > 2) {
+								$numWrap.append('<span class="text-slate-400 text-xs px-1">...</span>');
+							}
+						}
+
+						for (var p = startPage; p <= endPage; p++) {
+							var activeCls = (p === activityCurrentPage) ? 'bg-indigo-600 text-white font-bold border-indigo-600 shadow-xs' : 'bg-white text-slate-700 font-semibold border-slate-200 hover:bg-slate-50';
+							$numWrap.append('<button type="button" class="fed-page-btn h-8 w-8 rounded-xl border ' + activeCls + ' text-xs cursor-pointer" data-page="' + p + '">' + p + '</button>');
+						}
+
+						if (endPage < totalPages) {
+							if (endPage < totalPages - 1) {
+								$numWrap.append('<span class="text-slate-400 text-xs px-1">...</span>');
+							}
+							$numWrap.append('<button type="button" class="fed-page-btn h-8 w-8 rounded-xl border border-slate-200 bg-white text-slate-700 text-xs font-semibold hover:bg-slate-50 cursor-pointer" data-page="' + totalPages + '">' + totalPages + '</button>');
+						}
+					}
+				}
+
+				// Initial pagination render
+				renderActivityPagination();
+
+				$('#fed_activity_search_input').on('input keyup', function() {
+					activityCurrentPage = 1;
+					renderActivityPagination();
+				});
+
+				$('#fed_activity_filter_select').on('change', function() {
+					activityCurrentPage = 1;
+					renderActivityPagination();
+				});
+
+				$('#fed_activity_per_page').on('change', function() {
+					activityPageSize    = parseInt($(this).val(), 10) || 25;
+					activityCurrentPage = 1;
+					renderActivityPagination();
+				});
+
+				$(document).on('click', '#fed_activity_prev_btn', function(e) {
+					e.preventDefault();
+					if (activityCurrentPage > 1) {
+						activityCurrentPage--;
+						renderActivityPagination();
+					}
+				});
+
+				$(document).on('click', '#fed_activity_next_btn', function(e) {
+					e.preventDefault();
+					var totalPages = Math.ceil(matchingRows.length / activityPageSize) || 1;
+					if (activityCurrentPage < totalPages) {
+						activityCurrentPage++;
+						renderActivityPagination();
+					}
+				});
+
+				$(document).on('click', '.fed-page-btn', function(e) {
+					e.preventDefault();
+					var p = parseInt($(this).data('page'), 10);
+					if (p && p !== activityCurrentPage) {
+						activityCurrentPage = p;
+						renderActivityPagination();
+					}
+				});
+
+				// Refresh Activity Log Trigger
+				$('#fed_action_refresh_activity_btn').on('click', function(e) {
+					e.preventDefault();
+					showLoader('Refreshing Audit Trail', 'Loading recent database activity logs...');
+					setTimeout(function() {
+						location.reload();
+					}, 300);
+				});
+
+				// Clear Database Activity Log Trigger
+				$('#fed_action_clear_activity_btn').on('click', function(e) {
+					e.preventDefault();
+					openModal($('#fed_status_clear_activity_modal'));
+				});
+
+				$('#fed_confirm_clear_activity_btn').on('click', function(e) {
+					e.preventDefault();
+					closeModal($('#fed_status_clear_activity_modal'));
+					showLoader('Clearing Activity History', 'Truncating activity log database table...');
+
+					$.ajax({
+						type: 'POST',
+						url: ajaxUrl,
+						data: {
+							action: 'fed_tools_clear_activity_log',
+							fed_nonce: nonce
+						},
+						success: function(res) {
+							hideLoader();
+							if (res && res.success) {
+								showToast(res.data.message, false);
+								setTimeout(function() { location.reload(); }, 700);
+							} else {
+								showToast(res.data && res.data.message ? res.data.message : 'Error clearing activity log.', true);
+							}
+						},
+						error: function() {
+							hideLoader();
+							showToast('Server error clearing activity log.', true);
+						}
+					});
+				});
+
 			});
 		})(jQuery);
 		</script>
