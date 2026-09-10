@@ -26,23 +26,32 @@ class AssetManager {
 	}
 
 	public function enqueue_scripts() {
+		$context    = is_admin() ? 'admin' : 'frontend';
+		$db_scripts = get_option( 'fed_general_scripts_styles', array() );
+		$is_style_disabled  = isset( $db_scripts[ $context ]['styles']['fed-style'] );
+		$is_script_disabled = isset( $db_scripts[ $context ]['scripts']['fed-main'] );
+
 		if ( $this->is_dev ) {
 			// Enqueue Vite client for HMR
-			wp_enqueue_script( 'fed-vite-client', 'http://localhost:3000/@vite/client', [], null, true );
-			wp_enqueue_script( 'fed-main', 'http://localhost:3000/assets/js/main.js', [], null, true );
-			wp_enqueue_style( 'fed-style', 'http://localhost:3000/assets/css/main.css', [], null );
+			if ( ! $is_script_disabled ) {
+				wp_enqueue_script( 'fed-vite-client', 'http://localhost:3000/@vite/client', [], null, true );
+				wp_enqueue_script( 'fed-main', 'http://localhost:3000/assets/js/main.js', [], null, true );
+			}
+			if ( ! $is_style_disabled ) {
+				wp_enqueue_style( 'fed-style', 'http://localhost:3000/assets/css/main.css', [], null );
+			}
 		} else {
 			// Production: read manifest.json
 			$manifest_path = BC_FED_PLUGIN_DIR . '/assets/dist/.vite/manifest.json';
 			if ( file_exists( $manifest_path ) ) {
 				$manifest = json_decode( file_get_contents( $manifest_path ), true );
 				
-				if ( isset( $manifest['assets/js/main.js'] ) ) {
+				if ( ! $is_script_disabled && isset( $manifest['assets/js/main.js'] ) ) {
 					$js_file = $manifest['assets/js/main.js']['file'];
 					wp_enqueue_script( 'fed-main', BC_FED_PLUGIN_URL . '/assets/dist/' . $js_file, [], $this->version, true );
 				}
 				
-				if ( isset( $manifest['assets/css/main.css'] ) ) {
+				if ( ! $is_style_disabled && isset( $manifest['assets/css/main.css'] ) ) {
 					$css_file = $manifest['assets/css/main.css']['file'];
 					wp_enqueue_style( 'fed-style', BC_FED_PLUGIN_URL . '/assets/dist/' . $css_file, [], $this->version );
 				}

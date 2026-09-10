@@ -507,6 +507,14 @@ Upload Image
 /**
 Loader
 **/
+.bc_fed .hide,
+.fed_admin_menu .hide,
+.preview-area.hide,
+.preview-area.hidden,
+.hide {
+	display: none !important;
+}
+
 .bc_fed .preview-area {
 	width: 300px;
 	height: 300px;
@@ -522,6 +530,13 @@ Loader
 	justify-content: center;
 	align-items: center;
 	flex-direction: column;
+}
+
+.bc_fed .preview-area.hide,
+.bc_fed .preview-area.hidden,
+.preview-area.hide,
+.preview-area.hidden {
+	display: none !important;
 }
 
 .fed_bg_gray {

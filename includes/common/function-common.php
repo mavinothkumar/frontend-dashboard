@@ -77,14 +77,15 @@ if ( ! function_exists( 'fed_loader' ) ) {
 	 * @return string
 	 */
 	function fed_loader( $hide = 'hide', $message = null ) {
-		$html = '<div class="preview-area ' . $hide . '">
+		$hide_class = ( 'hide' === $hide || 'hidden' === $hide ) ? 'hide hidden' : $hide;
+		$html = '<div class="preview-area ' . esc_attr( $hide_class ) . '">
         <div class="spinner_circle">
             <div class="double-bounce1"></div>
             <div class="double-bounce2"></div>
         </div>';
 
 		if ( $message ) {
-			$html .= '<div class="fed_loader_message hide">' . $message . '</div>';
+			$html .= '<div class="fed_loader_message hide hidden">' . $message . '</div>';
 		}
 
 		$html .= '</div>';

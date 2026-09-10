@@ -458,13 +458,15 @@ jQuery( document ).ready(
 		$( '#fed_admin_setting_tabs a' ).click(
 			function ( e ) {
 				e.preventDefault();
-				$( this ).tab( 'show' );
+				if ( typeof $.fn.tab === 'function' ) {
+					$( this ).tab( 'show' );
+				}
 			}
 		);
 
 		var hash = document.location.hash;
 		var prefix = "tab_";
-		if ( hash ) {
+		if ( hash && typeof $.fn.tab === 'function' ) {
 			$( '.nav-tabs a[href="' + hash.replace( prefix, "" ) + '"]' ).tab( 'show' );
 		}
 		// Change hash for page-reload.
@@ -493,19 +495,115 @@ jQuery( document ).ready(
 			}
 		);
 
-		body.on(
-			"click", "div[data-id].fed_single_fa ", function () {
-				var menu_name = $( this ).closest( '.modal-body' ).find( '#fed_menu_box_id' ).val();
-				body.find( "." + menu_name ).val( $( this ).data( "id" ) );
-			}
-		);
+		// --- Modern Icon Picker Modal Logic ---
+		function getIconModal() {
+			return $( '#fed_icon_picker_modal, .fed_show_fa_list' );
+		}
 
-		$( '.fed_show_fa_list' ).on(
-			'show.bs.modal', function ( e ) {
-				var click = $( e.relatedTarget ).data( 'fed_menu_box_id' );
-				body.find( '#fed_menu_box_id' ).val( click );
+		function openIconModal( targetName ) {
+			var $modal = getIconModal();
+			if ( ! $modal.length ) return;
+			$modal.find( '#fed_menu_box_id' ).val( targetName || '' );
+			$modal.removeClass( 'hidden opacity-0 pointer-events-none' )
+				.addClass( 'opacity-100 pointer-events-auto flex' )
+				.attr( 'style', 'display: flex !important; z-index: 999999 !important;' );
+			$modal.find( '.fed-icon-modal-dialog' )
+				.removeClass( 'scale-95 opacity-0' )
+				.addClass( 'scale-100 opacity-100' );
+			$modal.find( '#fed_global_icon_search' ).val( '' ).focus();
+			$modal.find( '.fed_single_fa' ).show();
+			var totalIcons = $modal.find( '.fed_single_fa' ).length;
+			$modal.find( '#fed_global_icon_count_display' ).text( totalIcons + ' icons available' );
+		}
+
+		function closeIconModal() {
+			var $modal = getIconModal();
+			if ( ! $modal.length ) return;
+			$modal.find( '.fed-icon-modal-dialog' )
+				.removeClass( 'scale-100 opacity-100' )
+				.addClass( 'scale-95 opacity-0' );
+			setTimeout( function () {
+				$modal.removeClass( 'opacity-100 pointer-events-auto flex' )
+					.addClass( 'hidden opacity-0 pointer-events-none' )
+					.attr( 'style', 'display: none !important;' );
+			}, 150 );
+		}
+
+		// Trigger to Open Modal
+		body.on( 'click', '[data-target=".fed_show_fa_list"], [data-target="#fed_icon_picker_modal"], #fed_trigger_icon_picker, .fed_icon_picker_trigger', function ( e ) {
+			e.preventDefault();
+			var target = $( this ).data( 'fed_menu_box_id' ) || $( this ).data( 'target_input' ) || $( this ).attr( 'name' ) || 'fed_form_menu_icon';
+			openIconModal( target );
+		} );
+
+		// Close Modal
+		body.on( 'click', '.fed_close_icon_modal', function ( e ) {
+			e.preventDefault();
+			closeIconModal();
+		} );
+
+		// Close on Backdrop Click
+		body.on( 'click', '#fed_icon_picker_modal, .fed_show_fa_list', function ( e ) {
+			if ( $( e.target ).is( '#fed_icon_picker_modal, .fed_show_fa_list' ) ) {
+				closeIconModal();
 			}
-		);
+		} );
+
+		// Close on Escape Key
+		$( document ).on( 'keydown', function ( e ) {
+			var $modal = getIconModal();
+			if ( e.key === 'Escape' && $modal.is( ':visible' ) && ! $modal.hasClass( 'hidden' ) ) {
+				closeIconModal();
+			}
+		} );
+
+		// Live Search Filter
+		body.on( 'input', '#fed_global_icon_search', function () {
+			var $modal = getIconModal();
+			var query = $( this ).val().toLowerCase().trim();
+			var matched = 0;
+			$modal.find( '.fed_single_fa' ).each( function () {
+				var iconId = ( $( this ).data( 'id' ) || '' ).toLowerCase();
+				if ( ! query || iconId.indexOf( query ) !== -1 ) {
+					$( this ).show();
+					matched++;
+				} else {
+					$( this ).hide();
+				}
+			} );
+			$modal.find( '#fed_global_icon_count_display' ).text( matched + ' icons matching' );
+		} );
+
+		// Icon Selected
+		body.on( 'click', '.fed_single_fa', function ( e ) {
+			e.preventDefault();
+			var iconClass = $( this ).data( 'id' );
+			var $modal = getIconModal();
+			var targetName = $modal.find( '#fed_menu_box_id' ).val();
+
+			if ( targetName ) {
+				var $target = $( '#' + targetName );
+				if ( ! $target.length ) {
+					$target = $( '.' + targetName );
+				}
+				if ( ! $target.length ) {
+					$target = $( '[name="' + targetName + '"]' );
+				}
+				if ( $target.length ) {
+					$target.val( iconClass ).trigger( 'change' ).trigger( 'input' );
+				}
+			}
+
+			// Also update dashboard menu inputs if present
+			if ( $( '#fed_form_menu_icon' ).length ) {
+				$( '#fed_form_menu_icon' ).val( iconClass ).trigger( 'input' ).trigger( 'change' );
+			}
+			if ( $( '#fed_selected_icon_preview' ).length ) {
+				$( '#fed_selected_icon_preview' ).html( '<i class="' + iconClass + '"></i>' );
+			}
+
+			closeIconModal();
+		} );
 
 		body.on(
 			'click', '.fed_menu_save_button_toggle', function ( e ) {
@@ -650,12 +748,14 @@ jQuery( document ).ready(
 		/**
 		 * Single line executions
 		 */
-		body.popover(
-			{
-				selector: '[data-toggle="popover"]',
-				trigger: 'focus'
-			}
-		);
+		if ( typeof $.fn.popover === 'function' ) {
+			body.popover(
+				{
+					selector: '[data-toggle="popover"]',
+					trigger: 'focus'
+				}
+			);
+		}
 
 		if ( $( ".flatpickr" ).length ) {
 			$( ".flatpickr" ).flatpickr( {} );
@@ -729,16 +829,18 @@ jQuery( document ).ready(
 		$(
 			function () {
 				var hash = window.location.hash;
-				hash && $( 'ul.nav a[href="' + hash + '"]' ).tab( 'show' );
+				if ( typeof $.fn.tab === 'function' ) {
+					hash && $( 'ul.nav a[href="' + hash + '"]' ).tab( 'show' );
 
-				$( '.nav-tabs a' ).click(
-					function ( e ) {
-						$( this ).tab( 'show' );
-						var scrollmem = $( 'body' ).scrollTop() || $( 'html' ).scrollTop();
-						window.location.hash = this.hash;
-						$( 'html,body' ).scrollTop( scrollmem );
-					}
-				);
+					$( '.nav-tabs a' ).click(
+						function ( e ) {
+							$( this ).tab( 'show' );
+							var scrollmem = $( 'body' ).scrollTop() || $( 'html' ).scrollTop();
+							window.location.hash = this.hash;
+							$( 'html,body' ).scrollTop( scrollmem );
+						}
+					);
+				}
 			}
 		);
 

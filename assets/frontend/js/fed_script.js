@@ -8,7 +8,9 @@ jQuery(document).ready(function ($) {
     var b = $('body')
     var dashboard_menu = $('.fed_dashboard_menus')
 
-    $('[data-toggle="popover"]').popover()
+    if ( typeof $.fn.popover === 'function' ) {
+      $('[data-toggle="popover"]').popover()
+    }
 
     // All Front End submission.
     $('form.fed_form_post').on('submit', function (e) {

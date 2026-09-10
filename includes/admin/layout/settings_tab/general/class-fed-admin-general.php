@@ -103,6 +103,19 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 		 * @return mixed|void
 		 */
 		public function default_admin_script() {
+			$manifest_path = defined( 'BC_FED_PLUGIN_DIR' ) ? BC_FED_PLUGIN_DIR . '/assets/dist/.vite/manifest.json' : '';
+			$tailwind_css  = plugins_url( '/assets/css/main.css', BC_FED_PLUGIN );
+			$main_js       = plugins_url( '/assets/js/main.js', BC_FED_PLUGIN );
+			if ( ! empty( $manifest_path ) && file_exists( $manifest_path ) ) {
+				$manifest = json_decode( file_get_contents( $manifest_path ), true );
+				if ( isset( $manifest['assets/css/main.css']['file'] ) ) {
+					$tailwind_css = plugins_url( '/assets/dist/' . $manifest['assets/css/main.css']['file'], BC_FED_PLUGIN );
+				}
+				if ( isset( $manifest['assets/js/main.js']['file'] ) ) {
+					$main_js = plugins_url( '/assets/dist/' . $manifest['assets/js/main.js']['file'], BC_FED_PLUGIN );
+				}
+			}
+
 			$scripts = apply_filters(
 				'fed_default_admin_scripts_styles', array(
 					'scripts' => array(
@@ -120,6 +133,15 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 							'wp_core'     => true,
 							'name'        => 'JQuery UI Sortable',
 							'plugin_name' => 'Frontend Dashboard',
+						),
+						'fed-main'              => array(
+							'wp_core'      => false,
+							'name'         => 'Frontend Dashboard Main JS (Vite)',
+							'plugin_name'  => 'Frontend Dashboard',
+							'src'          => $main_js,
+							'dependencies' => array( 'jquery' ),
+							'version'      => BC_FED_PLUGIN_VERSION,
+							'in_footer'    => true,
 						),
 						'fed_sweetalert'        => array(
 							'wp_core'      => false,
@@ -156,15 +178,6 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 							'name'         => 'FED Admin Script',
 							'plugin_name'  => 'Frontend Dashboard',
 							'src'          => plugins_url( '/assets/admin/js/fed_admin_script.js', BC_FED_PLUGIN ),
-							'dependencies' => array( 'jquery' ),
-							'version'      => false,
-							'in_footer'    => true,
-						),
-						'fed_bootstrap_script'  => array(
-							'wp_core'      => false,
-							'name'         => 'Bootstrap',
-							'plugin_name'  => 'Frontend Dashboard',
-							'src'          => plugins_url( '/assets/frontend/js/bootstrap.js', BC_FED_PLUGIN ),
 							'dependencies' => array( 'jquery' ),
 							'version'      => false,
 							'in_footer'    => true,
@@ -216,11 +229,11 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 						),
 					),
 					'styles'  => array(
-						'fed_admin_bootstrap'          => array(
+						'fed-style'                    => array(
 							'wp_core'      => false,
-							'name'         => 'Bootstrap',
+							'name'         => 'Tailwind CSS (Frontend Dashboard)',
 							'plugin_name'  => 'Frontend Dashboard',
-							'src'          => plugins_url( '/assets/frontend/css/bootstrap.css', BC_FED_PLUGIN ),
+							'src'          => $tailwind_css,
 							'dependencies' => array(),
 							'version'      => BC_FED_PLUGIN_VERSION,
 							'media'        => 'all',
@@ -574,9 +587,31 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 		 * @return mixed|void
 		 */
 		public function default_frontend_script() {
+			$manifest_path = defined( 'BC_FED_PLUGIN_DIR' ) ? BC_FED_PLUGIN_DIR . '/assets/dist/.vite/manifest.json' : '';
+			$tailwind_css  = plugins_url( '/assets/css/main.css', BC_FED_PLUGIN );
+			$main_js       = plugins_url( '/assets/js/main.js', BC_FED_PLUGIN );
+			if ( ! empty( $manifest_path ) && file_exists( $manifest_path ) ) {
+				$manifest = json_decode( file_get_contents( $manifest_path ), true );
+				if ( isset( $manifest['assets/css/main.css']['file'] ) ) {
+					$tailwind_css = plugins_url( '/assets/dist/' . $manifest['assets/css/main.css']['file'], BC_FED_PLUGIN );
+				}
+				if ( isset( $manifest['assets/js/main.js']['file'] ) ) {
+					$main_js = plugins_url( '/assets/dist/' . $manifest['assets/js/main.js']['file'], BC_FED_PLUGIN );
+				}
+			}
+
 			return apply_filters(
 				'fed_default_frontend_scripts_styles', array(
 					'scripts' => array(
+						'fed-main'              => array(
+							'wp_core'      => false,
+							'name'         => 'Frontend Dashboard Main JS (Vite)',
+							'plugin_name'  => 'Frontend Dashboard',
+							'src'          => $main_js,
+							'dependencies' => array( 'jquery' ),
+							'version'      => BC_FED_PLUGIN_VERSION,
+							'in_footer'    => true,
+						),
 						'fed_sweetalert'        => array(
 							'wp_core'      => false,
 							'name'         => 'SweetAlert',
@@ -625,15 +660,6 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 							'version'      => false,
 							'in_footer'    => true,
 						),
-						'fed_bootstrap_script'  => array(
-							'wp_core'      => false,
-							'name'         => 'Bootstrap',
-							'plugin_name'  => 'Frontend Dashboard',
-							'src'          => plugins_url( '/assets/frontend/js/bootstrap.js', BC_FED_PLUGIN ),
-							'dependencies' => array(),
-							'version'      => false,
-							'in_footer'    => true,
-						),
 						'fed_jscolor_script'    => array(
 							'wp_core'      => false,
 							'name'         => 'JSColor',
@@ -672,11 +698,11 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 						),
 					),
 					'styles'  => array(
-						'fed_frontend_bootstrap'       => array(
+						'fed-style'                    => array(
 							'wp_core'      => false,
-							'name'         => 'Bootstrap',
+							'name'         => 'Tailwind CSS (Frontend Dashboard)',
 							'plugin_name'  => 'Frontend Dashboard',
-							'src'          => plugins_url( '/assets/frontend/css/bootstrap.css', BC_FED_PLUGIN ),
+							'src'          => $tailwind_css,
 							'dependencies' => array(),
 							'version'      => BC_FED_PLUGIN_VERSION,
 							'media'        => 'all',

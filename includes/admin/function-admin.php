@@ -2890,51 +2890,81 @@ function fed_convert_this_to_that( $source, $_this, $that ) {
 	return str_replace( $_this, $that, $source );
 }
 
+add_action( 'admin_footer', 'fed_render_menu_icons_popup_footer' );
+/**
+ * Render Menu Icons Popup in Admin Footer for FED pages.
+ */
+function fed_render_menu_icons_popup_footer() {
+	if ( ( isset( $_GET['page'] ) && in_array( wp_unslash( $_GET['page'] ), fed_get_script_loading_pages(), false ) ) ||
+	     ( isset( $GLOBALS['pagenow'] ) && in_array( $GLOBALS['pagenow'], fed_get_script_loading_pages(), false ) ) ) {
+		fed_menu_icons_popup();
+	}
+}
+
 /**
  * Show Menu Icons Popup.
  */
 function fed_menu_icons_popup() {
+	static $rendered = false;
+	if ( $rendered ) {
+		return;
+	}
+	$rendered = true;
+	$icons = fed_font_awesome_list();
 	?>
 	<div class="bc_fed">
-		<div class="modal fade fed_show_fa_list"
-				tabindex="-1"
-				role="dialog"
-		>
-			<div class="modal-dialog modal-lg"
-					role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button"
-								class="close"
-								data-dismiss="modal"
-								aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h4 class="modal-title"><?php _e( 'Please Select one Image', 'frontend-dashboard' ) ?></h4>
-					</div>
-					<div class="modal-body">
-						<input type="hidden"
-								id="fed_menu_box_id"
-								name="fed_menu_box_id"
-								value=""/>
-						<div class="row fed_fa_container">
-							<?php foreach ( fed_font_awesome_list() as $key => $list ) {
-								echo '<div class="col-md-1 fed_single_fa" 
-							data-dismiss="modal"
-							data-id="' . $key . '"
-							data-toggle="popover"
-							title="' . esc_attr( $list ) . '"
-							data-trigger="hover"
-							data-viewport=""
-							data-content="' . esc_attr( $list ) . '"
-							>
-							<span class="' . esc_attr( $key ) . '"  data-id="' . esc_attr( $key ) . '" id="' . esc_attr(
-										$key
-									) . '"></span>
-							</div>';
-							} ?>
+		<div id="fed_icon_picker_modal" class="fed_show_fa_list modal fixed inset-0 z-[99999] bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 transition-all duration-200 hidden opacity-0 pointer-events-none" style="display: none;" tabindex="-1" role="dialog">
+			<div class="fed-icon-modal-dialog bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-3xl w-full max-h-[85vh] flex flex-col overflow-hidden transform scale-95 transition-all duration-200" role="document">
+				<!-- Header -->
+				<div class="px-6 py-4 bg-slate-50 border-b border-slate-200/80 flex items-center justify-between shrink-0">
+					<div class="flex items-center gap-3">
+						<div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-base font-semibold shadow-2xs">
+							<i class="fas fa-icons"></i>
+						</div>
+						<div>
+							<h3 class="text-sm font-bold text-slate-900 m-0"><?php esc_html_e( 'Select Icon', 'frontend-dashboard' ); ?></h3>
+							<p class="text-xs text-slate-500 m-0"><?php esc_html_e( 'Click any icon to assign it to your menu item', 'frontend-dashboard' ); ?></p>
 						</div>
 					</div>
+					<button type="button" class="fed_close_icon_modal text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 w-8 h-8 rounded-lg flex items-center justify-center transition-colors text-xl font-bold cursor-pointer leading-none" aria-label="Close">
+						&times;
+					</button>
+				</div>
+
+				<!-- Search Bar -->
+				<div class="p-4 border-b border-slate-100 bg-white shrink-0">
+					<div class="relative">
+						<span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400 text-xs">
+							<i class="fas fa-search"></i>
+						</span>
+						<input type="text" id="fed_global_icon_search" placeholder="<?php esc_attr_e( 'Search icons (e.g. user, chart, settings, bell, star)...', 'frontend-dashboard' ); ?>" class="w-full pl-9 pr-4 py-2 text-xs text-slate-800 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all outline-none" />
+					</div>
+				</div>
+
+				<!-- Body: Icons Grid -->
+				<div class="modal-body p-5 overflow-y-auto flex-1 max-h-[50vh]">
+					<input type="hidden" id="fed_menu_box_id" name="fed_menu_box_id" value="" />
+					<div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2.5 fed_fa_container" id="fed_global_icons_grid">
+						<?php foreach ( $icons as $key => $unicode ) : 
+							$icon_name = str_replace( array( 'fas fa-', 'fab fa-', 'far fa-', 'fa fa-' ), '', $key );
+						?>
+							<button type="button" 
+								class="fed_single_fa group p-2.5 flex flex-col items-center justify-center rounded-xl border border-slate-200 bg-white hover:bg-indigo-50 hover:border-indigo-300 hover:text-indigo-600 text-slate-700 transition-all duration-150 cursor-pointer shadow-2xs hover:shadow-xs" 
+								data-id="<?php echo esc_attr( $key ); ?>" 
+								title="<?php echo esc_attr( $key ); ?>">
+								<i class="<?php echo esc_attr( $key ); ?> text-lg mb-1 group-hover:scale-110 transition-transform"></i>
+								<span class="text-[9px] text-slate-400 group-hover:text-indigo-600 font-mono truncate max-w-full text-center block"><?php echo esc_html( $icon_name ); ?></span>
+							</button>
+						<?php endforeach; ?>
+					</div>
+				</div>
+
+				<!-- Footer -->
+				<div class="px-6 py-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between shrink-0 text-xs text-slate-500">
+					<span id="fed_global_icon_count_display"><?php echo count( $icons ); ?> <?php esc_html_e( 'icons available', 'frontend-dashboard' ); ?></span>
+					<button type="button" class="fed_close_icon_modal px-4 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium rounded-lg transition-colors cursor-pointer">
+						<?php esc_html_e( 'Cancel', 'frontend-dashboard' ); ?>
+					</button>
 				</div>
 			</div>
 		</div>

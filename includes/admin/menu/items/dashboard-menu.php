@@ -555,7 +555,7 @@ function fed_get_dashboard_menu_items() {
 										</div>
 										<div class="relative flex-1">
 											<input type="text" id="fed_form_menu_icon" name="menu_image_id" value="fas fa-link" placeholder="fas fa-icon" class="text-xs text-slate-800 font-mono font-medium outline-none" />
-											<button type="button" id="fed_trigger_icon_picker" class="text-xs font-semibold cursor-pointer gap-1.5">
+											<button type="button" id="fed_trigger_icon_picker" data-fed_menu_box_id="fed_form_menu_icon" data-target="#fed_icon_picker_modal" class="fed_icon_picker_trigger text-xs font-semibold cursor-pointer gap-1.5">
 												<i class="fas fa-images text-[10px]"></i>
 												<span><?php esc_html_e( 'Browse', 'frontend-dashboard' ); ?></span>
 											</button>
@@ -740,53 +740,6 @@ function fed_get_dashboard_menu_items() {
 			</div>
 		</div>
 
-		<!-- ========================================== -->
-		<!-- MODAL: SEARCHABLE FONT AWESOME ICON PICKER -->
-		<!-- ========================================== -->
-		<div id="fed_icon_picker_modal" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 transition-opacity duration-200">
-			<div class="bg-white rounded-2xl shadow-2xl border border-slate-200/90 w-full max-w-2xl overflow-hidden transform transition-all duration-300 scale-95 opacity-0 icon-modal-content my-6">
-				<!-- Modal Header -->
-				<div class="px-6 py-4.5 border-b border-slate-100 flex items-center justify-between bg-slate-50/60">
-					<div>
-						<h3 class="text-sm sm:text-base font-bold text-slate-900 m-0">
-							<?php esc_html_e( 'Select an Icon', 'frontend-dashboard' ); ?>
-						</h3>
-						<p class="text-[11px] text-slate-500 m-0 font-medium">
-							<?php esc_html_e( 'Choose from FontAwesome icons for your dashboard menu.', 'frontend-dashboard' ); ?>
-						</p>
-					</div>
-					<button type="button" id="fed_close_icon_picker_btn" class="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 flex items-center justify-center transition-colors cursor-pointer">
-						<i class="fas fa-times text-sm"></i>
-					</button>
-				</div>
-
-				<!-- Search Input -->
-				<div class="p-4 sm:p-5 border-b border-slate-100 bg-white">
-					<div class="relative">
-						<span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
-							<i class="fas fa-search text-xs"></i>
-						</span>
-						<input type="text" id="fed_icon_search_input" placeholder="<?php esc_attr_e( 'Search icons (e.g. user, dashboard, chart, cart, lock)...', 'frontend-dashboard' ); ?>" class="w-full pr-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-800 font-medium focus:bg-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-100 transition-all outline-none" style="padding-left: 38px !important;" />
-					</div>
-				</div>
-
-				<!-- Icons Grid -->
-				<div id="fed_icons_grid" class="p-5 sm:p-6 grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 gap-2.5 max-h-80 overflow-y-auto">
-					<?php
-					$fa_icons = fed_font_awesome_list();
-					foreach ( $fa_icons as $fa_class => $fa_name ) :
-						?>
-						<button type="button" class="fed-icon-choice flex flex-col items-center justify-center p-2.5 rounded-xl border border-slate-100 hover:border-indigo-300 bg-slate-50/60 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 transition-all cursor-pointer group" data-icon="<?php echo esc_attr( $fa_class ); ?>" title="<?php echo esc_attr( $fa_class ); ?>">
-							<i class="<?php echo esc_attr( $fa_class ); ?> text-base mb-1 group-hover:scale-125 transition-transform"></i>
-							<span class="text-[9px] text-slate-400 group-hover:text-indigo-600 truncate w-full text-center font-mono">
-								<?php echo esc_html( str_replace( array( 'fas fa-', 'far fa-', 'fab fa-' ), '', $fa_class ) ); ?>
-							</span>
-						</button>
-					<?php endforeach; ?>
-				</div>
-			</div>
-		</div>
-
 		<!-- Custom Delete Confirmation Modal -->
 		<div id="fed_delete_confirm_modal" class="fixed inset-0 z-50 overflow-y-auto hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs transition-opacity duration-200" style="z-index: 999999 !important;">
 			<div class="delete-modal-content bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 transform scale-95 opacity-0 transition-all duration-200 text-center">
@@ -809,9 +762,6 @@ function fed_get_dashboard_menu_items() {
 				</div>
 			</div>
 		</div>
-
-		<!-- Legacy Icon Popup for backwards compatibility -->
-		<?php fed_menu_icons_popup(); ?>
 	</div>
 
 	<!-- ======================================================== -->
@@ -1438,41 +1388,10 @@ function fed_get_dashboard_menu_items() {
 			});
 		});
 
-		// 7. Searchable Icon Picker Modal
-		$('#fed_trigger_icon_picker').on('click', function(e) {
-			e.preventDefault();
-			$iconModal.removeClass('hidden');
-			setTimeout(function() {
-				$iconModal.find('.icon-modal-content').removeClass('scale-95 opacity-0').addClass('scale-100 opacity-100');
-			}, 10);
-		});
-
-		$('#fed_close_icon_picker_btn').on('click', function(e) {
-			e.preventDefault();
-			$iconModal.find('.icon-modal-content').removeClass('scale-100 opacity-100').addClass('scale-95 opacity-0');
-			setTimeout(function() {
-				$iconModal.addClass('hidden');
-			}, 200);
-		});
-
-		$('#fed_icon_search_input').on('input', function() {
-			var q = $(this).val().toLowerCase().trim();
-			$('#fed_icons_grid .fed-icon-choice').each(function() {
-				var iconClass = $(this).data('icon').toLowerCase();
-				if (iconClass.indexOf(q) !== -1) {
-					$(this).show();
-				} else {
-					$(this).hide();
-				}
-			});
-		});
-
-		$('#fed_icons_grid').on('click', '.fed-icon-choice', function(e) {
-			e.preventDefault();
-			var selectedIcon = $(this).data('icon');
-			$('#fed_form_menu_icon').val(selectedIcon);
-			$('#fed_selected_icon_preview').html('<i class="' + selectedIcon + '"></i>');
-			$('#fed_close_icon_picker_btn').trigger('click');
+		// 7. Searchable Icon Picker Modal integration
+		$('#fed_form_menu_icon').on('input change', function() {
+			var val = $(this).val().trim() || 'fas fa-link';
+			$('#fed_selected_icon_preview').html('<i class="' + val + '"></i>');
 		});
 
 		$('#fed_form_menu_icon').on('input', function() {

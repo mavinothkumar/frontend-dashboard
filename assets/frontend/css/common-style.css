@@ -497,6 +497,13 @@ Upload Image
 /**
 Loader
 **/
+.bc_fed .hide,
+.preview-area.hide,
+.preview-area.hidden,
+.hide {
+	display: none !important;
+}
+
 .bc_fed .preview-area {
 	width: 60px;
 	height: 60px;
@@ -508,6 +515,13 @@ Loader
 	-webkit-transform: translate(-50%, -50%);
 	-moz-transform: translate(-50%, -50%);
 	-ms-transform: translate(-50%, -50%);
+}
+
+.bc_fed .preview-area.hide,
+.bc_fed .preview-area.hidden,
+.preview-area.hide,
+.preview-area.hidden {
+	display: none !important;
 }
 
 .bc_fed .spinner_circle {
