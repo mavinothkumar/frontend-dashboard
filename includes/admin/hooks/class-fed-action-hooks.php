@@ -54,13 +54,23 @@ if ( ! class_exists( 'FED_ActionHooks' ) ) {
 					add_filter( 'wp_mail_from_name', array( $fed_email, 'sender_name' ) );
 				}
 				if ( 'SMTP' === $is_enable ) {
-					$mailer->IsSMTP();
-					$mailer->SMTPAuth   = fed_get_data( 'smtp.auth', $settings );
-					$mailer->Host       = fed_get_data( 'smtp.host_name', $settings );
-					$mailer->Username   = fed_get_data( 'smtp.user_name', $settings );
-					$mailer->Password   = fed_get_data( 'smtp.password', $settings );
-					$mailer->SMTPSecure = fed_get_data( 'smtp.encryption', $settings );
-					$mailer->Port       = fed_get_data( 'smtp.port', $settings );
+					$mailer->isSMTP();
+					$auth               = fed_get_data( 'smtp.auth', $settings, 'yes' );
+					$mailer->SMTPAuth   = ( 'no' === $auth || false === $auth || '0' === $auth ) ? false : true;
+					$mailer->Host       = (string) fed_get_data( 'smtp.host_name', $settings, '' );
+					$mailer->Username   = (string) fed_get_data( 'smtp.user_name', $settings, '' );
+					$mailer->Password   = (string) fed_get_data( 'smtp.password', $settings, '' );
+					$encryption         = strtolower( (string) fed_get_data( 'smtp.encryption', $settings, 'tls' ) );
+					if ( 'none' === $encryption ) {
+						$mailer->SMTPSecure  = '';
+						$mailer->SMTPAutoTLS = false;
+					} elseif ( 'starttls' === $encryption ) {
+						$mailer->SMTPSecure = 'tls';
+					} else {
+						$mailer->SMTPSecure = $encryption;
+					}
+					$port = fed_get_data( 'smtp.port', $settings, 587 );
+					$mailer->Port = ! empty( $port ) ? (int) $port : 587;
 				}
 			}
 		}

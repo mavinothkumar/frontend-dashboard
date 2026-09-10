@@ -27,8 +27,17 @@ jQuery( document ).ready(
 						success: function ( results ) {
 							fed_toggle_loader();
 							fedAdminAlert.adminSettings( results );
+						},
+						error: function ( jqXHR ) {
+							fed_toggle_loader();
+							var msg = 'An error occurred while saving.';
+							if ( jqXHR.responseJSON && jqXHR.responseJSON.data && jqXHR.responseJSON.data.message ) {
+								msg = jqXHR.responseJSON.data.message;
+							}
+							if ( typeof fedAdminAlert !== 'undefined' && fedAdminAlert.adminSettings ) {
+								fedAdminAlert.adminSettings( { success: false, data: { message: msg } } );
+							}
 						}
-
 					}
 				);
 
@@ -855,7 +864,7 @@ jQuery( document ).ready(
 		);
 
 		function fed_toggle_loader() {
-			$( '.preview-area' ).toggleClass( 'hide' );
+			$( '.preview-area' ).toggleClass( 'hide hidden' );
 		}
 
 		$( '#fed_sticky_subscribe' ).on(
@@ -1058,11 +1067,11 @@ var fedAdminAlert = {
 };
 
 jQuery.fed_toggle_loader = function ($) {
-	jQuery( '.preview-area' ).toggleClass( 'hide' );
+	jQuery( '.preview-area' ).toggleClass( 'hide hidden' );
 	if ( jQuery( '.fed_loader_message' ).length ) {
 		window.setTimeout(
 			function () {
-				jQuery( '.fed_loader_message' ).toggleClass( 'hide' );
+				jQuery( '.fed_loader_message' ).toggleClass( 'hide hidden' );
 			}, 2000
 		);
 	}

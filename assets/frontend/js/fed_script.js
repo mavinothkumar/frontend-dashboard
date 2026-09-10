@@ -580,16 +580,16 @@ jQuery(document).ready(function ($) {
     }
 
     function fed_toggle_loader () {
-      $('.preview-area').toggleClass('hide')
+      $('.preview-area').toggleClass('hide hidden')
     }
   }
 )
 
 jQuery.fed_toggle_loader = function () {
-  jQuery('.preview-area').toggleClass('hide')
+  jQuery('.preview-area').toggleClass('hide hidden')
   if (jQuery('.fed_loader_message').length) {
     window.setTimeout(function () {
-      jQuery('.fed_loader_message').toggleClass('hide')
+      jQuery('.fed_loader_message').toggleClass('hide hidden')
     }, 2000)
   }
 }
