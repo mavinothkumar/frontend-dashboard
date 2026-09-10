@@ -305,6 +305,11 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 			</div>
 
 			<!-- Main Full-Width Flex Layout (Sidebar Post Type Tabs + Content Fields Panel) -->
+			<?php
+			$req_payload     = array_merge( \FED\Helpers\InputHelper::get(), \FED\Helpers\InputHelper::post() );
+			$first_pt_slug   = ! empty( $public_post_types ) ? array_keys( $public_post_types )[0] : 'post';
+			$active_tab_slug = isset( $req_payload['tab'] ) && ! empty( $req_payload['tab'] ) ? esc_attr( $req_payload['tab'] ) : ( isset( $req_payload['post_type'] ) && ! empty( $req_payload['post_type'] ) ? esc_attr( $req_payload['post_type'] ) : $first_pt_slug );
+			?>
 			<div class="flex flex-col lg:flex-row gap-6 items-start">
 				<!-- LEFT SIDEBAR: Post Types Navigation Tabs -->
 				<div class="w-full lg:w-72 xl:w-80 shrink-0 space-y-3">
@@ -327,7 +332,7 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 								$pt_name_esc = esc_html( $pt_name );
 								$pt_icon     = fed_get_post_type_icon( $pt_slug );
 								$field_cnt   = isset( $group_by[ $pt_slug ] ) ? count( $group_by[ $pt_slug ] ) : 0;
-								$is_default  = ( 0 === $tab_idx );
+								$is_default  = ( $pt_slug === $active_tab_slug );
 								?>
 								<button type="button"
 									class="fed-menu-tab-btn w-full flex items-center justify-between p-3 rounded-xl border transition-all text-left cursor-pointer group <?php echo $is_default ? 'is-active bg-white border-indigo-500 text-indigo-700 shadow-2xs' : 'bg-slate-50/70 border-slate-200/70 text-slate-700 hover:bg-slate-100/80 hover:border-slate-300'; ?>"
@@ -374,7 +379,7 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 						$pt_name_esc = esc_html( $pt_name );
 						$pt_icon     = fed_get_post_type_icon( $pt_slug );
 						$m_fields    = isset( $group_by[ $pt_slug ] ) ? $group_by[ $pt_slug ] : array();
-						$is_visible  = ( 0 === $pane_idx );
+						$is_visible  = ( $pt_slug === $active_tab_slug );
 						?>
 						<div id="fed_tab_content_<?php echo esc_attr( $pt_slug_esc ); ?>" class="fed-tab-pane space-y-4 <?php echo $is_visible ? '' : 'hidden'; ?>" data-menu-slug="<?php echo esc_attr( $pt_slug_esc ); ?>" data-post-type="<?php echo esc_attr( $pt_slug_esc ); ?>">
 							<!-- Section Header Card -->
@@ -640,6 +645,14 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 					var $btn = $('.fed-menu-tab-btn[data-tab-target="' + targetId + '"]');
 					if (!$btn.length) return;
 
+					var slug = targetId.replace('fed_tab_content_', '');
+					try {
+						sessionStorage.setItem('fed_active_tab_post_fields', slug);
+						var url = new URL(window.location.href);
+						url.searchParams.set('tab', slug);
+						window.history.replaceState({ path: url.toString() }, '', url.toString());
+					} catch(e) {}
+
 					$('.fed-menu-tab-btn').removeClass('is-active bg-white border-indigo-500 text-indigo-700 shadow-2xs')
 						.addClass('bg-slate-50/70 border-slate-200/70 text-slate-700 hover:bg-slate-100/80 hover:border-slate-300');
 					$('.fed-menu-tab-btn .fed-tab-icon').removeClass('bg-indigo-600 text-white')
@@ -663,6 +676,15 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 						filterFields(query);
 					}
 				}
+
+				// Check initial tab from URL query param or sessionStorage
+				try {
+					var urlParams = new URLSearchParams(window.location.search);
+					var initialTabSlug = urlParams.get('tab') || sessionStorage.getItem('fed_active_tab_post_fields');
+					if (initialTabSlug && $('#fed_tab_content_' + initialTabSlug).length) {
+						activateTab('fed_tab_content_' + initialTabSlug);
+					}
+				} catch(e) {}
 
 				$(document).on('click', '.fed-menu-tab-btn', function(e) {
 					e.preventDefault();
@@ -1009,10 +1031,16 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 				});
 
 				// Intercept AJAX Save in Builder Modal to refresh page/UI smoothly
-				$(document).on('submit', '#fed_field_builder_modal form.fed_ajax', function(e) {
+				$(document).off('submit.fed_modal_builder').on('submit.fed_modal_builder', '#fed_field_builder_modal form.fed_ajax', function(e) {
 					e.preventDefault();
+					e.stopImmediatePropagation();
 					var form = $(this);
 					showLoading('Saving Field Changes...', 'Persisting configuration to database...');
+
+					// If in All Roles mode, check all role checkboxes before serializing
+					if (form.find('.fed_specific_roles_wrapper').hasClass('hidden')) {
+						form.find('.fed-role-checkbox').prop('checked', true);
+					}
 
 					$.ajax({
 						type: 'POST',
@@ -1029,9 +1057,16 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 
 							if (isSuccess) {
 								closeBuilderModal();
+								var savedPostType = form.find('input[name="post_type"]').val() || $('.fed-menu-tab-btn.is-active').data('post-type') || 'post';
+								try {
+									sessionStorage.setItem('fed_active_tab_post_fields', savedPostType);
+								} catch(e) {}
+
 								// Smooth reload to show newly updated fields in list
 								setTimeout(function() {
-									window.location.reload();
+									var reloadUrl = new URL(window.location.href);
+									reloadUrl.searchParams.set('tab', savedPostType);
+									window.location.href = reloadUrl.toString();
 								}, 600);
 							}
 						},

@@ -54,7 +54,7 @@ function fed_admin_input_fields_mail( $row, $action, $menu_options ) {
 			<?php
 			fed_get_admin_up_display_permission( $row, $action );
 			fed_get_admin_up_role_based( $row, $action, $menu_options );
-			fed_get_input_type_and_submit_btn( 'email', $action );
+			fed_get_input_type_and_submit_btn( 'email', $action, $row );
 			?>
 		</form>
 	</div>

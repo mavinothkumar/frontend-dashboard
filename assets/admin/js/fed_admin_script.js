@@ -15,6 +15,9 @@ jQuery( document ).ready(
 		body.on(
 			'submit', '.fed_ajax', function ( e ) {
 				var form = $( this );
+				if ( form.hasClass( 'fed_admin_menu' ) || form.closest( '#fed_field_builder_modal' ).length ) {
+					return;
+				}
 				fed_toggle_loader();
 				$.ajax(
 					{

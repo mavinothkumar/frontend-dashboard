@@ -405,6 +405,7 @@ function fed_get_empty_value_for_user_profile( $action ) {
  */
 function fed_process_user_profile( $row, $action, $update = 'no' ) {
 	$default = array(
+		'id'             => isset( $row['id'] ) ? (int) $row['id'] : ( isset( $row['input_id'] ) ? (int) $row['input_id'] : '' ),
 		'label_name'     => isset( $row['label_name'] ) ? sanitize_text_field(
 			htmlentities( $row['label_name'] )
 		) : '',

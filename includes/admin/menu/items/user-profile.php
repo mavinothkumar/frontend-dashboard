@@ -343,6 +343,10 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 			</div>
 
 			<!-- Main Full-Width Flex Layout (Sidebar Menu Tabs + Content Fields Panel) -->
+			<?php
+			$req_payload     = array_merge( \FED\Helpers\InputHelper::get(), \FED\Helpers\InputHelper::post() );
+			$active_tab_slug = isset( $req_payload['tab'] ) && ! empty( $req_payload['tab'] ) ? esc_attr( $req_payload['tab'] ) : ( isset( $eligible_menus[0]['menu_slug'] ) ? $eligible_menus[0]['menu_slug'] : 'profile' );
+			?>
 			<div class="flex flex-col lg:flex-row gap-6 items-start">
 				<!-- LEFT SIDEBAR: Navigation Menu Tabs -->
 				<div class="w-full lg:w-72 xl:w-80 shrink-0 space-y-3">
@@ -365,7 +369,7 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 								$m_name     = esc_html( $menu_item['menu'] );
 								$m_icon     = ! empty( $menu_item['menu_image_id'] ) ? esc_attr( $menu_item['menu_image_id'] ) : 'fas fa-bars';
 								$field_cnt  = isset( $group_by[ $m_slug ] ) ? count( $group_by[ $m_slug ] ) : 0;
-								$is_default = ( 0 === $tab_idx );
+								$is_default = ( $m_slug === $active_tab_slug );
 								?>
 								<button type="button"
 									class="fed-menu-tab-btn w-full flex items-center justify-between p-3 rounded-xl border transition-all text-left cursor-pointer group <?php echo $is_default ? 'is-active bg-white border-indigo-500 text-indigo-700 shadow-2xs' : 'bg-slate-50/70 border-slate-200/70 text-slate-700 hover:bg-slate-100/80 hover:border-slate-300'; ?>"
@@ -422,7 +426,7 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 						$m_name     = esc_html( $menu_item['menu'] );
 						$m_icon     = ! empty( $menu_item['menu_image_id'] ) ? esc_attr( $menu_item['menu_image_id'] ) : 'fas fa-bars';
 						$m_fields   = isset( $group_by[ $m_slug ] ) ? $group_by[ $m_slug ] : array();
-						$is_visible = ( 0 === $pane_idx );
+						$is_visible = ( $m_slug === $active_tab_slug );
 						?>
 						<div id="fed_tab_content_<?php echo esc_attr( $m_slug ); ?>" class="fed-tab-pane space-y-4 <?php echo $is_visible ? '' : 'hidden'; ?>" data-menu-slug="<?php echo esc_attr( $m_slug ); ?>">
 							<!-- Section Header Card -->
@@ -719,6 +723,14 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 					var $btn = $('.fed-menu-tab-btn[data-tab-target="' + targetId + '"]');
 					if (!$btn.length) return;
 
+					var slug = targetId.replace('fed_tab_content_', '');
+					try {
+						sessionStorage.setItem('fed_active_tab_user_profile', slug);
+						var url = new URL(window.location.href);
+						url.searchParams.set('tab', slug);
+						window.history.replaceState({ path: url.toString() }, '', url.toString());
+					} catch(e) {}
+
 					$('.fed-menu-tab-btn').removeClass('is-active bg-white border-indigo-500 text-indigo-700 shadow-2xs')
 						.addClass('bg-slate-50/70 border-slate-200/70 text-slate-700 hover:bg-slate-100/80 hover:border-slate-300');
 					$('.fed-menu-tab-btn .fed-tab-icon').removeClass('bg-indigo-600 text-white')
@@ -742,6 +754,15 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 						filterFields(query);
 					}
 				}
+
+				// Check initial tab from URL query param or sessionStorage
+				try {
+					var urlParams = new URLSearchParams(window.location.search);
+					var initialTabSlug = urlParams.get('tab') || sessionStorage.getItem('fed_active_tab_user_profile');
+					if (initialTabSlug && $('#fed_tab_content_' + initialTabSlug).length) {
+						activateTab('fed_tab_content_' + initialTabSlug);
+					}
+				} catch(e) {}
 
 				$(document).on('click', '.fed-menu-tab-btn', function(e) {
 					e.preventDefault();
@@ -1088,10 +1109,16 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 				});
 
 				// Intercept AJAX Save in Builder Modal to refresh page/UI smoothly
-				$(document).on('submit', '#fed_field_builder_modal form.fed_ajax', function(e) {
+				$(document).off('submit.fed_modal_builder').on('submit.fed_modal_builder', '#fed_field_builder_modal form.fed_ajax', function(e) {
 					e.preventDefault();
+					e.stopImmediatePropagation();
 					var form = $(this);
 					showLoading('Saving Field Changes...', 'Persisting configuration to database...');
+
+					// If in All Roles mode, check all role checkboxes before serializing
+					if (form.find('.fed_specific_roles_wrapper').hasClass('hidden')) {
+						form.find('.fed-role-checkbox').prop('checked', true);
+					}
 
 					$.ajax({
 						type: 'POST',
@@ -1108,9 +1135,16 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 
 							if (isSuccess) {
 								closeBuilderModal();
+								var savedMenuSlug = form.find('input[name="menu"]').val() || $('.fed-menu-tab-btn.is-active').data('menu-slug') || 'profile';
+								try {
+									sessionStorage.setItem('fed_active_tab_user_profile', savedMenuSlug);
+								} catch(e) {}
+
 								// Smooth reload to show newly updated fields in list
 								setTimeout(function() {
-									window.location.reload();
+									var reloadUrl = new URL(window.location.href);
+									reloadUrl.searchParams.set('tab', savedMenuSlug);
+									window.location.href = reloadUrl.toString();
 								}, 600);
 							}
 						},

@@ -381,10 +381,17 @@ function fed_get_admin_up_input_meta( $row ) {
  * @param string $input_type Submit Input Type.
  * @param string $action     Action Type.
  */
-function fed_get_input_type_and_submit_btn( $input_type, $action ) {
-	$get_payload = \FED\Helpers\InputHelper::get();
-	$input_id    = isset( $get_payload['fed_input_id'] ) ? esc_attr( $get_payload['fed_input_id'] ) : '';
-	$back_url    = ( 'post' === $action ) ? menu_page_url( 'fed_post_fields', false ) : menu_page_url( 'fed_user_profile', false );
+function fed_get_input_type_and_submit_btn( $input_type, $action, $row = [] ) {
+	$payload  = array_merge( \FED\Helpers\InputHelper::get(), \FED\Helpers\InputHelper::post() );
+	$input_id = '';
+	if ( is_array( $row ) && ! empty( $row['id'] ) ) {
+		$input_id = (string) $row['id'];
+	} elseif ( isset( $payload['fed_input_id'] ) && ! empty( $payload['fed_input_id'] ) ) {
+		$input_id = esc_attr( $payload['fed_input_id'] );
+	} elseif ( isset( $payload['input_id'] ) && ! empty( $payload['input_id'] ) ) {
+		$input_id = esc_attr( $payload['input_id'] );
+	}
+	$back_url = ( 'post' === $action ) ? menu_page_url( 'fed_post_fields', false ) : menu_page_url( 'fed_user_profile', false );
 	?>
 	<div class="pt-3">
 		<?php echo fed_input_box( 'input_type', array( 'value' => $input_type ), 'hidden' ); ?>

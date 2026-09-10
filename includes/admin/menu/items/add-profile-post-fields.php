@@ -53,6 +53,7 @@ function fed_get_add_profile_post_fields() {
 				return;
 			}
 			$row      = fed_process_user_profile( $rows, $action );
+			$row['id'] = $id;
 			$selected = ! empty( $row['input_type'] ) ? $row['input_type'] : 'single_line';
 		} else {
 			$row = fed_get_empty_value_for_user_profile( $action );
@@ -83,6 +84,7 @@ function fed_get_add_profile_post_fields() {
 				return;
 			}
 			$row      = fed_process_user_profile( $rows, $action );
+			$row['id'] = $id;
 			$selected = ! empty( $row['input_type'] ) ? $row['input_type'] : 'single_line';
 		} else {
 			$row = fed_get_empty_value_for_user_profile( $action );
@@ -711,40 +713,44 @@ function fed_get_add_profile_post_fields() {
 				}, 3500);
 			}
 
-			// AJAX Save with Toast
-			$(document).on('submit', '.fed_admin_menu.fed_ajax', function(e) {
-				e.preventDefault();
-				var form = $(this);
-				var $loader = $('.fed_loader');
-				$loader.removeClass('hidden');
+			// AJAX Save with Toast for Standalone Page
+			if (!$('#fed_field_builder_modal').length) {
+				$(document).off('submit.fed_standalone_builder').on('submit.fed_standalone_builder', '.fed_admin_menu.fed_ajax', function(e) {
+					e.preventDefault();
+					e.stopImmediatePropagation();
+					var form = $(this);
+					var $loader = $('.fed_loader');
+					$loader.removeClass('hidden');
 
-				// If in All Roles mode, check all role checkboxes before serializing
-				if (form.find('.fed_specific_roles_wrapper').hasClass('hidden')) {
-					form.find('.fed-role-checkbox').prop('checked', true);
-				}
-
-				$.ajax({
-					type: 'POST',
-					url: form.attr('action'),
-					data: form.serialize(),
-					success: function(response) {
-						$loader.addClass('hidden');
-						var isSuccess = (response && (response.success || response.status === 'success' || (typeof response === 'object' && !response.error)));
-						var message = (response && response.data && response.data.message) ? response.data.message : 'Field settings saved successfully.';
-						if (!isSuccess && response && response.data && response.data.errorMessage) {
-							message = response.data.errorMessage;
-						if (typeof fedAdminAlert !== 'undefined' && fedAdminAlert.adminSettings) {
-							fedAdminAlert.adminSettings(response);
-						} else {
-							showToast(message, !isSuccess);
-						}
-					},
-					error: function() {
-						$loader.addClass('hidden');
-						showToast('An error occurred while saving field settings.', true);
+					// If in All Roles mode, check all role checkboxes before serializing
+					if (form.find('.fed_specific_roles_wrapper').hasClass('hidden')) {
+						form.find('.fed-role-checkbox').prop('checked', true);
 					}
+
+					$.ajax({
+						type: 'POST',
+						url: form.attr('action'),
+						data: form.serialize(),
+						success: function(response) {
+							$loader.addClass('hidden');
+							var isSuccess = (response && (response.success || response.status === 'success' || (typeof response === 'object' && !response.error)));
+							var message = (response && response.data && response.data.message) ? response.data.message : 'Field settings saved successfully.';
+							if (!isSuccess && response && response.data && response.data.errorMessage) {
+								message = response.data.errorMessage;
+							}
+							if (typeof fedAdminAlert !== 'undefined' && fedAdminAlert.adminSettings) {
+								fedAdminAlert.adminSettings(response);
+							} else {
+								showToast(message, !isSuccess);
+							}
+						},
+						error: function() {
+							$loader.addClass('hidden');
+							showToast('An error occurred while saving field settings.', true);
+						}
+					});
 				});
-			});
+			}
 		});
 	})(jQuery);
 	</script>
