@@ -82,8 +82,10 @@ function fed_get_addons_catalog() {
 			'category_name' => __( 'Core & Posts', 'frontend-dashboard' ),
 			'icon'          => 'fas fa-puzzle-piece',
 			'icon_bg'       => 'bg-gradient-to-br from-teal-500 to-emerald-600 text-white',
-			'tags'          => array( 'Profile Widgets', 'Statistics Badges', 'Role Shortcuts', 'Helper Tools' ),
+			'tags'          => array( 'Merged into Core', 'Date & Time', 'File Upload', 'Color Picker', 'WP Editor', 'Table Grid' ),
 			'settings_url'  => admin_url( 'admin.php?page=fed_user_profile' ),
+			'description'   => __( 'Frontend Dashboard Extra has been merged directly into Core. Date & Time pickers, File uploads, Hex Color pickers, WP Editor (TinyMCE), Custom Labels, and Table Grids are built-in under Form Builder.', 'frontend-dashboard' ),
+			'is_merged'     => true,
 		),
 		'frontend-dashboard-social-chat'               => array(
 			'category'      => 'communication',

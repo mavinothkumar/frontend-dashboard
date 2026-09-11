@@ -113,6 +113,30 @@ function fed_admin_user_profile_select( $selected = '' ) {
 					'name'  => __( 'URL', 'frontend-dashboard' ),
 					'image' => plugins_url( '/assets/admin/images/inputs/url.png', BC_FED_PLUGIN ),
 				),
+				'date'        => array(
+					'name'  => __( 'Date', 'frontend-dashboard' ),
+					'image' => plugins_url( '/assets/admin/images/inputs/date.png', BC_FED_PLUGIN ),
+				),
+				'file'        => array(
+					'name'  => __( 'File', 'frontend-dashboard' ),
+					'image' => plugins_url( '/assets/admin/images/inputs/file.png', BC_FED_PLUGIN ),
+				),
+				'color'       => array(
+					'name'  => __( 'Color', 'frontend-dashboard' ),
+					'image' => plugins_url( '/assets/admin/images/inputs/color.png', BC_FED_PLUGIN ),
+				),
+				'wp_editor'   => array(
+					'name'  => __( 'WP Editor', 'frontend-dashboard' ),
+					'image' => plugins_url( '/assets/admin/images/inputs/wp_editor.png', BC_FED_PLUGIN ),
+				),
+				'label'       => array(
+					'name'  => __( 'Label', 'frontend-dashboard' ),
+					'image' => plugins_url( '/assets/admin/images/inputs/label.png', BC_FED_PLUGIN ),
+				),
+				'table'       => array(
+					'name'  => __( 'Table', 'frontend-dashboard' ),
+					'image' => plugins_url( '/assets/admin/images/inputs/table.png', BC_FED_PLUGIN ),
+				),
 			)
 		),
 		'value'   => $selected,
@@ -255,6 +279,26 @@ function fed_get_input_details( $attr ) {
 		case 'file':
 		case 'files':
 			$input .= fed_form_file( $attr );
+			break;
+
+		case 'date':
+			$input .= fed_form_date( $attr );
+			break;
+
+		case 'color':
+			$input .= fed_form_color( $attr );
+			break;
+
+		case 'wp_editor':
+			$input .= fed_form_wp_editor( $attr );
+			break;
+
+		case 'label':
+			$input .= fed_form_label( $attr );
+			break;
+
+		case 'table':
+			$input .= fed_form_table( $attr );
 			break;
 
 	}
@@ -4552,3 +4596,247 @@ if ( ! function_exists( 'fed_log_activity' ) ) {
 		return $inserted ? $wpdb->insert_id : false;
 	}
 }
+
+if ( ! function_exists( 'fed_get_date_formats' ) ) {
+	/**
+	 * Get Supported Date Formats
+	 *
+	 * @return array
+	 */
+	function fed_get_date_formats() {
+		$date_formats = array(
+			'd-m-Y'  => 'Date-Month-Year (14-09-2026)',
+			'm-d-Y'  => 'Month-Date-Year (09-14-2026)',
+			'Y-m-d'  => 'Year-Month-Date (2026-09-14)',
+			'd/m/Y'  => 'Date/Month/Year (14/09/2026)',
+			'm/d/Y'  => 'Month/Date/Year (09/14/2026)',
+			'Y/m/d'  => 'Year/Month/Date (2026/09/14)',
+			'd.m.Y'  => 'Date.Month.Year (14.09.2026)',
+			'F j, Y' => 'Full Month Date, Year (September 14, 2026)',
+			'M j, Y' => 'Short Month Date, Year (Sep 14, 2026)',
+		);
+
+		return apply_filters( 'fed_get_date_formats_filter', $date_formats );
+	}
+}
+
+if ( ! function_exists( 'fed_get_date_mode' ) ) {
+	/**
+	 * Get Date Picker Selection Modes
+	 *
+	 * @return array
+	 */
+	function fed_get_date_mode() {
+		return array(
+			'single'   => __( 'Single Date', 'frontend-dashboard' ),
+			'multiple' => __( 'Multiple Dates', 'frontend-dashboard' ),
+			'range'    => __( 'Date Range', 'frontend-dashboard' ),
+		);
+	}
+}
+
+if ( ! function_exists( 'fed_image_mime_types' ) ) {
+	/**
+	 * Get MIME Type Icon Mapping
+	 *
+	 * @return array
+	 */
+	function fed_image_mime_types() {
+		$base = site_url() . '/wp-includes/images/media/';
+		return array(
+			'video/x-ms-asf'                                                            => $base . 'video.png',
+			'video/x-ms-wmv'                                                            => $base . 'video.png',
+			'video/x-ms-wmx'                                                            => $base . 'video.png',
+			'video/x-ms-wm'                                                             => $base . 'video.png',
+			'video/avi'                                                                 => $base . 'video.png',
+			'video/divx'                                                                => $base . 'video.png',
+			'video/x-flv'                                                               => $base . 'video.png',
+			'video/quicktime'                                                           => $base . 'video.png',
+			'video/mpeg'                                                                => $base . 'video.png',
+			'video/mp4'                                                                 => $base . 'video.png',
+			'video/ogg'                                                                 => $base . 'video.png',
+			'video/webm'                                                                => $base . 'video.png',
+			'video/x-matroska'                                                          => $base . 'video.png',
+			'video/3gpp'                                                                => $base . 'video.png',
+			'video/3gpp2'                                                               => $base . 'video.png',
+			'text/plain'                                                                => $base . 'text.png',
+			'text/csv'                                                                  => $base . 'text.png',
+			'text/tab-separated-values'                                                 => $base . 'text.png',
+			'text/calendar'                                                             => $base . 'text.png',
+			'text/richtext'                                                             => $base . 'text.png',
+			'text/css'                                                                  => $base . 'text.png',
+			'text/html'                                                                 => $base . 'text.png',
+			'text/vtt'                                                                  => $base . 'text.png',
+			'application/ttaf+xml'                                                      => $base . 'text.png',
+			'audio/mpeg'                                                                => $base . 'audio.png',
+			'audio/x-realaudio'                                                         => $base . 'audio.png',
+			'audio/wav'                                                                 => $base . 'audio.png',
+			'audio/ogg'                                                                 => $base . 'audio.png',
+			'audio/midi'                                                                => $base . 'audio.png',
+			'audio/x-ms-wma'                                                            => $base . 'audio.png',
+			'audio/x-ms-wax'                                                            => $base . 'audio.png',
+			'audio/x-matroska'                                                          => $base . 'audio.png',
+			'application/rtf'                                                           => $base . 'archive.png',
+			'application/javascript'                                                    => $base . 'archive.png',
+			'application/pdf'                                                           => $base . 'document.png',
+			'application/x-shockwave-flash'                                             => $base . 'archive.png',
+			'application/java'                                                          => $base . 'archive.png',
+			'application/x-tar'                                                         => $base . 'archive.png',
+			'application/zip'                                                           => $base . 'archive.png',
+			'application/x-gzip'                                                        => $base . 'archive.png',
+			'application/rar'                                                           => $base . 'archive.png',
+			'application/x-7z-compressed'                                               => $base . 'archive.png',
+			'application/x-msdownload'                                                  => $base . 'archive.png',
+			'application/octet-stream'                                                  => $base . 'document.png',
+			'application/msword'                                                        => $base . 'document.png',
+			'application/vnd.ms-powerpoint'                                             => $base . 'document.png',
+			'application/vnd.ms-write'                                                  => $base . 'document.png',
+			'application/vnd.ms-excel'                                                  => $base . 'document.png',
+			'application/vnd.ms-access'                                                 => $base . 'document.png',
+			'application/vnd.ms-project'                                                => $base . 'document.png',
+			'application/vnd.openxmlformats-officedocument.wordprocessingml.document'   => $base . 'document.png',
+			'application/vnd.ms-word.document.macroEnabled.12'                          => $base . 'document.png',
+			'application/vnd.openxmlformats-officedocument.wordprocessingml.template'   => $base . 'document.png',
+			'application/vnd.ms-word.template.macroEnabled.12'                          => $base . 'document.png',
+			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'         => $base . 'document.png',
+			'application/vnd.ms-excel.sheet.macroEnabled.12'                            => $base . 'document.png',
+			'application/vnd.ms-excel.sheet.binary.macroEnabled.12'                     => $base . 'document.png',
+			'application/vnd.openxmlformats-officedocument.spreadsheetml.template'      => $base . 'document.png',
+			'application/vnd.ms-excel.template.macroEnabled.12'                         => $base . 'document.png',
+			'application/vnd.ms-excel.addin.macroEnabled.12'                            => $base . 'document.png',
+			'application/vnd.openxmlformats-officedocument.presentationml.presentation' => $base . 'document.png',
+			'application/vnd.ms-powerpoint.presentation.macroEnabled.12'                => $base . 'document.png',
+			'application/vnd.openxmlformats-officedocument.presentationml.slideshow'    => $base . 'document.png',
+			'application/vnd.ms-powerpoint.slideshow.macroEnabled.12'                   => $base . 'document.png',
+			'application/vnd.openxmlformats-officedocument.presentationml.template'     => $base . 'document.png',
+			'application/vnd.ms-powerpoint.template.macroEnabled.12'                    => $base . 'document.png',
+			'application/vnd.ms-powerpoint.addin.macroEnabled.12'                       => $base . 'document.png',
+			'application/vnd.openxmlformats-officedocument.presentationml.slide'        => $base . 'document.png',
+			'application/vnd.ms-powerpoint.slide.macroEnabled.12'                       => $base . 'document.png',
+			'application/onenote'                                                       => $base . 'document.png',
+			'application/oxps'                                                          => $base . 'document.png',
+			'application/vnd.ms-xpsdocument'                                            => $base . 'document.png',
+			'application/vnd.oasis.opendocument.text'                                   => $base . 'document.png',
+			'application/vnd.oasis.opendocument.presentation'                           => $base . 'document.png',
+			'application/vnd.oasis.opendocument.spreadsheet'                            => $base . 'document.png',
+			'application/vnd.oasis.opendocument.graphics'                               => $base . 'document.png',
+			'application/vnd.oasis.opendocument.chart'                                  => $base . 'document.png',
+			'application/vnd.oasis.opendocument.database'                               => $base . 'document.png',
+			'application/vnd.oasis.opendocument.formula'                                => $base . 'document.png',
+			'application/wordperfect'                                                   => $base . 'document.png',
+			'application/vnd.apple.keynote'                                             => $base . 'document.png',
+			'application/vnd.apple.numbers'                                             => $base . 'document.png',
+			'application/vnd.apple.pages'                                               => $base . 'document.png',
+		);
+	}
+}
+
+if ( ! function_exists( 'fed_get_image_by_type' ) ) {
+	/**
+	 * Get Image or Fallback MIME Icon for Attachment
+	 *
+	 * @param array $options Options array containing 'user_value' (attachment ID).
+	 * @return string URL of image or mime icon.
+	 */
+	function fed_get_image_by_type( $options ) {
+		$attachment_id = isset( $options['user_value'] ) ? (int) $options['user_value'] : 0;
+		if ( ! $attachment_id ) {
+			return site_url() . '/wp-includes/images/media/default.png';
+		}
+		$mime_type = get_post_mime_type( $attachment_id );
+		$defaults  = fed_image_mime_types();
+
+		if ( false !== strpos( (string) $mime_type, 'image' ) ) {
+			$url = wp_get_attachment_image_url( $attachment_id, array( 100, 100 ) );
+			if ( $url ) {
+				return $url;
+			}
+		}
+
+		if ( isset( $defaults[ $mime_type ] ) ) {
+			return $defaults[ $mime_type ];
+		}
+
+		return site_url() . '/wp-includes/images/media/default.png';
+	}
+}
+
+if ( ! function_exists( 'fede_get_image_by_type' ) ) {
+	/**
+	 * Backward compatibility wrapper.
+	 */
+	function fede_get_image_by_type( $options ) {
+		return fed_get_image_by_type( $options );
+	}
+}
+
+/**
+ * Process Extended Form Fields for Built-in Extra Types
+ */
+add_filter( 'fed_process_form_fields', 'fed_core_process_extended_form_fields', 10, 4 );
+function fed_core_process_extended_form_fields( $default, $row, $action, $update ) {
+	$type = isset( $row['input_type'] ) ? $row['input_type'] : '';
+
+	if ( 'wp_editor' === $type ) {
+		if ( 'yes' === $update ) {
+			$default['extended'] = serialize(
+				array(
+					'settings' => array(
+						'textarea_name' => fed_get_data( 'input_meta', $row ),
+						'media_buttons' => fed_get_data( 'extended.settings.media_buttons', $row, 'true' ),
+						'textarea_rows' => fed_get_data( 'extended.settings.textarea_rows', $row, 10 ),
+						'editor_class'  => fed_get_data( 'class_name', $row ),
+						'editor_height' => fed_get_data( 'extended.settings.editor_height', $row, 250 ),
+						'quicktags'     => fed_get_data( 'extended.settings.quicktags', $row, 'true' ),
+					),
+				)
+			);
+			return $default;
+		}
+	}
+
+	if ( 'table' === $type ) {
+		if ( 'yes' === $update ) {
+			$default['extended'] = serialize(
+				array(
+					'table_mode'          => isset( $row['extended']['table_mode'] ) ? sanitize_text_field( $row['extended']['table_mode'] ) : 'editable',
+					'table_template'      => isset( $row['extended']['table_template'] ) ? sanitize_text_field( $row['extended']['table_template'] ) : 'bordered',
+					'disable_user_access' => isset( $row['extended']['disable_user_access'] ) ? wp_kses_post( $row['extended']['disable_user_access'] ) : '',
+				)
+			);
+			return $default;
+		}
+	}
+
+	if ( 'date' === $type ) {
+		if ( 'yes' === $update ) {
+			$default['extended'] = serialize(
+				array(
+					'date_format'         => isset( $row['extended']['date_format'] ) ? sanitize_text_field( $row['extended']['date_format'] ) : 'd-m-Y',
+					'enable_time'         => isset( $row['extended']['enable_time'] ) ? sanitize_text_field( $row['extended']['enable_time'] ) : 'false',
+					'date_mode'           => isset( $row['extended']['date_mode'] ) ? sanitize_text_field( $row['extended']['date_mode'] ) : 'single',
+					'time_24hr'           => isset( $row['extended']['time_24hr'] ) ? sanitize_text_field( $row['extended']['time_24hr'] ) : 'false',
+					'enable_seconds'      => isset( $row['extended']['enable_seconds'] ) ? sanitize_text_field( $row['extended']['enable_seconds'] ) : 'false',
+					'min_date'            => isset( $row['extended']['min_date'] ) ? sanitize_text_field( $row['extended']['min_date'] ) : '',
+					'max_date'            => isset( $row['extended']['max_date'] ) ? sanitize_text_field( $row['extended']['max_date'] ) : '',
+					'disable_user_access' => isset( $row['extended']['disable_user_access'] ) ? wp_kses_post( $row['extended']['disable_user_access'] ) : '',
+				)
+			);
+			return $default;
+		}
+	}
+
+	return $default;
+}
+
+add_filter( 'fed_default_extended_fields', 'fed_core_default_extended_fields' );
+function fed_core_default_extended_fields( $fields ) {
+	$array = array(
+		'settings'       => array(),
+		'table_mode'     => 'editable',
+		'table_template' => 'bordered',
+	);
+
+	return array_merge( (array) $fields, $array );
+}
+

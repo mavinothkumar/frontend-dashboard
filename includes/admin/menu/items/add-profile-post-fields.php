@@ -490,6 +490,12 @@ function fed_get_add_profile_post_fields() {
 				fed_admin_input_fields_radio( $row, $action, $menu_options );
 				fed_admin_input_fields_select( $row, $action, $menu_options );
 				fed_admin_input_fields_url( $row, $action, $menu_options );
+				fed_admin_input_fields_date( $row, $action, $menu_options );
+				fed_admin_input_fields_file( $row, $action, $menu_options );
+				fed_admin_input_fields_color( $row, $action, $menu_options );
+				fed_admin_input_fields_wp_editor( $row, $action, $menu_options );
+				fed_admin_input_fields_label( $row, $action, $menu_options );
+				fed_admin_input_fields_table( $row, $action, $menu_options );
 
 				// Extensible hook for custom addon field panels
 				do_action( 'fed_admin_input_fields_container_extra', $row, $action, $menu_options );
