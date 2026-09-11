@@ -48,6 +48,7 @@ if ( ! function_exists( 'fed_script_admin' ) ) {
 
 			wp_localize_script( 'fed_admin_script', 'frontend_dashboard', fed_js_translation() );
 
+			wp_enqueue_editor();
 			wp_enqueue_media();
 		}
 	}

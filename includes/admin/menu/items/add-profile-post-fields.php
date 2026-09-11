@@ -528,6 +528,30 @@ function fed_get_add_profile_post_fields() {
 				});
 			}
 
+			function initDynamicLabelEditor() {
+				var edId = 'fed_label_html_content_editor';
+				var $textarea = $( '#' + edId );
+				if ( $textarea.length && ! $( '#wp-' + edId + '-wrap' ).length ) {
+					if ( typeof wp !== 'undefined' && wp.editor && typeof wp.editor.initialize === 'function' ) {
+						try {
+							wp.editor.initialize( edId, {
+								tinymce: {
+									wpautop: true,
+									toolbar1: 'formatselect,bold,italic,underline,strikethrough,bullist,numlist,blockquote,hr,alignleft,aligncenter,alignright,alignjustify,link,unlink,outdent,indent,undo,redo,wp_adv',
+									toolbar2: 'fontselect,fontsizeselect,forecolor,backcolor,pastetext,removeformat,charmap,subscript,superscript,table'
+								},
+								quicktags: {
+									buttons: 'strong,em,link,block,del,ins,img,ul,ol,li,code,more,close'
+								},
+								mediaButtons: false
+							} );
+						} catch ( e ) {
+							console.warn( 'initDynamicLabelEditor error:', e );
+						}
+					}
+				}
+			}
+
 			// Activate specific field type in the inspector
 			function activateFieldType(type) {
 				selectedType = type;
@@ -550,10 +574,39 @@ function fed_get_add_profile_post_fields() {
 				if (window.fedInitChoicesBuilders) {
 					window.fedInitChoicesBuilders();
 				}
+
+				// Refresh TinyMCE / WP Editor layout safely when activated
+				if ( type === 'label' ) {
+					initDynamicLabelEditor();
+					setTimeout( function () {
+						if ( typeof tinymce !== 'undefined' ) {
+							var ed = tinymce.get( 'fed_label_html_content_editor' );
+							if ( ed ) {
+								try {
+									ed.show();
+									ed.fire( 'resize' );
+								} catch ( e ) {}
+							}
+						}
+					}, 50 );
+				} else if ( type === 'wp_editor' ) {
+					setTimeout( function () {
+						if ( typeof tinymce !== 'undefined' ) {
+							var ed = tinymce.get( 'post_content' );
+							if ( ed ) {
+								try {
+									ed.show();
+									ed.fire( 'resize' );
+								} catch ( e ) {}
+							}
+						}
+					}, 50 );
+				}
 			}
 
 			// Initialize with selected type
-			activateFieldType(selectedType);
+			activateFieldType( selectedType );
+			initDynamicLabelEditor();
 
 			// Left Tab Navigation Switching
 			$(document).on('click', '.fed-editor-tab-btn', function(e) {
@@ -764,6 +817,11 @@ function fed_get_add_profile_post_fields() {
 					var form = $(this);
 					var $loader = $('.fed_loader');
 					$loader.removeClass('hidden');
+
+					// Sync TinyMCE / WP Editor content to textarea
+					if (typeof tinyMCE !== 'undefined') {
+						tinyMCE.triggerSave();
+					}
 
 					// If in All Roles mode, check all role checkboxes before serializing
 					if (form.find('.fed_specific_roles_wrapper').hasClass('hidden')) {

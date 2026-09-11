@@ -18,6 +18,9 @@ jQuery( document ).ready(
 				if ( form.hasClass( 'fed_admin_menu' ) || form.closest( '#fed_field_builder_modal' ).length ) {
 					return;
 				}
+				if ( typeof tinyMCE !== 'undefined' ) {
+					tinyMCE.triggerSave();
+				}
 				fed_toggle_loader();
 				$.ajax(
 					{
