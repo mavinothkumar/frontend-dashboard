@@ -22,6 +22,49 @@ do_action( 'fed_before_login_form' );
 if ( $menu ) {
 	?>
 	<div class="bc_fed fed_login_container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans text-slate-800">
+		<style>
+			.fed_login_container .form-group label {
+				font-size: 1.15rem;
+				font-weight: 300;
+				color: #334155;
+				margin-bottom: 0.15rem;
+			}
+			.fed_login_container input.form-control:not([type="checkbox"]) {
+				background-color: #eef2fa;
+				border: 1px solid #e2e8f0;
+				border-radius: 0.15rem;
+				padding: 0.75rem 1rem;
+				font-size: 1rem;
+				color: #1e293b;
+				width: 100%;
+				box-shadow: none;
+			}
+			.fed_login_container input.form-control:not([type="checkbox"]):focus {
+				outline: none;
+				border-color: #3b82f6;
+				box-shadow: 0 0 0 1px #3b82f6;
+			}
+			.fed_login_container .form-group:has(input[type="checkbox"]) {
+				flex-direction: row;
+				align-items: center;
+				gap: 0.75rem;
+				margin-top: 1rem;
+			}
+			.fed_login_container input[type="checkbox"] {
+				width: 1.25rem;
+				height: 1.25rem;
+				border: 1px solid #94a3b8;
+				border-radius: 0.15rem;
+				cursor: pointer;
+			}
+			.fed_login_container .form-group:has(input[type="checkbox"]) label {
+				font-size: 0.95rem;
+				font-weight: 500;
+				color: #475569;
+				margin-bottom: 0;
+				cursor: pointer;
+			}
+		</style>
 		<?php echo fed_loader(); ?>
 		
 		<div class="flex justify-center">
@@ -29,16 +72,16 @@ if ( $menu ) {
 				<div class="bg-white shadow-xl rounded-2xl overflow-hidden border border-slate-200/80">
 					
 					<!-- Tab Navigation -->
-					<div class="bg-slate-100/80 p-2 border-b border-slate-200/80 flex items-center justify-around gap-1">
+					<div class="bg-slate-50 p-3 border-b border-slate-100 flex items-center justify-around gap-1">
 						<?php
 						foreach ( $menus as $key => $menu_item ) {
 							$is_active = $page_name === $key;
 							$tab_class = $is_active
-								? 'bg-blue-600 text-white shadow-sm font-bold'
-								: 'text-slate-600 hover:text-slate-900 hover:bg-white/60 font-semibold';
+								? 'bg-[#2563eb] text-white shadow font-bold'
+								: 'text-slate-500 hover:text-slate-800 hover:bg-slate-100/50 font-medium';
 							?>
 							<a href="<?php echo esc_url( add_query_arg( array( 'page_type' => esc_attr( $key ) ), fed_get_current_page_url() ) ); ?>"
-								class="flex-1 text-center py-2 px-3 rounded-xl text-xs sm:text-sm transition-all duration-200 <?php echo esc_attr( $tab_class ); ?>"
+								class="flex-1 text-center py-2.5 px-3 rounded-xl text-sm transition-all duration-200 <?php echo esc_attr( $tab_class ); ?>"
 								id="<?php echo esc_attr( $key ); ?>">
 								<?php esc_html_e( fed_get_data( 'label', $menu_item ), 'frontend-dashboard' ); ?>
 							</a>
@@ -53,6 +96,7 @@ if ( $menu ) {
 
 						<div class="fed_tab_content">
 							<form method="post" class="fed_form_post space-y-4">
+								<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
 								<?php
 								$contents = $menu['content'];
 								uasort( $contents, 'fed_sort_by_order' );

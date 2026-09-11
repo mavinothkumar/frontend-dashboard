@@ -24,9 +24,13 @@ jQuery(document).ready(function ($) {
         data: data,
         url: url,
         success: function (results) {
-          console.log(results)
           fed_toggle_loader()
           fedAlert.loginStatus(results)
+        },
+        error: function (xhr) {
+          fed_toggle_loader()
+          var resp = xhr.responseJSON ? xhr.responseJSON : (xhr.responseText || 'Server Error: ' + xhr.status + ' ' + xhr.statusText)
+          fedAlert.loginStatus(resp)
         }
       })
       e.preventDefault()
@@ -447,37 +451,52 @@ jQuery(document).ready(function ($) {
         var error
         if (results.success) {
           swal({
-            title: results.data.message || frontend_dashboard.alert.confirmation.title,
-            text: frontend_dashboard.alert.redirecting,
-            type: 'success',
-            showConfirmButton: false,
-            timer: 1000,
-            confirmButtonColor: '#0AAAAA'
-          }).then(
-            function () {
-            },
-            function () {
-              window.location.href = results.data.url
-            })
-        } else {
-          if (frontend_dashboard.fed_captcha_details && frontend_dashboard.fed_captcha_details.fed_captcha_enable === 'Enable') {
-            grecaptcha.reset()
-          }
-          if (results.data.user instanceof Array) {
-            error = results.data.user.join('</br>')
-          } else {
-            error = results.data.user
-          }
-          swal({
-            title: error,
-            type: 'error',
-            confirmButtonColor: '#DD6B55'
-          })
-        }
-      },
-      adminSettings: function (results) {
-        if (results.success) {
-          swal({
+			title: results && results.data && results.data.message ? results.data.message : frontend_dashboard.alert.confirmation.title,
+			text: frontend_dashboard.alert.redirecting,
+			type: 'success',
+			showConfirmButton: false,
+			timer: 1000,
+			confirmButtonColor: '#0AAAAA'
+		  }).then(
+			function () {
+			},
+			function () {
+			  window.location.href = results.data.url
+			})
+		} else {
+		  if (frontend_dashboard.fed_captcha_details && frontend_dashboard.fed_captcha_details.fed_captcha_enable === 'Enable') {
+			grecaptcha.reset()
+		  }
+		  if (results && results.data) {
+			if (results.data.user instanceof Array) {
+			  error = results.data.user.join('<br>')
+			} else if (results.data.user) {
+			  error = results.data.user
+			} else if (results.data.message) {
+			  error = results.data.message
+			} else {
+			  error = 'Unknown error occurred.'
+			}
+		  } else if (typeof results === 'string' && results.length > 0) {
+			error = results
+		  } else {
+			error = 'Something went wrong. Please try again.'
+		  }
+
+		  var cleanTitle = typeof error === 'string' ? error.replace(/<[^>]*>?/gm, ' ') : error
+
+		  swal({
+			title: cleanTitle,
+			html: true,
+			text: error,
+			type: 'error',
+			confirmButtonColor: '#DD6B55'
+		  })
+		}
+	  },
+	  adminSettings: function (results) {
+		if (results.success) {
+		  swal({
             title: results.data.message || frontend_dashboard.alert.something_went_wrong,
             type: 'success',
             confirmButtonColor: '#0AAAAA',

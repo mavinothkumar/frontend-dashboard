@@ -610,19 +610,15 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 	if ( $row['input_type'] === 'date' ) {
 		if ( isset( $row['extended'] ) ) {
 			if ( $update === 'yes' ) {
-				$extended            = array(
-					'date_format' => isset( $row['extended']['date_format'] ) ? sanitize_text_field(
-						$row['extended']['date_format']
-					) : 'd-m-Y',
-					'enable_time' => isset( $row['extended']['enable_time'] ) ? sanitize_text_field(
-						$row['extended']['enable_time']
-					) : 'no',
-					'date_mode'   => isset( $row['extended']['date_mode'] ) ? sanitize_text_field(
-						$row['extended']['date_mode']
-					) : 'single',
-					'time_24hr'   => isset( $row['extended']['time_24hr'] ) ? sanitize_text_field(
-						$row['extended']['time_24hr']
-					) : '24_hours',
+				$extended = array(
+					'date_format'         => isset( $row['extended']['date_format'] ) ? sanitize_text_field( $row['extended']['date_format'] ) : 'd-m-Y',
+					'enable_time'         => isset( $row['extended']['enable_time'] ) ? sanitize_text_field( $row['extended']['enable_time'] ) : 'false',
+					'date_mode'           => isset( $row['extended']['date_mode'] ) ? sanitize_text_field( $row['extended']['date_mode'] ) : 'single',
+					'time_24hr'           => isset( $row['extended']['time_24hr'] ) ? sanitize_text_field( $row['extended']['time_24hr'] ) : 'true',
+					'enable_seconds'      => isset( $row['extended']['enable_seconds'] ) ? sanitize_text_field( $row['extended']['enable_seconds'] ) : 'false',
+					'min_date'            => isset( $row['extended']['min_date'] ) ? sanitize_text_field( $row['extended']['min_date'] ) : '',
+					'max_date'            => isset( $row['extended']['max_date'] ) ? sanitize_text_field( $row['extended']['max_date'] ) : '',
+					'disable_user_access' => isset( $row['extended']['disable_user_access'] ) ? wp_kses_post( $row['extended']['disable_user_access'] ) : '',
 				);
 				$default['extended'] = serialize( $extended );
 			} else {
