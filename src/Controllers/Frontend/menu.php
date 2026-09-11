@@ -293,3 +293,37 @@ function fed_get_collapse_menu_content() {
 	);
 }
 
+if ( ! function_exists( 'fed_core_convert_dashboard_menu_url' ) ) {
+	/**
+	 * Built-in Core Handler: Convert Dashboard Menu URL if menu_key is 'url'.
+	 *
+	 * @param string|array $menu_url
+	 * @param array        $menu
+	 * @return string|array
+	 */
+	function fed_core_convert_dashboard_menu_url( $menu_url, $menu ) {
+		if ( isset( $menu['menu_key'] ) && 'url' === $menu['menu_key'] && ! empty( $menu['menu_value'] ) ) {
+			$menu_value = maybe_unserialize( $menu['menu_value'] );
+			if ( is_array( $menu_value ) ) {
+				$url    = isset( $menu_value['url'] ) ? esc_url( $menu_value['url'] ) : null;
+				$target = isset( $menu_value['target'] ) && ! empty( $menu_value['target'] ) ? $menu_value['target'] : '_self';
+				if ( $url !== null ) {
+					return array(
+						'url'    => $url,
+						'target' => $target,
+					);
+				}
+			} elseif ( is_string( $menu_value ) && ! empty( $menu_value ) ) {
+				return array(
+					'url'    => esc_url( $menu_value ),
+					'target' => '_self',
+				);
+			}
+		}
+
+		return $menu_url;
+	}
+	add_filter( 'fed_convert_dashboard_menu_url', 'fed_core_convert_dashboard_menu_url', 10, 2 );
+}
+
+

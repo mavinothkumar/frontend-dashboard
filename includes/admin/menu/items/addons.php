@@ -70,8 +70,10 @@ function fed_get_addons_catalog() {
 			'category_name' => __( 'Core & Posts', 'frontend-dashboard' ),
 			'icon'          => 'fas fa-file-alt',
 			'icon_bg'       => 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white',
-			'tags'          => array( 'Page Mapping', 'Shortcode Embeds', 'Custom Tabs', 'Access Control' ),
+			'tags'          => array( 'Merged into Core', 'Built-in Feature', 'Page Mapping', 'Native' ),
 			'settings_url'  => admin_url( 'admin.php?page=fed_dashboard_menu' ),
+			'description'   => __( 'Frontend Dashboard Pages has been merged directly into Core. You can map WordPress pages and external URLs directly in Dashboard Navigation Menus.', 'frontend-dashboard' ),
+			'is_merged'     => true,
 		),
 		'frontend-dashboard-extra'                     => array(
 			'category'      => 'core',
@@ -692,7 +694,12 @@ function fed_get_plugin_pages_menu() {
 
 								<?php if ( empty( $addon['thumbnail'] ) ) : ?>
 									<div>
-										<?php if ( $is_active ) : ?>
+										<?php if ( ! empty( $addon['is_merged'] ) ) : ?>
+											<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200">
+												<i class="fas fa-check-circle text-[10px] mr-1 text-indigo-600"></i>
+												<?php esc_html_e( 'Built-in to Core', 'frontend-dashboard' ); ?>
+											</span>
+										<?php elseif ( $is_active ) : ?>
 											<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/80">
 												<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse mr-1.5"></span>
 												<?php esc_html_e( 'Active', 'frontend-dashboard' ); ?>
@@ -743,7 +750,20 @@ function fed_get_plugin_pages_menu() {
 						</div>
 
 						<div class="flex items-center space-x-2 flex-wrap">
-							<?php if ( $is_active ) : ?>
+							<?php if ( ! empty( $addon['is_merged'] ) ) : ?>
+								<a href="<?php echo esc_url( admin_url( 'admin.php?page=fed_dashboard_menu' ) ); ?>" class="inline-flex items-center px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition-all shadow-sm">
+									<i class="fas fa-sliders-h mr-1.5"></i>
+									<?php esc_html_e( 'Manage in Menus', 'frontend-dashboard' ); ?>
+								</a>
+								<?php if ( $is_active ) : ?>
+									<button type="button" class="fed-btn-deactivate inline-flex items-center px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-lg transition-all border border-rose-200"
+										data-plugin="<?php echo esc_attr( $addon['file'] ); ?>"
+										data-title="<?php echo esc_attr( $addon['title'] ); ?>">
+										<i class="fas fa-power-off mr-1"></i>
+										<?php esc_html_e( 'Deactivate', 'frontend-dashboard' ); ?>
+									</button>
+								<?php endif; ?>
+							<?php elseif ( $is_active ) : ?>
 								<?php if ( $has_update ) : ?>
 									<a href="<?php echo esc_url( $addon['download_url'] ); ?>" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-2.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded-lg transition-all shadow-sm">
 										<i class="fas fa-sync-alt mr-1"></i>

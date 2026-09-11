@@ -81,7 +81,9 @@ if ( ! function_exists( 'fed_script_front_end' ) ) {
 
 			wp_localize_script( 'fed_script', 'frontend_dashboard', $translation_array );
 
-			wp_enqueue_media();
+			if ( is_user_logged_in() || fed_is_dashboard() ) {
+				wp_enqueue_media();
+			}
 		}
 
 		wp_enqueue_style( 'fed_global_admin_style' );

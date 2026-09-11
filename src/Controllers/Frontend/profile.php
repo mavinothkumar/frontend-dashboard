@@ -377,3 +377,85 @@ function fed_display_dashboard_profile( $menu_item ) {
 	</div>
 	<?php
 }
+
+if ( ! function_exists( 'fed_core_menu_default_page' ) ) {
+	/**
+	 * Built-in Core Handler: Suppress default profile form if a WordPress page is assigned to this menu.
+	 *
+	 * @param bool   $status Default status.
+	 * @param array  $menus  Menus array.
+	 * @param string $index  Menu slug / index.
+	 * @return bool
+	 */
+	function fed_core_menu_default_page( $status, $menus, $index ) {
+		if ( isset( $menus[ $index ]['menu_key'] ) && 'yes' === $menus[ $index ]['menu_key'] ) {
+			return false;
+		}
+
+		return $status;
+	}
+	add_filter( 'fed_menu_default_page', 'fed_core_menu_default_page', 10, 3 );
+}
+
+if ( ! function_exists( 'fed_core_override_default_page' ) ) {
+	/**
+	 * Built-in Core Handler: Render assigned WordPress page content inside dashboard canvas.
+	 *
+	 * @param array  $menus Menus array.
+	 * @param string $index Menu slug / index.
+	 */
+	function fed_core_override_default_page( $menus, $index ) {
+		if ( isset( $menus[ $index ]['menu_key'] ) && 'yes' === $menus[ $index ]['menu_key'] && ! empty( $menus[ $index ]['menu_value'] ) ) {
+			$page_id = (int) $menus[ $index ]['menu_value'];
+			$post    = get_post( $page_id );
+
+			if ( $post instanceof \WP_Post ) {
+				// WPBakery Page Builder Custom CSS support
+				$wpb_css = get_post_meta( $post->ID, '_wpb_shortcodes_custom_css', true );
+				if ( $wpb_css ) {
+					echo '<style type="text/css" data-type="vc_shortcodes-custom-css">' . strip_tags( $wpb_css ) . '</style>';
+				}
+
+				// Elementor page content support if Elementor is active
+				if ( class_exists( '\Elementor\Plugin' ) && \Elementor\Plugin::$instance->documents->get( $post->ID ) && \Elementor\Plugin::$instance->documents->get( $post->ID )->is_built_with_elementor() ) {
+					echo \Elementor\Plugin::$instance->frontend->get_builder_content_for_display( $post->ID );
+				} else {
+					echo '<div class="fed-page-content prose max-w-none">' . apply_filters( 'the_content', $post->post_content ) . '</div>';
+				}
+			} else {
+				?>
+				<div class="bg-white rounded-2xl border border-slate-200/80 p-8 text-center text-slate-500">
+					<i class="fas fa-file-excel text-3xl text-amber-500 mb-3"></i>
+					<p class="text-sm font-semibold text-slate-800"><?php esc_html_e( 'Assigned page not found.', 'frontend-dashboard' ); ?></p>
+					<p class="text-xs text-slate-400"><?php esc_html_e( 'Please check the page assignment in Dashboard Menus settings.', 'frontend-dashboard' ); ?></p>
+				</div>
+				<?php
+			}
+		}
+	}
+	add_action( 'fed_override_default_page', 'fed_core_override_default_page', 10, 2 );
+}
+
+if ( ! function_exists( 'fed_core_menu_title' ) ) {
+	/**
+	 * Built-in Core Handler: Use post title as fallback menu title if not explicitly set.
+	 *
+	 * @param string $menu_title
+	 * @param array  $menus
+	 * @param string $index
+	 * @return string
+	 */
+	function fed_core_menu_title( $menu_title, $menus, $index ) {
+		if ( isset( $menus[ $index ]['menu_key'] ) && 'yes' === $menus[ $index ]['menu_key'] && ! empty( $menus[ $index ]['menu_value'] ) ) {
+			if ( empty( $menu_title ) || 'MISSING' === $menu_title ) {
+				$post = get_post( (int) $menus[ $index ]['menu_value'] );
+				if ( $post instanceof \WP_Post ) {
+					return $post->post_title;
+				}
+			}
+		}
+
+		return $menu_title;
+	}
+	add_filter( 'fed_menu_title', 'fed_core_menu_title', 10, 3 );
+}
