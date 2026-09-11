@@ -123,6 +123,10 @@ function fed_display_dashboard_menu( $menus ) {
 	$get_payload       = \FED\Helpers\InputHelper::get();
 
 	foreach ( $menus['menu_items'] as $index => $menu ) {
+		if ( 'logout_logout' === $index || 'logout' === ( $menu['menu_slug'] ?? '' ) ) {
+			continue;
+		}
+
 		$menu_format  = fed_format_menu_items( $menu, $index, $first_element, $dashboard_url, $index );
 		$is_submenu   = false;
 		$parent_id    = isset( $get_payload['parent_id'] ) ? sanitize_text_field( $get_payload['parent_id'] ) : '';
@@ -171,27 +175,15 @@ function fed_display_dashboard_menu( $menus ) {
 			</div>
 			<?php
 		} else {
-			if ( 'logout_logout' === $index || 'logout' === $menu['menu_slug'] ) {
-				?>
-				<div class="fed_menu_item mt-3 pt-3 border-t border-gray-100">
-					<a href="<?php echo wp_logout_url( fed_get_logout_redirect_url() ); ?>"
-							class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 hover:text-red-700 transition-all duration-150">
-						<span class="w-5 text-center text-base <?php echo esc_attr( $menu['menu_image_id'] ); ?> text-red-500"></span>
-						<span><?php echo esc_html( $menu_format['menu_name'] ); ?></span>
-					</a>
-				</div>
-				<?php
-			} else {
-				?>
-				<div class="fed_menu_item mb-1">
-					<a href="<?php echo esc_url( $menu_format['menu_url'] ); ?>"
-							class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 <?php echo $isActive ? 'bg-indigo-50 text-indigo-700 font-semibold shadow-xs' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'; ?>">
-						<span class="w-5 text-center text-base <?php echo esc_attr( $menu['menu_image_id'] ); ?> <?php echo $isActive ? 'text-indigo-600' : 'text-gray-400'; ?>"></span>
-						<span><?php echo esc_html( $menu_format['menu_name'] ); ?></span>
-					</a>
-				</div>
-				<?php
-			}
+			?>
+			<div class="fed_menu_item mb-1">
+				<a href="<?php echo esc_url( $menu_format['menu_url'] ); ?>"
+						class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 <?php echo $isActive ? 'bg-indigo-50 text-indigo-700 font-semibold shadow-xs' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'; ?>">
+					<span class="w-5 text-center text-base <?php echo esc_attr( $menu['menu_image_id'] ); ?> <?php echo $isActive ? 'text-indigo-600' : 'text-gray-400'; ?>"></span>
+					<span><?php echo esc_html( $menu_format['menu_name'] ); ?></span>
+				</a>
+			</div>
+			<?php
 		}
 	}
 }
@@ -276,23 +268,13 @@ function fed_get_collapse_menu() {
 	}
 	$collapse = fed_get_collapse_menu_content();
 	?>
-	<div class="panel panel-secondary fed_menu_item">
-		<div class="panel-heading" role="tab">
-			<h4 class="panel-title fed_collapse_menu">
-				<a role="button" data-toggle="collapse" data-parent="#fed_default_template"
-						href="#">
-					<div class="fed_flex_left">
-						<div class="fed_menu_icon fed_collapse_menu_icon menu_open">
-							<span class="open <?php echo esc_attr( $collapse['open_icon'] ); ?>"></span>
-							<span class="closed hide <?php echo esc_attr( $collapse['close_icon'] ); ?>"></span>
-						</div>
-						<div class="fed_menu_title fed_collapse_menu_item">
-							<?php echo esc_attr( $collapse['name'] ); ?>
-						</div>
-					</div>
-				</a>
-			</h4>
-		</div>
+	<div class="fed_menu_item mt-2 pt-2 border-t border-slate-200/20 fed_collapse_menu_wrapper">
+		<button type="button"
+				class="fed_collapse_menu w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 text-slate-400 hover:text-slate-200 cursor-pointer">
+			<span class="w-5 text-center text-base fa fa-arrow-left"></span>
+			<span><?php echo esc_html( $collapse['name'] ); ?></span>
+		</button>
+	</div>
 	<?php
 }
 

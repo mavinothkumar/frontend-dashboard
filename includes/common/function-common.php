@@ -70,24 +70,28 @@ if ( ! function_exists( 'fed_loader' ) ) {
 	/**
 	 * Loader.
 	 *
-	 * @param  string $hide  Hide.
-	 *
-	 * @param  null   $message  Message.
+	 * @param  string      $hide     Hide class ('hide' or 'hidden').
+	 * @param  string|null $message  Optional message.
 	 *
 	 * @return string
 	 */
 	function fed_loader( $hide = 'hide', $message = null ) {
 		$hide_class = ( 'hide' === $hide || 'hidden' === $hide ) ? 'hide hidden' : $hide;
-		$html = '<div class="preview-area ' . esc_attr( $hide_class ) . '">
-        <div class="spinner_circle">
-            <div class="double-bounce1"></div>
-            <div class="double-bounce2"></div>
-        </div>';
+		$msg_text   = ! empty( $message ) ? $message : __( 'Saving changes, please wait...', 'frontend-dashboard' );
 
-		if ( $message ) {
-			$html .= '<div class="fed_loader_message hide hidden">' . $message . '</div>';
-		}
-
+		$html  = '<div class="preview-area fed-global-loader-overlay ' . esc_attr( $hide_class ) . '">';
+		$html .= '<div class="fed-loader-card">';
+		$html .= '  <div class="fed-loader-spinner">';
+		$html .= '    <svg class="fed-spinner-svg" viewBox="0 0 50 50">';
+		$html .= '      <circle class="fed-spinner-path" cx="25" cy="25" r="20" fill="none" stroke-width="4"></circle>';
+		$html .= '    </svg>';
+		$html .= '  </div>';
+		$html .= '  <div class="fed-loader-text">' . esc_html( $msg_text ) . '</div>';
+		$html .= '  <div class="spinner_circle" style="display:none !important;">';
+		$html .= '    <div class="double-bounce1"></div>';
+		$html .= '    <div class="double-bounce2"></div>';
+		$html .= '  </div>';
+		$html .= '</div>';
 		$html .= '</div>';
 
 		return $html;

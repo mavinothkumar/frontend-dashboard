@@ -653,18 +653,37 @@ jQuery(document).ready(function ($) {
       }
     });
 
-    function fed_toggle_loader () {
-      $('.preview-area').toggleClass('hide hidden')
+    function fed_toggle_loader (show) {
+      if (typeof show === 'boolean') {
+        if (show) {
+          $('.preview-area').removeClass('hide hidden')
+        } else {
+          $('.preview-area').addClass('hide hidden')
+        }
+      } else {
+        if ($('.preview-area').hasClass('hide') || $('.preview-area').hasClass('hidden')) {
+          $('.preview-area').removeClass('hide hidden')
+        } else {
+          $('.preview-area').addClass('hide hidden')
+        }
+      }
     }
   }
 )
 
-jQuery.fed_toggle_loader = function () {
-  jQuery('.preview-area').toggleClass('hide hidden')
-  if (jQuery('.fed_loader_message').length) {
-    window.setTimeout(function () {
-      jQuery('.fed_loader_message').toggleClass('hide hidden')
-    }, 2000)
+jQuery.fed_toggle_loader = function (show) {
+  if (typeof show === 'boolean') {
+    if (show) {
+      jQuery('.preview-area').removeClass('hide hidden')
+    } else {
+      jQuery('.preview-area').addClass('hide hidden')
+    }
+  } else {
+    if (jQuery('.preview-area').hasClass('hide') || jQuery('.preview-area').hasClass('hidden')) {
+      jQuery('.preview-area').removeClass('hide hidden')
+    } else {
+      jQuery('.preview-area').addClass('hide hidden')
+    }
   }
 }
 

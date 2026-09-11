@@ -40,47 +40,44 @@ function fed_display_dashboard_profile( $menu_item ) {
 	?>
 	<div class="fed_dashboard_item space-y-6">
 
-		<!-- Profile Hero Banner -->
-		<div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 p-6 sm:p-8 text-white shadow-sm border border-slate-800/80">
-			<!-- Subtle background decorative glow -->
-			<div class="absolute -right-12 -top-12 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
-			<div class="absolute -left-12 -bottom-12 w-64 h-64 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
-
-			<div class="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-				<!-- Left: Avatar & Identity -->
-				<div class="flex items-center gap-5">
-					<div class="relative flex-shrink-0">
-						<img class="w-20 h-20 sm:w-22 sm:h-22 rounded-2xl object-cover ring-4 ring-white/10 shadow-md bg-slate-800"
-							 src="<?php echo esc_url( get_avatar_url( $user ? $user->ID : 0, [ 'size' => 180 ] ) ); ?>"
-							 alt="<?php echo esc_attr( $user ? $user->display_name : '' ); ?>">
-						<span class="absolute bottom-0 right-0 w-4 h-4 bg-emerald-500 border-2 border-slate-900 rounded-full" title="<?php esc_attr_e( 'Active', 'frontend-dashboard' ); ?>"></span>
-					</div>
-					<div>
-						<div class="flex flex-wrap items-center gap-2.5 mb-1">
-							<h1 class="text-xl sm:text-2xl font-bold tracking-tight text-white">
-								<?php echo esc_html( $user ? $user->display_name : 'User' ); ?>
-							</h1>
-							<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-								<?php echo esc_html( $primaryRole ); ?>
-							</span>
-						</div>
-						<p class="text-xs sm:text-sm text-slate-300 font-mono flex items-center gap-1.5 mb-2">
-							<span>@<?php echo esc_html( $user ? $user->user_login : '' ); ?></span>
-						</p>
-						<p class="text-xs text-slate-400">
-							<?php esc_html_e( 'Manage and update your account details, personal profile, and preferences.', 'frontend-dashboard' ); ?>
-						</p>
-					</div>
+		<!-- Profile Identity Header -->
+		<div class="rounded-2xl p-6 sm:p-7 border shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 transition-colors"
+		     style="background-color: var(--fed-body-bg, #F8FAFC); border-color: var(--fed-border, #E2E8F0);">
+			<!-- Left: Avatar & Identity -->
+			<div class="flex items-center gap-5">
+				<div class="relative flex-shrink-0">
+					<img class="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl object-cover ring-2 ring-white/60 shadow-xs"
+						 src="<?php echo esc_url( get_avatar_url( $user ? $user->ID : 0, [ 'size' => 180 ] ) ); ?>"
+						 alt="<?php echo esc_attr( $user ? $user->display_name : '' ); ?>">
+					<span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full" title="<?php esc_attr_e( 'Active', 'frontend-dashboard' ); ?>"></span>
 				</div>
-
-				<!-- Right: Quick Metadata -->
-				<?php if ( $registeredDate ) : ?>
-					<div class="flex sm:flex-col items-center sm:items-end gap-3 sm:gap-1 text-xs text-slate-400 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-800/80 w-full sm:w-auto">
-						<span class="text-slate-400"><?php esc_html_e( 'Member Since', 'frontend-dashboard' ); ?></span>
-						<span class="font-semibold text-slate-200"><?php echo esc_html( $registeredDate ); ?></span>
+				<div>
+					<div class="flex flex-wrap items-center gap-2.5 mb-1">
+						<h2 class="text-lg sm:text-xl font-black tracking-tight m-0" style="color: var(--fed-text-main, #0F172A);">
+							<?php echo esc_html( $user ? $user->display_name : 'User' ); ?>
+						</h2>
+						<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold shadow-2xs"
+						      style="background-color: var(--fed-active-bg, #EEF2FF); color: var(--fed-active-text, #4F46E5);">
+							<?php echo esc_html( $primaryRole ); ?>
+						</span>
 					</div>
-				<?php endif; ?>
+					<p class="text-xs font-mono font-medium flex items-center gap-1.5 mb-1.5 m-0" style="color: var(--fed-sidebar-text, #64748B);">
+						<span>@<?php echo esc_html( $user ? $user->user_login : '' ); ?></span>
+					</p>
+					<p class="text-xs m-0" style="color: var(--fed-sidebar-text, #64748B); opacity: 0.85;">
+						<?php esc_html_e( 'Manage and update your account details, personal profile, and preferences.', 'frontend-dashboard' ); ?>
+					</p>
+				</div>
 			</div>
+
+			<!-- Right: Quick Metadata -->
+			<?php if ( $registeredDate ) : ?>
+				<div class="flex sm:flex-col items-center sm:items-end gap-1 text-xs pt-3 sm:pt-0 border-t sm:border-t-0 w-full sm:w-auto"
+				     style="border-color: var(--fed-border, #E2E8F0); color: var(--fed-sidebar-text, #64748B);">
+					<span class="opacity-75"><?php esc_html_e( 'Member Since', 'frontend-dashboard' ); ?></span>
+					<span class="font-bold" style="color: var(--fed-text-main, #0F172A);"><?php echo esc_html( $registeredDate ); ?></span>
+				</div>
+			<?php endif; ?>
 		</div>
 
 		<div>
@@ -347,15 +344,15 @@ function fed_display_dashboard_profile( $menu_item ) {
 						</style>
 
 						<!-- Form Action Footer Bar -->
-						<div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs px-6 py-3.5 flex items-center justify-end">
+						<div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs px-6 py-3.5 flex items-center justify-end fed_profile_footer_card">
 							<button type="submit"
 									id="fed_profile_submit_btn"
 									class="fed-profile-save-btn inline-flex items-center justify-center gap-1.5 px-4.5 rounded-xl font-semibold text-xs tracking-wide text-white shadow-2xs hover:shadow-xs active:scale-[0.98] transition-all duration-150 cursor-pointer w-full sm:w-auto"
-									style="height: 38px !important; min-height: 38px !important; padding: 0 18px !important; font-size: 12px !important; line-height: 1 !important; font-weight: 600 !important; background-color: #4f46e5 !important; color: #ffffff !important; border: 1px solid #4338ca !important; border-radius: 10px !important; text-transform: none !important; letter-spacing: 0.01em !important;">
-								<svg class="w-3.5 h-3.5 shrink-0" style="width: 14px !important; height: 14px !important; color: #ffffff !important; stroke: #ffffff !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									style="height: 38px !important; min-height: 38px !important; padding: 0 18px !important; font-size: 12px !important; line-height: 1 !important; font-weight: 600 !important; background-color: var(--fed-primary, #4f46e5) !important; color: var(--fed-primary-font, #ffffff) !important; border: 1px solid var(--fed-primary, #4338ca) !important; border-radius: 10px !important; text-transform: none !important; letter-spacing: 0.01em !important;">
+								<svg class="w-3.5 h-3.5 shrink-0" style="width: 14px !important; height: 14px !important; color: var(--fed-primary-font, #ffffff) !important; stroke: var(--fed-primary-font, #ffffff) !important;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
 								</svg>
-								<span style="font-size: 12px !important; line-height: 1 !important; color: #ffffff !important; font-weight: 600 !important; text-transform: none !important; letter-spacing: 0.01em !important;"><?php esc_html_e( 'Save Changes', 'frontend-dashboard' ); ?></span>
+								<span style="font-size: 12px !important; line-height: 1 !important; color: var(--fed-primary-font, #ffffff) !important; font-weight: 600 !important; text-transform: none !important; letter-spacing: 0.01em !important;"><?php esc_html_e( 'Save Changes', 'frontend-dashboard' ); ?></span>
 							</button>
 						</div>
 
@@ -363,9 +360,9 @@ function fed_display_dashboard_profile( $menu_item ) {
 					<?php
 				} else {
 					?>
-					<div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs text-center py-12 px-6 text-slate-400">
-						<svg class="w-12 h-12 mx-auto mb-3 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-						<p class="text-sm font-medium"><?php esc_html_e( 'No fields configured for this section.', 'frontend-dashboard' ); ?></p>
+					<div class="fed_empty_state_card rounded-2xl border border-slate-200/80 p-12 text-center text-slate-400" style="background-color: var(--fed-body-bg, #f8fafc); border-color: var(--fed-border, #e2e8f0);">
+						<svg class="w-12 h-12 mx-auto mb-3 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+						<p class="text-sm font-medium" style="color: var(--fed-text-main, #0f172a); opacity: 0.8;"><?php esc_html_e( 'No fields configured for this section.', 'frontend-dashboard' ); ?></p>
 					</div>
 					<?php
 				}

@@ -42,25 +42,27 @@ function fed_admin_setting_upl_request() {
  * Admin Setting User Profile Level Color request.
  */
 function fed_admin_setting_upl_color_request() {
-	$request                         = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
-	$fed_admin_settings_upl          = get_option( 'fed_admin_setting_upl_color' );
+	$request                = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
+	$fed_admin_settings_upl = get_option( 'fed_admin_setting_upl_color', array() );
+	if ( ! is_array( $fed_admin_settings_upl ) ) {
+		$fed_admin_settings_upl = array();
+	}
+
+	$colors = isset( $request['color'] ) && is_array( $request['color'] ) ? $request['color'] : array();
+
 	$fed_admin_settings_upl['color'] = array(
-		'fed_upl_color_bg_color'       => isset( $request['color']['fed_upl_color_bg_color'] ) ? sanitize_text_field(
-			$request['color']['fed_upl_color_bg_color']
-		) : '#0AAAAA',
-
-		'fed_upl_color_bg_font_color'  => isset( $request['color']['fed_upl_color_bg_font_color'] ) ? sanitize_text_field(
-			$request['color']['fed_upl_color_bg_font_color']
-		) : '#ffffff',
-
-		'fed_upl_color_sbg_color'      => isset( $request['color']['fed_upl_color_sbg_color'] ) ? sanitize_text_field(
-			$request['color']['fed_upl_color_sbg_color']
-		) : '#033333',
-
-		'fed_upl_color_sbg_font_color' => isset( $request['color']['fed_upl_color_sbg_font_color'] ) ? sanitize_text_field(
-			$request['color']['fed_upl_color_sbg_font_color']
-		) : '#ffffff',
-
+		'fed_upl_color_bg_color'       => isset( $colors['fed_upl_color_bg_color'] ) ? sanitize_text_field( $colors['fed_upl_color_bg_color'] ) : '#4F46E5',
+		'fed_upl_color_bg_font_color'  => isset( $colors['fed_upl_color_bg_font_color'] ) ? sanitize_text_field( $colors['fed_upl_color_bg_font_color'] ) : '#FFFFFF',
+		'fed_upl_color_sbg_color'      => isset( $colors['fed_upl_color_sbg_color'] ) ? sanitize_text_field( $colors['fed_upl_color_sbg_color'] ) : '#0F172A',
+		'fed_upl_color_sbg_font_color' => isset( $colors['fed_upl_color_sbg_font_color'] ) ? sanitize_text_field( $colors['fed_upl_color_sbg_font_color'] ) : '#FFFFFF',
+		'fed_upl_color_sidebar_bg'     => isset( $colors['fed_upl_color_sidebar_bg'] ) ? sanitize_text_field( $colors['fed_upl_color_sidebar_bg'] ) : '#FFFFFF',
+		'fed_upl_color_sidebar_text'   => isset( $colors['fed_upl_color_sidebar_text'] ) ? sanitize_text_field( $colors['fed_upl_color_sidebar_text'] ) : '#475569',
+		'fed_upl_color_active_bg'      => isset( $colors['fed_upl_color_active_bg'] ) ? sanitize_text_field( $colors['fed_upl_color_active_bg'] ) : '#EEF2FF',
+		'fed_upl_color_active_text'    => isset( $colors['fed_upl_color_active_text'] ) ? sanitize_text_field( $colors['fed_upl_color_active_text'] ) : '#4338CA',
+		'fed_upl_color_body_bg'        => isset( $colors['fed_upl_color_body_bg'] ) ? sanitize_text_field( $colors['fed_upl_color_body_bg'] ) : '#F8FAFC',
+		'fed_upl_color_card_bg'        => isset( $colors['fed_upl_color_card_bg'] ) ? sanitize_text_field( $colors['fed_upl_color_card_bg'] ) : '#FFFFFF',
+		'fed_upl_color_text_main'      => isset( $colors['fed_upl_color_text_main'] ) ? sanitize_text_field( $colors['fed_upl_color_text_main'] ) : '#0F172A',
+		'fed_upl_color_border'         => isset( $colors['fed_upl_color_border'] ) ? sanitize_text_field( $colors['fed_upl_color_border'] ) : '#E2E8F0',
 	);
 
 	$new_value = apply_filters( 'fed_admin_settings_upl_color', $fed_admin_settings_upl, $request );
@@ -69,7 +71,7 @@ function fed_admin_setting_upl_color_request() {
 
 	wp_send_json_success(
 		array(
-			'message' => __( 'Color Settings Updated Successfully ' ),
+			'message' => __( 'Color Theme Settings Updated Successfully', 'frontend-dashboard' ),
 		)
 	);
 }

@@ -9,30 +9,34 @@ jQuery( document ).ready(
 		var bc_fed = $( '.bc_fed' );
 		var body = $( 'body' );
 		var fed_menu_ajax = $( 'form.fed_menu_ajax' );
+		// Ensure any lingering loaders are hidden on page load
+		$( '.preview-area' ).addClass( 'hide hidden' );
+
 		/**
 		 * Admin Page / User Profile Setting Save/Edit.
 		 */
 		body.on(
 			'submit', '.fed_ajax', function ( e ) {
 				var form = $( this );
-				if ( form.hasClass( 'fed_admin_menu' ) || form.closest( '#fed_field_builder_modal' ).length ) {
+				if ( form.closest( '#fed_field_builder_modal' ).length ) {
 					return;
 				}
 				if ( typeof tinyMCE !== 'undefined' ) {
 					tinyMCE.triggerSave();
 				}
-				fed_toggle_loader();
+				fed_toggle_loader( true );
+				var $submitBtn = form.find( 'button[type="submit"], input[type="submit"]' );
+				$submitBtn.prop( 'disabled', true );
+
 				$.ajax(
 					{
 						type: 'POST',
 						url: form.attr( 'action' ),
 						data: form.serialize(),
 						success: function ( results ) {
-							fed_toggle_loader();
 							fedAdminAlert.adminSettings( results );
 						},
 						error: function ( jqXHR ) {
-							fed_toggle_loader();
 							var msg = 'An error occurred while saving.';
 							if ( jqXHR.responseJSON && jqXHR.responseJSON.data && jqXHR.responseJSON.data.message ) {
 								msg = jqXHR.responseJSON.data.message;
@@ -40,6 +44,10 @@ jQuery( document ).ready(
 							if ( typeof fedAdminAlert !== 'undefined' && fedAdminAlert.adminSettings ) {
 								fedAdminAlert.adminSettings( { success: false, data: { message: msg } } );
 							}
+						},
+						complete: function () {
+							fed_toggle_loader( false );
+							$submitBtn.prop( 'disabled', false );
 						}
 					}
 				);
@@ -883,8 +891,20 @@ jQuery( document ).ready(
 			}
 		);
 
-		function fed_toggle_loader() {
-			$( '.preview-area' ).toggleClass( 'hide hidden' );
+		function fed_toggle_loader( show ) {
+			if ( typeof show === 'boolean' ) {
+				if ( show ) {
+					$( '.preview-area' ).removeClass( 'hide hidden' );
+				} else {
+					$( '.preview-area' ).addClass( 'hide hidden' );
+				}
+			} else {
+				if ( $( '.preview-area' ).hasClass( 'hide' ) || $( '.preview-area' ).hasClass( 'hidden' ) ) {
+					$( '.preview-area' ).removeClass( 'hide hidden' );
+				} else {
+					$( '.preview-area' ).addClass( 'hide hidden' );
+				}
+			}
 		}
 
 		$( '#fed_sticky_subscribe' ).on(
@@ -1086,12 +1106,24 @@ var fedAdminAlert = {
 	}
 };
 
-jQuery.fed_toggle_loader = function ($) {
-	jQuery( '.preview-area' ).toggleClass( 'hide hidden' );
+jQuery.fed_toggle_loader = function ( show ) {
+	if ( typeof show === 'boolean' ) {
+		if ( show ) {
+			jQuery( '.preview-area' ).removeClass( 'hide hidden' );
+		} else {
+			jQuery( '.preview-area' ).addClass( 'hide hidden' );
+		}
+	} else {
+		if ( jQuery( '.preview-area' ).hasClass( 'hide' ) || jQuery( '.preview-area' ).hasClass( 'hidden' ) ) {
+			jQuery( '.preview-area' ).removeClass( 'hide hidden' );
+		} else {
+			jQuery( '.preview-area' ).addClass( 'hide hidden' );
+		}
+	}
 	if ( jQuery( '.fed_loader_message' ).length ) {
 		window.setTimeout(
 			function () {
-				jQuery( '.fed_loader_message' ).toggleClass( 'hide hidden' );
+				jQuery( '.fed_loader_message' ).addClass( 'hide hidden' );
 			}, 2000
 		);
 	}
