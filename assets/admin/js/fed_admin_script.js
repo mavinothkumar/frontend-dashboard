@@ -1487,10 +1487,50 @@ jQuery.fed_toggle_loader = function ( show ) {
 			var r = val.charAt( 1 ), g = val.charAt( 2 ), b = val.charAt( 3 );
 			var full = ( '#' + r + r + g + g + b + b ).toUpperCase();
 			$( this ).val( full );
-			container.find( '.fed_color_swatch' ).css( 'background-color', full );
-			container.find( '.fed_color_native' ).val( full.toLowerCase() );
+	// WordPress Media Uploader for FileField
+	$( document ).on( 'click', '.fed-media-dropzone, .fed-change-media-btn', function ( e ) {
+		e.preventDefault();
+		var box = $( this ).closest( '.fed-media-uploader-box' );
+		var idInput = box.find( '.fed-media-id-input' );
+		var dropzone = box.find( '.fed-media-dropzone' );
+		var previewCard = box.find( '.fed-media-preview-card' );
+		var previewImg = box.find( '.fed-preview-img' );
+		var previewTitle = box.find( '.fed-preview-title' );
+
+		if ( typeof wp !== 'undefined' && wp.media ) {
+			var mediaFrame = wp.media( {
+				title: 'Select or Upload Dashboard Brand Logo',
+				button: { text: 'Use this media' },
+				multiple: false
+			} );
+
+			mediaFrame.on( 'select', function () {
+				var attachment = mediaFrame.state().get( 'selection' ).first().toJSON();
+				idInput.val( attachment.id );
+				var thumbUrl = attachment.sizes && attachment.sizes.medium ? attachment.sizes.medium.url : attachment.url;
+				if ( previewImg.length ) {
+					previewImg.attr( 'src', thumbUrl );
+				} else {
+					previewCard.find( '.fed-preview-fallback' ).replaceWith( '<img src="' + thumbUrl + '" alt="" class="w-12 h-12 object-contain rounded-lg border border-slate-100 bg-slate-50 shrink-0 fed-preview-img" />' );
+				}
+				previewTitle.text( attachment.title || attachment.filename );
+				dropzone.addClass( 'hidden' );
+				previewCard.removeClass( 'hidden' );
+			} );
+
+			mediaFrame.open();
 		}
 	} );
 
+	// Remove uploaded media
+	$( document ).on( 'click', '.fed-remove-media-btn', function ( e ) {
+		e.preventDefault();
+		var box = $( this ).closest( '.fed-media-uploader-box' );
+		box.find( '.fed-media-id-input' ).val( '' );
+		box.find( '.fed-media-preview-card' ).addClass( 'hidden' );
+		box.find( '.fed-media-dropzone' ).removeClass( 'hidden' );
+	} );
+
 } )( jQuery );
+
 

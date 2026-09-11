@@ -27,18 +27,31 @@ $activeSlug  = is_array( $menu ) && isset( $menu['menu_request']['menu_slug'] ) 
 			<div class="p-4 sm:p-5 flex-1 flex flex-col overflow-y-auto">
 				<!-- Brand Header in Sidebar -->
 				<div class="flex items-center gap-3 pb-4 mb-4 border-b border-slate-100 shrink-0" style="border-color: var(--fed-border, #E2E8F0);">
-					<div class="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm shadow-xs shrink-0 transition-colors"
-					     style="background-color: var(--fed-primary, #4F46E5); color: var(--fed-primary-font, #FFFFFF);">
-						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-					</div>
-					<div class="overflow-hidden">
-						<span class="font-bold text-sm tracking-tight block truncate" style="color: var(--fed-sidebar-text, #0F172A);">
-							<?php echo esc_html( get_bloginfo( 'name' ) ?: 'Dashboard' ); ?>
-						</span>
-						<span class="text-[10px] font-semibold block uppercase tracking-wider opacity-60" style="color: var(--fed-sidebar-text, #64748B);">
-							<?php esc_html_e( 'Frontend Dashboard', 'frontend-dashboard' ); ?>
-						</span>
-					</div>
+					<?php
+					$uplOptions = get_option( 'fed_admin_settings_upl', [] );
+					$logoId     = ! empty( $uplOptions['settings']['fed_upl_website_logo'] ) ? (int) $uplOptions['settings']['fed_upl_website_logo'] : 0;
+					$logoUrl    = $logoId ? wp_get_attachment_image_url( $logoId, 'full' ) : '';
+					$logoWidth  = ! empty( $uplOptions['settings']['fed_upl_website_logo_width'] ) ? 'max-width: ' . intval( $uplOptions['settings']['fed_upl_website_logo_width'] ) . 'px;' : 'max-width: 180px;';
+					$logoHeight = ! empty( $uplOptions['settings']['fed_upl_website_logo_height'] ) ? 'max-height: ' . intval( $uplOptions['settings']['fed_upl_website_logo_height'] ) . 'px;' : 'max-height: 44px;';
+					?>
+					<?php if ( $logoUrl ) : ?>
+						<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="block py-1">
+							<img src="<?php echo esc_url( $logoUrl ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" class="object-contain" style="<?php echo esc_attr( $logoWidth . ' ' . $logoHeight ); ?>" />
+						</a>
+					<?php else : ?>
+						<div class="w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm shadow-xs shrink-0 transition-colors"
+						     style="background-color: var(--fed-primary, #4F46E5); color: var(--fed-primary-font, #FFFFFF);">
+							<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+						</div>
+						<div class="overflow-hidden">
+							<span class="font-bold text-sm tracking-tight block truncate" style="color: var(--fed-sidebar-text, #0F172A);">
+								<?php echo esc_html( get_bloginfo( 'name' ) ?: 'Dashboard' ); ?>
+							</span>
+							<span class="text-[10px] font-semibold block uppercase tracking-wider opacity-60" style="color: var(--fed-sidebar-text, #64748B);">
+								<?php esc_html_e( 'Frontend Dashboard', 'frontend-dashboard' ); ?>
+							</span>
+						</div>
+					<?php endif; ?>
 				</div>
 
 				<!-- Navigation Menu -->

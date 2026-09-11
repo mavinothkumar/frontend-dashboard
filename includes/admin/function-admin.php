@@ -252,6 +252,11 @@ function fed_get_input_details( $attr ) {
 			$input .= fed_form_radio( $attr );
 			break;
 
+		case 'file':
+		case 'files':
+			$input .= fed_form_file( $attr );
+			break;
+
 	}
 
 	return apply_filters( 'fed_custom_input_fields', $input, $attr );

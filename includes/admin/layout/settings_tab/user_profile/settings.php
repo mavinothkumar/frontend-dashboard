@@ -43,6 +43,44 @@ function fed_admin_user_profile_settings_tab( $fed_admin_options ) {
 			),
 		),
 		'input'  => array(
+			'Website Logo'                  => array(
+				'col'          => 'col-md-12',
+				'name'         => __( 'Dashboard Brand Logo', 'frontend-dashboard' ),
+				'input'        => fed_get_input_details(
+					array(
+						'input_meta' => 'settings[fed_upl_website_logo]',
+						'user_value' => isset( $fed_admin_options['settings']['fed_upl_website_logo'] ) ? $fed_admin_options['settings']['fed_upl_website_logo'] : null,
+						'input_type' => 'file',
+					)
+				),
+				'help_message' => fed_show_help_message( array(
+					'content' => __( 'Upload custom brand logo to display in the dashboard sidebar/header canvas', 'frontend-dashboard' ),
+				) ),
+			),
+			'Website Logo Width'            => array(
+				'col'   => 'col-md-6',
+				'name'  => __( 'Logo Width (px)', 'frontend-dashboard' ),
+				'input' => fed_get_input_details(
+					array(
+						'placeholder' => __( 'e.g. 160 (optional)', 'frontend-dashboard' ),
+						'input_meta'  => 'settings[fed_upl_website_logo_width]',
+						'user_value'  => isset( $fed_admin_options['settings']['fed_upl_website_logo_width'] ) ? $fed_admin_options['settings']['fed_upl_website_logo_width'] : '',
+						'input_type'  => 'number',
+					)
+				),
+			),
+			'Website Logo Height'           => array(
+				'col'   => 'col-md-6',
+				'name'  => __( 'Logo Height (px)', 'frontend-dashboard' ),
+				'input' => fed_get_input_details(
+					array(
+						'placeholder' => __( 'e.g. 40 (optional)', 'frontend-dashboard' ),
+						'input_meta'  => 'settings[fed_upl_website_logo_height]',
+						'user_value'  => isset( $fed_admin_options['settings']['fed_upl_website_logo_height'] ) ? $fed_admin_options['settings']['fed_upl_website_logo_height'] : '',
+						'input_type'  => 'number',
+					)
+				),
+			),
 			'Change Profile Picture'        => array(
 				'col'          => 'col-md-6',
 				'name'         => __( 'Change Profile Picture', 'frontend-dashboard' ),

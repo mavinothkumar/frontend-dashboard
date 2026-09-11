@@ -97,6 +97,10 @@ class Plugin {
 		// Register Add-on Version & Compatibility Validation
 		$addon_compatibility = \FED\Services\Diagnostics\AddonCompatibilityManager::instance();
 		$addon_compatibility->register_hooks( $this->loader );
+
+		// Register Dashboard Template Manager & Widget Areas
+		$template_manager = \FED\Services\Templates\TemplateManager::instance();
+		$template_manager->register_hooks( $this->loader );
 	}
 
 	private function load_dependencies() {

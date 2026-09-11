@@ -68,6 +68,11 @@ function fed_admin_setting_form_function() {
 		exit();
 	}
 
+	if ( isset( $request['fed_admin_unique'] ) && 'fed_admin_setting_upl_hide_bar' == $request['fed_admin_unique'] ) {
+		fed_admin_setting_upl_hide_bar_request();
+		exit();
+	}
+
 	/**
 	 * Process Post Options
 	 */

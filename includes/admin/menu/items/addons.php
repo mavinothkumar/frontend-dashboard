@@ -62,8 +62,10 @@ function fed_get_addons_catalog() {
 			'category_name' => __( 'UI & Templates', 'frontend-dashboard' ),
 			'icon'          => 'fas fa-palette',
 			'icon_bg'       => 'bg-gradient-to-br from-pink-500 to-rose-600 text-white',
-			'tags'          => array( 'Layout Engine', 'Sidebar Variations', 'Login Themes', 'Responsive UI' ),
-			'settings_url'  => admin_url( 'admin.php?page=fed_dashboard_menu' ),
+			'tags'          => array( 'Merged into Core', 'App Shell Layout', 'Branding & Logo', 'Admin Bar Controls', 'Color Engine' ),
+			'settings_url'  => admin_url( 'admin.php?page=fed_user_profile' ),
+			'description'   => __( 'Frontend Dashboard Templates has been merged directly into Core. The modern App Shell layout, brand logo customizer, role-based admin bar controls, and color theming are built-in under Settings > Dashboard.', 'frontend-dashboard' ),
+			'is_merged'     => true,
 		),
 		'frontend-dashboard-pages'                     => array(
 			'category'      => 'core',

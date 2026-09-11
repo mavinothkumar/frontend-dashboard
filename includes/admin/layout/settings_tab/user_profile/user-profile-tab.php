@@ -27,17 +27,29 @@ function fed_user_profile_layout_design() {
  */
 function fed_user_profile_layout_options( $fed_admin_options ) {
 	$options = array(
-		'fed_admin_user_profile_layout_colors'   => array(
+		'fed_admin_user_profile_layout_colors'    => array(
 			'icon'      => 'fa fa-paint-brush',
 			'name'      => __( 'Colors', 'frontend-dashboard' ),
 			'callable'  => 'fed_admin_user_profile_colors_tab',
 			'arguments' => $fed_admin_options,
 		),
-		'fed_admin_user_profile_layout_settings' => array(
+		'fed_admin_user_profile_layout_settings'  => array(
 			'icon'      => 'fa fa-cogs',
 			'name'      => __( 'Settings', 'frontend-dashboard' ),
 			'callable'  => 'fed_admin_user_profile_settings_tab',
 			'arguments' => $fed_admin_options,
+		),
+		'fed_admin_user_profile_layout_templates' => array(
+			'icon'      => 'fa fa-palette',
+			'name'      => __( 'Templates', 'frontend-dashboard' ),
+			'callable'  => 'fed_admin_user_profile_templates_tab',
+			'arguments' => $fed_admin_options,
+		),
+		'fed_admin_user_profile_layout_hide_bar'  => array(
+			'icon'      => 'fa fa-eye-slash',
+			'name'      => __( 'Admin Bar', 'frontend-dashboard' ),
+			'callable'  => 'fed_admin_user_profile_hide_bar_tab',
+			'arguments' => get_option( 'fed_admin_settings_upl_hide_admin_bar' ),
 		),
 	);
 
