@@ -376,34 +376,31 @@ jQuery(document).ready(function ($) {
     b.on('click', '.fed_upload_container', function (e) {
       var custom_uploader
       var button_click = $(this)
+      var wrapper = button_click.closest('.fed_upload_wrapper')
       e.preventDefault()
       custom_uploader = wp.media.frames.file_frame = wp.media({
-        title: 'Upload',
+        title: 'Upload File',
         button: {
-          text: 'Upload'
+          text: 'Select File'
         },
         multiple: false
       })
       //When a file is selected, grab the URL and set it as the text field's value
       custom_uploader.on('select', function () {
-        // var regex_image_type = /(image)/g;
         attachment = custom_uploader.state().get('selection').first().toJSON()
-        console.log(attachment)
-        button_click.find('.fed_upload_image_dummy').addClass('fed_hide')
-        button_click.find('.fed_upload_input').val(attachment.id)
-        console.log(( attachment.mime ).indexOf('image'))
-        if (( attachment.mime ).indexOf('image') >= 0) {
-          console.log('image')
-          button_click.find('.fed_upload_image_actual').removeClass('fed_hide')
-          button_click.closest('.fed_upload_wrapper').find('.fed_remove_image').removeClass('fed_hide')
-          button_click.find('.fed_upload_image_container img').attr('src', attachment.url)
-        } else {
-          console.log('pdf')
-          console.log(attachment.icon)
-          button_click.closest('.fed_upload_wrapper').find('.fed_remove_image').addClass('fed_hide')
-          button_click.find('.fed_upload_image_container img').attr('src', attachment.icon)
+        wrapper.find('.fed_upload_image_dummy').addClass('fed_hide hidden')
+        wrapper.find('.fed_upload_input').val(attachment.id)
+        wrapper.find('.fed_upload_image_actual').removeClass('fed_hide hidden')
+
+        var previewSrc = attachment.url
+        if (attachment.sizes && attachment.sizes.thumbnail) {
+          previewSrc = attachment.sizes.thumbnail.url
+        } else if (attachment.icon && (attachment.mime || '').indexOf('image') === -1) {
+          previewSrc = attachment.icon
         }
 
+        wrapper.find('.fed_upload_image_actual img').attr('src', previewSrc)
+        wrapper.find('.fed_upload_filename').text(attachment.filename || attachment.title || 'File Selected')
       })
       //Open the uploader dialog
       custom_uploader.open()

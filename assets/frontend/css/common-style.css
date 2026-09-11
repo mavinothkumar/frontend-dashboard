@@ -387,20 +387,7 @@ Dashboard
 Upload Image
  */
 .bc_fed .fed_upload_container {
-	border: 1px solid #E0E0E0;
-	width: 100px;
-	height: 100px;
 	cursor: pointer;
-	padding: 0 !important;
-}
-
-.bc_fed .fed_upload_image_container {
-	width: 100px;
-	height: 100px;
-}
-
-.bc_fed .fed_upload_container .fed_upload_icon {
-	margin-top: 25px;
 }
 
 .bc_fed input[type=color] {
@@ -887,9 +874,7 @@ Pricing
 	padding: 20px 0 !important;
 }
 
-.bc_fed .fed_upload_image_container img {
-	height: inherit;
-}
+
 
 .bc_fed .fed_menu_slug a:focus {
 	outline: none;

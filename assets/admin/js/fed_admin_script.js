@@ -422,17 +422,23 @@ jQuery( document ).ready(
 				var $labelInput = $( this );
 				var $form = $labelInput.closest( 'form' );
 				var $metaInput = $form.find( 'input[name="input_meta"]' );
+				var $placeholderInput = $form.find( 'input[name="placeholder"]' );
+				var currentLabel = $labelInput.val();
 
-				if ( ! $metaInput.length || $metaInput.prop( 'readonly' ) || $metaInput.hasClass( 'bg-slate-100' ) || $metaInput.data( 'locked' ) ) {
-					return;
+				// Auto populate input_meta
+				if ( $metaInput.length && ! $metaInput.prop( 'readonly' ) && ! $metaInput.hasClass( 'bg-slate-100' ) && ! $metaInput.data( 'locked' ) ) {
+					if ( ! ( $metaInput.data( 'fed-manual' ) && $metaInput.val() !== '' ) ) {
+						var slug = fedSlugifyInputMeta( currentLabel );
+						$metaInput.val( slug );
+					}
 				}
 
-				if ( $metaInput.data( 'fed-manual' ) && $metaInput.val() !== '' ) {
-					return;
+				// Auto populate placeholder text
+				if ( $placeholderInput.length && ! $placeholderInput.prop( 'readonly' ) ) {
+					if ( ! ( $placeholderInput.data( 'fed-manual' ) && $placeholderInput.val() !== '' ) ) {
+						$placeholderInput.val( currentLabel );
+					}
 				}
-
-				var slug = fedSlugifyInputMeta( $labelInput.val() );
-				$metaInput.val( slug );
 			}
 		);
 
@@ -443,6 +449,17 @@ jQuery( document ).ready(
 					$metaInput.removeData( 'fed-manual' );
 				} else {
 					$metaInput.data( 'fed-manual', true );
+				}
+			}
+		);
+
+		$( document ).on(
+			'input keyup', 'input[name="placeholder"]', function () {
+				var $placeholderInput = $( this );
+				if ( $placeholderInput.val() === '' ) {
+					$placeholderInput.removeData( 'fed-manual' );
+				} else {
+					$placeholderInput.data( 'fed-manual', true );
 				}
 			}
 		);

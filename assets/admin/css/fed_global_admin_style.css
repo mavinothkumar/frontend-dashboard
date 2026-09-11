@@ -124,23 +124,9 @@
 /*    padding: 0 !important;*/
 /*}*/
 
-.bc_fed .fed_remove_image {
-	position: absolute;
-	top: 0;
-	right: 0;
-	background: #033333;
-	color: #ffffff;
-	border-radius: 21px;
-	width: 22px;
-	text-align: center;
-	cursor: pointer;
-	font-size: 14px;
-}
-
 .bc_fed .fed_upload_wrapper {
 	position: relative;
-	width: 100px;
-	height: 100px;
+	width: 100%;
 }
 
 .bc_fed .fed_menu_slug.list-group-item {

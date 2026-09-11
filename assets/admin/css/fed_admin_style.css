@@ -230,12 +230,6 @@ Fed User Profile Layout
 Upload Image
  */
 .bc_fed .fed_upload_container {
-	border: 1px solid #E0E0E0;
-	width: 100px;
-	height: 100px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
 	cursor: pointer;
 }
 
