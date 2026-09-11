@@ -12,12 +12,10 @@ jQuery(document).ready(function ($) {
       $('[data-toggle="popover"]').popover()
     }
 
-    // All Front End submission.
-    $('form.fed_form_post').on('submit', function (e) {
-      var click = $(this)
-      var data = click.serialize()
+    function executeFedFormPost($form) {
+      var data = $form.serialize()
       var url = frontend_dashboard.fed_login_form_post
-      var method = click.attr('method') || 'post'
+      var method = $form.attr('method') || 'post'
       fed_toggle_loader()
       $.ajax({
         type: method,
@@ -33,7 +31,53 @@ jQuery(document).ready(function ($) {
           fedAlert.loginStatus(resp)
         }
       })
+    }
+
+    // All Front End submission.
+    $('form.fed_form_post').on('submit', function (e) {
       e.preventDefault()
+      var click = $(this)
+      
+      // Check if Google reCAPTCHA v3 is active
+      if (
+        typeof grecaptcha !== 'undefined' &&
+        typeof frontend_dashboard !== 'undefined' &&
+        frontend_dashboard.fed_captcha_details &&
+        frontend_dashboard.fed_captcha_details.fed_captcha_version === 'v3' &&
+        frontend_dashboard.fed_captcha_details.fed_captcha_site_key &&
+        frontend_dashboard.fed_captcha_details.fed_captcha_enable === 'Enable'
+      ) {
+        var isLogin = click.find('input[name="fed_login_form"]').length || click.hasClass('fed_login_form') || (click.attr('action') && click.attr('action').indexOf('login') !== -1)
+        var isRegister = click.find('input[name="fed_register_form"]').length || click.hasClass('fed_register_form')
+        var actionName = isLogin ? 'login' : (isRegister ? 'register' : 'fed_submit')
+        
+        fed_toggle_loader()
+        grecaptcha.ready(function () {
+          grecaptcha.execute(frontend_dashboard.fed_captcha_details.fed_captcha_site_key, { action: actionName }).then(function (token) {
+            fed_toggle_loader()
+            var $tokenInput = click.find('input[name="g-recaptcha-response"]')
+            if (!$tokenInput.length) {
+              click.append('<input type="hidden" name="g-recaptcha-response" value="' + token + '" />')
+            } else {
+              $tokenInput.val(token)
+            }
+            executeFedFormPost(click)
+          }).catch(function (err) {
+            fed_toggle_loader()
+            if (typeof swal === 'function') {
+              swal({
+                title: 'reCAPTCHA Error',
+                text: err ? (err.message || String(err)) : 'Unable to verify reCAPTCHA. Please try again.',
+                type: 'error'
+              })
+            } else {
+              alert('reCAPTCHA Error: ' + (err ? (err.message || String(err)) : 'Unable to verify.'))
+            }
+          })
+        })
+      } else {
+        executeFedFormPost(click)
+      }
     })
 
     //Common submission. Disabiling for next few releases because of new one below.
@@ -692,6 +736,13 @@ jQuery.fed_generate_random_number = function () {
 }
 
 var CaptchaCallback = function () {
+  if (
+    typeof frontend_dashboard === 'undefined' ||
+    !frontend_dashboard.fed_captcha_details ||
+    frontend_dashboard.fed_captcha_details.fed_captcha_version === 'v3'
+  ) {
+    return
+  }
   var fedRegister = document.getElementById('fedRegisterCaptcha')
   var fedLogin = document.getElementById('fedLoginCaptcha')
   if (fedRegister !== null) {
@@ -699,7 +750,6 @@ var CaptchaCallback = function () {
   }
   if (fedLogin !== null) {
     grecaptcha.render('fedLoginCaptcha', { 'sitekey': frontend_dashboard.fed_captcha_details.fed_captcha_site_key })
-
   }
 }
 
