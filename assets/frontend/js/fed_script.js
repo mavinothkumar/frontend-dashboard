@@ -477,36 +477,31 @@ jQuery(document).ready(function ($) {
      */
 
     b.on('click', '.fed_upload_container', function (e) {
-      var custom_uploader
       var button_click = $(this)
       var wrapper = button_click.closest('.fed_upload_wrapper')
       e.preventDefault()
-      custom_uploader = wp.media.frames.file_frame = wp.media({
-        title: 'Upload File',
-        button: {
-          text: 'Select File'
-        },
-        multiple: false
-      })
-      //When a file is selected, grab the URL and set it as the text field's value
-      custom_uploader.on('select', function () {
-        attachment = custom_uploader.state().get('selection').first().toJSON()
-        wrapper.find('.fed_upload_image_dummy').addClass('fed_hide hidden')
-        wrapper.find('.fed_upload_input').val(attachment.id)
-        wrapper.find('.fed_upload_image_actual').removeClass('fed_hide hidden')
 
-        var previewSrc = attachment.url
-        if (attachment.sizes && attachment.sizes.thumbnail) {
-          previewSrc = attachment.sizes.thumbnail.url
-        } else if (attachment.icon && (attachment.mime || '').indexOf('image') === -1) {
-          previewSrc = attachment.icon
-        }
+      if (typeof window.fedOpenMediaPicker === 'function') {
+        window.fedOpenMediaPicker(function (attachment) {
+          wrapper.find('.fed_upload_image_dummy').addClass('fed_hide hidden')
+          wrapper.find('.fed_upload_input').val(attachment.id)
+          wrapper.find('.fed_upload_image_actual').removeClass('fed_hide hidden')
 
-        wrapper.find('.fed_upload_image_actual img').attr('src', previewSrc)
-        wrapper.find('.fed_upload_filename').text(attachment.filename || attachment.title || 'File Selected')
-      })
-      //Open the uploader dialog
-      custom_uploader.open()
+          var previewSrc = attachment.url
+          if (attachment.sizes && attachment.sizes.thumbnail) {
+            previewSrc = attachment.sizes.thumbnail.url
+          } else if (attachment.icon && (attachment.mime || '').indexOf('image') === -1) {
+            previewSrc = attachment.icon
+          }
+
+          wrapper.find('.fed_upload_image_actual img').attr('src', previewSrc)
+          wrapper.find('.fed_upload_filename').text(attachment.filename || attachment.title || 'File Selected')
+        }, {
+          title: 'Upload File',
+          button: { text: 'Select File' },
+          multiple: false
+        })
+      }
     })
 
     b.on('mouseover', '.fed_show_on_hover_container', function () {
@@ -778,33 +773,33 @@ jQuery(document).ready(function ($) {
       var previewImg = box.find('.fed-preview-img');
       var previewTitle = box.find('.fed-preview-title');
 
-      if (typeof wp !== 'undefined' && wp.media) {
-        var mediaFrame = wp.media({
+      if (typeof window.fedOpenMediaPicker === 'function') {
+        window.fedOpenMediaPicker(function (attachment) {
+          idInput.val(attachment.id);
+          var thumbUrl = (attachment.sizes && attachment.sizes.thumbnail) 
+            ? attachment.sizes.thumbnail.url 
+            : ((attachment.sizes && attachment.sizes.medium) ? attachment.sizes.medium.url : attachment.url);
+
+          var existingImg = previewCard.find('.fed-preview-img');
+          if (existingImg.length) {
+            existingImg.attr('src', thumbUrl).show();
+            previewCard.find('.fed-preview-fallback').hide();
+          } else {
+            var fallback = previewCard.find('.fed-preview-fallback');
+            if (fallback.length) {
+              fallback.replaceWith('<img src="' + thumbUrl + '" alt="" class="w-14 h-14 object-cover rounded-xl border border-slate-200 bg-slate-50 shrink-0 fed-preview-img" />');
+            } else {
+              previewCard.find('.overflow-hidden').first().before('<img src="' + thumbUrl + '" alt="" class="w-14 h-14 object-cover rounded-xl border border-slate-200 bg-slate-50 shrink-0 fed-preview-img" />');
+            }
+          }
+          previewTitle.text(attachment.title || attachment.filename || 'Image Selected');
+          dropzone.addClass('hidden');
+          previewCard.removeClass('hidden');
+        }, {
           title: 'Select or Upload Featured Image',
           button: { text: 'Use this media' },
           multiple: false
         });
-
-        mediaFrame.on('select', function () {
-          var attachment = mediaFrame.state().get('selection').first().toJSON();
-          idInput.val(attachment.id);
-          var thumbUrl = attachment.sizes && attachment.sizes.medium ? attachment.sizes.medium.url : (attachment.sizes && attachment.sizes.thumbnail ? attachment.sizes.thumbnail.url : attachment.url);
-          if (previewImg.length) {
-            previewImg.attr('src', thumbUrl);
-          } else {
-            var fallback = previewCard.find('.fed-preview-fallback');
-            if (fallback.length) {
-              fallback.replaceWith('<img src="' + thumbUrl + '" alt="" class="w-12 h-12 object-cover rounded-lg border border-slate-100 bg-slate-50 shrink-0 fed-preview-img" />');
-            } else {
-              previewCard.find('.overflow-hidden').first().before('<img src="' + thumbUrl + '" alt="" class="w-12 h-12 object-cover rounded-lg border border-slate-100 bg-slate-50 shrink-0 fed-preview-img" />');
-            }
-          }
-          previewTitle.text(attachment.title || attachment.filename);
-          dropzone.addClass('hidden');
-          previewCard.removeClass('hidden');
-        });
-
-        mediaFrame.open();
       } else {
         var fileInput = box.find('input[type="file"]');
         if (fileInput.length) {

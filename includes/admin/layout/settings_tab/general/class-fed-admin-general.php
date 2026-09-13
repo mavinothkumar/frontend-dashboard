@@ -608,7 +608,7 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 							'name'         => 'Frontend Dashboard Main JS (Vite)',
 							'plugin_name'  => 'Frontend Dashboard',
 							'src'          => $main_js,
-							'dependencies' => array( 'jquery', 'media-editor', 'media-views' ),
+							'dependencies' => array( 'jquery' ),
 							'version'      => BC_FED_PLUGIN_VERSION,
 							'in_footer'    => true,
 						),
@@ -648,7 +648,7 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 							'plugin_name'  => 'Frontend Dashboard',
 							'src'          => plugins_url( '/assets/frontend/js/fed_script.js', BC_FED_PLUGIN ),
 							'dependencies' => array( 'jquery' ),
-							'version'      => false,
+							'version'      => BC_FED_PLUGIN_VERSION,
 							'in_footer'    => true,
 						),
 						'fed_common'            => array(

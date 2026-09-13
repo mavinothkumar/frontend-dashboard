@@ -1512,13 +1512,23 @@ jQuery.fed_toggle_loader = function ( show ) {
 			mediaFrame.on( 'select', function () {
 				var attachment = mediaFrame.state().get( 'selection' ).first().toJSON();
 				idInput.val( attachment.id );
-				var thumbUrl = attachment.sizes && attachment.sizes.medium ? attachment.sizes.medium.url : attachment.url;
-				if ( previewImg.length ) {
-					previewImg.attr( 'src', thumbUrl );
+				var thumbUrl = (attachment.sizes && attachment.sizes.thumbnail) 
+					? attachment.sizes.thumbnail.url 
+					: ((attachment.sizes && attachment.sizes.medium) ? attachment.sizes.medium.url : attachment.url);
+
+				var existingImg = previewCard.find( '.fed-preview-img' );
+				if ( existingImg.length ) {
+					existingImg.attr( 'src', thumbUrl ).show();
+					previewCard.find( '.fed-preview-fallback' ).hide();
 				} else {
-					previewCard.find( '.fed-preview-fallback' ).replaceWith( '<img src="' + thumbUrl + '" alt="" class="w-12 h-12 object-contain rounded-lg border border-slate-100 bg-slate-50 shrink-0 fed-preview-img" />' );
+					var fallback = previewCard.find( '.fed-preview-fallback' );
+					if ( fallback.length ) {
+						fallback.replaceWith( '<img src="' + thumbUrl + '" alt="" class="w-14 h-14 object-cover rounded-xl border border-slate-200 bg-slate-50 shrink-0 fed-preview-img" />' );
+					} else {
+						previewCard.find( '.overflow-hidden' ).first().before( '<img src="' + thumbUrl + '" alt="" class="w-14 h-14 object-cover rounded-xl border border-slate-200 bg-slate-50 shrink-0 fed-preview-img" />' );
+					}
 				}
-				previewTitle.text( attachment.title || attachment.filename );
+				previewTitle.text( attachment.title || attachment.filename || 'Image Selected' );
 				dropzone.addClass( 'hidden' );
 				previewCard.removeClass( 'hidden' );
 			} );

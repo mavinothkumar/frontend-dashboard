@@ -23,6 +23,29 @@ class AssetManager {
 			// Alternatively, you can check if vite dev server is running on port 3000
 			$this->is_dev = false; // Set to true manually when running `npm run dev`
 		}
+
+		add_filter( 'script_loader_tag', array( $this, 'filter_script_loader_tag' ), 10, 3 );
+	}
+
+	/**
+	 * Ensure Vite bundles load with type="module" to prevent global namespace pollution
+	 */
+	public function filter_script_loader_tag( $tag, $handle, $src ) {
+		if ( 'fed-main' === $handle || 'fed-vite-client' === $handle ) {
+			if ( false === strpos( $tag, 'type="module"' ) && false === strpos( $tag, 'type=\'module\'' ) ) {
+				$tag = str_replace( '<script ', '<script type="module" ', $tag );
+			}
+		}
+		return $tag;
+	}
+
+	public function print_early_shims() {
+		static $printed = false;
+		if ( $printed ) {
+			return;
+		}
+		$printed = true;
+		echo '<script id="fed-early-shims">window.wp=(typeof window.wp==="object"&&window.wp!==null)?window.wp:{};window.wp.editor=(typeof window.wp.editor==="object"&&window.wp.editor!==null)?window.wp.editor:{};window.wp.autop=window.wp.autop||{autop:function(t){return t;},removep:function(t){return t;}};window.wp.i18n=(typeof window.wp.i18n==="object"&&window.wp.i18n!==null)?window.wp.i18n:{__:function(t){return t;},_x:function(t){return t;},_n:function(s,p,n){return n===1?s:p;},_nx:function(s,p,n){return n===1?s:p;},isRtl:function(){return false;},setLocaleData:function(){},sprintf:function(t){return t;}};if(!window.wp.i18n.__){window.wp.i18n.__=function(t){return t;};}window.wp.hooks=window.wp.hooks||{addAction:function(){},addFilter:function(){},applyFilters:function(h,v){return v;},doAction:function(){},removeAction:function(){},removeFilter:function(){},hasAction:function(){return false;},hasFilter:function(){return false;}};</script>';
 	}
 
 	public function enqueue_scripts() {
@@ -31,17 +54,22 @@ class AssetManager {
 		$is_style_disabled  = isset( $db_scripts[ $context ]['styles']['fed-style'] );
 		$is_script_disabled = isset( $db_scripts[ $context ]['scripts']['fed-main'] );
 
+		$shims = 'window.wp=(typeof window.wp==="object"&&window.wp!==null)?window.wp:{};window.wp.editor=(typeof window.wp.editor==="object"&&window.wp.editor!==null)?window.wp.editor:{};window.wp.autop=window.wp.autop||{autop:function(t){return t;},removep:function(t){return t;}};window.wp.i18n=(typeof window.wp.i18n==="object"&&window.wp.i18n!==null)?window.wp.i18n:{__:function(t){return t;},_x:function(t){return t;},_n:function(s,p,n){return n===1?s:p;},_nx:function(s,p,n){return n===1?s:p;},isRtl:function(){return false;},setLocaleData:function(){},sprintf:function(t){return t;}};if(!window.wp.i18n.__){window.wp.i18n.__=function(t){return t;};}window.wp.hooks=window.wp.hooks||{addAction:function(){},addFilter:function(){},applyFilters:function(h,v){return v;},doAction:function(){},removeAction:function(){},removeFilter:function(){},hasAction:function(){return false;},hasFilter:function(){return false;}};';
+
+		wp_add_inline_script( 'jquery-core', $shims, 'before' );
+		wp_add_inline_script( 'jquery', $shims, 'before' );
+
+		wp_enqueue_script( 'wp-polyfill' );
+		wp_enqueue_script( 'wp-hooks' );
+		wp_enqueue_script( 'wp-i18n' );
+		wp_enqueue_script( 'wp-dom-ready' );
+		wp_enqueue_script( 'wp-a11y' );
+
 		$dependencies = [ 'jquery' ];
 
-		if ( is_user_logged_in() || is_admin() || ( function_exists( 'fed_is_dashboard' ) && fed_is_dashboard() ) ) {
+		if ( is_admin() ) {
 			if ( function_exists( 'wp_enqueue_media' ) ) {
 				wp_enqueue_media();
-				$dependencies[] = 'media-editor';
-				$dependencies[] = 'media-views';
-				if ( ! is_admin() ) {
-					add_action( 'wp_footer', 'wp_print_media_templates' );
-					add_action( 'wp_print_footer_scripts', 'wp_print_media_templates' );
-				}
 			}
 		}
 

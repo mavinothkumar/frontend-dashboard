@@ -59,9 +59,12 @@ class Plugin {
 	private function define_hooks() {
 		$asset_manager = $this->app->make( AssetManager::class );
 
-		// Register frontend and admin scripts
+		// Register frontend and admin scripts and early shims
 		$this->loader->add_action( 'wp_enqueue_scripts', $asset_manager, 'enqueue_scripts' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $asset_manager, 'enqueue_scripts' );
+		$this->loader->add_action( 'wp_head', $asset_manager, 'print_early_shims', 0 );
+		$this->loader->add_action( 'admin_head', $asset_manager, 'print_early_shims', 0 );
+		$this->loader->add_action( 'login_head', $asset_manager, 'print_early_shims', 0 );
 
 		// Register Auth Controller hooks
 		$auth_controller = new \FED\Controllers\Auth\AuthController();
@@ -101,6 +104,10 @@ class Plugin {
 		// Register Dashboard Template Manager & Widget Areas
 		$template_manager = \FED\Services\Templates\TemplateManager::instance();
 		$template_manager->register_hooks( $this->loader );
+
+		// Register Frontend Media Controller
+		$media_controller = new \FED\Controllers\Media\MediaController();
+		$media_controller->register_hooks( $this->loader );
 	}
 
 	private function load_dependencies() {
