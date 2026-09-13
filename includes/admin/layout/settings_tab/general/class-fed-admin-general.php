@@ -145,11 +145,11 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 						),
 						'fed_sweetalert'        => array(
 							'wp_core'      => false,
-							'name'         => 'SweetAlert',
+							'name'         => 'Modal & Toast Notifications',
 							'plugin_name'  => 'Frontend Dashboard',
-							'src'          => plugins_url( '/assets/frontend/js/sweetalert2.js', BC_FED_PLUGIN ),
+							'src'          => plugins_url( '/assets/frontend/js/fed_modal.js', BC_FED_PLUGIN ),
 							'dependencies' => array(),
-							'version'      => false,
+							'version'      => BC_FED_PLUGIN_VERSION,
 							'in_footer'    => true,
 						),
 						'fed_fontawesome'       => array(
@@ -240,9 +240,9 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 						),
 						'fed_frontend_sweetalert'      => array(
 							'wp_core'      => false,
-							'name'         => 'SweetAlert',
+							'name'         => 'Modal & Toast Notifications CSS',
 							'plugin_name'  => 'Frontend Dashboard',
-							'src'          => plugins_url( '/assets/frontend/css/sweetalert2.css', BC_FED_PLUGIN ),
+							'src'          => plugins_url( '/assets/frontend/css/fed_modal.css', BC_FED_PLUGIN ),
 							'dependencies' => array(),
 							'version'      => BC_FED_PLUGIN_VERSION,
 							'media'        => 'all',
@@ -614,11 +614,11 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 						),
 						'fed_sweetalert'        => array(
 							'wp_core'      => false,
-							'name'         => 'SweetAlert',
+							'name'         => 'Modal & Toast Notifications',
 							'plugin_name'  => 'Frontend Dashboard',
-							'src'          => plugins_url( '/assets/frontend/js/sweetalert2.js', BC_FED_PLUGIN ),
+							'src'          => plugins_url( '/assets/frontend/js/fed_modal.js', BC_FED_PLUGIN ),
 							'dependencies' => array(),
-							'version'      => false,
+							'version'      => BC_FED_PLUGIN_VERSION,
 							'in_footer'    => true,
 						),
 						'fed_fontawesome'       => array(
@@ -709,9 +709,9 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 						),
 						'fed_frontend_sweetalert'      => array(
 							'wp_core'      => false,
-							'name'         => 'SweetAlert',
+							'name'         => 'Modal & Toast Notifications CSS',
 							'plugin_name'  => 'Frontend Dashboard',
-							'src'          => plugins_url( '/assets/frontend/css/sweetalert2.css', BC_FED_PLUGIN ),
+							'src'          => plugins_url( '/assets/frontend/css/fed_modal.css', BC_FED_PLUGIN ),
 							'dependencies' => array(),
 							'version'      => BC_FED_PLUGIN_VERSION,
 							'media'        => 'all',

@@ -1487,6 +1487,11 @@ jQuery.fed_toggle_loader = function ( show ) {
 			var r = val.charAt( 1 ), g = val.charAt( 2 ), b = val.charAt( 3 );
 			var full = ( '#' + r + r + g + g + b + b ).toUpperCase();
 			$( this ).val( full );
+			container.find( '.fed_color_swatch' ).css( 'background-color', full );
+			container.find( '.fed_color_native' ).val( full.toLowerCase() );
+		}
+	} );
+
 	// WordPress Media Uploader for FileField
 	$( document ).on( 'click', '.fed-media-dropzone, .fed-change-media-btn', function ( e ) {
 		e.preventDefault();

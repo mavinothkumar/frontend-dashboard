@@ -66,17 +66,7 @@ function fed_get_post_pagination( $post_object, $menu = null ) {
 			}
 			?>
 			<li <?php echo esc_attr( $class ); ?>>
-				<a href="
-				<?php
-				echo esc_url(
-					add_query_arg(
-						array(
-							'page_number' => $i,
-						)
-					), site_url()
-				);
-				?>
-				">
+				<a href="<?php echo esc_url( add_query_arg( array( 'page_number' => $i ) ) ); ?>">
 					<span><?php echo esc_attr( $i ); ?></span>
 				</a>
 			</li>
@@ -101,51 +91,33 @@ function fed_get_pagination( $current_page, $total_pages ) {
 	if ( $total_pages > 1 && $current_page <= $total_pages ) {
 		$i = max( 2, $current_page - 5 );
 		?>
-		<nav>
-			<ul class="pagination pagination-small fed_pagination">
-				<li <?php echo esc_attr( 1 === (int) $current_page ? 'class=active' : '' ); ?>>
-					<a href="<?php echo esc_url(
-						add_query_arg(
-							array(
-								'page_number' => 1,
-							)
-						), site_url()
-					); ?>">1
-					</a>
+		<nav class="pt-4 flex items-center justify-center">
+			<ul class="inline-flex items-center gap-1 bg-white p-1 rounded-2xl border border-slate-200/80 shadow-2xs fed_pagination text-xs font-semibold list-none m-0">
+				<li>
+					<a class="w-8 h-8 rounded-xl flex items-center justify-center transition-all no-underline <?php echo 1 === (int) $current_page ? 'bg-indigo-600 text-white font-bold shadow-2xs' : 'text-slate-600 hover:bg-slate-100'; ?>"
+					   href="<?php echo esc_url( add_query_arg( array( 'page_number' => 1 ) ) ); ?>">1</a>
 				</li>
 				<?php
 				if ( $i > 2 ) {
-					echo '<li><a>...</a></li>';
+					echo '<li class="w-8 h-8 flex items-center justify-center text-slate-400">...</li>';
 				}
 				for ( ; $i < min( $current_page + 6, $total_pages ); $i ++ ) {
-					$class = '';
-					if ( (int) $current_page === (int) $i ) {
-						$class = 'class=active';
-					}
+					$isActive = (int) $current_page === (int) $i;
 					?>
-					<li <?php echo esc_attr( $class ); ?>>
-						<a href="<?php echo esc_url(
-							add_query_arg(
-								array(
-									'page_number' => (int) $i,
-								)
-							), site_url()
-						); ?>"><?php echo (int) $i; ?></a>
+					<li>
+						<a class="w-8 h-8 rounded-xl flex items-center justify-center transition-all no-underline <?php echo $isActive ? 'bg-indigo-600 text-white font-bold shadow-2xs' : 'text-slate-600 hover:bg-slate-100'; ?>"
+						   href="<?php echo esc_url( add_query_arg( array( 'page_number' => (int) $i ) ) ); ?>"><?php echo (int) $i; ?></a>
 					</li>
 					<?php
 				}
 				if ( $i != $total_pages ) {
-					echo '<li><a>...</a></li>';
+					echo '<li class="w-8 h-8 flex items-center justify-center text-slate-400">...</li>';
 				}
+				$isLastActive = (int) $total_pages === (int) $current_page;
 				?>
-				<li <?php echo esc_attr( (int) $total_pages === (int) $current_page ? 'class=active' : '' ); ?>>
-					<a href="<?php echo esc_url(
-						add_query_arg(
-							array(
-								'page_number' => $total_pages,
-							)
-						), site_url()
-					); ?>">
+				<li>
+					<a class="w-8 h-8 rounded-xl flex items-center justify-center transition-all no-underline <?php echo $isLastActive ? 'bg-indigo-600 text-white font-bold shadow-2xs' : 'text-slate-600 hover:bg-slate-100'; ?>"
+					   href="<?php echo esc_url( add_query_arg( array( 'page_number' => $total_pages ) ) ); ?>">
 						<?php echo (int) $total_pages; ?>
 					</a>
 				</li>
@@ -434,12 +406,12 @@ function fed_show_category_tag_post_format( $post, $post_settings ) {
 			foreach ( $ctp as $cindex => $category ) {
 				if ( ! isset( $post_settings['taxonomies'][ $cindex ][ $user_role ] ) ) {
 					?>
-					<div class="row fed_dashboard_item_field">
-						<div class="col-md-12">
-							<div class="fed_header_font_color">
-								<?php echo esc_attr( $category->label ); ?>
-								<?php do_action( 'fed_frontend_dashboard_edit_tag_label', $category, $post ); ?>
-							</div>
+					<div class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-2xs space-y-3">
+						<h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+							<i class="fas fa-folder text-indigo-500"></i>
+							<span><?php echo esc_attr( $category->label ); ?></span>
+						</h4>
+						<div>
 							<?php echo fed_get_dashboard_display_categories( $post, $category ); ?>
 						</div>
 					</div>
@@ -451,12 +423,15 @@ function fed_show_category_tag_post_format( $post, $post_settings ) {
 			foreach ( $ctp as $tindex => $tag ) {
 				if ( ! isset( $post_settings['taxonomies'][ $tindex ][ $user_role ] ) ) {
 					?>
-					<div class="row fed_dashboard_item_field">
-						<div class="col-md-12">
-							<div class="fed_header_font_color">
-								<?php echo esc_attr( $tag->label ); ?>
-								<?php do_action( 'fed_frontend_dashboard_edit_tag_label', $tag, $post ); ?>
-							</div>
+					<div class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-2xs space-y-3">
+						<div class="flex items-center justify-between">
+							<h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2 m-0">
+								<i class="fas fa-tags text-indigo-500"></i>
+								<span><?php echo esc_attr( $tag->label ); ?></span>
+							</h4>
+							<?php do_action( 'fed_frontend_dashboard_edit_tag_label', $tag, $post ); ?>
+						</div>
+						<div>
 							<?php echo fed_get_dashboard_display_tags( $post, $tag ); ?>
 						</div>
 					</div>
@@ -468,17 +443,31 @@ function fed_show_category_tag_post_format( $post, $post_settings ) {
 			if ( ! isset( $post_settings['taxonomies']['post_format'][ $user_role ] ) ) {
 				$post_format = fed_dashboard_get_post_format();
 				if ( is_array( $post_format ) ) {
-					$post_format = array_combine( $post_format, $post_format );
+					$post_value = isset( $post->ID ) ? esc_attr( get_post_format( $post->ID ) ) : 'standard';
+					if ( empty( $post_value ) ) {
+						$post_value = 'standard';
+					}
+					$format_options = array(
+						'standard' => __( 'Standard', 'frontend-dashboard' ),
+					);
+					foreach ( $post_format as $pf ) {
+						$format_options[ $pf ] = ucfirst( $pf );
+					}
 					?>
-					<div class="row fed_dashboard_item_field">
-						<div class="col-md-12">
-							<div class="fed_header_font_color"><?php echo esc_attr( 'Post Format' ); ?></div>
+					<div class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-2xs space-y-3">
+						<h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+							<i class="fas fa-newspaper text-indigo-500"></i>
+							<span><?php esc_html_e( 'Post Format', 'frontend-dashboard' ); ?></span>
+						</h4>
+						<div>
 							<?php
-							echo fed_input_box(
-								'tax_input[post_format][]', array(
-								'options' => $post_format,
-								'value'   => esc_attr( get_post_format( $post->ID ) ) ?: 'standard',
-							), 'radio'
+							echo fed_form_select(
+								array(
+									'input_meta'  => 'tax_input[post_format][]',
+									'input_value' => $format_options,
+									'user_value'  => $post_value,
+									'class_name'  => 'form-control',
+								)
 							);
 							?>
 						</div>

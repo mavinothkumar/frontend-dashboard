@@ -242,25 +242,36 @@ jQuery(document).ready(function ($) {
       e.preventDefault()
     })
 
-    // Dashboard Post Save.
+    // Dashboard Post Save (Add New).
     b.on('submit', 'form.fed_dashboard_add_new_post', function (e) {
+      e.preventDefault()
       var click = $(this)
+      if (typeof tinyMCE !== 'undefined') {
+        tinyMCE.triggerSave()
+      }
       var data = click.serialize()
       var url = click.attr('action')
       var method = click.attr('method') || 'post'
-      fed_toggle_loader()
+      fed_toggle_loader(true)
       $.ajax({
         type: method,
         data: data,
         url: url,
         success: function (results) {
-          console.log(results)
-          $('#fed_post_id_hidden').val(results.data.id)
+          fed_toggle_loader(false)
+          if (results.success && results.data && results.data.id) {
+            $('#fed_post_id_hidden').val(results.data.id)
+          }
           fedAlert.dashboardPostCommon(results)
-          fed_toggle_loader()
+        },
+        error: function () {
+          fed_toggle_loader(false)
+          swal({
+            title: frontend_dashboard.alert.something_went_wrong,
+            type: 'error'
+          })
         }
       })
-      e.preventDefault()
     })
 
     // Add new post request.
@@ -277,16 +288,26 @@ jQuery(document).ready(function ($) {
         async: false,
         url: url,
         success: function (results) {
-          // console.log(results);
           fed_toggle_loader()
           root.html(results)
         },
         complete: function () {
-          $('.flatpickr').flatpickr({})
+          if ($('.flatpickr').length) {
+            $('.flatpickr').flatpickr({})
+          }
+          if (typeof $.fn.select2 === 'function') {
+            root.find('.fed_multi_select, .fed_select2').select2({
+              dropdownCssClass: 'bc_fed_select2_dropdown',
+              width: '100%',
+              placeholder: function () {
+                return $(this).attr('placeholder') || $(this).data('placeholder') || 'Select options...'
+              },
+              allowClear: true
+            });
+          }
         }
       })
       e.preventDefault()
-
     })
 
     // Show Edit post by ID.
@@ -303,18 +324,24 @@ jQuery(document).ready(function ($) {
         url: url,
         async: false,
         beforeSend: function () {
-          //tinyMCE.add('#post_content');
-          // tinyMCE.remove('#post_content');
         },
         success: function (results) {
-          // console.log(results);
           fed_toggle_loader()
           root.html(results)
         },
         complete: function () {
-          //tinyMCE.remove('#post_content');
           if ($('.flatpickr').length) {
             $('.flatpickr').flatpickr({})
+          }
+          if (typeof $.fn.select2 === 'function') {
+            root.find('.fed_multi_select, .fed_select2').select2({
+              dropdownCssClass: 'bc_fed_select2_dropdown',
+              width: '100%',
+              placeholder: function () {
+                return $(this).attr('placeholder') || $(this).data('placeholder') || 'Select options...'
+              },
+              allowClear: true
+            });
           }
         }
       })
@@ -323,32 +350,44 @@ jQuery(document).ready(function ($) {
 
     // Process Edit post by ID.
     b.on('submit', 'form.fed_dashboard_process_edit_post_request', function (e) {
+      e.preventDefault()
       var click = $(this)
+      if (typeof tinyMCE !== 'undefined') {
+        tinyMCE.triggerSave()
+      }
       var data = click.serialize()
       var url = click.attr('action')
       var method = click.attr('method') || 'post'
-      var root = click.closest('.fed_panel_body_container')
-      fed_toggle_loader()
+      fed_toggle_loader(true)
       $.ajax({
         type: method,
         data: data,
         url: url,
         success: function (results) {
+          fed_toggle_loader(false)
           fedAlert.dashboardPostCommon(results)
-          fed_toggle_loader()
+        },
+        error: function () {
+          fed_toggle_loader(false)
+          swal({
+            title: frontend_dashboard.alert.something_went_wrong,
+            type: 'error'
+          })
         }
       })
-      e.preventDefault()
     })
 
     // Delete post.
     b.on('submit', 'form.fed_dashboard_delete_post_by_id', function (e) {
+      e.preventDefault()
       var click = $(this)
       var data = click.serialize()
       var url = click.attr('action')
       var method = click.attr('method') || 'post'
-      var root = click.closest('.fed_dashboard_item_field_wrapper')
-      fed_toggle_loader()
+      var $row = click.closest('tr')
+      if (!$row.length) {
+        $row = click.closest('.fed_dashboard_item_field_wrapper')
+      }
       swal({
         title: frontend_dashboard.alert.confirmation.title,
         text: frontend_dashboard.alert.confirmation.text,
@@ -360,30 +399,38 @@ jQuery(document).ready(function ($) {
         showLoaderOnConfirm: true
       }).then(
         function () {
+          fed_toggle_loader(true)
           $.ajax({
             type: method,
             url: url,
             data: data,
             success: function (results) {
+              fed_toggle_loader(false)
               fedAlert.dashboardPostCommon(results)
-              if (results.success) root.html('')
+              if (results.success && $row.length) {
+                $row.css('background-color', '#fee2e2').fadeOut(400, function () {
+                  $(this).remove()
+                })
+              }
+            },
+            error: function () {
+              fed_toggle_loader(false)
+              swal({
+                title: frontend_dashboard.alert.something_went_wrong,
+                type: 'error'
+              })
             }
-
           })
         },
         function (dismiss) {
           if (dismiss === 'cancel') {
             swal({
-                title: frontend_dashboard.alert.title_cancelled,
-                type: 'error',
-                confirmButtonColor: '#0AAAAA'
-              }
-            )
+              title: frontend_dashboard.alert.title_cancelled,
+              type: 'info',
+              confirmButtonColor: '#0AAAAA'
+            })
           }
         })
-      fed_toggle_loader()
-
-      e.preventDefault()
     })
 
     // Show Post List Request.
@@ -695,6 +742,72 @@ jQuery(document).ready(function ($) {
         container.find('.fed_color_swatch').css('background-color', full);
         container.find('.fed_color_native').val(full.toLowerCase());
       }
+    });
+
+    // Initialize Select2 on Multi-selects and Tag selects
+    if (typeof $.fn.select2 === 'function') {
+      $('.fed_multi_select, .fed_select2').select2({
+        dropdownCssClass: 'bc_fed_select2_dropdown',
+        width: '100%',
+        placeholder: function () {
+          return $(this).attr('placeholder') || $(this).data('placeholder') || 'Select options...'
+        },
+        allowClear: true
+      });
+    }
+
+    // WordPress Media Uploader for FileField / Featured Image
+    $(document).on('click', '.fed-media-dropzone, .fed-change-media-btn', function (e) {
+      e.preventDefault();
+      var box = $(this).closest('.fed-media-uploader-box');
+      var idInput = box.find('.fed-media-id-input');
+      var dropzone = box.find('.fed-media-dropzone');
+      var previewCard = box.find('.fed-media-preview-card');
+      var previewImg = box.find('.fed-preview-img');
+      var previewTitle = box.find('.fed-preview-title');
+
+      if (typeof wp !== 'undefined' && wp.media) {
+        var mediaFrame = wp.media({
+          title: 'Select or Upload Featured Image',
+          button: { text: 'Use this media' },
+          multiple: false
+        });
+
+        mediaFrame.on('select', function () {
+          var attachment = mediaFrame.state().get('selection').first().toJSON();
+          idInput.val(attachment.id);
+          var thumbUrl = attachment.sizes && attachment.sizes.medium ? attachment.sizes.medium.url : (attachment.sizes && attachment.sizes.thumbnail ? attachment.sizes.thumbnail.url : attachment.url);
+          if (previewImg.length) {
+            previewImg.attr('src', thumbUrl);
+          } else {
+            var fallback = previewCard.find('.fed-preview-fallback');
+            if (fallback.length) {
+              fallback.replaceWith('<img src="' + thumbUrl + '" alt="" class="w-12 h-12 object-cover rounded-lg border border-slate-100 bg-slate-50 shrink-0 fed-preview-img" />');
+            } else {
+              previewCard.find('.overflow-hidden').first().before('<img src="' + thumbUrl + '" alt="" class="w-12 h-12 object-cover rounded-lg border border-slate-100 bg-slate-50 shrink-0 fed-preview-img" />');
+            }
+          }
+          previewTitle.text(attachment.title || attachment.filename);
+          dropzone.addClass('hidden');
+          previewCard.removeClass('hidden');
+        });
+
+        mediaFrame.open();
+      } else {
+        var fileInput = box.find('input[type="file"]');
+        if (fileInput.length) {
+          fileInput.click();
+        }
+      }
+    });
+
+    // Remove uploaded media
+    $(document).on('click', '.fed-remove-media-btn', function (e) {
+      e.preventDefault();
+      var box = $(this).closest('.fed-media-uploader-box');
+      box.find('.fed-media-id-input').val('');
+      box.find('.fed-media-preview-card').addClass('hidden');
+      box.find('.fed-media-dropzone').removeClass('hidden');
     });
 
     function fed_toggle_loader (show) {

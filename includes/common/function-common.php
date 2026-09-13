@@ -77,7 +77,7 @@ if ( ! function_exists( 'fed_loader' ) ) {
 	 */
 	function fed_loader( $hide = 'hide', $message = null ) {
 		$hide_class = ( 'hide' === $hide || 'hidden' === $hide ) ? 'hide hidden' : $hide;
-		$msg_text   = ! empty( $message ) ? $message : __( 'Saving changes, please wait...', 'frontend-dashboard' );
+		$msg_text   = ! empty( $message ) ? $message : __( 'Please wait...', 'frontend-dashboard' );
 
 		$html  = '<div class="preview-area fed-global-loader-overlay ' . esc_attr( $hide_class ) . '">';
 		$html .= '<div class="fed-loader-card">';
