@@ -83,6 +83,9 @@ function fed_process_admin_settings_post_settings( $request ) {
 		'fed_post_status' => isset( $request['fed_post_status'] ) ? sanitize_text_field(
 			$request['fed_post_status']
 		) : 'publish',
+		'fed_editor_type' => isset( $request['fed_editor_type'] ) ? sanitize_text_field(
+			$request['fed_editor_type']
+		) : 'classic',
 	);
 }
 

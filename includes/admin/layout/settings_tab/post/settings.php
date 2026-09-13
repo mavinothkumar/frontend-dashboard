@@ -18,6 +18,12 @@ function fed_admin_post_settings_tab( $fed_admin_options ) {
 	$post_status       = fed_get_post_status();
 	$fed_post_status   = isset( $fed_admin_options['settings']['fed_post_status'] ) ? $fed_admin_options['settings']['fed_post_status'] : '';
 	$fed_post_position = isset( $fed_admin_options['settings']['fed_post_position'] ) ? $fed_admin_options['settings']['fed_post_position'] : 3;
+	$editor_types      = array(
+		'classic'  => __( 'Classic Editor (TinyMCE)', 'frontend-dashboard' ),
+		'tiptap'   => __( 'TipTap (Modern Rich & Slash Editor)', 'frontend-dashboard' ),
+		'editorjs' => __( 'Editor.js (Block Editor)', 'frontend-dashboard' ),
+	);
+	$fed_editor_type   = isset( $fed_admin_options['settings']['fed_editor_type'] ) ? $fed_admin_options['settings']['fed_editor_type'] : 'classic';
 	?>
 	<form method="post"
 			class="fed_admin_menu fed_ajax"
@@ -51,6 +57,24 @@ function fed_admin_post_settings_tab( $fed_admin_options ) {
 									'name'    => 'settings[fed_post_status]',
 									'value'   => $fed_post_status,
 									'options' => $post_status,
+								), 'select'
+							);
+							?>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-4 fed_menu_title">Post Editor Type</div>
+					<div class="col-md-4">
+						<div class="col-md-10">
+							<?php
+							echo fed_input_box(
+								'fed_editor_type',
+								array(
+									'name'    => 'settings[fed_editor_type]',
+									'value'   => $fed_editor_type,
+									'options' => $editor_types,
 								), 'select'
 							);
 							?>

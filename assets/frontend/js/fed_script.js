@@ -246,6 +246,9 @@ jQuery(document).ready(function ($) {
     b.on('submit', 'form.fed_dashboard_add_new_post', function (e) {
       e.preventDefault()
       var click = $(this)
+      if (typeof window.FedEditors !== 'undefined' && typeof window.FedEditors.saveAll === 'function') {
+        window.FedEditors.saveAll()
+      }
       if (typeof tinyMCE !== 'undefined') {
         tinyMCE.triggerSave()
       }
@@ -305,6 +308,9 @@ jQuery(document).ready(function ($) {
               allowClear: true
             });
           }
+          if (typeof window.FedEditors !== 'undefined' && typeof window.FedEditors.autoInitAll === 'function') {
+            window.FedEditors.autoInitAll()
+          }
         }
       })
       e.preventDefault()
@@ -343,6 +349,9 @@ jQuery(document).ready(function ($) {
               allowClear: true
             });
           }
+          if (typeof window.FedEditors !== 'undefined' && typeof window.FedEditors.autoInitAll === 'function') {
+            window.FedEditors.autoInitAll()
+          }
         }
       })
       e.preventDefault()
@@ -352,6 +361,9 @@ jQuery(document).ready(function ($) {
     b.on('submit', 'form.fed_dashboard_process_edit_post_request', function (e) {
       e.preventDefault()
       var click = $(this)
+      if (typeof window.FedEditors !== 'undefined' && typeof window.FedEditors.saveAll === 'function') {
+        window.FedEditors.saveAll()
+      }
       if (typeof tinyMCE !== 'undefined') {
         tinyMCE.triggerSave()
       }

@@ -437,6 +437,28 @@ function fed_convert_array_to_id_name( array $array, $key = 'term_id', $type = '
 }
 
 /**
+ * Render Post Content Editor.
+ *
+ * @param  string      $content     Content.
+ * @param  string      $input_meta  Input Meta Name.
+ * @param  string      $post_type   Post Type.
+ * @param  string|null $editor_type Editor Type.
+ *
+ * @return string
+ */
+function fed_render_post_editor( $content = '', $input_meta = 'post_content', $post_type = 'post', $editor_type = null ) {
+	if ( class_exists( '\\FED\\Services\\Editor\\EditorRenderer' ) ) {
+		return \FED\Services\Editor\EditorRenderer::render( $content, $input_meta, $post_type, $editor_type );
+	}
+	if ( function_exists( 'wp_editor' ) ) {
+		ob_start();
+		wp_editor( $content, $input_meta, array( 'quicktags' => true ) );
+		return ob_get_clean();
+	}
+	return '<textarea name="' . esc_attr( $input_meta ) . '" class="form-control" rows="10">' . esc_textarea( $content ) . '</textarea>';
+}
+
+/**
  * Get post format.
  */
 function fed_dashboard_get_post_format() {

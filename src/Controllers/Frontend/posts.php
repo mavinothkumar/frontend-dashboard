@@ -300,11 +300,7 @@ function fed_display_dashboard_edit_post_by_id( $post ) {
 	<div class="row fed_dashboard_item_field">
 		<div class="col-md-12">
 			<div class="fed_header_font_color">' . __( 'Content' ) . '</div>
-			' . fed_get_wp_editor(
-				$post->post_content, 'post_content', array(
-					'quicktags' => true,
-				)
-			) . '
+			' . fed_render_post_editor( $post->post_content, 'post_content', $post->post_type ) . '
 		</div>
 
 	</div>
