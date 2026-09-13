@@ -608,7 +608,7 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 							'name'         => 'Frontend Dashboard Main JS (Vite)',
 							'plugin_name'  => 'Frontend Dashboard',
 							'src'          => $main_js,
-							'dependencies' => array( 'jquery' ),
+							'dependencies' => array( 'jquery', 'media-editor', 'media-views' ),
 							'version'      => BC_FED_PLUGIN_VERSION,
 							'in_footer'    => true,
 						),

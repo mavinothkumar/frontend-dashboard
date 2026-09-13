@@ -16,6 +16,7 @@
   "dependencies": {
     "@editorjs/editorjs": "^2.31.6",
     "@editorjs/header": "^2.8.9",
+    "@editorjs/image": "^2.10.3",
     "@editorjs/list": "^2.0.9",
     "@editorjs/quote": "^2.7.6",
     "@editorjs/table": "^2.4.6",

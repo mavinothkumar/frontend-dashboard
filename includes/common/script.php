@@ -59,7 +59,7 @@ if ( ! function_exists( 'fed_script_front_end' ) ) {
 	 */
 	function fed_script_front_end() {
 		$custom_condition = apply_filters( 'fed_show_frontend_script_on_custom_condition', false );
-		if ( fed_is_shortcode_in_content() || $custom_condition ) {
+		if ( is_user_logged_in() || fed_is_dashboard() || fed_is_shortcode_in_content() || $custom_condition ) {
 			$db_scripts      = get_option( 'fed_general_scripts_styles', array() );
 			$default_scripts = new FED_Admin_General();
 			foreach ( $default_scripts->default_frontend_script() as $index => $scripts ) {
@@ -82,7 +82,11 @@ if ( ! function_exists( 'fed_script_front_end' ) ) {
 			wp_localize_script( 'fed_script', 'frontend_dashboard', $translation_array );
 
 			if ( is_user_logged_in() || fed_is_dashboard() ) {
-				wp_enqueue_media();
+				if ( function_exists( 'wp_enqueue_media' ) ) {
+					wp_enqueue_media();
+					add_action( 'wp_footer', 'wp_print_media_templates' );
+					add_action( 'wp_print_footer_scripts', 'wp_print_media_templates' );
+				}
 			}
 		}
 
