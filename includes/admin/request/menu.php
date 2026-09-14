@@ -16,6 +16,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param  string $post_id  Post ID.
  */
 function fed_admin_menu_save( $request, $post_id = '' ) {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
+
 	global $wpdb;
 	$menu_slug = $request['menu_slug'];
 
@@ -32,7 +36,11 @@ function fed_admin_menu_save( $request, $post_id = '' ) {
 		 * Check for input meta already exist
 		 */
 		$duplicate = $wpdb->get_row(
-			"SELECT * FROM $table_name WHERE menu_slug LIKE '{$menu_slug}' AND NOT id = $post_id "
+			$wpdb->prepare(
+				"SELECT * FROM {$table_name} WHERE menu_slug = %s AND id != %d",
+				$menu_slug,
+				(int) $post_id
+			)
 		);
 
 		if ( null !== $duplicate ) {
@@ -67,7 +75,12 @@ function fed_admin_menu_save( $request, $post_id = '' ) {
 		 * Check for input meta already exist
 		 */
 
-		$duplicate = $wpdb->get_row( "SELECT * FROM $table_name WHERE menu_slug LIKE '{$menu_slug}'" );
+		$duplicate = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT * FROM {$table_name} WHERE menu_slug = %s",
+				$menu_slug
+			)
+		);
 
 		if ( null !== $duplicate ) {
 			wp_send_json_error(
@@ -127,6 +140,11 @@ add_action( 'wp_ajax_fed_menu_sorting_items', 'fed_menu_sorting_items' );
  * Menu Sorting Items.
  */
 function fed_menu_sorting_items() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
+
+	fed_verify_nonce();
 
 	$request           = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	$default_menu_type = fed_get_default_menu_type();

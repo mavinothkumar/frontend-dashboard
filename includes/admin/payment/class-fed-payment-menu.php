@@ -1,6 +1,6 @@
 <?php
 /**
- * Payment Menu Controller & Enterprise Dashboard Layout.
+ * Payment Menu Controller & Modern Dashboard Layout.
  *
  * @package Frontend Dashboard.
  */
@@ -179,10 +179,10 @@ if ( ! class_exists( 'FEDPaymentMenu' ) ) {
 						$submenu = fed_get_first_key_in_array( $menu_config['submenu'] );
 					}
 					?>
-					<div class="row" style="margin-top: 10px;">
+					<div class="fed_payment_two_col_layout" style="display: grid; grid-template-columns: 240px 1fr; gap: 24px; margin-top: 16px; align-items: start;">
 						<!-- Left Submenu Pills -->
-						<div class="col-md-3" style="margin-bottom: 16px;">
-							<div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+						<div style="margin-bottom: 16px;">
+							<div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
 								<div style="font-size: 11px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; padding: 6px 12px 10px 12px; border-bottom: 1px solid #f1f5f9; margin-bottom: 8px;">
 									<?php echo esc_html( fed_get_data( 'name', $menu_config ) ); ?> <?php esc_html_e( 'Sections', 'frontend-dashboard' ); ?>
 								</div>
@@ -208,7 +208,7 @@ if ( ! class_exists( 'FEDPaymentMenu' ) ) {
 						</div>
 
 						<!-- Right Content Card -->
-						<div class="col-md-9">
+						<div style="min-width: 0;">
 							<div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); overflow: hidden;">
 								<div style="background: #f8fafc; border-bottom: 1px solid #e2e8f0; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between;">
 									<h3 style="margin: 0; font-size: 15px; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 8px;">

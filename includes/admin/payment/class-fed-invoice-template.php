@@ -29,7 +29,7 @@ if ( ! class_exists( 'FEDInvoiceTemplate' ) ) {
 				array(
 					'standard_clean' => array(
 						'id'          => 'standard_clean',
-						'name'        => __( 'Standard Enterprise Minimalist', 'frontend-dashboard' ),
+						'name'        => __( 'Standard Minimalist', 'frontend-dashboard' ),
 						'description' => __( 'Clean, crisp typography with itemized breakdown, tax/discount lines, and branded header.', 'frontend-dashboard' ),
 						'tag'         => __( 'Default', 'frontend-dashboard' ),
 						'is_pro'      => false,
@@ -157,26 +157,6 @@ if ( ! class_exists( 'FEDInvoiceTemplate' ) ) {
 						<i class="fas fa-save" style="margin-right: 6px;"></i> <?php esc_html_e( 'Save Invoice Template', 'frontend-dashboard' ); ?>
 					</button>
 				</form>
-
-				<!-- Pro Features Banner -->
-				<div style="margin-top: 30px; background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%); border: 1px solid #a7f3d0; border-radius: 12px; padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
-					<div style="display: flex; align-items: center; gap: 14px;">
-						<div style="width: 44px; height: 44px; border-radius: 10px; background: #10b981; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;">
-							<i class="fas fa-file-pdf"></i>
-						</div>
-						<div>
-							<div style="font-weight: 800; font-size: 15px; color: #065f46;">
-								<?php esc_html_e( 'Need Automated PDF Invoices & Email Attachments?', 'frontend-dashboard' ); ?>
-							</div>
-							<div style="font-size: 13px; color: #047857; margin-top: 2px;">
-								<?php esc_html_e( 'Upgrade to Pro to generate downloadable PDF receipts, dynamic QR codes, multi-currency invoices, and automated customer email delivery.', 'frontend-dashboard' ); ?>
-							</div>
-						</div>
-					</div>
-					<a href="https://buffercode.com/plugin/frontend-dashboard/" target="_blank" style="background: #059669; color: #ffffff; font-weight: 700; font-size: 13px; padding: 9px 18px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(5, 150, 105, 0.3);">
-						<i class="fas fa-crown"></i> <?php esc_html_e( 'Explore Pro Invoice Engine', 'frontend-dashboard' ); ?>
-					</a>
-				</div>
 
 			</div>
 			<?php

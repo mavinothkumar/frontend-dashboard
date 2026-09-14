@@ -68,8 +68,9 @@ function fed_fetch_table_rows_with_key_front_end( $table, $key ) {
 			}
 		}
 
-		$result['menu_type']                = isset( $result['menu_type'] ) ? $result['menu_type'] : 'user';
-		$result_with_key[ $result[ $key ] ] = $result;
+		$result['menu_type'] = isset( $result['menu_type'] ) ? $result['menu_type'] : 'user';
+		$item_key = isset( $result[ $key ] ) ? $result[ $key ] : ( isset( $result['menu_slug'] ) ? $result['menu_slug'] : uniqid( 'fed_m_' ) );
+		$result_with_key[ $item_key ] = $result;
 	}
 
 	return $result_with_key;

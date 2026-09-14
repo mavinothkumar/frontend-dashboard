@@ -170,8 +170,104 @@ if ( ! class_exists( 'FED_ActionHooks' ) ) {
 					background-color: <?php echo esc_attr( $active_bg ); ?> !important;
 					color: <?php echo esc_attr( $active_text ); ?> !important;
 				}
+				/* Sidebar Layout & Fixed Bottom User Profile */
+				.bc_fed.fed_dashboard_container {
+					min-height: 100vh !important;
+				}
+				.bc_fed .fed_dashboard_wrapper {
+					display: flex !important;
+					flex-direction: row !important;
+					align-items: stretch !important;
+					min-height: 100vh !important;
+					width: 100% !important;
+				}
+				.bc_fed aside.fed_dashboard_menus {
+					display: flex !important;
+					flex-direction: column !important;
+					justify-content: space-between !important;
+					align-self: stretch !important;
+					min-height: 100vh !important;
+					width: 260px !important;
+					min-width: 260px !important;
+					max-width: 260px !important;
+					box-sizing: border-box !important;
+					position: relative !important;
+					flex-shrink: 0 !important;
+				}
+				.bc_fed .fed_sidebar_scrollable {
+					flex: 1 1 auto !important;
+					display: flex !important;
+					flex-direction: column !important;
+					min-height: 0 !important;
+				}
 				.bc_fed .fed_sidebar_user_section {
-					border-color: <?php echo esc_attr( $border_color ); ?> !important;
+					display: flex !important;
+					flex-direction: row !important;
+					flex-wrap: nowrap !important;
+					align-items: center !important;
+					justify-content: space-between !important;
+					gap: 8px !important;
+					width: 100% !important;
+					box-sizing: border-box !important;
+					margin-top: auto !important;
+					position: sticky !important;
+					bottom: 0 !important;
+					background-color: <?php echo esc_attr( $sidebar_bg ); ?> !important;
+					border-top: 1px solid <?php echo esc_attr( $border_color ); ?> !important;
+					padding: 14px 16px !important;
+					z-index: 20 !important;
+				}
+				.bc_fed .fed_sidebar_user_info {
+					display: flex !important;
+					flex-direction: row !important;
+					flex-wrap: nowrap !important;
+					align-items: center !important;
+					gap: 10px !important;
+					min-width: 0 !important;
+					flex: 1 1 auto !important;
+					overflow: hidden !important;
+				}
+				.bc_fed .fed_sidebar_user_section .fed_sidebar_user_name {
+					font-size: 13px !important;
+					font-weight: 700 !important;
+					color: <?php echo esc_attr( $text_main ); ?> !important;
+					white-space: nowrap !important;
+					overflow: hidden !important;
+					text-overflow: ellipsis !important;
+					display: block !important;
+					line-height: 1.25 !important;
+				}
+				.bc_fed .fed_sidebar_user_section .fed_sidebar_user_email {
+					font-size: 11px !important;
+					font-weight: 500 !important;
+					color: <?php echo esc_attr( $sidebar_text ); ?> !important;
+					opacity: 0.75 !important;
+					white-space: nowrap !important;
+					overflow: hidden !important;
+					text-overflow: ellipsis !important;
+					display: block !important;
+					line-height: 1.25 !important;
+					margin-top: 2px !important;
+				}
+				.bc_fed .fed_sidebar_logout_btn {
+					display: inline-flex !important;
+					align-items: center !important;
+					justify-content: center !important;
+					width: 32px !important;
+					height: 32px !important;
+					min-width: 32px !important;
+					max-width: 32px !important;
+					padding: 6px !important;
+					border-radius: 8px !important;
+					color: #94a3b8 !important;
+					flex-shrink: 0 !important;
+					text-decoration: none !important;
+					margin-left: auto !important;
+					box-sizing: border-box !important;
+				}
+				.bc_fed .fed_sidebar_logout_btn:hover {
+					color: #e11d48 !important;
+					background-color: #fff1f2 !important;
 				}
 
 				/* Sidebar Active Nav Item */

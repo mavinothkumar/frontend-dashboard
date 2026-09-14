@@ -446,7 +446,7 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 			<div class="bg-white rounded-3xl p-6 sm:p-8 shadow-xs border border-slate-200/90 mb-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
 				<div class="flex items-center gap-4">
 					<div class="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-xl shadow-xs shrink-0" style="background-color: #4f46e5 !important; color: #ffffff !important;">
-						<i class="fas fa-tools" style="color: #ffffff !important;"></i>
+						<i class="fas fa-wrench" style="color: #ffffff !important;"></i>
 					</div>
 					<div>
 						<div class="flex items-center gap-2.5 flex-wrap">
@@ -1622,7 +1622,7 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 			<div id="fed_status_create_tables_modal" class="fed-status-modal">
 				<div class="status-modal-content">
 					<div class="w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-2xl mx-auto mb-4 shadow-xs" style="background-color: #eef2ff !important; color: #4f46e5 !important;">
-						<i class="fas fa-tools" style="color: #4f46e5 !important;"></i>
+						<i class="fas fa-wrench" style="color: #4f46e5 !important;"></i>
 					</div>
 					<h3 class="text-base sm:text-lg font-bold text-slate-900 mb-1.5" style="color: #0f172a !important;">
 						<?php esc_html_e( 'Create / Repair Database Schema?', 'frontend-dashboard' ); ?>

@@ -14,6 +14,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param  string $post_id  Post ID.
  */
 function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
+
 	global $wpdb;
 	$input_meta = $request['input_meta'];
 
@@ -34,7 +38,11 @@ function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
 		 */
 
 		$duplicate = $wpdb->get_row(
-			"SELECT * FROM $table_name WHERE input_meta LIKE '{$input_meta}' AND NOT id = $post_id "
+			$wpdb->prepare(
+				"SELECT * FROM {$table_name} WHERE input_meta = %s AND id != %d",
+				$input_meta,
+				(int) $post_id
+			)
 		);
 
 		if ( null !== $duplicate ) {
@@ -77,7 +85,12 @@ function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
 		/**
 		 * Check for input meta already exist
 		 */
-		$duplicate = $wpdb->get_row( "SELECT * FROM $table_name WHERE input_meta = '{$input_meta}'" );
+		$duplicate = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT * FROM {$table_name} WHERE input_meta = %s",
+				$input_meta
+			)
+		);
 
 		if ( null !== $duplicate ) {
 			$error_message_2 = 'User Profile';
@@ -134,6 +147,10 @@ add_action( 'wp_ajax_fed_admin_menu_sorting', 'fed_admin_menu_sorting' );
  * Admin Menu Sorting.
  */
 function fed_admin_menu_sorting() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
+
 	global $wpdb;
 
 	fed_verify_nonce();

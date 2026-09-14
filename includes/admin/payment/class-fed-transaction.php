@@ -417,7 +417,7 @@ if ( ! class_exists( 'FEDTransaction' ) ) {
 		public function update( $request ) {
 			$this->authorize();
 
-			if ( ! is_admin() ) {
+			if ( ! current_user_can( 'manage_options' ) ) {
 				wp_die( __( 'Error 403: You are not allowed to view this page', 'frontend-dashboard' ) );
 			}
 
@@ -660,9 +660,15 @@ if ( ! class_exists( 'FEDTransaction' ) ) {
 			fed_verify_nonce( $request );
 
 			if ( isset( $request['transaction_id'] ) ) {
-				$items = fed_get_transaction_with_meta( $request['transaction_id'] );
-				$html  = fed_transaction_product_details( $items );
-				wp_send_json_success( array( 'html' => $html ) );
+				$txn_id = (int) $request['transaction_id'];
+				$items  = fed_get_transaction_with_meta( $txn_id );
+				if ( ! is_wp_error( $items ) && ! empty( $items ) && is_array( $items ) ) {
+					if ( ! fed_is_admin() && (int) $items['user_id'] !== (int) get_current_user_id() ) {
+						wp_send_json_error( array( 'html' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+					}
+					$html = fed_transaction_product_details( $items );
+					wp_send_json_success( array( 'html' => $html ) );
+				}
 			}
 			wp_send_json_error( array( 'html' => __( 'Something went wrong', 'frontend-dashboard' ) ) );
 		}
@@ -673,6 +679,11 @@ if ( ! class_exists( 'FEDTransaction' ) ) {
 		 * @param  array $request  Request.
 		 */
 		public function add_items( $request ) {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+			}
+			fed_verify_nonce( $request );
+
 			if ( isset( $request['type'] ) ) {
 				global $wpdb;
 				$table      = fed_get_payment_for( esc_attr( $request['type'] ) );

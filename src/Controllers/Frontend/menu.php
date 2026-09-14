@@ -137,8 +137,9 @@ function fed_display_dashboard_menu( $menus ) {
 			uasort( $submenus, 'fed_sort_by_order' );
 		}
 
-		$isActive     = ! empty( $menu_format['active'] );
+		$isActive      = ! empty( $menu_format['active'] );
 		$random_number = fed_get_random_string( 5 );
+		$menu_icon     = ! empty( $menu['menu_image_id'] ) ? $menu['menu_image_id'] : ( ! empty( $menu['menu_icon'] ) ? $menu['menu_icon'] : 'fas fa-circle' );
 
 		if ( $is_submenu ) {
 			$isParentActive = $index === $parent_id || $isActive;
@@ -150,7 +151,7 @@ function fed_display_dashboard_menu( $menus ) {
 						data-target="#sub_<?php echo esc_attr( $index . $random_number ); ?>"
 						aria-expanded="<?php echo $isParentActive ? 'true' : 'false'; ?>">
 					<div class="flex items-center gap-3">
-						<span class="w-5 text-center text-base <?php echo esc_attr( $menu['menu_image_id'] ); ?> <?php echo $isParentActive ? 'text-indigo-600' : 'text-gray-400'; ?>"></span>
+						<span class="w-5 text-center text-base <?php echo esc_attr( $menu_icon ); ?> <?php echo $isParentActive ? 'text-indigo-600' : 'text-gray-400'; ?>"></span>
 						<span><?php echo esc_html( $menu_format['menu_name'] ); ?></span>
 					</div>
 					<svg class="w-4 h-4 transform transition-transform duration-200 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -179,7 +180,7 @@ function fed_display_dashboard_menu( $menus ) {
 			<div class="fed_menu_item mb-1">
 				<a href="<?php echo esc_url( $menu_format['menu_url'] ); ?>"
 						class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 <?php echo $isActive ? 'bg-indigo-50 text-indigo-700 font-semibold shadow-xs' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'; ?>">
-					<span class="w-5 text-center text-base <?php echo esc_attr( $menu['menu_image_id'] ); ?> <?php echo $isActive ? 'text-indigo-600' : 'text-gray-400'; ?>"></span>
+					<span class="w-5 text-center text-base <?php echo esc_attr( $menu_icon ); ?> <?php echo $isActive ? 'text-indigo-600' : 'text-gray-400'; ?>"></span>
 					<span><?php echo esc_html( $menu_format['menu_name'] ); ?></span>
 				</a>
 			</div>
@@ -205,7 +206,13 @@ function fed_format_menu_items( $menu, $index, $first_element, $dashboard_url, $
 	$menu_type   = isset( $menu['menu_type'] ) ? $menu['menu_type'] : 'custom';
 	$menu_slug   = isset( $menu['menu_slug'] ) ? $menu['menu_slug'] : 'fed_slug_error';
 	$menu_id     = isset( $menu['id'] ) ? $menu['id'] : 0;
-	$menu_name   = isset( $menu['menu'] ) ? $menu['menu'] : ( isset( $menu['menu_name'] ) ? $menu['menu_name'] : 'MISSING' );
+	$menu_name   = isset( $menu['menu'] ) && '' !== $menu['menu']
+		? $menu['menu']
+		: ( isset( $menu['menu_name'] ) && '' !== $menu['menu_name']
+			? $menu['menu_name']
+			: ( isset( $menu['name'] ) && '' !== $menu['name']
+				? $menu['name']
+				: ( ! empty( $menu_slug ) && 'fed_slug_error' !== $menu_slug ? ucwords( str_replace( [ '-', '_' ], ' ', $menu_slug ) ) : 'Menu' ) ) );
 	$menu_url    = add_query_arg(
 		array(
 			'menu_type' => $menu_type,

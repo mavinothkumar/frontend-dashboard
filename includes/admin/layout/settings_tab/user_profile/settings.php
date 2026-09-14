@@ -326,7 +326,7 @@ function fed_admin_user_profile_colors_tab() {
 				<div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 					<div>
 						<div class="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-xs font-semibold text-indigo-200 backdrop-blur-md mb-2">
-							<i class="fas fa-palette text-indigo-400"></i> <?php esc_html_e( 'Enterprise Theme Customizer', 'frontend-dashboard' ); ?>
+							<i class="fas fa-palette text-indigo-400"></i> <?php esc_html_e( 'Theme Customizer', 'frontend-dashboard' ); ?>
 						</div>
 						<h2 class="text-xl md:text-2xl font-black tracking-tight text-white"><?php esc_html_e( 'Dashboard Color & Branding Engine', 'frontend-dashboard' ); ?></h2>
 						<p class="text-xs md:text-sm text-slate-300 mt-1 max-w-2xl leading-relaxed">
@@ -347,7 +347,7 @@ function fed_admin_user_profile_colors_tab() {
 				<div class="flex items-center justify-between mb-4">
 					<div>
 						<h3 class="text-sm font-black text-slate-800 uppercase tracking-wider flex items-center gap-2">
-							<i class="fas fa-magic text-indigo-600"></i> <?php esc_html_e( '1-Click Enterprise Presets', 'frontend-dashboard' ); ?>
+							<i class="fas fa-magic text-indigo-600"></i> <?php esc_html_e( '1-Click Color Presets', 'frontend-dashboard' ); ?>
 						</h3>
 						<p class="text-xs text-slate-500 mt-0.5"><?php esc_html_e( 'Select an expertly crafted color scheme to apply across your entire dashboard instantly.', 'frontend-dashboard' ); ?></p>
 					</div>

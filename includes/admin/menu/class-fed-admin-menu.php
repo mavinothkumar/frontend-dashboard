@@ -79,6 +79,24 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 				);
 			}
 
+			// Register legacy aliases as hidden submenus to prevent 403 on older URLs
+			add_submenu_page(
+				null,
+				__( 'Settings', 'frontend-dashboard' ),
+				__( 'Settings', 'frontend-dashboard' ),
+				'manage_options',
+				'fed_settings_menu',
+				array( $this, 'common_settings' )
+			);
+			add_submenu_page(
+				null,
+				__( 'User Profile', 'frontend-dashboard' ),
+				__( 'User Profile', 'frontend-dashboard' ),
+				'manage_options',
+				'fed_add_user_profile',
+				array( $this, 'add_user_profile' )
+			);
+
 			do_action( 'fed_add_main_sub_menu_action' );
 
 		}

@@ -25,6 +25,9 @@ add_action( 'wp_ajax_fed_get_field_builder_modal', 'fed_get_field_builder_modal_
  * Render Field Builder Modal Markup via AJAX.
  */
 function fed_get_field_builder_modal_function() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
 	fed_verify_nonce();
 
 	ob_start();
@@ -40,6 +43,9 @@ function fed_get_field_builder_modal_function() {
  * Admin Setting Page.
  */
 function fed_admin_setting_form_function() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
 
 	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	/**
@@ -101,7 +107,11 @@ function fed_admin_setting_form_function() {
  * Admin User Profile Page
  */
 function fed_admin_setting_up_form_function() {
-	$post = $_POST; //filter_input_array( INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS );
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
+
+	$post = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 
 	if ( ! isset( $post['fed_action'] ) ) {
 		wp_send_json_error(
@@ -126,49 +136,105 @@ function fed_admin_setting_up_form_function() {
 
 	}
 
+	$post_id = isset( $post['input_id'] ) && ! empty( $post['input_id'] ) ? (int) $post['input_id'] : '';
+
+	// Reserved / sensitive keys that should never be used as custom field keys
+	$reserved_keys = array(
+		'role',
+		'roles',
+		'caps',
+		'capabilities',
+		'wp_capabilities',
+		'user_level',
+		'user_pass',
+		'user_pass_confirm',
+		'confirmation_password',
+		'user_activation_key',
+		'user_status',
+		'ID',
+		'id',
+		'session_tokens',
+	);
+
 	/**
 	 * Check for default post value as input meta
 	 */
-	if (
-		( 'post' === $post['fed_action'] ) && ( '' === $post['input_id'] ) && in_array(
-			$post['input_meta'],
-			fed_get_default_post_items(), false
-		)
-	) {
-		wp_send_json_error(
-			array(
-				'message' => sprintf(
-				/* Translators: %s : Label Name */
-					__( 'Sorry! you cannot add the default post value %s', 'frontend-dashboard' ),
-					esc_attr( $post['label_name'] )
-				),
-			)
-		);
+	if ( 'post' === $post['fed_action'] ) {
+		$default_post_items = fed_get_default_post_items();
+		if ( empty( $post_id ) ) {
+			if ( in_array( $post['input_meta'], $default_post_items, true ) || in_array( $post['input_meta'], $reserved_keys, true ) ) {
+				wp_send_json_error(
+					array(
+						'message' => sprintf(
+							/* Translators: %s : Label Name */
+							__( 'Sorry! you cannot add the default post value %s', 'frontend-dashboard' ),
+							esc_attr( $post['label_name'] )
+						),
+					)
+				);
+			}
+		} else {
+			$existing = fed_fetch_table_row_by_id( BC_FED_TABLE_POST, $post_id );
+			if ( ! is_wp_error( $existing ) && $existing ) {
+				$is_default = ( isset( $existing['extra'] ) && 'no' === $existing['extra'] ) || in_array( $existing['input_meta'], $default_post_items, true );
+				if ( $is_default ) {
+					// Cannot rename input_meta of a default field
+					$post['input_meta'] = $existing['input_meta'];
+				} elseif ( in_array( $post['input_meta'], $default_post_items, true ) || in_array( $post['input_meta'], $reserved_keys, true ) ) {
+					wp_send_json_error(
+						array(
+							'message' => sprintf(
+								/* Translators: %s : Label Name */
+								__( 'Sorry! you cannot use reserved post field name %s', 'frontend-dashboard' ),
+								esc_attr( $post['label_name'] )
+							),
+						)
+					);
+				}
+			}
+		}
 	}
 
 	/**
 	 * Check for default user profile value as input meta
 	 */
-	if (
-		'profile' === $post['fed_action'] && '' === $post['input_id'] && in_array(
-			$post['input_meta'],
-			fed_get_default_profile_items(), false
-		)
-	) {
-		wp_send_json_error(
-			array(
-				'message' => sprintf(
-				/* Translators: %s : Label Name */
-					__( 'Sorry! you cannot add the default profile value %s', 'frontend-dashboard' ),
-					esc_attr( $post['label_name'] )
-				),
-			)
-		);
+	if ( 'profile' === $post['fed_action'] ) {
+		$default_profile_items = fed_get_default_profile_items();
+		if ( empty( $post_id ) ) {
+			if ( in_array( $post['input_meta'], $default_profile_items, true ) || in_array( $post['input_meta'], $reserved_keys, true ) ) {
+				wp_send_json_error(
+					array(
+						'message' => sprintf(
+							/* Translators: %s : Label Name */
+							__( 'Sorry! you cannot add the default profile value %s', 'frontend-dashboard' ),
+							esc_attr( $post['label_name'] )
+						),
+					)
+				);
+			}
+		} else {
+			$existing = fed_fetch_table_row_by_id( BC_FED_TABLE_USER_PROFILE, $post_id );
+			if ( ! is_wp_error( $existing ) && $existing ) {
+				$is_default = ( isset( $existing['extra'] ) && 'no' === $existing['extra'] ) || in_array( $existing['input_meta'], $default_profile_items, true );
+				if ( $is_default ) {
+					// Cannot rename input_meta of a default field
+					$post['input_meta'] = $existing['input_meta'];
+				} elseif ( in_array( $post['input_meta'], $default_profile_items, true ) || in_array( $post['input_meta'], $reserved_keys, true ) ) {
+					wp_send_json_error(
+						array(
+							'message' => sprintf(
+								/* Translators: %s : Label Name */
+								__( 'Sorry! you cannot use reserved profile field name %s', 'frontend-dashboard' ),
+								esc_attr( $post['label_name'] )
+							),
+						)
+					);
+				}
+			}
+		}
 	}
 
 	$values = fed_process_user_profile( $post, $post['fed_action'], 'yes' );
-
-	$post_id = isset( $post['input_id'] ) && ! empty( $post['input_id'] ) ? (int) $post['input_id'] : '';
 
 	fed_save_profile_post( $values, $post['fed_action'], $post_id );
 }
@@ -177,6 +243,10 @@ function fed_admin_setting_up_form_function() {
  * Edit Dashboard menu.
  */
 function fed_admin_setting_form_dashboard_menu_function() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
+
 	$post_all = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	parse_str( $post_all['data'], $post );
 	$action  = $post_all['fed_action'];
@@ -260,6 +330,10 @@ function fed_admin_setting_form_dashboard_menu_function() {
  * Admin User Profile Layout Page.
  */
 function fed_admin_setting_upl_form_function() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
+
 	/**
 	 * Check for Nonce
 	 */
@@ -274,6 +348,10 @@ function fed_admin_setting_upl_form_function() {
  * Delete User Profile
  */
 function fed_user_profile_delete_function() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
+
 	$post_all = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	parse_str( $post_all['data'], $post );
 	$action = $post_all['fed_up_action'];
@@ -330,6 +408,10 @@ function fed_user_profile_delete_function() {
  * Dismiss admin notice permanently.
  */
 function fed_message_form_function() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
+
 	/**
 	 * Check for Nonce
 	 */
@@ -351,6 +433,10 @@ function fed_message_form_function() {
  */
 add_action( 'wp_ajax_fed_search_wp_pages', 'fed_search_wp_pages_ajax' );
 function fed_search_wp_pages_ajax() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
+
 	fed_verify_nonce();
 
 	$query       = isset( $_REQUEST['q'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['q'] ) ) : '';

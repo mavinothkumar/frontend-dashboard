@@ -150,26 +150,26 @@ if ( ! function_exists( 'fed_get_transactions' ) ) {
 	SELECT      *
 	FROM        $table_payment payment
 	INNER JOIN  $table_user users
-	            ON payment.user_id = users.id
+	            ON payment.user_id = users.ID
 	ORDER BY    payment.id DESC
 	", ARRAY_A
 			);
 		}
 		else {
-			$user_id = get_current_user_id();
-			// FED_Log::writeLog(['$user_id' => $user_id]);.
-			$result = $wpdb->get_results(
-				"
+			$user_id = (int) get_current_user_id();
+			$result  = $wpdb->get_results(
+				$wpdb->prepare(
+					"
 	SELECT      *
 	FROM        $table_payment payment
 	INNER JOIN  $table_user users
-	            ON payment.user_id = users.id
-    WHERE       payment.user_id = $user_id
+	            ON payment.user_id = users.ID
+    WHERE       payment.user_id = %d
 	ORDER BY    payment.id DESC
-	", ARRAY_A
+	", $user_id
+				), ARRAY_A
 			);
 
-			// FED_Log::writeLog(['$result' => $result]);.
 			return $result;
 		}
 	}
@@ -193,25 +193,26 @@ if ( ! function_exists( 'fed_get_active_transactions' ) ) {
 	SELECT      *
 	FROM        $table_payment payment
 	INNER JOIN  $table_user users
-	            ON payment.user_id = users.id
+	            ON payment.user_id = users.ID
     WHERE ends_at = 'active'
 	ORDER BY    payment.id DESC
 	", ARRAY_A
 			);
 		}
 		else {
-			$user_id = get_current_user_id();
-			// FED_Log::writeLog(['$user_id' => $user_id]);.
-			$result = $wpdb->get_results(
-				"
+			$user_id = (int) get_current_user_id();
+			$result  = $wpdb->get_results(
+				$wpdb->prepare(
+					"
 	SELECT      *
 	FROM        $table_payment payment
 	INNER JOIN  $table_user users
-	            ON payment.user_id = users.id
-    WHERE       payment.user_id = $user_id AND
+	            ON payment.user_id = users.ID
+    WHERE       payment.user_id = %d AND
                 status = 'active'
 	ORDER BY    payment.id DESC
-	", ARRAY_A
+	", $user_id
+				), ARRAY_A
 			);
 
 			return $result;
@@ -229,12 +230,19 @@ if ( ! function_exists( 'fed_get_transaction_with_meta' ) ) {
 	 */
 	function fed_get_transaction_with_meta( $id, $column = 'id' ) {
 		global $wpdb;
-		$transaction         = fed_get_transaction( $id, $column );
-		$table_payment_items = $wpdb->prefix . BC_FED_TABLE_PAYMENT_ITEMS;
+		$transaction = fed_get_transaction( $id, $column );
 
-		$transaction_id               = $transaction['id'];
-		$m                            = $wpdb->get_results(
-			"SELECT * FROM $table_payment_items WHERE payment_id = $transaction_id ORDER BY  payment_item_id DESC",
+		if ( is_wp_error( $transaction ) || empty( $transaction ) || ! isset( $transaction['id'] ) ) {
+			return $transaction;
+		}
+
+		$table_payment_items = $wpdb->prefix . BC_FED_TABLE_PAYMENT_ITEMS;
+		$transaction_id      = (int) $transaction['id'];
+		$m                   = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT * FROM {$table_payment_items} WHERE payment_id = %d ORDER BY payment_item_id DESC",
+				$transaction_id
+			),
 			ARRAY_A
 		);
 		$transaction['payment_items'] = $m;
@@ -257,15 +265,45 @@ if ( ! function_exists( 'fed_get_transaction' ) ) {
 			$table_payment = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
 			$table_user    = $wpdb->prefix . 'users';
 
-			$result = $wpdb->get_results(
-				"
-	SELECT      *
-	FROM        $table_payment payment
-	INNER JOIN  $table_user users
-	            ON payment.user_id = users.id
-    WHERE payment.$column = $id	            
-	            ", ARRAY_A
-			);
+			$allowed_columns = array( 'id', 'transaction_id', 'user_id', 'invoice_number', 'payer_id', 'sku' );
+			if ( ! in_array( $column, $allowed_columns, true ) ) {
+				$column = 'id';
+			}
+
+			$is_admin        = fed_is_admin();
+			$current_user_id = (int) get_current_user_id();
+
+			if ( 'id' === $column || 'user_id' === $column ) {
+				$id_val = (int) $id;
+				if ( $is_admin ) {
+					$query = $wpdb->prepare(
+						"SELECT * FROM {$table_payment} payment INNER JOIN {$table_user} users ON payment.user_id = users.ID WHERE payment.{$column} = %d",
+						$id_val
+					);
+				} else {
+					$query = $wpdb->prepare(
+						"SELECT * FROM {$table_payment} payment INNER JOIN {$table_user} users ON payment.user_id = users.ID WHERE payment.{$column} = %d AND payment.user_id = %d",
+						$id_val,
+						$current_user_id
+					);
+				}
+			} else {
+				$id_val = sanitize_text_field( (string) $id );
+				if ( $is_admin ) {
+					$query = $wpdb->prepare(
+						"SELECT * FROM {$table_payment} payment INNER JOIN {$table_user} users ON payment.user_id = users.ID WHERE payment.{$column} = %s",
+						$id_val
+					);
+				} else {
+					$query = $wpdb->prepare(
+						"SELECT * FROM {$table_payment} payment INNER JOIN {$table_user} users ON payment.user_id = users.ID WHERE payment.{$column} = %s AND payment.user_id = %d",
+						$id_val,
+						$current_user_id
+					);
+				}
+			}
+
+			$result = $wpdb->get_results( $query, ARRAY_A );
 
 			if ( isset( $result[0] ) && count( $result[0] ) > 0 ) {
 				return $result[0];
@@ -292,10 +330,29 @@ if ( ! function_exists( 'fed_get_transaction_meta' ) ) {
 	function fed_get_transaction_meta( $id, $column = 'id' ) {
 		global $wpdb;
 		$table_payment_items = $wpdb->prefix . BC_FED_TABLE_PAYMENT_ITEMS;
-		$transaction         = $wpdb->get_results(
-			"SELECT * FROM $table_payment_items WHERE $column = $id ORDER BY  payment_item_id DESC",
-			ARRAY_A
-		);
+
+		$allowed_columns = array( 'payment_item_id', 'payment_id', 'id', 'item_id', 'transaction_id' );
+		if ( ! in_array( $column, $allowed_columns, true ) ) {
+			$column = 'payment_id';
+		}
+
+		if ( in_array( $column, array( 'payment_item_id', 'payment_id', 'id', 'item_id' ), true ) ) {
+			$transaction = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT * FROM {$table_payment_items} WHERE {$column} = %d ORDER BY payment_item_id DESC",
+					(int) $id
+				),
+				ARRAY_A
+			);
+		} else {
+			$transaction = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT * FROM {$table_payment_items} WHERE {$column} = %s ORDER BY payment_item_id DESC",
+					sanitize_text_field( (string) $id )
+				),
+				ARRAY_A
+			);
+		}
 
 		return $transaction;
 
@@ -471,13 +528,13 @@ if ( ! function_exists( 'fed_get_registered_gateways' ) ) {
 		$default_gateways = array(
 			'bank_transfer' => array(
 				'id'          => 'bank_transfer',
-				'name'        => __( 'Direct Bank Transfer (Wire)', 'frontend-dashboard' ),
+				'name'        => __( 'Direct Bank Transfer', 'frontend-dashboard' ),
 				'icon'        => 'fas fa-university',
 				'color'       => '#0f766e',
 				'tagline'     => __( 'Offline BACS & Wire Orders', 'frontend-dashboard' ),
 				'description' => __( 'Accept payments offline directly into your bank account with manual verification and automated receipt generation.', 'frontend-dashboard' ),
 				'type'        => 'core',
-				'badge'       => 'Core Free',
+				'badge'       => 'Free',
 				'badge_color' => '#0f766e',
 				'is_active'   => ( 'bank_transfer' === $current_gateway ),
 				'is_installed'=> true,

@@ -17,6 +17,12 @@ add_action( 'wp_ajax_fed_admin_add_orders', 'fed_admin_add_orders_function' );
  * Admin Orders.
  */
 function fed_admin_orders_function() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
+
+	fed_verify_nonce();
+
 	global $wpdb;
 	$table_name = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
 	$request    = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
@@ -67,6 +73,12 @@ function fed_admin_orders_function() {
  * Admin Order Delete.
  */
 function fed_admin_order_delete_function() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
+
+	fed_verify_nonce();
+
 	global $wpdb;
 	$table_name = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
 	$request    = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
@@ -128,6 +140,12 @@ function fed_admin_order_id_validation( $request ) {
  * Order Search User to Add
  */
 function fed_order_search_add_function() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
+
+	fed_verify_nonce();
+
 	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	if ( ! isset( $request['fed_order_search'] ) || '' == $request['fed_order_search'] ) {
 		wp_send_json_error( array( 'message' => __( 'Please fill the search field', 'frontend-dashboard' ) ) );
@@ -160,6 +178,10 @@ function fed_order_search_add_function() {
  * Admin Add Order
  */
 function fed_admin_add_orders_function() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
+
 	global $wpdb;
 	$table_name = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
 	$request    = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();

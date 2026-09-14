@@ -1043,3 +1043,80 @@ Pricing
 	padding-left: 0 !important;
 	padding-right: 0 !important;
 }
+
+/* Modern App Shell Sidebar Layout & Profile Footer */
+.bc_fed.fed_dashboard_container .fed_dashboard_wrapper {
+	display: flex !important;
+	flex-direction: row !important;
+	align-items: stretch !important;
+	min-height: 100vh !important;
+	width: 100% !important;
+}
+
+.bc_fed.fed_dashboard_container aside.fed_dashboard_menus {
+	display: flex !important;
+	flex-direction: column !important;
+	justify-content: space-between !important;
+	align-self: stretch !important;
+	min-height: 100vh !important;
+	width: 280px !important;
+	min-width: 280px !important;
+	max-width: 280px !important;
+	box-sizing: border-box !important;
+	position: relative !important;
+	flex-shrink: 0 !important;
+}
+
+.bc_fed .fed_sidebar_scrollable {
+	flex: 1 1 auto !important;
+	display: flex !important;
+	flex-direction: column !important;
+	min-height: 0 !important;
+}
+
+.bc_fed .fed_sidebar_user_section {
+	display: flex !important;
+	flex-direction: row !important;
+	flex-wrap: nowrap !important;
+	align-items: center !important;
+	justify-content: space-between !important;
+	gap: 10px !important;
+	width: 100% !important;
+	box-sizing: border-box !important;
+	margin-top: auto !important;
+	position: sticky !important;
+	bottom: 0 !important;
+	background-color: var(--fed-sidebar-bg, #FFFFFF) !important;
+	border-top: 1px solid var(--fed-border, #E2E8F0) !important;
+	z-index: 10 !important;
+}
+
+.bc_fed .fed_sidebar_user_info {
+	display: flex !important;
+	flex-direction: row !important;
+	flex-wrap: nowrap !important;
+	align-items: center !important;
+	gap: 10px !important;
+	min-width: 0 !important;
+	flex: 1 1 auto !important;
+	overflow: hidden !important;
+}
+
+.bc_fed .fed_sidebar_user_section .fed_sidebar_user_name,
+.bc_fed .fed_sidebar_user_section .fed_sidebar_user_email {
+	white-space: nowrap !important;
+	overflow: hidden !important;
+	text-overflow: ellipsis !important;
+	display: block !important;
+}
+
+.bc_fed .fed_sidebar_logout_btn {
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	width: 32px !important;
+	height: 32px !important;
+	min-width: 32px !important;
+	flex-shrink: 0 !important;
+	margin-left: auto !important;
+}
