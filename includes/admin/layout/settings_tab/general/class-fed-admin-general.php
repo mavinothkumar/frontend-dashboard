@@ -55,7 +55,7 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 					),
 					'fed_frontend_scripts' => array(
 						'icon'      => 'fas fa-code',
-						'name'      => __( 'Frontend Scripts', 'frontend-dashboard-extra' ),
+						'name'      => __( 'Frontend Scripts', 'frontend-dashboard' ),
 						'callable'  => array(
 							'object' => $this,
 							'method' => 'fed_frontend_script_menu_tab',

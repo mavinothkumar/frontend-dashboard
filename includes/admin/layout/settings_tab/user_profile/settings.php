@@ -165,9 +165,8 @@ function fed_admin_user_profile_settings_tab( $fed_admin_options ) {
 }
 
 function fed_admin_user_profile_colors_tab() {
-	if ( defined( 'BC_FED_EXTRA_PLUGIN_VERSION' ) ) {
-		$fed_admin_options = get_option( 'fed_admin_setting_upl_color' );
-		$colors = isset( $fed_admin_options['color'] ) && is_array( $fed_admin_options['color'] ) ? $fed_admin_options['color'] : array();
+	$fed_admin_options = get_option( 'fed_admin_setting_upl_color' );
+	$colors = isset( $fed_admin_options['color'] ) && is_array( $fed_admin_options['color'] ) ? $fed_admin_options['color'] : array();
 
 		// Default enterprise values
 		$c_bg_color     = ! empty( $colors['fed_upl_color_bg_color'] ) ? $colors['fed_upl_color_bg_color'] : '#4F46E5';
@@ -806,24 +805,4 @@ function fed_admin_user_profile_colors_tab() {
 		});
 		</script>
 		<?php
-	} else {
-		?>
-		<div class="alert alert-info">
-			<strong>
-				<?php
-				esc_attr_e(
-					'Please install Frontend Dashboard Extra Plugin to activate this section',
-					'frontend-dashboard'
-				);
-				?>
-			</strong>
-			<?php esc_attr_e( 'Download', 'frontend-dashboard' ); ?>
-			<a href="https://buffercode.com/plugin/frontend-dashboard-extra">
-				<?php
-				esc_attr_e( 'Frontend Dashboard Extra', 'frontend-dashboard' );
-				?>
-			</a>
-		</div>
-		<?php
-	}
 }
