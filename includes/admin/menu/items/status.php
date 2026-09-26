@@ -51,10 +51,8 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 		$addons = array(
 			'frontend-dashboard-custom-post'    => array( 'name' => 'Custom Post & Taxonomies', 'file' => 'frontend-dashboard-custom-post/frontend-dashboard-custom-post.php' ),
 			'frontend-dashboard-captcha'        => array( 'name' => 'reCAPTCHA Spam Protection', 'file' => 'frontend-dashboard-captcha/frontend-dashboard-captcha.php' ),
-			'frontend-dashboard-user-management'=> array( 'name' => 'User Management', 'file' => 'frontend-dashboard-user-management/frontend-dashboard-user-management.php' ),
-			'frontend-dashboard-templates'      => array( 'name' => 'Dashboard Templates', 'file' => 'frontend-dashboard-templates/frontend-dashboard-templates.php' ),
+			'frontend-dashboard-notification'   => array( 'name' => 'Notification System', 'file' => 'frontend-dashboard-notification/frontend-dashboard-notification.php' ),
 			'frontend-dashboard-social-chat'    => array( 'name' => 'Social Chat', 'file' => 'frontend-dashboard-social-chat/frontend-dashboard-social-chat.php' ),
-			'frontend-dashboard-payments'       => array( 'name' => 'Payments & Subscriptions', 'file' => 'frontend-dashboard-payments/frontend-dashboard-payments.php' ),
 		);
 
 		// ----------------------------------------------------
@@ -974,34 +972,60 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 				</div>
 
 				<!-- Sub-Pane 1: DB Log (Database Table) -->
-				<div class="fed-sub-pane block space-y-6" id="subpane_activity_db_log">
+				<div class="fed-sub-pane block space-y-5" id="subpane_activity_db_log">
 					<div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-5">
-						<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-slate-100">
-							<div class="flex items-center gap-3">
-								<div class="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-base shadow-xs" style="background-color: #eef2ff !important; color: #4f46e5 !important;">
+						
+						<!-- Header Title & Action Buttons -->
+						<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-5 border-b border-slate-100">
+							<div class="flex items-center gap-3.5 min-w-0">
+								<div class="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-base shrink-0 shadow-2xs" style="background-color: #eef2ff !important; color: #4f46e5 !important;">
 									<i class="fas fa-history" style="color: #4f46e5 !important;"></i>
 								</div>
-								<div>
-									<div class="flex items-center gap-2">
-										<h3 class="text-sm font-bold text-slate-900 m-0"><?php esc_html_e( 'Activity & Audit Log (Database)', 'frontend-dashboard' ); ?></h3>
-										<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200" id="fed_activity_count_badge">
+								<div class="min-w-0">
+									<div class="flex items-center gap-2 flex-wrap">
+										<h3 class="text-sm sm:text-base font-bold text-slate-900 m-0"><?php esc_html_e( 'Activity & Audit Log (Database)', 'frontend-dashboard' ); ?></h3>
+										<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200" id="fed_activity_count_badge">
 											<?php echo count( $db_activity_logs ); ?> <?php esc_html_e( 'events', 'frontend-dashboard' ); ?>
 										</span>
 									</div>
-									<p class="text-[11px] text-slate-500 m-0 mt-0.5"><?php esc_html_e( 'Real-time audit trail of administrative operations, seeder executions, schema migrations, and system tasks in MySQL.', 'frontend-dashboard' ); ?></p>
+									<p class="text-xs text-slate-500 m-0 mt-0.5"><?php esc_html_e( 'Real-time audit trail of administrative operations, seeder executions, schema migrations, and system tasks in MySQL.', 'frontend-dashboard' ); ?></p>
 								</div>
 							</div>
 
-							<!-- Filter & Action Controls -->
-							<div class="flex items-center gap-2.5 flex-wrap">
-								<!-- Search Input -->
-								<div class="fed-search-input-wrap">
-									<i class="fas fa-search fed-search-icon"></i>
-									<input type="text" id="fed_activity_search_input" placeholder="<?php esc_attr_e( 'Search audit logs...', 'frontend-dashboard' ); ?>" class="fed-status-search-input text-xs" style="width: 200px !important; min-width: 180px !important;" />
-								</div>
+							<!-- Action Buttons -->
+							<div class="flex items-center gap-2.5 shrink-0">
+								<button type="button" id="fed_action_refresh_activity_btn" class="h-9 px-3.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs inline-flex items-center gap-1.5 transition-colors cursor-pointer border-0 shadow-2xs">
+									<i class="fas fa-sync-alt text-[10px]"></i>
+									<span><?php esc_html_e( 'Refresh', 'frontend-dashboard' ); ?></span>
+								</button>
 
-								<!-- Category Filter Dropdown -->
-								<select id="fed_activity_filter_select" class="h-[38px] px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 text-xs font-semibold focus:bg-white focus:border-indigo-500 focus:outline-none transition-all cursor-pointer">
+								<button type="button" id="fed_action_clear_activity_btn" class="h-9 px-3.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-semibold text-xs inline-flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs">
+									<i class="fas fa-trash-alt text-[10px]"></i>
+									<span><?php esc_html_e( 'Clear Audit History', 'frontend-dashboard' ); ?></span>
+								</button>
+							</div>
+						</div>
+
+						<!-- Search & Filter Controls Toolbar -->
+						<div class="flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-50/70 p-3 rounded-2xl border border-slate-200/80">
+							<!-- Search Input with explicit icon padding -->
+							<div class="fed-search-input-wrap w-full sm:w-80" style="position: relative !important; display: inline-flex !important; align-items: center !important; width: 100% !important; max-width: 360px !important;">
+								<span class="fed-search-icon" style="position: absolute !important; left: 14px !important; top: 50% !important; transform: translateY(-50%) !important; color: #94a3b8 !important; font-size: 12px !important; z-index: 2 !important; pointer-events: none !important; line-height: 1 !important;">
+									<i class="fas fa-search"></i>
+								</span>
+								<input type="text"
+									   id="fed_activity_search_input"
+									   placeholder="<?php esc_attr_e( 'Search by actor, action, details, IP...', 'frontend-dashboard' ); ?>"
+									   class="fed-status-search-input w-full"
+									   style="padding-left: 38px !important; padding-right: 16px !important; padding-top: 8px !important; padding-bottom: 8px !important; height: 38px !important; font-size: 12px !important; width: 100% !important; background-color: #ffffff !important; border-radius: 12px !important; border: 1px solid #e2e8f0 !important; color: #334155 !important; box-sizing: border-box !important;" />
+							</div>
+
+							<!-- Category Filter Dropdown with dedicated arrow padding -->
+							<div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+								<label for="fed_activity_filter_select" class="text-xs font-semibold text-slate-500 shrink-0 hidden md:inline"><?php esc_html_e( 'Category:', 'frontend-dashboard' ); ?></label>
+								<select id="fed_activity_filter_select"
+										class="h-[38px] rounded-xl border border-slate-200 bg-white text-slate-700 text-xs font-semibold focus:border-indigo-500 focus:outline-none transition-all cursor-pointer shadow-2xs w-full sm:w-auto"
+										style="height: 38px !important; padding-left: 14px !important; padding-right: 36px !important; padding-top: 6px !important; padding-bottom: 6px !important; min-width: 180px !important; font-size: 12px !important; background-color: #ffffff !important; border: 1px solid #e2e8f0 !important; border-radius: 12px !important; -webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important; background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2364748B%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E') !important; background-repeat: no-repeat !important; background-position: right 14px center !important; background-size: 9px !important;">
 									<option value=""><?php esc_html_e( 'All Categories', 'frontend-dashboard' ); ?></option>
 									<option value="seeder"><?php esc_html_e( 'Seeder / Purge', 'frontend-dashboard' ); ?></option>
 									<option value="database"><?php esc_html_e( 'Database Tables', 'frontend-dashboard' ); ?></option>
@@ -1009,34 +1033,22 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 									<option value="cron"><?php esc_html_e( 'Crons', 'frontend-dashboard' ); ?></option>
 									<option value="log"><?php esc_html_e( 'System Logs', 'frontend-dashboard' ); ?></option>
 								</select>
-
-								<!-- Refresh Button -->
-								<button type="button" id="fed_action_refresh_activity_btn" class="fed-btn-secondary h-[38px] px-3.5 rounded-xl font-semibold text-xs inline-flex items-center gap-1.5 cursor-pointer shadow-2xs">
-									<i class="fas fa-sync-alt text-[10px]"></i>
-									<span><?php esc_html_e( 'Refresh', 'frontend-dashboard' ); ?></span>
-								</button>
-
-								<!-- Clear Database Log Button -->
-								<button type="button" id="fed_action_clear_activity_btn" class="h-[38px] px-3.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-semibold text-xs inline-flex items-center gap-1.5 transition-colors cursor-pointer">
-									<i class="fas fa-trash-alt text-[10px]"></i>
-									<span><?php esc_html_e( 'Clear Audit History', 'frontend-dashboard' ); ?></span>
-								</button>
 							</div>
 						</div>
 
 						<!-- Real-Time Activity Log Table -->
-						<div class="overflow-x-auto rounded-2xl border border-slate-200/80 max-h-[600px] overflow-y-auto">
-							<table class="w-full text-left border-collapse">
-								<thead class="sticky top-0 z-10 shadow-xs">
+						<div class="overflow-x-auto rounded-2xl border border-slate-200/80 max-h-[600px] overflow-y-auto shadow-2xs">
+							<table class="w-full text-left border-collapse" style="table-layout: fixed; width: 100%;">
+								<thead class="sticky top-0 z-10 shadow-xs bg-slate-50/90 border-b border-slate-200/80 text-[11px] font-bold uppercase tracking-wider text-slate-500">
 									<tr>
-										<th class="w-48"><?php esc_html_e( 'User / Actor', 'frontend-dashboard' ); ?></th>
-										<th class="w-32"><?php esc_html_e( 'Category', 'frontend-dashboard' ); ?></th>
-										<th><?php esc_html_e( 'Action & Description', 'frontend-dashboard' ); ?></th>
-										<th class="w-28 text-center"><?php esc_html_e( 'Status', 'frontend-dashboard' ); ?></th>
-										<th class="w-40 text-right"><?php esc_html_e( 'Timestamp', 'frontend-dashboard' ); ?></th>
+										<th class="py-3.5 px-4" style="width: 20%;"><?php esc_html_e( 'User / Actor', 'frontend-dashboard' ); ?></th>
+										<th class="py-3.5 px-3" style="width: 14%;"><?php esc_html_e( 'Category', 'frontend-dashboard' ); ?></th>
+										<th class="py-3.5 px-3" style="width: 44%;"><?php esc_html_e( 'Action & Description', 'frontend-dashboard' ); ?></th>
+										<th class="py-3.5 px-2 text-center" style="width: 10%;"><?php esc_html_e( 'Status', 'frontend-dashboard' ); ?></th>
+										<th class="py-3.5 px-4 text-right" style="width: 12%;"><?php esc_html_e( 'Timestamp', 'frontend-dashboard' ); ?></th>
 									</tr>
 								</thead>
-								<tbody class="divide-y divide-slate-100" id="fed_activity_log_tbody">
+								<tbody class="divide-y divide-slate-100 text-xs text-slate-700 font-medium" id="fed_activity_log_tbody">
 									<?php if ( ! empty( $db_activity_logs ) ) : ?>
 										<?php foreach ( $db_activity_logs as $act ) : 
 											$action_cat   = ! empty( $act['channel'] ) ? $act['channel'] : ( ! empty( $act['action_type'] ) ? $act['action_type'] : 'system' );
@@ -1080,22 +1092,22 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 											$time_diff = human_time_diff( $time_unix, time() ) . ' ' . __( 'ago', 'frontend-dashboard' );
 											$time_exact = date_i18n( 'M j, Y H:i:s', $time_unix );
 										?>
-											<tr class="fed-activity-row hover:bg-slate-50 transition-colors" data-category="<?php echo esc_attr( $action_cat ); ?>" data-search="<?php echo esc_attr( $search_str ); ?>">
+											<tr class="fed-activity-row hover:bg-slate-50/70 transition-colors" data-category="<?php echo esc_attr( $action_cat ); ?>" data-search="<?php echo esc_attr( $search_str ); ?>">
 												<!-- User / Actor Column -->
-												<td>
-													<div class="flex items-center gap-2.5">
-														<div class="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-xs text-slate-600 font-bold shrink-0 overflow-hidden">
+												<td class="py-3 px-4 overflow-hidden">
+													<div class="flex items-center gap-2.5 min-w-0">
+														<div class="w-7 h-7 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-xs text-slate-600 font-bold shrink-0 overflow-hidden">
 															<?php if ( ! empty( $act['user_id'] ) ) : ?>
-																<?php echo get_avatar( $act['user_id'], 32, '', '', array( 'class' => 'w-full h-full object-cover' ) ); ?>
+																<?php echo get_avatar( $act['user_id'], 28, '', '', array( 'class' => 'w-full h-full object-cover' ) ); ?>
 															<?php else : ?>
-																<i class="fas fa-user-shield text-indigo-500 text-xs"></i>
+																<i class="fas fa-user-shield text-indigo-500 text-[10px]"></i>
 															<?php endif; ?>
 														</div>
 														<div class="min-w-0">
 															<span class="block font-bold text-slate-800 truncate text-xs">
 																<?php echo esc_html( ! empty( $act['user_display_name'] ) ? $act['user_display_name'] : ( $act['user_login'] ?? 'System' ) ); ?>
 															</span>
-															<span class="block text-[10px] text-slate-400 font-mono">
+															<span class="block text-[10px] text-slate-400 font-mono truncate">
 																<?php echo esc_html( ! empty( $act['ip_address'] ) ? $act['ip_address'] : '127.0.0.1' ); ?>
 															</span>
 														</div>
@@ -1103,21 +1115,21 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 												</td>
 
 												<!-- Category Column -->
-												<td>
-													<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold border <?php echo esc_attr( $cat_badge_cls ); ?>">
-														<i class="fas <?php echo esc_attr( $cat_icon ); ?> text-[9px]"></i>
-														<span><?php echo esc_html( ucfirst( $action_cat ) ); ?></span>
+												<td class="py-3 px-3 overflow-hidden">
+													<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold border truncate <?php echo esc_attr( $cat_badge_cls ); ?>">
+														<i class="fas <?php echo esc_attr( $cat_icon ); ?> text-[9px] shrink-0"></i>
+														<span class="truncate"><?php echo esc_html( ucfirst( $action_cat ) ); ?></span>
 													</span>
 												</td>
 
 												<!-- Action Title & Description Column -->
-												<td>
-													<div class="space-y-1">
-														<span class="font-bold text-slate-900 text-xs block">
+												<td class="py-3 px-3 overflow-hidden">
+													<div class="min-w-0">
+														<div class="font-bold text-slate-900 text-xs truncate">
 															<?php echo esc_html( $action_title ); ?>
-														</span>
+														</div>
 														<?php if ( ! empty( $act_desc ) ) : ?>
-															<div class="text-[11px] text-slate-600 leading-relaxed whitespace-pre-wrap font-sans bg-slate-50/70 p-2 rounded-xl border border-slate-100">
+															<div class="text-[11px] text-slate-500 mt-0.5 truncate leading-relaxed" title="<?php echo esc_attr( $act_desc ); ?>">
 																<?php echo esc_html( $act_desc ); ?>
 															</div>
 														<?php endif; ?>
@@ -1125,19 +1137,19 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 												</td>
 
 												<!-- Status Column -->
-												<td class="text-center">
-													<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold border <?php echo esc_attr( $status_badge_cls ); ?>">
+												<td class="py-3 px-2 text-center overflow-hidden">
+													<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold border <?php echo esc_attr( $status_badge_cls ); ?>">
 														<i class="fas <?php echo esc_attr( $status_icon ); ?> text-[9px]"></i>
 														<span><?php echo esc_html( ucfirst( $act_status ) ); ?></span>
 													</span>
 												</td>
 
 												<!-- Timestamp Column -->
-												<td class="text-right">
+												<td class="py-3 px-4 text-right overflow-hidden">
 													<span class="font-bold text-slate-700 text-xs block">
 														<?php echo esc_html( $time_diff ); ?>
 													</span>
-													<span class="text-[10px] text-slate-400 font-mono block" title="<?php echo esc_attr( $time_exact ); ?>">
+													<span class="text-[10px] text-slate-400 font-mono block truncate" title="<?php echo esc_attr( $time_exact ); ?>">
 														<?php echo esc_html( $time_exact ); ?>
 													</span>
 												</td>

@@ -3,12 +3,13 @@ Contributors: vinoth06, buffercode
 Tags: dashboard, frontend dashboard, custom login, custom register, custom roles, custom profile, custom post type, custom taxonomies, custom dashboard, hide admin bar, widget
 Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 5.8
-Tested up to: 7.1
+Tested up to: 6.7
+Requires PHP: 7.4
 Stable tag: 3.0.0
-License: GPL V3
-License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Frontend Dashboard is bundled with huge list of custom features which can easily customise the User profile, Posts, Login, Register, Custom roles on custom front page.
+Frontend Dashboard is bundled with a huge list of custom features which can easily customize user profiles, posts, login, registration, and custom roles on a custom frontend dashboard.
 
 == Description ==
 
@@ -17,7 +18,7 @@ Frontend Dashboard is bundled with huge list of custom features which can easily
 
 = Frontend Dashboard Designed and Developed with WordPress Coding Standards =
 
-Frontend Dashboard is bundled with the huge list of custom features which can easily customise the User profile, Posts, Login, Register, Custom roles on the custom front page.
+Frontend Dashboard provides a complete frontend portal for WordPress sites with modular controls for users, posts, menus, and branding.
 
 1. Custom Login Page.
 2. Custom Register Page.
@@ -25,30 +26,29 @@ Frontend Dashboard is bundled with the huge list of custom features which can ea
 4. Custom Redirect URL for before and after Login, Register, Logout.
 5. Restrict WP Admin area for role based users.
 6. Add/Delete custom User Roles.
-7. Customise the Frontend Dashboard with your theme matching colors.
+7. Customise the Frontend Dashboard with your theme matching colors and modern App Shell layout.
 8. Enable/Disable the Frontend Dashboard scripts and styles on both frontend and admin.
 9. Add Frontend Dashboard menus for User based roles.
-10. Add any number of custom user field.
-11. Add any number of post/custom post field.
-12. Each custom fields can be configured based on user roles.
-13. Allow/Disallow to upload files in Frontend Dashboard based on User Role.
+10. Add any number of custom user fields.
+11. Add any number of post/custom post fields.
+12. Each custom field can be configured based on user roles.
+13. Allow/Disallow file uploads in Frontend Dashboard based on User Role.
 14. Show custom user fields on Register page.
 15. Add/Edit/Delete Post/Custom post in Frontend Dashboard based on User Role.
 16. Show user role based custom profile page.
-17. Manage custom Post type and Taxonomies.
-18. Customize templates.
-19. Restrict illegal username on Registration.
+17. Manage custom Post types and Taxonomies.
+18. Built-in modern templates, layouts, and page mappings.
+19. Restrict illegal usernames on Registration.
 
-= Frontend Dashboard Plugins List =
-* [Frontend Dashboard User Management (Pro) ](https://buffercode.com/plugin/frontend-dashboard-user-management)
-* [Frontend Dashboard Social Connect (Pro) ](https://buffercode.com/plugin/frontend-dashboard-social-connect)
-* [Frontend Dashboard Pages](https://buffercode.com/plugin/frontend-dashboard-pages)
-* [Frontend Dashboard Extra](https://buffercode.com/plugin/frontend-dashboard-extra)
-* [Frontend Dashboard Captcha](https://buffercode.com/plugin/frontend-dashboard-captcha)
-* [Frontend Dashboard Templates](https://buffercode.com/plugin/frontend-dashboard-templates)
-* [Frontend Dashboard Social Chat](https://buffercode.com/plugin/frontend-dashboard-social-chat)
-* [Frontend Dashboard Notification](https://buffercode.com/plugin/frontend-dashboard-notification)
-* [Frontend Dashboard Custom Post and Taxonomies](https://buffercode.com/plugin/frontend-dashboard-custom-post-and-taxonomies)
+= Frontend Dashboard Official Extensions =
+* [Frontend Dashboard Custom Post and Taxonomies](https://buffercode.com/plugin/frontend-dashboard-custom-post-and-taxonomies) (Free)
+* [Frontend Dashboard Notification](https://buffercode.com/plugin/frontend-dashboard-notification) (Free)
+* [Frontend Dashboard Captcha](https://buffercode.com/plugin/frontend-dashboard-captcha) (Free)
+* [Frontend Dashboard Social Chat](https://buffercode.com/plugin/frontend-dashboard-social-chat) (Free)
+* [Frontend Dashboard User Management](https://buffercode.com/plugin/frontend-dashboard-user-management) (Pro)
+* [Frontend Dashboard Social Connect](https://buffercode.com/plugin/frontend-dashboard-social-connect) (Pro)
+
+*Note: Frontend Dashboard Templates, Extra, and Pages have been merged directly into Core in v3.0.0.*
 
 = Videos =
 **How to Setup Frontend Dashboard and its Add-on**
@@ -247,6 +247,16 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 8. [fed_list_taxonomy taxonomy=TAXONOMY_NAME] to generate taxonomy in list order
 
 == Changelog ==
+
+= 3.0.0 =
+* Major Release: Complete frontend architecture redesign with Tailwind CSS and modern App Shell layout.
+* Feature: Merged Templates, Extra Form Fields, and Custom Pages directly into Core.
+* Feature: Brand new Add-ons & Extensions marketplace with 1-click install, activation, and real-time catalog caching.
+* Feature: System Status & Diagnostic tools with Database health checks and comprehensive Activity/Audit Logging.
+* Feature: Enhanced role-based admin bar controls, custom menu management, and advanced redirection settings.
+* Enhancement: Streamlined responsive mobile navigation with slide-over drawer menus.
+* Security: Comprehensive nonce validation, strict capability checks, and robust data sanitization across all AJAX endpoints.
+* Compatibility: Fully tested and compatible with WordPress 6.7 and PHP 8.1 / 8.2 / 8.3.
 
 = 2.2.4 [27-Feb-2024] =
 
@@ -632,6 +642,9 @@ Then Please go to Frontend Dashboard | Frontend Dashboard | Login (Tab) | Settin
 * Public release
 
 == Upgrade Notice ==
+
+= 3.0.0 =
+Major release: Modern App Shell UI redesign, built-in templates & extra field support, and full compatibility with WordPress 6.7. Legacy templates, extra, and pages add-ons are now merged into Core.
 
 = 2.2.1 [17-Sep-2020] =
 
