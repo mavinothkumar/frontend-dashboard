@@ -369,7 +369,7 @@ function fed_render_user_roles_selector( $args = array() ) {
 							value="Enable"
 							class="fed-role-checkbox rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 w-3.5 h-3.5 cursor-pointer"
 							<?php checked( $is_checked, true ); ?> />
-						<span class="text-xs truncate max-w-[150px]"><?php echo esc_html( $role ); ?></span>
+						<span class="text-xs whitespace-nowrap"><?php echo esc_html( $role ); ?></span>
 					</label>
 				<?php } ?>
 			</div>

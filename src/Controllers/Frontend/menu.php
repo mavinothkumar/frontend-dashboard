@@ -140,6 +140,11 @@ function fed_display_dashboard_menu( $menus ) {
 		$isActive      = ! empty( $menu_format['active'] );
 		$random_number = fed_get_random_string( 5 );
 		$menu_icon     = ! empty( $menu['menu_image_id'] ) ? $menu['menu_image_id'] : ( ! empty( $menu['menu_icon'] ) ? $menu['menu_icon'] : 'fas fa-circle' );
+		if ( strpos( $menu_icon, 'dashicons-' ) !== false && strpos( $menu_icon, 'dashicons ' ) === false && 0 !== strpos( $menu_icon, 'dashicons' ) ) {
+			$menu_icon = 'dashicons ' . $menu_icon;
+		} elseif ( 0 === strpos( $menu_icon, 'dashicons-' ) ) {
+			$menu_icon = 'dashicons ' . $menu_icon;
+		}
 
 		if ( $is_submenu ) {
 			$isParentActive = $index === $parent_id || $isActive;
@@ -233,7 +238,14 @@ function fed_format_menu_items( $menu, $index, $first_element, $dashboard_url, $
 	}
 
 	if ( isset( $get_payload['menu_type'], $get_payload['menu_id'] ) ) {
-		if ( $index === $get_payload['menu_type'] . '_' . $get_payload['menu_id'] || $menu_slug === ( $get_payload['menu_slug'] ?? '' ) ) {
+		if (
+			$index === $get_payload['menu_type'] . '_' . $get_payload['menu_id'] ||
+			( (string) $menu_id === (string) $get_payload['menu_id'] && $menu_type === $get_payload['menu_type'] )
+		) {
+			$active = 'active';
+		}
+	} elseif ( isset( $get_payload['menu_slug'] ) && ! empty( $get_payload['menu_slug'] ) ) {
+		if ( $menu_slug === $get_payload['menu_slug'] || $index === $get_payload['menu_slug'] ) {
 			$active = 'active';
 		}
 	} else {

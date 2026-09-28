@@ -3,7 +3,7 @@ Contributors: vinoth06, buffercode
 Tags: dashboard, frontend dashboard, custom login, custom register, custom roles, custom profile, custom post type, custom taxonomies, custom dashboard, hide admin bar, widget
 Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 5.8
-Tested up to: 6.7
+Tested up to: 7.1
 Requires PHP: 7.4
 Stable tag: 3.0.0
 License: GPLv2 or later

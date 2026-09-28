@@ -2902,10 +2902,13 @@ function fed_get_public_post_types() {
 	$post_type = get_post_types( array( 'public' => true ), 'objects' );
 	$new_type  = array();
 	foreach ( $post_type as $index => $type ) {
+		if ( 'attachment' === $index ) {
+			continue;
+		}
 		$new_type[ $index ] = $type->label;
 	}
 
-	return $new_type;
+	return apply_filters( 'fed_public_post_types', $new_type );
 }
 
 /**
@@ -2916,9 +2919,12 @@ function fed_get_public_post_types() {
  * @return bool
  */
 function fed_check_post_type( $post_type ) {
-	$post_types = get_post_types( array( 'public' => true ) );
+	if ( 'attachment' === $post_type ) {
+		return false;
+	}
+	$post_types = fed_get_public_post_types();
 
-	return isset( $post_types[ $post_type ] ) ? true : false;
+	return isset( $post_types[ $post_type ] );
 }
 
 /**

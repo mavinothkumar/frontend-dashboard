@@ -98,6 +98,8 @@ if ( ! function_exists( 'fed_script_front_end' ) ) {
 
 			do_action( 'fed_enqueue_script_style_frontend' );
 
+			wp_enqueue_style( 'dashicons' );
+
 			$shims = fed_get_early_wp_shims_js();
 			wp_add_inline_script( 'jquery-core', $shims, 'before' );
 			wp_add_inline_script( 'jquery', $shims, 'before' );
