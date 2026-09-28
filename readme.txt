@@ -1,9 +1,9 @@
 === Frontend Dashboard ===
 Contributors: vinoth06, buffercode
-Tags: dashboard, frontend dashboard, custom login, custom register, user profile, custom dashboard
+Tags: dashboard, frontend dashboard, custom login, custom register, custom dashboard
 Donate link: https://www.paypal.com/paypalme2/buffercode
-Requires at least: 5.8
-Tested up to: 6.7
+Requires at least: 6.1
+Tested up to: 7.1
 Requires PHP: 8.0
 Stable tag: 3.0.0
 License: GPLv2 or later
