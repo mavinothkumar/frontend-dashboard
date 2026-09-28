@@ -17,13 +17,20 @@ function fed_get_dashboard_menu_items() {
 	global $wpdb;
 	$table_name = $wpdb->get_blog_prefix() . BC_FED_TABLE_MENU;
 
+	$safe_table = sanitize_key( $wpdb->prefix . BC_FED_TABLE_MENU );
+
+	// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 	// Ensure menu_key and menu_value columns exist
-	$has_menu_key = $wpdb->get_results( "SHOW COLUMNS FROM `{$table_name}` LIKE 'menu_key'" );
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	$has_menu_key = $wpdb->get_results( $wpdb->prepare( "SHOW COLUMNS FROM `{$safe_table}` LIKE %s", 'menu_key' ) );
 	if ( empty( $has_menu_key ) ) {
-		$wpdb->query( "ALTER TABLE `{$table_name}` ADD `menu_key` VARCHAR(255) NULL AFTER `extended`, ADD `menu_value` TEXT NULL AFTER `menu_key`" );
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$wpdb->query( "ALTER TABLE `{$safe_table}` ADD `menu_key` VARCHAR(255) NULL AFTER `extended`, ADD `menu_value` TEXT NULL AFTER `menu_key`" );
 	}
 
-	$menus             = $wpdb->get_results( "SELECT * FROM {$table_name} ORDER BY CAST(menu_order AS UNSIGNED) ASC, id ASC", ARRAY_A );
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	$menus             = $wpdb->get_results( "SELECT * FROM `{$safe_table}` ORDER BY CAST(menu_order AS UNSIGNED) ASC, id ASC", ARRAY_A );
+	// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 	$user_roles        = fed_get_user_roles();
 	$total_roles_count = count( $user_roles );
 	$nonce             = wp_create_nonce( 'fed_nonce' );
@@ -252,7 +259,10 @@ function fed_get_dashboard_menu_items() {
 	</style>
 
 	<div class="bc_fed fed-admin-wrap w-full max-w-none px-4 sm:px-8 py-6 sm:py-8 font-sans text-slate-800">
-		<?php echo fed_loader(); ?>
+		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo fed_loader();
+		?>
 
 		<!-- Toast Notification Element -->
 		<div id="fed_toast_notification" class="fixed bottom-6 right-6 transform translate-y-16 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-3 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl border border-slate-700" style="z-index: 99999999 !important;">
@@ -261,7 +271,10 @@ function fed_get_dashboard_menu_items() {
 		</div>
 
 		<?php if ( function_exists( 'fed_render_addon_compatibility_banner' ) ) : ?>
-			<?php echo fed_render_addon_compatibility_banner(); ?>
+			<?php
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo fed_render_addon_compatibility_banner();
+			?>
 		<?php endif; ?>
 
 		<!-- Page Header & Action Bar (Full Width) -->
@@ -399,8 +412,10 @@ function fed_get_dashboard_menu_items() {
 									<?php
 									$page_id    = (int) $menu_value;
 									$page_title = $page_id ? get_the_title( $page_id ) : __( 'Page', 'frontend-dashboard' );
+									/* translators: %s: mapped page title */
+									$mapped_page_label = sprintf( __( 'Mapped to Page: %s', 'frontend-dashboard' ), $page_title );
 									?>
-									<span class="fed-badge-item inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-sky-50 text-sky-700 border border-sky-100 shrink-0 whitespace-nowrap" title="<?php echo esc_attr( sprintf( __( 'Mapped to Page: %s', 'frontend-dashboard' ), $page_title ) ); ?>">
+									<span class="fed-badge-item inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-sky-50 text-sky-700 border border-sky-100 shrink-0 whitespace-nowrap" title="<?php echo esc_attr( $mapped_page_label ); ?>">
 										<i class="fas fa-file-alt text-[9px]"></i> <?php echo esc_html( $page_title ); ?>
 									</span>
 								<?php elseif ( 'url' === $menu_key ) : ?>
@@ -425,7 +440,10 @@ function fed_get_dashboard_menu_items() {
 								</span>
 
 								<!-- Roles Summary Pill with +N -->
-								<?php echo fed_render_user_roles_badge( $selected_roles, $user_roles ); ?>
+								<?php
+								// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+								echo fed_render_user_roles_badge( $selected_roles, $user_roles );
+								?>
 							</div>
 						</div>
 
@@ -616,12 +634,16 @@ function fed_get_dashboard_menu_items() {
 											<span class="absolute inset-y-0 left-0 flex items-center pl-2.5 pointer-events-none text-slate-400">
 												<i class="fas fa-search text-[9px]"></i>
 											</span>
-											<input type="text" id="fed_role_search_filter" placeholder="<?php echo esc_attr( sprintf( __( 'Filter %d roles...', 'frontend-dashboard' ), $total_roles_count ) ); ?>" class="w-full pr-2 py-1 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-100 transition-all outline-none font-medium" style="padding-left: 28px !important; height: 34px !important; min-height: 34px !important;" />
+											<?php
+											/* translators: %d: number of roles */
+											$filter_roles_input_placeholder = sprintf( __( 'Filter %d roles...', 'frontend-dashboard' ), $total_roles_count );
+											?>
+											<input type="text" id="fed_role_search_filter" placeholder="<?php echo esc_attr( $filter_roles_input_placeholder ); ?>" class="w-full pr-2 py-1 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-indigo-500 focus:ring-1 focus:ring-indigo-100 transition-all outline-none font-medium" style="padding-left: 28px !important; height: 34px !important; min-height: 34px !important;" />
 										</div>
 
 										<div class="flex items-center gap-1.5 shrink-0 text-xs">
 											<span id="fed_role_selected_count" class="text-[10px] font-semibold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-100">
-												0 / <?php echo $total_roles_count; ?>
+												0 / <?php echo esc_html( $total_roles_count ); ?>
 											</span>
 											<button type="button" id="fed_roles_select_all" class="text-[11px] font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer">
 												<?php esc_html_e( 'All', 'frontend-dashboard' ); ?>
@@ -1489,7 +1511,7 @@ function fed_get_dashboard_menu_items_sort_data() {
 
 		foreach ( $menus as $m => $missing_menu ) {
 			$new_menus[ $missing_menu['menu_type'] . '_' . $missing_menu['id'] ]          = $missing_menu;
-			$new_menus[ $missing_menu['menu_type'] . '_' . $missing_menu['id'] ]['order'] = mt_rand( 99, 999 );
+			$new_menus[ $missing_menu['menu_type'] . '_' . $missing_menu['id'] ]['order'] = wp_rand( 99, 999 );
 		}
 	} else {
 		$new_menus = $menus;

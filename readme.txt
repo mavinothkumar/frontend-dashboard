@@ -5,11 +5,11 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.0.0
+Stable tag: 3.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Frontend Dashboard gives you the power to build a modern, customizable user portal on the frontend of WordPress with custom login, registration, user profiles, frontend post submissions, modern editors, and role-based permissions.
+Build custom frontend user dashboards with login, registration, user profiles, frontend post editing, and role-based permissions.
 
 == Description ==
 = Frontend Dashboard — Built for Modern WordPress Portals =
@@ -141,6 +141,9 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 == Changelog ==
 
+= 3.0.1 =
+* Fix: WordPress.org plugin review and security compliance improvements.
+
 = 3.0.0 =
 * Major Release: Complete frontend architecture redesign with Tailwind CSS and modern App Shell layout.
 * Feature: Integrated modern rich text editors — Editor.js (block editor) and TipTap (WYSIWYG editor) alongside classic WP Editor.
@@ -156,6 +159,9 @@ More Changelogs:
 https://faq.frontenddashboard.com/changelog/overview/
 
 == Upgrade Notice ==
+
+= 3.0.1 =
+Minor update: Security escaping and WordPress standards compliance fixes.
 
 = 3.0.0 =
 Major release: Modern App Shell UI redesign, built-in block & rich text editors (Editor.js & TipTap), integrated templates & extra field support, and full compatibility with WordPress 6.7 and PHP 8.x. Legacy templates, extra fields, and pages add-ons are now part of Core.

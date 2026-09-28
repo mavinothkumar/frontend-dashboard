@@ -44,13 +44,14 @@ function fed_status_delete_table() {
 
 	if ( ! empty( $request['table_name'] ) ) {
 		global $wpdb;
-		$table_name = sanitize_text_field( $request['table_name'] );
+		$table_name = sanitize_key( $request['table_name'] );
 
 		// Security: Only allow tables with WordPress prefix and starting with fed
 		if ( strpos( $table_name, $wpdb->prefix . 'fed' ) !== 0 ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid table name specified.', 'frontend-dashboard' ) ) );
 		}
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$status = $wpdb->query( "DROP TABLE IF EXISTS `{$table_name}`" );
 
 		if ( false !== $status ) {
@@ -59,6 +60,7 @@ function fed_status_delete_table() {
 			}
 			wp_send_json_success(
 				array(
+					/* translators: %s: Table name */
 					'message' => sprintf( __( 'Table "%s" was successfully dropped.', 'frontend-dashboard' ), $table_name ),
 					'reload'  => admin_url( 'admin.php?page=fed_tools#database_tables' ),
 				)
@@ -83,13 +85,14 @@ function fed_status_empty_table() {
 
 	if ( ! empty( $request['table_name'] ) ) {
 		global $wpdb;
-		$table_name = sanitize_text_field( $request['table_name'] );
+		$table_name = sanitize_key( $request['table_name'] );
 
 		// Security: Only allow tables with WordPress prefix and starting with fed
 		if ( strpos( $table_name, $wpdb->prefix . 'fed' ) !== 0 ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid table name specified.', 'frontend-dashboard' ) ) );
 		}
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$status = $wpdb->query( "TRUNCATE TABLE `{$table_name}`" );
 
 		if ( false !== $status ) {
@@ -98,6 +101,7 @@ function fed_status_empty_table() {
 			}
 			wp_send_json_success(
 				array(
+					/* translators: %s: Table name */
 					'message' => sprintf( __( 'Table "%s" was successfully emptied.', 'frontend-dashboard' ), $table_name ),
 					'reload'  => admin_url( 'admin.php?page=fed_tools#database_tables' ),
 				)
@@ -153,12 +157,15 @@ function fed_status_optimize_tables() {
 	fed_verify_nonce( $request );
 
 	global $wpdb;
-	$sql    = "SHOW TABLES LIKE '{$wpdb->prefix}fed%'";
-	$tables = $wpdb->get_col( $sql );
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+	$tables = $wpdb->get_col( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $wpdb->prefix . 'fed' ) . '%' ) );
 
 	if ( ! empty( $tables ) ) {
 		foreach ( $tables as $table_name ) {
+			$table_name = sanitize_key( $table_name );
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$wpdb->query( "OPTIMIZE TABLE `{$table_name}`" );
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$wpdb->query( "REPAIR TABLE `{$table_name}`" );
 		}
 	}
@@ -169,6 +176,7 @@ function fed_status_optimize_tables() {
 
 	wp_send_json_success(
 		array(
+			/* translators: %d: Number of tables */
 			'message' => sprintf( __( 'Successfully optimized and repaired %d plugin tables.', 'frontend-dashboard' ), count( $tables ) ),
 			'reload'  => admin_url( 'admin.php?page=fed_tools#database_tables' ),
 		)
@@ -223,7 +231,8 @@ function fed_status_delete_all_option() {
 	fed_verify_nonce( $request );
 
 	global $wpdb;
-	$deleted = $wpdb->query( "DELETE FROM `{$wpdb->options}` WHERE option_name LIKE 'fed%' OR option_name LIKE 'fed_admin_%'" );
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+	$deleted = $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s", $wpdb->esc_like( 'fed' ) . '%', $wpdb->esc_like( 'fed_admin_' ) . '%' ) );
 
 	if ( false !== $deleted ) {
 		if ( function_exists( 'fed_log_activity' ) ) {
@@ -231,6 +240,7 @@ function fed_status_delete_all_option() {
 		}
 		wp_send_json_success(
 			array(
+				/* translators: %d: Number of options */
 				'message' => sprintf( __( 'Successfully removed %d plugin options.', 'frontend-dashboard' ), (int) $deleted ),
 				'reload'  => admin_url( 'admin.php?page=fed_tools#plugin_options' ),
 			)
@@ -290,6 +300,7 @@ function fed_status_run_cron() {
 
 		wp_send_json_success(
 			array(
+				/* translators: %s: Cron hook name */
 				'message' => sprintf( __( 'Cron hook "%s" was executed successfully.', 'frontend-dashboard' ), $hook ),
 				'reload'  => admin_url( 'admin.php?page=fed_tools#scheduled_crons' ),
 			)

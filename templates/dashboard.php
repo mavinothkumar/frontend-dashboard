@@ -5,6 +5,10 @@
  * @package Frontend Dashboard
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 $dashboard_container = new \FED\Routes\Dashboard\DashboardRoutes( $_REQUEST );
 $menu                = $dashboard_container->setDashboardMenuQuery();
 do_action( 'fed_before_dashboard_container' );
@@ -15,7 +19,7 @@ $primaryRole = ! empty( $userRoles[0] ) ? ucfirst( $userRoles[0] ) : 'Member';
 $activeSlug  = is_array( $menu ) && isset( $menu['menu_request']['menu_slug'] ) ? $menu['menu_request']['menu_slug'] : 'dashboard';
 ?>
 <div class="bc_fed fed_dashboard_container min-h-screen font-sans antialiased text-slate-800" style="background-color: var(--fed-body-bg, #F8FAFC); color: var(--fed-text-main, #0F172A);">
-	<?php echo fed_loader(); ?>
+	<?php echo fed_loader(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 	<?php do_action( 'fed_inside_dashboard_container_top' ); ?>
 
 	<div class="flex flex-col lg:flex-row min-h-screen w-full fed_dashboard_wrapper" style="display: flex; min-height: 100vh; width: 100%; align-items: stretch;">
@@ -112,7 +116,7 @@ $activeSlug  = is_array( $menu ) && isset( $menu['menu_request']['menu_slug'] ) 
 
 			<!-- Main Content Canvas Area -->
 			<div class="p-6 sm:p-8 flex-1">
-				<?php echo fed_show_alert( 'fed_dashboard_top_message' ); ?>
+				<?php echo fed_show_alert( 'fed_dashboard_top_message' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
 				<?php if ( ! $menu instanceof WP_Error ) {
 					do_action( 'fed_dashboard_content_outside_top' );

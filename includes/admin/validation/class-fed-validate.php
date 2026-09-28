@@ -69,8 +69,7 @@ if ( ! class_exists( 'FED_Validate' ) ) {
 		 * @return $this
 		 */
 		public function name( $name ) {
-			/* translators: %s : Name */
-			$this->name = sprintf( __( '%s ', 'frontend-dashboard' ), $name );
+			$this->name = $name . ' ';
 
 			return $this;
 		}
@@ -83,8 +82,7 @@ if ( ! class_exists( 'FED_Validate' ) ) {
 		 * @return $this
 		 */
 		public function key( $key ) {
-			/* translators: %s : Name */
-			$this->key   = sprintf( __( '%s ', 'frontend-dashboard' ), $key );
+			$this->key   = $key . ' ';
 			$this->name  = ucfirst( str_replace( '_', ' ', $key ) );
 			$this->value = isset( $this->post_payload[ $key ] ) ? $this->post_payload[ $key ] : '';
 
@@ -346,7 +344,7 @@ if ( ! class_exists( 'FED_Validate' ) ) {
 			if ( ! $this->is_success() ) {
 
 				foreach ( $this->get_errors() as $error ) {
-					echo "$error\n";
+					echo esc_html( "$error\n" );
 				}
 				exit;
 

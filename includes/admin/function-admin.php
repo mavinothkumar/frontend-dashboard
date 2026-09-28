@@ -2159,6 +2159,7 @@ function fed_get_display_post_status( $status ) {
 function fed_get_all_post_meta( $postid ) {
 	global $wpdb;
 
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	return $wpdb->get_results(
 		$wpdb->prepare(
 			"SELECT meta_key, meta_value, meta_id, post_id
@@ -3244,13 +3245,15 @@ if ( ! function_exists( 'array_column' ) ) {
 		$argc   = func_num_args();
 		$params = func_get_args();
 		if ( $argc < 2 ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			trigger_error( "array_column() expects at least 2 parameters, {$argc} given", E_USER_WARNING );
 
 			return null;
 		}
 		if ( ! is_array( $params[0] ) ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			trigger_error(
-				'array_column() expects parameter 1 to be array, ' . gettype( $params[0] ) . ' given',
+				'array_column() expects parameter 1 to be array, ' . esc_html( gettype( $params[0] ) ) . ' given',
 				E_USER_WARNING
 			);
 
@@ -3688,9 +3691,10 @@ function fed_get_table_status() {
 	$menu_meta    = $wpdb->prefix . BC_FED_TABLE_MENU_META;
 	$post         = $wpdb->prefix . BC_FED_TABLE_POST;
 
+	// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	$table_status['user_profile'] = array(
 		'title'       => 'User Profile',
-		'status'      => $wpdb->get_var( "SHOW TABLES LIKE '$user_profile'" ) != $user_profile ? fed_enable_disable(
+		'status'      => $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $user_profile ) ) ) != $user_profile ? fed_enable_disable(
 			false
 		) : fed_enable_disable( true ),
 		'plugin_name' => BC_FED_APP_NAME,
@@ -3698,7 +3702,7 @@ function fed_get_table_status() {
 	);
 	$table_status['menu']         = array(
 		'title'       => 'Menu',
-		'status'      => $wpdb->get_var( "SHOW TABLES LIKE '$menu'" ) != $menu ? fed_enable_disable(
+		'status'      => $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $menu ) ) ) != $menu ? fed_enable_disable(
 			false
 		) : fed_enable_disable( true ),
 		'plugin_name' => BC_FED_APP_NAME,
@@ -3706,7 +3710,7 @@ function fed_get_table_status() {
 	);
 	$table_status['menu_meta']    = array(
 		'title'       => 'Menu Meta',
-		'status'      => $wpdb->get_var( "SHOW TABLES LIKE '$menu_meta'" ) != $menu_meta ? fed_enable_disable(
+		'status'      => $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $menu_meta ) ) ) != $menu_meta ? fed_enable_disable(
 			false
 		) : fed_enable_disable( true ),
 		'plugin_name' => BC_FED_APP_NAME,
@@ -3715,12 +3719,13 @@ function fed_get_table_status() {
 
 	$table_status['post'] = array(
 		'title'       => 'Post',
-		'status'      => $wpdb->get_var( "SHOW TABLES LIKE '$post'" ) != $post ? fed_enable_disable(
+		'status'      => $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $post ) ) ) != $post ? fed_enable_disable(
 			false
 		) : fed_enable_disable( true ),
 		'plugin_name' => BC_FED_APP_NAME,
 		'position'    => 0,
 	);
+	// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 	$tables = apply_filters( 'fed_status_get_table_status', $table_status );
 
@@ -4043,12 +4048,12 @@ function fed_show_help_icons() {
 						</div>
 					</a>
 					<!-- Rate Us -->
-					<a target="_blank" rel="noopener noreferrer" href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#new-post" class="fed-hub-item">
+					<a target="_blank" rel="noopener noreferrer" href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/#new-post" class="fed-hub-item">
 						<div class="fed-hub-icon-wrap" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
 							<i class="fas fa-star"></i>
 						</div>
 						<div>
-							<div class="fed-hub-item-label"><?php esc_html_e( 'Rate 5 Stars', 'frontend-dashboard' ); ?></div>
+							<div class="fed-hub-item-label"><?php esc_html_e( 'Leave a Review', 'frontend-dashboard' ); ?></div>
 							<div class="fed-hub-item-sub"><?php esc_html_e( 'Support plugin', 'frontend-dashboard' ); ?></div>
 						</div>
 					</a>
@@ -4559,7 +4564,8 @@ if ( ! function_exists( 'fed_log_activity' ) ) {
 		$table_name = $wpdb->prefix . ( defined( 'BC_FED_TABLE_ACTIVITY_LOG' ) ? BC_FED_TABLE_ACTIVITY_LOG : 'fed_activity_log' );
 
 		// Ensure table exists
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" ) !== $table_name ) {
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table_name ) ) ) !== $table_name ) {
 			if ( function_exists( 'fed_plugin_activation' ) ) {
 				fed_plugin_activation();
 			}
@@ -4592,6 +4598,7 @@ if ( ! function_exists( 'fed_log_activity' ) ) {
 			'created_at'        => current_time( 'mysql' ),
 		);
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$inserted = $wpdb->insert( $table_name, $data );
 
 		// Also write to file log

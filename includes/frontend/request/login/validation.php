@@ -90,17 +90,16 @@ function fed_validate_forgot_password( $post ) {
 	$errors = new WP_Error();
 
 	if ( empty( $post['user_login'] ) || '' == $post['user_login'] ) {
-		$errors->add( 'empty_username', __( '<strong>ERROR</strong>: Enter a username or email address.' ) );
-	}
-	elseif ( strpos( $post['user_login'], '@' ) ) {
+		$errors->add( 'empty_username', __( '<strong>ERROR</strong>: Enter a username or email address.', 'frontend-dashboard' ) );
+	} elseif ( strpos( $post['user_login'], '@' ) ) {
 		$user_data = get_user_by( 'email', trim( wp_unslash( $post['user_login'] ) ) );
 		if ( empty( $user_data ) ) {
 			$errors->add(
-				'invalid_email', __( '<strong>ERROR</strong>: There is no user registered with that email address.' )
+				'invalid_email',
+				__( '<strong>ERROR</strong>: There is no user registered with that email address.', 'frontend-dashboard' )
 			);
 		}
-	}
-	else {
+	} else {
 		$login     = trim( $post['user_login'] );
 		$user_data = get_user_by( 'login', $login );
 	}
@@ -110,7 +109,7 @@ function fed_validate_forgot_password( $post ) {
 	}
 
 	if ( ! $user_data ) {
-		$errors->add( 'invalidcombo', __( '<strong>ERROR</strong>: Invalid username or email.' ) );
+		$errors->add( 'invalidcombo', __( '<strong>ERROR</strong>: Invalid username or email.', 'frontend-dashboard' ) );
 
 		wp_send_json_error( array( 'user' => $errors->get_error_messages() ) );
 		exit();

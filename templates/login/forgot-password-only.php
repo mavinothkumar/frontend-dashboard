@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 /**
  * Forgot Password only
  *
@@ -21,7 +24,7 @@ do_action( 'fed_before_forgot_password_only_form' );
 				<div class="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-100">
 					<div class="bg-blue-600 px-6 py-4">
 						<h3 class="text-white text-lg font-semibold tracking-wide">
-							<?php esc_attr_e( $details['menu']['name'], 'frontend-dashboard' ); ?>
+							<?php echo esc_html( $details['menu']['name'] ); ?>
 						</h3>
 					</div>
 					<div class="p-6">
@@ -36,7 +39,7 @@ do_action( 'fed_before_forgot_password_only_form' );
 										<label class="block text-sm font-medium text-gray-700">
 											<?php
 											//phpcs:ignore
-											echo wp_kses_post( __( $content['name'], 'frontend-dashboard' ) );
+											echo esc_html( $content['name'] );
 											?>
 										</label>
 										<?php
@@ -51,7 +54,7 @@ do_action( 'fed_before_forgot_password_only_form' );
 								<div class="pt-4 text-center">
 									<input type="hidden" name="submit" value="forgot_password"/>
 									<button class="w-full inline-flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors" type="submit">
-										<?php esc_attr_e( $details['button'], 'frontend-dashboard' ); ?>
+										<?php echo esc_html( $details['button'] ); ?>
 									</button>
 								</div>
 								

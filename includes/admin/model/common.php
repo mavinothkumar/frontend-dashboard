@@ -19,11 +19,12 @@ if ( ! function_exists( 'fed_fetch_rows_by_table' ) ) {
 	 */
 	function fed_fetch_rows_by_table( $table, $order = null ) {
 		global $wpdb;
-		$table_name = $wpdb->prefix . $table;
+		$table_name = $wpdb->prefix . sanitize_key( $table );
 
-		$order = $order ? 'ORDER BY id ' . $order : '';
+		$order = $order ? 'ORDER BY id ' . sanitize_text_field( $order ) : '';
 
-		return $wpdb->get_results( "SELECT * FROM $table_name $order", ARRAY_A );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		return $wpdb->get_results( "SELECT * FROM {$table_name} {$order}", ARRAY_A );
 	}
 }
 
@@ -38,10 +39,13 @@ if ( ! function_exists( 'fed_fetch_table_row_by_id' ) ) {
 	 */
 	function fed_fetch_table_row_by_id( $table, $id ) {
 		global $wpdb;
-		$table_name = $wpdb->prefix . $table;
+		$table_name = $wpdb->prefix . sanitize_key( $table );
 
-		$result = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $table_name WHERE id = %d LIMIT 1", (int) $id ),
-			ARRAY_A );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$result = $wpdb->get_row(
+			$wpdb->prepare( "SELECT * FROM {$table_name} WHERE id = %d LIMIT 1", (int) $id ),
+			ARRAY_A
+		);
 
 		if ( ( is_array( $result ) && count( $result ) <= 0 ) || ! $result ) {
 			return new WP_Error( 'fed_no_row_found_on_that_id', __( 'Invalid ID', 'frontend-dashboard' ) );
@@ -63,10 +67,16 @@ if ( ! function_exists( 'fed_fetch_table_row_by_ids' ) ) {
 	 */
 	function fed_fetch_table_row_by_ids( $table, $ids ) {
 		global $wpdb;
-		$table_name = $wpdb->prefix . $table;
+		$table_name = $wpdb->prefix . sanitize_key( $table );
 
-		$result = $wpdb->get_results( "SELECT * FROM $table_name WHERE id IN (" . implode( ',',
-				array_map( 'intval', $ids ) ) . ")", ARRAY_A );
+		$clean_ids = is_array( $ids ) ? array_map( 'intval', $ids ) : array();
+		if ( empty( $clean_ids ) ) {
+			return new WP_Error( 'fed_no_row_found_on_that_id', __( 'Invalid ID', 'frontend-dashboard' ) );
+		}
+		$placeholders = implode( ',', array_fill( 0, count( $clean_ids ), '%d' ) );
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+		$result = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table_name} WHERE id IN ({$placeholders})", $clean_ids ), ARRAY_A );
 
 		if ( ( is_array( $result ) && count( $result ) <= 0 ) || ! $result ) {
 			return new WP_Error( 'fed_no_row_found_on_that_id', __( 'Invalid ID', 'frontend-dashboard' ) );
@@ -250,18 +260,20 @@ if ( ! function_exists( 'fed_fetch_table_rows_by_key_value_column' ) ) {
 	 */
 	function fed_fetch_table_rows_by_key_value_column( $table, array $conditions ) {
 		global $wpdb;
-		$table_name = $wpdb->prefix . $table;
-		$key        = isset( $conditions['key'] ) ? $conditions['key'] : false;
-		$value      = isset( $conditions['value'] ) ? $conditions['value'] : false;
-		$condition  = isset( $conditions['condition'] ) ? $conditions['condition'] : '=';
-		$column     = isset( $conditions['column'] ) ? $conditions['column'] : '*';
+		$table_name = $wpdb->prefix . sanitize_key( $table );
+		$key        = isset( $conditions['key'] ) ? sanitize_key( $conditions['key'] ) : false;
+		$value      = isset( $conditions['value'] ) ? sanitize_text_field( $conditions['value'] ) : false;
+		$condition  = ( isset( $conditions['condition'] ) && in_array( $conditions['condition'], array( '=', '!=', '<>', 'LIKE' ), true ) ) ? $conditions['condition'] : '=';
+		$column     = ( isset( $conditions['column'] ) && '*' !== $conditions['column'] ) ? sanitize_key( $conditions['column'] ) : '*';
 
-		$columns = $wpdb->get_results( "SELECT {$column} FROM $table_name WHERE {$key} $condition '{$value}' ",
-			ARRAY_A );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$columns = $wpdb->get_results( $wpdb->prepare( "SELECT {$column} FROM {$table_name} WHERE {$key} {$condition} %s", $value ), ARRAY_A );
 		$new_col = array();
 
-		foreach ( $columns as $index => $col ) {
-			$new_col[] = $col[ $column ];
+		if ( is_array( $columns ) ) {
+			foreach ( $columns as $index => $col ) {
+				$new_col[] = isset( $col[ $column ] ) ? $col[ $column ] : null;
+			}
 		}
 
 		return $new_col;

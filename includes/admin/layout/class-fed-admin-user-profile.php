@@ -73,6 +73,7 @@ if ( ! class_exists( 'FED_AdminUserProfile' ) ) {
 
 							<td>
 								<?php
+								// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 								echo fed_get_input_details( $default_value );
 								?>
 							</td>

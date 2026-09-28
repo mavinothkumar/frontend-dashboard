@@ -5,6 +5,10 @@
  * @package frontend-dashboard.
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 if ( ! class_exists( 'FED_Post_Widget' ) ) {
 	/**
 	 * Class FED_Post_Widget
@@ -84,9 +88,11 @@ if ( ! class_exists( 'FED_Post_Widget' ) ) {
 
 			$pages = get_posts( $options );
 
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo $args['before_widget'];
 
 			if ( ! empty( $instance['title'] ) ) {
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];
 			}
 			?>
@@ -124,8 +130,7 @@ if ( ! class_exists( 'FED_Post_Widget' ) ) {
 											<?php } ?>
 											<?php if ( 'yes' === $fed_post_widget_date ) { ?>
 												<div class="fed_post_widget_layout_items_content_date">
-													<?php echo esc_attr( date( 'M d, Y',
-														strtotime( $page->post_date ) ) ); ?>
+													<?php echo esc_attr( gmdate( 'M d, Y', strtotime( $page->post_date ) ) ); ?>
 												</div>
 											<?php } ?>
 										</div>
@@ -203,16 +208,17 @@ if ( ! class_exists( 'FED_Post_Widget' ) ) {
 								<input type="text"
 										class="form-control"
 										name="<?php echo esc_attr( $this->get_field_name( 'fed_post_widget_title' ) ); ?>"
-										value="<?php echo $title; ?>"/>
+										value="<?php echo esc_attr( $title ); ?>"/>
 							</div>
 							<div class="fed_widget_item_message"></div>
 						</div>
 						<div class="fed_widget_item fed_widget_post_type_wrapper m-b-10">
 							<div class="fed_widget_item_label">
-								<?php esc_attr_e( 'Select Post Type' ); ?>
+								<?php esc_attr_e( 'Select Post Type', 'frontend-dashboard' ); ?>
 							</div>
 							<div class="fed_widget_item_content">
 								<?php
+								// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 								echo fed_form_select( array(
 									'input_value' => $post_types,
 									'input_meta'  => $this->get_field_name( 'fed_post_type' ),
@@ -226,11 +232,11 @@ if ( ! class_exists( 'FED_Post_Widget' ) ) {
 						</div>
 						<div class="fed_widget_item fed_widget_taxonomy_list m-b-10">
 							<div class="fed_widget_item_label">
-								<?php esc_attr_e( 'Select Taxonomies' ); ?>
+								<?php esc_attr_e( 'Select Taxonomies', 'frontend-dashboard' ); ?>
 							</div>
 							<div class="fed_widget_item_content">
 								<?php
-								// phpcs:ignore
+								// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 								echo fed_form_select( array(
 									'input_value' => $taxonomies,
 									'input_meta'  => $this->get_field_name( 'fed_taxonomy' ),
@@ -248,6 +254,7 @@ if ( ! class_exists( 'FED_Post_Widget' ) ) {
 							</div>
 							<div class="fed_widget_item_content">
 								<?php
+								// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 								echo fed_form_select( array(
 									'input_value' => $terms,
 									'input_meta'  => $this->get_field_name( 'fed_term' ),

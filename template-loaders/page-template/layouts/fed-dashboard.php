@@ -5,6 +5,10 @@
  * @package Frontend Dashboard.
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 $dashboard_url = fed_get_dashboard_url();
 $login_page    = fed_get_login_url();
 $login_page    = ( false === $login_page ) ? wp_login_url() : $login_page;

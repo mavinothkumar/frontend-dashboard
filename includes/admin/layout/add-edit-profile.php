@@ -53,6 +53,7 @@ function fed_get_admin_up_role_based( $row, $action, $menu_options ) {
 						<?php esc_html_e( 'Menu Location', 'frontend-dashboard' ); ?>
 					</label>
 					<?php
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					echo fed_input_box(
 						'menu',
 						array(
@@ -76,6 +77,7 @@ function fed_get_admin_up_role_based( $row, $action, $menu_options ) {
 						<div class="p-4 bg-slate-50/80 border border-slate-200/80 rounded-2xl flex items-center justify-between gap-3">
 							<span class="text-xs font-semibold text-slate-700"><?php esc_html_e( 'Disable in Profile?', 'frontend-dashboard' ); ?></span>
 							<?php
+							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							echo fed_input_box(
 								'show_user_profile',
 								array(
@@ -98,6 +100,7 @@ function fed_get_admin_up_role_based( $row, $action, $menu_options ) {
 					<div class="p-4 bg-slate-50/80 border border-slate-200/80 rounded-2xl flex items-center justify-between gap-3">
 						<span class="text-xs font-semibold text-slate-700"><?php esc_html_e( 'Admin-Only Edit (Read-Only)?', 'frontend-dashboard' ); ?></span>
 						<?php
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo fed_input_box(
 							'extended[disable_user_access]',
 							array(
@@ -119,6 +122,7 @@ function fed_get_admin_up_role_based( $row, $action, $menu_options ) {
 						<?php esc_html_e( 'Target Post Type *', 'frontend-dashboard' ); ?>
 					</label>
 					<?php
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					echo fed_input_box(
 						'post_type',
 						array(
@@ -141,6 +145,7 @@ function fed_get_admin_up_role_based( $row, $action, $menu_options ) {
 					<div class="p-4 bg-slate-50/80 border border-slate-200/80 rounded-2xl flex items-center justify-between gap-3">
 						<span class="text-xs font-semibold text-slate-700"><?php esc_html_e( 'Admin-Only Edit (Read-Only)?', 'frontend-dashboard' ); ?></span>
 						<?php
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo fed_input_box(
 							'extended[disable_user_access]',
 							array(
@@ -211,6 +216,7 @@ function fed_get_admin_up_display_permission( $row, $action, $type = '' ) {
 						<span class="text-[11px] text-slate-400"><?php esc_html_e( 'Show on sign up form', 'frontend-dashboard' ); ?></span>
 					</div>
 					<?php
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					echo fed_input_box(
 						'show_register',
 						array(
@@ -230,6 +236,7 @@ function fed_get_admin_up_display_permission( $row, $action, $type = '' ) {
 						<span class="text-[11px] text-slate-400"><?php esc_html_e( 'Show in dashboard tab', 'frontend-dashboard' ); ?></span>
 					</div>
 					<?php
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					echo fed_input_box(
 						'show_dashboard',
 						array(
@@ -252,6 +259,7 @@ function fed_get_admin_up_display_permission( $row, $action, $type = '' ) {
 					<span class="text-[11px] text-slate-400"><?php esc_html_e( 'Mandatory for user submission', 'frontend-dashboard' ); ?></span>
 				</div>
 				<?php
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo fed_input_box(
 					'is_required',
 					array(
@@ -287,6 +295,7 @@ function fed_get_admin_up_label_input_order( $row ) {
 				<?php esc_html_e( 'Label Name *', 'frontend-dashboard' ); ?>
 			</label>
 			<?php
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo fed_get_input_details(
 				array(
 					'input_type' => 'single_line',
@@ -305,6 +314,7 @@ function fed_get_admin_up_label_input_order( $row ) {
 				<?php esc_html_e( 'Input Order *', 'frontend-dashboard' ); ?>
 			</label>
 			<?php
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo fed_get_input_details(
 				array(
 					'input_type' => 'number',
@@ -342,6 +352,7 @@ function fed_get_admin_up_input_meta( $row ) {
 
 		<?php
 		if ( $is_extra && ! empty( $meta_val ) ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo fed_input_box(
 				'input_meta',
 				array(
@@ -352,6 +363,7 @@ function fed_get_admin_up_input_meta( $row ) {
 				'single_line'
 			);
 
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo fed_input_box(
 				'fed_extra',
 				array(
@@ -360,6 +372,7 @@ function fed_get_admin_up_input_meta( $row ) {
 				'hidden'
 			);
 		} else {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo fed_input_box(
 				'input_meta',
 				array(
@@ -394,9 +407,18 @@ function fed_get_input_type_and_submit_btn( $input_type, $action, $row = [] ) {
 	$back_url = ( 'post' === $action ) ? menu_page_url( 'fed_post_fields', false ) : menu_page_url( 'fed_user_profile', false );
 	?>
 	<div class="pt-3">
-		<?php echo fed_input_box( 'input_type', array( 'value' => $input_type ), 'hidden' ); ?>
-		<?php echo fed_input_box( 'input_id', array( 'value' => $input_id ), 'hidden' ); ?>
-		<?php echo fed_input_box( 'fed_action', array( 'value' => $action ), 'hidden' ); ?>
+		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo fed_input_box( 'input_type', array( 'value' => $input_type ), 'hidden' );
+		?>
+		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo fed_input_box( 'input_id', array( 'value' => $input_id ), 'hidden' );
+		?>
+		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo fed_input_box( 'fed_action', array( 'value' => $action ), 'hidden' );
+		?>
 
 		<!-- Form Actions Bar -->
 		<div class="flex items-center justify-between gap-4 pt-6 border-t border-slate-100">

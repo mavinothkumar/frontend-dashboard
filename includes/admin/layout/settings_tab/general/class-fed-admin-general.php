@@ -360,7 +360,10 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 					<input type="hidden" name="fed_admin_script_type" value="frontend"/>
 				<?php endif; ?>
 
-				<?php echo fed_loader(); ?>
+				<?php
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo fed_loader();
+				?>
 
 				<!-- Information & Caution Callout Banners -->
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -407,8 +410,12 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 						<span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400 text-xs">
 							<i class="fas fa-search"></i>
 						</span>
+						<?php
+						/* translators: %d: number of assets */
+						$search_assets_placeholder = sprintf( __( 'Search %d assets (e.g. jQuery, SweetAlert, Select2)...', 'frontend-dashboard' ), $total_assets );
+						?>
 						<input type="text"
-							   placeholder="<?php echo esc_attr( sprintf( __( 'Search %d assets (e.g. jQuery, SweetAlert, Select2)...', 'frontend-dashboard' ), $total_assets ) ); ?>"
+							   placeholder="<?php echo esc_attr( $search_assets_placeholder ); ?>"
 							   class="fed-asset-search-input w-full pr-3 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100/70 focus:bg-white border border-slate-200 focus:border-indigo-500 text-xs text-slate-800 placeholder:text-slate-400 transition-all outline-none font-medium"
 							   style="padding-left: 38px !important; height: 42px !important;" />
 					</div>

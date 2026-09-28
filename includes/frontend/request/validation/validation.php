@@ -71,9 +71,11 @@ function fed_validate_user_profile_form( $post ) {
 			if ( 'email' === $input_type || 'user_email' === $meta_key ) {
 				if ( '' !== $val ) {
 					if ( ! is_email( $val ) ) {
+						/* translators: %s: Field label */
+						$invalid_email_msg = sprintf( __( 'Please enter a valid email address for %s.', 'frontend-dashboard' ), $label );
 						$fed_error->add(
 							$meta_key . '_invalid',
-							sprintf( __( 'Please enter a valid email address for %s.', 'frontend-dashboard' ), $label )
+							$invalid_email_msg
 						);
 					} elseif ( 'user_email' === $meta_key && function_exists( 'email_exists' ) ) {
 						$user_id_by_email = email_exists( $val );
@@ -91,9 +93,11 @@ function fed_validate_user_profile_form( $post ) {
 			if ( 'url' === $input_type || 'user_url' === $meta_key ) {
 				if ( '' !== $val && is_string( $val ) ) {
 					if ( ! filter_var( $val, FILTER_VALIDATE_URL ) && ! ( function_exists( 'wp_http_validate_url' ) && wp_http_validate_url( $val ) ) ) {
+						/* translators: %s: Field label */
+						$invalid_url_msg = sprintf( __( 'Please enter a valid URL for %s.', 'frontend-dashboard' ), $label );
 						$fed_error->add(
 							$meta_key . '_invalid',
-							sprintf( __( 'Please enter a valid URL for %s.', 'frontend-dashboard' ), $label )
+							$invalid_url_msg
 						);
 					}
 				}
@@ -102,9 +106,11 @@ function fed_validate_user_profile_form( $post ) {
 			// Number validation
 			if ( 'number' === $input_type ) {
 				if ( '' !== $val && ! is_numeric( $val ) ) {
+					/* translators: %s: Field label */
+					$invalid_number_msg = sprintf( __( '%s must be a valid number.', 'frontend-dashboard' ), $label );
 					$fed_error->add(
 						$meta_key . '_invalid',
-						sprintf( __( '%s must be a valid number.', 'frontend-dashboard' ), $label )
+						$invalid_number_msg
 					);
 				}
 			}

@@ -84,7 +84,7 @@ function fed_display_dashboard_profile( $menu_item ) {
 			<?php
 			do_action( 'fed_dashboard_panel_inside_top' );
 			do_action( 'fed_dashboard_panel_inside_top_' . fed_get_data( 'menu_slug', $menu_item ) );
-			echo fed_show_alert( 'fed_profile_save_message' );
+			echo fed_show_alert( 'fed_profile_save_message' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 			if ( $menu_default_page ) {
 				if ( $profiles && is_array( $profiles ) ) {
@@ -183,7 +183,7 @@ function fed_display_dashboard_profile( $menu_item ) {
 												<?php endif; ?>
 											</div>
 											<div class="mt-1">
-												<?php echo fed_get_input_details( $field ); ?>
+												<?php echo fed_get_input_details( $field ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 											</div>
 											<p class="text-xs text-slate-400 mt-1.5">
 												<?php
@@ -226,7 +226,7 @@ function fed_display_dashboard_profile( $menu_item ) {
 												<?php echo wp_kses_post( $field['label_name'] ); ?>
 											</label>
 											<div class="mt-1">
-												<?php echo fed_get_input_details( $field ); ?>
+												<?php echo fed_get_input_details( $field ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 											</div>
 											<p class="text-xs text-slate-400 mt-1.5">
 												<?php
@@ -272,7 +272,7 @@ function fed_display_dashboard_profile( $menu_item ) {
 												<?php endif; ?>
 											</label>
 											<div class="mt-1">
-												<?php echo fed_get_input_details( $single_item ); ?>
+												<?php echo fed_get_input_details( $single_item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 											</div>
 											<?php if ( $isUrl ) : ?>
 												<p class="text-xs text-slate-400 mt-1.5 flex items-center gap-1">
@@ -413,13 +413,16 @@ if ( ! function_exists( 'fed_core_override_default_page' ) ) {
 				// WPBakery Page Builder Custom CSS support
 				$wpb_css = get_post_meta( $post->ID, '_wpb_shortcodes_custom_css', true );
 				if ( $wpb_css ) {
-					echo '<style type="text/css" data-type="vc_shortcodes-custom-css">' . strip_tags( $wpb_css ) . '</style>';
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					echo '<style type="text/css" data-type="vc_shortcodes-custom-css">' . wp_strip_all_tags( $wpb_css ) . '</style>';
 				}
 
 				// Elementor page content support if Elementor is active
 				if ( class_exists( '\Elementor\Plugin' ) && \Elementor\Plugin::$instance->documents->get( $post->ID ) && \Elementor\Plugin::$instance->documents->get( $post->ID )->is_built_with_elementor() ) {
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					echo \Elementor\Plugin::$instance->frontend->get_builder_content_for_display( $post->ID );
 				} else {
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					echo '<div class="fed-page-content prose max-w-none">' . apply_filters( 'the_content', $post->post_content ) . '</div>';
 				}
 			} else {

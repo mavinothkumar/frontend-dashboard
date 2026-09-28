@@ -281,7 +281,7 @@ function fed_display_dashboard_edit_post_by_id( $post ) {
 	$html .= '
 	<div class="row fed_dashboard_item_field">
 		<div class="col-md-12">
-			<div class="fed_header_font_color">' . __( 'Title' ) . '</div>
+			<div class="fed_header_font_color">' . __( 'Title', 'frontend-dashboard' ) . '</div>
 			' . fed_input_box(
 			'post_title', array(
 			'value'       => esc_attr( $post->post_title ),
@@ -299,7 +299,7 @@ function fed_display_dashboard_edit_post_by_id( $post ) {
 		$html .= '
 	<div class="row fed_dashboard_item_field">
 		<div class="col-md-12">
-			<div class="fed_header_font_color">' . __( 'Content' ) . '</div>
+			<div class="fed_header_font_color">' . __( 'Content', 'frontend-dashboard' ) . '</div>
 			' . fed_render_post_editor( $post->post_content, 'post_content', $post->post_type ) . '
 		</div>
 
@@ -316,7 +316,7 @@ function fed_display_dashboard_edit_post_by_id( $post ) {
 		$html .= '
 	<div class="row fed_dashboard_item_field">
 		<div class="col-md-12">
-			<div class="fed_header_font_color">' . __( 'Featured Image' ) . '</div>
+			<div class="fed_header_font_color">' . __( 'Featured Image', 'frontend-dashboard' ) . '</div>
 			' . fed_input_box( '_thumbnail_id', array( 'value' => (int) $post_meta['_thumbnail_id'][0] ), 'file' ) .
 		         '
 		</div>
@@ -331,7 +331,7 @@ function fed_display_dashboard_edit_post_by_id( $post ) {
 		$html .= '
 	<div class="row fed_dashboard_item_field">
 		<div class="col-md-12">
-			<div class="fed_header_font_color">' . __( 'Allow Comments' ) . '</div>
+			<div class="fed_header_font_color">' . __( 'Allow Comments', 'frontend-dashboard' ) . '</div>
 			' . fed_input_box(
 				'comment_status', array(
 				'default_value' => 'open',
@@ -352,7 +352,7 @@ function fed_display_dashboard_edit_post_by_id( $post ) {
 			$html .= '
 	<div class="row fed_dashboard_item_field">
 		<div class="col-md-9">
-			<div class="fed_header_font_color">' . __( $item['label_name'] ) . '</div>
+			<div class="fed_header_font_color">' . esc_html( $item['label_name'] ) . '</div>
 			' . fed_get_input_details( $temp ) . '
 		</div>
 	</div>
@@ -408,7 +408,7 @@ function fed_show_category_tag_post_format( $post, $post_settings ) {
 							<span><?php echo esc_attr( $category->label ); ?></span>
 						</h4>
 						<div>
-							<?php echo fed_get_dashboard_display_categories( $post, $category ); ?>
+							<?php echo fed_get_dashboard_display_categories( $post, $category ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 						</div>
 					</div>
 					<?php
@@ -428,7 +428,7 @@ function fed_show_category_tag_post_format( $post, $post_settings ) {
 							<?php do_action( 'fed_frontend_dashboard_edit_tag_label', $tag, $post ); ?>
 						</div>
 						<div>
-							<?php echo fed_get_dashboard_display_tags( $post, $tag ); ?>
+							<?php echo fed_get_dashboard_display_tags( $post, $tag ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 						</div>
 					</div>
 					<?php
@@ -457,6 +457,7 @@ function fed_show_category_tag_post_format( $post, $post_settings ) {
 						</h4>
 						<div>
 							<?php
+							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							echo fed_form_select(
 								array(
 									'input_meta'  => 'tax_input[post_format][]',

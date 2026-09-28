@@ -1057,7 +1057,7 @@ function fed_show_form_label( $content ) {
 		( ! isset( $content['input_type'] ) && ! empty( $content['name'] ) ) ||
 		( isset( $content['input_type'] ) && 'label' !== $content['input_type'] && ! empty( $content['name'] ) )
 	) {
-		$label = '<label>' . esc_attr__( $content['name'], 'frontend-dashboard' ) . '</label>';
+		$label = '<label>' . esc_html( $content['name'] ) . '</label>';
 	}
 
 	$label = apply_filters( 'fed_show_form_label', $label, $content );

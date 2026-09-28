@@ -43,8 +43,11 @@ function fed_add_meta_boxes_display() {
 				?>
                 <div class="row fed_dashboard_item_field p-b-20">
                     <div class="col-md-6">
-                        <div class="fed_header_font_color"><?php esc_attr_e( $temp['label_name'], 'fed' ); ?></div>
-						<?php echo fed_get_input_details( $temp ); ?>
+                        <div class="fed_header_font_color"><?php echo esc_html( $temp['label_name'] ); ?></div>
+						<?php
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						echo fed_get_input_details( $temp );
+						?>
                     </div>
                 </div>
 				<?php

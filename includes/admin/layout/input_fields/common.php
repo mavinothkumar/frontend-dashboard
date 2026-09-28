@@ -21,6 +21,7 @@ function fed_get_placeholder_field( array $row ) {
 			<?php esc_html_e( 'Placeholder Text', 'frontend-dashboard' ); ?>
 		</label>
 		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo fed_input_box(
 			'placeholder',
 			array(
@@ -48,6 +49,7 @@ function fed_get_class_field( array $row ) {
 			<?php esc_html_e( 'Custom CSS Class', 'frontend-dashboard' ); ?>
 		</label>
 		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo fed_input_box(
 			'class_name',
 			array(
@@ -74,6 +76,7 @@ function fed_get_id_field( array $row ) {
 			<?php esc_html_e( 'Element ID', 'frontend-dashboard' ); ?>
 		</label>
 		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo fed_input_box(
 			'id_name',
 			array(
@@ -132,6 +135,7 @@ function fed_render_choices_builder( $input_val, $field_type = 'select', $is_mul
 					<div class="px-3 py-1.5 bg-slate-50 border border-slate-200/80 rounded-xl flex items-center gap-2.5">
 						<span class="text-xs font-semibold text-slate-700"><?php esc_html_e( 'Multi-Select', 'frontend-dashboard' ); ?></span>
 						<?php
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo fed_input_box(
 							'extended[multiple]',
 							array(

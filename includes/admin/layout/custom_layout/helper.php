@@ -41,11 +41,15 @@ function fed_common_simple_layout( $form ) {
 				action="<?php echo esc_attr( $form_action ); ?>">
 
 			<?php fed_wp_nonce_field( $form_nonce_action, $form_nonce_name ); ?>
-			<?php echo $form_loader; ?>
+			<?php
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo $form_loader;
+			?>
 
 			<?php
 			if ( isset( $form['hidden'] ) && is_array( $form['hidden'] ) ) {
 				foreach ( $form['hidden'] as $hindex => $hidden ) {
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					echo fed_get_input_details( $hidden );
 				}
 			}
@@ -79,8 +83,10 @@ function fed_common_simple_layout( $form ) {
 							<?php
 							if ( isset( $input['input'] ) ) {
 								if ( is_array( $input['input'] ) ) {
+									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									echo fed_get_input_details( $input['input'] );
 								} else {
+									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									echo $input['input'];
 								}
 							}
@@ -94,7 +100,10 @@ function fed_common_simple_layout( $form ) {
 									?>
 									<label class="p-3 bg-slate-50/80 hover:bg-slate-100/80 border border-slate-200/80 rounded-2xl flex items-center justify-between gap-2 cursor-pointer transition-colors">
 										<span class="text-xs font-bold text-slate-800 select-none"><?php echo esc_html( $item_label ); ?></span>
-										<?php echo fed_get_input_details( $input_data ); ?>
+										<?php
+										// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+										echo fed_get_input_details( $input_data );
+										?>
 									</label>
 									<?php
 								}
@@ -103,7 +112,7 @@ function fed_common_simple_layout( $form ) {
 							?>
 
 							<?php if ( ! empty( $input['help_message'] ) ) : ?>
-								<p class="text-[11px] text-slate-400 m-0"><?php echo wp_strip_all_tags( $input['help_message'] ); ?></p>
+								<p class="text-[11px] text-slate-400 m-0"><?php echo esc_html( wp_strip_all_tags( $input['help_message'] ) ); ?></p>
 							<?php endif; ?>
 						</div>
 						<?php
@@ -140,7 +149,7 @@ function fed_common_simple_layout( $form ) {
  * @param  array  $tabs  Tabs.
  */
 function fed_common_layouts_admin_settings( $fed_admin_options, $tabs ) {
-	$no = mt_rand( 1000, 9999 );
+	$no = wp_rand( 1000, 9999 );
 	?>
 	<div class="flex flex-col lg:flex-row gap-6 items-start w-full fed-settings-subtab-container" id="fed_subtabs_wrap_<?php echo esc_attr( $no ); ?>">
 		<!-- Left Subtab Sidebar -->
@@ -337,12 +346,16 @@ function fed_render_user_roles_selector( $args = array() ) {
 					<span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400 text-xs">
 						<i class="fas fa-search"></i>
 					</span>
-					<input type="text" placeholder="<?php echo esc_attr( sprintf( __( 'Filter %d user roles...', 'frontend-dashboard' ), $total_roles_count ) ); ?>" class="fed_role_search_filter w-full pr-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-indigo-500 transition-all outline-none font-medium" style="padding-left: 36px !important; height: 38px !important;" />
+					<?php
+					/* translators: %d: total number of roles */
+					$filter_roles_placeholder = sprintf( __( 'Filter %d user roles...', 'frontend-dashboard' ), $total_roles_count );
+					?>
+					<input type="text" placeholder="<?php echo esc_attr( $filter_roles_placeholder ); ?>" class="fed_role_search_filter w-full pr-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-800 placeholder:text-slate-400 focus:bg-white focus:border-indigo-500 transition-all outline-none font-medium" style="padding-left: 36px !important; height: 38px !important;" />
 				</div>
 
 				<div class="flex items-center gap-2 shrink-0 text-xs">
 					<span class="fed_role_selected_count text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-100">
-						<span class="fed_role_selected_num"><?php echo ( $is_all_roles_mode ? $total_roles_count : $active_roles_count ); ?></span> / <?php echo $total_roles_count; ?> <?php esc_html_e( 'Selected', 'frontend-dashboard' ); ?>
+						<span class="fed_role_selected_num"><?php echo esc_html( $is_all_roles_mode ? $total_roles_count : $active_roles_count ); ?></span> / <?php echo esc_html( $total_roles_count ); ?> <?php esc_html_e( 'Selected', 'frontend-dashboard' ); ?>
 					</span>
 					<button type="button" class="fed_roles_select_all text-xs font-bold text-indigo-600 hover:text-indigo-800 px-2.5 py-1 rounded-lg bg-indigo-50/60 hover:bg-indigo-50 cursor-pointer">
 						<?php esc_html_e( 'Select All', 'frontend-dashboard' ); ?>

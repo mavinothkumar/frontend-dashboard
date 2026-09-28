@@ -370,7 +370,7 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 			) : '';
 
 			$transaction_id = isset( $payment['transaction_id'] ) ? $payment['transaction_id'] : '';
-			$created        = isset( $payment['created'] ) ? date( 'Y-m-d', strtotime( $payment['created'] ) ) : '';
+			$created        = isset( $payment['created'] ) ? gmdate( 'Y-m-d', strtotime( $payment['created'] ) ) : '';
 			$amount         = isset( $payment['amount'] ) ? $payment['amount'] : '';
 			$currency       = isset( $payment['currency'] ) ? $payment['currency'] : '';
 

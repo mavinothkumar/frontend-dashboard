@@ -189,7 +189,8 @@ function fed_restrict_admin_area() {
 			$restrict_admin_area['restrict_wp']['role']
 		) && is_admin()
 	) {
-		wp_redirect( fed_get_dashboard_url() );
+		wp_safe_redirect( fed_get_dashboard_url() );
+		exit;
 	}
 }
 

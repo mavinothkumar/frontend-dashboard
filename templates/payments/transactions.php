@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 /**
  * Transaction Template
  *
@@ -282,6 +285,7 @@ $transactions = fed_get_transactions();
 													?>
 													</label>
 												<?php
+												// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 												echo fed_get_input_details(
 													array(
 														'input_value' => array(
@@ -301,6 +305,7 @@ $transactions = fed_get_transactions();
 											<div class="form-group">
 												<label><?php esc_attr_e( 'Status', 'frontend-dashboard' ); ?></label>
 												<?php
+												// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 												echo fed_get_input_details(
 													array(
 														'input_value' => fed_payment_status(),

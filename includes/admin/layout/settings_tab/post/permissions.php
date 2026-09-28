@@ -25,7 +25,10 @@ function fed_admin_post_permissions_tab( $fed_admin_options ) {
 			action="<?php echo esc_url( admin_url( 'admin-ajax.php?action=fed_admin_setting_form' ) ); ?>">
 
 		<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
-		<?php echo fed_loader(); ?>
+		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo fed_loader();
+		?>
 
 		<input type="hidden" name="fed_admin_unique" value="fed_admin_settings_post"/>
 		<input type="hidden" name="fed_admin_unique_post" value="fed_admin_permission_post"/>

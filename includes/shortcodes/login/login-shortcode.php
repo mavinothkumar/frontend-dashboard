@@ -5,6 +5,10 @@
  * @package frontend-dashboard
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 if ( ! shortcode_exists( 'fed_login' ) && ! function_exists( 'fed_fn_login' ) ) {
 	/**
 	 * Add Shortcode to the page.

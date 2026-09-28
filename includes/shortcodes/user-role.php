@@ -5,6 +5,10 @@
  * @package Frontend Dashboard.
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 if ( ! shortcode_exists( 'fed_user' ) && ! function_exists( 'fed_user_fn' ) ) {
 	/**
 	 * Add Shortcode to the page.

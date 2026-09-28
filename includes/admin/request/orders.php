@@ -52,7 +52,7 @@ function fed_admin_orders_function() {
 		'country_code'   => isset( $request['country_code'] ) ? sanitize_text_field(
 			$request['country_code']
 		) : $order['country_code'],
-		'updated_at'     => date( 'Y-m-d H:i:s' ),
+		'updated_at'     => gmdate( 'Y-m-d H:i:s' ),
 	);
 
 	$status = $wpdb->update( $table_name, $orders, array( 'id' => $id ) );
@@ -90,11 +90,11 @@ function fed_admin_order_delete_function() {
 	$verify = $wpdb->delete( $table_name, array( 'id' => $id ), array( '%d' ) );
 
 	if ( $verify ) {
-		wp_send_json_success( array( 'message' => __( 'Payment has been successfully deleted' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Payment has been successfully deleted', 'frontend-dashboard' ) ) );
 		exit();
 	}
 
-	wp_send_json_error( array( 'message' => __( 'Sorry could not find the payment record' ) ) );
+	wp_send_json_error( array( 'message' => __( 'Sorry could not find the payment record', 'frontend-dashboard' ) ) );
 	exit();
 }
 
@@ -187,7 +187,7 @@ function fed_admin_add_orders_function() {
 	$request    = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 
 	if ( ! wp_verify_nonce( $request['fed_admin_add_orders'], 'fed_admin_add_orders' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Invalid Request' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Invalid Request', 'frontend-dashboard' ) ) );
 		exit();
 	}
 	$validation = fed_order_add_validation( $request );
@@ -223,8 +223,8 @@ function fed_admin_add_orders_function() {
 		'currency_type'  => isset( $request['currency_type'] ) ? sanitize_text_field(
 			$request['currency_type']
 		) : 'paypal',
-		'created_at'     => date( 'Y-m-d H:i:s' ),
-		'updated_at'     => date( 'Y-m-d H:i:s' ),
+		'created_at'     => gmdate( 'Y-m-d H:i:s' ),
+		'updated_at'     => gmdate( 'Y-m-d H:i:s' ),
 	);
 
 	$status = $wpdb->insert(

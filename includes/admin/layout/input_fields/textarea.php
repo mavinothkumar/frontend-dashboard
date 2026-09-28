@@ -25,7 +25,10 @@ function fed_admin_input_fields_multi_line( $row, $action, $menu_options ) {
 			  action="<?php echo esc_url( admin_url( 'admin-ajax.php?action=fed_admin_setting_up_form' ) ); ?>">
 
 			<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
-			<?php echo fed_loader(); ?>
+			<?php
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo fed_loader();
+			?>
 
 			<!-- Card: Basic Field Settings -->
 			<div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-6 sm:space-y-7">
@@ -51,6 +54,7 @@ function fed_admin_input_fields_multi_line( $row, $action, $menu_options ) {
 						<div class="space-y-2">
 							<label class="block text-xs font-bold text-slate-700"><?php esc_html_e( 'Textarea Height (Rows)', 'frontend-dashboard' ); ?></label>
 							<?php
+							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							echo fed_input_box(
 								'input_row',
 								array(

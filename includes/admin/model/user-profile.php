@@ -40,8 +40,14 @@ function fed_fetch_user_profile_required_by_menu( $menu = 'profile' ) {
 	global $wpdb;
 	$table_name = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
 
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	$result = $wpdb->get_results(
-		"SELECT * FROM $table_name WHERE (menu LIKE '{$menu}' AND is_required LIKE 'true') ", ARRAY_A
+		$wpdb->prepare(
+			"SELECT * FROM {$table_name} WHERE (menu = %s AND is_required = %s)",
+			sanitize_text_field( $menu ),
+			'true'
+		),
+		ARRAY_A
 	);
 	if ( count( $result ) <= 0 ) {
 		return array();
@@ -144,8 +150,14 @@ function fed_fetch_user_profile_by_menu_slug( $menu_slug = '' ) {
 	global $wpdb;
 	$table_name = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
 
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	$results = $wpdb->get_results(
-		"SELECT * FROM $table_name WHERE show_dashboard LIKE 'Enable' AND menu LIKE '{$menu_slug}' ", ARRAY_A
+		$wpdb->prepare(
+			"SELECT * FROM {$table_name} WHERE show_dashboard = %s AND menu = %s",
+			'Enable',
+			sanitize_text_field( $menu_slug )
+		),
+		ARRAY_A
 	);
 
 	if ( count( $results ) <= 0 ) {
@@ -282,8 +294,14 @@ function fed_fetch_user_profile_columns( $value ) {
 	global $wpdb;
 	$table_name = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
 
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	$columns = $wpdb->get_results(
-		"SELECT input_meta, input_type FROM $table_name WHERE menu = '{$value}' AND show_dashboard = 'Enable' AND extra = 'yes' ",
+		$wpdb->prepare(
+			"SELECT input_meta, input_type FROM {$table_name} WHERE menu = %s AND show_dashboard = %s AND extra = %s",
+			sanitize_text_field( $value ),
+			'Enable',
+			'yes'
+		),
 		ARRAY_A
 	);
 

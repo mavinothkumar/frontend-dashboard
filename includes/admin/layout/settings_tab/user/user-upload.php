@@ -24,7 +24,10 @@ function fed_admin_user_upload_permission_tab( $fed_admin_options ) {
 			action="<?php echo esc_url( admin_url( 'admin-ajax.php?action=fed_admin_setting_form' ) ); ?>">
 
 		<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
-		<?php echo fed_loader(); ?>
+		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo fed_loader();
+		?>
 
 		<input type="hidden" name="fed_admin_unique" value="fed_admin_setting_user"/>
 		<input type="hidden" name="fed_admin_unique_user" value="fed_admin_user_upload"/>

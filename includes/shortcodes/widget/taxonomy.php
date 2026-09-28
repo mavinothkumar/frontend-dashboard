@@ -7,6 +7,10 @@
  * @package Frontend Dashboard.
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 add_filter( 'widget_text', 'do_shortcode' );
 
 add_shortcode( 'fed_list_taxonomy', 'fed_list_taxonomy' );
@@ -41,7 +45,7 @@ function fed_list_taxonomy( $attributes ) {
 				'separator'           => '<br />',
 				'show_count'          => 0,
 				'show_option_all'     => '',
-				'show_option_none'    => __( 'No categories' ),
+				'show_option_none'    => __( 'No categories', 'frontend-dashboard' ),
 				'style'               => 'list',
 				'taxonomy'            => null,
 				'title_li'            => '',

@@ -36,7 +36,7 @@ if ( ! function_exists( 'fed_print_early_wp_shims' ) ) {
 		if ( $printed ) {
 			return;
 		}
-		$printed = true;
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '<script id="fed-early-wp-shims">' . fed_get_early_wp_shims_js() . '</script>';
 	}
 }

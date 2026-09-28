@@ -147,8 +147,8 @@ if ( ! class_exists( 'FEDPayment' ) ) {
 						'input'        => wp_dropdown_pages(
 							array(
 								'name'             => 'settings[success_page]',
-								'selected'         => isset( $settings['settings']['success_page'] ) ? $settings['settings']['success_page'] : '',
-								'show_option_none' => __( '&mdash; Default Dashboard Page &mdash;', 'frontend-dashboard' ),
+								'selected'         => isset( $settings['settings']['success_page'] ) ? (int) $settings['settings']['success_page'] : 0,
+								'show_option_none' => esc_html__( '&mdash; Default Dashboard Page &mdash;', 'frontend-dashboard' ),
 								'class'            => 'form-control',
 								'echo'             => false,
 							)
@@ -165,8 +165,8 @@ if ( ! class_exists( 'FEDPayment' ) ) {
 						'input'        => wp_dropdown_pages(
 							array(
 								'name'             => 'settings[failed_page]',
-								'selected'         => isset( $settings['settings']['failed_page'] ) ? $settings['settings']['failed_page'] : '',
-								'show_option_none' => __( '&mdash; Default Dashboard Page &mdash;', 'frontend-dashboard' ),
+								'selected'         => isset( $settings['settings']['failed_page'] ) ? (int) $settings['settings']['failed_page'] : 0,
+								'show_option_none' => esc_html__( '&mdash; Default Dashboard Page &mdash;', 'frontend-dashboard' ),
 								'class'            => 'form-control',
 								'echo'             => false,
 							)
@@ -249,7 +249,7 @@ if ( ! class_exists( 'FEDPayment' ) ) {
 		public function authorize() {
 			if ( ! fed_is_admin() ) {
 				wp_die(
-					__(
+					esc_html__(
 						'Sorry! You are not allowed to do this action | Error: FED|Admin|Payment|FEDPayment@authorize',
 						'frontend-dashboard'
 					)

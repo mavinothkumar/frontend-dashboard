@@ -369,7 +369,10 @@ function fed_get_plugin_pages_menu() {
 	<div class="fed-addons-wrap w-full pr-6 py-6">
 		
 		<?php if ( function_exists( 'fed_render_addon_compatibility_banner' ) ) : ?>
-			<?php echo fed_render_addon_compatibility_banner(); ?>
+			<?php
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo fed_render_addon_compatibility_banner();
+			?>
 		<?php endif; ?>
 
 		<!-- Top Notification Banner -->

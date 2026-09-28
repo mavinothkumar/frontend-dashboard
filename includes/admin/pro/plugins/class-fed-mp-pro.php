@@ -231,11 +231,11 @@ if ( ! class_exists( 'FEDMPPRO' ) && ! defined( 'BC_FED_MP_PLUGIN' ) ) {
 										<form method="post"
 												action="https://buffercode.com/payment/bc/payment_start">
 											<input type='hidden' name='redirect_url'
-													value="<?php echo fed_current_page_url(); ?>"/>
+													value="<?php echo esc_url( fed_current_page_url() ); ?>"/>
 											<input type='hidden' name='domain'
-													value="<?php echo esc_textarea(fed_get_domain_name()); ?>"/>
+													value="<?php echo esc_attr( fed_get_domain_name() ); ?>"/>
 											<input type='hidden' name='contact_email'
-													value="<?php echo esc_textarea( fed_get_admin_email() ); ?>"/>
+													value="<?php echo esc_attr( fed_get_admin_email() ); ?>"/>
 											<input type='hidden' name='plugin_name'
 													value='frontend-dashboard-membership-pro'/>
 											<input type='hidden' name='amount' value='29'/>
@@ -246,7 +246,7 @@ if ( ! class_exists( 'FEDMPPRO' ) && ! defined( 'BC_FED_MP_PLUGIN' ) ) {
 													'assets/admin/images/pro/buy-now-29.png',
 													BC_FED_PLUGIN
 												)
-											) ?>);
+											); ?>);
 													background-repeat: no-repeat;
 													width:200px;
 													height: 148px;
@@ -258,20 +258,22 @@ if ( ! class_exists( 'FEDMPPRO' ) && ! defined( 'BC_FED_MP_PLUGIN' ) ) {
 										<form method="post"
 												action="https://buffercode.com/payment/bc/payment_start">
 											<input type='hidden' name='redirect_url'
-													value="<?php echo fed_current_page_url(); ?>"/>
+													value="<?php echo esc_url( fed_current_page_url() ); ?>"/>
 											<input type='hidden' name='domain'
-													value="<?php echo fed_get_domain_name(); ?>"/>
+													value="<?php echo esc_attr( fed_get_domain_name() ); ?>"/>
 											<input type='hidden' name='contact_email'
-													value="<?php echo fed_get_admin_email(); ?>"/>
+													value="<?php echo esc_attr( fed_get_admin_email() ); ?>"/>
 											<input type='hidden' name='plugin_name'
 													value='frontend-dashboard-membership-pro'/>
 											<input type='hidden' name='amount' value='99'/>
 											<input type='hidden' name='plan_type' value='lifetime'/>
 											<button type="submit" style="
-													background:url(<?php echo plugins_url(
-												'assets/admin/images/pro/buy-now-99.png',
-												BC_FED_PLUGIN
-											) ?>);
+													background:url(<?php echo esc_url(
+												plugins_url(
+													'assets/admin/images/pro/buy-now-99.png',
+													BC_FED_PLUGIN
+												)
+											); ?>);
 													background-repeat: no-repeat;
 													width:200px;
 													height: 148px;

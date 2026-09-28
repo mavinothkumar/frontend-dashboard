@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 function fed_initial_setup() {
 	if($_POST && $_POST['slug']){
 		include( ABSPATH . 'wp-admin/includes/ajax-actions.php' );

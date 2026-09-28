@@ -5,6 +5,10 @@
  * @package Frontend Dashboard.
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Login Form.
  *
@@ -48,48 +52,25 @@ function fed_login_only() {
 		),
 		'content'  => array(
 			'user_login'    => array(
-				'name' => sprintf(
-				/* translators: %s: User Login Label */
-					esc_html__(
-						'%s',
-						'frontend-dashboard'
-					), $login_info['user_login']['label_name']
-				),
-
+				'name'        => isset( $login_info['user_login']['label_name'] ) ? esc_html( $login_info['user_login']['label_name'] ) : __( 'Username', 'frontend-dashboard' ),
 				'input'       => fed_input_box(
 					'user_login',
 					array(
-						'placeholder' => sprintf(
-						/* Translators:  %s: User Login Placeholder */
-							esc_html__(
-								'%s',
-								'frontend-dashboard'
-							), $login_info['user_login']['placeholder']
-						),
-					), 'single_line'
+						'placeholder' => isset( $login_info['user_login']['placeholder'] ) ? esc_attr( $login_info['user_login']['placeholder'] ) : '',
+					),
+					'single_line'
 				),
 				'input_order' => 7,
 				'input_type'  => 'single_line',
 			),
 			'user_password' => array(
-				'name'        => sprintf(
-				/* translators: %s: User Password Label */
-					esc_html__(
-						'%s',
-						'frontend-dashboard'
-					), $login_info['user_pass']['label_name']
-				),
+				'name'        => isset( $login_info['user_pass']['label_name'] ) ? esc_html( $login_info['user_pass']['label_name'] ) : __( 'Password', 'frontend-dashboard' ),
 				'input'       => fed_input_box(
 					'user_password',
 					array(
-						'placeholder' => sprintf(
-						/* translators: %s: User Password Placeholder */
-							esc_html__(
-								'%s',
-								'frontend-dashboard'
-							), $login_info['user_pass']['label_name']
-						),
-					), 'password'
+						'placeholder' => isset( $login_info['user_pass']['label_name'] ) ? esc_attr( $login_info['user_pass']['label_name'] ) : '',
+					),
+					'password'
 				),
 				'input_order' => 9,
 				'input_type'  => 'single_line',

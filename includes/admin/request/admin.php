@@ -299,7 +299,8 @@ function fed_admin_setting_form_dashboard_menu_function() {
 			wp_send_json_error(
 				array(
 					'message' => __(
-						'You are trying to delete a menu, which has Sub Menu(s), Please delete or move it to different Menu'
+						'You are trying to delete a menu, which has Sub Menu(s), Please delete or move it to different Menu',
+						'frontend-dashboard'
 					),
 				)
 			);
@@ -475,9 +476,11 @@ function fed_search_wp_pages_ajax() {
 	}
 
 	foreach ( $pages as $p ) {
+		/* translators: %d: Page ID */
+		$fallback_title = sprintf( __( '(Page #%d no title)', 'frontend-dashboard' ), $p->ID );
 		$results[] = array(
 			'id'    => $p->ID,
-			'title' => $p->post_title ? $p->post_title : sprintf( __( '(Page #%d no title)', 'frontend-dashboard' ), $p->ID ),
+			'title' => $p->post_title ? $p->post_title : $fallback_title,
 		);
 	}
 

@@ -454,14 +454,7 @@ if ( ! class_exists( 'FED_ActionHooks' ) ) {
 					true
 				)
 			) {
-				$text = '<span id="footer-thankyou">If you like <strong>Frontend Dashboard (v' . BC_FED_PLUGIN_VERSION . ')</strong>, Please leave us a rating <a 
-href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#new-post">
-<i class="fa fa-star fa-2x" aria-hidden="true"></i>
-<i class="fa fa-star fa-2x" aria-hidden="true"></i>
-<i class="fa fa-star fa-2x" aria-hidden="true"></i>
-<i class="fa fa-star fa-2x" aria-hidden="true"></i>
-<i class="fa fa-star fa-2x" aria-hidden="true"></i>
-</a>. A huge thanks in advance <i class="fa fa-smile-o" aria-hidden="true"></i>';
+				$text = '<span id="footer-thankyou">If you like <strong>Frontend Dashboard (v' . esc_html( BC_FED_PLUGIN_VERSION ) . ')</strong>, please leave us a <a href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/#new-post" target="_blank" rel="noopener noreferrer">review</a>. A huge thanks in advance!</span>';
 			}
 
 			return $text;

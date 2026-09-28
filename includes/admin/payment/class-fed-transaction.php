@@ -170,10 +170,10 @@ if ( ! class_exists( 'FEDTransaction' ) ) {
 											<!-- Date Column -->
 											<td style="padding: 14px 18px;">
 												<div style="font-weight: 600; color: #1e293b; font-size: 13px;">
-													<?php echo esc_html( date( 'M d, Y', strtotime( $created ) ) ); ?>
+													<?php echo esc_html( gmdate( 'M d, Y', strtotime( $created ) ) ); ?>
 												</div>
 												<div style="font-size: 11.5px; color: #94a3b8;">
-													<?php echo esc_html( date( 'h:i A', strtotime( $created ) ) ); ?>
+													<?php echo esc_html( gmdate( 'h:i A', strtotime( $created ) ) ); ?>
 												</div>
 											</td>
 
@@ -234,7 +234,7 @@ if ( ! class_exists( 'FEDTransaction' ) ) {
 										if ( ! empty( $users ) ) {
 											foreach ( $users as $u ) {
 												$selected = ( $u->ID === get_current_user_id() ) ? 'selected' : '';
-												echo '<option value="' . esc_attr( $u->ID ) . '" ' . $selected . '>' . esc_html( $u->display_name . ' (' . $u->user_email . ')' ) . '</option>';
+												echo '<option value="' . esc_attr( $u->ID ) . '" ' . esc_attr( $selected ) . '>' . esc_html( $u->display_name . ' (' . $u->user_email . ')' ) . '</option>';
 											}
 										}
 										?>
@@ -361,7 +361,7 @@ if ( ! class_exists( 'FEDTransaction' ) ) {
 		public function authorize() {
 			if ( ! is_user_logged_in() ) {
 				$error_message = __( 'Error 403: Please login to view this page', 'frontend-dashboard' );
-				wp_die( $error_message );
+				wp_die( esc_html( $error_message ) );
 			}
 		}
 
@@ -418,7 +418,7 @@ if ( ! class_exists( 'FEDTransaction' ) ) {
 			$this->authorize();
 
 			if ( ! current_user_can( 'manage_options' ) ) {
-				wp_die( __( 'Error 403: You are not allowed to view this page', 'frontend-dashboard' ) );
+				wp_die( esc_html__( 'Error 403: You are not allowed to view this page', 'frontend-dashboard' ) );
 			}
 
 			/**
@@ -635,7 +635,7 @@ if ( ! class_exists( 'FEDTransaction' ) ) {
 				'payment_type'   => ! empty( $type ) ? $type : 'NA',
 				'payment_source' => fed_sanitize_text_field( fed_get_data( 'payment_source', $request ) ),
 				'updated'        => current_time( 'Y-m-d' ),
-				'created'        => isset( $request['created'] ) ? date(
+				'created'        => isset( $request['created'] ) ? gmdate(
 					'Y-m-d H:i:s',
 					strtotime( fed_sanitize_text_field( $request['created'] ) )
 				) : '',
@@ -686,9 +686,11 @@ if ( ! class_exists( 'FEDTransaction' ) ) {
 
 			if ( isset( $request['type'] ) ) {
 				global $wpdb;
-				$table      = fed_get_payment_for( esc_attr( $request['type'] ) );
-				$table_name = $wpdb->prefix . $table['object_table'];
-				if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}' " ) === $table_name ) {
+				$table      = fed_get_payment_for( sanitize_text_field( $request['type'] ) );
+				$table_name = $wpdb->prefix . sanitize_key( $table['object_table'] );
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table_name ) ) ) === $table_name ) {
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 					$records = $wpdb->get_results( "SELECT * FROM `{$table_name}` ", ARRAY_A );
 					if ( $records && count( $records ) > 0 ) {
 						$formatted = fed_get_key_value_array( $records, 'id', 'plan_name' );
@@ -736,17 +738,20 @@ if ( ! class_exists( 'FEDTransaction' ) ) {
 						<label>
 							<?php esc_attr_e( 'Gateway', 'frontend-dashboard' ); ?>
 						</label>
-						<?php echo fed_form_select(
+						<?php
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						echo fed_form_select(
 							array(
 								'input_meta'  => 'gateway',
 								'user_value'  => '',
 								'input_value' => array_merge(
 									array(
-										'' => __( 'Please select Gateway', 'frontend-dashboard-membership' ),
+										'' => __( 'Please select Gateway', 'frontend-dashboard' ),
 									), fed_get_only_payment_gateways()
 								),
 							)
-						) ?>
+						);
+						?>
 					</div>
 				</div>
 
@@ -755,17 +760,20 @@ if ( ! class_exists( 'FEDTransaction' ) ) {
 						<label>
 							<?php esc_attr_e( 'Gateway', 'frontend-dashboard' ); ?>
 						</label>
-						<?php echo fed_form_select(
+						<?php
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						echo fed_form_select(
 							array(
 								'input_meta'  => 'gateway',
 								'user_value'  => '',
 								'input_value' => array_merge(
 									array(
-										'' => __( 'Please select Gateway', 'frontend-dashboard-membership' ),
+										'' => __( 'Please select Gateway', 'frontend-dashboard' ),
 									), fed_get_payment_for_key_index()
 								),
 							)
-						) ?>
+						);
+						?>
 					</div>
 				</div>
 

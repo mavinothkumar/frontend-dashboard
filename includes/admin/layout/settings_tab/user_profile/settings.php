@@ -375,7 +375,10 @@ function fed_admin_user_profile_colors_tab() {
 			      id="fed_color_customizer_form">
 
 				<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
-				<?php echo fed_loader(); ?>
+				<?php
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo fed_loader();
+				?>
 				<input type="hidden" name="fed_admin_unique" value="fed_admin_setting_upl_color">
 
 				<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -398,6 +401,7 @@ function fed_admin_user_profile_colors_tab() {
 								<div>
 									<label class="block text-xs font-bold text-slate-700 mb-1.5"><?php esc_html_e( 'Primary Button / Brand Accent', 'frontend-dashboard' ); ?></label>
 									<?php
+									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									echo fed_form_color( array(
 										'input_meta' => 'color[fed_upl_color_bg_color]',
 										'user_value' => $c_bg_color,
@@ -410,6 +414,7 @@ function fed_admin_user_profile_colors_tab() {
 								<div>
 									<label class="block text-xs font-bold text-slate-700 mb-1.5"><?php esc_html_e( 'Primary Button Text', 'frontend-dashboard' ); ?></label>
 									<?php
+									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									echo fed_form_color( array(
 										'input_meta' => 'color[fed_upl_color_bg_font_color]',
 										'user_value' => $c_bg_font,
@@ -422,6 +427,7 @@ function fed_admin_user_profile_colors_tab() {
 								<div>
 									<label class="block text-xs font-bold text-slate-700 mb-1.5"><?php esc_html_e( 'Secondary / Accent Color', 'frontend-dashboard' ); ?></label>
 									<?php
+									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									echo fed_form_color( array(
 										'input_meta' => 'color[fed_upl_color_sbg_color]',
 										'user_value' => $c_sbg_color,
@@ -434,6 +440,7 @@ function fed_admin_user_profile_colors_tab() {
 								<div>
 									<label class="block text-xs font-bold text-slate-700 mb-1.5"><?php esc_html_e( 'Secondary Button Text', 'frontend-dashboard' ); ?></label>
 									<?php
+									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									echo fed_form_color( array(
 										'input_meta' => 'color[fed_upl_color_sbg_font_color]',
 										'user_value' => $c_sbg_font,
@@ -461,6 +468,7 @@ function fed_admin_user_profile_colors_tab() {
 								<div>
 									<label class="block text-xs font-bold text-slate-700 mb-1.5"><?php esc_html_e( 'Sidebar Background', 'frontend-dashboard' ); ?></label>
 									<?php
+									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									echo fed_form_color( array(
 										'input_meta' => 'color[fed_upl_color_sidebar_bg]',
 										'user_value' => $c_sidebar_bg,
@@ -473,6 +481,7 @@ function fed_admin_user_profile_colors_tab() {
 								<div>
 									<label class="block text-xs font-bold text-slate-700 mb-1.5"><?php esc_html_e( 'Sidebar Inactive Item Text', 'frontend-dashboard' ); ?></label>
 									<?php
+									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									echo fed_form_color( array(
 										'input_meta' => 'color[fed_upl_color_sidebar_text]',
 										'user_value' => $c_sidebar_text,
@@ -485,6 +494,7 @@ function fed_admin_user_profile_colors_tab() {
 								<div>
 									<label class="block text-xs font-bold text-slate-700 mb-1.5"><?php esc_html_e( 'Active Tab Background', 'frontend-dashboard' ); ?></label>
 									<?php
+									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									echo fed_form_color( array(
 										'input_meta' => 'color[fed_upl_color_active_bg]',
 										'user_value' => $c_active_bg,
@@ -497,6 +507,7 @@ function fed_admin_user_profile_colors_tab() {
 								<div>
 									<label class="block text-xs font-bold text-slate-700 mb-1.5"><?php esc_html_e( 'Active Tab Text / Icon', 'frontend-dashboard' ); ?></label>
 									<?php
+									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									echo fed_form_color( array(
 										'input_meta' => 'color[fed_upl_color_active_text]',
 										'user_value' => $c_active_text,
@@ -524,6 +535,7 @@ function fed_admin_user_profile_colors_tab() {
 								<div>
 									<label class="block text-xs font-bold text-slate-700 mb-1.5"><?php esc_html_e( 'Dashboard Body Background', 'frontend-dashboard' ); ?></label>
 									<?php
+									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									echo fed_form_color( array(
 										'input_meta' => 'color[fed_upl_color_body_bg]',
 										'user_value' => $c_body_bg,
@@ -536,6 +548,7 @@ function fed_admin_user_profile_colors_tab() {
 								<div>
 									<label class="block text-xs font-bold text-slate-700 mb-1.5"><?php esc_html_e( 'Content Card Background', 'frontend-dashboard' ); ?></label>
 									<?php
+									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									echo fed_form_color( array(
 										'input_meta' => 'color[fed_upl_color_card_bg]',
 										'user_value' => $c_card_bg,
@@ -548,6 +561,7 @@ function fed_admin_user_profile_colors_tab() {
 								<div>
 									<label class="block text-xs font-bold text-slate-700 mb-1.5"><?php esc_html_e( 'Main Text & Headings', 'frontend-dashboard' ); ?></label>
 									<?php
+									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									echo fed_form_color( array(
 										'input_meta' => 'color[fed_upl_color_text_main]',
 										'user_value' => $c_text_main,
@@ -560,6 +574,7 @@ function fed_admin_user_profile_colors_tab() {
 								<div>
 									<label class="block text-xs font-bold text-slate-700 mb-1.5"><?php esc_html_e( 'Borders & Dividers', 'frontend-dashboard' ); ?></label>
 									<?php
+									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									echo fed_form_color( array(
 										'input_meta' => 'color[fed_upl_color_border]',
 										'user_value' => $c_border,

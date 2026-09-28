@@ -74,6 +74,6 @@ function fed_admin_frontend_login_menu_save( $request ) {
 
 	update_option( 'fed_admin_login', $fed_login );
 
-	wp_send_json_success( array( 'message' => __( 'Login menu successfully assigned' ) ) );
+	wp_send_json_success( array( 'message' => __( 'Login menu successfully assigned', 'frontend-dashboard' ) ) );
 
 }

@@ -264,7 +264,10 @@ function fed_get_add_profile_post_fields() {
 	</style>
 
 	<div class="bc_fed fed-admin-wrap w-full max-w-none px-6 sm:px-10 py-8 font-sans text-slate-800 fed_add_edit_input_container" data-nonce="<?php echo esc_attr( $nonce ); ?>" data-ajax-url="<?php echo esc_url( $ajax_url ); ?>">
-		<?php echo fed_loader(); ?>
+		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo fed_loader();
+		?>
 
 		<!-- Toast Notification Element -->
 		<div id="fed_toast_notification" class="fixed bottom-6 right-6 transform translate-y-16 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-3 bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-slate-700" style="z-index: 99999999 !important;">

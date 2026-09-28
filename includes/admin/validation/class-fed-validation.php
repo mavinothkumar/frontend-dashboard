@@ -53,8 +53,7 @@ if ( ! class_exists( 'FED_Validation' ) ) {
 		 * @return $this
 		 */
 		public function name( $name ) {
-			/* translators: %s : Name */
-			$this->name = sprintf( __( '%s ', 'frontend-dashboard' ), $name );
+			$this->name = $name . ' ';
 
 			return $this;
 		}
@@ -318,7 +317,7 @@ if ( ! class_exists( 'FED_Validation' ) ) {
 			if ( ! $this->is_success() ) {
 
 				foreach ( $this->get_errors() as $error ) {
-					echo "$error\n";
+					echo esc_html( "$error\n" );
 				}
 				exit;
 

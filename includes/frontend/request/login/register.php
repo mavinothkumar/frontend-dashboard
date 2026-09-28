@@ -132,7 +132,7 @@ function fed_insert_user_meta( $meta, $user, $update ) {
 function fed_skip_user_name_on_registration( $sanitized_user_login ) {
 	$post_payload = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	if ( isset( $post_payload['submit'] ) && ! isset( $post_payload['user_login'] ) && 'register' === $post_payload['submit'] ) {
-		return sanitize_user( $post_payload['user_email'] . '_' . mt_rand( 1, 999 ), true );
+		return sanitize_user( $post_payload['user_email'] . '_' . wp_rand( 1, 999 ), true );
 	}
 
 	return $sanitized_user_login;

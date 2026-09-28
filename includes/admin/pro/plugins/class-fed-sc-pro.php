@@ -66,7 +66,7 @@ if ( ! class_exists( 'FEDSCPRO' ) && ! defined( 'BC_FED_SC_PLUGIN' ) ) {
 			$options = array(
 				'fed_social_connect_settings' => array(
 					'icon'      => 'fa fa-cogs',
-					'name'      => __( 'Settings (Pro)', 'frontend-dashboard-social-connect' ),
+					'name'      => __( 'Settings (Pro)', 'frontend-dashboard' ),
 					'callable'  => array(
 						'object' => $this,
 						'method' => 'pro',
@@ -75,7 +75,7 @@ if ( ! class_exists( 'FEDSCPRO' ) && ! defined( 'BC_FED_SC_PLUGIN' ) ) {
 				),
 				'fed_social_connect_facebook' => array(
 					'icon'      => 'fa fa-facebook',
-					'name'      => __( 'Facebook (Pro)', 'frontend-dashboard-social-connect' ),
+					'name'      => __( 'Facebook (Pro)', 'frontend-dashboard' ),
 					'callable'  => array(
 						'object' => $this,
 						'method' => 'pro',
@@ -84,7 +84,7 @@ if ( ! class_exists( 'FEDSCPRO' ) && ! defined( 'BC_FED_SC_PLUGIN' ) ) {
 				),
 				'fed_social_connect_twitter'  => array(
 					'icon'      => 'fa fa-twitter',
-					'name'      => __( 'Twitter (Pro)', 'frontend-dashboard-social-connect' ),
+					'name'      => __( 'Twitter (Pro)', 'frontend-dashboard' ),
 					'callable'  => array(
 						'object' => $this,
 						'method' => 'pro',
@@ -93,7 +93,7 @@ if ( ! class_exists( 'FEDSCPRO' ) && ! defined( 'BC_FED_SC_PLUGIN' ) ) {
 				),
 				'fed_social_connect_linkedin' => array(
 					'icon'      => 'fa fa-linkedin',
-					'name'      => __( 'LinkedIn (Pro)', 'frontend-dashboard-social-connect' ),
+					'name'      => __( 'LinkedIn (Pro)', 'frontend-dashboard' ),
 					'callable'  => array(
 						'object' => $this,
 						'method' => 'pro',
@@ -102,7 +102,7 @@ if ( ! class_exists( 'FEDSCPRO' ) && ! defined( 'BC_FED_SC_PLUGIN' ) ) {
 				),
 				'fed_social_connect_github'   => array(
 					'icon'      => 'fa fa-github',
-					'name'      => __( 'GitHub (Pro)', 'frontend-dashboard-social-connect' ),
+					'name'      => __( 'GitHub (Pro)', 'frontend-dashboard' ),
 					'callable'  => array(
 						'object' => $this,
 						'method' => 'pro',
@@ -111,7 +111,7 @@ if ( ! class_exists( 'FEDSCPRO' ) && ! defined( 'BC_FED_SC_PLUGIN' ) ) {
 				),
 				'fed_social_button_style'     => array(
 					'icon'      => 'fa fa-paint-brush',
-					'name'      => __( 'Buttons (Pro)', 'frontend-dashboard-social-connect' ),
+					'name'      => __( 'Buttons (Pro)', 'frontend-dashboard' ),
 					'callable'  => array(
 						'object' => $this,
 						'method' => 'pro',
@@ -120,7 +120,7 @@ if ( ! class_exists( 'FEDSCPRO' ) && ! defined( 'BC_FED_SC_PLUGIN' ) ) {
 				),
 				'fed_social_notifications'    => array(
 					'icon'      => 'fa fa-warning',
-					'name'      => __( 'Notifications (Pro)', 'frontend-dashboard-social-connect' ),
+					'name'      => __( 'Notifications (Pro)', 'frontend-dashboard' ),
 					'callable'  => array(
 						'object' => $this,
 						'method' => 'pro',
@@ -129,7 +129,7 @@ if ( ! class_exists( 'FEDSCPRO' ) && ! defined( 'BC_FED_SC_PLUGIN' ) ) {
 				),
 				'fed_social_instructions'     => array(
 					'icon'      => 'fas fa-info-circle',
-					'name'      => __( 'Instruction (Pro)', 'frontend-dashboard-social-connect' ),
+					'name'      => __( 'Instruction (Pro)', 'frontend-dashboard' ),
 					'callable'  => array(
 						'object' => $this,
 						'method' => 'pro',
@@ -153,9 +153,9 @@ if ( ! class_exists( 'FEDSCPRO' ) && ! defined( 'BC_FED_SC_PLUGIN' ) ) {
 				<div class="col-md-4">
 					<form method="post"
 							action="https://buffercode.com/payment/bc/payment_start">
-						<input type='hidden' name='redirect_url' value="<?php echo fed_current_page_url(); ?>"/>
-						<input type='hidden' name='domain' value="<?php echo fed_get_domain_name(); ?>"/>
-						<input type='hidden' name='contact_email' value="<?php echo fed_get_admin_email(); ?>"/>
+						<input type='hidden' name='redirect_url' value="<?php echo esc_url( fed_current_page_url() ); ?>"/>
+						<input type='hidden' name='domain' value="<?php echo esc_attr( fed_get_domain_name() ); ?>"/>
+						<input type='hidden' name='contact_email' value="<?php echo esc_attr( fed_get_admin_email() ); ?>"/>
 						<input type='hidden' name='plugin_name' value='frontend-dashboard-social-connect'/>
 						<input type='hidden' name='amount' value='29'/>
 						<input type='hidden' name='plan_type' value='annual'/>
@@ -180,9 +180,9 @@ if ( ! class_exists( 'FEDSCPRO' ) && ! defined( 'BC_FED_SC_PLUGIN' ) ) {
 				<div class="col-md-4">
 					<form method="post"
 							action="https://buffercode.com/payment/bc/payment_start">
-						<input type='hidden' name='redirect_url' value="<?php echo fed_current_page_url(); ?>"/>
-						<input type='hidden' name='domain' value="<?php echo fed_get_domain_name(); ?>"/>
-						<input type='hidden' name='contact_email' value="<?php echo fed_get_admin_email(); ?>"/>
+						<input type='hidden' name='redirect_url' value="<?php echo esc_url( fed_current_page_url() ); ?>"/>
+						<input type='hidden' name='domain' value="<?php echo esc_attr( fed_get_domain_name() ); ?>"/>
+						<input type='hidden' name='contact_email' value="<?php echo esc_attr( fed_get_admin_email() ); ?>"/>
 						<input type='hidden' name='plugin_name' value='frontend-dashboard-social-connect'/>
 						<input type='hidden' name='amount' value='99'/>
 						<input type='hidden' name='plan_type' value='lifetime'/>

@@ -159,6 +159,7 @@ if ( ! function_exists( 'fed_wp_nonce_field' ) ) {
 		}
 
 		if ( $echo ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo $nonce_field;
 		}
 
@@ -179,7 +180,7 @@ if ( ! function_exists( 'fed_get_random_string' ) ) {
 		$characters_length = strlen( $characters );
 		$random_string     = '';
 		for ( $i = 0; $i < $length; $i ++ ) {
-			$random_string .= $characters[ rand( 0, $characters_length - 1 ) ];
+			$random_string .= $characters[ wp_rand( 0, $characters_length - 1 ) ];
 		}
 
 		return $random_string;
@@ -440,8 +441,10 @@ if ( ! function_exists( 'bcdump' ) ) {
 		echo '<pre style="font-size:11px;">';
 
 		if ( is_array( $var ) || is_object( $var ) ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo htmlentities( print_r( $var, true ) );
 		} elseif ( is_string( $var ) ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo "string(" . strlen( $var ) . ") \"" . htmlentities( $var ) . "\"\n";
 		} else {
 			var_dump( $var );
@@ -588,7 +591,7 @@ function fed_show_notifications_message() {
 	?>
 	<div class="error notice">
 		<p>
-			<?php echo fed_convert_array_value_to_string( $_SESSION['fed_admin_errors'], ',' ); ?>
+			<?php echo esc_html( fed_convert_array_value_to_string( $_SESSION['fed_admin_errors'], ',' ) ); ?>
 		</p>
 	</div>
 	<?php
@@ -672,7 +675,7 @@ function fed_show_alert_message( $message, $type = 'danger' ) {
 	<div class="fed_alert_notification flex items-center justify-between p-4 my-4 rounded-2xl border shadow-2xs transition-all duration-300 <?php echo esc_attr( $bg_class ); ?>" role="alert">
 		<div class="flex items-center gap-3 min-w-0">
 			<div class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 <?php echo esc_attr( $icon_bg ); ?>">
-				<?php echo $icon_svg; ?>
+				<?php echo $icon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			</div>
 			<div class="min-w-0 text-xs sm:text-sm font-semibold leading-normal">
 				<?php echo wp_kses_post( $message ); ?>
@@ -782,7 +785,7 @@ function fed_get_current_user( $key = 'id' ) {
  * @return false|string
  */
 function fed_timestamp_to_date_format( $timestamp ) {
-	return $timestamp && ! empty( $timestamp ) ? date( get_option( 'date_format' ), $timestamp ) : 'ERROR';
+	return $timestamp && ! empty( $timestamp ) ? gmdate( get_option( 'date_format' ), $timestamp ) : 'ERROR';
 }
 
 /**
@@ -793,7 +796,7 @@ function fed_timestamp_to_date_format( $timestamp ) {
  * @return false|string
  */
 function fed_get_formatted_date( $date ) {
-	return $date && ! empty( $date ) ? date( get_option( 'date_format' ), strtotime( $date ) ) : 'ERROR';
+	return $date && ! empty( $date ) ? gmdate( get_option( 'date_format' ), strtotime( $date ) ) : 'ERROR';
 }
 
 

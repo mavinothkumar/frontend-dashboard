@@ -88,7 +88,7 @@ function fed_process_update_user_profile( $post ) {
 	$user_obj = get_userdata( $current_user->ID );
 
 	if ( ! $user_obj ) {
-		return new WP_Error( 'invalid_user_id', __( 'Invalid user ID.' ) );
+		return new WP_Error( 'invalid_user_id', __( 'Invalid user ID.', 'frontend-dashboard' ) );
 	}
 
 	$core_keys = array(

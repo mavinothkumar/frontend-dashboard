@@ -51,7 +51,7 @@ if ( ! class_exists( 'FEDEmail' ) ) {
 			?>
 			<div class="bc_fed max-w-4xl mx-auto space-y-6">
 				<!-- Settings Form -->
-				<form method="post" id="fed_email_settings_form" class="fed_ajax space-y-6" action="<?php echo $ajax_action; ?>">
+				<form method="post" id="fed_email_settings_form" class="fed_ajax space-y-6" action="<?php echo esc_url( $ajax_action ); ?>">
 					<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
 
 					<!-- Main Settings Card -->
@@ -260,7 +260,7 @@ if ( ! class_exists( 'FEDEmail' ) ) {
 							</span>
 							<input type="email" id="fed_test_email_recipient" placeholder="your-email@domain.com" value="<?php echo esc_attr( wp_get_current_user()->user_email ); ?>" class="w-full text-xs text-slate-800 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-emerald-500 transition-all outline-none" style="padding-left: 38px !important; min-height: 42px !important; height: 42px !important;" />
 						</div>
-						<button type="button" id="fed_send_test_email_btn" data-url="<?php echo $test_action; ?>" class="fed-btn-secondary px-5 py-2.5 rounded-xl font-bold text-xs inline-flex items-center justify-center gap-2 cursor-pointer transition-all border border-slate-200 hover:bg-slate-100" style="min-height: 42px !important; height: 42px !important;">
+						<button type="button" id="fed_send_test_email_btn" data-url="<?php echo esc_url( $test_action ); ?>" class="fed-btn-secondary px-5 py-2.5 rounded-xl font-bold text-xs inline-flex items-center justify-center gap-2 cursor-pointer transition-all border border-slate-200 hover:bg-slate-100" style="min-height: 42px !important; height: 42px !important;">
 							<i class="fas fa-paper-plane text-emerald-600"></i>
 							<span><?php esc_html_e( 'Send Test Email', 'frontend-dashboard' ); ?></span>
 						</button>
@@ -422,10 +422,12 @@ if ( ! class_exists( 'FEDEmail' ) ) {
 				wp_send_json_error( array( 'message' => __( 'Please provide a valid recipient email address.', 'frontend-dashboard' ) ) );
 			}
 
+			/* translators: %s: site name */
 			$subject = sprintf( __( '[%s] Test Email from Frontend Dashboard', 'frontend-dashboard' ), get_bloginfo( 'name' ) );
 			$via     = fed_get_data( 'via', $this->settings, 'WP_MAIL' );
+			/* translators: 1: site name, 2: routing method, 3: sender name, 4: sender email */
 			$body    = sprintf(
-				__( "Hello!\n\nThis is a confirmation test email sent from Frontend Dashboard on %s.\n\nRouting Method: %s\nSender: %s <%s>\n\nIf you received this, your email configuration is working perfectly!", 'frontend-dashboard' ),
+				__( "Hello!\n\nThis is a confirmation test email sent from Frontend Dashboard on %1\$s.\n\nRouting Method: %2\$s\nSender: %3\$s <%4\$s>\n\nIf you received this, your email configuration is working perfectly!", 'frontend-dashboard' ),
 				get_bloginfo( 'name' ),
 				esc_html( $via ),
 				esc_html( fed_get_data( 'credentials.from_name', $this->settings, get_bloginfo( 'name' ) ) ),
@@ -448,8 +450,10 @@ if ( ! class_exists( 'FEDEmail' ) ) {
 			remove_action( 'wp_mail_failed', $failed_handler );
 
 			if ( $sent ) {
+				/* translators: %s: recipient email address */
+				$success_msg = sprintf( __( 'Test email sent successfully to %s! Please check your inbox.', 'frontend-dashboard' ), esc_html( $recipient ) );
 				wp_send_json_success( array(
-					'message' => sprintf( __( 'Test email sent successfully to %s! Please check your inbox.', 'frontend-dashboard' ), esc_html( $recipient ) ),
+					'message' => $success_msg,
 				) );
 			} else {
 				$msg = ! empty( $mail_error ) ? $mail_error : __( 'wp_mail() returned false. Please verify your SMTP host, port, username, password, and encryption protocol.', 'frontend-dashboard' );

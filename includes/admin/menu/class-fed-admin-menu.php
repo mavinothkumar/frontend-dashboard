@@ -367,10 +367,16 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 			</style>
 
 			<div class="bc_fed fed-admin-wrap w-full max-w-none px-4 sm:px-8 py-6 sm:py-8 font-sans text-slate-800">
-				<?php echo fed_loader(); ?>
+				<?php
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo fed_loader();
+				?>
 
 				<?php if ( function_exists( 'fed_render_addon_compatibility_banner' ) ) : ?>
-					<?php echo fed_render_addon_compatibility_banner(); ?>
+					<?php
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					echo fed_render_addon_compatibility_banner();
+					?>
 				<?php endif; ?>
 
 				<!-- Toast Notification Element -->

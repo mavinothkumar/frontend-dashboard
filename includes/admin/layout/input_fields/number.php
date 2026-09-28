@@ -27,7 +27,10 @@ function fed_admin_input_fields_number( $row, $action, $menu_options ) {
 			  action="<?php echo esc_url( admin_url( 'admin-ajax.php?action=fed_admin_setting_up_form' ) ); ?>">
 
 			<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
-			<?php echo fed_loader(); ?>
+			<?php
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo fed_loader();
+			?>
 
 			<!-- Card: Basic Field Settings -->
 			<div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-6 sm:space-y-7">
@@ -56,17 +59,26 @@ function fed_admin_input_fields_number( $row, $action, $menu_options ) {
 					<div class="grid grid-cols-1 sm:grid-cols-3 gap-5 pt-2">
 						<div class="space-y-2">
 							<label class="block text-xs font-bold text-slate-700"><?php esc_html_e( 'Min Value', 'frontend-dashboard' ); ?></label>
-							<?php echo fed_input_box( 'input_min', array( 'value' => $min_val ), 'number' ); ?>
+							<?php
+							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							echo fed_input_box( 'input_min', array( 'value' => $min_val ), 'number' );
+							?>
 							<p class="text-[11px] text-slate-400 m-0"><?php esc_html_e( 'Minimum allowed number.', 'frontend-dashboard' ); ?></p>
 						</div>
 						<div class="space-y-1.5">
 							<label class="block text-xs font-bold text-slate-700"><?php esc_html_e( 'Max Value', 'frontend-dashboard' ); ?></label>
-							<?php echo fed_input_box( 'input_max', array( 'value' => $max_val ), 'number' ); ?>
+							<?php
+							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							echo fed_input_box( 'input_max', array( 'value' => $max_val ), 'number' );
+							?>
 							<p class="text-[11px] text-slate-400 m-0"><?php esc_html_e( 'Maximum allowed number.', 'frontend-dashboard' ); ?></p>
 						</div>
 						<div class="space-y-1.5">
 							<label class="block text-xs font-bold text-slate-700"><?php esc_html_e( 'Step Increment', 'frontend-dashboard' ); ?></label>
-							<?php echo fed_input_box( 'input_step', array( 'value' => $step_val ), 'number' ); ?>
+							<?php
+							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							echo fed_input_box( 'input_step', array( 'value' => $step_val ), 'number' );
+							?>
 							<p class="text-[11px] text-slate-400 m-0"><?php esc_html_e( 'Step interval (e.g. 1, 5, 0.1).', 'frontend-dashboard' ); ?></p>
 						</div>
 					</div>

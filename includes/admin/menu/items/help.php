@@ -75,7 +75,12 @@ if ( ! function_exists( 'fed_get_help_menu' ) ) {
 			),
 			array(
 				'q' => __( 'Where can I find developer hooks, filters, and API documentation?', 'frontend-dashboard' ),
-				'a' => __( 'Visit our official documentation hub at <a href="' . esc_url( $faq_domain_url ) . '" target="_blank" style="color: #0284c7; font-weight: 600;">' . esc_html( $faq_domain_display ) . '</a>. You will find complete reference guides for <code>fed_payment_gateways</code>, <code>fed_registered_payment_gateways</code>, <code>fed_add_main_sub_menu</code>, custom form submission hooks, and REST APIs.', 'frontend-dashboard' ),
+				'a' => sprintf(
+					/* translators: 1: documentation URL, 2: domain name */
+					__( 'Visit our official documentation hub at <a href="%1$s" target="_blank" style="color: #0284c7; font-weight: 600;">%2$s</a>. You will find complete reference guides for <code>fed_payment_gateways</code>, <code>fed_registered_payment_gateways</code>, <code>fed_add_main_sub_menu</code>, custom form submission hooks, and REST APIs.', 'frontend-dashboard' ),
+					esc_url( $faq_domain_url ),
+					esc_html( $faq_domain_display )
+				),
 			),
 		);
 		?>
@@ -100,6 +105,7 @@ if ( ! function_exists( 'fed_get_help_menu' ) ) {
 
 					<div>
 						<a href="<?php echo esc_url( $faq_domain_url ); ?>" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 8px; background: #10b981; border: 1px solid #059669; padding: 10px 18px; border-radius: 8px; color: #ffffff; font-size: 13.5px; font-weight: 700; text-decoration: none; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35); transition: all 0.2s ease;">
+							<?php /* translators: %s: domain name */ ?>
 							<i class="fas fa-external-link-alt"></i> <?php echo esc_html( sprintf( __( 'Visit %s', 'frontend-dashboard' ), $faq_domain_display ) ); ?>
 						</a>
 					</div>
@@ -123,7 +129,10 @@ if ( ! function_exists( 'fed_get_help_menu' ) ) {
 								</span>
 							</div>
 							<p style="margin: 4px 0 0 0; font-size: 13px; color: #64748b;">
-								<?php echo esc_html( sprintf( __( 'We maintain complete, up-to-date documentation and detailed step-by-step FAQs at %s.', 'frontend-dashboard' ), $faq_domain_display ) ); ?>
+								<?php
+								/* translators: %s: domain name */
+								echo esc_html( sprintf( __( 'We maintain complete, up-to-date documentation and detailed step-by-step FAQs at %s.', 'frontend-dashboard' ), $faq_domain_display ) );
+								?>
 							</p>
 						</div>
 					</div>
@@ -188,7 +197,10 @@ if ( ! function_exists( 'fed_get_help_menu' ) ) {
 							<span><?php esc_html_e( 'Core Shortcodes Reference', 'frontend-dashboard' ); ?></span>
 						</h3>
 						<span style="font-size: 12px; color: #64748b; font-weight: 600;">
-							<?php echo sprintf( esc_html__( '%d Shortcodes', 'frontend-dashboard' ), count( $shortcodes ) ); ?>
+							<?php
+							/* translators: %d: number of shortcodes */
+							echo sprintf( esc_html__( '%d Shortcodes', 'frontend-dashboard' ), count( $shortcodes ) );
+							?>
 						</span>
 					</div>
 
@@ -269,8 +281,8 @@ if ( ! function_exists( 'fed_get_help_menu' ) ) {
 						<a href="https://buffercode.com/plugin/frontend-dashboard" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 7px; background: #ffffff; border: 1px solid #cbd5e1; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #334155; text-decoration: none;">
 							<i class="fas fa-comments" style="color: #0284c7;"></i> <?php esc_html_e( 'Live Chat', 'frontend-dashboard' ); ?>
 						</a>
-						<a href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#new-post" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 7px; background: #033333; color: #ffffff; border: 1px solid #033333; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none;">
-							<i class="fas fa-star" style="color: #f59e0b;"></i> <?php esc_html_e( 'Rate Plugin', 'frontend-dashboard' ); ?>
+						<a href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/#new-post" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 7px; background: #033333; color: #ffffff; border: 1px solid #033333; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none;">
+							<i class="fas fa-star" style="color: #f59e0b;"></i> <?php esc_html_e( 'Leave a Review', 'frontend-dashboard' ); ?>
 						</a>
 					</div>
 				</div>

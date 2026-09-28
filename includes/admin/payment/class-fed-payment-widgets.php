@@ -39,10 +39,9 @@ if ( ! class_exists( 'FEDPaymentWidgets' ) ) {
 			$created  = array();
 			$amount   = array();
 			$table    = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
-			$query    = "SELECT DATE_FORMAT(created,'%Y-%m-%d') as created, currency, SUM(amount) as amount FROM $table GROUP BY DATE_FORMAT(created,'%Y-%m-%d')";
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$payments = $wpdb->get_results( "SELECT DATE_FORMAT(created,'%Y-%m-%d') as created, currency, SUM(amount) as amount FROM {$table} GROUP BY DATE_FORMAT(created,'%Y-%m-%d')", ARRAY_A );
 			$currency = 'USD';
-
-			$payments = $wpdb->get_results( $query, ARRAY_A );
 
 			if ( $payments && count( $payments ) > 0 ) {
 				foreach ( $payments as $index => $payment ) {
@@ -59,10 +58,10 @@ if ( ! class_exists( 'FEDPaymentWidgets' ) ) {
                     var payment_stat = new Chart(ctx, {
                         type: 'bar',
                         data: {
-                            labels: <?php echo json_encode( $created ) ?>,
+                            labels: <?php echo wp_json_encode( $created ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>,
                             datasets: [{
-                                label: 'Total (<?php echo $currency ?>)',
-                                data: <?php echo json_encode( $amount ) ?>,
+                                label: 'Total (<?php echo esc_js( $currency ); ?>)',
+                                data: <?php echo wp_json_encode( $amount ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>,
                                 backgroundColor: 'rgba(10, 170, 170,1)'
                             }]
                         },
@@ -72,15 +71,14 @@ if ( ! class_exists( 'FEDPaymentWidgets' ) ) {
                                     ticks: {
                                         beginAtZero: true
                                     }
-                                }]
+                                    }]
                             }
                         }
                     });
 				</script>
 				<?php
-			}
-			else {
-				esc_attr_e( 'No payment received yet', 'frontend-dashboard' );
+			} else {
+				esc_html_e( 'No payment received yet', 'frontend-dashboard' );
 			}
 		}
 
@@ -91,11 +89,17 @@ if ( ! class_exists( 'FEDPaymentWidgets' ) ) {
 			if ( fed_get_current_screen_id() === 'dashboard' ) {
 				wp_enqueue_script(
 					'fed_payment_chart',
-					'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js', array(), '1'
+					BC_FED_PLUGIN_URL . 'assets/admin/js/chart.min.js',
+					array(),
+					BC_FED_PLUGIN_VERSION,
+					true
 				);
 				wp_enqueue_style(
 					'fed_payment_chart',
-					'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css', array(), '1', 'all'
+					BC_FED_PLUGIN_URL . 'assets/admin/css/chart.min.css',
+					array(),
+					BC_FED_PLUGIN_VERSION,
+					'all'
 				);
 			}
 		}

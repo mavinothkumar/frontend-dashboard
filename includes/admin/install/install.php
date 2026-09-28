@@ -56,6 +56,7 @@ function fed_next_updates() {
 	}
 
 	global $wpdb;
+	// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 	$menu_table      = $wpdb->prefix . BC_FED_TABLE_MENU;
 	$menu_meta_table = $wpdb->prefix . BC_FED_TABLE_MENU_META;
 	$menu_query      = $wpdb->get_results( "SELECT * from {$menu_table} LIMIT 1" );
@@ -64,7 +65,7 @@ function fed_next_updates() {
 		$wpdb->query( "ALTER TABLE {$menu_table} ADD parent_id VARCHAR(10) NOT NULL DEFAULT '0'" );
 	}
 
-	if ( $wpdb->get_var( "SHOW TABLES LIKE '{$menu_meta_table}'" ) != $menu_meta_table ) {
+	if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $menu_meta_table ) ) ) != $menu_meta_table ) {
 		$menu_meta = 'CREATE TABLE `' . $menu_meta_table . "` (
 		  meta_id BIGINT(20) NOT NULL AUTO_INCREMENT,
 		  menu_id BIGINT(20) NOT NULL,
@@ -76,6 +77,7 @@ function fed_next_updates() {
 
 		dbDelta( $menu_meta );
 	}
+	// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 
 }
 
@@ -95,7 +97,8 @@ function fed_plugin_activation() {
 
 	$charset_collate = $wpdb->get_charset_collate();
 
-	if ( $wpdb->get_var( "SHOW TABLES LIKE '{$user_profile_table}'" ) != $user_profile_table ) {
+	// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
+	if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $user_profile_table ) ) ) != $user_profile_table ) {
 		$user_profile = 'CREATE TABLE `' . $user_profile_table . "` (
 		  id BIGINT(20) NOT NULL AUTO_INCREMENT,
 		  input_meta char(32) NOT NULL,
@@ -128,7 +131,7 @@ function fed_plugin_activation() {
 
 		dbDelta( $user_profile );
 	}
-	if ( $wpdb->get_var( "SHOW TABLES LIKE '{$post_table}'" ) != $post_table ) {
+	if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $post_table ) ) ) != $post_table ) {
 		$post = 'CREATE TABLE `' . $post_table . "` (
 		  id BIGINT(20) NOT NULL AUTO_INCREMENT,
 		  input_meta char(32) NOT NULL,
@@ -156,7 +159,7 @@ function fed_plugin_activation() {
 		  ) $charset_collate;";
 		dbDelta( $post );
 	}
-	if ( $wpdb->get_var( "SHOW TABLES LIKE '{$menu_table}'" ) != $menu_table ) {
+	if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $menu_table ) ) ) != $menu_table ) {
 		$menu = 'CREATE TABLE `' . $menu_table . "` (
 		  id BIGINT(20) NOT NULL AUTO_INCREMENT,
 		  menu_slug char(32) NOT NULL,
@@ -174,7 +177,7 @@ function fed_plugin_activation() {
 		dbDelta( $menu );
 	}
 
-	if ( $wpdb->get_var( "SHOW TABLES LIKE '{$payment_table}'" ) != $payment_table ) {
+	if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $payment_table ) ) ) != $payment_table ) {
 		$payment = 'CREATE TABLE `' . $payment_table . "` (
 		  id BIGINT(20) NOT NULL AUTO_INCREMENT,
 		  user_id BIGINT(20) NOT NULL,
@@ -194,7 +197,7 @@ function fed_plugin_activation() {
 		dbDelta( $payment );
 	}
 
-	if ( $wpdb->get_var( "SHOW TABLES LIKE '{$payment_items_table}'" ) != $payment_items_table ) {
+	if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $payment_items_table ) ) ) != $payment_items_table ) {
 		$payment_items_table = 'CREATE TABLE `' . $payment_items_table . "` (
 		  payment_item_id BIGINT(20) NOT NULL AUTO_INCREMENT,
 		  payment_id BIGINT(20) NOT NULL,
@@ -250,9 +253,10 @@ function fed_plugin_activation() {
 
 	// Clean up legacy redundant fed_logs table if it exists
 	$legacy_logs_table = $wpdb->prefix . 'fed_logs';
-	if ( $wpdb->get_var( "SHOW TABLES LIKE '{$legacy_logs_table}'" ) === $legacy_logs_table ) {
-		$wpdb->query( "DROP TABLE IF EXISTS `{$legacy_logs_table}`" );
+	if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $legacy_logs_table ) ) ) === $legacy_logs_table ) {
+		$wpdb->query( "DROP TABLE IF EXISTS `{$wpdb->prefix}fed_logs`" );
 	}
+	// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 
 	update_option( 'fed_plugin_version', BC_FED_PLUGIN_VERSION );
 
@@ -263,6 +267,7 @@ function fed_plugin_activation() {
  */
 function fed_plugin_data() {
 	global $wpdb;
+	// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	$fed_get_user_roles = array_keys( fed_get_user_roles() );
 	$profile_data       = fed_get_user_profile_default_meta_values();
 
@@ -295,6 +300,7 @@ function fed_plugin_data() {
 			)
 		);
 	}
+	// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 }
 
@@ -521,9 +527,11 @@ function fed_admin_notice() {
 						?>
 						<div class="notice notice-info">
 							<div class="fed_flex_start_center">
-								<img width="50px" src="<?php echo $plugin->thumbnail; ?>"/>
+								<img width="50px" src="<?php echo esc_url( $plugin->thumbnail ); ?>"/>
 								<h2 class="fed_p_l_20">
-									<?php echo $plugin->title . ' has been updated to newer version ' . $plugin->version . ' kindly <a href="' . $plugin->download_url . '">Update</a>'; ?>
+									<?php
+									echo esc_html( $plugin->title ) . ' ' . esc_html__( 'has been updated to newer version', 'frontend-dashboard' ) . ' ' . esc_html( $plugin->version ) . ' ' . esc_html__( 'kindly', 'frontend-dashboard' ) . ' <a href="' . esc_url( $plugin->download_url ) . '">' . esc_html__( 'Update', 'frontend-dashboard' ) . '</a>';
+									?>
 								</h2>
 							</div>
 						</div>

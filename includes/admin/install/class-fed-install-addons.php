@@ -5,6 +5,10 @@
  * @package Frontend Dashboard.
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 if ( ! class_exists( 'FEDInstallAddons' ) ) {
 	/**
 	 * Class FEDInstallAddons
@@ -60,7 +64,7 @@ if ( ! class_exists( 'FEDInstallAddons' ) ) {
 		public function activated_plugin( $plugin, $network_wide ) {
 			$page = isset( $_GET, $_GET['fed_plugin_custom_activate'] ) && 'on' === $_GET['fed_plugin_custom_activate'] ? true : false;
 			if ( $page ) {
-				wp_redirect( fed_menu_page_url( 'fed_plugin_pages' ) );
+				wp_safe_redirect( fed_menu_page_url( 'fed_plugin_pages' ) );
 				exit();
 			}
 		}

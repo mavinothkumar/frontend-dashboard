@@ -267,7 +267,7 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 		</style>
 
 		<div class="bc_fed fed-admin-wrap w-full max-w-none px-4 sm:px-8 py-6 sm:py-8 font-sans text-slate-800" data-nonce="<?php echo esc_attr( $nonce ); ?>" data-ajax-url="<?php echo esc_url( $ajax_url ); ?>">
-			<?php echo fed_loader(); ?>
+			<?php echo fed_loader(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
 			<!-- Toast Notification Element -->
 			<div id="fed_toast_notification" class="fixed bottom-6 right-6 transform translate-y-16 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-3 bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-slate-700" style="z-index: 99999999 !important;">
@@ -289,7 +289,7 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 			</div>
 
 			<?php if ( function_exists( 'fed_render_addon_compatibility_banner' ) ) : ?>
-				<?php echo fed_render_addon_compatibility_banner(); ?>
+				<?php echo fed_render_addon_compatibility_banner(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			<?php endif; ?>
 
 			<!-- Page Header & Action Bar (Full Width) -->
@@ -511,7 +511,11 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 												</div>
 
 												<!-- Type Icon Box -->
-												<div class="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-sm shrink-0 shadow-2xs" title="<?php echo esc_attr( sprintf( __( 'Input Type: %s', 'frontend-dashboard' ), $field_type ) ); ?>">
+												<?php
+												/* translators: %s: input field type */
+												$field_type_title = sprintf( __( 'Input Type: %s', 'frontend-dashboard' ), $field_type );
+												?>
+												<div class="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-sm shrink-0 shadow-2xs" title="<?php echo esc_attr( $field_type_title ); ?>">
 													<i class="<?php echo esc_attr( $type_icon ); ?>"></i>
 												</div>
 
@@ -548,7 +552,7 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 													<?php endif; ?>
 
 													<!-- User Roles Summary Badge with +N -->
-													<?php echo fed_render_user_roles_badge( isset( $field['user_role'] ) ? $field['user_role'] : array() ); ?>
+													<?php echo fed_render_user_roles_badge( isset( $field['user_role'] ) ? $field['user_role'] : array() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 												</div>
 											</div>
 

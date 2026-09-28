@@ -68,7 +68,8 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 			$wpdb->prefix . ( defined( 'BC_FED_TABLE_ACTIVITY_LOG' ) ? BC_FED_TABLE_ACTIVITY_LOG : 'fed_activity_log' ) => array( 'label' => 'Activity & Audit Log', 'schema' => 'BC_FED_TABLE_ACTIVITY_LOG' ),
 		);
 
-		$db_existing_tables = $wpdb->get_col( "SHOW TABLES LIKE '{$wpdb->prefix}fed%'" );
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$db_existing_tables = $wpdb->get_col( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $wpdb->prefix . 'fed' ) . '%' ) );
 		$all_table_keys     = array_unique( array_merge( array_keys( $expected_core_tables ), $db_existing_tables ) );
 
 		$tables_data = array();
@@ -120,7 +121,7 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 		// ----------------------------------------------------
 		// 4. DATA GATHERING: Options Store
 		// ----------------------------------------------------
-		$options_query = $wpdb->get_results( "SELECT option_id, option_name, option_value, autoload FROM `{$wpdb->options}` WHERE option_name LIKE 'fed%' OR option_name LIKE 'fed_admin_%' ORDER BY option_name ASC" );
+		$options_query = $wpdb->get_results( $wpdb->prepare( "SELECT option_id, option_name, option_value, autoload FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s ORDER BY option_name ASC", $wpdb->esc_like( 'fed' ) . '%', $wpdb->esc_like( 'fed_admin_' ) . '%' ) );
 		$total_options = count( $options_query );
 
 		// ----------------------------------------------------
@@ -160,9 +161,10 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 		// ----------------------------------------------------
 		$activity_log_table = $wpdb->prefix . ( defined( 'BC_FED_TABLE_ACTIVITY_LOG' ) ? BC_FED_TABLE_ACTIVITY_LOG : 'fed_activity_log' );
 		$db_activity_logs   = array();
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$activity_log_table}'" ) === $activity_log_table ) {
+		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $activity_log_table ) ) === $activity_log_table ) {
 			$db_activity_logs = $wpdb->get_results( "SELECT * FROM `{$activity_log_table}` ORDER BY id DESC LIMIT 500", ARRAY_A );
 		}
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 		// Memory-efficient reader: safely extract the most recent N lines even if log file is 10MB+
 		if ( ! function_exists( 'fed_tail_file' ) ) {
@@ -186,6 +188,7 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 				}
 
 				// Large files: seek backward in chunks to avoid memory spikes
+				// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 				$handle = fopen( $filepath, 'rb' );
 				if ( ! $handle ) {
 					return array();
@@ -200,10 +203,12 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 					$readSize = min( $chunkSize, $pos );
 					$pos     -= $readSize;
 					fseek( $handle, $pos );
+					// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fread
 					$chunk     = fread( $handle, $readSize );
 					$buffer    = $chunk . $buffer;
 					$lineCount = substr_count( $buffer, "\n" );
 				}
+				// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 				fclose( $handle );
 
 				$all = explode( "\n", trim( $buffer ) );
@@ -432,7 +437,7 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 		</style>
 
 		<div class="bc_fed fed-admin-wrap w-full max-w-none px-4 sm:px-8 py-6 sm:py-8 font-sans text-slate-800" data-nonce="<?php echo esc_attr( wp_create_nonce( 'fed_nonce' ) ); ?>" data-ajax-url="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>">
-			<?php echo fed_loader(); ?>
+			<?php echo fed_loader(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
 			<!-- Toast Notification Element -->
 			<div id="fed_toast_notification" class="fixed bottom-6 right-6 transform translate-y-16 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-3 bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-slate-700" style="z-index: 99999999 !important;">
@@ -871,7 +876,7 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 													<?php echo esc_html( strtoupper( $opt->autoload ) ); ?>
 												</span>
 											</td>
-											<td class="py-3 px-4 text-center font-mono text-slate-500"><?php echo size_format( $val_len, 2 ); ?></td>
+											<td class="py-3 px-4 text-center font-mono text-slate-500"><?php echo esc_html( size_format( $val_len, 2 ) ); ?></td>
 											<td class="py-3 px-4 text-right">
 												<button type="button"
 														class="fed-trigger-delete-option p-2 rounded-xl text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
@@ -928,9 +933,13 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 												<?php if ( $cron['is_past'] ) : ?>
 													<span class="font-bold text-amber-600 flex items-center gap-1"><i class="fas fa-exclamation-circle text-[10px]"></i> <?php esc_html_e( 'Due now / Overdue', 'frontend-dashboard' ); ?></span>
 												<?php else : ?>
-													<span class="font-mono text-slate-700"><?php echo sprintf( __( 'In %s', 'frontend-dashboard' ), $cron['diff'] ); ?></span>
+													<?php
+													/* translators: %s: time difference string */
+													$cron_diff_label = sprintf( __( 'In %s', 'frontend-dashboard' ), $cron['diff'] );
+													?>
+													<span class="font-mono text-slate-700"><?php echo esc_html( $cron_diff_label ); ?></span>
 												<?php endif; ?>
-												<span class="block text-[10px] font-mono text-slate-400"><?php echo date_i18n( 'M j, Y H:i:s', $cron['timestamp'] ); ?></span>
+												<span class="block text-[10px] font-mono text-slate-400"><?php echo esc_html( date_i18n( 'M j, Y H:i:s', $cron['timestamp'] ) ); ?></span>
 											</td>
 											<td class="py-3.5 px-4 text-right">
 												<button type="button"
@@ -1215,7 +1224,11 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 									<div class="flex items-center gap-2 flex-wrap">
 										<h3 class="text-sm font-bold text-slate-900 m-0"><?php esc_html_e( 'Raw File Log Console', 'frontend-dashboard' ); ?></h3>
 										<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
-											<i class="fas fa-eye text-[9px] mr-1 text-indigo-600"></i> <?php echo sprintf( esc_html__( 'Showing latest %d lines', 'frontend-dashboard' ), count( $log_lines ) ); ?>
+											<?php
+											/* translators: %d: number of log lines */
+											$log_lines_label = sprintf( esc_html__( 'Showing latest %d lines', 'frontend-dashboard' ), count( $log_lines ) );
+											?>
+											<i class="fas fa-eye text-[9px] mr-1 text-indigo-600"></i> <?php echo esc_html( $log_lines_label ); ?>
 										</span>
 										<?php if ( file_exists( $log_file ) && filesize( $log_file ) > 1024 * 1024 ) : ?>
 											<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200">

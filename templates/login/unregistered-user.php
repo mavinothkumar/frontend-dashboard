@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 /**
  * Unregistered User Authentication Card (Login, Register, Forgot Password Tabs)
  *
@@ -65,7 +68,10 @@ if ( $menu ) {
 				cursor: pointer;
 			}
 		</style>
-		<?php echo fed_loader(); ?>
+		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo fed_loader();
+		?>
 		
 		<div class="flex justify-center">
 			<div class="w-full max-w-md">
@@ -83,7 +89,7 @@ if ( $menu ) {
 							<a href="<?php echo esc_url( add_query_arg( array( 'page_type' => esc_attr( $key ) ), fed_get_current_page_url() ) ); ?>"
 								class="flex-1 text-center py-2.5 px-3 rounded-xl text-sm transition-all duration-200 <?php echo esc_attr( $tab_class ); ?>"
 								id="<?php echo esc_attr( $key ); ?>">
-								<?php esc_html_e( fed_get_data( 'label', $menu_item ), 'frontend-dashboard' ); ?>
+								<?php echo esc_html( fed_get_data( 'label', $menu_item ) ); ?>
 							</a>
 							<?php
 						}
@@ -114,8 +120,14 @@ if ( $menu ) {
 										$content_name = ! empty( $content['name'] ) && ( null === $label ) ? fed_show_form_label( $content ) : '';
 										echo wp_kses_post( $content_name );
 										?>
-										<?php echo( $content['input'] ); ?>
-										<?php echo null !== $label ? fed_show_form_label( $content ) : ''; ?>
+										<?php
+										// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+										echo( $content['input'] );
+										?>
+										<?php
+										// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+										echo null !== $label ? fed_show_form_label( $content ) : '';
+										?>
 									</div>
 									<?php
 								}

@@ -31,7 +31,10 @@ function fed_admin_post_settings_tab( $fed_admin_options ) {
 
 		<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
 
-		<?php echo fed_loader(); ?>
+		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo fed_loader();
+		?>
 
 		<input type="hidden"
 				name="fed_admin_unique"
@@ -51,6 +54,7 @@ function fed_admin_post_settings_tab( $fed_admin_options ) {
 					<div class="col-md-4">
 						<div class="col-md-6">
 							<?php
+							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							echo fed_input_box(
 								'fed_post_status',
 								array(
@@ -69,6 +73,7 @@ function fed_admin_post_settings_tab( $fed_admin_options ) {
 					<div class="col-md-4">
 						<div class="col-md-10">
 							<?php
+							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							echo fed_input_box(
 								'fed_editor_type',
 								array(
