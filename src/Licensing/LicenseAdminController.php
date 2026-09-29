@@ -721,7 +721,12 @@ class LicenseAdminController {
 			<div class="fed-lic-header">
 				<div class="fed-lic-header-title">
 					<h1><span>🔑</span> <?php esc_html_e( 'Pro Licenses & Updates Hub', 'frontend-dashboard' ); ?></h1>
-					<p><?php printf( esc_html__( 'Manage your verified license keys and automated updates for active domain: %s', 'frontend-dashboard' ), '<strong>' . esc_html( $site_domain ) . '</strong>' ); ?></p>
+					<p>
+						<?php
+						/* translators: %s: Current site domain name */
+						printf( esc_html__( 'Manage your verified license keys and automated updates for active domain: %s', 'frontend-dashboard' ), '<strong>' . esc_html( $site_domain ) . '</strong>' );
+						?>
+					</p>
 				</div>
 				<div class="fed-lic-header-tools">
 					<!-- Expandable Search Box -->

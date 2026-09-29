@@ -35,9 +35,6 @@ class LicenseManager {
 	 * @param \FED\Hooks\HookLoader|null $loader
 	 */
 	public function register_hooks( $loader = null ) {
-		// Initialize auto-updater
-		PluginUpdater::instance()->register_hooks();
-
 		// Schedule weekly background check cron if not scheduled
 		if ( ! wp_next_scheduled( self::CRON_HOOK ) ) {
 			wp_schedule_event( time() + HOUR_IN_SECONDS, 'weekly', self::CRON_HOOK );
@@ -127,8 +124,8 @@ class LicenseManager {
 			);
 			update_option( self::OPTION_KEY, $licenses );
 
-			// Clear update transients
-			delete_site_transient( 'update_plugins' );
+			// Clear plugin caches
+			wp_clean_plugins_cache();
 
 			return array(
 				'success' => true,
@@ -173,8 +170,8 @@ class LicenseManager {
 		unset( $licenses[ $slug ] );
 		update_option( self::OPTION_KEY, $licenses );
 
-		// Clear update transients
-		delete_site_transient( 'update_plugins' );
+		// Clear plugin caches
+		wp_clean_plugins_cache();
 
 		return array(
 			'success' => true,
@@ -282,7 +279,8 @@ class LicenseManager {
 			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'frontend-dashboard' ) ), 403 );
 		}
 
-		delete_site_transient( 'update_plugins' );
+		wp_clean_plugins_cache();
+		do_action( 'fed_check_pro_addon_updates' );
 		wp_update_plugins();
 
 		wp_send_json_success( array(
