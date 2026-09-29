@@ -108,6 +108,10 @@ class Plugin {
 		// Register Frontend Media Controller
 		$media_controller = new \FED\Controllers\Media\MediaController();
 		$media_controller->register_hooks( $this->loader );
+
+		// Register Pro Extension Licensing & Update Hub
+		$license_manager = \FED\Licensing\LicenseManager::instance();
+		$license_manager->register_hooks( $this->loader );
 	}
 
 	private function load_dependencies() {

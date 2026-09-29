@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.0.1
+Stable tag: 3.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -140,6 +140,10 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 
 == Changelog ==
+
+= 3.0.2 =
+* Enhancement: Extended hook architecture to support modular extension registration, automated update checks, and decoupled addon management.
+* Performance: Optimized admin menu filter pipeline and background cron worker workflows.
 
 = 3.0.1 =
 * Fix: WordPress.org plugin review and security compliance improvements.
