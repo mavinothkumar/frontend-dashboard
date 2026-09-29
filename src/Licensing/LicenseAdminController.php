@@ -860,6 +860,12 @@ class LicenseAdminController {
 											<?php if ( ! empty( $addon['doc_url'] ) ) : ?>
 												<a href="<?php echo esc_url( $addon['doc_url'] ); ?>" target="_blank" rel="noopener noreferrer" style="color: #64748b;"><?php esc_html_e( 'Docs ↗', 'frontend-dashboard' ); ?></a>
 											<?php endif; ?>
+											<?php if ( ! empty( $addon['settings_url'] ) ) : ?>
+												<span class="sep">•</span>
+												<a href="<?php echo esc_url( $addon['settings_url'] ); ?>" style="color: #4f46e5; font-weight: 700; text-decoration: none;">
+													<span>⚙️ <?php esc_html_e( 'Configure Settings →', 'frontend-dashboard' ); ?></span>
+												</a>
+											<?php endif; ?>
 										</div>
 									</div>
 								</div>
