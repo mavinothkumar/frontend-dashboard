@@ -143,6 +143,7 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 = 3.0.2 =
 * Enhancement: Extended hook architecture to support modular extension registration, automated update checks, and decoupled addon management.
+* Enhancement: Modernized Extensions Hub interface with smart section categorization, live search filtering, native confirmation dialogs, and real-time status feedback.
 * Performance: Optimized admin menu filter pipeline and background cron worker workflows.
 
 = 3.0.1 =
