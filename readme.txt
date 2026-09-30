@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.0.3
+Stable tag: 3.0.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -141,6 +141,11 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 == Changelog ==
 
+= 3.0.4 =
+* Fix: Resolved "Class FEDInstallAddons does not exist" error during extension 1-click install and activation.
+* Fix: Loaded missing module dependencies into core bootstrapper including orders, pro plugin placeholders, and standalone shortcodes.
+* Enhancement: Hardened AJAX extension installer with explicit capability checks and clean JSON error response handling.
+
 = 3.0.3 =
 * Fix: WordPress.org plugin review standards and code quality compliance improvements.
 * Fix: Addressed input unslashing, sanitization, and nonce verification checks across admin and frontend requests.
@@ -170,6 +175,9 @@ More Changelogs:
 https://faq.frontenddashboard.com/changelog/overview/
 
 == Upgrade Notice ==
+
+= 3.0.4 =
+Maintenance & bugfix update: Fixed extension installation and activation class loader issue, registered missing module dependencies, and enhanced AJAX error handling.
 
 = 3.0.3 =
 Maintenance update: WordPress.org standards compliance, input unslashing/sanitization improvements, and cleanup.
