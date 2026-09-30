@@ -76,11 +76,11 @@ class AssetManager {
 		if ( $this->is_dev ) {
 			// Enqueue Vite client for HMR
 			if ( ! $is_script_disabled ) {
-				wp_enqueue_script( 'fed-vite-client', 'http://localhost:3000/@vite/client', [], null, true );
-				wp_enqueue_script( 'fed-main', 'http://localhost:3000/assets/js/main.js', $dependencies, null, true );
+				wp_enqueue_script( 'fed-vite-client', 'http://localhost:3000/@vite/client', [], $this->version, true );
+				wp_enqueue_script( 'fed-main', 'http://localhost:3000/assets/js/main.js', $dependencies, $this->version, true );
 			}
 			if ( ! $is_style_disabled ) {
-				wp_enqueue_style( 'fed-style', 'http://localhost:3000/assets/css/main.css', [], null );
+				wp_enqueue_style( 'fed-style', 'http://localhost:3000/assets/css/main.css', [], $this->version );
 			}
 		} else {
 			// Production: read manifest.json

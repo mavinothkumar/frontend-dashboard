@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.0.2
+Stable tag: 3.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -141,6 +141,12 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 == Changelog ==
 
+= 3.0.3 =
+* Fix: WordPress.org plugin review standards and code quality compliance improvements.
+* Fix: Addressed input unslashing, sanitization, and nonce verification checks across admin and frontend requests.
+* Fix: Removed obsolete array_column polyfill and auto_update_plugin hook alteration.
+* Enhancement: Added comprehensive `.gitignore` rules for modern development workflows.
+
 = 3.0.2 =
 * Enhancement: Extended hook architecture to support modular extension registration, automated update checks, and decoupled addon management.
 * Enhancement: Modernized Extensions Hub interface with smart section categorization, live search filtering, native confirmation dialogs, and real-time status feedback.
@@ -164,6 +170,12 @@ More Changelogs:
 https://faq.frontenddashboard.com/changelog/overview/
 
 == Upgrade Notice ==
+
+= 3.0.3 =
+Maintenance update: WordPress.org standards compliance, input unslashing/sanitization improvements, and cleanup.
+
+= 3.0.2 =
+Enhancement: Modernized Extensions Hub, modular hook architecture, and performance optimizations.
 
 = 3.0.1 =
 Minor update: Security escaping and WordPress standards compliance fixes.

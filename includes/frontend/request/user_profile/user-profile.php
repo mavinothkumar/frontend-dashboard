@@ -26,7 +26,7 @@ function fed_store_user_profile_save() {
 	if (
 		isset( $_REQUEST, $post_payload['tab_id'] ) &&
 		isset( $_REQUEST['menu_type'] ) &&
-		( 'user' === wp_slash( $_REQUEST['menu_type'] ) )
+		( 'user' === sanitize_text_field( wp_unslash( $_REQUEST['menu_type'] ) ) )
 	) {
 		fed_verify_nonce();
 

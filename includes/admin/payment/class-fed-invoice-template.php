@@ -195,4 +195,4 @@ if ( ! class_exists( 'FEDInvoiceTemplate' ) ) {
 	}
 
 	new FEDInvoiceTemplate();
-}
+}

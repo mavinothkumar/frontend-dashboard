@@ -416,7 +416,7 @@ function fed_message_form_function() {
 	/**
 	 * Check for Nonce
 	 */
-	if ( ! wp_verify_nonce( $_REQUEST['fed_message_nonce'], 'fed_message_nonce' ) ) {
+	if ( ! isset( $_REQUEST['fed_message_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['fed_message_nonce'] ) ), 'fed_message_nonce' ) ) {
 		wp_send_json_error( array( 'message' => 'Invalid Request' ) );
 		exit();
 	}

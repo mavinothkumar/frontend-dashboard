@@ -617,22 +617,3 @@ function get_plugin_list() {
 
 	return false;
 }
-
-/**
- * Auto update the Frontend Dashboard dependent plugins
- *
- * @param  bool   $update
- * @param  object $item
- *
- * @return bool
- */
-function fed_update_all_dependent_plugins( $update, $item ) {
-
-	if ( in_array( $item->slug, fed_get_dependent_plugins(), true ) ) {
-		return true;
-	}
-
-	return $update;
-}
-
-add_filter( 'auto_update_plugin', 'fed_update_all_dependent_plugins', 10, 2 );

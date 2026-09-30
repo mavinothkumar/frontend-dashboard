@@ -96,23 +96,18 @@ function fed_insert_user_meta( $meta, $user, $update ) {
 					$_REQUEST[ $extra_field['input_meta'] ]
 				)
 			) {
+				$raw_val = wp_unslash( $_REQUEST[ $extra_field['input_meta'] ] );
 				$meta[ $extra_field['input_meta'] ] = serialize(
-				// phpcs:ignore
-					fed_sanitize_text_field( $_REQUEST[ $extra_field['input_meta'] ] )
+					fed_sanitize_text_field( $raw_val )
 				);
 			} else {
+				$raw_val = isset( $_REQUEST[ $extra_field['input_meta'] ] ) ? wp_unslash( $_REQUEST[ $extra_field['input_meta'] ] ) : '';
 				if ( isset( $extra_field['input_type'] ) && 'wp_editor' === $extra_field['input_type'] ) {
-					$meta[ $extra_field['input_meta'] ] = isset( $_REQUEST[ $extra_field['input_meta'] ] ) ? wp_kses_post(
-						$_REQUEST[ $extra_field['input_meta'] ]
-					) : '';
+					$meta[ $extra_field['input_meta'] ] = ! empty( $raw_val ) ? wp_kses_post( $raw_val ) : '';
 				} elseif ( isset( $extra_field['input_type'] ) && in_array( $extra_field['input_type'], array( 'multi_line', 'textarea', 'multiline' ), true ) ) {
-					$meta[ $extra_field['input_meta'] ] = isset( $_REQUEST[ $extra_field['input_meta'] ] ) ? sanitize_textarea_field(
-						$_REQUEST[ $extra_field['input_meta'] ]
-					) : '';
+					$meta[ $extra_field['input_meta'] ] = ! empty( $raw_val ) ? sanitize_textarea_field( $raw_val ) : '';
 				} else {
-					$meta[ $extra_field['input_meta'] ] = isset( $_REQUEST[ $extra_field['input_meta'] ] ) ? fed_sanitize_text_field(
-						$_REQUEST[ $extra_field['input_meta'] ]
-					) : '';
+					$meta[ $extra_field['input_meta'] ] = ! empty( $raw_val ) ? fed_sanitize_text_field( $raw_val ) : '';
 				}
 			}
 		}

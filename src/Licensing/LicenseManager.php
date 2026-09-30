@@ -221,8 +221,8 @@ class LicenseManager {
 			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'frontend-dashboard' ) ), 403 );
 		}
 
-		$slug = isset( $_POST['slug'] ) ? sanitize_key( $_POST['slug'] ) : '';
-		$key  = isset( $_POST['key'] ) ? sanitize_text_field( $_POST['key'] ) : '';
+		$slug = isset( $_POST['slug'] ) ? sanitize_key( wp_unslash( $_POST['slug'] ) ) : '';
+		$key  = isset( $_POST['key'] ) ? sanitize_text_field( wp_unslash( $_POST['key'] ) ) : '';
 
 		$result = $this->activate_license( $slug, $key );
 
@@ -243,7 +243,7 @@ class LicenseManager {
 			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'frontend-dashboard' ) ), 403 );
 		}
 
-		$slug = isset( $_POST['slug'] ) ? sanitize_key( $_POST['slug'] ) : '';
+		$slug = isset( $_POST['slug'] ) ? sanitize_key( wp_unslash( $_POST['slug'] ) ) : '';
 
 		$result = $this->deactivate_license( $slug );
 		wp_send_json_success( $result );
@@ -259,7 +259,7 @@ class LicenseManager {
 			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'frontend-dashboard' ) ), 403 );
 		}
 
-		$slug   = isset( $_POST['slug'] ) ? sanitize_key( $_POST['slug'] ) : '';
+		$slug   = isset( $_POST['slug'] ) ? sanitize_key( wp_unslash( $_POST['slug'] ) ) : '';
 		$result = $this->refresh_license( $slug );
 
 		if ( ! empty( $result['success'] ) ) {

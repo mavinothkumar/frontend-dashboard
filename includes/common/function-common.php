@@ -441,12 +441,13 @@ if ( ! function_exists( 'bcdump' ) ) {
 		echo '<pre style="font-size:11px;">';
 
 		if ( is_array( $var ) || is_object( $var ) ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.PHP.DevelopmentFunctions.error_log_print_r
 			echo htmlentities( print_r( $var, true ) );
 		} elseif ( is_string( $var ) ) {
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo "string(" . strlen( $var ) . ") \"" . htmlentities( $var ) . "\"\n";
 		} else {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_dump
 			var_dump( $var );
 		}
 
@@ -588,6 +589,9 @@ function fed_check_admin_notifications() {
  * Show Notifications Message.
  */
 function fed_show_notifications_message() {
+	if ( empty( $_SESSION['fed_admin_errors'] ) || ! is_array( $_SESSION['fed_admin_errors'] ) ) {
+		return;
+	}
 	?>
 	<div class="error notice">
 		<p>
