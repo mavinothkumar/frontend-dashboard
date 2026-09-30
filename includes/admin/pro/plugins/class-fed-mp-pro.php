@@ -65,6 +65,7 @@ if ( ! class_exists( 'FEDMPPRO' ) && ! defined( 'BC_FED_MP_PLUGIN' ) ) {
 		 * Menu
 		 */
 		public function menu() {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$get_payload = isset( $_GET ) ? fed_sanitize_text_field( wp_unslash( $_GET ) ) : array();
 			$action      = ( isset( $get_payload, $get_payload['action'] ) && ! empty( $get_payload['action'] ) ) ? urldecode(
 				$get_payload['action']
@@ -74,6 +75,7 @@ if ( ! class_exists( 'FEDMPPRO' ) && ! defined( 'BC_FED_MP_PLUGIN' ) ) {
 				$page = in_array( $action, $this->page_list() ) ? $action : array();
 				if ( is_string( $page ) ) {
 					$action = true;
+					// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 					fed_execute_method_by_string( $page, $_GET );
 				}
 			}
@@ -120,6 +122,7 @@ if ( ! class_exists( 'FEDMPPRO' ) && ! defined( 'BC_FED_MP_PLUGIN' ) ) {
 		 * Header Menu.
 		 */
 		public function header_menu() {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$get_payload = isset( $_GET ) ? fed_sanitize_text_field( wp_unslash( $_GET ) ) : array();
 			?>
 			<div class="bc_fed">

@@ -365,6 +365,7 @@ if ( ! class_exists( 'FEDEmail' ) ) {
 		 * Unified Save for Email & SMTP Settings.
 		 */
 		public function update() {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
 			$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 			fed_verify_nonce( $request );
 
@@ -414,6 +415,7 @@ if ( ! class_exists( 'FEDEmail' ) ) {
 		 * Send Test Email AJAX endpoint.
 		 */
 		public function test_email() {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
 			$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 			fed_verify_nonce( $request );
 

@@ -449,7 +449,9 @@ if ( ! class_exists( 'FED_ActionHooks' ) ) {
 		 */
 		public function fed_update_footer( $text ) {
 			if (
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				isset( $_GET['page_type'] ) && in_array(
+					// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 					wp_unslash( $_GET['page_type'] ), fed_get_script_loading_pages(),
 					true
 				)

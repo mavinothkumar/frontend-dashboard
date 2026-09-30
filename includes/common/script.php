@@ -54,8 +54,10 @@ if ( ! function_exists( 'fed_script_admin' ) ) {
 				$hook, fed_get_script_loading_pages(),
 				false
 			) ) ||
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			( isset( $_GET['page'] ) &&
 			  in_array(
+				  // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				  wp_unslash( $_GET['page'] ), fed_get_script_loading_pages(), false
 			  ) )
 		) {

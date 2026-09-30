@@ -13,6 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function fed_admin_setting_login_request() {
 	$message         = '';
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$requests        = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	$fed_admin_login = get_option( 'fed_admin_login' );
 	$request         = isset( $requests['fed_admin_login'] ) ? $requests['fed_admin_login'] : array();

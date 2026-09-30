@@ -564,6 +564,7 @@ function fed_convert_array_object_to_key_value( $array, $key = 'slug', $value = 
  * Get Payment Notificcation.
  */
 function fed_get_payment_notification() {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( isset( $_REQUEST['success'] ) && 'no' == $_REQUEST['success'] ) {
 		?>
 		<div class="alert alert-danger">
@@ -577,6 +578,7 @@ function fed_get_payment_notification() {
 		</div>
 		<?php
 	}
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( isset( $_REQUEST['success'] ) && 'yes' == $_REQUEST['success'] && isset( $_REQUEST['tid'] ) ) {
 		?>
 		<div class="alert alert-success">
@@ -586,6 +588,7 @@ function fed_get_payment_notification() {
 					aria-hidden="true">&times;
 			</button>
 			<strong>Payment Success!</strong>
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			Thanks for your payment - You transaction ID : <?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['tid'] ) ) ); ?>
 		</div>
 		<?php

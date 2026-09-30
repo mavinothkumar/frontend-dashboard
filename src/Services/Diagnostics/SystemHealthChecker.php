@@ -136,7 +136,9 @@ class SystemHealthChecker {
 
 		foreach ( $tables as $tbl ) {
 			$fullName = $wpdb->prefix . $tbl;
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$exists   = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $fullName ) ) === $fullName;
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$count    = $exists ? (int) $wpdb->get_var( "SELECT COUNT(*) FROM `{$fullName}`" ) : 0;
 
 			$results['database'][ $tbl ] = [

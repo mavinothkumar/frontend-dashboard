@@ -50,8 +50,11 @@ class UserProfileController {
 		$message      = __( 'Something Went Wrong', 'frontend-dashboard' );
 
 		if (
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			isset( $_REQUEST, $post_payload['tab_id'] ) &&
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			isset( $_REQUEST['menu_type'] ) &&
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			'user' === sanitize_text_field( wp_unslash( $_REQUEST['menu_type'] ) )
 		) {
 			if ( function_exists( 'fed_verify_nonce' ) ) {

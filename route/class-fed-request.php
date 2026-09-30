@@ -32,6 +32,7 @@ if ( ! class_exists( 'FED_Requests' ) ) {
 		 * Ajax request.
 		 */
 		public function ajax_request() {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$request = fed_sanitize_text_field( $_REQUEST );
 
 			/**
@@ -66,6 +67,7 @@ if ( ! class_exists( 'FED_Requests' ) ) {
 		 * Request.
 		 */
 		public function request() {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$request = fed_sanitize_text_field( $_REQUEST );
 
 			/**
@@ -100,6 +102,7 @@ if ( ! class_exists( 'FED_Requests' ) ) {
 		 * API Request.
 		 */
 		public function api_request() {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$request = fed_sanitize_text_field( $_REQUEST );
 
 			do_action( 'fed_before_api_request_action_hook_call', $request );
@@ -131,6 +134,7 @@ if ( ! class_exists( 'FED_Requests' ) ) {
 		 * Ajax API Request.
 		 */
 		public function ajax_api_request() {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$request = fed_sanitize_text_field( $_REQUEST );
 
 			do_action( 'fed_before_ajax_request_action_hook_call', $request );

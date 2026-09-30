@@ -20,12 +20,16 @@ add_action( 'admin_post_nopriv_fed_save_user_profile', 'fed_block_the_action' );
  * Store User Profile.
  */
 function fed_store_user_profile_save() {
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$post_payload    = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	$message = 'Something Went Wrong';
 
 	if (
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		isset( $_REQUEST, $post_payload['tab_id'] ) &&
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		isset( $_REQUEST['menu_type'] ) &&
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		( 'user' === sanitize_text_field( wp_unslash( $_REQUEST['menu_type'] ) ) )
 	) {
 		fed_verify_nonce();
@@ -150,6 +154,7 @@ function fed_process_update_user_profile( $post ) {
 	}
 	if ( empty( $all_fields ) && ! empty( $wpdb ) ) {
 		$tbl = $wpdb->prefix . ( defined( 'BC_FED_TABLE_USER_PROFILE' ) ? BC_FED_TABLE_USER_PROFILE : 'fed_user_profile' );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$all_fields = $wpdb->get_results( "SELECT * FROM $tbl", ARRAY_A );
 	}
 	if ( is_array( $all_fields ) ) {

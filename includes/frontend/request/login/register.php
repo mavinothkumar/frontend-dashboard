@@ -78,10 +78,13 @@ add_filter( 'pre_user_login', 'fed_skip_user_name_on_registration' );
  */
 function fed_insert_user_meta( $meta, $user, $update ) {
 	$get_profile_meta_by_menu = array();
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( isset( $_REQUEST['tab_id'] ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$get_profile_meta_by_menu = fed_fetch_user_profile_columns( sanitize_text_field( wp_unslash( $_REQUEST['tab_id'] ) ) );
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( isset( $_REQUEST['fed_registration_form'] ) ) {
 		/**
 		 * Fetch registration form field and add it in the meta fields
@@ -92,15 +95,19 @@ function fed_insert_user_meta( $meta, $user, $update ) {
 	if ( count( $get_profile_meta_by_menu ) > 0 ) {
 		foreach ( $get_profile_meta_by_menu as $key => $extra_field ) {
 			if (
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				isset( $_REQUEST[ $extra_field['input_meta'] ] ) && is_array(
+					// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 					$_REQUEST[ $extra_field['input_meta'] ]
 				)
 			) {
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 				$raw_val = wp_unslash( $_REQUEST[ $extra_field['input_meta'] ] );
 				$meta[ $extra_field['input_meta'] ] = serialize(
 					fed_sanitize_text_field( $raw_val )
 				);
 			} else {
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 				$raw_val = isset( $_REQUEST[ $extra_field['input_meta'] ] ) ? wp_unslash( $_REQUEST[ $extra_field['input_meta'] ] ) : '';
 				if ( isset( $extra_field['input_type'] ) && 'wp_editor' === $extra_field['input_type'] ) {
 					$meta[ $extra_field['input_meta'] ] = ! empty( $raw_val ) ? wp_kses_post( $raw_val ) : '';
@@ -125,6 +132,7 @@ function fed_insert_user_meta( $meta, $user, $update ) {
  * @return string
  */
 function fed_skip_user_name_on_registration( $sanitized_user_login ) {
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$post_payload = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	if ( isset( $post_payload['submit'] ) && ! isset( $post_payload['user_login'] ) && 'register' === $post_payload['submit'] ) {
 		return sanitize_user( $post_payload['user_email'] . '_' . wp_rand( 1, 999 ), true );

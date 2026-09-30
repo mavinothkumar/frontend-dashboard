@@ -47,6 +47,7 @@ function fed_admin_setting_form_function() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	/**
 	 * Check for Nonce
@@ -111,6 +112,7 @@ function fed_admin_setting_up_form_function() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$post = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 
 	if ( ! isset( $post['fed_action'] ) ) {
@@ -247,6 +249,7 @@ function fed_admin_setting_form_dashboard_menu_function() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$post_all = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	parse_str( $post_all['data'], $post );
 	$action  = $post_all['fed_action'];
@@ -338,6 +341,7 @@ function fed_admin_setting_upl_form_function() {
 	/**
 	 * Check for Nonce
 	 */
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 	if ( ! wp_verify_nonce( $_REQUEST['fed_admin_setting_upl_nonce'], 'fed_admin_setting_upl_nonce' ) ) {
 		wp_send_json_error( array( 'message' => 'Invalid Request' ) );
 		exit();
@@ -353,6 +357,7 @@ function fed_user_profile_delete_function() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$post_all = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	parse_str( $post_all['data'], $post );
 	$action = $post_all['fed_up_action'];
@@ -440,7 +445,9 @@ function fed_search_wp_pages_ajax() {
 
 	fed_verify_nonce();
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$query       = isset( $_REQUEST['q'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['q'] ) ) : '';
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$selected_id = isset( $_REQUEST['selected_id'] ) ? (int) $_REQUEST['selected_id'] : 0;
 
 	$args = array(

@@ -821,6 +821,7 @@ function fed_no_update_fields() {
  * @return string
  */
 function get_custom_post_type_archive_template( $single_template ) {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( isset( $_GET['fed_user_profile'] ) || is_author() ) {
 		$single_template = apply_filters(
 			                   'fed_change_author_frontend_page',
@@ -2072,6 +2073,7 @@ function fed_restrict_user_profile_picture( $wp_query_obj ) {
 		return;
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 	if ( 'admin-ajax.php' != $pagenow || 'query-attachments' != $_REQUEST['action'] ) {
 		return;
 	}
@@ -2968,6 +2970,7 @@ add_action( 'admin_footer', 'fed_render_menu_icons_popup_footer' );
  * Render Menu Icons Popup in Admin Footer for FED pages.
  */
 function fed_render_menu_icons_popup_footer() {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( ( isset( $_GET['page'] ) && in_array( wp_unslash( $_GET['page'] ), fed_get_script_loading_pages(), false ) ) ||
 	     ( isset( $GLOBALS['pagenow'] ) && in_array( $GLOBALS['pagenow'], fed_get_script_loading_pages(), false ) ) ) {
 		fed_menu_icons_popup();
@@ -3398,10 +3401,13 @@ function fed_isset_request( $request, $key, $default = null ) {
  * @return mixed|null
  */
 function fed_get_data( $key, $target = null, $default = null, $sanitize = true ) {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( $target === null && ! isset( $_REQUEST ) ) {
 		return $default;
 	}
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( $target === null && isset( $_REQUEST ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$target = $_REQUEST;
 	}
 
@@ -3816,6 +3822,7 @@ add_action( 'admin_footer_text', 'fed_show_help_icons' );
  * Show Modern Floating Quick Resources Hub.
  */
 function fed_show_help_icons() {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( isset( $_GET, $_GET['page'] ) && in_array( $_GET['page'], fed_get_script_loading_pages() ) ) {
 		?>
 		<style>

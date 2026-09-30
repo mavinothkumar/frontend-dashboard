@@ -8,6 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @package Frontend Dashboard.
  */
 
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 $get_payload = isset( $_GET ) ? fed_sanitize_text_field( wp_unslash( $_GET ) ) : array();
 $menus       = fed_login_form();
 if ( isset( $get_payload['page_type'] ) && 'reset_password' === $get_payload['page_type'] ) {

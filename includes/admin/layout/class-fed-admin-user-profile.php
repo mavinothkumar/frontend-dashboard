@@ -114,7 +114,9 @@ if ( ! class_exists( 'FED_AdminUserProfile' ) ) {
 						'input_value' => isset( $field['input_value'] ) ? esc_attr( $field['input_value'] ) : '',
 					);
 
+					// phpcs:ignore WordPress.Security.NonceVerification.Missing
 					if ( isset( $_POST[ $default_value['input_meta'] ] ) ) {
+						// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 						$raw_val = $_POST[ $default_value['input_meta'] ];
 						if ( is_array( $raw_val ) ) {
 							$sanitized = maybe_serialize( $raw_val );

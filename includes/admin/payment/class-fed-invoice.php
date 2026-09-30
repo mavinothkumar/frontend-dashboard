@@ -325,6 +325,7 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 			}
 			global $wpdb;
 			$up_table     = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$up           = $wpdb->get_results( "SELECT id, input_meta FROM $up_table" );
 			$user_profile = fed_convert_array_object_to_key_value( $up, 'id', 'input_meta' );
 
@@ -491,6 +492,7 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 			global $wpdb;
 
 			$table         = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$user_profiles = $wpdb->get_results( "SELECT id, label_name FROM $table" );
 
 			$profiles = array( '' => __( '&mdash; Hide this field from invoice &mdash;', 'frontend-dashboard' ) ) + (array) fed_convert_array_object_to_key_value(

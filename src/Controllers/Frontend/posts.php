@@ -24,6 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function fed_process_dashboard_display_post( $post_type = 'post' ) {
 	$user  = get_userdata( get_current_user_id() );
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$paged = isset( $_REQUEST['page_number'] ) ? absint( $_REQUEST['page_number'] ) : 1;
 	$args  = array(
 		'orderby'        => 'post_date',
@@ -53,6 +54,7 @@ function fed_process_dashboard_display_post( $post_type = 'post' ) {
  */
 function fed_get_post_pagination( $post_object, $menu = null ) {
 	$pagination_counts = ceil( $post_object->found_posts / get_option( 'posts_per_page', 10 ) );
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$current_page      = isset( $_REQUEST['page_number'] ) ? absint( $_REQUEST['page_number'] ) : 1;
 
 	if ( $pagination_counts > 1 ) {

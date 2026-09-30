@@ -59,9 +59,11 @@ function fed_next_updates() {
 	// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 	$menu_table      = $wpdb->prefix . BC_FED_TABLE_MENU;
 	$menu_meta_table = $wpdb->prefix . BC_FED_TABLE_MENU_META;
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	$menu_query      = $wpdb->get_results( "SELECT * from {$menu_table} LIMIT 1" );
 	$charset_collate = $wpdb->get_charset_collate();
 	if ( ! isset( $menu_query[0]->parent_id ) ) {
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query( "ALTER TABLE {$menu_table} ADD parent_id VARCHAR(10) NOT NULL DEFAULT '0'" );
 	}
 
@@ -213,12 +215,15 @@ function fed_plugin_activation() {
 	}
 
 	// Adding Three Column.
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	$payment_update_1 = $wpdb->get_row( "SELECT * FROM $payment_table" );
 	if ( is_array( $payment_update_1 ) && ! array_key_exists( 'trail_period', $payment_update_1 ) ) {
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query( "ALTER TABLE $payment_table ADD COLUMN trail_period VARCHAR(255) NULL AFTER `status`,  ADD COLUMN payment_method VARCHAR(255) NULL AFTER `status`, ADD COLUMN ends_at_time VARCHAR(255) NULL AFTER `ends_at`" );
 
 	}
 	if ( is_array( $payment_update_1 ) && ! array_key_exists( 'invoice_id', $payment_update_1 ) ) {
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query( "ALTER TABLE $payment_table ADD COLUMN invoice_id VARCHAR(255) NULL AFTER `status`" );
 	}
 
@@ -274,7 +279,9 @@ function fed_plugin_data() {
 	$profile_table = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
 	$menu_table    = $wpdb->prefix . BC_FED_TABLE_MENU;
 
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	$profile_count = $wpdb->get_var( "SELECT COUNT(*) FROM $profile_table" );
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	$menu_count    = $wpdb->get_var( "SELECT COUNT(*) FROM $menu_table" );
 
 	if ( $profile_count <= 0 ) {
@@ -508,6 +515,7 @@ function fed_plugin_meta_data() {
  * Admin Notice
  */
 function fed_admin_notice() {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$get_payload = isset( $_GET ) ? fed_sanitize_text_field( wp_unslash( $_GET ) ) : array();
 	if ( isset( $get_payload['page'] ) && in_array( $get_payload['page'], fed_get_script_loading_pages(), false ) ) {
 		$get_notification = get_option( 'fed_admin_message_notification' );

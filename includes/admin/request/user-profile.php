@@ -37,8 +37,10 @@ function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
 		 * Check for input meta already exist
 		 */
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$duplicate = $wpdb->get_row(
 			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				"SELECT * FROM {$table_name} WHERE input_meta = %s AND id != %d",
 				$input_meta,
 				(int) $post_id
@@ -70,6 +72,7 @@ function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
 		/**
 		 * No duplicate found, so we can update the record.
 		 */
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$status = $wpdb->update( $table_name, $request, array( 'id' => (int) $post_id ) );
 
 		if ( false === $status ) {
@@ -85,8 +88,10 @@ function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
 		/**
 		 * Check for input meta already exist
 		 */
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$duplicate = $wpdb->get_row(
 			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				"SELECT * FROM {$table_name} WHERE input_meta = %s",
 				$input_meta
 			)
@@ -119,6 +124,7 @@ function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
 		/**
 		 * Now we are free to insert the row
 		 */
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$status = $wpdb->insert(
 			$table_name,
 			$request
@@ -155,7 +161,9 @@ function fed_admin_menu_sorting() {
 
 	fed_verify_nonce();
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request_post = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$request_get  = isset( $_GET ) ? fed_sanitize_text_field( wp_unslash( $_GET ) ) : array();
 
 	$table_key = isset( $request_post['table'] ) ? $request_post['table'] : ( isset( $request_get['table'] ) ? $request_get['table'] : 'fed_menu' );
@@ -170,6 +178,7 @@ function fed_admin_menu_sorting() {
 		foreach ( $sort_items as $sort => $id ) {
 			$item_id = (int) $id;
 			if ( $item_id > 0 ) {
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				$wpdb->update(
 					$table_name,
 					array( $order_col => (int) $sort + 1 ),

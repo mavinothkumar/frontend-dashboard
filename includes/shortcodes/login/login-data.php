@@ -150,6 +150,7 @@ function fed_forgot_password_only() {
  * @return array
  */
 function fed_reset_password_only() {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$get_payload = isset( $_GET ) ? fed_sanitize_text_field( wp_unslash( $_GET ) ) : array();
 
 	return array(

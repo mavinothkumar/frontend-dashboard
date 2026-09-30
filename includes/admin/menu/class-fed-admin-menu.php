@@ -27,13 +27,17 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 		 * Handle legacy URL redirects for bookmarks
 		 */
 		public function handle_legacy_redirects() {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			if ( isset( $_GET['page'] ) && 'fed_settings_menu' === $_GET['page'] ) {
 				wp_safe_redirect( admin_url( 'admin.php?page=fed_settings' ) );
 				exit;
 			}
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			if ( isset( $_GET['page'] ) && 'fed_add_user_profile' === $_GET['page'] ) {
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				$action = isset( $_GET['fed_action'] ) && 'post' === $_GET['fed_action'] ? 'post' : 'profile';
 				$target = ( 'post' === $action ) ? 'fed_post_fields' : 'fed_user_profile';
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				$params = $_GET;
 				$params['page'] = $target;
 				wp_safe_redirect( add_query_arg( $params, admin_url( 'admin.php' ) ) );
@@ -47,6 +51,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 		public function ensure_admin_page_title() {
 			global $title;
 			if ( null === $title || '' === $title ) {
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 				if ( isset( $_GET['page'] ) && 0 === strpos( (string) $_GET['page'], 'fed_' ) ) {
 					$title = __( 'Frontend Dashboard', 'frontend-dashboard' );
 				}

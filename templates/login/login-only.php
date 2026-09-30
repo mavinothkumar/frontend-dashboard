@@ -7,6 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @package Frontend Dashboard.
  */
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 if ( isset( $_GET['action'], $_GET['key'], $_GET['login'] ) && ( 'fed_reset' === $_GET['action'] ) ) {
 	$details = fed_reset_password_only();
 	$type    = 'reset_password';

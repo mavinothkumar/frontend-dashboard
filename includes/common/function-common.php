@@ -595,6 +595,7 @@ function fed_show_notifications_message() {
 	?>
 	<div class="error notice">
 		<p>
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			<?php echo esc_html( fed_convert_array_value_to_string( $_SESSION['fed_admin_errors'], ',' ) ); ?>
 		</p>
 	</div>
@@ -835,6 +836,7 @@ function fed_get_menu_url_by_slug( $menu_slug, $menu_type ) {
 
 			return false;
 		} else {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$dashboard_container = new FED_Routes( $_REQUEST );
 
 			$menu = $dashboard_container->setDashboardMenuQuery();

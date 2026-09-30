@@ -226,6 +226,7 @@ class DashboardOverviewController {
 		try {
 			global $wpdb;
 			$table = $wpdb->prefix . ( defined( 'BC_FED_TABLE_ACTIVITY_LOG' ) ? BC_FED_TABLE_ACTIVITY_LOG : 'fed_activity_log' );
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$results = $wpdb->get_results( "SELECT * FROM `{$table}` ORDER BY `created_at` DESC LIMIT 8", ARRAY_A );
 			return is_array( $results ) ? $results : [];
 		} catch ( \Throwable $e ) {

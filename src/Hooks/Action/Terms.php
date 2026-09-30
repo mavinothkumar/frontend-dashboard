@@ -33,7 +33,9 @@ class Terms {
 	}
 
 	public function get_terms_by_taxonomy() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$post_payload = isset( $_POST ) ? wp_unslash( $_POST ) : array();
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$get_payload  = isset( $_GET ) ? array_map( 'sanitize_text_field', wp_unslash( $_GET ) ) : array();
 
 		fed_verify_nonce( $get_payload );

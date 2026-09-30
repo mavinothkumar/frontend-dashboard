@@ -57,10 +57,12 @@ class CronManager {
 
 		// 1. Delete audit logs older than 30 days
 		$logsTable = $wpdb->prefix . ( defined( 'BC_FED_TABLE_ACTIVITY_LOG' ) ? BC_FED_TABLE_ACTIVITY_LOG : 'fed_activity_log' );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query( "DELETE FROM `{$logsTable}` WHERE `created_at` < DATE_SUB(NOW(), INTERVAL 30 DAY)" );
 
 		// 2. Delete read notifications older than 60 days
 		$notifTable = $wpdb->prefix . 'fed_notifications';
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query( "DELETE FROM `{$notifTable}` WHERE `is_read` = 1 AND `created_at` < DATE_SUB(NOW(), INTERVAL 60 DAY)" );
 
 		do_action( 'fed_daily_cleanup_completed' );

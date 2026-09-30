@@ -35,8 +35,10 @@ function fed_admin_menu_save( $request, $post_id = '' ) {
 		/**
 		 * Check for input meta already exist
 		 */
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$duplicate = $wpdb->get_row(
 			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				"SELECT * FROM {$table_name} WHERE menu_slug = %s AND id != %d",
 				$menu_slug,
 				(int) $post_id
@@ -58,6 +60,7 @@ function fed_admin_menu_save( $request, $post_id = '' ) {
 		 * No duplicate found, so we can update the record.
 		 */
 		unset( $request['menu_slug'] );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$status = $wpdb->update( $table_name, $request, array( 'id' => (int) $post_id ) );
 
 		if ( false === $status ) {
@@ -75,8 +78,10 @@ function fed_admin_menu_save( $request, $post_id = '' ) {
 		 * Check for input meta already exist
 		 */
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$duplicate = $wpdb->get_row(
 			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				"SELECT * FROM {$table_name} WHERE menu_slug = %s",
 				$menu_slug
 			)
@@ -96,6 +101,7 @@ function fed_admin_menu_save( $request, $post_id = '' ) {
 		/**
 		 * Now we are free to insert the row
 		 */
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$status = $wpdb->insert(
 			$table_name,
 			$request
@@ -146,6 +152,7 @@ function fed_menu_sorting_items() {
 
 	fed_verify_nonce();
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request           = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	$default_menu_type = fed_get_default_menu_type();
 	$menus             = array();

@@ -68,6 +68,7 @@ if ( ! class_exists( 'FED_Post_Widget' ) ) {
 			);
 
 			if ( $fed_taxonomy && ! empty( $fed_taxonomy ) ) {
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 				$options['tax_query'] = array(
 					array(
 						'taxonomy' => $fed_taxonomy,
@@ -75,6 +76,7 @@ if ( ! class_exists( 'FED_Post_Widget' ) ) {
 					),
 				);
 				if ( $fed_term && ! empty( $fed_term ) ) {
+					// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 					$options['tax_query'] = array(
 						array(
 							'taxonomy'         => $fed_taxonomy,

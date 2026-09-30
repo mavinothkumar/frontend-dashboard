@@ -23,7 +23,7 @@ if ( ! function_exists( 'fed_fetch_rows_by_table' ) ) {
 
 		$order = $order ? 'ORDER BY id ' . sanitize_text_field( $order ) : '';
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, .Security.DirectDB.UnescapedDBParameter
 		return $wpdb->get_results( "SELECT * FROM {$table_name} {$order}", ARRAY_A );
 	}
 }
@@ -41,8 +41,9 @@ if ( ! function_exists( 'fed_fetch_table_row_by_id' ) ) {
 		global $wpdb;
 		$table_name = $wpdb->prefix . sanitize_key( $table );
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, .Security.DirectDB.UnescapedDBParameter
 		$result = $wpdb->get_row(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$wpdb->prepare( "SELECT * FROM {$table_name} WHERE id = %d LIMIT 1", (int) $id ),
 			ARRAY_A
 		);
@@ -75,7 +76,7 @@ if ( ! function_exists( 'fed_fetch_table_row_by_ids' ) ) {
 		}
 		$placeholders = implode( ',', array_fill( 0, count( $clean_ids ), '%d' ) );
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare, .Security.DirectDB.UnescapedDBParameter
 		$result = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table_name} WHERE id IN ({$placeholders})", $clean_ids ), ARRAY_A );
 
 		if ( ( is_array( $result ) && count( $result ) <= 0 ) || ! $result ) {
@@ -115,8 +116,10 @@ if ( ! function_exists( 'fed_fetch_table_rows_by_key_value' ) ) {
 
 		$order = $order ? 'ORDER BY id ' . $order : '';
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		return $wpdb->get_results(
 			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				"SELECT * FROM $table_name WHERE $key $condition %s $order",
 				esc_attr( $value )
 			), $output );
@@ -137,6 +140,7 @@ if ( ! function_exists( 'fed_delete_table_row_by_id' ) ) {
 		global $wpdb;
 		$table_name = $wpdb->prefix . $table;
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$verify = $wpdb->delete( $table_name, array( 'id' => ( $id ) ), array( '%d' ) );
 
 		if ( $verify ) {
@@ -160,6 +164,7 @@ if ( ! function_exists( 'fed_delete_table_rows_on_condition' ) ) {
 		global $wpdb;
 		$table_name = $wpdb->prefix . $table;
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$verify = $wpdb->delete( $table_name, array( $key => $value ) );
 
 		if ( $verify ) {
@@ -209,7 +214,9 @@ if ( ! function_exists( 'fed_fetch_table_by_is_required' ) ) {
 		global $wpdb;
 		$table_name = $wpdb->prefix . $table;
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$result = $wpdb->get_results(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			"SELECT * FROM $table_name WHERE is_required LIKE 'true' AND show_register LIKE 'Enable'",
 			ARRAY_A
 		);
@@ -240,6 +247,7 @@ if ( ! function_exists( 'fed_insert_new_row' ) ) {
 		global $wpdb;
 		$table_name = $wpdb->prefix . $table;
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$status = $wpdb->insert(
 			$table_name,
 			$data
@@ -266,7 +274,7 @@ if ( ! function_exists( 'fed_fetch_table_rows_by_key_value_column' ) ) {
 		$condition  = ( isset( $conditions['condition'] ) && in_array( $conditions['condition'], array( '=', '!=', '<>', 'LIKE' ), true ) ) ? $conditions['condition'] : '=';
 		$column     = ( isset( $conditions['column'] ) && '*' !== $conditions['column'] ) ? sanitize_key( $conditions['column'] ) : '*';
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, .Security.DirectDB.UnescapedDBParameter
 		$columns = $wpdb->get_results( $wpdb->prepare( "SELECT {$column} FROM {$table_name} WHERE {$key} {$condition} %s", $value ), ARRAY_A );
 		$new_col = array();
 

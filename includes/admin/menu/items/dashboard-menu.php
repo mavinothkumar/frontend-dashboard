@@ -21,14 +21,14 @@ function fed_get_dashboard_menu_items() {
 
 	// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 	// Ensure menu_key and menu_value columns exist
-	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 	$has_menu_key = $wpdb->get_results( $wpdb->prepare( "SHOW COLUMNS FROM `{$safe_table}` LIKE %s", 'menu_key' ) );
 	if ( empty( $has_menu_key ) ) {
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$wpdb->query( "ALTER TABLE `{$safe_table}` ADD `menu_key` VARCHAR(255) NULL AFTER `extended`, ADD `menu_value` TEXT NULL AFTER `menu_key`" );
 	}
 
-	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 	$menus             = $wpdb->get_results( "SELECT * FROM `{$safe_table}` ORDER BY CAST(menu_order AS UNSIGNED) ASC, id ASC", ARRAY_A );
 	// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 	$user_roles        = fed_get_user_roles();

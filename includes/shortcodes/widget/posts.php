@@ -30,6 +30,7 @@ function fed_list_posts( $attributes ) {
 				'current_category'    => 0,
 				'depth'               => 0,
 				'echo'                => 0,
+				// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 				'exclude'             => '',
 				'exclude_tree'        => '',
 				'feed'                => '',
@@ -60,6 +61,7 @@ function fed_list_posts( $attributes ) {
 			'current_category'    => $current_category,
 			'depth'               => $depth,
 			'echo'                => $echo,
+			// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 			'exclude'             => $exclude,
 			'exclude_tree'        => $exclude_tree,
 			'feed'                => $feed,

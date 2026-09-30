@@ -25,6 +25,7 @@ function fed_addon_activate_handler() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied. Administrator access required.', 'frontend-dashboard' ) ) );
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	fed_verify_nonce( $request );
 
@@ -66,6 +67,7 @@ function fed_addon_deactivate_handler() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied. Administrator access required.', 'frontend-dashboard' ) ) );
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	fed_verify_nonce( $request );
 
@@ -97,6 +99,7 @@ function fed_addon_refresh_catalog_handler() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied.', 'frontend-dashboard' ) ) );
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	fed_verify_nonce( $request );
 

@@ -51,7 +51,9 @@ class CreateFedLogsTable implements MigrationInterface {
 
 		// Clean up legacy redundant fed_logs table
 		$legacy_logs_table = $wpdb->prefix . 'fed_logs';
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		if ( $wpdb->get_var( "SHOW TABLES LIKE '{$legacy_logs_table}'" ) === $legacy_logs_table ) {
+			// phpcs:ignore PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.SchemaChange
 			$wpdb->query( "DROP TABLE IF EXISTS `{$legacy_logs_table}`" );
 		}
 	}
@@ -59,7 +61,9 @@ class CreateFedLogsTable implements MigrationInterface {
 	public function down(): void {
 		global $wpdb;
 		$table = $wpdb->prefix . ( defined( 'BC_FED_TABLE_ACTIVITY_LOG' ) ? BC_FED_TABLE_ACTIVITY_LOG : 'fed_activity_log' );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.SchemaChange
 		$wpdb->query( "DROP TABLE IF EXISTS `{$table}`" );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 		$wpdb->query( "DROP TABLE IF EXISTS `{$wpdb->prefix}fed_logs`" );
 	}
 }

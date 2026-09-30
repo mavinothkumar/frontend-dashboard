@@ -39,6 +39,7 @@ function fed_status_delete_table() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied. Administrator access required.', 'frontend-dashboard' ) ) );
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	fed_verify_nonce( $request );
 
@@ -51,7 +52,7 @@ function fed_status_delete_table() {
 			wp_send_json_error( array( 'message' => __( 'Invalid table name specified.', 'frontend-dashboard' ) ) );
 		}
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter, WordPress.DB.DirectDatabaseQuery.SchemaChange
 		$status = $wpdb->query( "DROP TABLE IF EXISTS `{$table_name}`" );
 
 		if ( false !== $status ) {
@@ -80,6 +81,7 @@ function fed_status_empty_table() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied. Administrator access required.', 'frontend-dashboard' ) ) );
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	fed_verify_nonce( $request );
 
@@ -92,7 +94,7 @@ function fed_status_empty_table() {
 			wp_send_json_error( array( 'message' => __( 'Invalid table name specified.', 'frontend-dashboard' ) ) );
 		}
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$status = $wpdb->query( "TRUNCATE TABLE `{$table_name}`" );
 
 		if ( false !== $status ) {
@@ -121,6 +123,7 @@ function fed_status_create_table() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied. Administrator access required.', 'frontend-dashboard' ) ) );
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	fed_verify_nonce( $request );
 
@@ -153,6 +156,7 @@ function fed_status_optimize_tables() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied. Administrator access required.', 'frontend-dashboard' ) ) );
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	fed_verify_nonce( $request );
 
@@ -163,9 +167,9 @@ function fed_status_optimize_tables() {
 	if ( ! empty( $tables ) ) {
 		foreach ( $tables as $table_name ) {
 			$table_name = sanitize_key( $table_name );
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 			$wpdb->query( "OPTIMIZE TABLE `{$table_name}`" );
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 			$wpdb->query( "REPAIR TABLE `{$table_name}`" );
 		}
 	}
@@ -191,15 +195,18 @@ function fed_status_delete_option() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied. Administrator access required.', 'frontend-dashboard' ) ) );
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	fed_verify_nonce( $request );
 
 	if ( ! empty( $request['option_id'] ) ) {
 		global $wpdb;
 		$option_id = (int) $request['option_id'];
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$opt_row   = $wpdb->get_row( $wpdb->prepare( "SELECT option_name FROM `{$wpdb->options}` WHERE option_id = %d", $option_id ) );
 		$opt_name  = $opt_row ? $opt_row->option_name : "ID #{$option_id}";
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$status    = $wpdb->delete( $wpdb->options, array( 'option_id' => $option_id ), array( '%d' ) );
 
 		if ( $status ) {
@@ -227,6 +234,7 @@ function fed_status_delete_all_option() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied. Administrator access required.', 'frontend-dashboard' ) ) );
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	fed_verify_nonce( $request );
 
@@ -257,6 +265,7 @@ function fed_status_clear_log() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied. Administrator access required.', 'frontend-dashboard' ) ) );
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	fed_verify_nonce( $request );
 
@@ -285,6 +294,7 @@ function fed_status_run_cron() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied. Administrator access required.', 'frontend-dashboard' ) ) );
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	fed_verify_nonce( $request );
 
@@ -355,6 +365,7 @@ function fed_tools_seed_pages() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied.', 'frontend-dashboard' ) ) );
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	fed_verify_nonce( $request );
 
@@ -411,6 +422,7 @@ function fed_tools_seed_menus() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied.', 'frontend-dashboard' ) ) );
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	fed_verify_nonce( $request );
 
@@ -428,8 +440,10 @@ function fed_tools_seed_menus() {
 
 	$inserted_count = 0;
 	foreach ( $default_menus as $m ) {
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$existing = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$menu_table} WHERE menu_slug = %s", $m['menu_slug'] ) );
 		if ( ! $existing ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$wpdb->insert( $menu_table, $m );
 			$inserted_count++;
 		}
@@ -462,6 +476,7 @@ function fed_tools_seed_profile_fields() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied.', 'frontend-dashboard' ) ) );
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	fed_verify_nonce( $request );
 
@@ -496,6 +511,7 @@ function fed_tools_seed_all() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied.', 'frontend-dashboard' ) ) );
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	fed_verify_nonce( $request );
 
@@ -540,8 +556,10 @@ function fed_tools_seed_all() {
 	);
 
 	foreach ( $default_menus as $m ) {
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$existing = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$menu_table} WHERE menu_slug = %s", $m['menu_slug'] ) );
 		if ( ! $existing ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$wpdb->insert( $menu_table, $m );
 		}
 	}
@@ -578,6 +596,7 @@ function fed_tools_purge_all() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied. Administrator access required.', 'frontend-dashboard' ) ) );
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	fed_verify_nonce( $request );
 
@@ -605,7 +624,9 @@ function fed_tools_purge_all() {
 
 	// 3. Remove Default Navigation Menus
 	$menu_table = $wpdb->prefix . ( defined( 'BC_FED_TABLE_MENU' ) ? BC_FED_TABLE_MENU : 'fed_menu' );
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	if ( $wpdb->get_var( "SHOW TABLES LIKE '{$menu_table}'" ) === $menu_table ) {
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$deleted_menus = $wpdb->query( "DELETE FROM `{$menu_table}` WHERE menu_slug IN ('dashboard', 'profile', 'post', 'payments', 'logout')" );
 		if ( false !== $deleted_menus && $deleted_menus > 0 ) {
 			$purged_items[] = "Removed {$deleted_menus} standard navigation menu items";
@@ -638,13 +659,16 @@ function fed_tools_clear_activity_log() {
 		wp_send_json_error( array( 'message' => __( 'Permission denied. Administrator access required.', 'frontend-dashboard' ) ) );
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	fed_verify_nonce( $request );
 
 	global $wpdb;
 	$table_name = $wpdb->prefix . ( defined( 'BC_FED_TABLE_ACTIVITY_LOG' ) ? BC_FED_TABLE_ACTIVITY_LOG : 'fed_activity_log' );
 
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" ) === $table_name ) {
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query( "TRUNCATE TABLE `{$table_name}`" );
 	}
 

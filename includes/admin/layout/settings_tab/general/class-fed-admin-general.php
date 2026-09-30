@@ -70,6 +70,7 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 		 * Save Admin Script Menu
 		 */
 		public function save_admin_script() {
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
 			$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 			fed_verify_nonce( $request );
 			$db_value = get_option( 'fed_general_scripts_styles', array() );

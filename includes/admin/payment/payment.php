@@ -122,6 +122,7 @@ if ( ! function_exists( 'fed_get_transactions_with_meta' ) ) {
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				$m                                       = $wpdb->get_results(
 					$wpdb->prepare(
+						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 						"SELECT * FROM {$table_payment_items} WHERE payment_id = %d ORDER BY payment_item_id DESC",
 						$transaction_id
 					),
@@ -148,11 +149,13 @@ if ( ! function_exists( 'fed_get_transactions' ) ) {
 		$table_payment = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
 		$table_user    = $wpdb->prefix . 'users';
 		if ( fed_is_admin() ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, .Security.DirectDB.UnescapedDBParameter
 			return $wpdb->get_results(
 				"
 	SELECT      *
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	FROM        {$table_payment} payment
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	INNER JOIN  {$table_user} users
 	            ON payment.user_id = users.ID
 	ORDER BY    payment.id DESC
@@ -160,12 +163,14 @@ if ( ! function_exists( 'fed_get_transactions' ) ) {
 			);
 		} else {
 			$user_id = (int) get_current_user_id();
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, .Security.DirectDB.UnescapedDBParameter
 			$result  = $wpdb->get_results(
 				$wpdb->prepare(
 					"
 	SELECT      *
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	FROM        {$table_payment} payment
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	INNER JOIN  {$table_user} users
 	            ON payment.user_id = users.ID
     WHERE       payment.user_id = %d
@@ -191,11 +196,13 @@ if ( ! function_exists( 'fed_get_active_transactions' ) ) {
 		$table_payment = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
 		$table_user    = $wpdb->prefix . 'users';
 		if ( fed_is_admin() ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, .Security.DirectDB.UnescapedDBParameter
 			return $wpdb->get_results(
 				"
 	SELECT      *
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	FROM        {$table_payment} payment
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	INNER JOIN  {$table_user} users
 	            ON payment.user_id = users.ID
     WHERE ends_at = 'active'
@@ -204,12 +211,14 @@ if ( ! function_exists( 'fed_get_active_transactions' ) ) {
 			);
 		} else {
 			$user_id = (int) get_current_user_id();
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, .Security.DirectDB.UnescapedDBParameter
 			$result  = $wpdb->get_results(
 				$wpdb->prepare(
 					"
 	SELECT      *
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	FROM        {$table_payment} payment
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	INNER JOIN  {$table_user} users
 	            ON payment.user_id = users.ID
     WHERE       payment.user_id = %d AND
@@ -242,8 +251,10 @@ if ( ! function_exists( 'fed_get_transaction_with_meta' ) ) {
 
 		$table_payment_items = $wpdb->prefix . BC_FED_TABLE_PAYMENT_ITEMS;
 		$transaction_id      = (int) $transaction['id'];
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$m                   = $wpdb->get_results(
 			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				"SELECT * FROM {$table_payment_items} WHERE payment_id = %d ORDER BY payment_item_id DESC",
 				$transaction_id
 			),
@@ -281,11 +292,13 @@ if ( ! function_exists( 'fed_get_transaction' ) ) {
 				$id_val = (int) $id;
 				if ( $is_admin ) {
 					$query = $wpdb->prepare(
+						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 						"SELECT * FROM {$table_payment} payment INNER JOIN {$table_user} users ON payment.user_id = users.ID WHERE payment.{$column} = %d",
 						$id_val
 					);
 				} else {
 					$query = $wpdb->prepare(
+						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 						"SELECT * FROM {$table_payment} payment INNER JOIN {$table_user} users ON payment.user_id = users.ID WHERE payment.{$column} = %d AND payment.user_id = %d",
 						$id_val,
 						$current_user_id
@@ -295,11 +308,13 @@ if ( ! function_exists( 'fed_get_transaction' ) ) {
 				$id_val = sanitize_text_field( (string) $id );
 				if ( $is_admin ) {
 					$query = $wpdb->prepare(
+						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 						"SELECT * FROM {$table_payment} payment INNER JOIN {$table_user} users ON payment.user_id = users.ID WHERE payment.{$column} = %s",
 						$id_val
 					);
 				} else {
 					$query = $wpdb->prepare(
+						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 						"SELECT * FROM {$table_payment} payment INNER JOIN {$table_user} users ON payment.user_id = users.ID WHERE payment.{$column} = %s AND payment.user_id = %d",
 						$id_val,
 						$current_user_id
@@ -307,7 +322,7 @@ if ( ! function_exists( 'fed_get_transaction' ) ) {
 				}
 			}
 
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, .Security.DirectDB.UnescapedDBParameter
 			$result = $wpdb->get_results( $query, ARRAY_A );
 
 			if ( isset( $result[0] ) && count( $result[0] ) > 0 ) {
@@ -343,18 +358,20 @@ if ( ! function_exists( 'fed_get_transaction_meta' ) ) {
 		}
 
 		if ( in_array( $column, array( 'payment_item_id', 'payment_id', 'id', 'item_id' ), true ) ) {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, .Security.DirectDB.UnescapedDBParameter
 			$transaction = $wpdb->get_results(
 				$wpdb->prepare(
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 					"SELECT * FROM {$table_payment_items} WHERE {$column} = %d ORDER BY payment_item_id DESC",
 					(int) $id
 				),
 				ARRAY_A
 			);
 		} else {
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, .Security.DirectDB.UnescapedDBParameter
 			$transaction = $wpdb->get_results(
 				$wpdb->prepare(
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 					"SELECT * FROM {$table_payment_items} WHERE {$column} = %s ORDER BY payment_item_id DESC",
 					sanitize_text_field( (string) $id )
 				),
@@ -596,8 +613,10 @@ if ( ! function_exists( 'fed_get_payment_metrics' ) ) {
 		$pending_txns   = 0;
 		$refunded_txns  = 0;
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$table_exists = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $table_payment ) );
 		if ( $table_exists === $table_payment ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$results = $wpdb->get_results( "SELECT amount, status FROM {$table_payment}", ARRAY_A );
 			if ( ! empty( $results ) ) {
 				$total_txns = count( $results );

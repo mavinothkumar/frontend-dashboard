@@ -62,6 +62,7 @@ if ( ! class_exists( 'FEDInstallAddons' ) ) {
 		 * @param  bool   $network_wide  Network Wide.
 		 */
 		public function activated_plugin( $plugin, $network_wide ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$page = isset( $_GET, $_GET['fed_plugin_custom_activate'] ) && 'on' === $_GET['fed_plugin_custom_activate'] ? true : false;
 			if ( $page ) {
 				wp_safe_redirect( fed_menu_page_url( 'fed_plugin_pages' ) );

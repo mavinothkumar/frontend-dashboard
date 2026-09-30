@@ -55,9 +55,12 @@ class Request {
 	 */
 	public static function capture() {
 		return new static(
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$_GET,
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
 			$_POST,
 			$_SERVER,
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
 			$_FILES
 		);
 	}

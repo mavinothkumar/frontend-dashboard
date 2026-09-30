@@ -25,6 +25,7 @@ function fed_admin_orders_function() {
 
 	global $wpdb;
 	$table_name = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request    = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 
 	$response = fed_admin_order_id_validation( $request );
@@ -55,6 +56,7 @@ function fed_admin_orders_function() {
 		'updated_at'     => gmdate( 'Y-m-d H:i:s' ),
 	);
 
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	$status = $wpdb->update( $table_name, $orders, array( 'id' => $id ) );
 
 	if ( false === $status ) {
@@ -81,12 +83,14 @@ function fed_admin_order_delete_function() {
 
 	global $wpdb;
 	$table_name = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request    = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	parse_str( $request['data'], $request );
 	$response = fed_admin_order_id_validation( $request );
 	$order    = $response['order'];
 	$id       = $response['id'];
 
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	$verify = $wpdb->delete( $table_name, array( 'id' => $id ), array( '%d' ) );
 
 	if ( $verify ) {
@@ -146,6 +150,7 @@ function fed_order_search_add_function() {
 
 	fed_verify_nonce();
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	if ( ! isset( $request['fed_order_search'] ) || '' == $request['fed_order_search'] ) {
 		wp_send_json_error( array( 'message' => __( 'Please fill the search field', 'frontend-dashboard' ) ) );
@@ -227,6 +232,7 @@ function fed_admin_add_orders_function() {
 		'updated_at'     => gmdate( 'Y-m-d H:i:s' ),
 	);
 
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 	$status = $wpdb->insert(
 		$table_name,
 		$orders

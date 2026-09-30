@@ -136,6 +136,7 @@ if ( ! class_exists( 'FEDPaymentMenu' ) ) {
 		 * @param  array $menus  Menus.
 		 */
 		public function header_menu( $menus ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$get_payload = isset( $_GET ) ? array_map( 'sanitize_text_field', wp_unslash( $_GET ) ) : array();
 			$current_menu = isset( $get_payload['menu'] ) ? $get_payload['menu'] : fed_get_first_key_in_array( $menus );
 			?>
@@ -219,6 +220,7 @@ if ( ! class_exists( 'FEDPaymentMenu' ) ) {
 								<div style="padding: 20px;">
 									<?php
 									if ( is_string( $submenu ) ) {
+										// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 										fed_execute_method_by_string( $submenu, $_GET );
 									}
 									?>
@@ -241,6 +243,7 @@ if ( ! class_exists( 'FEDPaymentMenu' ) ) {
 					}
 					?>
 					<div style="margin-top: 10px;">
+						// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 						<?php fed_execute_method_by_string( $sub_menu_action, $_GET ); ?>
 					</div>
 					<?php

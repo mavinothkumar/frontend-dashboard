@@ -12,6 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Admin Setting User Profile Request
  */
 function fed_admin_setting_upl_request() {
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request                            = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	$fed_admin_settings_upl             = get_option( 'fed_admin_settings_upl', array() );
 	if ( ! is_array( $fed_admin_settings_upl ) ) {
@@ -56,6 +57,7 @@ function fed_admin_setting_upl_request() {
  * Admin Setting Hide Admin Bar Request.
  */
 function fed_admin_setting_upl_hide_bar_request() {
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request                = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	$fed_admin_settings_upl = get_option( 'fed_admin_settings_upl_hide_admin_bar', array() );
 	if ( ! is_array( $fed_admin_settings_upl ) ) {
@@ -115,6 +117,7 @@ if ( ! function_exists( 'fed_hide_admin_bar_init_handler' ) ) {
  * Admin Setting User Profile Level Color request.
  */
 function fed_admin_setting_upl_color_request() {
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request                = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	$fed_admin_settings_upl = get_option( 'fed_admin_setting_upl_color', array() );
 	if ( ! is_array( $fed_admin_settings_upl ) ) {

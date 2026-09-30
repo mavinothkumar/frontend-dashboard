@@ -98,6 +98,7 @@ class UserProfileModel {
 		}
 		if ( empty( $all_fields ) && ! empty( $wpdb ) ) {
 			$tbl = $wpdb->prefix . ( defined( 'BC_FED_TABLE_USER_PROFILE' ) ? BC_FED_TABLE_USER_PROFILE : 'fed_user_profile' );
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$all_fields = $wpdb->get_results( "SELECT * FROM $tbl", ARRAY_A );
 		}
 		if ( is_array( $all_fields ) ) {

@@ -17,6 +17,7 @@ function fed_fetch_user_profile_by_registration() {
 	global $wpdb;
 	$table_name = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
 
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	$result = $wpdb->get_results( "SELECT * FROM $table_name WHERE show_register LIKE 'Enable'", ARRAY_A );
 	if ( count( $result ) <= 0 ) {
 		return new WP_Error( 'fed_no_row_found_on_that_id', 'All fields are disabled to show on Registration form ' );
@@ -43,6 +44,7 @@ function fed_fetch_user_profile_required_by_menu( $menu = 'profile' ) {
 	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	$result = $wpdb->get_results(
 		$wpdb->prepare(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			"SELECT * FROM {$table_name} WHERE (menu = %s AND is_required = %s)",
 			sanitize_text_field( $menu ),
 			'true'
@@ -66,6 +68,7 @@ function fed_fetch_user_profile_extra_fields() {
 	global $wpdb;
 	$table_name = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
 
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	$result = $wpdb->get_results( "SELECT * FROM $table_name WHERE extra LIKE 'yes'", ARRAY_A );
 
 	if ( ( null === $result ) || ( count( $result ) <= 0 ) ) {
@@ -98,6 +101,7 @@ function fed_fetch_user_profile_not_extra_fields() {
 	global $wpdb;
 	$table_name = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
 
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	$result = $wpdb->get_results( "SELECT * FROM $table_name WHERE extra LIKE 'no'", ARRAY_A );
 	if ( null === $result || count( $result ) <= 0 ) {
 		return false;
@@ -130,6 +134,7 @@ function fed_fetch_user_profile_by_dashboard() {
 	global $wpdb;
 	$table_name = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
 
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	$results = $wpdb->get_results( "SELECT * FROM $table_name WHERE show_dashboard LIKE 'Enable'", ARRAY_A );
 
 	if ( count( $results ) <= 0 ) {
@@ -153,6 +158,7 @@ function fed_fetch_user_profile_by_menu_slug( $menu_slug = '' ) {
 	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	$results = $wpdb->get_results(
 		$wpdb->prepare(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			"SELECT * FROM {$table_name} WHERE show_dashboard = %s AND menu = %s",
 			'Enable',
 			sanitize_text_field( $menu_slug )
@@ -297,6 +303,7 @@ function fed_fetch_user_profile_columns( $value ) {
 	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	$columns = $wpdb->get_results(
 		$wpdb->prepare(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			"SELECT input_meta, input_type FROM {$table_name} WHERE menu = %s AND show_dashboard = %s AND extra = %s",
 			sanitize_text_field( $value ),
 			'Enable',
