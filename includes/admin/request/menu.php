@@ -21,7 +21,7 @@ function fed_admin_menu_save( $request, $post_id = '' ) {
 	}
 
 	global $wpdb;
-	$menu_slug = $request['menu_slug'];
+	$menu_slug = sanitize_key( $request['menu_slug'] );
 
 	/**
 	 * TODO: changed prefix to get_blog_prefix() for multisite check.

@@ -735,7 +735,7 @@ function fed_normalize_icon_class( $icon ) {
  */
 function fed_process_menu( $row ) {
 	$default_value = array(
-		'menu_slug'         => isset( $row['fed_menu_slug'] ) ? sanitize_text_field( trim( $row['fed_menu_slug'] ) ) : 'ERROR',
+		'menu_slug'         => isset( $row['fed_menu_slug'] ) ? sanitize_key( trim( $row['fed_menu_slug'] ) ) : 'ERROR',
 		'menu'              => isset( $row['fed_menu_name'] ) ? sanitize_text_field( trim( $row['fed_menu_name'] ) ) : 'ERROR',
 		'menu_image_id'     => isset( $row['menu_image_id'] ) ? fed_normalize_icon_class( sanitize_text_field( trim( $row['menu_image_id'] ) ) ) : 'fas fa-link',
 		'show_user_profile' => isset( $row['show_user_profile'] ) ? sanitize_text_field(
