@@ -26,7 +26,20 @@ if ( ! class_exists( 'FEDInstallAddons' ) ) {
 		 * Install.
 		 */
 		public function install() {
+			if ( ! current_user_can( 'install_plugins' ) ) {
+				wp_send_json_error(
+					array(
+						'errorMessage' => __( 'Sorry, you are not allowed to install plugins on this site.', 'frontend-dashboard' ),
+					)
+				);
+			}
+
+			if ( ! function_exists( 'wp_ajax_install_plugin' ) ) {
+				require_once ABSPATH . 'wp-admin/includes/ajax-actions.php';
+			}
+
 			wp_ajax_install_plugin();
+			exit();
 		}
 
 		/**

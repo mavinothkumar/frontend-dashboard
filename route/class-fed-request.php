@@ -141,6 +141,7 @@ if ( ! class_exists( 'FED_Requests' ) ) {
 
 			if ( isset( $request['fed_action_hook'] ) ) {
 				fed_execute_method_by_string( urldecode( $request['fed_action_hook'] ), $request );
+				exit();
 			}
 			if (
 				isset( $request['fed_action_hook_fn'] ) && ! empty( $request['fed_action_hook_fn'] ) && is_string(
@@ -153,6 +154,7 @@ if ( ! class_exists( 'FED_Requests' ) ) {
 						'arguments' => $request,
 					)
 				);
+				exit();
 			}
 
 			do_action( 'fed_after_ajax_request_action_hook_call', $request );

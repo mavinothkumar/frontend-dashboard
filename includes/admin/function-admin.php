@@ -3310,6 +3310,13 @@ function fed_execute_method_by_string( $item, $parameter = null ) {
 				)
 			);
 		} else {
+			if ( wp_doing_ajax() ) {
+				wp_send_json_error(
+					array(
+						'errorMessage' => sprintf( __( 'Class %s does not exist', 'frontend-dashboard' ), esc_html( $class[0] ) ),
+					)
+				);
+			}
 			?>
 			<div class="bc_fed fed_add_page_profile_container">
 				<?php

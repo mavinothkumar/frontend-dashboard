@@ -22,6 +22,7 @@ $fed_core_files = array(
 
 	// Admin functions & install definitions
 	'/includes/admin/install/install.php',
+	'/includes/admin/install/class-fed-install-addons.php',
 	'/includes/admin/install/initial-setup.php',
 	'/includes/admin/function-admin.php',
 
@@ -106,6 +107,7 @@ $fed_core_files = array(
 	'/includes/admin/request/user-profile.php',
 	'/includes/admin/request/status.php',
 	'/includes/admin/request/addons.php',
+	'/includes/admin/request/orders.php',
 	'/includes/admin/request/tabs/user-profile-layout.php',
 	'/includes/admin/request/tabs/post-options.php',
 	'/includes/admin/request/tabs/login.php',
@@ -128,6 +130,9 @@ $fed_core_files = array(
 	'/includes/admin/payment/class-fed-invoice.php',
 	'/includes/admin/payment/class-fed-invoice-template.php',
 	'/includes/admin/payment/class-fed-payment-widgets.php',
+	'/includes/admin/pro/plugins/class-fed-mp-pro.php',
+	'/includes/admin/pro/plugins/class-fed-pp-pro.php',
+	'/includes/admin/pro/plugins/class-fed-sc-pro.php',
 	'/includes/config/config.php',
 	'/includes/admin/widgets/class-fed-user-count-widget.php',
 	'/includes/log/class-fed-log.php',
@@ -138,6 +143,11 @@ $fed_core_files = array(
 	'/includes/frontend/request/validation/validation.php',
 	'/includes/frontend/request/user_profile/user-profile.php',
 	'/includes/shortcodes/login/login-data.php',
+	'/includes/shortcodes/login/login-only-shortcode.php',
+	'/includes/shortcodes/login/register-only-shortcode.php',
+	'/includes/shortcodes/login/forgot-password-only-shortcode.php',
+	'/includes/shortcodes/widget/taxonomy.php',
+	'/includes/widgets/class-fed-post-widget.php',
 	'/includes/frontend/request/login/validation.php',
 	'/includes/frontend/request/login/login.php',
 	'/includes/frontend/request/login/register.php',
