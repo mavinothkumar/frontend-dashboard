@@ -690,7 +690,7 @@ if ( ! class_exists( 'FEDTransaction' ) ) {
 				$table_name = $wpdb->prefix . sanitize_key( $table['object_table'] );
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table_name ) ) ) === $table_name ) {
-					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 					$records = $wpdb->get_results( "SELECT * FROM `{$table_name}` ", ARRAY_A );
 					if ( $records && count( $records ) > 0 ) {
 						$formatted = fed_get_key_value_array( $records, 'id', 'plan_name' );
