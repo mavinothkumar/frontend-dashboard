@@ -142,6 +142,9 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 == Changelog ==
 
 = 3.0.4 =
+* Feature: Introduced "More WordPress Plugins by BufferCode" section in Add-ons marketplace to showcase standalone ecosystem plugins (AdFuz & GateFuz).
+* Feature: Added support for WordPress 6.5+ native plugin dependency declarations (`required_plugins`) to dynamically separate official add-ons from standalone ecosystem plugins.
+* Enhancement: Streamlined Add-ons marketplace grid with unified 4-column responsive card layouts and dedicated ecosystem filter tab.
 * Fix: Resolved "Class FEDInstallAddons does not exist" error during extension 1-click install and activation.
 * Fix: Loaded missing module dependencies into core bootstrapper including orders, pro plugin placeholders, and standalone shortcodes.
 * Enhancement: Hardened AJAX extension installer with explicit capability checks and clean JSON error response handling.
@@ -177,7 +180,7 @@ https://faq.frontenddashboard.com/changelog/overview/
 == Upgrade Notice ==
 
 = 3.0.4 =
-Maintenance & bugfix update: Fixed extension installation and activation class loader issue, registered missing module dependencies, and enhanced AJAX error handling.
+Maintenance & feature update: Added BufferCode ecosystem plugins showcase (AdFuz & GateFuz) in Add-ons hub, fixed extension installation and activation class loader issue, registered missing module dependencies, and enhanced AJAX error handling.
 
 = 3.0.3 =
 Maintenance update: WordPress.org standards compliance, input unslashing/sanitization improvements, and cleanup.

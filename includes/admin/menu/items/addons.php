@@ -880,13 +880,13 @@ function fed_get_plugin_pages_menu() {
 				</div>
 			</div>
 
-			<div id="fed_other_plugins_grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+			<div id="fed_other_plugins_grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
 				<?php foreach ( $other_plugins as $slug => $item ) : ?>
 					<?php
 					$is_active     = $item['is_active'];
 					$is_installed  = $item['is_installed'];
 					$status_attr   = $is_active ? 'active' : ( $is_installed ? 'inactive' : 'available' );
-					$card_border   = 'border-slate-200/80 shadow-sm hover:shadow-md';
+					$card_border   = 'border-slate-200/80 shadow-sm';
 					?>
 					<div class="fed-addon-card fed-ecosystem-card bg-white rounded-2xl border <?php echo esc_attr( $card_border ); ?> flex flex-col justify-between overflow-hidden"
 						data-category="ecosystem"
@@ -901,7 +901,7 @@ function fed_get_plugin_pages_menu() {
 						
 						<div>
 							<!-- Card Thumbnail Image or Gradient Banner -->
-							<div class="relative w-full h-40 bg-slate-100 overflow-hidden border-b border-slate-100 flex items-center justify-center">
+							<div class="relative w-full h-36 bg-slate-100 overflow-hidden border-b border-slate-100 flex items-center justify-center">
 								<?php if ( ! empty( $item['thumbnail'] ) ) : ?>
 									<img src="<?php echo esc_url( $item['thumbnail'] ); ?>" alt="<?php echo esc_attr( $item['title'] ); ?>" class="w-full h-full object-cover object-center transition-transform duration-300 hover:scale-105" loading="lazy" onerror="this.style.display='none'; if(this.nextElementSibling){this.nextElementSibling.classList.remove('hidden');}" />
 								<?php endif; ?>
@@ -936,7 +936,7 @@ function fed_get_plugin_pages_menu() {
 								<!-- Card Top Row -->
 								<div class="flex items-start justify-between gap-3 mb-2">
 									<div>
-										<h3 class="font-bold text-slate-900 text-lg leading-snug">
+										<h3 class="font-bold text-slate-900 text-base leading-snug">
 											<?php echo esc_html( $item['title'] ); ?>
 										</h3>
 										<?php if ( ! empty( $item['tagline'] ) ) : ?>
