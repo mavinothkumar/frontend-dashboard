@@ -14,6 +14,16 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param  array $post  Post.
  */
 function fed_register_form_submit( $post ) {
+	// Security: Explicitly unset reserved WordPress user fields before anything else
+	unset(
+		$post['ID'],
+		$post['id'],
+		$post['user_registered'],
+		$post['user_activation_key'],
+		$post['user_status'],
+		$post['spam'],
+		$post['deleted']
+	);
 
 	do_action( 'fed_register_before_validation', $post );
 
@@ -28,9 +38,45 @@ function fed_register_form_submit( $post ) {
 		exit();
 	}
 
-	apply_filters( 'fed_register_form_submit', $post );
+	// Determine valid user role
+	$allowed_roles = fed_is_role_in_registration();
+	$default_role  = get_option( 'default_role', 'subscriber' );
+	if ( 'administrator' === strtolower( (string) $default_role ) ) {
+		$default_role = 'subscriber';
+	}
 
-	$status = wp_insert_user( $post );
+	$role = $default_role;
+	if ( $allowed_roles && isset( $post['role'] ) && array_key_exists( $post['role'], $allowed_roles ) && 'administrator' !== strtolower( (string) $post['role'] ) ) {
+		$role = sanitize_text_field( $post['role'] );
+	}
+
+	// Construct clean userdata strictly for new user insertion
+	$userdata = array(
+		'user_login' => sanitize_user( $post['user_login'], true ),
+		'user_email' => sanitize_email( $post['user_email'] ),
+		'user_pass'  => (string) $post['user_pass'],
+		'role'       => $role,
+	);
+
+	// Include optional standard profile fields if submitted
+	$optional_fields = array( 'first_name', 'last_name', 'display_name', 'user_url', 'description', 'nickname' );
+	foreach ( $optional_fields as $field ) {
+		if ( isset( $post[ $field ] ) && ! empty( $post[ $field ] ) ) {
+			$userdata[ $field ] = sanitize_text_field( $post[ $field ] );
+		}
+	}
+
+	// Ensure ID is never present under any circumstances
+	unset( $userdata['ID'], $userdata['id'] );
+
+	$userdata = apply_filters( 'fed_register_form_submit', $userdata );
+
+	// Double-safety unset after filters
+	if ( is_array( $userdata ) ) {
+		unset( $userdata['ID'], $userdata['id'] );
+	}
+
+	$status = wp_insert_user( $userdata );
 
 	if ( $status instanceof WP_Error ) {
 		wp_send_json_error( array( 'user' => $status->get_error_messages() ) );

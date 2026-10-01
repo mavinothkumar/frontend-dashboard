@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.0.4
+Stable tag: 3.0.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -141,6 +141,10 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 == Changelog ==
 
+= 3.0.5 =
+* Security: Fixed user registration parameter handling to prevent unauthorized user updates and privilege escalation.
+* Security: Hardened AJAX / Post API dispatch routing and function execution handlers with strict allowlist and capability checks.
+
 = 3.0.4 =
 * Feature: Introduced "More WordPress Plugins by BufferCode" section in Add-ons marketplace to showcase standalone ecosystem plugins (AdFuz & GateFuz).
 * Feature: Added support for WordPress 6.5+ native plugin dependency declarations (`required_plugins`) to dynamically separate official add-ons from standalone ecosystem plugins.
@@ -178,6 +182,9 @@ More Changelogs:
 https://faq.frontenddashboard.com/changelog/overview/
 
 == Upgrade Notice ==
+
+= 3.0.5 =
+Security update: Fixed user registration parameter handling and hardened API/AJAX function routing with strict allowlists. Upgrade immediately.
 
 = 3.0.4 =
 Maintenance & feature update: Added BufferCode ecosystem plugins showcase (AdFuz & GateFuz) in Add-ons hub, fixed extension installation and activation class loader issue, registered missing module dependencies, and enhanced AJAX error handling.

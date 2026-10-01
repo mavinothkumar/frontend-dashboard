@@ -3265,28 +3265,67 @@ function fed_call_function_method( $item ) {
  * @param  array  $item  Item.
  */
 function fed_ajax_call_function_method( $item ) {
-	if ( is_string( $item['callable'] ) && function_exists( $item['callable'] ) ) {
-		$parameter = isset( $item['arguments'] ) ? $item['arguments'] : '';
-		call_user_func( $item['callable'], $parameter );
+	if ( ! is_array( $item ) || ! isset( $item['callable'] ) ) {
+		wp_send_json_error( array( 'message' => __( 'Invalid callable provided.', 'frontend-dashboard' ) ), 400 );
+		exit();
+	}
+
+	if ( is_string( $item['callable'] ) ) {
+		$func = trim( $item['callable'] );
+		// Allowlist check: only allow functions starting with fed_ or in allowed list
+		$allowed = ( 0 === stripos( $func, 'fed_' ) || 0 === stripos( $func, 'FED' ) );
+		$allowed = apply_filters( 'fed_allowed_ajax_callable_function', $allowed, $func );
+
+		if ( $allowed && function_exists( $func ) ) {
+			$parameter = isset( $item['arguments'] ) ? $item['arguments'] : '';
+			call_user_func( $func, $parameter );
+			return;
+		}
+
+		wp_send_json_error(
+			array(
+				'message' => __( 'Unauthorized or invalid function call.', 'frontend-dashboard' ),
+			),
+			403
+		);
+		exit();
 	} elseif (
-		is_array( $item['callable'] ) && method_exists(
-			$item['callable']['object'],
-			$item['callable']['method']
-		)
+		is_array( $item['callable'] ) &&
+		isset( $item['callable']['object'], $item['callable']['method'] ) &&
+		is_string( $item['callable']['method'] ) &&
+		0 !== strpos( $item['callable']['method'], '__' ) &&
+		method_exists( $item['callable']['object'], $item['callable']['method'] )
 	) {
-		$parameter = isset( $item['arguments'] ) ? $item['arguments'] : '';
-		call_user_func( array( $item['callable']['object'], $item['callable']['method'] ), $parameter );
+		$class_name = is_object( $item['callable']['object'] ) ? get_class( $item['callable']['object'] ) : ( is_string( $item['callable']['object'] ) ? $item['callable']['object'] : '' );
+		$allowed    = ( 0 === stripos( $class_name, 'FED' ) || 0 === stripos( $class_name, 'BC_' ) );
+		$allowed    = apply_filters( 'fed_allowed_ajax_callable_class', $allowed, $class_name, $item['callable']['method'] );
+
+		if ( $allowed ) {
+			$parameter = isset( $item['arguments'] ) ? $item['arguments'] : '';
+			call_user_func( array( $item['callable']['object'], $item['callable']['method'] ), $parameter );
+			return;
+		}
+
+		wp_send_json_error(
+			array(
+				'message' => __( 'Unauthorized class method execution.', 'frontend-dashboard' ),
+			),
+			403
+		);
+		exit();
 	} else {
-		$error = is_array( $item['callable'] ) ? $item['callable']['method'] : $item['callable'];
+		$error = is_array( $item['callable'] ) ? ( isset( $item['callable']['method'] ) ? $item['callable']['method'] : 'unknown' ) : $item['callable'];
 
 		wp_send_json_error(
 			array(
 				'message' => __(
 					             'OOPS! You have not add the callable function, please add ',
 					             'frontend-dashboard'
-				             ) . $error . __( ' to show the body container', 'frontend-dashboard' ),
-			)
+				             ) . esc_html( $error ) . __( ' to show the body container', 'frontend-dashboard' ),
+			),
+			400
 		);
+		exit();
 	}
 }
 
@@ -3297,25 +3336,77 @@ function fed_ajax_call_function_method( $item ) {
  * @param  null  $parameter  Parameter
  */
 function fed_execute_method_by_string( $item, $parameter = null ) {
+	if ( ! is_string( $item ) || empty( $item ) ) {
+		return;
+	}
+
 	$class = explode( '@', $item );
 	if ( is_array( $class ) && isset( $class[0] ) ) {
-		if ( class_exists( $class[0] ) ) {
-			fed_call_function_method(
-				array(
-					'callable'  => array(
-						'object' => new $class[0],
-						'method' => isset( $class[1] ) ? $class[1] : 'update',
-					),
-					'arguments' => $parameter,
-				)
-			);
+		$class_name  = trim( $class[0] );
+		$method_name = isset( $class[1] ) && ! empty( $class[1] ) ? trim( $class[1] ) : 'update';
+
+		// Disallow magic methods or invalid method names
+		if ( 0 === strpos( $method_name, '__' ) ) {
+			if ( wp_doing_ajax() ) {
+				wp_send_json_error( array( 'errorMessage' => __( 'Invalid method call.', 'frontend-dashboard' ) ), 403 );
+				exit();
+			}
+			return;
+		}
+
+		// Validate class belongs to FED / BC namespaces or allowlist
+		$is_allowed = ( 0 === stripos( $class_name, 'FED' ) || 0 === stripos( $class_name, 'BC_' ) );
+		$is_allowed = apply_filters( 'fed_allowed_execute_class', $is_allowed, $class_name, $method_name );
+
+		if ( ! $is_allowed ) {
+			if ( wp_doing_ajax() ) {
+				wp_send_json_error( array( 'errorMessage' => __( 'Unauthorized class execution.', 'frontend-dashboard' ) ), 403 );
+				exit();
+			}
+			return;
+		}
+
+		if ( class_exists( $class_name ) ) {
+			$instance = new $class_name();
+			if ( method_exists( $instance, $method_name ) && is_callable( array( $instance, $method_name ) ) ) {
+				fed_call_function_method(
+					array(
+						'callable'  => array(
+							'object' => $instance,
+							'method' => $method_name,
+						),
+						'arguments' => $parameter,
+					)
+				);
+			} else {
+				if ( wp_doing_ajax() ) {
+					wp_send_json_error(
+						array(
+							'errorMessage' => sprintf(
+								/* Translators: 1: Method name, 2: Class name */
+								__( 'Method %1$s does not exist in class %2$s', 'frontend-dashboard' ),
+								esc_html( $method_name ),
+								esc_html( $class_name )
+							),
+						),
+						404
+					);
+					exit();
+				}
+			}
 		} else {
 			if ( wp_doing_ajax() ) {
 				wp_send_json_error(
 					array(
-						'errorMessage' => sprintf( __( 'Class %s does not exist', 'frontend-dashboard' ), esc_html( $class[0] ) ),
-					)
+						'errorMessage' => sprintf(
+							/* Translators: %s : Class name */
+							__( 'Class %s does not exist', 'frontend-dashboard' ),
+							esc_html( $class_name )
+						),
+					),
+					404
 				);
+				exit();
 			}
 			?>
 			<div class="bc_fed fed_add_page_profile_container">
@@ -3324,7 +3415,7 @@ function fed_execute_method_by_string( $item, $parameter = null ) {
 					sprintf(
 					/* Translators: %s : Class */
 						__( 'Class %s does not exist', 'frontend-dashboard' ),
-						esc_html( $class[0] )
+						esc_html( $class_name )
 					)
 				);
 				?>

@@ -21,11 +21,11 @@ if ( ! class_exists( 'FED_Requests' ) ) {
 			add_action( 'wp_ajax_fed_ajax_request', array( $this, 'ajax_request' ) );
 			add_action( 'wp_ajax_nopriv_fed_ajax_request', array( $this, 'ajax_request' ) );
 			add_action( 'wp_ajax_fed_api_ajax_request', array( $this, 'ajax_api_request' ) );
-			add_action( 'wp_ajax_nopriv_fed_api_ajax_request', array( $this, 'ajax_api_request' ) );
+			// Security: Do not expose unauthenticated nopriv hook for fed_api_ajax_request
 			add_action( 'admin_post_fed_request', array( $this, 'request' ) );
 			add_action( 'admin_post_nopriv_fed_request', array( $this, 'request' ) );
 			add_action( 'admin_post_fed_api_request', array( $this, 'api_request' ) );
-			add_action( 'admin_post_nopriv_fed_api_request', array( $this, 'api_request' ) );
+			// Security: Do not expose unauthenticated nopriv hook for fed_api_request
 		}
 
 		/**
@@ -102,8 +102,18 @@ if ( ! class_exists( 'FED_Requests' ) ) {
 		 * API Request.
 		 */
 		public function api_request() {
+			if ( ! is_user_logged_in() ) {
+				wp_die( esc_html__( 'Unauthorized Request', 'frontend-dashboard' ), 401 );
+			}
+
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$request = fed_sanitize_text_field( $_REQUEST );
+
+			if ( isset( $request['fed_action_hook'] ) && 'FEDInstallAddons@install' === $request['fed_action_hook'] ) {
+				check_admin_referer( 'updates' );
+			} else {
+				fed_verify_nonce( $request );
+			}
 
 			do_action( 'fed_before_api_request_action_hook_call', $request );
 
@@ -134,8 +144,18 @@ if ( ! class_exists( 'FED_Requests' ) ) {
 		 * Ajax API Request.
 		 */
 		public function ajax_api_request() {
+			if ( ! is_user_logged_in() ) {
+				wp_send_json_error( array( 'message' => __( 'Unauthorized Request', 'frontend-dashboard' ) ), 401 );
+			}
+
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$request = fed_sanitize_text_field( $_REQUEST );
+
+			if ( isset( $request['fed_action_hook'] ) && 'FEDInstallAddons@install' === $request['fed_action_hook'] ) {
+				check_ajax_referer( 'updates' );
+			} else {
+				fed_verify_nonce( $request );
+			}
 
 			do_action( 'fed_before_ajax_request_action_hook_call', $request );
 
