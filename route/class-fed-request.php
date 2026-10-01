@@ -19,11 +19,11 @@ if ( ! class_exists( 'FED_Requests' ) ) {
 		 */
 		public function __construct() {
 			add_action( 'wp_ajax_fed_ajax_request', array( $this, 'ajax_request' ) );
-			add_action( 'wp_ajax_nopriv_fed_ajax_request', array( $this, 'ajax_request' ) );
+			// Security: Do not expose unauthenticated nopriv hook for fed_ajax_request
 			add_action( 'wp_ajax_fed_api_ajax_request', array( $this, 'ajax_api_request' ) );
 			// Security: Do not expose unauthenticated nopriv hook for fed_api_ajax_request
 			add_action( 'admin_post_fed_request', array( $this, 'request' ) );
-			add_action( 'admin_post_nopriv_fed_request', array( $this, 'request' ) );
+			// Security: Do not expose unauthenticated nopriv hook for fed_request
 			add_action( 'admin_post_fed_api_request', array( $this, 'api_request' ) );
 			// Security: Do not expose unauthenticated nopriv hook for fed_api_request
 		}
@@ -32,6 +32,11 @@ if ( ! class_exists( 'FED_Requests' ) ) {
 		 * Ajax request.
 		 */
 		public function ajax_request() {
+			if ( ! is_user_logged_in() ) {
+				wp_send_json_error( array( 'message' => __( 'Unauthorized Request', 'frontend-dashboard' ) ), 401 );
+				exit();
+			}
+
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$request = fed_sanitize_text_field( $_REQUEST );
 
@@ -67,6 +72,10 @@ if ( ! class_exists( 'FED_Requests' ) ) {
 		 * Request.
 		 */
 		public function request() {
+			if ( ! is_user_logged_in() ) {
+				wp_die( esc_html__( 'Unauthorized Request', 'frontend-dashboard' ), 401 );
+			}
+
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$request = fed_sanitize_text_field( $_REQUEST );
 
