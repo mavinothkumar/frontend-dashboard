@@ -217,7 +217,9 @@ function fed_format_menu_items( $menu, $index, $first_element, $dashboard_url, $
 			? $menu['menu_name']
 			: ( isset( $menu['name'] ) && '' !== $menu['name']
 				? $menu['name']
-				: ( ! empty( $menu_slug ) && 'fed_slug_error' !== $menu_slug ? ucwords( str_replace( [ '-', '_' ], ' ', $menu_slug ) ) : 'Menu' ) ) );
+				: ( isset( $menu['menu_title'] ) && '' !== $menu['menu_title']
+					? $menu['menu_title']
+					: ( ! empty( $menu_slug ) && 'fed_slug_error' !== $menu_slug ? ucwords( str_replace( [ '-', '_' ], ' ', $menu_slug ) ) : 'Menu' ) ) ) );
 	$menu_url    = add_query_arg(
 		array(
 			'menu_type' => $menu_type,

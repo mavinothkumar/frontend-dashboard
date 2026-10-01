@@ -105,9 +105,29 @@ class DashboardRoutes {
 		$first_element_key = array_keys( $menu );
 		$first_element     = $first_element_key[0];
 
-		$hasFullQuery = count( array_diff( $this->getDefaultMenuQuery(), array_keys( $this->request ) ) ) === 0;
+		$hasFullQuery   = count( array_diff( $this->getDefaultMenuQuery(), array_keys( $this->request ) ) ) === 0;
+		$requested_slug = ! empty( $this->request['menu_slug'] ) ? sanitize_key( $this->request['menu_slug'] ) : '';
+		$matched_menu   = null;
 
-		if ( ! $hasFullQuery ) {
+		if ( $requested_slug ) {
+			foreach ( $menu as $item ) {
+				if ( isset( $item['menu_slug'] ) && $item['menu_slug'] === $requested_slug ) {
+					$matched_menu = $item;
+					break;
+				}
+			}
+		}
+
+		if ( $matched_menu ) {
+			$menu_items = [
+				'menu_request' => [
+					'menu_type' => isset( $matched_menu['menu_type'] ) ? $matched_menu['menu_type'] : ( isset( $this->request['menu_type'] ) ? sanitize_key( $this->request['menu_type'] ) : 'custom' ),
+					'menu_slug' => $matched_menu['menu_slug'],
+					'menu_id'   => isset( $matched_menu['id'] ) ? $matched_menu['id'] : ( isset( $this->request['menu_id'] ) ? absint( $this->request['menu_id'] ) : 0 ),
+					'fed_nonce' => wp_create_nonce( 'fed_nonce' ),
+				],
+			];
+		} elseif ( ! $hasFullQuery ) {
 			$menu_items = [
 				'menu_request' => [
 					'menu_type' => isset( $menu[ $first_element ]['menu_type'] ) ? $menu[ $first_element ]['menu_type'] : 'user',
@@ -121,7 +141,7 @@ class DashboardRoutes {
 				'menu_request' => [
 					'menu_type' => $this->request['menu_type'],
 					'menu_slug' => $this->request['menu_slug'],
-					'menu_id'   => $this->request['menu_id'],
+					'menu_id'   => isset( $this->request['menu_id'] ) ? $this->request['menu_id'] : 0,
 					'fed_nonce' => wp_create_nonce( 'fed_nonce' ),
 				],
 			];
