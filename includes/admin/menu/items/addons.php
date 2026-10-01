@@ -188,6 +188,11 @@ function fed_get_addons_catalog() {
 
 	$catalog = array();
 	foreach ( $plugins_raw as $slug => $item ) {
+		// Skip self
+		if ( 'frontend-dashboard' === $slug ) {
+			continue;
+		}
+
 		// Skip deprecated add-ons
 		if ( in_array( $slug, $deprecated_slugs, true ) ) {
 			continue;
@@ -197,6 +202,15 @@ function fed_get_addons_catalog() {
 
 		// Currently hide Pro versions for the free version release
 		if ( $is_pro ) {
+			continue;
+		}
+
+		// Dependency check: Must require frontend-dashboard
+		$required_plugins = isset( $item->required_plugins ) ? (array) $item->required_plugins : array();
+		$is_fed_addon     = in_array( 'frontend-dashboard', $required_plugins, true )
+							|| ( empty( $required_plugins ) && 0 === strpos( $slug, 'frontend-dashboard-' ) );
+
+		if ( ! $is_fed_addon ) {
 			continue;
 		}
 
@@ -235,6 +249,125 @@ function fed_get_addons_catalog() {
 }
 
 /**
+ * Get Catalog of Other Plugins by BufferCode (Standalone Ecosystem Products)
+ *
+ * @return array
+ */
+function fed_get_other_plugins_catalog() {
+	$current_slug = 'frontend-dashboard';
+
+	// Visual metadata registry for standalone BufferCode products
+	$meta_registry = array(
+		'ad-fuz'  => array(
+			'tagline'       => __( 'Ad Management & Campaign Delivery Engine', 'frontend-dashboard' ),
+			'category_name' => __( 'Ad Management', 'frontend-dashboard' ),
+			'icon'          => 'fas fa-bullhorn',
+			'icon_bg'       => 'bg-gradient-to-br from-violet-600 to-indigo-600 text-white',
+			'tags'          => array( 'Banner Ads', 'Video Ads', 'Campaign Schedules', 'Impression Telemetry' ),
+			'is_wp_org'     => true,
+		),
+		'gatefuz' => array(
+			'tagline'       => __( 'Decoupled Multi-Gateway Payment Solution', 'frontend-dashboard' ),
+			'category_name' => __( 'Payments & Checkout', 'frontend-dashboard' ),
+			'icon'          => 'fas fa-credit-card',
+			'icon_bg'       => 'bg-gradient-to-br from-emerald-600 to-teal-600 text-white',
+			'tags'          => array( '7 Global Gateways', 'Stripe & PayPal', 'Decoupled Architecture', 'Centralized Ledger' ),
+			'is_wp_org'     => false,
+		),
+	);
+
+	$api_data = get_transient( 'fed_plugin_list_api' );
+	if ( false === $api_data && function_exists( 'get_plugin_list' ) ) {
+		$api_data = get_plugin_list();
+		if ( $api_data ) {
+			set_transient( 'fed_plugin_list_api', $api_data, 12 * HOUR_IN_SECONDS );
+		}
+	}
+
+	$plugins_raw = array();
+	if ( $api_data ) {
+		$decoded = json_decode( $api_data );
+		if ( isset( $decoded->plugins ) ) {
+			$plugins_raw = (array) $decoded->plugins;
+		}
+	}
+
+	// Fallback definitions in case the API is offline or hasn't returned them
+	if ( empty( $plugins_raw ) || ( ! isset( $plugins_raw['ad-fuz'] ) && ! isset( $plugins_raw['gatefuz'] ) ) ) {
+		$fallback = array(
+			'ad-fuz'  => (object) array(
+				'id'               => 'AD_FUZ_PLUGIN',
+				'version'          => '1.3.13',
+				'directory'        => 'ad-fuz/ad-fuz.php',
+				'title'            => 'Ad Fuz',
+				'description'      => 'AdFuz gives you a structured, developer-grade workflow to create ads, schedule campaigns with precise date ranges, and serve them through defined ad spaces all from your WordPress dashboard.',
+				'thumbnail'        => 'https://buffercode.com/storage/plugins/banner-1544x500_1790584184_8QxCE_cover.webp',
+				'download_url'     => 'https://buffercode.com/plugin/ad-fuz',
+				'install_slug'     => 'ad-fuz',
+				'required_plugins' => array(),
+			),
+			'gatefuz' => (object) array(
+				'id'               => 'GATEFUZ_PLUGIN',
+				'version'          => '1.0.7',
+				'directory'        => 'gatefuz/gatefuz.php',
+				'title'            => 'GateFuz',
+				'description'      => 'Most WordPress payment solutions lock you into heavy, bloated eCommerce frameworks just to accept a single charge or recurring subscription. GateFuz redefines payments on WordPress with a developer-first, decoupled architecture supporting 7 global gateways.',
+				'thumbnail'        => 'https://buffercode.com/storage/plugins/banner-1544x500_1790689495_HCWJS_cover.webp',
+				'download_url'     => 'https://buffercode.com/plugin/gatefuz',
+				'install_slug'     => 'gatefuz',
+				'required_plugins' => array(),
+			),
+		);
+		$plugins_raw = array_merge( $plugins_raw, $fallback );
+	}
+
+	$other_plugins = array();
+	foreach ( $plugins_raw as $slug => $item ) {
+		if ( $slug === $current_slug ) {
+			continue;
+		}
+
+		$required = isset( $item->required_plugins ) ? (array) $item->required_plugins : array();
+
+		// Standalone plugin: empty required_plugins and not a frontend-dashboard add-on
+		$is_standalone = empty( $required ) && 0 !== strpos( $slug, 'frontend-dashboard-' );
+		if ( ! $is_standalone ) {
+			continue;
+		}
+
+		$meta      = isset( $meta_registry[ $slug ] ) ? $meta_registry[ $slug ] : array();
+		$directory = isset( $item->directory ) ? $item->directory : ( $slug . '/' . $slug . '.php' );
+
+		$raw_desc   = isset( $item->description ) ? $item->description : '';
+		$clean_desc = trim( wp_strip_all_tags( (string) $raw_desc ) );
+		$clean_desc = html_entity_decode( $clean_desc, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+		$clean_desc = (string) preg_replace( '/\s+/', ' ', $clean_desc );
+
+		$other_plugins[ $slug ] = array(
+			'slug'          => $slug,
+			'id'            => isset( $item->id ) ? $item->id : '',
+			'title'         => isset( $item->title ) ? $item->title : $slug,
+			'tagline'       => isset( $meta['tagline'] ) ? $meta['tagline'] : '',
+			'version'       => isset( $item->version ) ? $item->version : '1.0',
+			'directory'     => $directory,
+			'file'          => $directory,
+			'description'   => $clean_desc,
+			'thumbnail'     => isset( $item->thumbnail ) ? $item->thumbnail : '',
+			'download_url'  => isset( $item->download_url ) ? $item->download_url : 'https://buffercode.com/plugin/' . $slug,
+			'install_slug'  => isset( $item->install_slug ) ? $item->install_slug : $slug,
+			'pricing'       => isset( $item->pricing ) ? $item->pricing : (object) array( 'type' => 'Free' ),
+			'category_name' => isset( $meta['category_name'] ) ? $meta['category_name'] : __( 'Standalone Plugin', 'frontend-dashboard' ),
+			'icon'          => isset( $meta['icon'] ) ? $meta['icon'] : 'fas fa-box-open',
+			'icon_bg'       => isset( $meta['icon_bg'] ) ? $meta['icon_bg'] : 'bg-gradient-to-br from-indigo-500 to-purple-600 text-white',
+			'tags'          => isset( $meta['tags'] ) ? $meta['tags'] : array( 'BufferCode', 'WordPress' ),
+			'is_wp_org'     => isset( $meta['is_wp_org'] ) ? $meta['is_wp_org'] : ( 'ad-fuz' === $slug ),
+		);
+	}
+
+	return $other_plugins;
+}
+
+/**
  * Get Plugin Pages Menu / Add-ons Marketplace Page
  */
 function fed_get_plugin_pages_menu() {
@@ -242,9 +375,10 @@ function fed_get_plugin_pages_menu() {
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 	}
 
-	$catalog = fed_get_addons_catalog();
+	$catalog       = fed_get_addons_catalog();
+	$other_plugins = fed_get_other_plugins_catalog();
 
-	// Calculate live statistics
+	// Calculate live statistics for Frontend Dashboard Add-ons
 	$total_addons     = count( $catalog );
 	$active_count     = 0;
 	$installed_count  = 0;
@@ -276,6 +410,14 @@ function fed_get_plugin_pages_menu() {
 		if ( ! empty( $item['is_pro'] ) ) {
 			$pro_count++;
 		}
+	}
+	unset( $item );
+
+	// Calculate live status for other BufferCode ecosystem plugins
+	foreach ( $other_plugins as $slug => &$item ) {
+		$file                 = $item['file'];
+		$item['is_installed'] = file_exists( WP_PLUGIN_DIR . '/' . $file );
+		$item['is_active']    = $item['is_installed'] && is_plugin_active( $file );
 	}
 	unset( $item );
 
@@ -482,6 +624,11 @@ function fed_get_plugin_pages_menu() {
 					<button type="button" data-category="communication" class="fed-main-tab-btn inline-flex items-center px-4 py-2.5 rounded-xl text-sm font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all focus:outline-none">
 						<i class="fas fa-comments mr-2 text-xs"></i>
 						<?php esc_html_e( 'Communication', 'frontend-dashboard' ); ?>
+					</button>
+					<button type="button" data-category="ecosystem" class="fed-main-tab-btn inline-flex items-center px-4 py-2.5 rounded-xl text-sm font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition-all focus:outline-none">
+						<i class="fas fa-cubes mr-2 text-xs text-indigo-500"></i>
+						<?php esc_html_e( 'Other BufferCode Plugins', 'frontend-dashboard' ); ?>
+						<span class="fed-tab-count ml-2 px-2 py-0.5 rounded-full text-xs bg-slate-200 text-slate-700 font-bold"><?php echo esc_html( count( $other_plugins ) ); ?></span>
 					</button>
 				</div>
 
@@ -716,6 +863,163 @@ function fed_get_plugin_pages_menu() {
 			<?php endforeach; ?>
 		</div>
 
+		<!-- Other BufferCode Plugins Showcase -->
+		<div id="fed_other_plugins_section" class="mt-12 pt-8 border-t border-slate-200/80">
+			<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+				<div>
+					<div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-lg text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-100 mb-2">
+						<i class="fas fa-cubes text-[11px]"></i>
+						<?php esc_html_e( 'BufferCode Ecosystem', 'frontend-dashboard' ); ?>
+					</div>
+					<h2 class="text-xl font-bold text-slate-900 tracking-tight">
+						<?php esc_html_e( 'More WordPress Plugins by BufferCode', 'frontend-dashboard' ); ?>
+					</h2>
+					<p class="text-sm text-slate-500 mt-0.5">
+						<?php esc_html_e( 'Standalone WordPress solutions crafted with the same lightweight, modular philosophy.', 'frontend-dashboard' ); ?>
+					</p>
+				</div>
+			</div>
+
+			<div id="fed_other_plugins_grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+				<?php foreach ( $other_plugins as $slug => $item ) : ?>
+					<?php
+					$is_active     = $item['is_active'];
+					$is_installed  = $item['is_installed'];
+					$status_attr   = $is_active ? 'active' : ( $is_installed ? 'inactive' : 'available' );
+					$card_border   = 'border-slate-200/80 shadow-sm hover:shadow-md';
+					?>
+					<div class="fed-addon-card fed-ecosystem-card bg-white rounded-2xl border <?php echo esc_attr( $card_border ); ?> flex flex-col justify-between overflow-hidden"
+						data-category="ecosystem"
+						data-status="<?php echo esc_attr( $status_attr ); ?>"
+						data-installed="<?php echo $is_installed ? 'true' : 'false'; ?>"
+						data-active="<?php echo $is_active ? 'true' : 'false'; ?>"
+						data-pro="false"
+						data-incompatible="false"
+						data-title="<?php echo esc_attr( strtolower( $item['title'] ) ); ?>"
+						data-desc="<?php echo esc_attr( strtolower( $item['description'] ) ); ?>"
+						data-tags="<?php echo esc_attr( strtolower( implode( ' ', $item['tags'] ) ) ); ?>">
+						
+						<div>
+							<!-- Card Thumbnail Image or Gradient Banner -->
+							<div class="relative w-full h-40 bg-slate-100 overflow-hidden border-b border-slate-100 flex items-center justify-center">
+								<?php if ( ! empty( $item['thumbnail'] ) ) : ?>
+									<img src="<?php echo esc_url( $item['thumbnail'] ); ?>" alt="<?php echo esc_attr( $item['title'] ); ?>" class="w-full h-full object-cover object-center transition-transform duration-300 hover:scale-105" loading="lazy" onerror="this.style.display='none'; if(this.nextElementSibling){this.nextElementSibling.classList.remove('hidden');}" />
+								<?php endif; ?>
+								<div class="<?php echo ! empty( $item['thumbnail'] ) ? 'hidden ' : ''; ?>w-full h-full flex flex-col items-center justify-center <?php echo esc_attr( $item['icon_bg'] ); ?>">
+									<i class="<?php echo esc_attr( $item['icon'] ); ?> text-4xl text-white/90 mb-1.5"></i>
+									<span class="text-xs font-bold text-white/90 tracking-wide px-4 text-center"><?php echo esc_html( $item['title'] ); ?></span>
+								</div>
+								<div class="absolute top-3 left-3">
+									<span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold bg-slate-900/70 text-white backdrop-blur-sm">
+										<?php echo esc_html( $item['category_name'] ); ?>
+									</span>
+								</div>
+								<div class="absolute top-3 right-3">
+									<?php if ( $is_active ) : ?>
+										<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500 text-white shadow-sm backdrop-blur-sm">
+											<span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse mr-1.5"></span>
+											<?php esc_html_e( 'Active', 'frontend-dashboard' ); ?>
+										</span>
+									<?php elseif ( $is_installed ) : ?>
+										<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-800/80 text-white backdrop-blur-sm">
+											<?php esc_html_e( 'Inactive', 'frontend-dashboard' ); ?>
+										</span>
+									<?php else : ?>
+										<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-600 text-white shadow-sm backdrop-blur-sm">
+											<?php esc_html_e( 'Standalone', 'frontend-dashboard' ); ?>
+										</span>
+									<?php endif; ?>
+								</div>
+							</div>
+
+							<div class="p-5">
+								<!-- Card Top Row -->
+								<div class="flex items-start justify-between gap-3 mb-2">
+									<div>
+										<h3 class="font-bold text-slate-900 text-lg leading-snug">
+											<?php echo esc_html( $item['title'] ); ?>
+										</h3>
+										<?php if ( ! empty( $item['tagline'] ) ) : ?>
+											<p class="text-xs font-medium text-indigo-600 mt-0.5">
+												<?php echo esc_html( $item['tagline'] ); ?>
+											</p>
+										<?php endif; ?>
+										<div class="flex items-center space-x-2 mt-1.5">
+											<span class="text-xs font-semibold text-slate-500">
+												v<?php echo esc_html( $item['version'] ); ?>
+											</span>
+											<span class="inline-block w-1 h-1 rounded-full bg-slate-300"></span>
+											<span class="text-xs font-medium text-slate-500">
+												<?php esc_html_e( 'By BufferCode', 'frontend-dashboard' ); ?>
+											</span>
+										</div>
+									</div>
+								</div>
+
+								<!-- Description -->
+								<p class="text-slate-600 text-xs leading-relaxed mb-4 line-clamp-3">
+									<?php echo esc_html( $item['description'] ); ?>
+								</p>
+
+								<!-- Feature Tags -->
+								<div class="flex flex-wrap gap-1.5 mb-2">
+									<?php foreach ( $item['tags'] as $tag ) : ?>
+										<span class="px-2 py-0.5 rounded-md text-[11px] font-medium bg-slate-100 text-slate-600">
+											<?php echo esc_html( $tag ); ?>
+										</span>
+									<?php endforeach; ?>
+								</div>
+							</div>
+						</div>
+
+						<!-- Card Footer / Actions -->
+						<div class="px-5 py-3.5 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between gap-2 flex-wrap">
+							<div>
+								<a href="<?php echo esc_url( $item['download_url'] ); ?>" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold text-slate-500 hover:text-indigo-600 transition-colors inline-flex items-center">
+									<i class="fas fa-external-link-alt mr-1.5 text-slate-400 text-[10px]"></i>
+									<?php esc_html_e( 'Details & Docs', 'frontend-dashboard' ); ?>
+								</a>
+							</div>
+
+							<div class="flex items-center space-x-2 flex-wrap">
+								<?php if ( $is_active ) : ?>
+									<button type="button" class="fed-btn-deactivate inline-flex items-center px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-lg transition-all border border-rose-200"
+										data-plugin="<?php echo esc_attr( $item['file'] ); ?>"
+										data-title="<?php echo esc_attr( $item['title'] ); ?>">
+										<i class="fas fa-power-off mr-1"></i>
+										<?php esc_html_e( 'Deactivate', 'frontend-dashboard' ); ?>
+									</button>
+								<?php elseif ( $is_installed ) : ?>
+									<button type="button" class="fed-btn-activate inline-flex items-center px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg transition-all shadow-sm"
+										data-plugin="<?php echo esc_attr( $item['file'] ); ?>"
+										data-title="<?php echo esc_attr( $item['title'] ); ?>">
+										<i class="fas fa-play mr-1.5"></i>
+										<?php esc_html_e( 'Activate', 'frontend-dashboard' ); ?>
+									</button>
+								<?php elseif ( ! empty( $item['is_wp_org'] ) ) : ?>
+									<form method="post" class="fed_ajax_plugin_install inline-block"
+										action="<?php echo esc_url( fed_get_ajax_form_action( 'fed_api_ajax_request' ) . '&fed_action_hook=FEDInstallAddons@install' ); ?>">
+										<?php wp_nonce_field( 'updates' ); ?>
+										<input type="hidden" name="slug" value="<?php echo esc_attr( $item['install_slug'] ); ?>">
+										<button type="submit" class="inline-flex items-center px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition-all shadow-sm">
+											<i class="fas fa-download mr-1.5"></i>
+											<?php esc_html_e( 'Install & Activate', 'frontend-dashboard' ); ?>
+										</button>
+									</form>
+								<?php else : ?>
+									<a href="<?php echo esc_url( $item['download_url'] ); ?>" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition-all shadow-sm">
+										<i class="fas fa-external-link-alt mr-1.5 text-xs"></i>
+										<?php echo esc_html( sprintf( __( 'Get %s', 'frontend-dashboard' ), $item['title'] ) ); ?>
+									</a>
+								<?php endif; ?>
+							</div>
+						</div>
+
+					</div>
+				<?php endforeach; ?>
+			</div>
+		</div>
+
 		<!-- Empty State (Hidden by default) -->
 		<div id="fed_addons_empty_state" class="hidden bg-white rounded-2xl border border-slate-200/80 p-12 text-center my-8 shadow-sm">
 			<div class="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400 mx-auto mb-4">
@@ -783,6 +1087,8 @@ function fed_get_plugin_pages_menu() {
 		const searchClear = document.getElementById('fed_addons_search_clear');
 		const statusFilter = document.getElementById('fed_addons_status_filter');
 		const cards = Array.from(document.querySelectorAll('.fed-addon-card'));
+		const addonsGrid = document.getElementById('fed_addons_grid');
+		const otherSection = document.getElementById('fed_other_plugins_section');
 		const emptyState = document.getElementById('fed_addons_empty_state');
 		const resetBtn = document.getElementById('fed_addons_reset_filters');
 		const alertBox = document.getElementById('fed_addons_alert');
@@ -806,6 +1112,23 @@ function fed_get_plugin_pages_menu() {
 			const query = (searchInput.value || '').trim().toLowerCase();
 			const status = statusFilter.value;
 			let visibleCount = 0;
+
+			// Toggle parent section containers based on selected category tab
+			if (addonsGrid) {
+				if (currentCategory === 'ecosystem') {
+					addonsGrid.style.display = 'none';
+				} else {
+					addonsGrid.style.display = 'grid';
+				}
+			}
+
+			if (otherSection) {
+				if (currentCategory === 'core' || currentCategory === 'security' || currentCategory === 'communication') {
+					otherSection.style.display = 'none';
+				} else {
+					otherSection.style.display = 'block';
+				}
+			}
 
 			cards.forEach(card => {
 				const cardCat = card.getAttribute('data-category');
