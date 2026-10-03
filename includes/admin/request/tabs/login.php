@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Handle all Admin login settings request
  */
 function fed_admin_setting_login_request() {
-	$message         = '';
+	$message = '';
 	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$requests        = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	$fed_admin_login = get_option( 'fed_admin_login' );
@@ -47,7 +47,6 @@ function fed_admin_setting_login_request() {
 			'message' => sprintf( __( '%s Settings Updated Successfully', 'frontend-dashboard' ), $message ),
 		)
 	);
-
 }
 
 /**
@@ -67,7 +66,6 @@ function fed_admin_login_settings_save( $request ) {
 		'fed_redirect_logout_url'   => ! empty( $request['settings']['fed_redirect_logout_url'] ) && (int) $request['settings']['fed_redirect_logout_url'] > 0 ? (int) $request['settings']['fed_redirect_logout_url'] : '',
 		'fed_dashboard_url'         => ! empty( $request['settings']['fed_dashboard_url'] ) && (int) $request['settings']['fed_dashboard_url'] > 0 ? (int) $request['settings']['fed_dashboard_url'] : '',
 	);
-
 }
 
 /**

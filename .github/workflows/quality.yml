@@ -1,0 +1,32 @@
+name: Quality & Security Standards
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "**" ]
+
+jobs:
+  phpcs:
+    name: WordPress Standards & Security (PHPCS)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: phpcs, composer
+          coverage: none
+
+      - name: Install WPCS & Sniffs
+        run: |
+          composer global config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+          composer global require --dev wp-coding-standards/wpcs dealerdirect/phpcodesniffer-composer-installer
+          phpcs -i
+
+      - name: Run PHPCS Standards & Security Audit
+        run: |
+          phpcs -s --standard=phpcs.xml.dist

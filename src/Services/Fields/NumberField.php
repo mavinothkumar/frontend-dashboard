@@ -16,12 +16,12 @@ class NumberField extends TextField {
 	protected $type = 'number';
 
 	public function render() {
-		$min  = $this->get_data( 'input_min', $this->attributes );
+		$min = $this->get_data( 'input_min', $this->attributes );
 		if ( '' === $min ) {
 			$min = $this->get_data( 'min', $this->attributes, null );
 		}
 
-		$max  = $this->get_data( 'input_max', $this->attributes );
+		$max = $this->get_data( 'input_max', $this->attributes );
 		if ( '' === $max ) {
 			$max = $this->get_data( 'max', $this->attributes, null );
 		}
@@ -31,10 +31,10 @@ class NumberField extends TextField {
 			$step = $this->get_data( 'step', $this->attributes, 'any' );
 		}
 
-		$extra = [
+		$extra = array(
 			'type'  => $this->type,
 			'value' => $this->value,
-		];
+		);
 
 		if ( null !== $min && '' !== $min ) {
 			$extra['min'] = $min;

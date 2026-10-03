@@ -38,15 +38,40 @@ if ( ! class_exists( 'FEDSubscription' ) ) {
 
 					<div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
 						<!-- Navigate to Subscription Plans Page -->
-						<a href="<?php echo esc_url( fed_menu_page_url( 'fed_payments', array( 'menu' => 'subscriptions', 'submenu' => 'FEDSubscription@plans' ) ) ); ?>" 
-						   style="display: inline-flex; align-items: center; gap: 7px; background: #ffffff; color: #033333; border: 1px solid #cbd5e1; padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.04); transition: all 0.15s ease;">
+						<a href="
+						<?php
+						echo esc_url(
+							fed_menu_page_url(
+								'fed_payments',
+								array(
+									'menu'    => 'subscriptions',
+									'submenu' => 'FEDSubscription@plans',
+								)
+							)
+						);
+						?>
+									" 
+							style="display: inline-flex; align-items: center; gap: 7px; background: #ffffff; color: #033333; border: 1px solid #cbd5e1; padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.04); transition: all 0.15s ease;">
 							<i class="fas fa-cubes"></i> 
 							<span><?php esc_html_e( 'Subscription Plans', 'frontend-dashboard' ); ?></span>
 						</a>
 
 						<!-- Navigate to Add New Plan on Plans Page -->
-						<a href="<?php echo esc_url( add_query_arg( array( 'menu' => 'subscriptions', 'submenu' => 'FEDSubscription@plans', 'open' => 'new' ), fed_menu_page_url( 'fed_payments' ) ) ); ?>" 
-						   style="display: inline-flex; align-items: center; gap: 7px; background: #033333; color: #ffffff; border: 1px solid #033333; padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none; box-shadow: 0 2px 6px rgba(3,51,51,0.2);">
+						<a href="
+						<?php
+						echo esc_url(
+							add_query_arg(
+								array(
+									'menu'    => 'subscriptions',
+									'submenu' => 'FEDSubscription@plans',
+									'open'    => 'new',
+								),
+								fed_menu_page_url( 'fed_payments' )
+							)
+						);
+						?>
+									" 
+							style="display: inline-flex; align-items: center; gap: 7px; background: #033333; color: #ffffff; border: 1px solid #033333; padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none; box-shadow: 0 2px 6px rgba(3,51,51,0.2);">
 							<i class="fas fa-plus"></i> <?php esc_html_e( 'New Subscription Plan', 'frontend-dashboard' ); ?>
 						</a>
 					</div>
@@ -104,17 +129,17 @@ if ( ! class_exists( 'FEDSubscription' ) ) {
 								<?php
 								if ( ! empty( $subscriptions ) ) {
 									foreach ( $subscriptions as $sub ) {
-										$status = strtolower( fed_get_data( 'status', $sub, 'active' ) );
-										$status_bg = '#dcfce7';
+										$status       = strtolower( fed_get_data( 'status', $sub, 'active' ) );
+										$status_bg    = '#dcfce7';
 										$status_color = '#15803d';
 										$status_label = __( 'Active', 'frontend-dashboard' );
 
 										if ( 'past_due' === $status ) {
-											$status_bg = '#fef3c7';
+											$status_bg    = '#fef3c7';
 											$status_color = '#b45309';
 											$status_label = __( 'Past Due', 'frontend-dashboard' );
 										} elseif ( in_array( $status, array( 'cancelled', 'expired', 'failed' ), true ) ) {
-											$status_bg = '#fee2e2';
+											$status_bg    = '#fee2e2';
 											$status_color = '#b91c1c';
 											$status_label = __( 'Cancelled', 'frontend-dashboard' );
 										}
@@ -147,7 +172,7 @@ if ( ! class_exists( 'FEDSubscription' ) ) {
 												<div style="font-size: 11.5px; color: #64748b;">
 													<?php
 													/* translators: %s: Billing cycle interval */
-													echo sprintf( esc_html__( 'per %s', 'frontend-dashboard' ), esc_html( strtolower( fed_get_data( 'billing_cycle', $sub, 'Month' ) ) ) );
+													printf( esc_html__( 'per %s', 'frontend-dashboard' ), esc_html( strtolower( fed_get_data( 'billing_cycle', $sub, 'Month' ) ) ) );
 													?>
 												</div>
 											</td>
@@ -174,7 +199,7 @@ if ( ! class_exists( 'FEDSubscription' ) ) {
 												<div style="font-size: 11.5px; color: #94a3b8;">
 													<?php
 													/* translators: %s: Subscription start date */
-													echo sprintf( esc_html__( 'Started %s', 'frontend-dashboard' ), esc_html( fed_get_data( 'start_date', $sub, '-' ) ) );
+													printf( esc_html__( 'Started %s', 'frontend-dashboard' ), esc_html( fed_get_data( 'start_date', $sub, '-' ) ) );
 													?>
 												</div>
 											</td>
@@ -249,43 +274,43 @@ if ( ! class_exists( 'FEDSubscription' ) ) {
 		 */
 		public function plans() {
 			$this->authorize();
-			
+
 			// Load custom saved plans or default directory
 			$custom_plans = get_option( 'fed_subscription_plans_custom', null );
 			if ( ! is_array( $custom_plans ) || empty( $custom_plans ) ) {
 				$custom_plans = array(
-					'starter' => array(
-						'id'          => 'starter',
-						'name'        => __( 'Starter Membership', 'frontend-dashboard' ),
-						'price'       => '19.00',
-						'cycle'       => 'Monthly',
-						'subs'        => 12,
-						'user_role'   => 'subscriber',
-						'popular'     => false,
-						'features'    => "Standard User Dashboard\nCustom Profile Fields\nCommunity Access",
-						'color'       => '#0284c7',
+					'starter'    => array(
+						'id'        => 'starter',
+						'name'      => __( 'Starter Membership', 'frontend-dashboard' ),
+						'price'     => '19.00',
+						'cycle'     => 'Monthly',
+						'subs'      => 12,
+						'user_role' => 'subscriber',
+						'popular'   => false,
+						'features'  => "Standard User Dashboard\nCustom Profile Fields\nCommunity Access",
+						'color'     => '#0284c7',
 					),
-					'pro' => array(
-						'id'          => 'pro',
-						'name'        => __( 'Professional Plan', 'frontend-dashboard' ),
-						'price'       => '49.00',
-						'cycle'       => 'Monthly',
-						'subs'        => 28,
-						'user_role'   => 'subscriber',
-						'popular'     => true,
-						'features'    => "All Starter Features\nPost Submissions & Taxonomies\nCustom Post Types\nPriority Support",
-						'color'       => '#16a34a',
+					'pro'        => array(
+						'id'        => 'pro',
+						'name'      => __( 'Professional Plan', 'frontend-dashboard' ),
+						'price'     => '49.00',
+						'cycle'     => 'Monthly',
+						'subs'      => 28,
+						'user_role' => 'subscriber',
+						'popular'   => true,
+						'features'  => "All Starter Features\nPost Submissions & Taxonomies\nCustom Post Types\nPriority Support",
+						'color'     => '#16a34a',
 					),
 					'enterprise' => array(
-						'id'          => 'enterprise',
-						'name'        => __( 'Enterprise Annual', 'frontend-dashboard' ),
-						'price'       => '299.00',
-						'cycle'       => 'Annual',
-						'subs'        => 8,
-						'user_role'   => 'administrator',
-						'popular'     => false,
-						'features'    => "Full Platform Access\nUnlimited Post Types\nAdvanced Payments & Invoicing\nDedicated Account Manager",
-						'color'       => '#7c3aed',
+						'id'        => 'enterprise',
+						'name'      => __( 'Enterprise Annual', 'frontend-dashboard' ),
+						'price'     => '299.00',
+						'cycle'     => 'Annual',
+						'subs'      => 8,
+						'user_role' => 'administrator',
+						'popular'   => false,
+						'features'  => "Full Platform Access\nUnlimited Post Types\nAdvanced Payments & Invoicing\nDedicated Account Manager",
+						'color'     => '#7c3aed',
 					),
 				);
 			}
@@ -308,8 +333,20 @@ if ( ! class_exists( 'FEDSubscription' ) ) {
 
 					<div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
 						<!-- Back to Subscribers Button -->
-						<a href="<?php echo esc_url( fed_menu_page_url( 'fed_payments', array( 'menu' => 'subscriptions', 'submenu' => 'FEDSubscription@subscriptions' ) ) ); ?>" 
-						   style="display: inline-flex; align-items: center; gap: 7px; background: #ffffff; color: #033333; border: 1px solid #cbd5e1; padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.04); transition: all 0.15s ease;">
+						<a href="
+						<?php
+						echo esc_url(
+							fed_menu_page_url(
+								'fed_payments',
+								array(
+									'menu'    => 'subscriptions',
+									'submenu' => 'FEDSubscription@subscriptions',
+								)
+							)
+						);
+						?>
+									" 
+							style="display: inline-flex; align-items: center; gap: 7px; background: #ffffff; color: #033333; border: 1px solid #cbd5e1; padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 700; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.04); transition: all 0.15s ease;">
 							<i class="fas fa-users"></i> 
 							<span><?php esc_html_e( 'All Subscriptions', 'frontend-dashboard' ); ?></span>
 						</a>
@@ -326,9 +363,9 @@ if ( ! class_exists( 'FEDSubscription' ) ) {
 					<?php
 					foreach ( $custom_plans as $key => $plan ) :
 						$features_arr = is_array( $plan['features'] ) ? $plan['features'] : explode( "\n", trim( $plan['features'] ) );
-						$plan_color = ! empty( $plan['color'] ) ? $plan['color'] : '#0284c7';
-						$plan_price = isset( $plan['price'] ) ? $plan['price'] : '0.00';
-						$plan_cycle = isset( $plan['cycle'] ) ? $plan['cycle'] : 'Monthly';
+						$plan_color   = ! empty( $plan['color'] ) ? $plan['color'] : '#0284c7';
+						$plan_price   = isset( $plan['price'] ) ? $plan['price'] : '0.00';
+						$plan_cycle   = isset( $plan['cycle'] ) ? $plan['cycle'] : 'Monthly';
 						?>
 						<div class="fed_plan_card" data-plan-id="<?php echo esc_attr( $key ); ?>" style="background: #ffffff; border: 1px solid <?php echo ! empty( $plan['popular'] ) ? '#16a34a' : '#e2e8f0'; ?>; border-radius: 14px; padding: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.03); position: relative; display: flex; flex-direction: column; justify-content: space-between;">
 							
@@ -349,7 +386,7 @@ if ( ! class_exists( 'FEDSubscription' ) ) {
 									<i class="fas fa-users" style="color: <?php echo esc_attr( $plan_color ); ?>;"></i>
 									<?php
 									/* translators: %d: Number of active subscribers */
-									echo sprintf( esc_html__( '%d Active Subscribers', 'frontend-dashboard' ), intval( isset( $plan['subs'] ) ? $plan['subs'] : 0 ) );
+									printf( esc_html__( '%d Active Subscribers', 'frontend-dashboard' ), intval( isset( $plan['subs'] ) ? $plan['subs'] : 0 ) );
 									?>
 								</div>
 
@@ -392,7 +429,19 @@ if ( ! class_exists( 'FEDSubscription' ) ) {
 										<a href="#" class="fed_dropdown_duplicate" data-id="<?php echo esc_attr( $key ); ?>" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; font-size: 12.5px; color: #334155; text-decoration: none; border-radius: 6px; font-weight: 500;">
 											<i class="fas fa-copy" style="width: 14px; color: #16a34a;"></i> <?php esc_html_e( 'Duplicate', 'frontend-dashboard' ); ?>
 										</a>
-										<a href="<?php echo esc_url( fed_menu_page_url( 'fed_payments', array( 'menu' => 'subscriptions', 'submenu' => 'FEDSubscription@subscriptions' ) ) ); ?>" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; font-size: 12.5px; color: #334155; text-decoration: none; border-radius: 6px; font-weight: 500;">
+										<a href="
+										<?php
+										echo esc_url(
+											fed_menu_page_url(
+												'fed_payments',
+												array(
+													'menu' => 'subscriptions',
+													'submenu' => 'FEDSubscription@subscriptions',
+												)
+											)
+										);
+										?>
+													" style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; font-size: 12.5px; color: #334155; text-decoration: none; border-radius: 6px; font-weight: 500;">
 											<i class="fas fa-users" style="width: 14px; color: #64748b;"></i> <?php esc_html_e( 'Subscribers', 'frontend-dashboard' ); ?>
 										</a>
 										<div style="height: 1px; background: #f1f5f9; margin: 4px 0;"></div>
@@ -577,19 +626,36 @@ if ( ! class_exists( 'FEDSubscription' ) ) {
 		public function save_plan( $request ) {
 			$this->authorize();
 
-			$plan_id = ! empty( $request['plan_id'] ) ? sanitize_key( $request['plan_id'] ) : 'plan_' . time();
-			$name    = isset( $request['plan_name'] ) ? fed_sanitize_text_field( $request['plan_name'] ) : '';
-			$price   = isset( $request['plan_price'] ) ? fed_sanitize_text_field( $request['plan_price'] ) : '0.00';
-			$cycle   = isset( $request['plan_cycle'] ) ? fed_sanitize_text_field( $request['plan_cycle'] ) : 'Monthly';
-			$role    = isset( $request['user_role'] ) ? fed_sanitize_text_field( $request['user_role'] ) : 'subscriber';
-			$features= isset( $request['plan_features'] ) ? sanitize_textarea_field( $request['plan_features'] ) : '';
-			$popular = ! empty( $request['popular'] );
+			$plan_id  = ! empty( $request['plan_id'] ) ? sanitize_key( $request['plan_id'] ) : 'plan_' . time();
+			$name     = isset( $request['plan_name'] ) ? fed_sanitize_text_field( $request['plan_name'] ) : '';
+			$price    = isset( $request['plan_price'] ) ? fed_sanitize_text_field( $request['plan_price'] ) : '0.00';
+			$cycle    = isset( $request['plan_cycle'] ) ? fed_sanitize_text_field( $request['plan_cycle'] ) : 'Monthly';
+			$role     = isset( $request['user_role'] ) ? fed_sanitize_text_field( $request['user_role'] ) : 'subscriber';
+			$features = isset( $request['plan_features'] ) ? sanitize_textarea_field( $request['plan_features'] ) : '';
+			$popular  = ! empty( $request['popular'] );
 
 			$plans = get_option( 'fed_subscription_plans_custom', array() );
 			if ( empty( $plans ) ) {
 				$plans = array(
-					'starter' => array( 'id' => 'starter', 'name' => 'Starter Membership', 'price' => '19.00', 'cycle' => 'Monthly', 'subs' => 12, 'features' => "Standard User Dashboard\nCustom Profile Fields\nCommunity Access", 'color' => '#0284c7' ),
-					'pro'     => array( 'id' => 'pro', 'name' => 'Professional Plan', 'price' => '49.00', 'cycle' => 'Monthly', 'subs' => 28, 'popular' => true, 'features' => "All Starter Features\nPost Submissions\nPriority Support", 'color' => '#16a34a' ),
+					'starter' => array(
+						'id'       => 'starter',
+						'name'     => 'Starter Membership',
+						'price'    => '19.00',
+						'cycle'    => 'Monthly',
+						'subs'     => 12,
+						'features' => "Standard User Dashboard\nCustom Profile Fields\nCommunity Access",
+						'color'    => '#0284c7',
+					),
+					'pro'     => array(
+						'id'       => 'pro',
+						'name'     => 'Professional Plan',
+						'price'    => '49.00',
+						'cycle'    => 'Monthly',
+						'subs'     => 28,
+						'popular'  => true,
+						'features' => "All Starter Features\nPost Submissions\nPriority Support",
+						'color'    => '#16a34a',
+					),
 				);
 			}
 
@@ -620,8 +686,8 @@ if ( ! class_exists( 'FEDSubscription' ) ) {
 			$plans   = get_option( 'fed_subscription_plans_custom', array() );
 
 			if ( isset( $plans[ $plan_id ] ) ) {
-				$new_id = 'plan_' . time();
-				$new_plan = $plans[ $plan_id ];
+				$new_id           = 'plan_' . time();
+				$new_plan         = $plans[ $plan_id ];
 				$new_plan['id']   = $new_id;
 				$new_plan['name'] = $new_plan['name'] . ' (Copy)';
 				$new_plan['subs'] = 0;

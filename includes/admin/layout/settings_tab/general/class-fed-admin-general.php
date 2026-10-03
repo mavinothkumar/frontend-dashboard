@@ -43,7 +43,8 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 		 */
 		public function fed_get_admin_general_options( $options ) {
 			return apply_filters(
-				'fed_customize_admin_general_options', array(
+				'fed_customize_admin_general_options',
+				array(
 					'fed_admin_scripts'    => array(
 						'icon'      => 'fas fa-code',
 						'name'      => __( 'Admin Scripts', 'frontend-dashboard' ),
@@ -95,7 +96,6 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 			update_option( 'fed_general_scripts_styles', $db_value );
 
 			wp_send_json_success( array( 'message' => 'Successfully updated' ) );
-
 		}
 
 		/**
@@ -118,7 +118,8 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 			}
 
 			$scripts = apply_filters(
-				'fed_default_admin_scripts_styles', array(
+				'fed_default_admin_scripts_styles',
+				array(
 					'scripts' => array(
 						'jquery'                => array(
 							'wp_core'     => true,
@@ -337,18 +338,18 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 		 * @param string $type Context type: 'admin' or 'frontend'.
 		 */
 		private function render_scripts_styles_view( $type = 'admin' ) {
-			$scripts        = $this->admin_scripts_styles( $type );
-			$default        = 'admin' === $type ? $this->default_admin_script() : $this->default_frontend_script();
-			$is_frontend    = ( 'frontend' === $type );
-			$context_title  = $is_frontend ? __( 'Frontend Portal & Pages', 'frontend-dashboard' ) : __( 'WordPress Admin Dashboard', 'frontend-dashboard' );
-			$context_slug   = $is_frontend ? 'frontend' : 'admin';
-			$ajax_url       = fed_get_ajax_form_action( 'fed_admin_script_menu' );
+			$scripts       = $this->admin_scripts_styles( $type );
+			$default       = 'admin' === $type ? $this->default_admin_script() : $this->default_frontend_script();
+			$is_frontend   = ( 'frontend' === $type );
+			$context_title = $is_frontend ? __( 'Frontend Portal & Pages', 'frontend-dashboard' ) : __( 'WordPress Admin Dashboard', 'frontend-dashboard' );
+			$context_slug  = $is_frontend ? 'frontend' : 'admin';
+			$ajax_url      = fed_get_ajax_form_action( 'fed_admin_script_menu' );
 
-			$scripts_list   = isset( $default['scripts'] ) ? $default['scripts'] : array();
-			$styles_list    = isset( $default['styles'] ) ? $default['styles'] : array();
+			$scripts_list = isset( $default['scripts'] ) ? $default['scripts'] : array();
+			$styles_list  = isset( $default['styles'] ) ? $default['styles'] : array();
 
-			$saved_scripts  = isset( $scripts['scripts'] ) ? (array) $scripts['scripts'] : array();
-			$saved_styles   = isset( $scripts['styles'] ) ? (array) $scripts['styles'] : array();
+			$saved_scripts = isset( $scripts['scripts'] ) ? (array) $scripts['scripts'] : array();
+			$saved_styles  = isset( $scripts['styles'] ) ? (array) $scripts['styles'] : array();
 
 			$dequeued_scripts_count = count( $saved_scripts );
 			$dequeued_styles_count  = count( $saved_styles );
@@ -379,7 +380,7 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 							</h4>
 							<p class="text-xs text-slate-600 m-0 leading-relaxed">
 								<?php
-								echo sprintf(
+								printf(
 									/* translators: %s: context title */
 									esc_html__( 'Select specific scripts or stylesheets to dequeue (disable) on %s. Useful if your theme or active plugins already bundle these libraries.', 'frontend-dashboard' ),
 									'<strong class="text-slate-800">' . esc_html( $context_title ) . '</strong>'
@@ -416,9 +417,9 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 						$search_assets_placeholder = sprintf( __( 'Search %d assets (e.g. jQuery, SweetAlert, Select2)...', 'frontend-dashboard' ), $total_assets );
 						?>
 						<input type="text"
-							   placeholder="<?php echo esc_attr( $search_assets_placeholder ); ?>"
-							   class="fed-asset-search-input w-full pr-3 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100/70 focus:bg-white border border-slate-200 focus:border-indigo-500 text-xs text-slate-800 placeholder:text-slate-400 transition-all outline-none font-medium"
-							   style="padding-left: 38px !important; height: 42px !important;" />
+								placeholder="<?php echo esc_attr( $search_assets_placeholder ); ?>"
+								class="fed-asset-search-input w-full pr-3 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100/70 focus:bg-white border border-slate-200 focus:border-indigo-500 text-xs text-slate-800 placeholder:text-slate-400 transition-all outline-none font-medium"
+								style="padding-left: 38px !important; height: 42px !important;" />
 					</div>
 
 					<div class="flex items-center gap-2.5 shrink-0">
@@ -469,10 +470,10 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 
 									<div class="shrink-0 flex items-center pl-2">
 										<input type="checkbox"
-											   name="<?php echo esc_attr( $context_slug ); ?>[scripts][<?php echo esc_attr( $key ); ?>]"
-											   value="<?php echo esc_attr( $key ); ?>"
-											   <?php checked( $is_checked, true ); ?>
-											   class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300 cursor-pointer transition-all" />
+												name="<?php echo esc_attr( $context_slug ); ?>[scripts][<?php echo esc_attr( $key ); ?>]"
+												value="<?php echo esc_attr( $key ); ?>"
+												<?php checked( $is_checked, true ); ?>
+												class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300 cursor-pointer transition-all" />
 									</div>
 								</label>
 							<?php endforeach; ?>
@@ -517,10 +518,10 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 
 									<div class="shrink-0 flex items-center pl-2">
 										<input type="checkbox"
-											   name="<?php echo esc_attr( $context_slug ); ?>[styles][<?php echo esc_attr( $key ); ?>]"
-											   value="<?php echo esc_attr( $key ); ?>"
-											   <?php checked( $is_checked, true ); ?>
-											   class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300 cursor-pointer transition-all" />
+												name="<?php echo esc_attr( $context_slug ); ?>[styles][<?php echo esc_attr( $key ); ?>]"
+												value="<?php echo esc_attr( $key ); ?>"
+												<?php checked( $is_checked, true ); ?>
+												class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 border-slate-300 cursor-pointer transition-all" />
 									</div>
 								</label>
 							<?php endforeach; ?>
@@ -586,7 +587,6 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 			$scripts = get_option( 'fed_general_scripts_styles' );
 
 			return isset( $scripts[ $type ] ) ? $scripts[ $type ] : array();
-
 		}
 
 		/**
@@ -609,7 +609,8 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 			}
 
 			return apply_filters(
-				'fed_default_frontend_scripts_styles', array(
+				'fed_default_frontend_scripts_styles',
+				array(
 					'scripts' => array(
 						'fed-main'              => array(
 							'wp_core'      => false,
@@ -813,7 +814,6 @@ if ( ! class_exists( 'FED_Admin_General' ) ) {
 		public function fed_frontend_script_menu_tab() {
 			$this->render_scripts_styles_view( 'frontend' );
 		}
-
 	}
 
 	new FED_Admin_General();

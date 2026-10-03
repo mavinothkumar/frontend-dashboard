@@ -16,12 +16,12 @@ class Container {
 	/**
 	 * @var array The container's bindings.
 	 */
-	protected $bindings = [];
+	protected $bindings = array();
 
 	/**
 	 * @var array The container's shared instances.
 	 */
-	protected $instances = [];
+	protected $instances = array();
 
 	/**
 	 * Register a binding with the container.
@@ -35,10 +35,10 @@ class Container {
 			$concrete = $abstract;
 		}
 
-		$this->bindings[ $abstract ] = [
+		$this->bindings[ $abstract ] = array(
 			'concrete' => $concrete,
 			'shared'   => $shared,
-		];
+		);
 	}
 
 	/**
@@ -71,7 +71,7 @@ class Container {
 	 * @return mixed
 	 * @throws \Exception
 	 */
-	public function make( $abstract, array $parameters = [] ) {
+	public function make( $abstract, array $parameters = array() ) {
 		// Return existing singleton if already instantiated
 		if ( isset( $this->instances[ $abstract ] ) ) {
 			return $this->instances[ $abstract ];
@@ -117,7 +117,7 @@ class Container {
 	 * @return object
 	 * @throws \Exception
 	 */
-	protected function build( $concrete, array $parameters = [] ) {
+	protected function build( $concrete, array $parameters = array() ) {
 		if ( ! class_exists( $concrete ) ) {
 			throw new \Exception( esc_html( "Target class [$concrete] does not exist." ) );
 		}
@@ -135,7 +135,7 @@ class Container {
 		}
 
 		$dependencies = $constructor->getParameters();
-		$instances    = [];
+		$instances    = array();
 
 		foreach ( $dependencies as $dependency ) {
 			$name = $dependency->getName();
@@ -147,7 +147,7 @@ class Container {
 
 			$type = $dependency->getType();
 			if ( $type && ! $type->isBuiltin() ) {
-				$className = $type->getName();
+				$className   = $type->getName();
 				$instances[] = $this->make( $className );
 				continue;
 			}

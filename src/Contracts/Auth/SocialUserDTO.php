@@ -20,7 +20,7 @@ class SocialUserDTO {
 	public $provider;
 	public $raw;
 
-	public function __construct( string $id, string $email, string $name = '', string $avatarUrl = '', string $provider = '', array $raw = [] ) {
+	public function __construct( string $id, string $email, string $name = '', string $avatarUrl = '', string $provider = '', array $raw = array() ) {
 		$this->id        = $id;
 		$this->email     = $email;
 		$this->name      = $name;

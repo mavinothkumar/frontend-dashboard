@@ -52,9 +52,9 @@ function fed_get_add_profile_post_fields() {
 				<?php
 				return;
 			}
-			$row      = fed_process_user_profile( $rows, $action );
+			$row       = fed_process_user_profile( $rows, $action );
 			$row['id'] = $id;
-			$selected = ! empty( $row['input_type'] ) ? $row['input_type'] : 'single_line';
+			$selected  = ! empty( $row['input_type'] ) ? $row['input_type'] : 'single_line';
 		} else {
 			$row = fed_get_empty_value_for_user_profile( $action );
 			if ( ! empty( $preselect_menu ) ) {
@@ -83,9 +83,9 @@ function fed_get_add_profile_post_fields() {
 				<?php
 				return;
 			}
-			$row      = fed_process_user_profile( $rows, $action );
+			$row       = fed_process_user_profile( $rows, $action );
 			$row['id'] = $id;
-			$selected = ! empty( $row['input_type'] ) ? $row['input_type'] : 'single_line';
+			$selected  = ! empty( $row['input_type'] ) ? $row['input_type'] : 'single_line';
 		} else {
 			$row = fed_get_empty_value_for_user_profile( $action );
 			if ( ! empty( $preselect_post_type ) ) {
@@ -145,7 +145,7 @@ function fed_get_add_profile_post_fields() {
 			'icon'  => 'fas fa-cubes',
 		),
 	);
-	$editor_tabs = apply_filters( 'fed_admin_field_editor_tabs', $default_tabs, $row, $action );
+	$editor_tabs  = apply_filters( 'fed_admin_field_editor_tabs', $default_tabs, $row, $action );
 	?>
 
 	<!-- Scoped Styles -->
@@ -337,7 +337,7 @@ function fed_get_add_profile_post_fields() {
 								<span><?php echo esc_html( $tab_info['label'] ); ?></span>
 							</button>
 							<?php
-							$tab_i++;
+							++$tab_i;
 						endforeach;
 						?>
 					</div>
@@ -528,10 +528,10 @@ function fed_get_add_profile_post_fields() {
 						var $cb = $(this).find('.fed-role-checkbox');
 						if ($cb.is(':checked')) {
 							$(this).addClass('bg-indigo-50/80 border-indigo-200 text-indigo-900 font-semibold')
-								   .removeClass('bg-white border-slate-200 text-slate-700');
+									.removeClass('bg-white border-slate-200 text-slate-700');
 						} else {
 							$(this).removeClass('bg-indigo-50/80 border-indigo-200 text-indigo-900 font-semibold')
-								   .addClass('bg-white border-slate-200 text-slate-700');
+									.addClass('bg-white border-slate-200 text-slate-700');
 						}
 					});
 				});

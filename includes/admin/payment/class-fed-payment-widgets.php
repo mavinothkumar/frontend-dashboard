@@ -26,7 +26,8 @@ if ( ! class_exists( 'FEDPaymentWidgets' ) ) {
 		 */
 		public function statistics() {
 			wp_add_dashboard_widget(
-				'fed_payment_statistics_widget', 'Frontend Dashboard Payment Statistics',
+				'fed_payment_statistics_widget',
+				'Frontend Dashboard Payment Statistics',
 				array( $this, 'chart' )
 			);
 		}
@@ -36,9 +37,9 @@ if ( ! class_exists( 'FEDPaymentWidgets' ) ) {
 		 */
 		public function chart() {
 			global $wpdb;
-			$created  = array();
-			$amount   = array();
-			$table    = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
+			$created = array();
+			$amount  = array();
+			$table   = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$payments = $wpdb->get_results( "SELECT DATE_FORMAT(created,'%Y-%m-%d') as created, currency, SUM(amount) as amount FROM {$table} GROUP BY DATE_FORMAT(created,'%Y-%m-%d')", ARRAY_A );
 			$currency = 'USD';
@@ -54,27 +55,27 @@ if ( ! class_exists( 'FEDPaymentWidgets' ) ) {
 					<canvas id="fed_payment_stat" width="1200" height="600"></canvas>
 				</div>
 				<script>
-                    var ctx = document.getElementById('fed_payment_stat').getContext('2d');
-                    var payment_stat = new Chart(ctx, {
-                        type: 'bar',
-                        data: {
-                            labels: <?php echo wp_json_encode( $created ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>,
-                            datasets: [{
-                                label: 'Total (<?php echo esc_js( $currency ); ?>)',
-                                data: <?php echo wp_json_encode( $amount ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>,
-                                backgroundColor: 'rgba(10, 170, 170,1)'
-                            }]
-                        },
-                        options: {
-                            scales: {
-                                yAxes: [{
-                                    ticks: {
-                                        beginAtZero: true
-                                    }
-                                    }]
-                            }
-                        }
-                    });
+					var ctx = document.getElementById('fed_payment_stat').getContext('2d');
+					var payment_stat = new Chart(ctx, {
+						type: 'bar',
+						data: {
+							labels: <?php echo wp_json_encode( $created ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>,
+							datasets: [{
+								label: 'Total (<?php echo esc_js( $currency ); ?>)',
+								data: <?php echo wp_json_encode( $amount ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>,
+								backgroundColor: 'rgba(10, 170, 170,1)'
+							}]
+						},
+						options: {
+							scales: {
+								yAxes: [{
+									ticks: {
+										beginAtZero: true
+									}
+									}]
+							}
+						}
+					});
 				</script>
 				<?php
 			} else {
@@ -103,7 +104,6 @@ if ( ! class_exists( 'FEDPaymentWidgets' ) ) {
 				);
 			}
 		}
-
 	}
 
 	new FEDPaymentWidgets();

@@ -34,7 +34,7 @@ class View {
 	 * @param array  $data     Data variables to extract inside template.
 	 * @return string Rendered HTML content.
 	 */
-	public function render( $template, array $data = [] ) {
+	public function render( $template, array $data = array() ) {
 		$filePath = $this->locateTemplate( $template );
 
 		if ( ! $filePath || ! file_exists( $filePath ) ) {
@@ -54,7 +54,7 @@ class View {
 	 * @param array  $data
 	 * @return string
 	 */
-	public function component( $component, array $data = [] ) {
+	public function component( $component, array $data = array() ) {
 		return $this->render( 'components/' . $component, $data );
 	}
 

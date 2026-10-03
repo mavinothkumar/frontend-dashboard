@@ -96,7 +96,6 @@ function fed_admin_setting_form_function() {
 		exit();
 	}
 
-
 	/**
 	 * 3rd Party template redirect handle
 	 */
@@ -127,10 +126,10 @@ function fed_admin_setting_up_form_function() {
 	fed_verify_nonce( $post );
 
 	if ( ! isset( $post['label_name'] ) || empty( $post['label_name'] )
-	     || ! isset( $post['input_order'] ) || empty( $post['input_order'] )
-	     || ! isset( $post['input_meta'] ) || empty( $post['input_meta'] )
-	     || ! isset( $post['input_type'] )
-	     || ! isset( $post['input_id'] )
+		|| ! isset( $post['input_order'] ) || empty( $post['input_order'] )
+		|| ! isset( $post['input_meta'] ) || empty( $post['input_meta'] )
+		|| ! isset( $post['input_type'] )
+		|| ! isset( $post['input_id'] )
 	) {
 
 		wp_send_json_error( array( 'message' => 'Please fill required fields' ) );
@@ -327,7 +326,6 @@ function fed_admin_setting_form_dashboard_menu_function() {
 			)
 		);
 	}
-
 }
 
 /**
@@ -346,7 +344,6 @@ function fed_admin_setting_upl_form_function() {
 		wp_send_json_error( array( 'message' => 'Invalid Request' ) );
 		exit();
 	}
-
 }
 
 /**
@@ -446,7 +443,7 @@ function fed_search_wp_pages_ajax() {
 	fed_verify_nonce();
 
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	$query       = isset( $_REQUEST['q'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['q'] ) ) : '';
+	$query = isset( $_REQUEST['q'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['q'] ) ) : '';
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$selected_id = isset( $_REQUEST['selected_id'] ) ? (int) $_REQUEST['selected_id'] : 0;
 
@@ -485,7 +482,7 @@ function fed_search_wp_pages_ajax() {
 	foreach ( $pages as $p ) {
 		/* translators: %d: Page ID */
 		$fallback_title = sprintf( __( '(Page #%d no title)', 'frontend-dashboard' ), $p->ID );
-		$results[] = array(
+		$results[]      = array(
 			'id'    => $p->ID,
 			'title' => $p->post_title ? $p->post_title : $fallback_title,
 		);
@@ -493,4 +490,3 @@ function fed_search_wp_pages_ajax() {
 
 	wp_send_json_success( array( 'pages' => $results ) );
 }
-

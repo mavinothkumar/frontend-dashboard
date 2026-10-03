@@ -100,7 +100,7 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 			if ( isset( $group_by[ $pt ] ) ) {
 				$group_by[ $pt ][] = $profile;
 			} else {
-				$first_key = ! empty( $public_post_types ) ? array_keys( $public_post_types )[0] : 'post';
+				$first_key    = ! empty( $public_post_types ) ? array_keys( $public_post_types )[0] : 'post';
 				$fallback_key = isset( $group_by['post'] ) ? 'post' : $first_key;
 				if ( isset( $group_by[ $fallback_key ] ) ) {
 					$group_by[ $fallback_key ][] = $profile;
@@ -362,7 +362,7 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 									</span>
 								</button>
 								<?php
-								$tab_idx++;
+								++$tab_idx;
 							endforeach;
 							?>
 						</div>
@@ -417,7 +417,19 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 								</div>
 
 								<div class="flex items-center gap-2 shrink-0">
-									<a href="<?php echo esc_url( add_query_arg( array( 'fed_action' => 'post', 'post_type' => $pt_slug_esc ), menu_page_url( 'fed_post_fields', false ) ) ); ?>" class="fed-open-add-field-modal fed-btn-primary h-9 inline-flex items-center justify-center gap-2 px-4 rounded-xl text-xs font-semibold transition-all active:scale-95 cursor-pointer shadow-xs no-underline" data-post-type="<?php echo esc_attr( $pt_slug_esc ); ?>">
+									<a href="
+									<?php
+									echo esc_url(
+										add_query_arg(
+											array(
+												'fed_action' => 'post',
+												'post_type'  => $pt_slug_esc,
+											),
+											menu_page_url( 'fed_post_fields', false )
+										)
+									);
+									?>
+												" class="fed-open-add-field-modal fed-btn-primary h-9 inline-flex items-center justify-center gap-2 px-4 rounded-xl text-xs font-semibold transition-all active:scale-95 cursor-pointer shadow-xs no-underline" data-post-type="<?php echo esc_attr( $pt_slug_esc ); ?>">
 										<i class="fas fa-plus text-xs" style="color: #ffffff !important;"></i>
 										<span style="color: #ffffff !important;"><?php esc_html_e( 'Add Field', 'frontend-dashboard' ); ?></span>
 									</a>
@@ -431,13 +443,13 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 								<?php
 								if ( ! empty( $m_fields ) ) {
 									foreach ( $m_fields as $field ) {
-										$field_id     = (int) $field['id'];
-										$field_label  = esc_attr( $field['label_name'] );
-										$field_meta   = esc_attr( $field['input_meta'] );
-										$field_type   = esc_attr( $field['input_type'] );
-										$field_order  = (int) $field['input_order'];
-										$is_extra     = ! fed_check_field_is_belongs_to_extra( $field['input_meta'] );
-										$type_icon    = function_exists( 'fed_get_profile_field_type_icon' ) ? fed_get_profile_field_type_icon( $field['input_type'] ) : 'fas fa-pen-nib';
+										$field_id    = (int) $field['id'];
+										$field_label = esc_attr( $field['label_name'] );
+										$field_meta  = esc_attr( $field['input_meta'] );
+										$field_type  = esc_attr( $field['input_type'] );
+										$field_order = (int) $field['input_order'];
+										$is_extra    = ! fed_check_field_is_belongs_to_extra( $field['input_meta'] );
+										$type_icon   = function_exists( 'fed_get_profile_field_type_icon' ) ? fed_get_profile_field_type_icon( $field['input_type'] ) : 'fas fa-pen-nib';
 
 										// Required check
 										$is_required = ( true === $field['is_required'] || 'true' === $field['is_required'] || 'enable' === strtolower( $field['is_required'] ) );
@@ -549,7 +561,19 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 											printf( esc_html__( 'No custom fields are currently assigned to "%s". Click below to add your first post field.', 'frontend-dashboard' ), esc_html( $pt_name_esc ) );
 											?>
 										</p>
-										<a href="<?php echo esc_url( add_query_arg( array( 'fed_action' => 'post', 'post_type' => $pt_slug_esc ), menu_page_url( 'fed_post_fields', false ) ) ); ?>" class="fed-open-add-field-modal fed-btn-primary h-9 inline-flex items-center justify-center gap-1.5 px-4 rounded-xl font-semibold text-xs transition-all shadow-xs no-underline" data-post-type="<?php echo esc_attr( $pt_slug_esc ); ?>">
+										<a href="
+										<?php
+										echo esc_url(
+											add_query_arg(
+												array(
+													'fed_action' => 'post',
+													'post_type'  => $pt_slug_esc,
+												),
+												menu_page_url( 'fed_post_fields', false )
+											)
+										);
+										?>
+													" class="fed-open-add-field-modal fed-btn-primary h-9 inline-flex items-center justify-center gap-1.5 px-4 rounded-xl font-semibold text-xs transition-all shadow-xs no-underline" data-post-type="<?php echo esc_attr( $pt_slug_esc ); ?>">
 											<i class="fas fa-plus text-xs" style="color: #ffffff !important;"></i>
 											<span style="color: #ffffff !important;"><?php esc_html_e( 'Add Field to this Post Type', 'frontend-dashboard' ); ?></span>
 										</a>
@@ -575,7 +599,7 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 							</div>
 						</div>
 						<?php
-						$pane_idx++;
+						++$pane_idx;
 					endforeach;
 					?>
 				</div>

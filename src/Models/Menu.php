@@ -17,7 +17,7 @@ class Menu extends Model {
 
 	protected $table = 'fed_menu';
 
-	protected $fillable = [
+	protected $fillable = array(
 		'menu_slug',
 		'menu',
 		'menu_name',
@@ -31,13 +31,13 @@ class Menu extends Model {
 		'parent_id',
 		'menu_type',
 		'status',
-	];
+	);
 
-	protected $casts = [
+	protected $casts = array(
 		'id'         => 'int',
 		'menu_order' => 'int',
 		'user_role'  => 'array',
-	];
+	);
 
 	/**
 	 * Get child sub-menus.

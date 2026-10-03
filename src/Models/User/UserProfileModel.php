@@ -33,7 +33,7 @@ class UserProfileModel {
 			return new WP_Error( 'invalid_user_id', __( 'Invalid user ID.', 'frontend-dashboard' ) );
 		}
 
-		$core_keys = [
+		$core_keys = array(
 			'user_login',
 			'user_pass',
 			'confirmation_password',
@@ -46,14 +46,14 @@ class UserProfileModel {
 			'description',
 			'show_admin_bar_front',
 			'user_url',
-		];
+		);
 
 		$raw_options  = function_exists( 'fed_fetch_user_profile_not_extra_fields_key_value' )
 			? fed_fetch_user_profile_not_extra_fields_key_value()
-			: [];
-		$site_options = is_array( $raw_options ) ? array_intersect( array_keys( $raw_options ), $core_keys ) : [];
+			: array();
+		$site_options = is_array( $raw_options ) ? array_intersect( array_keys( $raw_options ), $core_keys ) : array();
 
-		$new_value               = [];
+		$new_value               = array();
 		$new_value['ID']         = $current_user->ID;
 		$new_value['user_login'] = $current_user->user_login;
 
@@ -64,18 +64,16 @@ class UserProfileModel {
 				} else {
 					$new_value[ $site_option ] = '';
 				}
-			} else {
-				if ( array_key_exists( $site_option, $post ) ) {
-					if ( is_array( $post[ $site_option ] ) ) {
-						$new_value[ $site_option ] = serialize( $post[ $site_option ] );
-					} else {
-						$new_value[ $site_option ] = function_exists( 'fed_sanitize_text_field' )
-							? fed_sanitize_text_field( $post[ $site_option ] )
-							: sanitize_text_field( $post[ $site_option ] );
-					}
+			} elseif ( array_key_exists( $site_option, $post ) ) {
+				if ( is_array( $post[ $site_option ] ) ) {
+					$new_value[ $site_option ] = serialize( $post[ $site_option ] );
 				} else {
-					$new_value[ $site_option ] = $user_obj->has_prop( $site_option ) ? $user_obj->get( $site_option ) : '';
+					$new_value[ $site_option ] = function_exists( 'fed_sanitize_text_field' )
+						? fed_sanitize_text_field( $post[ $site_option ] )
+						: sanitize_text_field( $post[ $site_option ] );
 				}
+			} else {
+				$new_value[ $site_option ] = $user_obj->has_prop( $site_option ) ? $user_obj->get( $site_option ) : '';
 			}
 		}
 
@@ -92,7 +90,7 @@ class UserProfileModel {
 
 		// Process and save custom extra user profile fields into WordPress user meta
 		global $wpdb;
-		$all_fields = [];
+		$all_fields = array();
 		if ( function_exists( 'fed_fetch_rows_by_table' ) ) {
 			$all_fields = fed_fetch_rows_by_table( BC_FED_TABLE_USER_PROFILE );
 		}
@@ -102,7 +100,7 @@ class UserProfileModel {
 			$all_fields = $wpdb->get_results( "SELECT * FROM $tbl", ARRAY_A );
 		}
 		if ( is_array( $all_fields ) ) {
-			$disallowed_meta = [
+			$disallowed_meta = array(
 				'role',
 				'roles',
 				'caps',
@@ -113,7 +111,7 @@ class UserProfileModel {
 				'account_status',
 				'primary_blog',
 				'source_domain',
-			];
+			);
 
 			$submitted_tab = isset( $post['tab_id'] ) ? $post['tab_id'] : ( isset( $post['menu_slug'] ) ? $post['menu_slug'] : '' );
 
@@ -139,7 +137,7 @@ class UserProfileModel {
 						$sanitized_val = maybe_serialize( $raw_val );
 					} else {
 						$input_type = isset( $field['input_type'] ) ? $field['input_type'] : '';
-						if ( in_array( $input_type, [ 'textarea', 'multi_line', 'multiline' ], true ) ) {
+						if ( in_array( $input_type, array( 'textarea', 'multi_line', 'multiline' ), true ) ) {
 							$sanitized_val = sanitize_textarea_field( wp_unslash( $raw_val ) );
 						} else {
 							$sanitized_val = sanitize_text_field( wp_unslash( $raw_val ) );
@@ -149,7 +147,7 @@ class UserProfileModel {
 				} elseif ( ! empty( $submitted_tab ) && isset( $field['menu'] ) && $field['menu'] === $submitted_tab ) {
 					// Checkbox / multi-choice field submitted as unchecked
 					$input_type = isset( $field['input_type'] ) ? $field['input_type'] : '';
-					if ( in_array( $input_type, [ 'checkbox', 'select', 'radio' ], true ) ) {
+					if ( in_array( $input_type, array( 'checkbox', 'select', 'radio' ), true ) ) {
 						update_user_meta( $current_user->ID, $meta_key, '' );
 					}
 				}

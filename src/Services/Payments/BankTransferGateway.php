@@ -18,10 +18,10 @@ class BankTransferGateway extends AbstractPaymentGateway {
 
 	protected $id       = 'bank_transfer';
 	protected $name     = 'Direct Bank Transfer';
-	protected $supports = [ 'single_payment' ];
+	protected $supports = array( 'single_payment' );
 
-	public function renderCheckoutFields( array $orderData = [] ): string {
-		$settings = get_option( 'fed_payment_settings', [] );
+	public function renderCheckoutFields( array $orderData = array() ): string {
+		$settings = get_option( 'fed_payment_settings', array() );
 		$bankInfo = $settings['bank_details'] ?? __( 'Please transfer the payment to our official bank account and provide transaction ID as reference.', 'frontend-dashboard' );
 
 		return '<div class="fed_bank_transfer_info bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm text-slate-700 leading-relaxed mb-4">' .
@@ -32,7 +32,7 @@ class BankTransferGateway extends AbstractPaymentGateway {
 
 	public function processPayment( PaymentRequest $request ): PaymentResponse {
 		$txId = 'BACS-' . strtoupper( wp_generate_password( 8, false ) );
-		
+
 		return PaymentResponse::success(
 			$txId,
 			__( 'Order placed successfully. Please complete the bank transfer.', 'frontend-dashboard' )

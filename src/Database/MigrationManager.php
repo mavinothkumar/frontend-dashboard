@@ -30,14 +30,14 @@ class MigrationManager {
 	/**
 	 * @var array List of registered migration classes.
 	 */
-	protected $migrations = [
+	protected $migrations = array(
 		CreateFedMenuTable::class,
 		CreateFedUserProfileTable::class,
 		CreateFedPostTable::class,
 		CreateFedPaymentTables::class,
 		CreateFedLogsTable::class,
 		CreateFedNotificationsTable::class,
-	];
+	);
 
 	/**
 	 * Run all pending migrations.
@@ -45,8 +45,8 @@ class MigrationManager {
 	 * @return array Array of executed migration versions.
 	 */
 	public function run(): array {
-		$applied = $this->getAppliedMigrations();
-		$executed = [];
+		$applied  = $this->getAppliedMigrations();
+		$executed = array();
 
 		foreach ( $this->migrations as $migrationClass ) {
 			/** @var MigrationInterface $migration */
@@ -78,8 +78,8 @@ class MigrationManager {
 	 * @return array
 	 */
 	public function getAppliedMigrations(): array {
-		$applied = get_option( self::MIGRATIONS_OPTION, [] );
-		return is_array( $applied ) ? $applied : [];
+		$applied = get_option( self::MIGRATIONS_OPTION, array() );
+		return is_array( $applied ) ? $applied : array();
 	}
 
 	/**

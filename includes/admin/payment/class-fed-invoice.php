@@ -28,7 +28,7 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 				</p>
 			</div>
 			<?php
-			$array    = array(
+			$array = array(
 				'form'  => array(
 					'method' => '',
 					'class'  => 'fed_admin_menu fed_ajax',
@@ -241,7 +241,7 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 					),
 				),
 			);
-			$array    = apply_filters( 'fed_invoice_template_data', $array );
+			$array = apply_filters( 'fed_invoice_template_data', $array );
 			fed_common_simple_layout( $array );
 		}
 
@@ -277,7 +277,8 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 			);
 
 			$new_settings = apply_filters(
-				'fed_payment_invoice_template_update', $invoice,
+				'fed_payment_invoice_template_update',
+				$invoice,
 				$request
 			);
 
@@ -324,7 +325,7 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 				);
 			}
 			global $wpdb;
-			$up_table     = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
+			$up_table = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$up           = $wpdb->get_results( "SELECT id, input_meta FROM $up_table" );
 			$user_profile = fed_convert_array_object_to_key_value( $up, 'id', 'input_meta' );
@@ -375,7 +376,7 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 			$amount         = isset( $payment['amount'] ) ? $payment['amount'] : '';
 			$currency       = isset( $payment['currency'] ) ? $payment['currency'] : '';
 
-			$html = '';
+			$html  = '';
 			$html .= '<div class="container" id="print">
                 <div class="row">
                     <div class="col-sm-6">
@@ -434,14 +435,16 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 				$plan_currency = isset( $item['currency'] ) ? esc_attr( $item['currency'] ) : 'USD';
 				$discount      = isset( $item['discount_value'] ) && ! empty( $item['discount_value'] ) ? sprintf(
 					'Discount : %s %s',
-					esc_attr( $item['discount_value'] ), fed_get_discount_type( esc_attr( $item['discount'] ) )
+					esc_attr( $item['discount_value'] ),
+					fed_get_discount_type( esc_attr( $item['discount'] ) )
 				) : '';
 				$tax           = isset( $item['tax_value'] ) && ! empty( $item['tax_value'] ) ?
 					sprintf(
 						'Tax : %s %s',
-						esc_attr( $item['tax_value'] ), fed_get_discount_type( esc_attr( $item['tax'] ) )
+						esc_attr( $item['tax_value'] ),
+						fed_get_discount_type( esc_attr( $item['tax'] ) )
 					) : '';
-				$html          .= '<tr style="display: table-row;">
+				$html         .= '<tr style="display: table-row;">
                                 <td>' . $plan_name . '</td>
                                 <td>' . $plan_amount . $plan_currency . '</td>
                                 <td>' . $plan_quantity . '</td>
@@ -491,14 +494,15 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 		public function user() {
 			global $wpdb;
 
-			$table         = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
+			$table = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$user_profiles = $wpdb->get_results( "SELECT id, label_name FROM $table" );
 
 			$profiles = array( '' => __( '&mdash; Hide this field from invoice &mdash;', 'frontend-dashboard' ) ) + (array) fed_convert_array_object_to_key_value(
-					$user_profiles,
-					'id', 'label_name'
-				);
+				$user_profiles,
+				'id',
+				'label_name'
+			);
 			$settings = get_option( 'fed_invoice_settings', array() );
 			?>
 			<div style="margin-bottom: 20px;">
@@ -530,7 +534,7 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 					'loader' => '',
 				),
 				'input' => array(
-					'Customer Name' => array(
+					'Customer Name'  => array(
 						'col'          => 'col-md-6',
 						'name'         => __( 'Customer Full Name', 'frontend-dashboard' ),
 						'input'        => fed_get_input_details(
@@ -566,7 +570,7 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 							)
 						),
 					),
-					'City' => array(
+					'City'           => array(
 						'col'          => 'col-md-4',
 						'name'         => __( 'City', 'frontend-dashboard' ),
 						'input'        => fed_get_input_details(
@@ -584,7 +588,7 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 							)
 						),
 					),
-					'State' => array(
+					'State'          => array(
 						'col'          => 'col-md-4',
 						'name'         => __( 'State / Province', 'frontend-dashboard' ),
 						'input'        => fed_get_input_details(
@@ -602,7 +606,7 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 							)
 						),
 					),
-					'Postal Code' => array(
+					'Postal Code'    => array(
 						'col'          => 'col-md-4',
 						'name'         => __( 'Postal / ZIP Code', 'frontend-dashboard' ),
 						'input'        => fed_get_input_details(
@@ -620,7 +624,7 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 							)
 						),
 					),
-					'Country' => array(
+					'Country'        => array(
 						'col'          => 'col-md-6',
 						'name'         => __( 'Country', 'frontend-dashboard' ),
 						'input'        => fed_get_input_details(
@@ -638,7 +642,7 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 							)
 						),
 					),
-					'Telephone' => array(
+					'Telephone'      => array(
 						'col'          => 'col-md-6',
 						'name'         => __( 'Phone / Telephone', 'frontend-dashboard' ),
 						'input'        => fed_get_input_details(
@@ -680,7 +684,8 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 			);
 
 			$new_settings = apply_filters(
-				'fed_invoice_user_address_data_update', $invoice,
+				'fed_invoice_user_address_data_update',
+				$invoice,
 				$request
 			);
 

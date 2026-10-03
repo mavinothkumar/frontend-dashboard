@@ -160,22 +160,22 @@ class FED_Page_Template {
 		}
 
 		$fse_templates = array(
-			'fed-full-width'   => array(
+			'fed-full-width'  => array(
 				'title'       => __( 'FED Full Width (With Header & Footer)', 'frontend-dashboard' ),
 				'description' => __( 'Edge-to-edge layout with site header and footer.', 'frontend-dashboard' ),
 				'file'        => 'fed-full-width.html',
 			),
-			'fed-container'    => array(
+			'fed-container'   => array(
 				'title'       => __( 'FED Container (With Header & Footer)', 'frontend-dashboard' ),
 				'description' => __( 'Centered constrained container with site header and footer.', 'frontend-dashboard' ),
 				'file'        => 'fed-container.html',
 			),
-			'fed-canvas'       => array(
+			'fed-canvas'      => array(
 				'title'       => __( 'FED Canvas / Blank (No Header, No Footer)', 'frontend-dashboard' ),
 				'description' => __( 'Clean distraction-free canvas for authentication and forms.', 'frontend-dashboard' ),
 				'file'        => 'fed-canvas.html',
 			),
-			'fed-canvas-full'  => array(
+			'fed-canvas-full' => array(
 				'title'       => __( 'FED Full Width Canvas (No Header, No Footer)', 'frontend-dashboard' ),
 				'description' => __( 'Edge-to-edge standalone full-width canvas without header/footer.', 'frontend-dashboard' ),
 				'file'        => 'fed-canvas-full.html',
@@ -219,22 +219,22 @@ class FED_Page_Template {
 		}
 
 		$fse_templates = array(
-			'fed-full-width'   => array(
+			'fed-full-width'  => array(
 				'title'       => __( 'FED Full Width (With Header & Footer)', 'frontend-dashboard' ),
 				'description' => __( 'Edge-to-edge layout with site header and footer.', 'frontend-dashboard' ),
 				'file'        => 'fed-full-width.html',
 			),
-			'fed-container'    => array(
+			'fed-container'   => array(
 				'title'       => __( 'FED Container (With Header & Footer)', 'frontend-dashboard' ),
 				'description' => __( 'Centered constrained container with site header and footer.', 'frontend-dashboard' ),
 				'file'        => 'fed-container.html',
 			),
-			'fed-canvas'       => array(
+			'fed-canvas'      => array(
 				'title'       => __( 'FED Canvas / Blank (No Header, No Footer)', 'frontend-dashboard' ),
 				'description' => __( 'Clean distraction-free canvas for authentication and forms.', 'frontend-dashboard' ),
 				'file'        => 'fed-canvas.html',
 			),
-			'fed-canvas-full'  => array(
+			'fed-canvas-full' => array(
 				'title'       => __( 'FED Full Width Canvas (No Header, No Footer)', 'frontend-dashboard' ),
 				'description' => __( 'Edge-to-edge standalone full-width canvas without header/footer.', 'frontend-dashboard' ),
 				'file'        => 'fed-canvas-full.html',
@@ -284,22 +284,22 @@ class FED_Page_Template {
 		}
 
 		$fse_templates = array(
-			'fed-full-width'   => array(
+			'fed-full-width'  => array(
 				'title'       => __( 'FED Full Width (With Header & Footer)', 'frontend-dashboard' ),
 				'description' => __( 'Edge-to-edge layout with site header and footer.', 'frontend-dashboard' ),
 				'file'        => 'fed-full-width.html',
 			),
-			'fed-container'    => array(
+			'fed-container'   => array(
 				'title'       => __( 'FED Container (With Header & Footer)', 'frontend-dashboard' ),
 				'description' => __( 'Centered constrained container with site header and footer.', 'frontend-dashboard' ),
 				'file'        => 'fed-container.html',
 			),
-			'fed-canvas'       => array(
+			'fed-canvas'      => array(
 				'title'       => __( 'FED Canvas / Blank (No Header, No Footer)', 'frontend-dashboard' ),
 				'description' => __( 'Clean distraction-free canvas for authentication and forms.', 'frontend-dashboard' ),
 				'file'        => 'fed-canvas.html',
 			),
-			'fed-canvas-full'  => array(
+			'fed-canvas-full' => array(
 				'title'       => __( 'FED Full Width Canvas (No Header, No Footer)', 'frontend-dashboard' ),
 				'description' => __( 'Edge-to-edge standalone full-width canvas without header/footer.', 'frontend-dashboard' ),
 				'file'        => 'fed-canvas-full.html',

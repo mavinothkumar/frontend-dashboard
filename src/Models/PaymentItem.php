@@ -17,19 +17,19 @@ class PaymentItem extends Model {
 
 	protected $table = 'fed_payment_items';
 
-	protected $fillable = [
+	protected $fillable = array(
 		'payment_id',
 		'item_name',
 		'item_price',
 		'quantity',
-	];
+	);
 
-	protected $casts = [
+	protected $casts = array(
 		'id'         => 'int',
 		'payment_id' => 'int',
 		'item_price' => 'float',
 		'quantity'   => 'int',
-	];
+	);
 
 	/**
 	 * Get associated payment.

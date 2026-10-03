@@ -39,9 +39,9 @@ class EditorRenderer {
 	/**
 	 * Render Post Content Editor based on setting.
 	 *
-	 * @param string $content
-	 * @param string $input_meta
-	 * @param string $post_type
+	 * @param string      $content
+	 * @param string      $input_meta
+	 * @param string      $post_type
 	 * @param string|null $editor_type
 	 * @return string HTML output
 	 */
@@ -98,8 +98,8 @@ class EditorRenderer {
 	 */
 	public static function filter_clean_tinymce_init( $mceInit, $editor_id = '' ) {
 		if ( isset( $mceInit['plugins'] ) ) {
-			$plugins = explode( ',', $mceInit['plugins'] );
-			$plugins = array_diff( $plugins, array( 'wplink', 'wpeditimage', 'wpview', 'wpgallery' ) );
+			$plugins            = explode( ',', $mceInit['plugins'] );
+			$plugins            = array_diff( $plugins, array( 'wplink', 'wpeditimage', 'wpview', 'wpgallery' ) );
 			$mceInit['plugins'] = implode( ',', $plugins );
 		}
 		return $mceInit;
@@ -289,9 +289,9 @@ class EditorRenderer {
 /**
  * Global helper function to render the post editor.
  *
- * @param string $content
- * @param string $input_meta
- * @param string $post_type
+ * @param string      $content
+ * @param string      $input_meta
+ * @param string      $post_type
  * @param string|null $editor_type
  * @return string
  */

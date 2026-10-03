@@ -37,7 +37,7 @@ abstract class AbstractPaymentGateway implements PaymentGatewayInterface {
 	 *
 	 * @var array
 	 */
-	protected $supports = [ 'single_payment' ];
+	protected $supports = array( 'single_payment' );
 
 	/**
 	 * Get Gateway ID.
@@ -82,7 +82,7 @@ abstract class AbstractPaymentGateway implements PaymentGatewayInterface {
 	 * @param array $orderData
 	 * @return string
 	 */
-	public function renderCheckoutFields( array $orderData = [] ): string {
+	public function renderCheckoutFields( array $orderData = array() ): string {
 		return '';
 	}
 

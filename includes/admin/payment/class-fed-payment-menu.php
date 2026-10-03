@@ -27,13 +27,14 @@ if ( ! class_exists( 'FEDPaymentMenu' ) ) {
 		 */
 		public function layout() {
 			$menus = apply_filters(
-				'fed_payment_menu', array(
-					'dashboard'    => array(
+				'fed_payment_menu',
+				array(
+					'dashboard'     => array(
 						'icon'    => 'fas fa-chart-pie',
 						'name'    => __( 'Dashboard', 'frontend-dashboard' ),
 						'submenu' => 'FEDPaymentDashboard@dashboard',
 					),
-					'transactions' => array(
+					'transactions'  => array(
 						'icon'    => 'fas fa-receipt',
 						'name'    => __( 'Transactions', 'frontend-dashboard' ),
 						'submenu' => 'FEDTransaction@transactions',
@@ -52,14 +53,14 @@ if ( ! class_exists( 'FEDPaymentMenu' ) ) {
 								'name' => __( 'Gateways Hub', 'frontend-dashboard' ),
 								'menu' => array( 'FEDPaymentGatewayHub@hub' ),
 							),
-							'FEDPayment@settings' => array(
+							'FEDPayment@settings'      => array(
 								'icon' => 'fas fa-sliders-h',
 								'name' => __( 'Gateway Settings', 'frontend-dashboard' ),
 								'menu' => array( 'FEDPayment@settings' ),
 							),
 						),
 					),
-					'invoice'      => array(
+					'invoice'       => array(
 						'icon'    => 'fas fa-file-invoice-dollar',
 						'name'    => __( 'Invoices', 'frontend-dashboard' ),
 						'submenu' => array(
@@ -100,10 +101,34 @@ if ( ! class_exists( 'FEDPaymentMenu' ) ) {
 						</div>
 
 						<div style="display: flex; align-items: center; gap: 10px;">
-							<a href="<?php echo esc_url( fed_menu_page_url( 'fed_payments', array( 'menu' => 'gateways', 'submenu' => 'FEDPaymentGatewayHub@hub' ) ) ); ?>" style="display: inline-flex; align-items: center; gap: 7px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22); padding: 8px 14px; border-radius: 8px; color: #ffffff; font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.2s ease;">
+							<a href="
+							<?php
+							echo esc_url(
+								fed_menu_page_url(
+									'fed_payments',
+									array(
+										'menu'    => 'gateways',
+										'submenu' => 'FEDPaymentGatewayHub@hub',
+									)
+								)
+							);
+							?>
+										" style="display: inline-flex; align-items: center; gap: 7px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22); padding: 8px 14px; border-radius: 8px; color: #ffffff; font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.2s ease;">
 								<i class="fas fa-plug" style="color: #6ee7b7;"></i> <?php esc_html_e( 'Gateways Hub', 'frontend-dashboard' ); ?>
 							</a>
-							<a href="<?php echo esc_url( fed_menu_page_url( 'fed_payments', array( 'menu' => 'transactions', 'submenu' => 'FEDTransaction@add_new_transaction' ) ) ); ?>" style="display: inline-flex; align-items: center; gap: 7px; background: #10b981; border: 1px solid #059669; padding: 8px 16px; border-radius: 8px; color: #ffffff; font-size: 13px; font-weight: 700; text-decoration: none; box-shadow: 0 2px 6px rgba(16, 185, 129, 0.35);">
+							<a href="
+							<?php
+							echo esc_url(
+								fed_menu_page_url(
+									'fed_payments',
+									array(
+										'menu'    => 'transactions',
+										'submenu' => 'FEDTransaction@add_new_transaction',
+									)
+								)
+							);
+							?>
+										" style="display: inline-flex; align-items: center; gap: 7px; background: #10b981; border: 1px solid #059669; padding: 8px 16px; border-radius: 8px; color: #ffffff; font-size: 13px; font-weight: 700; text-decoration: none; box-shadow: 0 2px 6px rgba(16, 185, 129, 0.35);">
 								<i class="fas fa-plus"></i> <?php esc_html_e( 'Record Transaction', 'frontend-dashboard' ); ?>
 							</a>
 						</div>
@@ -137,13 +162,13 @@ if ( ! class_exists( 'FEDPaymentMenu' ) ) {
 		 */
 		public function header_menu( $menus ) {
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$get_payload = isset( $_GET ) ? array_map( 'sanitize_text_field', wp_unslash( $_GET ) ) : array();
+			$get_payload  = isset( $_GET ) ? array_map( 'sanitize_text_field', wp_unslash( $_GET ) ) : array();
 			$current_menu = isset( $get_payload['menu'] ) ? $get_payload['menu'] : fed_get_first_key_in_array( $menus );
 			?>
 			<div class="fed_nav_pills_container" style="display: flex; gap: 8px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; overflow-x: auto;">
 				<?php
 				foreach ( $menus as $index => $item ) {
-					$is_active = ( $current_menu === $index );
+					$is_active  = ( $current_menu === $index );
 					$bg_style   = $is_active ? '#033333' : '#f8fafc';
 					$text_style = $is_active ? '#ffffff' : '#475569';
 					$border     = $is_active ? '1px solid #033333' : '1px solid #e2e8f0';
@@ -151,7 +176,7 @@ if ( ! class_exists( 'FEDPaymentMenu' ) ) {
 					$shadow     = $is_active ? 'box-shadow: 0 4px 6px -1px rgba(3, 51, 51, 0.2);' : '';
 					?>
 					<a href="<?php echo esc_url( fed_menu_page_url( 'fed_payments', array( 'menu' => esc_attr( $index ) ) ) ); ?>" 
-					   style="display: inline-flex; align-items: center; gap: 8px; background: <?php echo esc_attr( $bg_style ); ?>; color: <?php echo esc_attr( $text_style ); ?>; border: <?php echo esc_attr( $border ); ?>; padding: 10px 18px; border-radius: 8px; font-size: 13.5px; font-weight: 700; text-decoration: none; transition: all 0.2s ease; <?php echo esc_attr( $shadow ); ?>">
+						style="display: inline-flex; align-items: center; gap: 8px; background: <?php echo esc_attr( $bg_style ); ?>; color: <?php echo esc_attr( $text_style ); ?>; border: <?php echo esc_attr( $border ); ?>; padding: 10px 18px; border-radius: 8px; font-size: 13.5px; font-weight: 700; text-decoration: none; transition: all 0.2s ease; <?php echo esc_attr( $shadow ); ?>">
 						<i class="<?php echo esc_attr( fed_get_data( 'icon', $item ) ); ?>" style="color: <?php echo esc_attr( $icon_color ); ?>; font-size: 14px;"></i>
 						<span><?php echo esc_html( fed_get_data( 'name', $item ) ); ?></span>
 					</a>
@@ -191,14 +216,26 @@ if ( ! class_exists( 'FEDPaymentMenu' ) ) {
 									<?php
 									foreach ( $menu_config['submenu'] as $index => $sub_item ) {
 										$is_sub_active = ( $submenu === $index );
-										$sub_bg   = $is_sub_active ? '#033333' : 'transparent';
-										$sub_text = $is_sub_active ? '#ffffff' : '#334155';
-										$sub_icon = $is_sub_active ? '#34d399' : '#64748b';
-										$sub_weight = $is_sub_active ? '700' : '600';
+										$sub_bg        = $is_sub_active ? '#033333' : 'transparent';
+										$sub_text      = $is_sub_active ? '#ffffff' : '#334155';
+										$sub_icon      = $is_sub_active ? '#34d399' : '#64748b';
+										$sub_weight    = $is_sub_active ? '700' : '600';
 										?>
 										<li>
-											<a href="<?php echo esc_url( fed_menu_page_url( 'fed_payments', array( 'menu' => $menu, 'submenu' => $index ) ) ); ?>" 
-											   style="display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 7px; background: <?php echo esc_attr( $sub_bg ); ?>; color: <?php echo esc_attr( $sub_text ); ?>; font-size: 13px; font-weight: <?php echo esc_attr( $sub_weight ); ?>; text-decoration: none; transition: background 0.15s ease;">
+											<a href="
+											<?php
+											echo esc_url(
+												fed_menu_page_url(
+													'fed_payments',
+													array(
+														'menu' => $menu,
+														'submenu' => $index,
+													)
+												)
+											);
+											?>
+														" 
+												style="display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 7px; background: <?php echo esc_attr( $sub_bg ); ?>; color: <?php echo esc_attr( $sub_text ); ?>; font-size: 13px; font-weight: <?php echo esc_attr( $sub_weight ); ?>; text-decoration: none; transition: background 0.15s ease;">
 												<i class="<?php echo esc_attr( $sub_item['icon'] ); ?>" style="color: <?php echo esc_attr( $sub_icon ); ?>; width: 16px; text-align: center;"></i>
 												<span><?php echo esc_html( $sub_item['name'] ); ?></span>
 											</a>

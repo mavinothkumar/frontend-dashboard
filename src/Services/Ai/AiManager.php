@@ -18,7 +18,7 @@ class AiManager {
 	/**
 	 * @var AiDriverInterface[]
 	 */
-	protected $drivers = [];
+	protected $drivers = array();
 
 	/**
 	 * @var string|null Default driver ID.

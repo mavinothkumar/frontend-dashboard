@@ -18,7 +18,7 @@ class SocialAuthManager {
 	/**
 	 * @var SocialAuthProviderInterface[]
 	 */
-	protected $providers = [];
+	protected $providers = array();
 
 	/**
 	 * Register a social authentication provider.

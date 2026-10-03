@@ -17,7 +17,7 @@ class UserProfileField extends Model {
 
 	protected $table = 'fed_user_profile';
 
-	protected $fillable = [
+	protected $fillable = array(
 		'input_meta',
 		'label_name',
 		'label',
@@ -48,16 +48,16 @@ class UserProfileField extends Model {
 		'user_read_only',
 		'admin_read_only',
 		'status',
-	];
+	);
 
-	protected $casts = [
-		'id'                => 'int',
-		'input_order'       => 'int',
-		'user_role'         => 'array',
-		'options'           => 'array',
-		'is_required'       => 'bool',
-		'is_unique'         => 'bool',
-		'user_read_only'    => 'bool',
-		'admin_read_only'   => 'bool',
-	];
+	protected $casts = array(
+		'id'              => 'int',
+		'input_order'     => 'int',
+		'user_role'       => 'array',
+		'options'         => 'array',
+		'is_required'     => 'bool',
+		'is_unique'       => 'bool',
+		'user_read_only'  => 'bool',
+		'admin_read_only' => 'bool',
+	);
 }

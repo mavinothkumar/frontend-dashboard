@@ -17,7 +17,7 @@ class AuditLog extends Model {
 
 	protected $table = 'fed_activity_log';
 
-	protected $fillable = [
+	protected $fillable = array(
 		'user_id',
 		'user_login',
 		'user_email',
@@ -33,11 +33,11 @@ class AuditLog extends Model {
 		'status',
 		'ip_address',
 		'user_agent',
-	];
+	);
 
-	protected $casts = [
+	protected $casts = array(
 		'id'      => 'int',
 		'user_id' => 'int',
 		'context' => 'array',
-	];
+	);
 }

@@ -34,7 +34,7 @@ function fed_display_dashboard_profile( $menu_item ) {
 	$iconClass = isset( $menus[ $index ]['menu_image_id'] ) ? $menus[ $index ]['menu_image_id'] : 'fa fa-user';
 
 	$menu_default_page = apply_filters( 'fed_menu_default_page', true, $menus, $index );
-	$userRoles         = $user ? (array) $user->roles : [];
+	$userRoles         = $user ? (array) $user->roles : array();
 	$primaryRole       = ! empty( $userRoles[0] ) ? ucfirst( $userRoles[0] ) : 'Member';
 	$registeredDate    = $user && ! empty( $user->user_registered ) ? date_i18n( get_option( 'date_format' ), strtotime( $user->user_registered ) ) : '';
 	?>
@@ -42,13 +42,13 @@ function fed_display_dashboard_profile( $menu_item ) {
 
 		<!-- Profile Identity Header -->
 		<div class="rounded-2xl p-6 sm:p-7 border shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 transition-colors"
-		     style="background-color: var(--fed-body-bg, #F8FAFC); border-color: var(--fed-border, #E2E8F0);">
+			style="background-color: var(--fed-body-bg, #F8FAFC); border-color: var(--fed-border, #E2E8F0);">
 			<!-- Left: Avatar & Identity -->
 			<div class="flex items-center gap-5">
 				<div class="relative flex-shrink-0">
 					<img class="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl object-cover ring-2 ring-white/60 shadow-xs"
-						 src="<?php echo esc_url( get_avatar_url( $user ? $user->ID : 0, [ 'size' => 180 ] ) ); ?>"
-						 alt="<?php echo esc_attr( $user ? $user->display_name : '' ); ?>">
+						src="<?php echo esc_url( get_avatar_url( $user ? $user->ID : 0, array( 'size' => 180 ) ) ); ?>"
+						alt="<?php echo esc_attr( $user ? $user->display_name : '' ); ?>">
 					<span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full" title="<?php esc_attr_e( 'Active', 'frontend-dashboard' ); ?>"></span>
 				</div>
 				<div>
@@ -57,7 +57,7 @@ function fed_display_dashboard_profile( $menu_item ) {
 							<?php echo esc_html( $user ? $user->display_name : 'User' ); ?>
 						</h2>
 						<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold shadow-2xs"
-						      style="background-color: var(--fed-active-bg, #EEF2FF); color: var(--fed-active-text, #4F46E5);">
+								style="background-color: var(--fed-active-bg, #EEF2FF); color: var(--fed-active-text, #4F46E5);">
 							<?php echo esc_html( $primaryRole ); ?>
 						</span>
 					</div>
@@ -73,7 +73,7 @@ function fed_display_dashboard_profile( $menu_item ) {
 			<!-- Right: Quick Metadata -->
 			<?php if ( $registeredDate ) : ?>
 				<div class="flex sm:flex-col items-center sm:items-end gap-1 text-xs pt-3 sm:pt-0 border-t sm:border-t-0 w-full sm:w-auto"
-				     style="border-color: var(--fed-border, #E2E8F0); color: var(--fed-sidebar-text, #64748B);">
+					style="border-color: var(--fed-border, #E2E8F0); color: var(--fed-sidebar-text, #64748B);">
 					<span class="opacity-75"><?php esc_html_e( 'Member Since', 'frontend-dashboard' ); ?></span>
 					<span class="font-bold" style="color: var(--fed-text-main, #0F172A);"><?php echo esc_html( $registeredDate ); ?></span>
 				</div>
@@ -91,9 +91,9 @@ function fed_display_dashboard_profile( $menu_item ) {
 					usort( $profiles, 'fed_sort_by_order' );
 
 					// Separate fields into logical sections
-					$account_fields  = [];
-					$security_fields = [];
-					$extra_fields    = [];
+					$account_fields  = array();
+					$security_fields = array();
+					$extra_fields    = array();
 
 					foreach ( $profiles as $single_item ) {
 						if ( 'user_pass' !== $single_item['input_meta'] && 'confirmation_password' !== $single_item['input_meta'] ) {
@@ -127,9 +127,9 @@ function fed_display_dashboard_profile( $menu_item ) {
 							}
 						}
 
-						if ( in_array( $single_item['input_meta'], [ 'user_login', 'user_email' ], true ) ) {
+						if ( in_array( $single_item['input_meta'], array( 'user_login', 'user_email' ), true ) ) {
 							$account_fields[] = $single_item;
-						} elseif ( in_array( $single_item['input_meta'], [ 'user_pass', 'confirmation_password' ], true ) ) {
+						} elseif ( in_array( $single_item['input_meta'], array( 'user_pass', 'confirmation_password' ), true ) ) {
 							$security_fields[] = $single_item;
 						} else {
 							$extra_fields[] = $single_item;
@@ -137,8 +137,8 @@ function fed_display_dashboard_profile( $menu_item ) {
 					}
 					?>
 					<form method="post"
-						  class="space-y-6"
-						  action="<?php echo esc_url( add_query_arg( [ 'fed_nonce' => wp_create_nonce( 'fed_nonce' ) ], fed_get_form_action( 'fed_save_user_profile' ) ) ); ?>">
+							class="space-y-6"
+							action="<?php echo esc_url( add_query_arg( array( 'fed_nonce' => wp_create_nonce( 'fed_nonce' ) ), fed_get_form_action( 'fed_save_user_profile' ) ) ); ?>">
 						<?php wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
 						<input type="hidden" name="tab_id" value="<?php echo esc_attr( $index ); ?>"/>
 						<input type="hidden" name="menu_type" value="<?php echo esc_attr( $menu_item['menu_type'] ); ?>"/>
@@ -260,7 +260,7 @@ function fed_display_dashboard_profile( $menu_item ) {
 								<div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
 									<?php
 									foreach ( $extra_fields as $single_item ) {
-										$isFullWidth = in_array( $single_item['input_type'] ?? '', [ 'multi_line', 'textarea', 'multiline', 'address' ], true );
+										$isFullWidth = in_array( $single_item['input_type'] ?? '', array( 'multi_line', 'textarea', 'multiline', 'address' ), true );
 										$isUrl       = ( 'url' === ( $single_item['input_type'] ?? '' ) || 'user_url' === ( $single_item['input_meta'] ?? '' ) );
 										$isEmail     = ( 'email' === ( $single_item['input_type'] ?? '' ) || 'user_email' === ( $single_item['input_meta'] ?? '' ) );
 										?>

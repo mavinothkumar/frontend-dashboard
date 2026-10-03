@@ -36,8 +36,8 @@ function fed_admin_input_fields_table( $row, $action, $menu_options ) {
 	?>
 	<div class="fed_input_type_container fed_input_table_container space-y-7 <?php echo $is_active ? '' : 'hide hidden'; ?>" data-field-type="table">
 		<form method="post"
-			  class="fed_admin_menu fed_ajax space-y-7"
-			  action="<?php echo esc_url( admin_url( 'admin-ajax.php?action=fed_admin_setting_up_form' ) ); ?>">
+				class="fed_admin_menu fed_ajax space-y-7"
+				action="<?php echo esc_url( admin_url( 'admin-ajax.php?action=fed_admin_setting_up_form' ) ); ?>">
 
 			<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
 			<?php
@@ -259,13 +259,13 @@ function fed_admin_input_fields_table( $row, $action, $menu_options ) {
 			var $helpText = $c.find('#fed_table_mode_help_text');
 			if (mode === 'readonly') {
 				$badge.removeClass('bg-indigo-50 text-indigo-700 border-indigo-200/80')
-					  .addClass('bg-amber-50 text-amber-700 border border-amber-200/80')
-					  .html('<i class="fas fa-lock text-[10px]"></i> <?php esc_html_e( 'Read-Only Mode', 'frontend-dashboard' ); ?>');
+						.addClass('bg-amber-50 text-amber-700 border border-amber-200/80')
+						.html('<i class="fas fa-lock text-[10px]"></i> <?php esc_html_e( 'Read-Only Mode', 'frontend-dashboard' ); ?>');
 				$helpText.text('<?php esc_html_e( 'Read-Only Mode: Users cannot edit this table on the frontend. The data you enter in the preview cells below will be shown as static table text.', 'frontend-dashboard' ); ?>');
 			} else {
 				$badge.removeClass('bg-amber-50 text-amber-700 border-amber-200/80')
-					  .addClass('bg-indigo-50 text-indigo-700 border border-indigo-200/80')
-					  .html('<i class="fas fa-pen text-[10px]"></i> <?php esc_html_e( 'User Input Mode', 'frontend-dashboard' ); ?>');
+						.addClass('bg-indigo-50 text-indigo-700 border border-indigo-200/80')
+						.html('<i class="fas fa-pen text-[10px]"></i> <?php esc_html_e( 'User Input Mode', 'frontend-dashboard' ); ?>');
 				$helpText.text('<?php esc_html_e( 'User Input Mode: Users can edit cells on the frontend. Any data entered below will serve as initial default values.', 'frontend-dashboard' ); ?>');
 			}
 

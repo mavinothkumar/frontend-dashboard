@@ -22,8 +22,8 @@ function fed_admin_input_fields_select( $row, $action, $menu_options ) {
 	?>
 	<div class="fed_input_type_container fed_input_select_container space-y-7 <?php echo $is_active ? '' : 'hide hidden'; ?>" data-field-type="select">
 		<form method="post"
-			  class="fed_admin_menu fed_ajax space-y-7"
-			  action="<?php echo esc_url( admin_url( 'admin-ajax.php?action=fed_admin_setting_up_form' ) ); ?>">
+				class="fed_admin_menu fed_ajax space-y-7"
+				action="<?php echo esc_url( admin_url( 'admin-ajax.php?action=fed_admin_setting_up_form' ) ); ?>">
 
 			<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
 			<?php

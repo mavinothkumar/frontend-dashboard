@@ -51,10 +51,10 @@ function fed_list_taxonomy( $attributes ) {
 				'taxonomy'            => null,
 				'title_li'            => '',
 				'use_desc_for_title'  => 1,
-			), $attributes
+			),
+			$attributes
 		)
 	);
-
 
 	if ( $taxonomy ) {
 		$args = array(

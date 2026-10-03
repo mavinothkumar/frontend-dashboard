@@ -17,20 +17,20 @@ class Notification extends Model {
 
 	protected $table = 'fed_notifications';
 
-	protected $fillable = [
+	protected $fillable = array(
 		'user_id',
 		'title',
 		'message',
 		'type',
 		'action_url',
 		'is_read',
-	];
+	);
 
-	protected $casts = [
+	protected $casts = array(
 		'id'      => 'int',
 		'user_id' => 'int',
 		'is_read' => 'bool',
-	];
+	);
 
 	/**
 	 * Mark notification as read.

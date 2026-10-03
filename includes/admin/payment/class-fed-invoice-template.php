@@ -19,15 +19,15 @@ if ( ! class_exists( 'FEDInvoiceTemplate' ) ) {
 		 * Template View.
 		 */
 		public function template() {
-			$settings = get_option( 'fed_payment_settings', array() );
+			$settings          = get_option( 'fed_payment_settings', array() );
 			$selected_template = isset( $settings['invoice']['template']['default'] ) ? $settings['invoice']['template']['default'] : 'standard_clean';
-			$accent_color = isset( $settings['invoice']['template']['accent_color'] ) ? $settings['invoice']['template']['accent_color'] : '#033333';
+			$accent_color      = isset( $settings['invoice']['template']['accent_color'] ) ? $settings['invoice']['template']['accent_color'] : '#033333';
 
 			// Get registered invoice templates (Core + Addons)
 			$templates = apply_filters(
 				'fed_invoice_template',
 				array(
-					'standard_clean' => array(
+					'standard_clean'  => array(
 						'id'          => 'standard_clean',
 						'name'        => __( 'Standard Minimalist', 'frontend-dashboard' ),
 						'description' => __( 'Clean, crisp typography with itemized breakdown, tax/discount lines, and branded header.', 'frontend-dashboard' ),
@@ -70,11 +70,11 @@ if ( ! class_exists( 'FEDInvoiceTemplate' ) ) {
 					<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; margin-bottom: 26px;">
 						<?php
 						foreach ( $templates as $key => $tpl ) {
-							$is_selected = ( $selected_template === $key );
+							$is_selected  = ( $selected_template === $key );
 							$border_color = $is_selected ? '#033333' : '#e2e8f0';
-							$bg_color = $is_selected ? '#f8fafc' : '#ffffff';
-							$badge_bg = $is_selected ? '#033333' : '#f1f5f9';
-							$badge_color = $is_selected ? '#ffffff' : '#64748b';
+							$bg_color     = $is_selected ? '#f8fafc' : '#ffffff';
+							$badge_bg     = $is_selected ? '#033333' : '#f1f5f9';
+							$badge_color  = $is_selected ? '#ffffff' : '#64748b';
 							?>
 							<label style="cursor: pointer; display: block; margin: 0;">
 								<div style="border: 2px solid <?php echo esc_attr( $border_color ); ?>; background: <?php echo esc_attr( $bg_color ); ?>; border-radius: 12px; padding: 18px; position: relative; transition: all 0.2s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.02); height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
@@ -177,7 +177,7 @@ if ( ! class_exists( 'FEDInvoiceTemplate' ) ) {
 			}
 
 			$settings = get_option( 'fed_payment_settings', array() );
-			
+
 			if ( ! isset( $settings['invoice'] ) || ! is_array( $settings['invoice'] ) ) {
 				$settings['invoice'] = array();
 			}

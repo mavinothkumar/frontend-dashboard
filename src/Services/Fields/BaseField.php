@@ -14,25 +14,25 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 abstract class BaseField {
 
-	protected $attributes = [];
-	protected $name = '';
-	protected $value = '';
+	protected $attributes  = array();
+	protected $name        = '';
+	protected $value       = '';
 	protected $placeholder = '';
-	protected $class_name = '';
-	protected $id_name = '';
+	protected $class_name  = '';
+	protected $id_name     = '';
 	protected $is_required = false;
 	protected $is_readonly = false;
 	protected $is_disabled = false;
-	protected $extra = '';
-	protected $options = [];
-	protected $extended = [];
+	protected $extra       = '';
+	protected $options     = array();
+	protected $extended    = array();
 
 	/**
 	 * BaseField constructor.
 	 *
 	 * @param array $attributes Raw options array from menu or form definitions.
 	 */
-	public function __construct( array $attributes = [] ) {
+	public function __construct( array $attributes = array() ) {
 		$this->attributes = $attributes;
 		$this->parse_attributes( $attributes );
 	}
@@ -50,7 +50,7 @@ abstract class BaseField {
 		$this->class_name  = ( ! empty( $class ) && strpos( $class, 'form-control' ) !== false ) ? $class : trim( 'form-control ' . $class );
 		$this->id_name     = $this->get_data( 'id_name', $attributes );
 		$this->extra       = isset( $attributes['extra'] ) ? $attributes['extra'] : '';
-		$this->options     = isset( $attributes['input_value'] ) ? $attributes['input_value'] : [];
+		$this->options     = isset( $attributes['input_value'] ) ? $attributes['input_value'] : array();
 
 		$required          = $this->get_data( 'is_required', $attributes );
 		$this->is_required = ( 'true' === $required || true === $required || 'Enable' === $required || 'yes' === $required );
@@ -61,7 +61,7 @@ abstract class BaseField {
 		if ( is_string( $extended ) ) {
 			$extended = maybe_unserialize( $extended );
 		}
-		$this->extended = is_array( $extended ) ? $extended : [];
+		$this->extended = is_array( $extended ) ? $extended : array();
 
 		// Handle user permission access check
 		$disable_user_access = isset( $this->extended['disable_user_access'] ) ? $this->extended['disable_user_access'] : null;
@@ -105,8 +105,8 @@ abstract class BaseField {
 	 * @param array $extra_attrs
 	 * @return string
 	 */
-	protected function build_attributes( array $extra_attrs = [] ) {
-		$attrs = [];
+	protected function build_attributes( array $extra_attrs = array() ) {
+		$attrs = array();
 
 		if ( ! empty( $this->name ) ) {
 			$attrs[] = sprintf( 'name="%s"', esc_attr( $this->name ) );

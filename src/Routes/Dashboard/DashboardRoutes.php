@@ -26,7 +26,7 @@ class DashboardRoutes {
 	 * @param array|string $request
 	 */
 	public function __construct( $request ) {
-		$this->request = is_array( $request ) ? $request : [];
+		$this->request = is_array( $request ) ? $request : array();
 	}
 
 	/**
@@ -68,7 +68,7 @@ class DashboardRoutes {
 	 * @param array $menu
 	 */
 	public function renderPaywallBanner( $menu ) {
-		$menuSlug = isset( $menu['menu_request']['menu_slug'] ) ? esc_html( ucfirst( str_replace( [ '-', '_' ], ' ', $menu['menu_request']['menu_slug'] ) ) ) : 'This Section';
+		$menuSlug = isset( $menu['menu_request']['menu_slug'] ) ? esc_html( ucfirst( str_replace( array( '-', '_' ), ' ', $menu['menu_request']['menu_slug'] ) ) ) : 'This Section';
 		?>
 		<div class="fed_paywall_container text-center py-12 px-6 flex flex-col items-center justify-center max-w-lg mx-auto">
 			<div class="w-16 h-16 rounded-2xl bg-amber-500/10 text-amber-600 flex items-center justify-center mb-5 text-2xl shadow-xs">
@@ -96,7 +96,7 @@ class DashboardRoutes {
 	public function setDashboardMenuQuery() {
 		$menu = function_exists( 'fed_get_dashboard_menu_items_sort_data' )
 			? fed_get_dashboard_menu_items_sort_data()
-			: [];
+			: array();
 
 		if ( empty( $menu ) ) {
 			return new WP_Error( 'no_menus', __( 'No dashboard menus available.', 'frontend-dashboard' ) );
@@ -119,32 +119,32 @@ class DashboardRoutes {
 		}
 
 		if ( $matched_menu ) {
-			$menu_items = [
-				'menu_request' => [
+			$menu_items = array(
+				'menu_request' => array(
 					'menu_type' => isset( $matched_menu['menu_type'] ) ? $matched_menu['menu_type'] : ( isset( $this->request['menu_type'] ) ? sanitize_key( $this->request['menu_type'] ) : 'custom' ),
 					'menu_slug' => $matched_menu['menu_slug'],
 					'menu_id'   => isset( $matched_menu['id'] ) ? $matched_menu['id'] : ( isset( $this->request['menu_id'] ) ? absint( $this->request['menu_id'] ) : 0 ),
 					'fed_nonce' => wp_create_nonce( 'fed_nonce' ),
-				],
-			];
+				),
+			);
 		} elseif ( ! $hasFullQuery ) {
-			$menu_items = [
-				'menu_request' => [
+			$menu_items = array(
+				'menu_request' => array(
 					'menu_type' => isset( $menu[ $first_element ]['menu_type'] ) ? $menu[ $first_element ]['menu_type'] : 'user',
 					'menu_slug' => isset( $menu[ $first_element ]['menu_slug'] ) ? $menu[ $first_element ]['menu_slug'] : 'profile',
 					'menu_id'   => isset( $menu[ $first_element ]['id'] ) ? $menu[ $first_element ]['id'] : 1,
 					'fed_nonce' => wp_create_nonce( 'fed_nonce' ),
-				],
-			];
+				),
+			);
 		} else {
-			$menu_items = [
-				'menu_request' => [
+			$menu_items = array(
+				'menu_request' => array(
 					'menu_type' => $this->request['menu_type'],
 					'menu_slug' => $this->request['menu_slug'],
 					'menu_id'   => isset( $this->request['menu_id'] ) ? $this->request['menu_id'] : 0,
 					'fed_nonce' => wp_create_nonce( 'fed_nonce' ),
-				],
-			];
+				),
+			);
 		}
 
 		$menu_items['menu_items'] = $menu;
@@ -161,7 +161,7 @@ class DashboardRoutes {
 	 * @return array
 	 */
 	public function getDefaultMenuQuery() {
-		return apply_filters( 'fed_get_default_menu_query', [ 'menu_type', 'menu_slug', 'fed_nonce' ] );
+		return apply_filters( 'fed_get_default_menu_query', array( 'menu_type', 'menu_slug', 'fed_nonce' ) );
 	}
 
 	/**
@@ -172,6 +172,6 @@ class DashboardRoutes {
 	public function getDefaultMenuType() {
 		return function_exists( 'fed_get_default_menu_type' )
 			? fed_get_default_menu_type()
-			: [ 'post', 'user', 'logout', 'collapse', 'custom' ];
+			: array( 'post', 'user', 'logout', 'collapse', 'custom' );
 	}
 }

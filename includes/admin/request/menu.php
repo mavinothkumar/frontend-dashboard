@@ -49,8 +49,8 @@ function fed_admin_menu_save( $request, $post_id = '' ) {
 			wp_send_json_error(
 				array(
 					'message' => 'Sorry, you have previously added ' . strtoupper(
-							$duplicate->menu
-						) . ' with order ' . strtoupper( $duplicate->menu_order ),
+						$duplicate->menu
+					) . ' with order ' . strtoupper( $duplicate->menu_order ),
 				)
 			);
 			exit();
@@ -72,8 +72,7 @@ function fed_admin_menu_save( $request, $post_id = '' ) {
 				'message' => $request['menu'] . ' has been successfully updated',
 			)
 		);
-	}
-	else {
+	} else {
 		/**
 		 * Check for input meta already exist
 		 */
@@ -91,8 +90,8 @@ function fed_admin_menu_save( $request, $post_id = '' ) {
 			wp_send_json_error(
 				array(
 					'message' => 'Sorry, you have previously added ' . strtoupper(
-							$duplicate->menu
-						) . ' with order ' . strtoupper( $duplicate->menu_order ),
+						$duplicate->menu
+					) . ' with order ' . strtoupper( $duplicate->menu_order ),
 				)
 			);
 			exit();
@@ -176,8 +175,7 @@ function fed_menu_sorting_items() {
 					'parent_type' => isset( $parent[0] ) ? $parent[0] : null,
 					'order'       => $data['order'],
 				);
-			}
-			else {
+			} else {
 				wp_send_json_error( array( 'message' => 'There is some issue in your custom menu, please check' ) );
 			}
 		}

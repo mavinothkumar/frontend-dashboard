@@ -63,7 +63,8 @@ do_action( 'fed_before_forgot_password_only_form' );
 										<a href="<?php echo esc_url( $login ); ?>" class="text-blue-600 hover:text-blue-500 font-medium">
 											<?php
 											esc_attr_e(
-												'Already have an account?', 'frontend-dashboard'
+												'Already have an account?',
+												'frontend-dashboard'
 											);
 											?>
 										</a>
@@ -77,7 +78,8 @@ do_action( 'fed_before_forgot_password_only_form' );
 										<a href="<?php echo esc_url( $register ); ?>" class="text-blue-600 hover:text-blue-500 font-medium">
 											<?php
 											esc_attr_e(
-												'Create an account?', 'frontend-dashboard'
+												'Create an account?',
+												'frontend-dashboard'
 											);
 											?>
 										</a>

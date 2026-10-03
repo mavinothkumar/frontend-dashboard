@@ -182,11 +182,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div>
 
 				<div style="display: flex; flex-direction: column; gap: 10px;">
-					<?php 
-					$checks = array_slice( $health['checks'] ?? [], 0, 5 );
-					foreach ( $checks as $chk ) : 
+					<?php
+					$checks = array_slice( $health['checks'] ?? array(), 0, 5 );
+					foreach ( $checks as $chk ) :
 						$is_good = ( $chk['status'] ?? 'pass' ) === 'pass';
-					?>
+						?>
 						<div style="display: flex; align-items: center; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px solid #f1f5f9;">
 							<div style="display: flex; align-items: center; gap: 8px; color: #334155;">
 								<span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: <?php echo $is_good ? '#10b981' : '#f59e0b'; ?>;"></span>
@@ -332,10 +332,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 				<?php else : ?>
 					<div style="display: flex; flex-direction: column; gap: 6px;">
-						<?php foreach ( $recent_logs as $log ) :
-							$action = is_array( $log ) ? ( $log['action'] ?? $log['action_title'] ?? $log['message'] ?? '' ) : ( $log->action ?? $log->action_title ?? $log->message ?? '' );
-							$channel = is_array( $log ) ? ( $log['channel'] ?? '' ) : ( $log->channel ?? '' );
-							$created_at = is_array( $log ) ? ( $log['created_at'] ?? 'now' ) : ( $log->created_at ?? 'now' );
+						<?php
+						foreach ( $recent_logs as $log ) :
+							$action      = is_array( $log ) ? ( $log['action'] ?? $log['action_title'] ?? $log['message'] ?? '' ) : ( $log->action ?? $log->action_title ?? $log->message ?? '' );
+							$channel     = is_array( $log ) ? ( $log['channel'] ?? '' ) : ( $log->channel ?? '' );
+							$created_at  = is_array( $log ) ? ( $log['created_at'] ?? 'now' ) : ( $log->created_at ?? 'now' );
 							$description = is_array( $log ) ? ( $log['description'] ?? '' ) : ( $log->description ?? '' );
 
 							if ( empty( $action ) ) {
@@ -343,8 +344,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 							}
 
 							$trimmed_desc = trim( (string) $description );
-							$show_desc = ! empty( $trimmed_desc ) && $trimmed_desc !== $action && 0 !== strpos( $trimmed_desc, '{' );
-						?>
+							$show_desc    = ! empty( $trimmed_desc ) && $trimmed_desc !== $action && 0 !== strpos( $trimmed_desc, '{' );
+							?>
 							<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; font-size: 12px; padding: 4px 0; border-bottom: 1px solid #f8fafc;">
 								<div>
 									<span style="font-weight: 600; color: #1e293b;"><?php echo esc_html( $action ); ?></span>

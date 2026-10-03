@@ -17,7 +17,7 @@ class PostField extends Model {
 
 	protected $table = 'fed_post';
 
-	protected $fillable = [
+	protected $fillable = array(
 		'post_type',
 		'label',
 		'input_meta',
@@ -30,12 +30,12 @@ class PostField extends Model {
 		'extra',
 		'is_required',
 		'status',
-	];
+	);
 
-	protected $casts = [
+	protected $casts = array(
 		'id'          => 'int',
 		'input_order' => 'int',
 		'options'     => 'array',
 		'is_required' => 'bool',
-	];
+	);
 }

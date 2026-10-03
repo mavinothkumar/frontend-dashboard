@@ -46,7 +46,8 @@ function fed_admin_post_dashboard_tab( $fed_admin_options ) {
 								'name'          => 'dashboard[fed_admin_login_settings_template]',
 								'value'         => isset( $fed_admin_options['dashboard']['post_content'] ) ? $fed_admin_options['dashboard']['post_content'] : '',
 								'default_value' => 'Enable',
-							), 'checkbox'
+							),
+							'checkbox'
 						);
 						?>
 					</div>
@@ -63,7 +64,8 @@ function fed_admin_post_dashboard_tab( $fed_admin_options ) {
 								'name'          => 'dashboard[fed_post_dashboard_category]',
 								'value'         => isset( $fed_admin_options['dashboard']['fed_post_dashboard_category'] ) ? $fed_admin_options['dashboard']['fed_post_dashboard_category'] : '',
 								'default_value' => 'Enable',
-							), 'checkbox'
+							),
+							'checkbox'
 						);
 						?>
 					</div>
@@ -74,12 +76,14 @@ function fed_admin_post_dashboard_tab( $fed_admin_options ) {
 
 						<?php
 						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-						echo fed_input_box( 'fed_post_dashboard_tag',
+						echo fed_input_box(
+							'fed_post_dashboard_tag',
 							array(
 								'name'          => 'dashboard[fed_post_dashboard_tag]',
 								'value'         => isset( $fed_admin_options['dashboard']['fed_post_dashboard_tag'] ) ? $fed_admin_options['dashboard']['fed_post_dashboard_tag'] : '',
 								'default_value' => 'Enable',
-							), 'checkbox'
+							),
+							'checkbox'
 						);
 						?>
 					</div>
@@ -96,7 +100,8 @@ function fed_admin_post_dashboard_tab( $fed_admin_options ) {
 								'name'          => 'dashboard[featured_image]',
 								'value'         => isset( $fed_admin_options['dashboard']['featured_image'] ) ? $fed_admin_options['dashboard']['featured_image'] : '',
 								'default_value' => 'Enable',
-							), 'checkbox'
+							),
+							'checkbox'
 						);
 						?>
 					</div>
@@ -114,7 +119,8 @@ function fed_admin_post_dashboard_tab( $fed_admin_options ) {
 								'name'          => 'dashboard[post_format]',
 								'value'         => isset( $fed_admin_options['dashboard']['post_format'] ) ? $fed_admin_options['dashboard']['post_format'] : '',
 								'default_value' => 'Enable',
-							), 'checkbox'
+							),
+							'checkbox'
 						);
 						?>
 					</div>
@@ -132,7 +138,8 @@ function fed_admin_post_dashboard_tab( $fed_admin_options ) {
 								'name'          => 'dashboard[allow_comments]',
 								'value'         => isset( $fed_admin_options['dashboard']['allow_comments'] ) ? $fed_admin_options['dashboard']['allow_comments'] : '',
 								'default_value' => 'Enable',
-							), 'checkbox'
+							),
+							'checkbox'
 						);
 						?>
 					</div>

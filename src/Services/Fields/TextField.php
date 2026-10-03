@@ -16,10 +16,12 @@ class TextField extends BaseField {
 	protected $type = 'text';
 
 	public function render() {
-		$attrs = $this->build_attributes( [
-			'type'  => $this->type,
-			'value' => $this->value,
-		] );
+		$attrs = $this->build_attributes(
+			array(
+				'type'  => $this->type,
+				'value' => $this->value,
+			)
+		);
 
 		return sprintf( '<input %s />', $attrs );
 	}

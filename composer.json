@@ -22,6 +22,15 @@
             "src/Helpers/functions.php"
         ]
     },
+    "scripts": {
+        "lint": "\"D:\\\\localhost-setup\\\\wpcs\\\\vendor\\\\bin\\\\phpcs.bat\" -s --standard=phpcs.xml.dist",
+        "format": "\"D:\\\\localhost-setup\\\\wpcs\\\\vendor\\\\bin\\\\phpcbf.bat\" --standard=phpcs.xml.dist",
+        "check:plugin": "\"D:\\\\localhost-setup\\\\wp-cli\\\\wp.bat\" plugin check frontend-dashboard --include-low-severity-warnings --include-low-severity-errors",
+        "check": [
+            "@lint",
+            "@check:plugin"
+        ]
+    },
     "config": {
         "allow-plugins": {
             "php-http/discovery": true

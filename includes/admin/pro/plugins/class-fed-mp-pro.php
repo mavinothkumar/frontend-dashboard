@@ -18,13 +18,15 @@ if ( ! class_exists( 'FEDMPPRO' ) && ! defined( 'BC_FED_MP_PLUGIN' ) ) {
 		 */
 		public function __construct() {
 			add_filter(
-				'fed_add_main_sub_menu', array(
+				'fed_add_main_sub_menu',
+				array(
 					$this,
 					'main_sub_menu',
 				)
 			);
 			add_filter(
-				'fed_admin_script_loading_pages', array(
+				'fed_admin_script_loading_pages',
+				array(
 					$this,
 					'script_loading_pages',
 				)
@@ -133,7 +135,8 @@ if ( ! class_exists( 'FEDMPPRO' ) && ! defined( 'BC_FED_MP_PLUGIN' ) ) {
 							$active = '';
 							if (
 								isset( $get_payload, $get_payload['action'] ) && in_array(
-									$get_payload['action'], $item['menu']
+									$get_payload['action'],
+									$item['menu']
 								)
 							) {
 								$active = 'active';
@@ -147,7 +150,8 @@ if ( ! class_exists( 'FEDMPPRO' ) && ! defined( 'BC_FED_MP_PLUGIN' ) ) {
 								<?php
 								echo esc_url(
 									fed_menu_page_url(
-										'fed_membership_pro', array(
+										'fed_membership_pro',
+										array(
 											'action' => $index,
 										)
 									)
@@ -224,9 +228,14 @@ if ( ! class_exists( 'FEDMPPRO' ) && ! defined( 'BC_FED_MP_PLUGIN' ) ) {
 					<div class="col-md-10">
 						<div class="panel panel-primary">
 							<div class="panel-heading">
-								<h3 class="panel-title"><?php esc_attr_e(
-										'Membership Pro', 'frontend-dashboard'
-									); ?></h3>
+								<h3 class="panel-title">
+								<?php
+								esc_attr_e(
+									'Membership Pro',
+									'frontend-dashboard'
+								);
+								?>
+														</h3>
 							</div>
 							<div class="panel-body">
 								<div class="row m-b-20">
@@ -244,12 +253,16 @@ if ( ! class_exists( 'FEDMPPRO' ) && ! defined( 'BC_FED_MP_PLUGIN' ) ) {
 											<input type='hidden' name='amount' value='29'/>
 											<input type='hidden' name='plan_type' value='annual'/>
 											<button type="submit" style="
-													background:url(<?php echo esc_url(
-												plugins_url(
-													'assets/admin/images/pro/buy-now-29.png',
-													BC_FED_PLUGIN
-												)
-											); ?>);
+													background:url(
+													<?php
+													echo esc_url(
+														plugins_url(
+															'assets/admin/images/pro/buy-now-29.png',
+															BC_FED_PLUGIN
+														)
+													);
+													?>
+																	);
 													background-repeat: no-repeat;
 													width:200px;
 													height: 148px;
@@ -271,12 +284,16 @@ if ( ! class_exists( 'FEDMPPRO' ) && ! defined( 'BC_FED_MP_PLUGIN' ) ) {
 											<input type='hidden' name='amount' value='99'/>
 											<input type='hidden' name='plan_type' value='lifetime'/>
 											<button type="submit" style="
-													background:url(<?php echo esc_url(
-												plugins_url(
-													'assets/admin/images/pro/buy-now-99.png',
-													BC_FED_PLUGIN
-												)
-											); ?>);
+													background:url(
+													<?php
+													echo esc_url(
+														plugins_url(
+															'assets/admin/images/pro/buy-now-99.png',
+															BC_FED_PLUGIN
+														)
+													);
+													?>
+																	);
 													background-repeat: no-repeat;
 													width:200px;
 													height: 148px;

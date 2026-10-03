@@ -16,22 +16,22 @@ class Validator {
 	/**
 	 * @var array Raw input data.
 	 */
-	protected $data = [];
+	protected $data = array();
 
 	/**
 	 * @var array Validation rules.
 	 */
-	protected $rules = [];
+	protected $rules = array();
 
 	/**
 	 * @var array Custom error messages.
 	 */
-	protected $messages = [];
+	protected $messages = array();
 
 	/**
 	 * @var array Collected validation errors.
 	 */
-	protected $errors = [];
+	protected $errors = array();
 
 	/**
 	 * Validator constructor.
@@ -40,7 +40,7 @@ class Validator {
 	 * @param array $rules
 	 * @param array $messages
 	 */
-	public function __construct( array $data, array $rules, array $messages = [] ) {
+	public function __construct( array $data, array $rules, array $messages = array() ) {
 		$this->data     = $data;
 		$this->rules    = $rules;
 		$this->messages = $messages;
@@ -56,7 +56,7 @@ class Validator {
 	 * @param array $messages
 	 * @return static
 	 */
-	public static function make( array $data, array $rules, array $messages = [] ) {
+	public static function make( array $data, array $rules, array $messages = array() ) {
 		return new static( $data, $rules, $messages );
 	}
 
@@ -106,7 +106,7 @@ class Validator {
 	 * @return array
 	 */
 	public function validated(): array {
-		$validated = [];
+		$validated = array();
 		foreach ( array_keys( $this->rules ) as $field ) {
 			if ( array_key_exists( $field, $this->data ) ) {
 				$validated[ $field ] = $this->data[ $field ];

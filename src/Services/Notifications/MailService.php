@@ -25,7 +25,7 @@ class MailService {
 	 * @param array        $headers
 	 * @return bool
 	 */
-	public function send( $to, string $subject, string $contentBody, array $attachments = [], array $headers = [] ): bool {
+	public function send( $to, string $subject, string $contentBody, array $attachments = array(), array $headers = array() ): bool {
 		$headers[] = 'Content-Type: text/html; charset=UTF-8';
 		$headers[] = sprintf( 'From: %s <%s>', get_bloginfo( 'name' ), get_option( 'admin_email' ) );
 

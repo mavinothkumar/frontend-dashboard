@@ -42,7 +42,7 @@ class UserProfileRepository extends BaseRepository {
 	 * @return array
 	 */
 	public function getRegistrationFields() {
-		return $this->where( [ 'show_register' => 'Enable' ], 'input_order ASC' );
+		return $this->where( array( 'show_register' => 'Enable' ), 'input_order ASC' );
 	}
 
 	/**
@@ -51,6 +51,6 @@ class UserProfileRepository extends BaseRepository {
 	 * @return array
 	 */
 	public function getProfileFields() {
-		return $this->where( [ 'show_user_profile' => 'Enable' ], 'input_order ASC' );
+		return $this->where( array( 'show_user_profile' => 'Enable' ), 'input_order ASC' );
 	}
 }

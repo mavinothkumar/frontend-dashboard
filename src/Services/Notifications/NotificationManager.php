@@ -26,14 +26,16 @@ class NotificationManager {
 	 * @return Notification
 	 */
 	public function notify( int $userId, string $title, string $message, string $type = 'info', string $actionUrl = '' ): Notification {
-		return Notification::create( [
-			'user_id'    => $userId,
-			'title'      => sanitize_text_field( $title ),
-			'message'    => sanitize_textarea_field( $message ),
-			'type'       => sanitize_key( $type ),
-			'action_url' => esc_url_raw( $actionUrl ),
-			'is_read'    => false,
-		] );
+		return Notification::create(
+			array(
+				'user_id'    => $userId,
+				'title'      => sanitize_text_field( $title ),
+				'message'    => sanitize_textarea_field( $message ),
+				'type'       => sanitize_key( $type ),
+				'action_url' => esc_url_raw( $actionUrl ),
+				'is_read'    => false,
+			)
+		);
 	}
 
 	/**
@@ -51,7 +53,7 @@ class NotificationManager {
 			->limit( $limit )
 			->get();
 
-		$models = [];
+		$models = array();
 		foreach ( $rows as $row ) {
 			$models[] = Notification::hydrate( $row );
 		}
@@ -96,7 +98,7 @@ class NotificationManager {
 		$status = Notification::query()
 			->where( 'user_id', $userId )
 			->where( 'is_read', 0 )
-			->update( [ 'is_read' => 1 ] );
+			->update( array( 'is_read' => 1 ) );
 
 		return false !== $status;
 	}

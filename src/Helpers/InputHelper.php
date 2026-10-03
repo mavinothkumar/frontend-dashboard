@@ -20,8 +20,8 @@ class InputHelper {
 	 */
 	public static function get() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$raw = ! empty( $_GET ) ? $_GET : ( filter_input_array( INPUT_GET, FILTER_DEFAULT ) ?: [] );
-		return is_array( $raw ) ? map_deep( $raw, 'sanitize_textarea_field' ) : [];
+		$raw = ! empty( $_GET ) ? $_GET : ( filter_input_array( INPUT_GET, FILTER_DEFAULT ) ?: array() );
+		return is_array( $raw ) ? map_deep( $raw, 'sanitize_textarea_field' ) : array();
 	}
 
 	/**
@@ -31,7 +31,7 @@ class InputHelper {
 	 */
 	public static function post() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$raw = ! empty( $_POST ) ? $_POST : ( filter_input_array( INPUT_POST, FILTER_DEFAULT ) ?: [] );
-		return is_array( $raw ) ? map_deep( $raw, 'sanitize_textarea_field' ) : [];
+		$raw = ! empty( $_POST ) ? $_POST : ( filter_input_array( INPUT_POST, FILTER_DEFAULT ) ?: array() );
+		return is_array( $raw ) ? map_deep( $raw, 'sanitize_textarea_field' ) : array();
 	}
 }

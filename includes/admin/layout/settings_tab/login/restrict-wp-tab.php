@@ -18,8 +18,8 @@ function fed_admin_restrict_wp_admin_tab( $fed_login_register ) {
 	$user_roles = fed_get_user_roles_without_admin();
 	?>
 	<form method="post"
-		  class="fed_admin_menu fed_ajax space-y-6"
-		  action="<?php echo esc_url( admin_url( 'admin-ajax.php?action=fed_admin_setting_form' ) ); ?>">
+			class="fed_admin_menu fed_ajax space-y-6"
+			action="<?php echo esc_url( admin_url( 'admin-ajax.php?action=fed_admin_setting_form' ) ); ?>">
 
 		<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
 		<?php

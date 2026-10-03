@@ -39,11 +39,11 @@ class ColorField extends BaseField {
 			<div class="relative w-11 h-11 rounded-2xl border-2 border-slate-200/90 shadow-2xs shrink-0 overflow-hidden cursor-pointer group hover:border-indigo-500/80 hover:shadow-xs focus-within:ring-4 focus-within:ring-indigo-500/10 transition-all duration-200 <?php echo $this->is_disabled ? 'opacity-60 cursor-not-allowed pointer-events-none' : ''; ?>" title="<?php esc_attr_e( 'Click to pick a color', 'frontend-dashboard' ); ?>">
 				<div class="fed_color_swatch absolute inset-0 w-full h-full rounded-2xl transition-all duration-150 group-hover:scale-105" style="background-color: <?php echo esc_attr( $hex_color ); ?>;"></div>
 				<input type="color"
-					   class="fed_color_native absolute inset-0 w-full h-full opacity-0 cursor-pointer p-0 m-0 border-0"
-					   value="<?php echo esc_attr( strtolower( $hex_color ) ); ?>"
-					   <?php echo $this->is_disabled ? 'disabled="disabled"' : ''; ?>
-					   <?php echo $this->is_readonly ? 'readonly="readonly"' : ''; ?>
-					   tabindex="-1">
+						class="fed_color_native absolute inset-0 w-full h-full opacity-0 cursor-pointer p-0 m-0 border-0"
+						value="<?php echo esc_attr( strtolower( $hex_color ) ); ?>"
+						<?php echo $this->is_disabled ? 'disabled="disabled"' : ''; ?>
+						<?php echo $this->is_readonly ? 'readonly="readonly"' : ''; ?>
+						tabindex="-1">
 			</div>
 
 			<!-- Hex Value Text Input -->
@@ -52,17 +52,20 @@ class ColorField extends BaseField {
 					<i class="fas fa-hashtag text-[11px] text-slate-300"></i>
 				</div>
 				<input type="text"
-					   name="<?php echo esc_attr( $this->name ); ?>"
-					   <?php if ( ! empty( $this->id_name ) ) : ?>id="<?php echo esc_attr( $this->id_name ); ?>"<?php endif; ?>
-					   class="fed_color_input w-full font-mono text-xs uppercase font-bold text-slate-800 bg-white border border-slate-200/90 rounded-2xl pl-8 pr-9 py-2.5 outline-none transition-all placeholder:text-slate-300 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10"
-					   value="<?php echo esc_attr( $hex_color ); ?>"
-					   placeholder="<?php echo esc_attr( $placeholder ); ?>"
-					   maxlength="7"
-					   spellcheck="false"
-					   autocomplete="off"
-					   <?php echo $this->is_required ? 'required="required"' : ''; ?>
-					   <?php echo $this->is_disabled ? 'disabled="disabled"' : ''; ?>
-					   <?php echo $this->is_readonly ? 'readonly="readonly"' : ''; ?>>
+						name="<?php echo esc_attr( $this->name ); ?>"
+						<?php
+						if ( ! empty( $this->id_name ) ) :
+							?>
+							id="<?php echo esc_attr( $this->id_name ); ?>"<?php endif; ?>
+						class="fed_color_input w-full font-mono text-xs uppercase font-bold text-slate-800 bg-white border border-slate-200/90 rounded-2xl pl-8 pr-9 py-2.5 outline-none transition-all placeholder:text-slate-300 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10"
+						value="<?php echo esc_attr( $hex_color ); ?>"
+						placeholder="<?php echo esc_attr( $placeholder ); ?>"
+						maxlength="7"
+						spellcheck="false"
+						autocomplete="off"
+						<?php echo $this->is_required ? 'required="required"' : ''; ?>
+						<?php echo $this->is_disabled ? 'disabled="disabled"' : ''; ?>
+						<?php echo $this->is_readonly ? 'readonly="readonly"' : ''; ?>>
 				<div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400 group-hover:text-indigo-600 transition-colors">
 					<i class="fas fa-eye-dropper text-xs text-slate-300"></i>
 				</div>

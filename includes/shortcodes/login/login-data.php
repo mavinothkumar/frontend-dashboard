@@ -85,7 +85,8 @@ function fed_login_only() {
 							'fed_login_remember_me',
 							__( 'Remember Me', 'frontend-dashboard' )
 						),
-					), 'checkbox'
+					),
+					'checkbox'
 				),
 				'input_order' => 15,
 				'input_type'  => '',
@@ -163,7 +164,8 @@ function fed_reset_password_only() {
 				'name'        => __( 'Password', 'frontend-dashboard' ),
 				'input'       => fed_input_box(
 					'user_password',
-					array( 'placeholder' => __( 'Password', 'frontend-dashboard' ) ), 'password'
+					array( 'placeholder' => __( 'Password', 'frontend-dashboard' ) ),
+					'password'
 				),
 				'input_order' => 7,
 			),
@@ -180,7 +182,8 @@ function fed_reset_password_only() {
 				'name'        => '',
 				'input'       => fed_input_box(
 					'key',
-					array( 'value' => isset( $get_payload['key'] ) ? $get_payload['key'] : '' ), 'hidden'
+					array( 'value' => isset( $get_payload['key'] ) ? $get_payload['key'] : '' ),
+					'hidden'
 				),
 				'input_order' => 30,
 			),
@@ -188,7 +191,8 @@ function fed_reset_password_only() {
 				'name'        => '',
 				'input'       => fed_input_box(
 					'login',
-					array( 'value' => isset( $get_payload['login'] ) ? $get_payload['login'] : '' ), 'hidden'
+					array( 'value' => isset( $get_payload['login'] ) ? $get_payload['login'] : '' ),
+					'hidden'
 				),
 				'input_order' => 30,
 			),

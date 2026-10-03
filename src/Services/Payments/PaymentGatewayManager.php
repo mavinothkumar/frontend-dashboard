@@ -21,7 +21,7 @@ class PaymentGatewayManager {
 	/**
 	 * @var array<string, PaymentGatewayInterface>
 	 */
-	protected $gateways = [];
+	protected $gateways = array();
 
 	/**
 	 * @var self|null
@@ -44,7 +44,7 @@ class PaymentGatewayManager {
 	 */
 	protected function initDefaultGateways(): void {
 		$this->registerGateway( new BankTransferGateway() );
-		
+
 		// Allow third-party and Pro addons to register gateways
 		do_action( 'fed_register_payment_gateways', $this );
 	}
@@ -89,7 +89,7 @@ class PaymentGatewayManager {
 		}
 
 		if ( isset( $this->gateways[ $current_gateway ] ) ) {
-			return [ $current_gateway => $this->gateways[ $current_gateway ] ];
+			return array( $current_gateway => $this->gateways[ $current_gateway ] );
 		}
 
 		return $this->gateways;

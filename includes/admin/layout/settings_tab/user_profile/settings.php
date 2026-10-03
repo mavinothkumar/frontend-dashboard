@@ -53,9 +53,11 @@ function fed_admin_user_profile_settings_tab( $fed_admin_options ) {
 						'input_type' => 'file',
 					)
 				),
-				'help_message' => fed_show_help_message( array(
-					'content' => __( 'Upload custom brand logo to display in the dashboard sidebar/header canvas', 'frontend-dashboard' ),
-				) ),
+				'help_message' => fed_show_help_message(
+					array(
+						'content' => __( 'Upload custom brand logo to display in the dashboard sidebar/header canvas', 'frontend-dashboard' ),
+					)
+				),
 			),
 			'Website Logo Width'            => array(
 				'col'   => 'col-md-6',
@@ -92,9 +94,11 @@ function fed_admin_user_profile_settings_tab( $fed_admin_options ) {
 						'input_type'  => 'select',
 					)
 				),
-				'help_message' => fed_show_help_message( array(
-					'content' => __( 'Image size should be min 600x600 px', 'frontend-dashboard' ),
-				) ),
+				'help_message' => fed_show_help_message(
+					array(
+						'content' => __( 'Image size should be min 600x600 px', 'frontend-dashboard' ),
+					)
+				),
 			),
 			'Disable Description'           => array(
 				'col'   => 'col-md-6',
@@ -166,7 +170,7 @@ function fed_admin_user_profile_settings_tab( $fed_admin_options ) {
 
 function fed_admin_user_profile_colors_tab() {
 	$fed_admin_options = get_option( 'fed_admin_setting_upl_color' );
-	$colors = isset( $fed_admin_options['color'] ) && is_array( $fed_admin_options['color'] ) ? $fed_admin_options['color'] : array();
+	$colors            = isset( $fed_admin_options['color'] ) && is_array( $fed_admin_options['color'] ) ? $fed_admin_options['color'] : array();
 
 		// Default enterprise values
 		$c_bg_color     = ! empty( $colors['fed_upl_color_bg_color'] ) ? $colors['fed_upl_color_bg_color'] : '#4F46E5';
@@ -183,137 +187,137 @@ function fed_admin_user_profile_colors_tab() {
 		$c_border       = ! empty( $colors['fed_upl_color_border'] ) ? $colors['fed_upl_color_border'] : '#E2E8F0';
 
 		$presets = array(
-			'indigo'    => array(
-				'name'    => __( 'Indigo Modern', 'frontend-dashboard' ),
-				'desc'    => __( 'Clean tech default', 'frontend-dashboard' ),
-				'badge'   => '#4F46E5',
-				'colors'  => array(
-					'fed_upl_color_bg_color'        => '#4F46E5',
-					'fed_upl_color_bg_font_color'   => '#FFFFFF',
-					'fed_upl_color_sbg_color'       => '#06B6D4',
-					'fed_upl_color_sbg_font_color'  => '#FFFFFF',
-					'fed_upl_color_sidebar_bg'      => '#FFFFFF',
-					'fed_upl_color_sidebar_text'    => '#64748B',
-					'fed_upl_color_active_bg'       => '#EEF2FF',
-					'fed_upl_color_active_text'     => '#4F46E5',
-					'fed_upl_color_body_bg'         => '#F8FAFC',
-					'fed_upl_color_card_bg'         => '#FFFFFF',
-					'fed_upl_color_text_main'       => '#0F172A',
-					'fed_upl_color_border'          => '#E2E8F0',
+			'indigo'   => array(
+				'name'   => __( 'Indigo Modern', 'frontend-dashboard' ),
+				'desc'   => __( 'Clean tech default', 'frontend-dashboard' ),
+				'badge'  => '#4F46E5',
+				'colors' => array(
+					'fed_upl_color_bg_color'       => '#4F46E5',
+					'fed_upl_color_bg_font_color'  => '#FFFFFF',
+					'fed_upl_color_sbg_color'      => '#06B6D4',
+					'fed_upl_color_sbg_font_color' => '#FFFFFF',
+					'fed_upl_color_sidebar_bg'     => '#FFFFFF',
+					'fed_upl_color_sidebar_text'   => '#64748B',
+					'fed_upl_color_active_bg'      => '#EEF2FF',
+					'fed_upl_color_active_text'    => '#4F46E5',
+					'fed_upl_color_body_bg'        => '#F8FAFC',
+					'fed_upl_color_card_bg'        => '#FFFFFF',
+					'fed_upl_color_text_main'      => '#0F172A',
+					'fed_upl_color_border'         => '#E2E8F0',
 				),
 			),
-			'slate'     => array(
-				'name'    => __( 'Slate Executive', 'frontend-dashboard' ),
-				'desc'    => __( 'Corporate navy & slate', 'frontend-dashboard' ),
-				'badge'   => '#0F172A',
-				'colors'  => array(
-					'fed_upl_color_bg_color'        => '#2563EB',
-					'fed_upl_color_bg_font_color'   => '#FFFFFF',
-					'fed_upl_color_sbg_color'       => '#38BDF8',
-					'fed_upl_color_sbg_font_color'  => '#FFFFFF',
-					'fed_upl_color_sidebar_bg'      => '#0F172A',
-					'fed_upl_color_sidebar_text'    => '#94A3B8',
-					'fed_upl_color_active_bg'       => '#1E293B',
-					'fed_upl_color_active_text'     => '#38BDF8',
-					'fed_upl_color_body_bg'         => '#F1F5F9',
-					'fed_upl_color_card_bg'         => '#FFFFFF',
-					'fed_upl_color_text_main'       => '#0F172A',
-					'fed_upl_color_border'          => '#CBD5E1',
+			'slate'    => array(
+				'name'   => __( 'Slate Executive', 'frontend-dashboard' ),
+				'desc'   => __( 'Corporate navy & slate', 'frontend-dashboard' ),
+				'badge'  => '#0F172A',
+				'colors' => array(
+					'fed_upl_color_bg_color'       => '#2563EB',
+					'fed_upl_color_bg_font_color'  => '#FFFFFF',
+					'fed_upl_color_sbg_color'      => '#38BDF8',
+					'fed_upl_color_sbg_font_color' => '#FFFFFF',
+					'fed_upl_color_sidebar_bg'     => '#0F172A',
+					'fed_upl_color_sidebar_text'   => '#94A3B8',
+					'fed_upl_color_active_bg'      => '#1E293B',
+					'fed_upl_color_active_text'    => '#38BDF8',
+					'fed_upl_color_body_bg'        => '#F1F5F9',
+					'fed_upl_color_card_bg'        => '#FFFFFF',
+					'fed_upl_color_text_main'      => '#0F172A',
+					'fed_upl_color_border'         => '#CBD5E1',
 				),
 			),
-			'emerald'   => array(
-				'name'    => __( 'Emerald FinTech', 'frontend-dashboard' ),
-				'desc'    => __( 'High-trust banking green', 'frontend-dashboard' ),
-				'badge'   => '#059669',
-				'colors'  => array(
-					'fed_upl_color_bg_color'        => '#059669',
-					'fed_upl_color_bg_font_color'   => '#FFFFFF',
-					'fed_upl_color_sbg_color'       => '#10B981',
-					'fed_upl_color_sbg_font_color'  => '#FFFFFF',
-					'fed_upl_color_sidebar_bg'      => '#064E3B',
-					'fed_upl_color_sidebar_text'    => '#A7F3D0',
-					'fed_upl_color_active_bg'       => '#047857',
-					'fed_upl_color_active_text'     => '#FFFFFF',
-					'fed_upl_color_body_bg'         => '#F0FDF4',
-					'fed_upl_color_card_bg'         => '#FFFFFF',
-					'fed_upl_color_text_main'       => '#064E3B',
-					'fed_upl_color_border'          => '#D1FAE5',
+			'emerald'  => array(
+				'name'   => __( 'Emerald FinTech', 'frontend-dashboard' ),
+				'desc'   => __( 'High-trust banking green', 'frontend-dashboard' ),
+				'badge'  => '#059669',
+				'colors' => array(
+					'fed_upl_color_bg_color'       => '#059669',
+					'fed_upl_color_bg_font_color'  => '#FFFFFF',
+					'fed_upl_color_sbg_color'      => '#10B981',
+					'fed_upl_color_sbg_font_color' => '#FFFFFF',
+					'fed_upl_color_sidebar_bg'     => '#064E3B',
+					'fed_upl_color_sidebar_text'   => '#A7F3D0',
+					'fed_upl_color_active_bg'      => '#047857',
+					'fed_upl_color_active_text'    => '#FFFFFF',
+					'fed_upl_color_body_bg'        => '#F0FDF4',
+					'fed_upl_color_card_bg'        => '#FFFFFF',
+					'fed_upl_color_text_main'      => '#064E3B',
+					'fed_upl_color_border'         => '#D1FAE5',
 				),
 			),
-			'midnight'  => array(
-				'name'    => __( 'Midnight SaaS', 'frontend-dashboard' ),
-				'desc'    => __( 'Deep dark workspace', 'frontend-dashboard' ),
-				'badge'   => '#1E1B4B',
-				'colors'  => array(
-					'fed_upl_color_bg_color'        => '#6366F1',
-					'fed_upl_color_bg_font_color'   => '#FFFFFF',
-					'fed_upl_color_sbg_color'       => '#8B5CF6',
-					'fed_upl_color_sbg_font_color'  => '#FFFFFF',
-					'fed_upl_color_sidebar_bg'      => '#111827',
-					'fed_upl_color_sidebar_text'    => '#9CA3AF',
-					'fed_upl_color_active_bg'       => '#1F2937',
-					'fed_upl_color_active_text'     => '#A5B4FC',
-					'fed_upl_color_body_bg'         => '#030712',
-					'fed_upl_color_card_bg'         => '#111827',
-					'fed_upl_color_text_main'       => '#F9FAFB',
-					'fed_upl_color_border'          => '#1F2937',
+			'midnight' => array(
+				'name'   => __( 'Midnight SaaS', 'frontend-dashboard' ),
+				'desc'   => __( 'Deep dark workspace', 'frontend-dashboard' ),
+				'badge'  => '#1E1B4B',
+				'colors' => array(
+					'fed_upl_color_bg_color'       => '#6366F1',
+					'fed_upl_color_bg_font_color'  => '#FFFFFF',
+					'fed_upl_color_sbg_color'      => '#8B5CF6',
+					'fed_upl_color_sbg_font_color' => '#FFFFFF',
+					'fed_upl_color_sidebar_bg'     => '#111827',
+					'fed_upl_color_sidebar_text'   => '#9CA3AF',
+					'fed_upl_color_active_bg'      => '#1F2937',
+					'fed_upl_color_active_text'    => '#A5B4FC',
+					'fed_upl_color_body_bg'        => '#030712',
+					'fed_upl_color_card_bg'        => '#111827',
+					'fed_upl_color_text_main'      => '#F9FAFB',
+					'fed_upl_color_border'         => '#1F2937',
 				),
 			),
-			'violet'    => array(
-				'name'    => __( 'Royal Violet', 'frontend-dashboard' ),
-				'desc'    => __( 'Modern creator & luxury', 'frontend-dashboard' ),
-				'badge'   => '#7C3AED',
-				'colors'  => array(
-					'fed_upl_color_bg_color'        => '#7C3AED',
-					'fed_upl_color_bg_font_color'   => '#FFFFFF',
-					'fed_upl_color_sbg_color'       => '#EC4899',
-					'fed_upl_color_sbg_font_color'  => '#FFFFFF',
-					'fed_upl_color_sidebar_bg'      => '#2E1065',
-					'fed_upl_color_sidebar_text'    => '#DDD6FE',
-					'fed_upl_color_active_bg'       => '#4C1D95',
-					'fed_upl_color_active_text'     => '#F472B6',
-					'fed_upl_color_body_bg'         => '#FAF5FF',
-					'fed_upl_color_card_bg'         => '#FFFFFF',
-					'fed_upl_color_text_main'       => '#3B0764',
-					'fed_upl_color_border'          => '#EDE9FE',
+			'violet'   => array(
+				'name'   => __( 'Royal Violet', 'frontend-dashboard' ),
+				'desc'   => __( 'Modern creator & luxury', 'frontend-dashboard' ),
+				'badge'  => '#7C3AED',
+				'colors' => array(
+					'fed_upl_color_bg_color'       => '#7C3AED',
+					'fed_upl_color_bg_font_color'  => '#FFFFFF',
+					'fed_upl_color_sbg_color'      => '#EC4899',
+					'fed_upl_color_sbg_font_color' => '#FFFFFF',
+					'fed_upl_color_sidebar_bg'     => '#2E1065',
+					'fed_upl_color_sidebar_text'   => '#DDD6FE',
+					'fed_upl_color_active_bg'      => '#4C1D95',
+					'fed_upl_color_active_text'    => '#F472B6',
+					'fed_upl_color_body_bg'        => '#FAF5FF',
+					'fed_upl_color_card_bg'        => '#FFFFFF',
+					'fed_upl_color_text_main'      => '#3B0764',
+					'fed_upl_color_border'         => '#EDE9FE',
 				),
 			),
-			'amber'     => array(
-				'name'    => __( 'Sunset Amber', 'frontend-dashboard' ),
-				'desc'    => __( 'Warm energetic dashboard', 'frontend-dashboard' ),
-				'badge'   => '#D97706',
-				'colors'  => array(
-					'fed_upl_color_bg_color'        => '#D97706',
-					'fed_upl_color_bg_font_color'   => '#FFFFFF',
-					'fed_upl_color_sbg_color'       => '#F97316',
-					'fed_upl_color_sbg_font_color'  => '#FFFFFF',
-					'fed_upl_color_sidebar_bg'      => '#78350F',
-					'fed_upl_color_sidebar_text'    => '#FDE68A',
-					'fed_upl_color_active_bg'       => '#92400E',
-					'fed_upl_color_active_text'     => '#FFFFFF',
-					'fed_upl_color_body_bg'         => '#FFFBEB',
-					'fed_upl_color_card_bg'         => '#FFFFFF',
-					'fed_upl_color_text_main'       => '#451A03',
-					'fed_upl_color_border'          => '#FEF3C7',
+			'amber'    => array(
+				'name'   => __( 'Sunset Amber', 'frontend-dashboard' ),
+				'desc'   => __( 'Warm energetic dashboard', 'frontend-dashboard' ),
+				'badge'  => '#D97706',
+				'colors' => array(
+					'fed_upl_color_bg_color'       => '#D97706',
+					'fed_upl_color_bg_font_color'  => '#FFFFFF',
+					'fed_upl_color_sbg_color'      => '#F97316',
+					'fed_upl_color_sbg_font_color' => '#FFFFFF',
+					'fed_upl_color_sidebar_bg'     => '#78350F',
+					'fed_upl_color_sidebar_text'   => '#FDE68A',
+					'fed_upl_color_active_bg'      => '#92400E',
+					'fed_upl_color_active_text'    => '#FFFFFF',
+					'fed_upl_color_body_bg'        => '#FFFBEB',
+					'fed_upl_color_card_bg'        => '#FFFFFF',
+					'fed_upl_color_text_main'      => '#451A03',
+					'fed_upl_color_border'         => '#FEF3C7',
 				),
 			),
-			'teal'      => array(
-				'name'    => __( 'Teal Clean Pro', 'frontend-dashboard' ),
-				'desc'    => __( 'Medical & analytics clarity', 'frontend-dashboard' ),
-				'badge'   => '#0D9488',
-				'colors'  => array(
-					'fed_upl_color_bg_color'        => '#0D9488',
-					'fed_upl_color_bg_font_color'   => '#FFFFFF',
-					'fed_upl_color_sbg_color'       => '#06B6D4',
-					'fed_upl_color_sbg_font_color'  => '#FFFFFF',
-					'fed_upl_color_sidebar_bg'      => '#134E4A',
-					'fed_upl_color_sidebar_text'    => '#99F6E4',
-					'fed_upl_color_active_bg'       => '#115E59',
-					'fed_upl_color_active_text'     => '#5EEAD4',
-					'fed_upl_color_body_bg'         => '#F0FDFA',
-					'fed_upl_color_card_bg'         => '#FFFFFF',
-					'fed_upl_color_text_main'       => '#134E4A',
-					'fed_upl_color_border'          => '#CCFBF1',
+			'teal'     => array(
+				'name'   => __( 'Teal Clean Pro', 'frontend-dashboard' ),
+				'desc'   => __( 'Medical & analytics clarity', 'frontend-dashboard' ),
+				'badge'  => '#0D9488',
+				'colors' => array(
+					'fed_upl_color_bg_color'       => '#0D9488',
+					'fed_upl_color_bg_font_color'  => '#FFFFFF',
+					'fed_upl_color_sbg_color'      => '#06B6D4',
+					'fed_upl_color_sbg_font_color' => '#FFFFFF',
+					'fed_upl_color_sidebar_bg'     => '#134E4A',
+					'fed_upl_color_sidebar_text'   => '#99F6E4',
+					'fed_upl_color_active_bg'      => '#115E59',
+					'fed_upl_color_active_text'    => '#5EEAD4',
+					'fed_upl_color_body_bg'        => '#F0FDFA',
+					'fed_upl_color_card_bg'        => '#FFFFFF',
+					'fed_upl_color_text_main'      => '#134E4A',
+					'fed_upl_color_border'         => '#CCFBF1',
 				),
 			),
 		);
@@ -354,8 +358,8 @@ function fed_admin_user_profile_colors_tab() {
 				<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3">
 					<?php foreach ( $presets as $pkey => $preset ) : ?>
 						<button type="button"
-						        class="fed-preset-btn flex flex-col items-start text-left p-3.5 rounded-2xl border border-slate-200/90 bg-slate-50/50 hover:bg-indigo-50/60 hover:border-indigo-300 transition-all duration-200 group relative cursor-pointer"
-						        data-preset="<?php echo esc_attr( wp_json_encode( $preset['colors'] ) ); ?>">
+								class="fed-preset-btn flex flex-col items-start text-left p-3.5 rounded-2xl border border-slate-200/90 bg-slate-50/50 hover:bg-indigo-50/60 hover:border-indigo-300 transition-all duration-200 group relative cursor-pointer"
+								data-preset="<?php echo esc_attr( wp_json_encode( $preset['colors'] ) ); ?>">
 							<div class="flex items-center gap-1.5 w-full mb-2">
 								<span class="w-3.5 h-3.5 rounded-full shadow-xs border border-white shrink-0" style="background-color: <?php echo esc_attr( $preset['badge'] ); ?>;"></span>
 								<span class="w-3.5 h-3.5 rounded-full shadow-xs border border-white shrink-0" style="background-color: <?php echo esc_attr( $preset['colors']['fed_upl_color_sbg_color'] ); ?>;"></span>
@@ -370,9 +374,9 @@ function fed_admin_user_profile_colors_tab() {
 
 			<!-- Form & Live Preview Grid -->
 			<form method="post"
-			      class="fed_admin_menu fed_ajax space-y-6"
-			      action="<?php echo esc_url( admin_url( 'admin-ajax.php?action=fed_admin_setting_form' ) ); ?>"
-			      id="fed_color_customizer_form">
+					class="fed_admin_menu fed_ajax space-y-6"
+					action="<?php echo esc_url( admin_url( 'admin-ajax.php?action=fed_admin_setting_form' ) ); ?>"
+					id="fed_color_customizer_form">
 
 				<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
 				<?php
@@ -402,11 +406,13 @@ function fed_admin_user_profile_colors_tab() {
 									<label class="block text-xs font-bold text-slate-700 mb-1.5"><?php esc_html_e( 'Primary Button / Brand Accent', 'frontend-dashboard' ); ?></label>
 									<?php
 									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									echo fed_form_color( array(
-										'input_meta' => 'color[fed_upl_color_bg_color]',
-										'user_value' => $c_bg_color,
-										'id_name'    => 'color_fed_upl_color_bg_color',
-									) );
+									echo fed_form_color(
+										array(
+											'input_meta' => 'color[fed_upl_color_bg_color]',
+											'user_value' => $c_bg_color,
+											'id_name'    => 'color_fed_upl_color_bg_color',
+										)
+									);
 									?>
 									<span class="text-[11px] text-slate-600 mt-1 block"><?php esc_html_e( 'Main submit buttons, active badges & pills.', 'frontend-dashboard' ); ?></span>
 								</div>
@@ -415,11 +421,13 @@ function fed_admin_user_profile_colors_tab() {
 									<label class="block text-xs font-bold text-slate-700 mb-1.5"><?php esc_html_e( 'Primary Button Text', 'frontend-dashboard' ); ?></label>
 									<?php
 									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									echo fed_form_color( array(
-										'input_meta' => 'color[fed_upl_color_bg_font_color]',
-										'user_value' => $c_bg_font,
-										'id_name'    => 'color_fed_upl_color_bg_font_color',
-									) );
+									echo fed_form_color(
+										array(
+											'input_meta' => 'color[fed_upl_color_bg_font_color]',
+											'user_value' => $c_bg_font,
+											'id_name'    => 'color_fed_upl_color_bg_font_color',
+										)
+									);
 									?>
 									<span class="text-[11px] text-slate-600 mt-1 block"><?php esc_html_e( 'Label text color on primary buttons.', 'frontend-dashboard' ); ?></span>
 								</div>
@@ -428,11 +436,13 @@ function fed_admin_user_profile_colors_tab() {
 									<label class="block text-xs font-bold text-slate-700 mb-1.5"><?php esc_html_e( 'Secondary / Accent Color', 'frontend-dashboard' ); ?></label>
 									<?php
 									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									echo fed_form_color( array(
-										'input_meta' => 'color[fed_upl_color_sbg_color]',
-										'user_value' => $c_sbg_color,
-										'id_name'    => 'color_fed_upl_color_sbg_color',
-									) );
+									echo fed_form_color(
+										array(
+											'input_meta' => 'color[fed_upl_color_sbg_color]',
+											'user_value' => $c_sbg_color,
+											'id_name'    => 'color_fed_upl_color_sbg_color',
+										)
+									);
 									?>
 									<span class="text-[11px] text-slate-600 mt-1 block"><?php esc_html_e( 'Secondary buttons, hover highlights & links.', 'frontend-dashboard' ); ?></span>
 								</div>
@@ -441,11 +451,13 @@ function fed_admin_user_profile_colors_tab() {
 									<label class="block text-xs font-bold text-slate-700 mb-1.5"><?php esc_html_e( 'Secondary Button Text', 'frontend-dashboard' ); ?></label>
 									<?php
 									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									echo fed_form_color( array(
-										'input_meta' => 'color[fed_upl_color_sbg_font_color]',
-										'user_value' => $c_sbg_font,
-										'id_name'    => 'color_fed_upl_color_sbg_font_color',
-									) );
+									echo fed_form_color(
+										array(
+											'input_meta' => 'color[fed_upl_color_sbg_font_color]',
+											'user_value' => $c_sbg_font,
+											'id_name'    => 'color_fed_upl_color_sbg_font_color',
+										)
+									);
 									?>
 									<span class="text-[11px] text-slate-600 mt-1 block"><?php esc_html_e( 'Label text on secondary action buttons.', 'frontend-dashboard' ); ?></span>
 								</div>
@@ -469,11 +481,13 @@ function fed_admin_user_profile_colors_tab() {
 									<label class="block text-xs font-bold text-slate-700 mb-1.5"><?php esc_html_e( 'Sidebar Background', 'frontend-dashboard' ); ?></label>
 									<?php
 									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									echo fed_form_color( array(
-										'input_meta' => 'color[fed_upl_color_sidebar_bg]',
-										'user_value' => $c_sidebar_bg,
-										'id_name'    => 'color_fed_upl_color_sidebar_bg',
-									) );
+									echo fed_form_color(
+										array(
+											'input_meta' => 'color[fed_upl_color_sidebar_bg]',
+											'user_value' => $c_sidebar_bg,
+											'id_name'    => 'color_fed_upl_color_sidebar_bg',
+										)
+									);
 									?>
 									<span class="text-[11px] text-slate-600 mt-1 block"><?php esc_html_e( 'Sidebar menu background surface.', 'frontend-dashboard' ); ?></span>
 								</div>
@@ -482,11 +496,13 @@ function fed_admin_user_profile_colors_tab() {
 									<label class="block text-xs font-bold text-slate-700 mb-1.5"><?php esc_html_e( 'Sidebar Inactive Item Text', 'frontend-dashboard' ); ?></label>
 									<?php
 									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									echo fed_form_color( array(
-										'input_meta' => 'color[fed_upl_color_sidebar_text]',
-										'user_value' => $c_sidebar_text,
-										'id_name'    => 'color_fed_upl_color_sidebar_text',
-									) );
+									echo fed_form_color(
+										array(
+											'input_meta' => 'color[fed_upl_color_sidebar_text]',
+											'user_value' => $c_sidebar_text,
+											'id_name'    => 'color_fed_upl_color_sidebar_text',
+										)
+									);
 									?>
 									<span class="text-[11px] text-slate-600 mt-1 block"><?php esc_html_e( 'Text & icon color of inactive nav items.', 'frontend-dashboard' ); ?></span>
 								</div>
@@ -495,11 +511,13 @@ function fed_admin_user_profile_colors_tab() {
 									<label class="block text-xs font-bold text-slate-700 mb-1.5"><?php esc_html_e( 'Active Tab Background', 'frontend-dashboard' ); ?></label>
 									<?php
 									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									echo fed_form_color( array(
-										'input_meta' => 'color[fed_upl_color_active_bg]',
-										'user_value' => $c_active_bg,
-										'id_name'    => 'color_fed_upl_color_active_bg',
-									) );
+									echo fed_form_color(
+										array(
+											'input_meta' => 'color[fed_upl_color_active_bg]',
+											'user_value' => $c_active_bg,
+											'id_name'    => 'color_fed_upl_color_active_bg',
+										)
+									);
 									?>
 									<span class="text-[11px] text-slate-600 mt-1 block"><?php esc_html_e( 'Active menu item pill background.', 'frontend-dashboard' ); ?></span>
 								</div>
@@ -508,11 +526,13 @@ function fed_admin_user_profile_colors_tab() {
 									<label class="block text-xs font-bold text-slate-700 mb-1.5"><?php esc_html_e( 'Active Tab Text / Icon', 'frontend-dashboard' ); ?></label>
 									<?php
 									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									echo fed_form_color( array(
-										'input_meta' => 'color[fed_upl_color_active_text]',
-										'user_value' => $c_active_text,
-										'id_name'    => 'color_fed_upl_color_active_text',
-									) );
+									echo fed_form_color(
+										array(
+											'input_meta' => 'color[fed_upl_color_active_text]',
+											'user_value' => $c_active_text,
+											'id_name'    => 'color_fed_upl_color_active_text',
+										)
+									);
 									?>
 									<span class="text-[11px] text-slate-600 mt-1 block"><?php esc_html_e( 'Active menu item label & icon color.', 'frontend-dashboard' ); ?></span>
 								</div>
@@ -536,11 +556,13 @@ function fed_admin_user_profile_colors_tab() {
 									<label class="block text-xs font-bold text-slate-700 mb-1.5"><?php esc_html_e( 'Dashboard Body Background', 'frontend-dashboard' ); ?></label>
 									<?php
 									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									echo fed_form_color( array(
-										'input_meta' => 'color[fed_upl_color_body_bg]',
-										'user_value' => $c_body_bg,
-										'id_name'    => 'color_fed_upl_color_body_bg',
-									) );
+									echo fed_form_color(
+										array(
+											'input_meta' => 'color[fed_upl_color_body_bg]',
+											'user_value' => $c_body_bg,
+											'id_name'    => 'color_fed_upl_color_body_bg',
+										)
+									);
 									?>
 									<span class="text-[11px] text-slate-600 mt-1 block"><?php esc_html_e( 'Overall page canvas backdrop.', 'frontend-dashboard' ); ?></span>
 								</div>
@@ -549,11 +571,13 @@ function fed_admin_user_profile_colors_tab() {
 									<label class="block text-xs font-bold text-slate-700 mb-1.5"><?php esc_html_e( 'Content Card Background', 'frontend-dashboard' ); ?></label>
 									<?php
 									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									echo fed_form_color( array(
-										'input_meta' => 'color[fed_upl_color_card_bg]',
-										'user_value' => $c_card_bg,
-										'id_name'    => 'color_fed_upl_color_card_bg',
-									) );
+									echo fed_form_color(
+										array(
+											'input_meta' => 'color[fed_upl_color_card_bg]',
+											'user_value' => $c_card_bg,
+											'id_name'    => 'color_fed_upl_color_card_bg',
+										)
+									);
 									?>
 									<span class="text-[11px] text-slate-600 mt-1 block"><?php esc_html_e( 'Dashboard cards and panels surface.', 'frontend-dashboard' ); ?></span>
 								</div>
@@ -562,11 +586,13 @@ function fed_admin_user_profile_colors_tab() {
 									<label class="block text-xs font-bold text-slate-700 mb-1.5"><?php esc_html_e( 'Main Text & Headings', 'frontend-dashboard' ); ?></label>
 									<?php
 									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									echo fed_form_color( array(
-										'input_meta' => 'color[fed_upl_color_text_main]',
-										'user_value' => $c_text_main,
-										'id_name'    => 'color_fed_upl_color_text_main',
-									) );
+									echo fed_form_color(
+										array(
+											'input_meta' => 'color[fed_upl_color_text_main]',
+											'user_value' => $c_text_main,
+											'id_name'    => 'color_fed_upl_color_text_main',
+										)
+									);
 									?>
 									<span class="text-[11px] text-slate-600 mt-1 block"><?php esc_html_e( 'Primary text and header typography color.', 'frontend-dashboard' ); ?></span>
 								</div>
@@ -575,11 +601,13 @@ function fed_admin_user_profile_colors_tab() {
 									<label class="block text-xs font-bold text-slate-700 mb-1.5"><?php esc_html_e( 'Borders & Dividers', 'frontend-dashboard' ); ?></label>
 									<?php
 									// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-									echo fed_form_color( array(
-										'input_meta' => 'color[fed_upl_color_border]',
-										'user_value' => $c_border,
-										'id_name'    => 'color_fed_upl_color_border',
-									) );
+									echo fed_form_color(
+										array(
+											'input_meta' => 'color[fed_upl_color_border]',
+											'user_value' => $c_border,
+											'id_name'    => 'color_fed_upl_color_border',
+										)
+									);
 									?>
 									<span class="text-[11px] text-slate-600 mt-1 block"><?php esc_html_e( 'Card borders, table dividers & inputs.', 'frontend-dashboard' ); ?></span>
 								</div>
@@ -589,7 +617,7 @@ function fed_admin_user_profile_colors_tab() {
 						<!-- Action Button -->
 						<div class="flex items-center gap-3 pt-2">
 							<button type="submit"
-							        class="fed-submit-btn inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold text-sm shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer">
+									class="fed-submit-btn inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold text-sm shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer">
 								<i class="fa fa-check fas fa-check"></i> <?php esc_html_e( 'Save Dashboard Theme', 'frontend-dashboard' ); ?>
 							</button>
 						</div>
@@ -610,19 +638,19 @@ function fed_admin_user_profile_colors_tab() {
 
 							<!-- Mini Dashboard Frame -->
 							<div id="fed_mini_preview"
-							     class="rounded-3xl border shadow-xl overflow-hidden transition-all duration-300"
-							     style="background-color: <?php echo esc_attr( $c_body_bg ); ?>; border-color: <?php echo esc_attr( $c_border ); ?>;">
+								class="rounded-3xl border shadow-xl overflow-hidden transition-all duration-300"
+								style="background-color: <?php echo esc_attr( $c_body_bg ); ?>; border-color: <?php echo esc_attr( $c_border ); ?>;">
 								
 								<!-- Window Top Bar -->
 								<div class="px-4 py-2.5 flex items-center justify-between border-b"
-								     style="background-color: <?php echo esc_attr( $c_card_bg ); ?>; border-color: <?php echo esc_attr( $c_border ); ?>;">
+									style="background-color: <?php echo esc_attr( $c_card_bg ); ?>; border-color: <?php echo esc_attr( $c_border ); ?>;">
 									<div class="flex items-center gap-1.5">
 										<span class="w-2.5 h-2.5 rounded-full bg-rose-400 inline-block"></span>
 										<span class="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block"></span>
 										<span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block"></span>
 									</div>
 									<div class="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md"
-									     style="background-color: <?php echo esc_attr( $c_body_bg ); ?>; color: <?php echo esc_attr( $c_text_main ); ?>;">
+										style="background-color: <?php echo esc_attr( $c_body_bg ); ?>; color: <?php echo esc_attr( $c_text_main ); ?>;">
 										my-site.com/dashboard
 									</div>
 									<div class="w-10"></div>
@@ -632,14 +660,14 @@ function fed_admin_user_profile_colors_tab() {
 								<div class="flex min-h-[340px]">
 									<!-- Mini Sidebar -->
 									<div id="preview_sidebar"
-									     class="w-36 p-3 flex flex-col justify-between border-r shrink-0 transition-colors"
-									     style="background-color: <?php echo esc_attr( $c_sidebar_bg ); ?>; border-color: <?php echo esc_attr( $c_border ); ?>;">
+										class="w-36 p-3 flex flex-col justify-between border-r shrink-0 transition-colors"
+										style="background-color: <?php echo esc_attr( $c_sidebar_bg ); ?>; border-color: <?php echo esc_attr( $c_border ); ?>;">
 										<div class="space-y-3">
 											<!-- Logo Area -->
 											<div class="flex items-center gap-2 pb-2 border-b" style="border-color: <?php echo esc_attr( $c_border ); ?>;">
 												<div class="w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs shadow-xs"
-												     id="preview_logo_icon"
-												     style="background-color: <?php echo esc_attr( $c_bg_color ); ?>; color: <?php echo esc_attr( $c_bg_font ); ?>;">
+													id="preview_logo_icon"
+													style="background-color: <?php echo esc_attr( $c_bg_color ); ?>; color: <?php echo esc_attr( $c_bg_font ); ?>;">
 													<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
 												</div>
 												<span class="text-xs font-black" id="preview_logo_text" style="color: <?php echo esc_attr( $c_sidebar_text ); ?>;">FED 3.0</span>
@@ -649,25 +677,25 @@ function fed_admin_user_profile_colors_tab() {
 											<div class="space-y-1">
 												<!-- Active Item -->
 												<div id="preview_nav_active"
-												     class="px-2.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 transition-colors shadow-xs"
-												     style="background-color: <?php echo esc_attr( $c_active_bg ); ?>; color: <?php echo esc_attr( $c_active_text ); ?>;">
+													class="px-2.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 transition-colors shadow-xs"
+													style="background-color: <?php echo esc_attr( $c_active_bg ); ?>; color: <?php echo esc_attr( $c_active_text ); ?>;">
 													<svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"/><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"/></svg>
 													<span>Overview</span>
 												</div>
 
 												<!-- Inactive Items -->
 												<div class="preview_nav_inactive px-2.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-colors"
-												     style="color: <?php echo esc_attr( $c_sidebar_text ); ?>;">
+													style="color: <?php echo esc_attr( $c_sidebar_text ); ?>;">
 													<svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/></svg>
 													<span>Posts</span>
 												</div>
 												<div class="preview_nav_inactive px-2.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-colors"
-												     style="color: <?php echo esc_attr( $c_sidebar_text ); ?>;">
+													style="color: <?php echo esc_attr( $c_sidebar_text ); ?>;">
 													<svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/></svg>
 													<span>Profile</span>
 												</div>
 												<div class="preview_nav_inactive px-2.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-colors"
-												     style="color: <?php echo esc_attr( $c_sidebar_text ); ?>;">
+													style="color: <?php echo esc_attr( $c_sidebar_text ); ?>;">
 													<svg class="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
 													<span>Settings</span>
 												</div>
@@ -693,9 +721,9 @@ function fed_admin_user_profile_colors_tab() {
 												<p class="text-[10px]" id="preview_subheading" style="color: <?php echo esc_attr( $c_sidebar_text ); ?>;">Real-time dashboard</p>
 											</div>
 											<button type="button"
-											        id="preview_primary_btn"
-											        class="px-2.5 py-1 rounded-xl text-[10px] font-black inline-flex items-center gap-1 shadow-xs transition-colors pointer-events-none"
-											        style="background-color: <?php echo esc_attr( $c_bg_color ); ?>; color: <?php echo esc_attr( $c_bg_font ); ?>;">
+													id="preview_primary_btn"
+													class="px-2.5 py-1 rounded-xl text-[10px] font-black inline-flex items-center gap-1 shadow-xs transition-colors pointer-events-none"
+													style="background-color: <?php echo esc_attr( $c_bg_color ); ?>; color: <?php echo esc_attr( $c_bg_font ); ?>;">
 												<svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
 												New Post
 											</button>
@@ -704,23 +732,23 @@ function fed_admin_user_profile_colors_tab() {
 										<!-- Stat Widgets -->
 										<div class="grid grid-cols-2 gap-2">
 											<div class="preview_card p-2.5 rounded-2xl border shadow-2xs transition-colors"
-											     style="background-color: <?php echo esc_attr( $c_card_bg ); ?>; border-color: <?php echo esc_attr( $c_border ); ?>;">
+												style="background-color: <?php echo esc_attr( $c_card_bg ); ?>; border-color: <?php echo esc_attr( $c_border ); ?>;">
 												<div class="preview_card_label text-[9px] uppercase font-bold tracking-wider" style="color: <?php echo esc_attr( $c_sidebar_text ); ?>;">Total Views</div>
 												<div class="preview_card_num text-sm font-black mt-0.5" style="color: <?php echo esc_attr( $c_text_main ); ?>;">28,490</div>
 												<div class="text-[9px] font-bold mt-1 inline-block px-1.5 py-0.5 rounded-md shadow-2xs"
-												     id="preview_accent_badge"
-												     style="background-color: <?php echo esc_attr( $c_sbg_color ); ?>; color: <?php echo esc_attr( $c_sbg_font ); ?>;">
+													id="preview_accent_badge"
+													style="background-color: <?php echo esc_attr( $c_sbg_color ); ?>; color: <?php echo esc_attr( $c_sbg_font ); ?>;">
 													+14.2%
 												</div>
 											</div>
 
 											<div class="preview_card p-2.5 rounded-2xl border shadow-2xs transition-colors"
-											     style="background-color: <?php echo esc_attr( $c_card_bg ); ?>; border-color: <?php echo esc_attr( $c_border ); ?>;">
+												style="background-color: <?php echo esc_attr( $c_card_bg ); ?>; border-color: <?php echo esc_attr( $c_border ); ?>;">
 												<div class="preview_card_label text-[9px] uppercase font-bold tracking-wider" style="color: <?php echo esc_attr( $c_sidebar_text ); ?>;">Submissions</div>
 												<div class="preview_card_num text-sm font-black mt-0.5" style="color: <?php echo esc_attr( $c_text_main ); ?>;">1,248</div>
 												<div class="text-[9px] font-bold mt-1 inline-block px-1.5 py-0.5 rounded-md"
-												     id="preview_active_badge"
-												     style="background-color: <?php echo esc_attr( $c_active_bg ); ?>; color: <?php echo esc_attr( $c_active_text ); ?>;">
+													id="preview_active_badge"
+													style="background-color: <?php echo esc_attr( $c_active_bg ); ?>; color: <?php echo esc_attr( $c_active_text ); ?>;">
 													Active
 												</div>
 											</div>
@@ -728,7 +756,7 @@ function fed_admin_user_profile_colors_tab() {
 
 										<!-- Content Block / Table Mockup -->
 										<div class="preview_card p-3 rounded-2xl border shadow-2xs space-y-2 transition-colors"
-										     style="background-color: <?php echo esc_attr( $c_card_bg ); ?>; border-color: <?php echo esc_attr( $c_border ); ?>;">
+											style="background-color: <?php echo esc_attr( $c_card_bg ); ?>; border-color: <?php echo esc_attr( $c_border ); ?>;">
 											<div class="flex items-center justify-between pb-1.5 border-b" style="border-color: <?php echo esc_attr( $c_border ); ?>;">
 												<span class="preview_card_heading text-[10px] font-bold" style="color: <?php echo esc_attr( $c_text_main ); ?>;">Recent Activities</span>
 												<span class="text-[9px] font-semibold" style="color: <?php echo esc_attr( $c_sidebar_text ); ?>;">View All</span>

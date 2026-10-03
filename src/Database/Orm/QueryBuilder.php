@@ -26,22 +26,22 @@ class QueryBuilder {
 	/**
 	 * @var array
 	 */
-	protected $select = ['*'];
+	protected $select = array( '*' );
 
 	/**
 	 * @var array
 	 */
-	protected $wheres = [];
+	protected $wheres = array();
 
 	/**
 	 * @var array
 	 */
-	protected $bindings = [];
+	protected $bindings = array();
 
 	/**
 	 * @var array
 	 */
-	protected $orders = [];
+	protected $orders = array();
 
 	/**
 	 * @var int|null
@@ -84,7 +84,7 @@ class QueryBuilder {
 	 * @param array|string $columns
 	 * @return $this
 	 */
-	public function select( $columns = ['*'] ): self {
+	public function select( $columns = array( '*' ) ): self {
 		$this->select = is_array( $columns ) ? $columns : func_get_args();
 		return $this;
 	}
@@ -103,7 +103,7 @@ class QueryBuilder {
 			$operator = '=';
 		}
 
-		$column = sanitize_key( str_replace( '`', '', $column ) );
+		$column           = sanitize_key( str_replace( '`', '', $column ) );
 		$this->wheres[]   = "`{$column}` {$operator} %s";
 		$this->bindings[] = $value;
 
@@ -123,8 +123,8 @@ class QueryBuilder {
 			return $this;
 		}
 
-		$column       = sanitize_key( str_replace( '`', '', $column ) );
-		$placeholders = implode( ',', array_fill( 0, count( $values ), '%s' ) );
+		$column         = sanitize_key( str_replace( '`', '', $column ) );
+		$placeholders   = implode( ',', array_fill( 0, count( $values ), '%s' ) );
 		$this->wheres[] = "`{$column}` IN ({$placeholders})";
 
 		foreach ( $values as $val ) {
@@ -210,9 +210,15 @@ class QueryBuilder {
 	 * @return string
 	 */
 	protected function toSql(): string {
-		$columns = empty( $this->select ) ? '*' : implode( ', ', array_map( function( $col ) {
-			return '*' === $col ? '*' : "`" . sanitize_key( str_replace( '`', '', $col ) ) . "`";
-		}, $this->select ) );
+		$columns = empty( $this->select ) ? '*' : implode(
+			', ',
+			array_map(
+				function ( $col ) {
+					return '*' === $col ? '*' : '`' . sanitize_key( str_replace( '`', '', $col ) ) . '`';
+				},
+				$this->select
+			)
+		);
 
 		$sql = "SELECT {$columns} FROM `{$this->table}`";
 
@@ -248,7 +254,7 @@ class QueryBuilder {
 		}
 
 		$results = $this->db->get_results( $sql, ARRAY_A );
-		return $results ?: [];
+		return $results ?: array();
 	}
 
 	/**
@@ -299,8 +305,8 @@ class QueryBuilder {
 	 * @return int|false
 	 */
 	public function update( array $data ) {
-		$sets     = [];
-		$bindings = [];
+		$sets     = array();
+		$bindings = array();
 
 		foreach ( $data as $col => $val ) {
 			$col        = sanitize_key( str_replace( '`', '', $col ) );
@@ -311,7 +317,7 @@ class QueryBuilder {
 		$sql = "UPDATE `{$this->table}` SET " . implode( ', ', $sets );
 
 		if ( ! empty( $this->wheres ) ) {
-			$sql .= ' WHERE ' . implode( ' AND ', $this->wheres );
+			$sql     .= ' WHERE ' . implode( ' AND ', $this->wheres );
 			$bindings = array_merge( $bindings, $this->bindings );
 		}
 
@@ -352,12 +358,12 @@ class QueryBuilder {
 		$this->limit( $perPage )->offset( ( $page - 1 ) * $perPage );
 		$items = $this->get();
 
-		return [
+		return array(
 			'data'         => $items,
 			'total'        => $total,
 			'per_page'     => $perPage,
 			'current_page' => $page,
 			'last_page'    => $totalPages,
-		];
+		);
 	}
 }

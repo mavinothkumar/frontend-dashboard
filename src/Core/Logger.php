@@ -19,7 +19,7 @@ class Logger {
 	 * @param string $message
 	 * @param array  $context
 	 */
-	public static function info( $message, array $context = [] ) {
+	public static function info( $message, array $context = array() ) {
 		self::log( 'INFO', $message, $context );
 	}
 
@@ -29,7 +29,7 @@ class Logger {
 	 * @param string $message
 	 * @param array  $context
 	 */
-	public static function warning( $message, array $context = [] ) {
+	public static function warning( $message, array $context = array() ) {
 		self::log( 'WARNING', $message, $context );
 	}
 
@@ -39,7 +39,7 @@ class Logger {
 	 * @param string|\Throwable $message
 	 * @param array             $context
 	 */
-	public static function error( $message, array $context = [] ) {
+	public static function error( $message, array $context = array() ) {
 		if ( $message instanceof \Throwable ) {
 			$context['file']  = $message->getFile();
 			$context['line']  = $message->getLine();
@@ -56,7 +56,7 @@ class Logger {
 	 * @param string $message
 	 * @param array  $context
 	 */
-	protected static function log( $level, $message, array $context = [] ) {
+	protected static function log( $level, $message, array $context = array() ) {
 		$context_str = ! empty( $context ) ? ' ' . wp_json_encode( $context ) : '';
 		$formatted   = sprintf( '[FED %s] %s%s', $level, $message, $context_str );
 

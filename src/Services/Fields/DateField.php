@@ -39,7 +39,7 @@ class DateField extends BaseField {
 
 		$placeholder = ! empty( $this->placeholder ) ? $this->placeholder : $full_format;
 
-		$extra_attrs = [
+		$extra_attrs = array(
 			'type'             => 'text',
 			'data-date-format' => $full_format,
 			'data-alt-format'  => $full_format,
@@ -49,7 +49,7 @@ class DateField extends BaseField {
 			'data-enable-time' => $enable_time,
 			'data-time_24hr'   => $time_24hr,
 			'value'            => $this->value,
-		];
+		);
 
 		if ( '' !== $min_date ) {
 			$extra_attrs['data-min-date'] = $min_date;

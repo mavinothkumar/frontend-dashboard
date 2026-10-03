@@ -283,8 +283,10 @@ class LicenseManager {
 		do_action( 'fed_check_pro_addon_updates' );
 		wp_update_plugins();
 
-		wp_send_json_success( array(
-			'message' => __( 'Plugin update check completed.', 'frontend-dashboard' ),
-		) );
+		wp_send_json_success(
+			array(
+				'message' => __( 'Plugin update check completed.', 'frontend-dashboard' ),
+			)
+		);
 	}
 }

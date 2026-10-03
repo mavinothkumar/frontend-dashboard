@@ -51,15 +51,18 @@ if ( ! function_exists( 'fed_script_admin' ) ) {
 
 		if (
 			( in_array(
-				$hook, fed_get_script_loading_pages(),
+				$hook,
+				fed_get_script_loading_pages(),
 				false
 			) ) ||
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			( isset( $_GET['page'] ) &&
-			  in_array(
-				  // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				  wp_unslash( $_GET['page'] ), fed_get_script_loading_pages(), false
-			  ) )
+				in_array(
+					// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+					wp_unslash( $_GET['page'] ),
+					fed_get_script_loading_pages(),
+					false
+				) )
 		) {
 			$db_scripts      = get_option( 'fed_general_scripts_styles', array() );
 			$default_scripts = new FED_Admin_General();
@@ -143,7 +146,10 @@ if ( ! function_exists( 'fed_enqueue_scripts' ) ) {
 				wp_enqueue_script( $key );
 			} else {
 				wp_register_script(
-					$key, $script['src'], $script['dependencies'], $script['version'],
+					$key,
+					$script['src'],
+					$script['dependencies'],
+					$script['version'],
 					$script['in_footer']
 				);
 				wp_enqueue_script( $key );
@@ -154,7 +160,10 @@ if ( ! function_exists( 'fed_enqueue_scripts' ) ) {
 				wp_enqueue_style( $key );
 			} else {
 				wp_register_style(
-					$key, $script['src'], $script['dependencies'], $script['version'],
+					$key,
+					$script['src'],
+					$script['dependencies'],
+					$script['version'],
 					$script['media']
 				);
 				wp_enqueue_style( $key );

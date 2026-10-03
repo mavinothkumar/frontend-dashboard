@@ -78,7 +78,7 @@ class Sanitizer {
 	/**
 	 * Sanitize HTML with allowed tags.
 	 */
-	public static function html( $value, array $allowedHtml = [] ): string {
+	public static function html( $value, array $allowedHtml = array() ): string {
 		if ( ! is_scalar( $value ) ) {
 			return '';
 		}
@@ -90,7 +90,7 @@ class Sanitizer {
 	 * Recursively sanitize an array with a fallback sanitizer.
 	 */
 	public static function array( array $array, ?callable $sanitizer = null ): array {
-		$sanitizer = $sanitizer ?: [ self::class, 'text' ];
+		$sanitizer = $sanitizer ?: array( self::class, 'text' );
 		return map_deep( $array, $sanitizer );
 	}
 }

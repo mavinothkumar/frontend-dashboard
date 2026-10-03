@@ -37,7 +37,7 @@ class LicenseRegistry {
 			 * @param array $addons Array of registered addon configurations.
 			 */
 			$raw_addons = apply_filters( 'fed_registered_pro_addons', array() );
-			
+
 			self::$addons = array();
 
 			if ( is_array( $raw_addons ) ) {
@@ -78,7 +78,7 @@ class LicenseRegistry {
 	 * Normalize an addon definition to ensure all required keys exist.
 	 *
 	 * @param array|mixed $addon
-	 * @param string|int $key
+	 * @param string|int  $key
 	 * @return array|null
 	 */
 	private static function normalize_addon( $addon, $key ) {

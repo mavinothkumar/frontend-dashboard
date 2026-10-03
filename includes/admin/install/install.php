@@ -80,7 +80,6 @@ function fed_next_updates() {
 		dbDelta( $menu_meta );
 	}
 	// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-
 }
 
 /**
@@ -227,8 +226,8 @@ function fed_plugin_activation() {
 		$wpdb->query( "ALTER TABLE $payment_table ADD COLUMN invoice_id VARCHAR(255) NULL AFTER `status`" );
 	}
 
-	$activity_log_table  = $wpdb->prefix . ( defined( 'BC_FED_TABLE_ACTIVITY_LOG' ) ? BC_FED_TABLE_ACTIVITY_LOG : 'fed_activity_log' );
-	$activity_log_sql    = "CREATE TABLE `{$activity_log_table}` (
+	$activity_log_table = $wpdb->prefix . ( defined( 'BC_FED_TABLE_ACTIVITY_LOG' ) ? BC_FED_TABLE_ACTIVITY_LOG : 'fed_activity_log' );
+	$activity_log_sql   = "CREATE TABLE `{$activity_log_table}` (
 	  id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 	  user_id BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
 	  user_login VARCHAR(60) NOT NULL DEFAULT '',
@@ -264,7 +263,6 @@ function fed_plugin_activation() {
 	// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 
 	update_option( 'fed_plugin_version', BC_FED_PLUGIN_VERSION );
-
 }
 
 /**
@@ -282,7 +280,7 @@ function fed_plugin_data() {
 	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	$profile_count = $wpdb->get_var( "SELECT COUNT(*) FROM $profile_table" );
 	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-	$menu_count    = $wpdb->get_var( "SELECT COUNT(*) FROM $menu_table" );
+	$menu_count = $wpdb->get_var( "SELECT COUNT(*) FROM $menu_table" );
 
 	if ( $profile_count <= 0 ) {
 		foreach ( $profile_data as $datum ) {
@@ -308,7 +306,6 @@ function fed_plugin_data() {
 		);
 	}
 	// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-
 }
 
 // register_activation_hook( BC_FED_PLUGIN, 'fed_plugin_activation' );
@@ -613,7 +610,8 @@ function fed_admin_notice() {
 function get_plugin_list() {
 	$config     = fed_config();
 	$plugin_api = wp_remote_get(
-		$config['plugin_api'], array(
+		$config['plugin_api'],
+		array(
 			'timeout'     => 120,
 			'httpversion' => '1.1',
 		)

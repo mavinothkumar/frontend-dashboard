@@ -47,7 +47,8 @@ function fed_process_dashboard_display_menu() {
 function fed_get_post_menu() {
 	$all_roles          = fed_get_user_roles();
 	$admin_post_options = get_option(
-		'fed_cp_admin_settings', fed_get_default_post_options(
+		'fed_cp_admin_settings',
+		fed_get_default_post_options(
 			$all_roles
 		)
 	);
@@ -127,10 +128,10 @@ function fed_display_dashboard_menu( $menus ) {
 			continue;
 		}
 
-		$menu_format  = fed_format_menu_items( $menu, $index, $first_element, $dashboard_url, $index );
-		$is_submenu   = false;
-		$parent_id    = isset( $get_payload['parent_id'] ) ? sanitize_text_field( $get_payload['parent_id'] ) : '';
-		
+		$menu_format = fed_format_menu_items( $menu, $index, $first_element, $dashboard_url, $index );
+		$is_submenu  = false;
+		$parent_id   = isset( $get_payload['parent_id'] ) ? sanitize_text_field( $get_payload['parent_id'] ) : '';
+
 		if ( isset( $menu['submenu'] ) && ! empty( $menu['submenu'] ) ) {
 			$is_submenu = true;
 			$submenus   = $menu['submenu'];
@@ -219,7 +220,7 @@ function fed_format_menu_items( $menu, $index, $first_element, $dashboard_url, $
 				? $menu['name']
 				: ( isset( $menu['menu_title'] ) && '' !== $menu['menu_title']
 					? $menu['menu_title']
-					: ( ! empty( $menu_slug ) && 'fed_slug_error' !== $menu_slug ? ucwords( str_replace( [ '-', '_' ], ' ', $menu_slug ) ) : 'Menu' ) ) ) );
+					: ( ! empty( $menu_slug ) && 'fed_slug_error' !== $menu_slug ? ucwords( str_replace( array( '-', '_' ), ' ', $menu_slug ) ) : 'Menu' ) ) ) );
 	$menu_url    = add_query_arg(
 		array(
 			'menu_type' => $menu_type,
@@ -229,7 +230,8 @@ function fed_format_menu_items( $menu, $index, $first_element, $dashboard_url, $
 			'fed_nonce' => wp_create_nonce(
 				'fed_nonce'
 			),
-		), $dashboard_url
+		),
+		$dashboard_url
 	);
 	$menu_url    = apply_filters( 'fed_convert_dashboard_menu_url', $menu_url, $menu );
 	$target      = '_self';
@@ -250,10 +252,8 @@ function fed_format_menu_items( $menu, $index, $first_element, $dashboard_url, $
 		if ( $menu_slug === $get_payload['menu_slug'] || $index === $get_payload['menu_slug'] ) {
 			$active = 'active';
 		}
-	} else {
-		if ( $index === $first_element ) {
+	} elseif ( $index === $first_element ) {
 			$active = 'active';
-		}
 	}
 
 	return array(
@@ -279,11 +279,11 @@ function fed_get_collapse_menu() {
 	) {
 		?>
 		<script>
-          jQuery(document).ready(function ($) {
-            if ($('.fed_dashboard_menus').length) {
-              $('.fed_collapse_menu').trigger('click')
-            }
-          })
+			jQuery(document).ready(function ($) {
+			if ($('.fed_dashboard_menus').length) {
+				$('.fed_collapse_menu').trigger('click')
+			}
+			})
 		</script>
 		<?php
 	}
@@ -306,7 +306,8 @@ function fed_get_collapse_menu() {
  */
 function fed_get_collapse_menu_content() {
 	return apply_filters(
-		'fed_collapse_menu_content', array(
+		'fed_collapse_menu_content',
+		array(
 			'open_icon'  => 'fa fa-arrow-right',
 			'close_icon' => 'fa fa-arrow-left',
 			'name'       => __( 'Collapse Menu', 'frontend-dashboard' ),

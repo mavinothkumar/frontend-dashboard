@@ -17,7 +17,7 @@ class Payment extends Model {
 
 	protected $table = 'fed_payment';
 
-	protected $fillable = [
+	protected $fillable = array(
 		'user_id',
 		'payment_type',
 		'payment_source',
@@ -25,13 +25,13 @@ class Payment extends Model {
 		'amount',
 		'currency',
 		'status',
-	];
+	);
 
-	protected $casts = [
+	protected $casts = array(
 		'id'      => 'int',
 		'user_id' => 'int',
 		'amount'  => 'float',
-	];
+	);
 
 	/**
 	 * Get payment line items.

@@ -26,22 +26,22 @@ abstract class Model {
 	/**
 	 * @var array Attributes that can be mass-assigned.
 	 */
-	protected $fillable = [];
+	protected $fillable = array();
 
 	/**
 	 * @var array Attribute type casts.
 	 */
-	protected $casts = [];
+	protected $casts = array();
 
 	/**
 	 * @var array Model attributes.
 	 */
-	protected $attributes = [];
+	protected $attributes = array();
 
 	/**
 	 * @var array Original attributes loaded from DB.
 	 */
-	protected $original = [];
+	protected $original = array();
 
 	/**
 	 * @var bool Flag whether model exists in DB.
@@ -53,7 +53,7 @@ abstract class Model {
 	 *
 	 * @param array $attributes
 	 */
-	public function __construct( array $attributes = [] ) {
+	public function __construct( array $attributes = array() ) {
 		$this->fill( $attributes );
 	}
 
@@ -117,7 +117,7 @@ abstract class Model {
 	 */
 	public static function find( $id ) {
 		$instance = new static();
-		$row = static::query()->where( $instance->getKeyName(), $id )->first();
+		$row      = static::query()->where( $instance->getKeyName(), $id )->first();
 		return $row ? static::hydrate( $row ) : null;
 	}
 
@@ -140,7 +140,7 @@ abstract class Model {
 	 */
 	public static function all(): array {
 		$rows   = static::query()->get();
-		$models = [];
+		$models = array();
 		foreach ( $rows as $row ) {
 			$models[] = static::hydrate( $row );
 		}
@@ -187,7 +187,7 @@ abstract class Model {
 	 * @return static
 	 */
 	public static function hydrate( array $row ) {
-		$model           = new static();
+		$model             = new static();
 		$model->attributes = $row;
 		$model->original   = $row;
 		$model->exists     = true;
@@ -241,7 +241,7 @@ abstract class Model {
 	 * @return array
 	 */
 	protected function prepareForSave(): array {
-		$data = [];
+		$data = array();
 		foreach ( $this->attributes as $key => $value ) {
 			if ( isset( $this->casts[ $key ] ) ) {
 				if ( 'json' === $this->casts[ $key ] || 'array' === $this->casts[ $key ] ) {
@@ -313,9 +313,9 @@ abstract class Model {
 	public function hasMany( string $relatedClass, string $foreignKey, string $localKey = 'id' ): array {
 		/** @var Model $instance */
 		$instance = new $relatedClass();
-		$rows = $instance::query()->where( $foreignKey, $this->getAttribute( $localKey ) )->get();
+		$rows     = $instance::query()->where( $foreignKey, $this->getAttribute( $localKey ) )->get();
 
-		$models = [];
+		$models = array();
 		foreach ( $rows as $row ) {
 			$models[] = $relatedClass::hydrate( $row );
 		}
@@ -340,7 +340,7 @@ abstract class Model {
 	 * @return array
 	 */
 	public function toArray(): array {
-		$array = [];
+		$array = array();
 		foreach ( $this->attributes as $key => $val ) {
 			$array[ $key ] = $this->getAttribute( $key );
 		}

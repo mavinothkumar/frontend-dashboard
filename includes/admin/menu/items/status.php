@@ -19,60 +19,93 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 		// ----------------------------------------------------
 		// 1. DATA GATHERING: Environment & Server Info
 		// ----------------------------------------------------
-		$php_version        = PHP_VERSION;
-		$server_software    = isset( $_SERVER['SERVER_SOFTWARE'] ) ? sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ) : 'Unknown';
-		$wp_memory_limit    = WP_MEMORY_LIMIT;
-		$php_memory_limit   = ini_get( 'memory_limit' );
-		$max_execution_time = ini_get( 'max_execution_time' );
-		$max_input_vars     = ini_get( 'max_input_vars' );
-		$upload_max_filesize= ini_get( 'upload_max_filesize' );
-		$post_max_size      = ini_get( 'post_max_size' );
-		$is_ssl             = is_ssl();
-		$uploads_dir        = wp_upload_dir();
-		$uploads_writable   = wp_is_writable( $uploads_dir['basedir'] );
-		$log_file           = BC_FED_PLUGIN_DIR . '/log/dashboard.log';
-		$log_file_writable  = file_exists( $log_file ) ? wp_is_writable( $log_file ) : wp_is_writable( dirname( $log_file ) );
-		$log_file_size      = file_exists( $log_file ) ? size_format( filesize( $log_file ), 2 ) : '0 B';
-		$log_file_modified  = file_exists( $log_file ) ? date_i18n( 'M j, Y H:i:s', filemtime( $log_file ) ) : __( 'Never', 'frontend-dashboard' );
+		$php_version         = PHP_VERSION;
+		$server_software     = isset( $_SERVER['SERVER_SOFTWARE'] ) ? sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ) : 'Unknown';
+		$wp_memory_limit     = WP_MEMORY_LIMIT;
+		$php_memory_limit    = ini_get( 'memory_limit' );
+		$max_execution_time  = ini_get( 'max_execution_time' );
+		$max_input_vars      = ini_get( 'max_input_vars' );
+		$upload_max_filesize = ini_get( 'upload_max_filesize' );
+		$post_max_size       = ini_get( 'post_max_size' );
+		$is_ssl              = is_ssl();
+		$uploads_dir         = wp_upload_dir();
+		$uploads_writable    = wp_is_writable( $uploads_dir['basedir'] );
+		$log_file            = BC_FED_PLUGIN_DIR . '/log/dashboard.log';
+		$log_file_writable   = file_exists( $log_file ) ? wp_is_writable( $log_file ) : wp_is_writable( dirname( $log_file ) );
+		$log_file_size       = file_exists( $log_file ) ? size_format( filesize( $log_file ), 2 ) : '0 B';
+		$log_file_modified   = file_exists( $log_file ) ? date_i18n( 'M j, Y H:i:s', filemtime( $log_file ) ) : __( 'Never', 'frontend-dashboard' );
 
 		// ----------------------------------------------------
 		// 2. DATA GATHERING: Core Frontend Dashboard Modules
 		// ----------------------------------------------------
-		$fed_login_opt     = get_option( 'fed_admin_login', array() );
-		$login_configured  = ! empty( $fed_login_opt['settings']['fed_login_url'] );
-		$register_opt      = get_option( 'fed_login_details', array() );
-		$fed_cp_opt        = get_option( 'fed_cp_admin_settings', array() );
-		$post_configured   = ! empty( $fed_cp_opt['post'] );
-		$upl_opt           = get_option( 'fed_admin_settings_upl', array() );
-		$upl_configured    = ! empty( $upl_opt['settings'] );
+		$fed_login_opt    = get_option( 'fed_admin_login', array() );
+		$login_configured = ! empty( $fed_login_opt['settings']['fed_login_url'] );
+		$register_opt     = get_option( 'fed_login_details', array() );
+		$fed_cp_opt       = get_option( 'fed_cp_admin_settings', array() );
+		$post_configured  = ! empty( $fed_cp_opt['post'] );
+		$upl_opt          = get_option( 'fed_admin_settings_upl', array() );
+		$upl_configured   = ! empty( $upl_opt['settings'] );
 
 		// Addon plugins
 		include_once ABSPATH . 'wp-admin/includes/plugin.php';
 		$addons = array(
-			'frontend-dashboard-custom-post'    => array( 'name' => 'Custom Post & Taxonomies', 'file' => 'frontend-dashboard-custom-post/frontend-dashboard-custom-post.php' ),
-			'frontend-dashboard-captcha'        => array( 'name' => 'reCAPTCHA Spam Protection', 'file' => 'frontend-dashboard-captcha/frontend-dashboard-captcha.php' ),
-			'frontend-dashboard-notification'   => array( 'name' => 'Notification System', 'file' => 'frontend-dashboard-notification/frontend-dashboard-notification.php' ),
-			'frontend-dashboard-social-chat'    => array( 'name' => 'Social Chat', 'file' => 'frontend-dashboard-social-chat/frontend-dashboard-social-chat.php' ),
+			'frontend-dashboard-custom-post'  => array(
+				'name' => 'Custom Post & Taxonomies',
+				'file' => 'frontend-dashboard-custom-post/frontend-dashboard-custom-post.php',
+			),
+			'frontend-dashboard-captcha'      => array(
+				'name' => 'reCAPTCHA Spam Protection',
+				'file' => 'frontend-dashboard-captcha/frontend-dashboard-captcha.php',
+			),
+			'frontend-dashboard-notification' => array(
+				'name' => 'Notification System',
+				'file' => 'frontend-dashboard-notification/frontend-dashboard-notification.php',
+			),
+			'frontend-dashboard-social-chat'  => array(
+				'name' => 'Social Chat',
+				'file' => 'frontend-dashboard-social-chat/frontend-dashboard-social-chat.php',
+			),
 		);
 
 		// ----------------------------------------------------
 		// 3. DATA GATHERING: Database Tables
 		// ----------------------------------------------------
 		$expected_core_tables = array(
-			$wpdb->prefix . BC_FED_TABLE_USER_PROFILE => array( 'label' => 'User Profile Fields', 'schema' => 'BC_FED_TABLE_USER_PROFILE' ),
-			$wpdb->prefix . BC_FED_TABLE_POST         => array( 'label' => 'Post & Custom Post Fields', 'schema' => 'BC_FED_TABLE_POST' ),
-			$wpdb->prefix . BC_FED_TABLE_MENU         => array( 'label' => 'Dashboard Menus', 'schema' => 'BC_FED_TABLE_MENU' ),
-			$wpdb->prefix . BC_FED_TABLE_MENU_META    => array( 'label' => 'Dashboard Menu Metadata', 'schema' => 'BC_FED_TABLE_MENU_META' ),
-			$wpdb->prefix . BC_FED_TABLE_PAYMENT      => array( 'label' => 'Payments', 'schema' => 'BC_FED_TABLE_PAYMENT' ),
-			$wpdb->prefix . BC_FED_TABLE_PAYMENT_ITEMS=> array( 'label' => 'Payment Items', 'schema' => 'BC_FED_TABLE_PAYMENT_ITEMS' ),
-			$wpdb->prefix . ( defined( 'BC_FED_TABLE_ACTIVITY_LOG' ) ? BC_FED_TABLE_ACTIVITY_LOG : 'fed_activity_log' ) => array( 'label' => 'Activity & Audit Log', 'schema' => 'BC_FED_TABLE_ACTIVITY_LOG' ),
+			$wpdb->prefix . BC_FED_TABLE_USER_PROFILE  => array(
+				'label'  => 'User Profile Fields',
+				'schema' => 'BC_FED_TABLE_USER_PROFILE',
+			),
+			$wpdb->prefix . BC_FED_TABLE_POST          => array(
+				'label'  => 'Post & Custom Post Fields',
+				'schema' => 'BC_FED_TABLE_POST',
+			),
+			$wpdb->prefix . BC_FED_TABLE_MENU          => array(
+				'label'  => 'Dashboard Menus',
+				'schema' => 'BC_FED_TABLE_MENU',
+			),
+			$wpdb->prefix . BC_FED_TABLE_MENU_META     => array(
+				'label'  => 'Dashboard Menu Metadata',
+				'schema' => 'BC_FED_TABLE_MENU_META',
+			),
+			$wpdb->prefix . BC_FED_TABLE_PAYMENT       => array(
+				'label'  => 'Payments',
+				'schema' => 'BC_FED_TABLE_PAYMENT',
+			),
+			$wpdb->prefix . BC_FED_TABLE_PAYMENT_ITEMS => array(
+				'label'  => 'Payment Items',
+				'schema' => 'BC_FED_TABLE_PAYMENT_ITEMS',
+			),
+			$wpdb->prefix . ( defined( 'BC_FED_TABLE_ACTIVITY_LOG' ) ? BC_FED_TABLE_ACTIVITY_LOG : 'fed_activity_log' ) => array(
+				'label'  => 'Activity & Audit Log',
+				'schema' => 'BC_FED_TABLE_ACTIVITY_LOG',
+			),
 		);
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$db_existing_tables = $wpdb->get_col( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $wpdb->prefix . 'fed' ) . '%' ) );
 		$all_table_keys     = array_unique( array_merge( array_keys( $expected_core_tables ), $db_existing_tables ) );
 
-		$tables_data = array();
+		$tables_data   = array();
 		$total_db_size = 0;
 		$total_db_rows = 0;
 
@@ -81,39 +114,39 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 			$label  = isset( $expected_core_tables[ $t_name ] ) ? $expected_core_tables[ $t_name ]['label'] : __( 'Plugin Table', 'frontend-dashboard' );
 
 			if ( $exists ) {
-				$status_row = $wpdb->get_row( $wpdb->prepare( "SHOW TABLE STATUS LIKE %s", $t_name ) );
+				$status_row = $wpdb->get_row( $wpdb->prepare( 'SHOW TABLE STATUS LIKE %s', $t_name ) );
 				$rows       = isset( $status_row->Rows ) ? (int) $status_row->Rows : 0;
 				$data_len   = isset( $status_row->Data_length ) ? (int) $status_row->Data_length : 0;
 				$index_len  = isset( $status_row->Index_length ) ? (int) $status_row->Index_length : 0;
 				$engine     = isset( $status_row->Engine ) ? $status_row->Engine : 'InnoDB';
 				$collation  = isset( $status_row->Collation ) ? $status_row->Collation : 'utf8mb4_unicode_ci';
 
-				$total_size    = $data_len + $index_len;
+				$total_size     = $data_len + $index_len;
 				$total_db_size += $total_size;
 				$total_db_rows += $rows;
 
 				$tables_data[ $t_name ] = array(
-					'exists'    => true,
-					'name'      => $t_name,
-					'label'     => $label,
-					'rows'      => $rows,
-					'data_size' => size_format( $data_len, 2 ),
-					'index_size'=> size_format( $index_len, 2 ),
-					'total_size'=> size_format( $total_size, 2 ),
-					'engine'    => $engine,
-					'collation' => $collation,
+					'exists'     => true,
+					'name'       => $t_name,
+					'label'      => $label,
+					'rows'       => $rows,
+					'data_size'  => size_format( $data_len, 2 ),
+					'index_size' => size_format( $index_len, 2 ),
+					'total_size' => size_format( $total_size, 2 ),
+					'engine'     => $engine,
+					'collation'  => $collation,
 				);
 			} else {
 				$tables_data[ $t_name ] = array(
-					'exists'    => false,
-					'name'      => $t_name,
-					'label'     => $label,
-					'rows'      => 0,
-					'data_size' => '0 B',
-					'index_size'=> '0 B',
-					'total_size'=> '0 B',
-					'engine'    => '-',
-					'collation' => '-',
+					'exists'     => false,
+					'name'       => $t_name,
+					'label'      => $label,
+					'rows'       => 0,
+					'data_size'  => '0 B',
+					'index_size' => '0 B',
+					'total_size' => '0 B',
+					'engine'     => '-',
+					'collation'  => '-',
 				);
 			}
 		}
@@ -127,24 +160,24 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 		// ----------------------------------------------------
 		// 5. DATA GATHERING: Scheduled Cron Jobs
 		// ----------------------------------------------------
-		$cron_array = _get_cron_array();
-		$cron_jobs  = array();
+		$cron_array   = _get_cron_array();
+		$cron_jobs    = array();
 		$current_time = time();
 
 		if ( is_array( $cron_array ) ) {
 			foreach ( $cron_array as $timestamp => $hooks ) {
 				foreach ( $hooks as $hook_name => $hook_data ) {
 					foreach ( $hook_data as $key => $details ) {
-						$is_fed = ( strpos( $hook_name, 'fed' ) !== false );
+						$is_fed      = ( strpos( $hook_name, 'fed' ) !== false );
 						$cron_jobs[] = array(
-							'hook'       => $hook_name,
-							'is_fed'     => $is_fed,
-							'timestamp'  => $timestamp,
-							'schedule'   => ! empty( $details['schedule'] ) ? $details['schedule'] : __( 'One-off', 'frontend-dashboard' ),
-							'interval'   => isset( $details['interval'] ) ? $details['interval'] : null,
-							'args'       => isset( $details['args'] ) ? $details['args'] : array(),
-							'diff'       => human_time_diff( $current_time, $timestamp ),
-							'is_past'    => $timestamp < $current_time,
+							'hook'      => $hook_name,
+							'is_fed'    => $is_fed,
+							'timestamp' => $timestamp,
+							'schedule'  => ! empty( $details['schedule'] ) ? $details['schedule'] : __( 'One-off', 'frontend-dashboard' ),
+							'interval'  => isset( $details['interval'] ) ? $details['interval'] : null,
+							'args'      => isset( $details['args'] ) ? $details['args'] : array(),
+							'diff'      => human_time_diff( $current_time, $timestamp ),
+							'is_past'   => $timestamp < $current_time,
 						);
 					}
 				}
@@ -152,9 +185,12 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 		}
 
 		// Sort crons by timestamp
-		usort( $cron_jobs, function( $a, $b ) {
-			return $a['timestamp'] - $b['timestamp'];
-		});
+		usort(
+			$cron_jobs,
+			function ( $a, $b ) {
+				return $a['timestamp'] - $b['timestamp'];
+			}
+		);
 
 		// ----------------------------------------------------
 		// 6. DATA GATHERING: Activity Logs & File Console
@@ -590,15 +626,15 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 						<div class="space-y-3">
 							<?php
 							$extensions = array(
-								'cURL'     => extension_loaded( 'curl' ),
-								'JSON'     => extension_loaded( 'json' ),
-								'OpenSSL'  => extension_loaded( 'openssl' ),
+								'cURL'         => extension_loaded( 'curl' ),
+								'JSON'         => extension_loaded( 'json' ),
+								'OpenSSL'      => extension_loaded( 'openssl' ),
 								'GD / Imagick' => ( extension_loaded( 'gd' ) || extension_loaded( 'imagick' ) ),
-								'mbstring' => extension_loaded( 'mbstring' ),
-								'SimpleXML'=> extension_loaded( 'simplexml' ),
+								'mbstring'     => extension_loaded( 'mbstring' ),
+								'SimpleXML'    => extension_loaded( 'simplexml' ),
 							);
 							foreach ( $extensions as $ext_name => $is_loaded ) :
-							?>
+								?>
 								<div class="flex items-center justify-between py-2 border-b border-slate-50 text-xs">
 									<span class="font-medium text-slate-600"><?php echo esc_html( $ext_name ); ?></span>
 									<?php if ( $is_loaded ) : ?>
@@ -678,9 +714,10 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 					<div class="pt-2">
 						<h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3"><?php esc_html_e( 'Installed Add-on Plugins', 'frontend-dashboard' ); ?></h4>
 						<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-							<?php foreach ( $addons as $slug => $addon_info ) : 
+							<?php
+							foreach ( $addons as $slug => $addon_info ) :
 								$is_active = is_plugin_active( $addon_info['file'] );
-							?>
+								?>
 								<div class="flex items-center justify-between p-3 rounded-xl border <?php echo $is_active ? 'bg-indigo-50/50 border-indigo-100' : 'bg-slate-50/60 border-slate-100'; ?>">
 									<span class="text-xs font-semibold <?php echo $is_active ? 'text-slate-800' : 'text-slate-500'; ?>"><?php echo esc_html( $addon_info['name'] ); ?></span>
 									<?php if ( $is_active ) : ?>
@@ -858,11 +895,12 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 									</tr>
 								</thead>
 								<tbody class="divide-y divide-slate-100 bg-white">
-									<?php foreach ( $options_query as $opt ) : 
-										$val_len = strlen( (string) $opt->option_value );
+									<?php
+									foreach ( $options_query as $opt ) :
+										$val_len       = strlen( (string) $opt->option_value );
 										$is_serialized = is_serialized( $opt->option_value );
-										$preview = wp_trim_words( esc_html( $opt->option_value ), 12, '...' );
-									?>
+										$preview       = wp_trim_words( esc_html( $opt->option_value ), 12, '...' );
+										?>
 										<tr class="fed-option-row hover:bg-slate-50/60 transition-colors" data-name="<?php echo esc_attr( strtolower( $opt->option_name ) ); ?>">
 											<td class="py-3 px-4 font-mono font-bold text-slate-800"><?php echo esc_html( $opt->option_name ); ?></td>
 											<td class="py-3 px-4 font-mono text-slate-600 max-w-xs truncate" title="<?php echo esc_attr( $opt->option_value ); ?>">
@@ -1023,10 +1061,10 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 									<i class="fas fa-search"></i>
 								</span>
 								<input type="text"
-									   id="fed_activity_search_input"
-									   placeholder="<?php esc_attr_e( 'Search by actor, action, details, IP...', 'frontend-dashboard' ); ?>"
-									   class="fed-status-search-input w-full"
-									   style="padding-left: 38px !important; padding-right: 16px !important; padding-top: 8px !important; padding-bottom: 8px !important; height: 38px !important; font-size: 12px !important; width: 100% !important; background-color: #ffffff !important; border-radius: 12px !important; border: 1px solid #e2e8f0 !important; color: #334155 !important; box-sizing: border-box !important;" />
+										id="fed_activity_search_input"
+										placeholder="<?php esc_attr_e( 'Search by actor, action, details, IP...', 'frontend-dashboard' ); ?>"
+										class="fed-status-search-input w-full"
+										style="padding-left: 38px !important; padding-right: 16px !important; padding-top: 8px !important; padding-bottom: 8px !important; height: 38px !important; font-size: 12px !important; width: 100% !important; background-color: #ffffff !important; border-radius: 12px !important; border: 1px solid #e2e8f0 !important; color: #334155 !important; box-sizing: border-box !important;" />
 							</div>
 
 							<!-- Category Filter Dropdown with dedicated arrow padding -->
@@ -1059,48 +1097,49 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 								</thead>
 								<tbody class="divide-y divide-slate-100 text-xs text-slate-700 font-medium" id="fed_activity_log_tbody">
 									<?php if ( ! empty( $db_activity_logs ) ) : ?>
-										<?php foreach ( $db_activity_logs as $act ) : 
+										<?php
+										foreach ( $db_activity_logs as $act ) :
 											$action_cat   = ! empty( $act['channel'] ) ? $act['channel'] : ( ! empty( $act['action_type'] ) ? $act['action_type'] : 'system' );
 											$act_status   = ! empty( $act['status'] ) ? $act['status'] : ( ! empty( $act['level'] ) ? $act['level'] : 'info' );
 											$action_title = ! empty( $act['action'] ) ? $act['action'] : ( ! empty( $act['action_title'] ) ? $act['action_title'] : __( 'System Event', 'frontend-dashboard' ) );
 											$act_desc     = ! empty( $act['description'] ) ? $act['description'] : ( ! empty( $act['message'] ) && $act['message'] !== $action_title ? $act['message'] : '' );
 											$search_str   = strtolower( ( $act['user_login'] ?? '' ) . ' ' . ( $act['user_display_name'] ?? '' ) . ' ' . $action_title . ' ' . $act_desc . ' ' . ( $act['ip_address'] ?? '' ) . ' ' . $action_cat );
-											
+
 											// Category Badge Style
 											$cat_badge_cls = 'bg-slate-100 text-slate-700 border-slate-200';
-											$cat_icon = 'fa-cog';
+											$cat_icon      = 'fa-cog';
 											if ( $action_cat === 'seeder' ) {
 												$cat_badge_cls = 'bg-indigo-50 text-indigo-700 border-indigo-200';
-												$cat_icon = 'fa-seedling';
+												$cat_icon      = 'fa-seedling';
 											} elseif ( $action_cat === 'database' ) {
 												$cat_badge_cls = 'bg-amber-50 text-amber-700 border-amber-200';
-												$cat_icon = 'fa-database';
+												$cat_icon      = 'fa-database';
 											} elseif ( $action_cat === 'option' ) {
 												$cat_badge_cls = 'bg-sky-50 text-sky-700 border-sky-200';
-												$cat_icon = 'fa-sliders-h';
+												$cat_icon      = 'fa-sliders-h';
 											} elseif ( $action_cat === 'cron' ) {
 												$cat_badge_cls = 'bg-emerald-50 text-emerald-700 border-emerald-200';
-												$cat_icon = 'fa-clock';
+												$cat_icon      = 'fa-clock';
 											} elseif ( $action_cat === 'log' ) {
 												$cat_badge_cls = 'bg-purple-50 text-purple-700 border-purple-200';
-												$cat_icon = 'fa-terminal';
+												$cat_icon      = 'fa-terminal';
 											}
 
 											// Status Badge Style
 											$status_badge_cls = 'bg-emerald-50 text-emerald-700 border-emerald-200';
-											$status_icon = 'fa-check-circle text-emerald-500';
+											$status_icon      = 'fa-check-circle text-emerald-500';
 											if ( $act_status === 'warning' ) {
 												$status_badge_cls = 'bg-amber-50 text-amber-700 border-amber-200';
-												$status_icon = 'fa-exclamation-triangle text-amber-500';
-											} elseif ( in_array( $act_status, [ 'error', 'critical' ], true ) ) {
+												$status_icon      = 'fa-exclamation-triangle text-amber-500';
+											} elseif ( in_array( $act_status, array( 'error', 'critical' ), true ) ) {
 												$status_badge_cls = 'bg-rose-50 text-rose-700 border-rose-200';
-												$status_icon = 'fa-times-circle text-rose-500';
+												$status_icon      = 'fa-times-circle text-rose-500';
 											}
 
-											$time_unix = ! empty( $act['created_at'] ) ? strtotime( $act['created_at'] ) : time();
-											$time_diff = human_time_diff( $time_unix, time() ) . ' ' . __( 'ago', 'frontend-dashboard' );
+											$time_unix  = ! empty( $act['created_at'] ) ? strtotime( $act['created_at'] ) : time();
+											$time_diff  = human_time_diff( $time_unix, time() ) . ' ' . __( 'ago', 'frontend-dashboard' );
 											$time_exact = date_i18n( 'M j, Y H:i:s', $time_unix );
-										?>
+											?>
 											<tr class="fed-activity-row hover:bg-slate-50/70 transition-colors" data-category="<?php echo esc_attr( $action_cat ); ?>" data-search="<?php echo esc_attr( $search_str ); ?>">
 												<!-- User / Actor Column -->
 												<td class="py-3 px-4 overflow-hidden">
@@ -1259,7 +1298,8 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 						<!-- Dark-Mode Monospace Terminal Console -->
 						<div class="rounded-2xl bg-slate-950 p-4 border border-slate-800 text-slate-200 font-mono text-xs overflow-x-auto max-h-[480px] overflow-y-auto space-y-1 shadow-inner" id="fed_log_terminal">
 							<?php if ( ! empty( $log_lines ) ) : ?>
-								<?php foreach ( $log_lines as $idx => $line ) : 
+								<?php
+								foreach ( $log_lines as $idx => $line ) :
 									$line_class = 'text-slate-300';
 									if ( stripos( $line, 'error' ) !== false || stripos( $line, 'fatal' ) !== false ) {
 										$line_class = 'text-rose-400 font-bold';
@@ -1268,7 +1308,7 @@ if ( ! function_exists( 'fed_get_status_menu' ) ) {
 									} elseif ( stripos( $line, 'info' ) !== false || stripos( $line, 'success' ) !== false ) {
 										$line_class = 'text-emerald-400';
 									}
-								?>
+									?>
 									<div class="flex items-start gap-3 hover:bg-slate-900/60 px-1 py-0.5 rounded">
 										<span class="text-slate-600 select-none text-[11px] w-8 text-right shrink-0"><?php echo esc_html( $idx + 1 ); ?></span>
 										<span class="<?php echo esc_attr( $line_class ); ?> whitespace-pre-wrap break-all"><?php echo esc_html( $line ); ?></span>

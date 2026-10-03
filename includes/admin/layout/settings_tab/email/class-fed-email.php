@@ -377,7 +377,7 @@ if ( ! class_exists( 'FEDEmail' ) ) {
 				wp_send_json_error( array( 'message' => __( 'Please enter a valid "From" email address.', 'frontend-dashboard' ) ) );
 			}
 
-			$this->settings['via']                   = in_array( $via, array( 'WP_MAIL', 'SMTP' ), true ) ? $via : 'WP_MAIL';
+			$this->settings['via']                      = in_array( $via, array( 'WP_MAIL', 'SMTP' ), true ) ? $via : 'WP_MAIL';
 			$this->settings['credentials']['email']     = sanitize_email( $from_email );
 			$this->settings['credentials']['from_name'] = sanitize_text_field( $from_name );
 
@@ -428,7 +428,7 @@ if ( ! class_exists( 'FEDEmail' ) ) {
 			$subject = sprintf( __( '[%s] Test Email from Frontend Dashboard', 'frontend-dashboard' ), get_bloginfo( 'name' ) );
 			$via     = fed_get_data( 'via', $this->settings, 'WP_MAIL' );
 			/* translators: 1: site name, 2: routing method, 3: sender name, 4: sender email */
-			$body    = sprintf(
+			$body = sprintf(
 				__( "Hello!\n\nThis is a confirmation test email sent from Frontend Dashboard on %1\$s.\n\nRouting Method: %2\$s\nSender: %3\$s <%4\$s>\n\nIf you received this, your email configuration is working perfectly!", 'frontend-dashboard' ),
 				get_bloginfo( 'name' ),
 				esc_html( $via ),
@@ -438,8 +438,8 @@ if ( ! class_exists( 'FEDEmail' ) ) {
 
 			$headers = array( 'Content-Type: text/plain; charset=UTF-8' );
 
-			$mail_error = null;
-			$failed_handler = function( $wp_error ) use ( &$mail_error ) {
+			$mail_error     = null;
+			$failed_handler = function ( $wp_error ) use ( &$mail_error ) {
 				if ( is_wp_error( $wp_error ) ) {
 					$mail_error = $wp_error->get_error_message();
 				}
@@ -454,9 +454,11 @@ if ( ! class_exists( 'FEDEmail' ) ) {
 			if ( $sent ) {
 				/* translators: %s: recipient email address */
 				$success_msg = sprintf( __( 'Test email sent successfully to %s! Please check your inbox.', 'frontend-dashboard' ), esc_html( $recipient ) );
-				wp_send_json_success( array(
-					'message' => $success_msg,
-				) );
+				wp_send_json_success(
+					array(
+						'message' => $success_msg,
+					)
+				);
 			} else {
 				$msg = ! empty( $mail_error ) ? $mail_error : __( 'wp_mail() returned false. Please verify your SMTP host, port, username, password, and encryption protocol.', 'frontend-dashboard' );
 				wp_send_json_error( array( 'message' => $msg ) );

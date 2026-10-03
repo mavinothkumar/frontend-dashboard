@@ -31,12 +31,12 @@ class ShortcodeController {
 	 */
 	public function register_hooks( $loader ) {
 		// Register shortcodes directly
-		add_shortcode( 'fed_dashboard', [ $this, 'render_dashboard' ] );
-		add_shortcode( 'fed_login', [ $this, 'render_login' ] );
-		add_shortcode( 'fed_transactions', [ $this, 'render_transactions' ] );
-		add_shortcode( 'fed_user', [ $this, 'render_user_role' ] );
-		add_shortcode( 'fed_user_role', [ $this, 'render_user_role' ] );
-		add_shortcode( 'fed_author', [ $this, 'render_author' ] );
+		add_shortcode( 'fed_dashboard', array( $this, 'render_dashboard' ) );
+		add_shortcode( 'fed_login', array( $this, 'render_login' ) );
+		add_shortcode( 'fed_transactions', array( $this, 'render_transactions' ) );
+		add_shortcode( 'fed_user', array( $this, 'render_user_role' ) );
+		add_shortcode( 'fed_user_role', array( $this, 'render_user_role' ) );
+		add_shortcode( 'fed_author', array( $this, 'render_author' ) );
 
 		// Template redirect guards
 		$loader->add_action( 'template_redirect', $this, 'redirect_unauthenticated_dashboard' );
@@ -91,7 +91,7 @@ class ShortcodeController {
 	 */
 	public function render_user_role( $atts ) {
 		$role = shortcode_atts(
-			[ 'role' => 'subscriber' ],
+			array( 'role' => 'subscriber' ),
 			$atts,
 			'fed_user'
 		);

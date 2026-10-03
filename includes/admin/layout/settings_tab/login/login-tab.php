@@ -26,7 +26,8 @@ function fed_admin_login_tab() {
  */
 function fed_get_admin_login_options( $fed_login ) {
 	return apply_filters(
-		'fed_customize_admin_login_options', array(
+		'fed_customize_admin_login_options',
+		array(
 			'fed_admin_login_settings'      => array(
 				'icon'      => 'fa fa-cogs',
 				'name'      => __( 'Settings', 'frontend-dashboard' ),

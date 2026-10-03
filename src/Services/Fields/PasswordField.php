@@ -19,10 +19,12 @@ class PasswordField extends TextField {
 			$this->class_name = trim( $this->class_name . ' pr-10' );
 		}
 
-		$attrs = $this->build_attributes( [
-			'type'  => $this->type,
-			'value' => $this->value,
-		] );
+		$attrs = $this->build_attributes(
+			array(
+				'type'  => $this->type,
+				'value' => $this->value,
+			)
+		);
 
 		return sprintf(
 			'<div class="relative flex items-center w-full">

@@ -20,7 +20,7 @@ class PaymentRequest {
 	public $description;
 	public $metadata;
 
-	public function __construct( float $amount, string $currency = 'USD', int $userId = 0, string $customerEmail = '', string $description = '', array $metadata = [] ) {
+	public function __construct( float $amount, string $currency = 'USD', int $userId = 0, string $customerEmail = '', string $description = '', array $metadata = array() ) {
 		$this->amount        = $amount;
 		$this->currency      = strtoupper( $currency );
 		$this->userId        = $userId;

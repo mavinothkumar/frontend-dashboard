@@ -134,7 +134,7 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 				$group_by[ $menu_slug ][] = $profile;
 			} else {
 				// If assigned to a menu not in current eligible list, fallback to first eligible or profile
-				$first_key = ! empty( $menus_map ) ? array_keys( $menus_map )[0] : 'profile';
+				$first_key    = ! empty( $menus_map ) ? array_keys( $menus_map )[0] : 'profile';
 				$fallback_key = isset( $group_by['profile'] ) ? 'profile' : $first_key;
 				if ( isset( $group_by[ $fallback_key ] ) ) {
 					$group_by[ $fallback_key ][] = $profile;
@@ -392,7 +392,7 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 									</span>
 								</button>
 								<?php
-								$tab_idx++;
+								++$tab_idx;
 							endforeach;
 							?>
 						</div>
@@ -458,7 +458,19 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 								</div>
 
 								<div class="flex items-center gap-2 shrink-0">
-									<a href="<?php echo esc_url( add_query_arg( array( 'fed_action' => 'profile', 'menu' => $m_slug ), menu_page_url( 'fed_user_profile', false ) ) ); ?>" class="fed-open-add-field-modal fed-btn-primary h-9 inline-flex items-center justify-center gap-2 px-4 rounded-xl text-xs font-semibold transition-all active:scale-95 cursor-pointer shadow-xs no-underline" data-menu="<?php echo esc_attr( $m_slug ); ?>">
+									<a href="
+									<?php
+									echo esc_url(
+										add_query_arg(
+											array(
+												'fed_action' => 'profile',
+												'menu' => $m_slug,
+											),
+											menu_page_url( 'fed_user_profile', false )
+										)
+									);
+									?>
+												" class="fed-open-add-field-modal fed-btn-primary h-9 inline-flex items-center justify-center gap-2 px-4 rounded-xl text-xs font-semibold transition-all active:scale-95 cursor-pointer shadow-xs no-underline" data-menu="<?php echo esc_attr( $m_slug ); ?>">
 										<i class="fas fa-plus text-xs" style="color: #ffffff !important;"></i>
 										<span style="color: #ffffff !important;"><?php esc_html_e( 'Add Field', 'frontend-dashboard' ); ?></span>
 									</a>
@@ -472,21 +484,21 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 								<?php
 								if ( ! empty( $m_fields ) ) {
 									foreach ( $m_fields as $field ) {
-										$field_id     = (int) $field['id'];
-										$field_label  = esc_attr( $field['label_name'] );
-										$field_meta   = esc_attr( $field['input_meta'] );
-										$field_type   = esc_attr( $field['input_type'] );
-										$field_order  = (int) $field['input_order'];
-										$is_extra     = ! fed_check_field_is_belongs_to_extra( $field['input_meta'] );
-										$type_icon    = fed_get_profile_field_type_icon( $field['input_type'] );
+										$field_id    = (int) $field['id'];
+										$field_label = esc_attr( $field['label_name'] );
+										$field_meta  = esc_attr( $field['input_meta'] );
+										$field_type  = esc_attr( $field['input_type'] );
+										$field_order = (int) $field['input_order'];
+										$is_extra    = ! fed_check_field_is_belongs_to_extra( $field['input_meta'] );
+										$type_icon   = fed_get_profile_field_type_icon( $field['input_type'] );
 
 										// Required check
 										$is_required = ( true === $field['is_required'] || 'true' === $field['is_required'] || 'enable' === strtolower( $field['is_required'] ) );
 
 										// Visibility conditions
-										$is_reg_active   = ( 'Enable' === $field['show_register'] || 'enable' === $field['show_register'] || 'true' === $field['show_register'] || true === $field['show_register'] );
-										$is_dash_active  = ( 'Enable' === $field['show_dashboard'] || 'enable' === $field['show_dashboard'] || 'true' === $field['show_dashboard'] || true === $field['show_dashboard'] );
-										$is_prof_active  = ( 'Enable' === $field['show_user_profile'] || 'enable' === $field['show_user_profile'] || 'true' === $field['show_user_profile'] || true === $field['show_user_profile'] );
+										$is_reg_active  = ( 'Enable' === $field['show_register'] || 'enable' === $field['show_register'] || 'true' === $field['show_register'] || true === $field['show_register'] );
+										$is_dash_active = ( 'Enable' === $field['show_dashboard'] || 'enable' === $field['show_dashboard'] || 'true' === $field['show_dashboard'] || true === $field['show_dashboard'] );
+										$is_prof_active = ( 'Enable' === $field['show_user_profile'] || 'enable' === $field['show_user_profile'] || 'true' === $field['show_user_profile'] || true === $field['show_user_profile'] );
 
 										$edit_url = add_query_arg(
 											array(
@@ -618,7 +630,19 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 											printf( esc_html__( 'No form fields are currently assigned to "%s". Click below to add your first field.', 'frontend-dashboard' ), esc_html( $m_name ) );
 											?>
 										</p>
-										<a href="<?php echo esc_url( add_query_arg( array( 'fed_action' => 'profile', 'menu' => $m_slug ), menu_page_url( 'fed_user_profile', false ) ) ); ?>" class="fed-open-add-field-modal fed-btn-primary h-9 inline-flex items-center justify-center gap-1.5 px-4 rounded-xl font-semibold text-xs transition-all shadow-xs no-underline" data-menu="<?php echo esc_attr( $m_slug ); ?>">
+										<a href="
+										<?php
+										echo esc_url(
+											add_query_arg(
+												array(
+													'fed_action' => 'profile',
+													'menu' => $m_slug,
+												),
+												menu_page_url( 'fed_user_profile', false )
+											)
+										);
+										?>
+													" class="fed-open-add-field-modal fed-btn-primary h-9 inline-flex items-center justify-center gap-1.5 px-4 rounded-xl font-semibold text-xs transition-all shadow-xs no-underline" data-menu="<?php echo esc_attr( $m_slug ); ?>">
 											<i class="fas fa-plus text-xs" style="color: #ffffff !important;"></i>
 											<span style="color: #ffffff !important;"><?php esc_html_e( 'Add Field to this Menu', 'frontend-dashboard' ); ?></span>
 										</a>
@@ -644,7 +668,7 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 							</div>
 						</div>
 						<?php
-						$pane_idx++;
+						++$pane_idx;
 					endforeach;
 					?>
 				</div>

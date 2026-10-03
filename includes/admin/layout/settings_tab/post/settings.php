@@ -61,7 +61,8 @@ function fed_admin_post_settings_tab( $fed_admin_options ) {
 									'name'    => 'settings[fed_post_status]',
 									'value'   => $fed_post_status,
 									'options' => $post_status,
-								), 'select'
+								),
+								'select'
 							);
 							?>
 						</div>
@@ -80,7 +81,8 @@ function fed_admin_post_settings_tab( $fed_admin_options ) {
 									'name'    => 'settings[fed_editor_type]',
 									'value'   => $fed_editor_type,
 									'options' => $editor_types,
-								), 'select'
+								),
+								'select'
 							);
 							?>
 						</div>

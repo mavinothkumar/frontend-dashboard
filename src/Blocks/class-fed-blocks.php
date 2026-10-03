@@ -48,7 +48,7 @@ class FED_Blocks {
 	/**
 	 * Register Frontend Dashboard Block Category.
 	 *
-	 * @param array                   $categories Categories list.
+	 * @param array                    $categories Categories list.
 	 * @param \WP_Block_Editor_Context $context    Context.
 	 * @return array
 	 */
@@ -148,10 +148,22 @@ class FED_Blocks {
 					'align' => array( 'wide', 'full' ),
 				),
 				'attributes'      => array(
-					'align'       => array( 'type' => 'string', 'default' => 'full' ),
-					'theme'       => array( 'type' => 'string', 'default' => 'modern' ),
-					'layout'      => array( 'type' => 'string', 'default' => 'full' ),
-					'default_tab' => array( 'type' => 'string', 'default' => '' ),
+					'align'       => array(
+						'type'    => 'string',
+						'default' => 'full',
+					),
+					'theme'       => array(
+						'type'    => 'string',
+						'default' => 'modern',
+					),
+					'layout'      => array(
+						'type'    => 'string',
+						'default' => 'full',
+					),
+					'default_tab' => array(
+						'type'    => 'string',
+						'default' => '',
+					),
 				),
 				'render_callback' => array( $this, 'render_dashboard_block' ),
 			)
@@ -170,10 +182,22 @@ class FED_Blocks {
 					'align' => array( 'wide', 'full' ),
 				),
 				'attributes'      => array(
-					'align'        => array( 'type' => 'string', 'default' => '' ),
-					'view'         => array( 'type' => 'string', 'default' => 'tabs' ),
-					'redirect_url' => array( 'type' => 'string', 'default' => '' ),
-					'default_tab'  => array( 'type' => 'string', 'default' => 'login' ),
+					'align'        => array(
+						'type'    => 'string',
+						'default' => '',
+					),
+					'view'         => array(
+						'type'    => 'string',
+						'default' => 'tabs',
+					),
+					'redirect_url' => array(
+						'type'    => 'string',
+						'default' => '',
+					),
+					'default_tab'  => array(
+						'type'    => 'string',
+						'default' => 'login',
+					),
 				),
 				'render_callback' => array( $this, 'render_login_block' ),
 			)
@@ -192,9 +216,18 @@ class FED_Blocks {
 					'align' => array( 'wide', 'full' ),
 				),
 				'attributes'      => array(
-					'align'    => array( 'type' => 'string', 'default' => 'full' ),
-					'per_page' => array( 'type' => 'number', 'default' => 10 ),
-					'status'   => array( 'type' => 'string', 'default' => '' ),
+					'align'    => array(
+						'type'    => 'string',
+						'default' => 'full',
+					),
+					'per_page' => array(
+						'type'    => 'number',
+						'default' => 10,
+					),
+					'status'   => array(
+						'type'    => 'string',
+						'default' => '',
+					),
 				),
 				'render_callback' => array( $this, 'render_transactions_block' ),
 			)
@@ -213,9 +246,18 @@ class FED_Blocks {
 					'align' => array( 'wide', 'full' ),
 				),
 				'attributes'      => array(
-					'align'         => array( 'type' => 'string', 'default' => '' ),
-					'role'          => array( 'type' => 'string', 'default' => 'subscriber' ),
-					'allowed_roles' => array( 'type' => 'array', 'default' => array( 'subscriber' ) ),
+					'align'         => array(
+						'type'    => 'string',
+						'default' => '',
+					),
+					'role'          => array(
+						'type'    => 'string',
+						'default' => 'subscriber',
+					),
+					'allowed_roles' => array(
+						'type'    => 'array',
+						'default' => array( 'subscriber' ),
+					),
 				),
 				'render_callback' => array( $this, 'render_user_role_block' ),
 			)
@@ -234,8 +276,14 @@ class FED_Blocks {
 					'align' => array( 'wide', 'full' ),
 				),
 				'attributes'      => array(
-					'align'  => array( 'type' => 'string', 'default' => '' ),
-					'layout' => array( 'type' => 'string', 'default' => 'grid' ),
+					'align'  => array(
+						'type'    => 'string',
+						'default' => '',
+					),
+					'layout' => array(
+						'type'    => 'string',
+						'default' => 'grid',
+					),
 				),
 				'render_callback' => array( $this, 'render_social_connect_block' ),
 			)
@@ -254,9 +302,18 @@ class FED_Blocks {
 					'align' => array( 'wide', 'full' ),
 				),
 				'attributes'      => array(
-					'align'    => array( 'type' => 'string', 'default' => 'full' ),
-					'per_page' => array( 'type' => 'number', 'default' => 15 ),
-					'roles'    => array( 'type' => 'string', 'default' => '' ),
+					'align'    => array(
+						'type'    => 'string',
+						'default' => 'full',
+					),
+					'per_page' => array(
+						'type'    => 'number',
+						'default' => 15,
+					),
+					'roles'    => array(
+						'type'    => 'string',
+						'default' => '',
+					),
 				),
 				'render_callback' => array( $this, 'render_user_management_block' ),
 			)
@@ -386,7 +443,10 @@ class FED_Blocks {
 		}
 
 		$roles = array(
-			array( 'label' => __( 'Guests Only (Logged-Out)', 'frontend-dashboard' ), 'value' => 'guest' ),
+			array(
+				'label' => __( 'Guests Only (Logged-Out)', 'frontend-dashboard' ),
+				'value' => 'guest',
+			),
 		);
 
 		foreach ( $wp_roles->get_names() as $key => $name ) {

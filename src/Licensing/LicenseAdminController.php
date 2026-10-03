@@ -64,14 +64,17 @@ class LicenseAdminController {
 			$status    = ! empty( $license['status'] ) ? $license['status'] : 'inactive';
 			$is_active = ( 'active' === $status );
 
-			$addon_data = array_merge( $addon, array(
-				'license'   => $license,
-				'status'    => $status,
-				'is_active' => $is_active,
-			) );
+			$addon_data = array_merge(
+				$addon,
+				array(
+					'license'   => $license,
+					'status'    => $status,
+					'is_active' => $is_active,
+				)
+			);
 
 			if ( $is_active ) {
-				$active_licenses++;
+				++$active_licenses;
 				$active_addons[ $slug ] = $addon_data;
 			} else {
 				$inactive_addons[ $slug ] = $addon_data;
@@ -768,10 +771,10 @@ class LicenseAdminController {
 				<div class="fed-lic-list-panel">
 					<?php
 					foreach ( $inactive_addons as $slug => $addon ) :
-						$license   = $addon['license'];
-						$key       = ! empty( $license['key'] ) ? $license['key'] : '';
-						$status    = $addon['status'];
-						$message   = ! empty( $license['message'] ) ? $license['message'] : '';
+						$license = $addon['license'];
+						$key     = ! empty( $license['key'] ) ? $license['key'] : '';
+						$status  = $addon['status'];
+						$message = ! empty( $license['message'] ) ? $license['message'] : '';
 						?>
 						<div class="fed-lic-row" id="fed-card-<?php echo esc_attr( $slug ); ?>" data-slug="<?php echo esc_attr( $slug ); ?>" data-name="<?php echo esc_attr( strtolower( $addon['name'] ) ); ?>">
 							<!-- Col 1: Brand Info -->

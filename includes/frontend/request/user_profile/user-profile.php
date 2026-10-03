@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Save the User Profile data
  */
 
-//add_action( 'template_redirect', 'fed_store_user_profile_save' );
+// add_action( 'template_redirect', 'fed_store_user_profile_save' );
 add_action( 'admin_post_fed_save_user_profile', 'fed_store_user_profile_save' );
 add_action( 'admin_post_nopriv_fed_save_user_profile', 'fed_block_the_action' );
 
@@ -21,8 +21,8 @@ add_action( 'admin_post_nopriv_fed_save_user_profile', 'fed_block_the_action' );
  */
 function fed_store_user_profile_save() {
 	// phpcs:ignore WordPress.Security.NonceVerification.Missing
-	$post_payload    = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
-	$message = 'Something Went Wrong';
+	$post_payload = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
+	$message      = 'Something Went Wrong';
 
 	if (
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
@@ -67,9 +67,12 @@ function fed_store_user_profile_save() {
 		fed_set_alert( 'fed_profile_save_message', $message );
 	}
 
-	wp_safe_redirect( add_query_arg( array( 'fed_nonce' => wp_create_nonce( 'fed_nonce' ) ),
-		$post_payload['_wp_http_referer'] ) );
-
+	wp_safe_redirect(
+		add_query_arg(
+			array( 'fed_nonce' => wp_create_nonce( 'fed_nonce' ) ),
+			$post_payload['_wp_http_referer']
+		)
+	);
 }
 
 /**
@@ -124,14 +127,12 @@ function fed_process_update_user_profile( $post ) {
 			} else {
 				$new_value[ $site_option ] = '';
 			}
-		} else {
-			if ( array_key_exists( $site_option, $post ) ) {
+		} elseif ( array_key_exists( $site_option, $post ) ) {
 				$new_value[ $site_option ] = is_array( $post[ $site_option ] ) ? serialize(
 					$post[ $site_option ]
 				) : fed_sanitize_text_field( $post[ $site_option ] );
-			} else {
-				$new_value[ $site_option ] = $user_obj->has_prop( $site_option ) ? $user_obj->get( $site_option ) : '';
-			}
+		} else {
+			$new_value[ $site_option ] = $user_obj->has_prop( $site_option ) ? $user_obj->get( $site_option ) : '';
 		}
 	}
 
@@ -214,4 +215,3 @@ function fed_process_update_user_profile( $post ) {
 	// Escape data pulled from DB.
 	return add_magic_quotes( $new_value );
 }
-

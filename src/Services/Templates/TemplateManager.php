@@ -54,8 +54,8 @@ class TemplateManager {
 			$loader->add_filter( 'frontend-dashboard_template_paths', $this, 'filter_template_paths', 20 );
 			$loader->add_action( 'widgets_init', $this, 'register_dashboard_sidebars' );
 		} else {
-			add_filter( 'frontend-dashboard_template_paths', [ $this, 'filter_template_paths' ], 20 );
-			add_action( 'widgets_init', [ $this, 'register_dashboard_sidebars' ] );
+			add_filter( 'frontend-dashboard_template_paths', array( $this, 'filter_template_paths' ), 20 );
+			add_action( 'widgets_init', array( $this, 'register_dashboard_sidebars' ) );
 		}
 	}
 
@@ -64,7 +64,7 @@ class TemplateManager {
 	 */
 	public function register_dashboard_sidebars() {
 		register_sidebar(
-			[
+			array(
 				'name'          => __( 'FED Right Sidebar', 'frontend-dashboard' ),
 				'id'            => 'fed_dashboard_right_sidebar',
 				'description'   => __( 'The Frontend Dashboard Right Sidebar widget area for custom widgets and announcements.', 'frontend-dashboard' ),
@@ -72,7 +72,7 @@ class TemplateManager {
 				'after_widget'  => '</aside>',
 				'before_title'  => '<h3 class="widget-title text-sm font-bold text-slate-800 mb-2">',
 				'after_title'   => '</h3>',
-			]
+			)
 		);
 	}
 
@@ -89,8 +89,8 @@ class TemplateManager {
 			return $this->templates;
 		}
 
-		$core_templates = [
-			'default' => [
+		$core_templates = array(
+			'default' => array(
 				'id'          => 'default',
 				'name'        => __( 'Modern App Shell (Default)', 'frontend-dashboard' ),
 				'description' => __( 'Enterprise full-height sticky sidebar with fluid content canvas, live color theming, and responsive layout.', 'frontend-dashboard' ),
@@ -100,8 +100,8 @@ class TemplateManager {
 				'path'        => BC_FED_PLUGIN_DIR . '/templates/',
 				'thumbnail'   => plugins_url( '/assets/admin/images/templates/default.jpg', BC_FED_PLUGIN ),
 				'badge'       => __( 'Core Native', 'frontend-dashboard' ),
-			],
-		];
+			),
+		);
 
 		$this->templates = apply_filters( 'fed_registered_dashboard_templates', $core_templates );
 
@@ -114,7 +114,7 @@ class TemplateManager {
 	 * @return string
 	 */
 	public function get_active_template_id(): string {
-		$upl_settings = get_option( 'fed_admin_settings_upl', [] );
+		$upl_settings = get_option( 'fed_admin_settings_upl', array() );
 		$model        = isset( $upl_settings['settings']['fed_upl_template_model'] )
 			? sanitize_text_field( $upl_settings['settings']['fed_upl_template_model'] )
 			: self::DEFAULT_TEMPLATE;

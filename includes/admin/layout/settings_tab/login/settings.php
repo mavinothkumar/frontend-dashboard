@@ -165,4 +165,3 @@ function fed_admin_login_settings_tab( $fed_login_settings ) {
 
 	fed_common_simple_layout( $array );
 }
-

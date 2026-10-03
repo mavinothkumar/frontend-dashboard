@@ -15,11 +15,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class AuditLogger {
 
-	const LEVEL_DEBUG     = 'debug';
-	const LEVEL_INFO      = 'info';
-	const LEVEL_WARNING   = 'warning';
-	const LEVEL_ERROR     = 'error';
-	const LEVEL_CRITICAL  = 'critical';
+	const LEVEL_DEBUG    = 'debug';
+	const LEVEL_INFO     = 'info';
+	const LEVEL_WARNING  = 'warning';
+	const LEVEL_ERROR    = 'error';
+	const LEVEL_CRITICAL = 'critical';
 
 	/**
 	 * Log an event to both database and file storage.
@@ -30,14 +30,14 @@ class AuditLogger {
 	 * @param string $channel Category (e.g. 'auth', 'payment', 'system', 'security', 'cron').
 	 * @return AuditLog|null
 	 */
-	public function log( string $level, string $message, array $context = [], string $channel = 'system' ): ?AuditLog {
+	public function log( string $level, string $message, array $context = array(), string $channel = 'system' ): ?AuditLog {
 		$userId    = get_current_user_id() ?: 0;
 		$user      = $userId ? get_user_by( 'id', $userId ) : null;
 		$ipAddress = $this->getClientIp();
 		$userAgent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? substr( sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ), 0, 255 ) : '';
 
 		$status = 'info';
-		if ( in_array( $level, [ 'warning', 'error', 'critical' ], true ) ) {
+		if ( in_array( $level, array( 'warning', 'error', 'critical' ), true ) ) {
 			$status = ( 'warning' === $level ) ? 'warning' : 'error';
 		}
 
@@ -48,23 +48,25 @@ class AuditLogger {
 
 		// 1. Write to unified database audit log
 		try {
-			$log = AuditLog::create( [
-				'user_id'           => $userId,
-				'user_login'        => $user ? $user->user_login : ( 0 === $userId ? 'System' : 'Guest' ),
-				'user_email'        => $user ? $user->user_email : '',
-				'user_display_name' => $user ? $user->display_name : ( 0 === $userId ? 'System / Cron' : 'Guest' ),
-				'channel'           => $channel,
-				'level'             => $level,
-				'action'            => $message,
-				'message'           => $message,
-				'context'           => $context,
-				'action_type'       => $channel,
-				'action_title'      => $message,
-				'description'       => $description,
-				'status'            => $status,
-				'ip_address'        => $ipAddress,
-				'user_agent'        => $userAgent,
-			] );
+			$log = AuditLog::create(
+				array(
+					'user_id'           => $userId,
+					'user_login'        => $user ? $user->user_login : ( 0 === $userId ? 'System' : 'Guest' ),
+					'user_email'        => $user ? $user->user_email : '',
+					'user_display_name' => $user ? $user->display_name : ( 0 === $userId ? 'System / Cron' : 'Guest' ),
+					'channel'           => $channel,
+					'level'             => $level,
+					'action'            => $message,
+					'message'           => $message,
+					'context'           => $context,
+					'action_type'       => $channel,
+					'action_title'      => $message,
+					'description'       => $description,
+					'status'            => $status,
+					'ip_address'        => $ipAddress,
+					'user_agent'        => $userAgent,
+				)
+			);
 		} catch ( \Throwable $e ) {
 			$log = null;
 		}
@@ -75,19 +77,19 @@ class AuditLogger {
 		return $log;
 	}
 
-	public function info( string $message, array $context = [], string $channel = 'system' ) {
+	public function info( string $message, array $context = array(), string $channel = 'system' ) {
 		return $this->log( self::LEVEL_INFO, $message, $context, $channel );
 	}
 
-	public function warning( string $message, array $context = [], string $channel = 'system' ) {
+	public function warning( string $message, array $context = array(), string $channel = 'system' ) {
 		return $this->log( self::LEVEL_WARNING, $message, $context, $channel );
 	}
 
-	public function error( string $message, array $context = [], string $channel = 'system' ) {
+	public function error( string $message, array $context = array(), string $channel = 'system' ) {
 		return $this->log( self::LEVEL_ERROR, $message, $context, $channel );
 	}
 
-	public function critical( string $message, array $context = [], string $channel = 'security' ) {
+	public function critical( string $message, array $context = array(), string $channel = 'security' ) {
 		return $this->log( self::LEVEL_CRITICAL, $message, $context, $channel );
 	}
 
@@ -105,9 +107,9 @@ class AuditLogger {
 			file_put_contents( $logDir . '/.htaccess', 'Deny from all' );
 		}
 
-		$logFile = sprintf( '%s/fed-%s-%s.log', $logDir, $channel, gmdate( 'Y-m-d' ) );
+		$logFile    = sprintf( '%s/fed-%s-%s.log', $logDir, $channel, gmdate( 'Y-m-d' ) );
 		$contextStr = ! empty( $context ) ? ' ' . wp_json_encode( $context ) : '';
-		$line = sprintf(
+		$line       = sprintf(
 			"[%s UTC] [%s] [%s] User:%d IP:%s - %s%s\n",
 			gmdate( 'Y-m-d H:i:s' ),
 			strtoupper( $level ),

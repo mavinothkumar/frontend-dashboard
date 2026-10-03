@@ -22,7 +22,7 @@ class TextareaField extends BaseField {
 			$rows = $this->get_data( 'row', $this->attributes );
 		}
 
-		$extra_attrs = [];
+		$extra_attrs = array();
 		if ( ! empty( $rows ) ) {
 			$extra_attrs['rows'] = (int) $rows;
 		}

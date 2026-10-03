@@ -23,11 +23,9 @@ function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
 
 	if ( 'profile' === $action ) {
 		$table_name = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
-	}
-	elseif ( 'post' === $action ) {
+	} elseif ( 'post' === $action ) {
 		$table_name = $wpdb->prefix . BC_FED_TABLE_POST;
-	}
-	else {
+	} else {
 		wp_send_json_error( array( 'message' => __( 'Hey, you are trying something naughty', 'frontend-dashboard' ) ) );
 	}
 
@@ -61,7 +59,8 @@ function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
 						strtoupper(
 							fed_convert_this_to_that(
 								$duplicate->input_type,
-								'_', ' '
+								'_',
+								' '
 							)
 						)
 					),
@@ -83,8 +82,7 @@ function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
 			);
 		}
 		wp_send_json_success( array( 'message' => $request['label_name'] . ' has been successfully updated' ) );
-	}
-	else {
+	} else {
 		/**
 		 * Check for input meta already exist
 		 */
@@ -108,7 +106,8 @@ function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
 					'message' => sprintf(
 					/* Translators: %1$s : Label Name, %2$s : Error Message 1, %3$s : Error Message 2  */
 						__(
-							'Sorry, you have previously added %1$s  with input type %2$s on %3$s', 'frontend-dashboard'
+							'Sorry, you have previously added %1$s  with input type %2$s on %3$s',
+							'frontend-dashboard'
 						),
 						esc_attr(
 							strtoupper(
@@ -164,7 +163,7 @@ function fed_admin_menu_sorting() {
 	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request_post = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	$request_get  = isset( $_GET ) ? fed_sanitize_text_field( wp_unslash( $_GET ) ) : array();
+	$request_get = isset( $_GET ) ? fed_sanitize_text_field( wp_unslash( $_GET ) ) : array();
 
 	$table_key = isset( $request_post['table'] ) ? $request_post['table'] : ( isset( $request_get['table'] ) ? $request_get['table'] : 'fed_menu' );
 	$tables    = fed_get_tables();

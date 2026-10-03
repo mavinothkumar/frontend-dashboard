@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @param array $fed_admin_options
  */
-function fed_admin_user_profile_templates_tab( $fed_admin_options = [] ) {
+function fed_admin_user_profile_templates_tab( $fed_admin_options = array() ) {
 	$template_manager = \FED\Services\Templates\TemplateManager::instance();
 	$registered       = $template_manager->get_registered_templates();
 	$active_id        = $template_manager->get_active_template_id();

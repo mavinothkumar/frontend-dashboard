@@ -29,7 +29,7 @@ function fed_get_dashboard_menu_items() {
 	}
 
 	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
-	$menus             = $wpdb->get_results( "SELECT * FROM `{$safe_table}` ORDER BY CAST(menu_order AS UNSIGNED) ASC, id ASC", ARRAY_A );
+	$menus = $wpdb->get_results( "SELECT * FROM `{$safe_table}` ORDER BY CAST(menu_order AS UNSIGNED) ASC, id ASC", ARRAY_A );
 	// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 	$user_roles        = fed_get_user_roles();
 	$total_roles_count = count( $user_roles );

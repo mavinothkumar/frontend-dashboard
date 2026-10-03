@@ -66,30 +66,30 @@ class UserProfileController {
 				: true;
 
 			if ( $validation instanceof WP_Error ) {
-				$message = [
+				$message = array(
 					'type'    => 'danger',
 					'message' => implode( '<br>', $validation->get_error_messages() ),
-				];
+				);
 			} else {
 				$user_data = $this->model->process_update_user_profile( $post_payload );
 
 				if ( $user_data instanceof WP_Error ) {
-					$message = [
+					$message = array(
 						'type'    => 'danger',
 						'message' => implode( '<br>', $user_data->get_error_messages() ),
-					];
+					);
 				} else {
 					$saved = $this->model->save( $user_data );
 					if ( is_wp_error( $saved ) ) {
-						$message = [
+						$message = array(
 							'type'    => 'danger',
 							'message' => implode( '<br>', $saved->get_error_messages() ),
-						];
+						);
 					} else {
-						$message = [
+						$message = array(
 							'type'    => 'success',
 							'message' => __( 'Successfully Updated', 'frontend-dashboard' ),
-						];
+						);
 						do_action( 'fed_user_profile_updated', get_current_user_id(), $post_payload, $user_data );
 					}
 				}
@@ -110,7 +110,7 @@ class UserProfileController {
 
 		wp_safe_redirect(
 			add_query_arg(
-				[ 'fed_nonce' => wp_create_nonce( 'fed_nonce' ) ],
+				array( 'fed_nonce' => wp_create_nonce( 'fed_nonce' ) ),
 				$redirect_url
 			)
 		);

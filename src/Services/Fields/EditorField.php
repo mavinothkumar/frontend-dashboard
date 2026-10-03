@@ -30,28 +30,28 @@ class EditorField extends BaseField {
 			$editor_html = fed_get_wp_editor(
 				$this->value,
 				$this->name,
-				[
+				array(
 					'textarea_name' => $this->name,
 					'media_buttons' => $media_buttons,
 					'textarea_rows' => $textarea_rows,
 					'editor_height' => $editor_height,
 					'editor_class'  => $this->class_name,
 					'quicktags'     => $quicktags,
-				]
+				)
 			);
 		} else {
 			ob_start();
 			wp_editor(
 				$this->value,
 				sanitize_key( $this->name ),
-				[
+				array(
 					'textarea_name' => $this->name,
 					'media_buttons' => $media_buttons,
 					'textarea_rows' => $textarea_rows,
 					'editor_height' => $editor_height,
 					'editor_class'  => $this->class_name,
 					'quicktags'     => $quicktags,
-				]
+				)
 			);
 			$editor_html = ob_get_clean();
 		}

@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Logout Process.
  */
-function fed_logout_process($menu_item) {
+function fed_logout_process( $menu_item ) {
 	$index  = 'logout';
 	$logout = fed_get_logout_menu();
 	?>

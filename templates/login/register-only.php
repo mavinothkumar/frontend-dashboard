@@ -67,7 +67,8 @@ do_action( 'fed_before_register_only_form' );
 										<a href="<?php echo esc_url( $login ); ?>" class="text-blue-600 hover:text-blue-500 font-medium">
 											<?php
 											esc_attr_e(
-												'Already have an account?', 'frontend-dashboard'
+												'Already have an account?',
+												'frontend-dashboard'
 											);
 											?>
 										</a>

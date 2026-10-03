@@ -27,7 +27,6 @@ function fed_fetch_user_profile_by_registration() {
 	}
 
 	return $result;
-
 }
 
 /**
@@ -279,8 +278,9 @@ function fed_role_with_pricing_flat( $fed_admin_login = '' ) {
 			$currency = $fed_payment_options['settings']['currency_type'];
 
 			$new_array[ $index ] = ( null !== $price && $currency ) ? $role . ' ' . $currency . ' ' . $price . fed_convert_to_price(
-					$cycle, $custom
-				) : $role;
+				$cycle,
+				$custom
+			) : $role;
 		}
 
 		return $new_array;

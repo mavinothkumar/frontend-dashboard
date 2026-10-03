@@ -32,13 +32,13 @@ if ( ! class_exists( 'FEDPaymentDashboard' ) ) {
 				'currency_symbol'      => '$',
 			);
 
-			$transactions = function_exists( 'fed_get_transactions' ) ? fed_get_transactions() : array();
-			$recent_txns  = ! empty( $transactions ) ? array_slice( $transactions, 0, 5 ) : array();
-			$gateways     = function_exists( 'fed_get_registered_gateways' ) ? fed_get_registered_gateways() : array();
-			$settings     = get_option( 'fed_payment_settings', array() );
+			$transactions  = function_exists( 'fed_get_transactions' ) ? fed_get_transactions() : array();
+			$recent_txns   = ! empty( $transactions ) ? array_slice( $transactions, 0, 5 ) : array();
+			$gateways      = function_exists( 'fed_get_registered_gateways' ) ? fed_get_registered_gateways() : array();
+			$settings      = get_option( 'fed_payment_settings', array() );
 			$currency_code = isset( $settings['settings']['currency'] ) ? $settings['settings']['currency'] : 'USD';
-			$is_sandbox   = isset( $settings['settings']['test_mode'] ) && 'enable' === $settings['settings']['test_mode'];
-			
+			$is_sandbox    = isset( $settings['settings']['test_mode'] ) && 'enable' === $settings['settings']['test_mode'];
+
 			$success_rate = 100;
 			if ( ! empty( $metrics['total_transactions'] ) ) {
 				$success_rate = round( ( $metrics['completed_txns'] / $metrics['total_transactions'] ) * 100, 1 );
@@ -79,7 +79,7 @@ if ( ! class_exists( 'FEDPaymentDashboard' ) ) {
 							<div style="font-size: 11.5px; color: #64748b; font-weight: 500; margin-top: 2px;">
 								<?php
 								/* translators: %d: Number of completed transactions */
-								echo sprintf( esc_html__( '%d completed', 'frontend-dashboard' ), intval( $metrics['completed_txns'] ) );
+								printf( esc_html__( '%d completed', 'frontend-dashboard' ), intval( $metrics['completed_txns'] ) );
 								?>
 							</div>
 						</div>
@@ -118,7 +118,7 @@ if ( ! class_exists( 'FEDPaymentDashboard' ) ) {
 							<div style="font-size: 11.5px; color: #64748b; font-weight: 500; margin-top: 2px;">
 								<?php
 								/* translators: %d: Number of pending transactions */
-								echo sprintf( esc_html__( '%d pending / review', 'frontend-dashboard' ), intval( $metrics['pending_txns'] ) );
+								printf( esc_html__( '%d pending / review', 'frontend-dashboard' ), intval( $metrics['pending_txns'] ) );
 								?>
 							</div>
 						</div>
@@ -182,27 +182,27 @@ if ( ! class_exists( 'FEDPaymentDashboard' ) ) {
 										<?php
 										if ( ! empty( $recent_txns ) ) {
 											foreach ( $recent_txns as $txn ) {
-												$status_raw = strtolower( fed_get_data( 'status', $txn, 'pending' ) );
-												$status_bg = '#fef3c7';
+												$status_raw   = strtolower( fed_get_data( 'status', $txn, 'pending' ) );
+												$status_bg    = '#fef3c7';
 												$status_color = '#b45309';
 												$status_label = __( 'Pending', 'frontend-dashboard' );
 
 												if ( in_array( $status_raw, array( 'completed', 'paid', 'success', 'succeeded', 'active' ), true ) ) {
-													$status_bg = '#dcfce7';
+													$status_bg    = '#dcfce7';
 													$status_color = '#15803d';
 													$status_label = __( 'Completed', 'frontend-dashboard' );
 												} elseif ( in_array( $status_raw, array( 'refunded', 'cancelled', 'failed' ), true ) ) {
-													$status_bg = '#fee2e2';
+													$status_bg    = '#fee2e2';
 													$status_color = '#b91c1c';
 													$status_label = ucfirst( $status_raw );
 												}
 
 												$user_name = fed_get_data( 'display_name', $txn, fed_get_data( 'user_login', $txn, 'User #' . fed_get_data( 'user_id', $txn ) ) );
-												$txn_id = fed_get_data( 'transaction_id', $txn, 'TXN-' . fed_get_data( 'id', $txn ) );
-												$gateway = fed_get_data( 'payment_source', $txn, 'PayPal' );
-												$amount = floatval( fed_get_data( 'amount', $txn, 0 ) );
-												$currency = fed_get_data( 'currency', $txn, 'USD' );
-												$created = fed_get_data( 'created', $txn, '-' );
+												$txn_id    = fed_get_data( 'transaction_id', $txn, 'TXN-' . fed_get_data( 'id', $txn ) );
+												$gateway   = fed_get_data( 'payment_source', $txn, 'PayPal' );
+												$amount    = floatval( fed_get_data( 'amount', $txn, 0 ) );
+												$currency  = fed_get_data( 'currency', $txn, 'USD' );
+												$created   = fed_get_data( 'created', $txn, '-' );
 												?>
 												<tr style="border-bottom: 1px solid #f1f5f9;">
 													<td style="padding: 12px 18px;">
@@ -287,7 +287,7 @@ if ( ! class_exists( 'FEDPaymentDashboard' ) ) {
 								<?php
 								$shown_gateways = array_slice( $gateways, 0, 4 );
 								foreach ( $shown_gateways as $g ) :
-									$is_act = ! empty( $g['is_active'] );
+									$is_act  = ! empty( $g['is_active'] );
 									$is_inst = ! empty( $g['is_installed'] );
 									?>
 									<div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 10px; background: #f8fafc; border-radius: 8px;">
@@ -310,25 +310,73 @@ if ( ! class_exists( 'FEDPaymentDashboard' ) ) {
 							</h4>
 							<ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px;">
 								<li>
-									<a href="<?php echo esc_url( fed_menu_page_url( 'fed_payments', array( 'menu' => 'transactions', 'submenu' => 'FEDTransaction@add_new_transaction' ) ) ); ?>" style="display: flex; align-items: center; gap: 10px; padding: 9px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; color: #1e293b; font-size: 12.5px; font-weight: 600; text-decoration: none; transition: background 0.15s ease;">
+									<a href="
+									<?php
+									echo esc_url(
+										fed_menu_page_url(
+											'fed_payments',
+											array(
+												'menu'    => 'transactions',
+												'submenu' => 'FEDTransaction@add_new_transaction',
+											)
+										)
+									);
+									?>
+												" style="display: flex; align-items: center; gap: 10px; padding: 9px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; color: #1e293b; font-size: 12.5px; font-weight: 600; text-decoration: none; transition: background 0.15s ease;">
 										<i class="fas fa-plus-circle" style="color: #10b981;"></i>
 										<span><?php esc_html_e( 'Record Manual Transaction', 'frontend-dashboard' ); ?></span>
 									</a>
 								</li>
 								<li>
-									<a href="<?php echo esc_url( fed_menu_page_url( 'fed_payments', array( 'menu' => 'subscriptions', 'submenu' => 'FEDSubscription@plans' ) ) ); ?>" style="display: flex; align-items: center; gap: 10px; padding: 9px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; color: #1e293b; font-size: 12.5px; font-weight: 600; text-decoration: none; transition: background 0.15s ease;">
+									<a href="
+									<?php
+									echo esc_url(
+										fed_menu_page_url(
+											'fed_payments',
+											array(
+												'menu'    => 'subscriptions',
+												'submenu' => 'FEDSubscription@plans',
+											)
+										)
+									);
+									?>
+												" style="display: flex; align-items: center; gap: 10px; padding: 9px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; color: #1e293b; font-size: 12.5px; font-weight: 600; text-decoration: none; transition: background 0.15s ease;">
 										<i class="fas fa-tags" style="color: #0284c7;"></i>
 										<span><?php esc_html_e( 'Configure Subscription Plans', 'frontend-dashboard' ); ?></span>
 									</a>
 								</li>
 								<li>
-									<a href="<?php echo esc_url( fed_menu_page_url( 'fed_payments', array( 'menu' => 'gateways', 'submenu' => 'FEDPayment@settings' ) ) ); ?>" style="display: flex; align-items: center; gap: 10px; padding: 9px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; color: #1e293b; font-size: 12.5px; font-weight: 600; text-decoration: none; transition: background 0.15s ease;">
+									<a href="
+									<?php
+									echo esc_url(
+										fed_menu_page_url(
+											'fed_payments',
+											array(
+												'menu'    => 'gateways',
+												'submenu' => 'FEDPayment@settings',
+											)
+										)
+									);
+									?>
+												" style="display: flex; align-items: center; gap: 10px; padding: 9px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; color: #1e293b; font-size: 12.5px; font-weight: 600; text-decoration: none; transition: background 0.15s ease;">
 										<i class="fas fa-sliders-h" style="color: #64748b;"></i>
 										<span><?php esc_html_e( 'Global Currency & Mode Settings', 'frontend-dashboard' ); ?></span>
 									</a>
 								</li>
 								<li>
-									<a href="<?php echo esc_url( fed_menu_page_url( 'fed_payments', array( 'menu' => 'invoice', 'submenu' => 'FEDInvoice@details' ) ) ); ?>" style="display: flex; align-items: center; gap: 10px; padding: 9px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; color: #1e293b; font-size: 12.5px; font-weight: 600; text-decoration: none; transition: background 0.15s ease;">
+									<a href="
+									<?php
+									echo esc_url(
+										fed_menu_page_url(
+											'fed_payments',
+											array(
+												'menu'    => 'invoice',
+												'submenu' => 'FEDInvoice@details',
+											)
+										)
+									);
+									?>
+									" style="display: flex; align-items: center; gap: 10px; padding: 9px 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; color: #1e293b; font-size: 12.5px; font-weight: 600; text-decoration: none; transition: background 0.15s ease;">
 										<i class="fas fa-file-invoice" style="color: #8b5cf6;"></i>
 										<span><?php esc_html_e( 'Company Invoice & Receipts', 'frontend-dashboard' ); ?></span>
 									</a>

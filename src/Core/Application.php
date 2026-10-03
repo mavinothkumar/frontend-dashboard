@@ -26,7 +26,7 @@ class Application {
 	/**
 	 * @var ServiceProvider[]
 	 */
-	protected $providers = [];
+	protected $providers = array();
 
 	/**
 	 * @var bool
@@ -39,7 +39,7 @@ class Application {
 	public function __construct() {
 		$this->container = new Container();
 		$this->container->instance( Container::class, $this->container );
-		$this->container->instance( Application::class, $this );
+		$this->container->instance( self::class, $this );
 
 		self::$instance = $this;
 	}
@@ -108,7 +108,7 @@ class Application {
 	 * @param array  $parameters
 	 * @return mixed
 	 */
-	public function make( $abstract, array $parameters = [] ) {
+	public function make( $abstract, array $parameters = array() ) {
 		return $this->container->make( $abstract, $parameters );
 	}
 }

@@ -26,7 +26,7 @@ function fed_admin_orders_function() {
 	global $wpdb;
 	$table_name = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
 	// phpcs:ignore WordPress.Security.NonceVerification.Missing
-	$request    = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
+	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 
 	$response = fed_admin_order_id_validation( $request );
 	$order    = $response['order'];
@@ -68,7 +68,6 @@ function fed_admin_orders_function() {
 
 	wp_send_json_success( array( 'message' => __( 'Orders has been successfully updated', 'frontend-dashboard' ) ) );
 	exit();
-
 }
 
 /**
@@ -84,7 +83,7 @@ function fed_admin_order_delete_function() {
 	global $wpdb;
 	$table_name = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
 	// phpcs:ignore WordPress.Security.NonceVerification.Missing
-	$request    = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
+	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	parse_str( $request['data'], $request );
 	$response = fed_admin_order_id_validation( $request );
 	$order    = $response['order'];
@@ -157,7 +156,8 @@ function fed_order_search_add_function() {
 		exit();
 	}
 	$user = get_user_by(
-		sanitize_text_field( $request['order_search_key'] ), sanitize_text_field( $request['fed_order_search'] )
+		sanitize_text_field( $request['order_search_key'] ),
+		sanitize_text_field( $request['fed_order_search'] )
 	);
 
 	if ( ! $user ) {
@@ -176,7 +176,6 @@ function fed_order_search_add_function() {
 			),
 		)
 	);
-
 }
 
 /**
@@ -207,8 +206,9 @@ function fed_admin_add_orders_function() {
 		'payer_id'       => wp_generate_password( 13, false ),
 		'invoice_number' => wp_generate_password( 13, false ),
 		'sku'            => current_time( 'YmdHis' ) . '_' . $request['user_id'] . '_' . wp_generate_password(
-				6, false
-			),
+			6,
+			false
+		),
 		'user_id'        => isset( $request['user_id'] ) ? (int) $request['user_id'] : '',
 		'email'          => isset( $request['email'] ) ? sanitize_email( $request['email'] ) : '',
 		'first_name'     => isset( $request['first_name'] ) ? sanitize_text_field( $request['first_name'] ) : '',

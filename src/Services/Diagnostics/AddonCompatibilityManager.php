@@ -55,8 +55,8 @@ class AddonCompatibilityManager {
 			$loader->add_action( 'admin_notices', $this, 'render_admin_notice' );
 			$loader->add_action( 'network_admin_notices', $this, 'render_admin_notice' );
 		} else {
-			add_action( 'admin_notices', [ $this, 'render_admin_notice' ] );
-			add_action( 'network_admin_notices', [ $this, 'render_admin_notice' ] );
+			add_action( 'admin_notices', array( $this, 'render_admin_notice' ) );
+			add_action( 'network_admin_notices', array( $this, 'render_admin_notice' ) );
 		}
 	}
 
@@ -86,7 +86,7 @@ class AddonCompatibilityManager {
 		}
 
 		$all_plugins  = get_plugins();
-		$incompatible = [];
+		$incompatible = array();
 
 		foreach ( $all_plugins as $plugin_file => $plugin_data ) {
 			// Skip Frontend Dashboard Core
@@ -107,15 +107,15 @@ class AddonCompatibilityManager {
 
 			// Check if version is less than 3.0.0
 			if ( empty( $version ) || version_compare( $version, self::MIN_REQUIRED_VERSION, '<' ) ) {
-				$slug = dirname( $plugin_file );
-				$incompatible[ $plugin_file ] = [
+				$slug                         = dirname( $plugin_file );
+				$incompatible[ $plugin_file ] = array(
 					'name'             => ! empty( $plugin_data['Name'] ) ? $plugin_data['Name'] : $slug,
 					'slug'             => $slug,
 					'file'             => $plugin_file,
 					'current_version'  => ! empty( $version ) ? $version : __( 'Unknown', 'frontend-dashboard' ),
 					'required_version' => self::MIN_REQUIRED_VERSION,
 					'plugin_uri'       => ! empty( $plugin_data['PluginURI'] ) ? $plugin_data['PluginURI'] : 'https://buffercode.com',
-				];
+				);
 			}
 		}
 
@@ -164,19 +164,19 @@ class AddonCompatibilityManager {
 	 */
 	private function resolve_addon_version( string $plugin_file, array $plugin_data ): string {
 		// 1. Try defined PHP constants for specific add-ons
-		$slug = dirname( $plugin_file );
-		$constant_map = [
+		$slug         = dirname( $plugin_file );
+		$constant_map = array(
 			'frontend-dashboard-extra'           => 'BC_FED_EXTRA_PLUGIN_VERSION',
-			'frontend-dashboard-social-connect' => 'BC_FED_SC_PLUGIN_VERSION',
-			'frontend-dashboard-user-management'=> 'BC_FED_UM_PLUGIN_VERSION',
-			'frontend-dashboard-notification'   => 'BC_FED_NTF_PLUGIN_VERSION',
-			'frontend-dashboard-custom-post'    => 'BC_FED_CP_PLUGIN_VERSION',
-			'frontend-dashboard-templates'      => 'BC_FED_TEMPLATES_PLUGIN_VERSION',
-			'frontend-dashboard-pages'          => 'BC_FED_PAGES_PLUGIN_VERSION',
-			'frontend-dashboard-social-chat'    => 'BC_FED_SCHAT_PLUGIN_VERSION',
-			'frontend-dashboard-captcha'        => 'BC_FED_CAPTCHA_PLUGIN_VERSION',
-			'frontend-dashboard-message'        => 'BC_FED_MSG_PLUGIN_VERSION',
-		];
+			'frontend-dashboard-social-connect'  => 'BC_FED_SC_PLUGIN_VERSION',
+			'frontend-dashboard-user-management' => 'BC_FED_UM_PLUGIN_VERSION',
+			'frontend-dashboard-notification'    => 'BC_FED_NTF_PLUGIN_VERSION',
+			'frontend-dashboard-custom-post'     => 'BC_FED_CP_PLUGIN_VERSION',
+			'frontend-dashboard-templates'       => 'BC_FED_TEMPLATES_PLUGIN_VERSION',
+			'frontend-dashboard-pages'           => 'BC_FED_PAGES_PLUGIN_VERSION',
+			'frontend-dashboard-social-chat'     => 'BC_FED_SCHAT_PLUGIN_VERSION',
+			'frontend-dashboard-captcha'         => 'BC_FED_CAPTCHA_PLUGIN_VERSION',
+			'frontend-dashboard-message'         => 'BC_FED_MSG_PLUGIN_VERSION',
+		);
 
 		if ( isset( $constant_map[ $slug ] ) && defined( $constant_map[ $slug ] ) ) {
 			return (string) constant( $constant_map[ $slug ] );
@@ -222,7 +222,7 @@ class AddonCompatibilityManager {
 					</div>
 					<p style="margin: 0 0 10px 0; color: #475569; font-size: 13px; line-height: 1.5;">
 						<?php
-						echo sprintf(
+						printf(
 							/* translators: 1: Frontend Dashboard version, 2: Required version */
 							esc_html__( 'Frontend Dashboard v%1$s introduces major architectural enhancements. All related add-ons must be updated to version %2$s or higher to ensure compatibility and avoid errors.', 'frontend-dashboard' ),
 							'<strong>' . esc_html( BC_FED_PLUGIN_VERSION ) . '</strong>',
@@ -297,7 +297,7 @@ class AddonCompatibilityManager {
 						</div>
 						<p class="text-xs text-slate-600 m-0 mt-1.5 leading-relaxed max-w-3xl">
 							<?php
-							echo sprintf(
+							printf(
 								/* translators: 1: Frontend Dashboard version, 2: Required version */
 								esc_html__( 'Frontend Dashboard v%1$s requires all active add-ons to be updated to version %2$s or higher. The following add-on(s) need to be updated:', 'frontend-dashboard' ),
 								'<strong>' . esc_html( BC_FED_PLUGIN_VERSION ) . '</strong>',

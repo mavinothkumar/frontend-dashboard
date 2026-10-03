@@ -16,7 +16,7 @@ class FieldFactory {
 	/**
 	 * @var array Registry mapping field types to class names.
 	 */
-	protected static $registry = [
+	protected static $registry = array(
 		'text'        => TextField::class,
 		'single_line' => TextField::class,
 		'textarea'    => TextareaField::class,
@@ -37,7 +37,7 @@ class FieldFactory {
 		'editor'      => EditorField::class,
 		'label'       => LabelField::class,
 		'table'       => TableField::class,
-	];
+	);
 
 	/**
 	 * Register a custom or third-party field class.
@@ -58,8 +58,8 @@ class FieldFactory {
 	 * @param array  $attributes
 	 * @return BaseField
 	 */
-	public static function create( $type, array $attributes = [] ) {
-		$key = strtolower( $type );
+	public static function create( $type, array $attributes = array() ) {
+		$key   = strtolower( $type );
 		$class = isset( self::$registry[ $key ] ) ? self::$registry[ $key ] : TextField::class;
 
 		return new $class( $attributes );
@@ -72,7 +72,7 @@ class FieldFactory {
 	 * @param array  $attributes
 	 * @return string
 	 */
-	public static function render( $type, array $attributes = [] ) {
+	public static function render( $type, array $attributes = array() ) {
 		$field = self::create( $type, $attributes );
 		$html  = $field->render();
 

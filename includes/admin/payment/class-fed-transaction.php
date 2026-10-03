@@ -92,32 +92,32 @@ if ( ! class_exists( 'FEDTransaction' ) ) {
 								<?php
 								if ( ! empty( $transactions ) ) {
 									foreach ( $transactions as $txn ) {
-										$status_raw = strtolower( fed_get_data( 'status', $txn, 'pending' ) );
+										$status_raw          = strtolower( fed_get_data( 'status', $txn, 'pending' ) );
 										$status_filter_group = 'pending';
-										$status_bg = '#fef3c7';
-										$status_color = '#b45309';
-										$status_label = __( 'Pending', 'frontend-dashboard' );
+										$status_bg           = '#fef3c7';
+										$status_color        = '#b45309';
+										$status_label        = __( 'Pending', 'frontend-dashboard' );
 
 										if ( in_array( $status_raw, array( 'completed', 'paid', 'success', 'succeeded', 'active' ), true ) ) {
 											$status_filter_group = 'completed';
-											$status_bg = '#dcfce7';
-											$status_color = '#15803d';
-											$status_label = __( 'Completed', 'frontend-dashboard' );
+											$status_bg           = '#dcfce7';
+											$status_color        = '#15803d';
+											$status_label        = __( 'Completed', 'frontend-dashboard' );
 										} elseif ( in_array( $status_raw, array( 'refunded', 'cancelled', 'failed', 'declined' ), true ) ) {
 											$status_filter_group = 'refunded';
-											$status_bg = '#fee2e2';
-											$status_color = '#b91c1c';
-											$status_label = ucfirst( $status_raw );
+											$status_bg           = '#fee2e2';
+											$status_color        = '#b91c1c';
+											$status_label        = ucfirst( $status_raw );
 										}
 
-										$user_name = fed_get_data( 'display_name', $txn, fed_get_data( 'user_login', $txn, 'User #' . fed_get_data( 'user_id', $txn ) ) );
+										$user_name  = fed_get_data( 'display_name', $txn, fed_get_data( 'user_login', $txn, 'User #' . fed_get_data( 'user_id', $txn ) ) );
 										$user_email = fed_get_data( 'user_email', $txn, '' );
-										$txn_id = fed_get_data( 'transaction_id', $txn, 'TXN-' . fed_get_data( 'id', $txn ) );
-										$gateway = fed_get_data( 'payment_source', $txn, 'PayPal' );
-										$amount = floatval( fed_get_data( 'amount', $txn, 0 ) );
-										$currency = fed_get_data( 'currency', $txn, 'USD' );
-										$created = fed_get_data( 'created', $txn, '-' );
-										$db_id = fed_get_data( 'id', $txn );
+										$txn_id     = fed_get_data( 'transaction_id', $txn, 'TXN-' . fed_get_data( 'id', $txn ) );
+										$gateway    = fed_get_data( 'payment_source', $txn, 'PayPal' );
+										$amount     = floatval( fed_get_data( 'amount', $txn, 0 ) );
+										$currency   = fed_get_data( 'currency', $txn, 'USD' );
+										$created    = fed_get_data( 'created', $txn, '-' );
+										$db_id      = fed_get_data( 'id', $txn );
 										?>
 										<tr class="fed_txn_row" data-status="<?php echo esc_attr( $status_filter_group ); ?>" style="border-bottom: 1px solid #f1f5f9; transition: background 0.15s ease;">
 											
@@ -230,7 +230,12 @@ if ( ! class_exists( 'FEDTransaction' ) ) {
 									<label style="font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 6px; display: block;"><?php esc_html_e( 'Customer / User', 'frontend-dashboard' ); ?> *</label>
 									<select name="user_id" required style="width: 100%; border: 1px solid #cbd5e1; border-radius: 8px; padding: 9px 14px; font-size: 13.5px; background: #ffffff;">
 										<?php
-										$users = get_users( array( 'number' => 100, 'orderby' => 'display_name' ) );
+										$users = get_users(
+											array(
+												'number'  => 100,
+												'orderby' => 'display_name',
+											)
+										);
 										if ( ! empty( $users ) ) {
 											foreach ( $users as $u ) {
 												$selected = ( $u->ID === get_current_user_id() ) ? 'selected' : '';
@@ -488,7 +493,6 @@ if ( ! class_exists( 'FEDTransaction' ) ) {
 					),
 				)
 			);
-
 		}
 
 		/**
@@ -583,8 +587,7 @@ if ( ! class_exists( 'FEDTransaction' ) ) {
 				$currency      = isset( $item['currency'] ) ? fed_sanitize_text_field( $item['currency'] ) : '';
 				if ( ! empty( $payment_type ) ) {
 					$type = $payment_type;
-				}
-				else {
+				} else {
 					$type = ( isset( $item['type'] ) && ! empty( $item['type'] ) ) ? $item['type'] : '';
 				}
 
@@ -698,11 +701,12 @@ if ( ! class_exists( 'FEDTransaction' ) ) {
 							array(
 								'fed_action_hook' => 'FEDTransaction@add_new_item',
 								'fed_nonce'       => wp_create_nonce( 'fed_nonce' ),
-							), fed_get_ajax_form_action( 'fed_ajax_request' )
+							),
+							fed_get_ajax_form_action( 'fed_ajax_request' )
 						);
 						$html      = '<div class="fed_flex_start_center fed_transaction_item"><div>';
-						$html      .= '<label>' . __( 'Please select your product', 'frontend-dashboard' ) . '</label>';
-						$html      .= '<select name="fed_pp_object_id[]" class="form-control">';
+						$html     .= '<label>' . __( 'Please select your product', 'frontend-dashboard' ) . '</label>';
+						$html     .= '<select name="fed_pp_object_id[]" class="form-control">';
 						foreach ( $formatted as $key => $format ) {
 							$html .= '<option value="' . $key . '">' . $format . '</option>';
 						}
@@ -722,7 +726,6 @@ if ( ! class_exists( 'FEDTransaction' ) ) {
 		 * @param  array $request  Request.
 		 */
 		public function add_new_item( $request ) {
-
 		}
 
 		/**
@@ -747,7 +750,8 @@ if ( ! class_exists( 'FEDTransaction' ) ) {
 								'input_value' => array_merge(
 									array(
 										'' => __( 'Please select Gateway', 'frontend-dashboard' ),
-									), fed_get_only_payment_gateways()
+									),
+									fed_get_only_payment_gateways()
 								),
 							)
 						);
@@ -769,7 +773,8 @@ if ( ! class_exists( 'FEDTransaction' ) ) {
 								'input_value' => array_merge(
 									array(
 										'' => __( 'Please select Gateway', 'frontend-dashboard' ),
-									), fed_get_payment_for_key_index()
+									),
+									fed_get_payment_for_key_index()
 								),
 							)
 						);
@@ -790,7 +795,6 @@ if ( ! class_exists( 'FEDTransaction' ) ) {
 			</div>
 			<?php
 		}
-
 	}
 
 	new FEDTransaction();

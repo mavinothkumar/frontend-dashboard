@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return WP_Query
  */
 function fed_process_dashboard_display_post( $post_type = 'post' ) {
-	$user  = get_userdata( get_current_user_id() );
+	$user = get_userdata( get_current_user_id() );
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	$paged = isset( $_REQUEST['page_number'] ) ? absint( $_REQUEST['page_number'] ) : 1;
 	$args  = array(
@@ -50,18 +50,17 @@ function fed_process_dashboard_display_post( $post_type = 'post' ) {
  * @param  array | null         $menu  Menu.
  *
  * @deprecated @ 2.1.22 Will be removed in future release
- *
  */
 function fed_get_post_pagination( $post_object, $menu = null ) {
 	$pagination_counts = ceil( $post_object->found_posts / get_option( 'posts_per_page', 10 ) );
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	$current_page      = isset( $_REQUEST['page_number'] ) ? absint( $_REQUEST['page_number'] ) : 1;
+	$current_page = isset( $_REQUEST['page_number'] ) ? absint( $_REQUEST['page_number'] ) : 1;
 
 	if ( $pagination_counts > 1 ) {
 		?>
 		<ul class="pagination pagination-small fed_post_pagination">
 		<?php
-		for ( $i = 1; $i <= $pagination_counts; $i ++ ) {
+		for ( $i = 1; $i <= $pagination_counts; $i++ ) {
 			$class = '';
 			if ( $current_page == $i ) {
 				$class = 'class="active"';
@@ -97,18 +96,18 @@ function fed_get_pagination( $current_page, $total_pages ) {
 			<ul class="inline-flex items-center gap-1 bg-white p-1 rounded-2xl border border-slate-200/80 shadow-2xs fed_pagination text-xs font-semibold list-none m-0">
 				<li>
 					<a class="w-8 h-8 rounded-xl flex items-center justify-center transition-all no-underline <?php echo 1 === (int) $current_page ? 'bg-indigo-600 text-white font-bold shadow-2xs' : 'text-slate-600 hover:bg-slate-100'; ?>"
-					   href="<?php echo esc_url( add_query_arg( array( 'page_number' => 1 ) ) ); ?>">1</a>
+						href="<?php echo esc_url( add_query_arg( array( 'page_number' => 1 ) ) ); ?>">1</a>
 				</li>
 				<?php
 				if ( $i > 2 ) {
 					echo '<li class="w-8 h-8 flex items-center justify-center text-slate-400">...</li>';
 				}
-				for ( ; $i < min( $current_page + 6, $total_pages ); $i ++ ) {
+				for ( ; $i < min( $current_page + 6, $total_pages ); $i++ ) {
 					$isActive = (int) $current_page === (int) $i;
 					?>
 					<li>
 						<a class="w-8 h-8 rounded-xl flex items-center justify-center transition-all no-underline <?php echo $isActive ? 'bg-indigo-600 text-white font-bold shadow-2xs' : 'text-slate-600 hover:bg-slate-100'; ?>"
-						   href="<?php echo esc_url( add_query_arg( array( 'page_number' => (int) $i ) ) ); ?>"><?php echo (int) $i; ?></a>
+							href="<?php echo esc_url( add_query_arg( array( 'page_number' => (int) $i ) ) ); ?>"><?php echo (int) $i; ?></a>
 					</li>
 					<?php
 				}
@@ -119,7 +118,7 @@ function fed_get_pagination( $current_page, $total_pages ) {
 				?>
 				<li>
 					<a class="w-8 h-8 rounded-xl flex items-center justify-center transition-all no-underline <?php echo $isLastActive ? 'bg-indigo-600 text-white font-bold shadow-2xs' : 'text-slate-600 hover:bg-slate-100'; ?>"
-					   href="<?php echo esc_url( add_query_arg( array( 'page_number' => $total_pages ) ) ); ?>">
+						href="<?php echo esc_url( add_query_arg( array( 'page_number' => $total_pages ) ) ); ?>">
 						<?php echo (int) $total_pages; ?>
 					</a>
 				</li>
@@ -223,7 +222,7 @@ function fed_display_dashboard_edit_post_by_id( $post ) {
 	$post_meta     = get_post_meta( $post->ID );
 	$post_settings = fed_get_post_settings_by_type( $post->post_type );
 
-	$html = '';
+	$html  = '';
 	$html .= '
 <div class="row">
 	<div class="col-md-5">
@@ -231,7 +230,9 @@ function fed_display_dashboard_edit_post_by_id( $post ) {
 			  class="fed_dashboard_show_post_list_request"
 			  action=" ' . admin_url( 'admin-ajax.php?action=fed_dashboard_show_post_list_request' ) . '">';
 	$html .= fed_wp_nonce_field(
-		'fed_dashboard_show_post_list_request', 'fed_dashboard_show_post_list_request', '',
+		'fed_dashboard_show_post_list_request',
+		'fed_dashboard_show_post_list_request',
+		'',
 		false
 	);
 
@@ -259,7 +260,8 @@ function fed_display_dashboard_edit_post_by_id( $post ) {
 	  action="' . admin_url( 'admin-ajax.php?action=fed_dashboard_process_edit_post_request' ) . '">';
 
 	$html .= fed_wp_nonce_field(
-		'fed_dashboard_process_edit_post_request', 'fed_dashboard_process_edit_post_request',
+		'fed_dashboard_process_edit_post_request',
+		'fed_dashboard_process_edit_post_request',
 		true,
 		false
 	);
@@ -285,11 +287,13 @@ function fed_display_dashboard_edit_post_by_id( $post ) {
 		<div class="col-md-12">
 			<div class="fed_header_font_color">' . __( 'Title', 'frontend-dashboard' ) . '</div>
 			' . fed_input_box(
-			'post_title', array(
-			'value'       => esc_attr( $post->post_title ),
-			'placeholder' => 'Post Title',
-		), 'single_line'
-		) . '
+				'post_title',
+				array(
+					'value'       => esc_attr( $post->post_title ),
+					'placeholder' => 'Post Title',
+				),
+				'single_line'
+			) . '
 		</div>
 
 	</div>
@@ -320,7 +324,7 @@ function fed_display_dashboard_edit_post_by_id( $post ) {
 		<div class="col-md-12">
 			<div class="fed_header_font_color">' . __( 'Featured Image', 'frontend-dashboard' ) . '</div>
 			' . fed_input_box( '_thumbnail_id', array( 'value' => (int) $post_meta['_thumbnail_id'][0] ), 'file' ) .
-		         '
+				'
 		</div>
 	</div>
 	';
@@ -335,10 +339,12 @@ function fed_display_dashboard_edit_post_by_id( $post ) {
 		<div class="col-md-12">
 			<div class="fed_header_font_color">' . __( 'Allow Comments', 'frontend-dashboard' ) . '</div>
 			' . fed_input_box(
-				'comment_status', array(
-				'default_value' => 'open',
-				'value'         => esc_attr( $post->comment_status ),
-			), 'checkbox'
+				'comment_status',
+				array(
+					'default_value' => 'open',
+					'value'         => esc_attr( $post->comment_status ),
+				),
+				'checkbox'
 			) . '
 		</div>
 	</div>

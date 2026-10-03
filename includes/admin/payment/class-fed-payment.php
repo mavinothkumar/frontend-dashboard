@@ -38,9 +38,9 @@ if ( ! class_exists( 'FEDPayment' ) ) {
 		 * Options => fed_payment_settings
 		 */
 		public function settings_data() {
-			$settings = get_option( 'fed_payment_settings', array() );
+			$settings   = get_option( 'fed_payment_settings', array() );
 			$currencies = function_exists( 'fed_get_payment_currencies' ) ? fed_get_payment_currencies() : array( 'USD' => 'USD - US Dollar ($)' );
-			$gateways = function_exists( 'fed_get_payment_gateways' ) ? fed_get_payment_gateways() : array( 'disable' => __( 'Disable', 'frontend-dashboard' ) );
+			$gateways   = function_exists( 'fed_get_payment_gateways' ) ? fed_get_payment_gateways() : array( 'disable' => __( 'Disable', 'frontend-dashboard' ) );
 
 			$array = array(
 				'form'  => array(
@@ -79,7 +79,7 @@ if ( ! class_exists( 'FEDPayment' ) ) {
 							)
 						),
 					),
-					'Environment Mode' => array(
+					'Environment Mode'        => array(
 						'col'          => 'col-md-6',
 						'name'         => __( 'Environment Mode', 'frontend-dashboard' ),
 						'input'        => fed_get_input_details(
@@ -100,7 +100,7 @@ if ( ! class_exists( 'FEDPayment' ) ) {
 							)
 						),
 					),
-					'Currency Code' => array(
+					'Currency Code'           => array(
 						'col'          => 'col-md-6',
 						'name'         => __( 'Payment Currency', 'frontend-dashboard' ),
 						'input'        => fed_get_input_details(
@@ -118,7 +118,7 @@ if ( ! class_exists( 'FEDPayment' ) ) {
 							)
 						),
 					),
-					'Currency Position' => array(
+					'Currency Position'       => array(
 						'col'          => 'col-md-6',
 						'name'         => __( 'Currency Symbol Position', 'frontend-dashboard' ),
 						'input'        => fed_get_input_details(
@@ -141,7 +141,7 @@ if ( ! class_exists( 'FEDPayment' ) ) {
 							)
 						),
 					),
-					'Payment Success Page' => array(
+					'Payment Success Page'    => array(
 						'col'          => 'col-md-6',
 						'name'         => __( 'Payment Success Page', 'frontend-dashboard' ),
 						'input'        => wp_dropdown_pages(
@@ -159,7 +159,7 @@ if ( ! class_exists( 'FEDPayment' ) ) {
 							)
 						),
 					),
-					'Payment Cancelled Page' => array(
+					'Payment Cancelled Page'  => array(
 						'col'          => 'col-md-6',
 						'name'         => __( 'Payment Cancelled Page', 'frontend-dashboard' ),
 						'input'        => wp_dropdown_pages(
@@ -260,4 +260,3 @@ if ( ! class_exists( 'FEDPayment' ) ) {
 
 	new FEDPayment();
 }
-

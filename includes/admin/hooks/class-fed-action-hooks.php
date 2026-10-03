@@ -33,7 +33,9 @@ if ( ! class_exists( 'FED_ActionHooks' ) ) {
 				array(
 					$this,
 					'fed_plugin_action_links',
-				), 10, 2
+				),
+				10,
+				2
 			);
 			add_action( 'phpmailer_init', array( $this, 'send_email_via_smtp' ) );
 		}
@@ -58,12 +60,12 @@ if ( ! class_exists( 'FED_ActionHooks' ) ) {
 				}
 				if ( 'SMTP' === $is_enable ) {
 					$mailer->isSMTP();
-					$auth               = fed_get_data( 'smtp.auth', $settings, 'yes' );
-					$mailer->SMTPAuth   = ( 'no' === $auth || false === $auth || '0' === $auth ) ? false : true;
-					$mailer->Host       = (string) fed_get_data( 'smtp.host_name', $settings, '' );
-					$mailer->Username   = (string) fed_get_data( 'smtp.user_name', $settings, '' );
-					$mailer->Password   = (string) fed_get_data( 'smtp.password', $settings, '' );
-					$encryption         = strtolower( (string) fed_get_data( 'smtp.encryption', $settings, 'tls' ) );
+					$auth             = fed_get_data( 'smtp.auth', $settings, 'yes' );
+					$mailer->SMTPAuth = ( 'no' === $auth || false === $auth || '0' === $auth ) ? false : true;
+					$mailer->Host     = (string) fed_get_data( 'smtp.host_name', $settings, '' );
+					$mailer->Username = (string) fed_get_data( 'smtp.user_name', $settings, '' );
+					$mailer->Password = (string) fed_get_data( 'smtp.password', $settings, '' );
+					$encryption       = strtolower( (string) fed_get_data( 'smtp.encryption', $settings, 'tls' ) );
 					if ( 'none' === $encryption ) {
 						$mailer->SMTPSecure  = '';
 						$mailer->SMTPAutoTLS = false;
@@ -72,7 +74,7 @@ if ( ! class_exists( 'FED_ActionHooks' ) ) {
 					} else {
 						$mailer->SMTPSecure = $encryption;
 					}
-					$port = fed_get_data( 'smtp.port', $settings, 587 );
+					$port         = fed_get_data( 'smtp.port', $settings, 587 );
 					$mailer->Port = ! empty( $port ) ? (int) $port : 587;
 				}
 			}
@@ -452,7 +454,8 @@ if ( ! class_exists( 'FED_ActionHooks' ) ) {
 				// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				isset( $_GET['page_type'] ) && in_array(
 					// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-					wp_unslash( $_GET['page_type'] ), fed_get_script_loading_pages(),
+					wp_unslash( $_GET['page_type'] ),
+					fed_get_script_loading_pages(),
 					true
 				)
 			) {
@@ -522,24 +525,24 @@ if ( ! class_exists( 'FED_ActionHooks' ) ) {
 			if ( BC_FED_PLUGIN_BASENAME == $file ) {
 				$row_meta = array(
 					'demo'        => '<a href="' . esc_url( 'https://demo.frontenddashboard.com/' ) . '">' . esc_html__(
-							'Demo',
-							'frontend-dashboard'
-						) . '</a>',
+						'Demo',
+						'frontend-dashboard'
+					) . '</a>',
 					'docs/videos' => '<a href="' . esc_url(
-							'https://buffercode.com/category/name/frontend-dashboard'
-						) . '">' . esc_html__(
-						                 'Docs/Videos',
-						                 'frontend-dashboard'
-					                 ) . '</a>',
+						'https://buffercode.com/category/name/frontend-dashboard'
+					) . '">' . esc_html__(
+						'Docs/Videos',
+						'frontend-dashboard'
+					) . '</a>',
 					'donation'    => '<a href="' . esc_url( 'https://www.paypal.me/buffercode' ) . '">' . esc_html__(
-							'Donation',
-							'frontend-dashboard'
-						) . '</a>',
+						'Donation',
+						'frontend-dashboard'
+					) . '</a>',
 
-					'support' => '<a href="mailto:support@buffercode.com">' . esc_html__(
-							'Support',
-							'frontend-dashboard'
-						) . '</a>',
+					'support'     => '<a href="mailto:support@buffercode.com">' . esc_html__(
+						'Support',
+						'frontend-dashboard'
+					) . '</a>',
 				);
 
 				return array_merge( $links, $row_meta );
@@ -558,11 +561,11 @@ if ( ! class_exists( 'FED_ActionHooks' ) ) {
 		public function fed_plugin_action_links( $links ) {
 			$action_links = array(
 				'settings' => '<a href="' . admin_url(
-						'admin.php?page=fed_settings_menu'
-					) . '" aria-label="' . esc_attr__(
-					              'Frontend Dashboard Settings',
-					              'frontend-dashboard'
-				              ) . '">' . esc_html__( 'Settings', 'frontend-dashboard' ) . '</a>',
+					'admin.php?page=fed_settings_menu'
+				) . '" aria-label="' . esc_attr__(
+					'Frontend Dashboard Settings',
+					'frontend-dashboard'
+				) . '">' . esc_html__( 'Settings', 'frontend-dashboard' ) . '</a>',
 			);
 
 			return array_merge( $action_links, $links );

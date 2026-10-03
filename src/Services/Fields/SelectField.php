@@ -56,7 +56,7 @@ class SelectField extends BaseField {
 			);
 		}
 
-		$extra_attrs = [];
+		$extra_attrs = array();
 		if ( $is_multiple ) {
 			$extra_attrs['name']     = $this->name . '[]';
 			$extra_attrs['multiple'] = 'multiple';

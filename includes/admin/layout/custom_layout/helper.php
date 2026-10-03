@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Common Simple Layout.
  *
- * @param  array  $form  Form.
+ * @param  array $form  Form.
  */
 function fed_common_simple_layout( $form ) {
 	$form_method       = isset( $form['form']['method'] ) && ! empty( $form['form']['method'] ) ? esc_attr( $form['form']['method'] ) : 'post';
@@ -94,8 +94,8 @@ function fed_common_simple_layout( $form ) {
 							if ( isset( $input['extra']['input'] ) && is_array( $input['extra']['input'] ) ) {
 								echo '<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5 pt-2">';
 								foreach ( $input['extra']['input'] as $eindex => $extra ) {
-									$input_data = $extra;
-									$item_label = isset( $extra['label'] ) ? $extra['label'] : $eindex;
+									$input_data          = $extra;
+									$item_label          = isset( $extra['label'] ) ? $extra['label'] : $eindex;
 									$input_data['label'] = '';
 									?>
 									<label class="p-3 bg-slate-50/80 hover:bg-slate-100/80 border border-slate-200/80 rounded-2xl flex items-center justify-between gap-2 cursor-pointer transition-colors">
@@ -145,8 +145,8 @@ function fed_common_simple_layout( $form ) {
 /**
  * Common Layouts Admin Settings.
  *
- * @param  array  $fed_admin_options  Admin Options.
- * @param  array  $tabs  Tabs.
+ * @param  array $fed_admin_options  Admin Options.
+ * @param  array $tabs  Tabs.
  */
 function fed_common_layouts_admin_settings( $fed_admin_options, $tabs ) {
 	$no = wp_rand( 1000, 9999 );
@@ -159,13 +159,13 @@ function fed_common_layouts_admin_settings( $fed_admin_options, $tabs ) {
 				$menu_count = 0;
 				foreach ( $tabs as $index => $tab ) {
 					$active = ( 0 === $menu_count );
-					$menu_count ++;
+					++$menu_count;
 					?>
 					<a href="#<?php echo esc_attr( $index ); ?>"
-					   data-target="#subtab_pane_<?php echo esc_attr( $index . '_' . $no ); ?>"
-					   role="tab"
-					   data-toggle="tab"
-					   class="fed-subtab-link flex items-center gap-3 px-3.5 py-3 rounded-2xl text-xs font-semibold transition-all cursor-pointer no-underline <?php echo $active ? 'fed-subtab-active bg-indigo-50 border border-indigo-200 text-indigo-700 shadow-2xs font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 border border-transparent'; ?>">
+						data-target="#subtab_pane_<?php echo esc_attr( $index . '_' . $no ); ?>"
+						role="tab"
+						data-toggle="tab"
+						class="fed-subtab-link flex items-center gap-3 px-3.5 py-3 rounded-2xl text-xs font-semibold transition-all cursor-pointer no-underline <?php echo $active ? 'fed-subtab-active bg-indigo-50 border border-indigo-200 text-indigo-700 shadow-2xs font-bold' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 border border-transparent'; ?>">
 						<div class="w-8 h-8 rounded-xl flex items-center justify-center text-sm shrink-0 <?php echo $active ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-500'; ?>">
 							<i class="<?php echo esc_attr( $tab['icon'] ); ?>"></i>
 						</div>
@@ -182,12 +182,12 @@ function fed_common_layouts_admin_settings( $fed_admin_options, $tabs ) {
 				$content_count = 0;
 				foreach ( $tabs as $index => $tab ) {
 					$active = ( 0 === $content_count );
-					$content_count ++;
+					++$content_count;
 					?>
 					<div role="tabpanel"
-						 class="tab-pane <?php echo $active ? 'active block' : 'hidden'; ?>"
-						 id="subtab_pane_<?php echo esc_attr( $index . '_' . $no ); ?>"
-						 data-pane="<?php echo esc_attr( $index ); ?>">
+						class="tab-pane <?php echo $active ? 'active block' : 'hidden'; ?>"
+						id="subtab_pane_<?php echo esc_attr( $index . '_' . $no ); ?>"
+						data-pane="<?php echo esc_attr( $index ); ?>">
 						<div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-6">
 							<div class="flex items-center gap-3.5 pb-5 border-b border-slate-100">
 								<div class="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-base shrink-0">
@@ -263,7 +263,7 @@ function fed_render_user_roles_badge( $selected = array(), $all_roles = null, $l
 	$remaining_count      = count( $role_names ) - count( $visible_names );
 	$all_selected_tooltip = esc_attr( implode( ', ', $role_names ) );
 
-	$html = '<span class="fed-badge-item inline-flex items-center gap-1.5 text-[11px] text-slate-600 font-medium shrink-0 whitespace-nowrap" title="' . $all_selected_tooltip . '">';
+	$html  = '<span class="fed-badge-item inline-flex items-center gap-1.5 text-[11px] text-slate-600 font-medium shrink-0 whitespace-nowrap" title="' . $all_selected_tooltip . '">';
 	$html .= '<i class="fas fa-user-tag text-slate-400 text-[10px]"></i> ';
 	$html .= '<span class="font-semibold text-slate-800">' . esc_html( implode( ', ', $visible_names ) ) . '</span>';
 
@@ -304,11 +304,11 @@ function fed_render_user_roles_selector( $args = array() ) {
 		}
 	}
 
-	$total_roles_count = count( $all_roles );
+	$total_roles_count  = count( $all_roles );
 	$active_roles_count = 0;
 	foreach ( $all_roles as $k => $r ) {
 		if ( in_array( $k, $selected_keys, true ) || ( empty( $selected_keys ) && $default_all_checked ) ) {
-			$active_roles_count ++;
+			++$active_roles_count;
 		}
 	}
 
@@ -389,7 +389,10 @@ function fed_render_user_roles_selector( $args = array() ) {
 		</div>
 	</div>
 
-	<?php if ( ! $script_printed ) : $script_printed = true; ?>
+	<?php
+	if ( ! $script_printed ) :
+		$script_printed = true;
+		?>
 		<script>
 			(function($) {
 				'use strict';
@@ -403,10 +406,10 @@ function fed_render_user_roles_selector( $args = array() ) {
 						var $cb = $chip.find('.fed-role-checkbox');
 						if ($cb.is(':checked')) {
 							$chip.addClass('bg-indigo-50/80 border-indigo-200 text-indigo-900 font-semibold')
-								 .removeClass('bg-white border-slate-200 text-slate-700');
+								.removeClass('bg-white border-slate-200 text-slate-700');
 						} else {
 							$chip.removeClass('bg-indigo-50/80 border-indigo-200 text-indigo-900 font-semibold')
-								 .addClass('bg-white border-slate-200 text-slate-700');
+								.addClass('bg-white border-slate-200 text-slate-700');
 						}
 					});
 				}
@@ -467,5 +470,6 @@ function fed_render_user_roles_selector( $args = array() ) {
 				});
 			})(jQuery);
 		</script>
-	<?php endif;
+		<?php
+	endif;
 }

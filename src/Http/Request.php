@@ -41,7 +41,7 @@ class Request {
 	 * @param array $server
 	 * @param array $files
 	 */
-	public function __construct( array $query = [], array $request = [], array $server = [], array $files = [] ) {
+	public function __construct( array $query = array(), array $request = array(), array $server = array(), array $files = array() ) {
 		$this->query   = $this->sanitize_array( $query );
 		$this->request = $this->sanitize_array( $request );
 		$this->server  = $server;
@@ -72,12 +72,15 @@ class Request {
 	 * @return array
 	 */
 	protected function sanitize_array( array $data ) {
-		return map_deep( $data, function( $value ) {
-			if ( is_string( $value ) ) {
-				return sanitize_text_field( wp_unslash( $value ) );
+		return map_deep(
+			$data,
+			function ( $value ) {
+				if ( is_string( $value ) ) {
+					return sanitize_text_field( wp_unslash( $value ) );
+				}
+				return $value;
 			}
-			return $value;
-		} );
+		);
 	}
 
 	/**
@@ -175,7 +178,7 @@ class Request {
 	 * @return array
 	 */
 	public function only( array $keys ) {
-		$results = [];
+		$results = array();
 		$all     = $this->input();
 		foreach ( $keys as $key ) {
 			if ( array_key_exists( $key, $all ) ) {
@@ -245,7 +248,7 @@ class Request {
 	 * @param array $messages
 	 * @return Validator
 	 */
-	public function validate( array $rules, array $messages = [] ) {
+	public function validate( array $rules, array $messages = array() ) {
 		return Validator::make( $this->input(), $rules, $messages );
 	}
 }

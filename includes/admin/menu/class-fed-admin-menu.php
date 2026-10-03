@@ -38,7 +38,7 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 				$action = isset( $_GET['fed_action'] ) && 'post' === $_GET['fed_action'] ? 'post' : 'profile';
 				$target = ( 'post' === $action ) ? 'fed_post_fields' : 'fed_user_profile';
 				// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				$params = $_GET;
+				$params         = $_GET;
 				$params['page'] = $target;
 				wp_safe_redirect( add_query_arg( $params, admin_url( 'admin.php' ) ) );
 				exit;
@@ -103,7 +103,6 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 			);
 
 			do_action( 'fed_add_main_sub_menu_action' );
-
 		}
 
 		/**
@@ -425,16 +424,16 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 
 				<!-- Main Navigation Tabs Bar -->
 				<div class="bg-white rounded-2xl p-1.5 shadow-xs border border-slate-200/80 mb-6 flex flex-wrap gap-1.5" id="fed_main_settings_tabs_bar" role="tablist">
-					<?php 
+					<?php
 					$btn_counter = 0;
-					foreach ( $menu as $index => $item ) : 
+					foreach ( $menu as $index => $item ) :
 						$is_first = ( 0 === $btn_counter );
-						$btn_counter ++;
-					?>
+						++$btn_counter;
+						?>
 						<a href="#<?php echo esc_attr( $index ); ?>"
-						   data-tab="<?php echo esc_attr( $index ); ?>"
-						   role="tab"
-						   class="fed-main-tab-btn <?php echo $is_first ? 'fed-tab-active' : ''; ?>">
+							data-tab="<?php echo esc_attr( $index ); ?>"
+							role="tab"
+							class="fed-main-tab-btn <?php echo $is_first ? 'fed-tab-active' : ''; ?>">
 							<i class="<?php echo esc_attr( $item['icon_class'] ); ?>"></i>
 							<span><?php echo esc_html( $item['name'] ); ?></span>
 						</a>
@@ -443,16 +442,16 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 
 				<!-- Main Tab Content Panes -->
 				<div class="fed-main-tabs-content-wrap">
-					<?php 
+					<?php
 					$pane_counter = 0;
-					foreach ( $menu as $index => $item ) : 
+					foreach ( $menu as $index => $item ) :
 						$is_first = ( 0 === $pane_counter );
-						$pane_counter ++;
-					?>
+						++$pane_counter;
+						?>
 						<div role="tabpanel"
-							 class="fed-main-tab-pane <?php echo $is_first ? 'block' : 'hidden'; ?>"
-							 id="tab_pane_<?php echo esc_attr( $index ); ?>"
-							 data-pane="<?php echo esc_attr( $index ); ?>">
+							class="fed-main-tab-pane <?php echo $is_first ? 'block' : 'hidden'; ?>"
+							id="tab_pane_<?php echo esc_attr( $index ); ?>"
+							data-pane="<?php echo esc_attr( $index ); ?>">
 							<?php $this->call_function_method( $item ); ?>
 						</div>
 					<?php endforeach; ?>
@@ -656,8 +655,10 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 
 			if ( is_string( $item['callable'] ) && function_exists( $item['callable'] ) ) {
 				call_user_func( $item['callable'], $parameter );
-			} elseif ( is_array( $item['callable'] ) && method_exists( $item['callable']['object'],
-					$item['callable']['method'] ) ) {
+			} elseif ( is_array( $item['callable'] ) && method_exists(
+				$item['callable']['object'],
+				$item['callable']['method']
+			) ) {
 				call_user_func( array( $item['callable']['object'], $item['callable']['method'] ), $parameter );
 			} else {
 				?>
@@ -679,63 +680,63 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 		 */
 		public function fed_get_main_sub_menu() {
 			$menu = array(
-				'fed_dashboard'        => array(
+				'fed_dashboard'      => array(
 					'page_title' => __( 'Overview', 'frontend-dashboard' ),
 					'menu_title' => __( 'Overview', 'frontend-dashboard' ),
 					'capability' => 'manage_options',
 					'callback'   => array( $this, 'dashboard_overview' ),
 					'position'   => 1,
 				),
-				'fed_dashboard_menu'   => array(
+				'fed_dashboard_menu' => array(
 					'page_title' => __( 'Dashboard Menu', 'frontend-dashboard' ),
 					'menu_title' => __( 'Dashboard Menu', 'frontend-dashboard' ),
 					'capability' => 'manage_options',
 					'callback'   => array( $this, 'dashboard_menu' ),
 					'position'   => 10,
 				),
-				'fed_user_profile'     => array(
+				'fed_user_profile'   => array(
 					'page_title' => __( 'User Profile', 'frontend-dashboard' ),
 					'menu_title' => __( 'User Profile', 'frontend-dashboard' ),
 					'capability' => 'manage_options',
 					'callback'   => array( $this, 'user_profile' ),
 					'position'   => 20,
 				),
-				'fed_post_fields'      => array(
+				'fed_post_fields'    => array(
 					'page_title' => __( 'Post Fields', 'frontend-dashboard' ),
 					'menu_title' => __( 'Post Fields', 'frontend-dashboard' ),
 					'capability' => 'manage_options',
 					'callback'   => array( $this, 'post_fields' ),
 					'position'   => 25,
 				),
-				'fed_payments'         => array(
+				'fed_payments'       => array(
 					'page_title' => __( 'Payments', 'frontend-dashboard' ),
 					'menu_title' => __( 'Payments', 'frontend-dashboard' ),
 					'capability' => 'manage_options',
 					'callback'   => array( $this, 'payments' ),
 					'position'   => 40,
 				),
-				'fed_settings'         => array(
+				'fed_settings'       => array(
 					'page_title' => __( 'Settings', 'frontend-dashboard' ),
 					'menu_title' => __( 'Settings', 'frontend-dashboard' ),
 					'capability' => 'manage_options',
 					'callback'   => array( $this, 'common_settings' ),
 					'position'   => 50,
 				),
-				'fed_tools'            => array(
+				'fed_tools'          => array(
 					'page_title' => __( 'Tools', 'frontend-dashboard' ),
 					'menu_title' => __( 'Tools', 'frontend-dashboard' ),
 					'capability' => 'manage_options',
 					'callback'   => array( $this, 'tools' ),
 					'position'   => 70,
 				),
-				'fed_plugin_pages'     => array(
+				'fed_plugin_pages'   => array(
 					'page_title' => __( 'Add-Ons', 'frontend-dashboard' ),
 					'menu_title' => __( 'Add-Ons', 'frontend-dashboard' ),
 					'capability' => 'manage_options',
 					'callback'   => array( $this, 'plugin_pages' ),
 					'position'   => 80,
 				),
-				'fed_help'             => array(
+				'fed_help'           => array(
 					'page_title' => __( 'Help', 'frontend-dashboard' ),
 					'menu_title' => __( 'Help', 'frontend-dashboard' ),
 					'capability' => 'manage_options',
@@ -749,10 +750,9 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 			return fed_array_sort( $main_menu, 'position' );
 		}
 
-//		public function test() {
-//
-//		}
-
+		// public function test() {
+		//
+		// }
 	}
 
 	new FED_AdminMenu();

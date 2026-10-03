@@ -90,8 +90,11 @@ function fed_register_form_submit( $post ) {
 		wp_set_current_user( $status );
 		wp_set_auth_cookie( $status );
 
-		$redirect_url = apply_filters( 'fed_registration_redirect_url', fed_registration_redirect(),
-			new WP_User( $status ) );
+		$redirect_url = apply_filters(
+			'fed_registration_redirect_url',
+			fed_registration_redirect(),
+			new WP_User( $status )
+		);
 	}
 
 	do_action( 'fed_registration_success', $status );
@@ -103,7 +106,6 @@ function fed_register_form_submit( $post ) {
 			'url'     => $redirect_url,
 		)
 	);
-
 }
 
 
@@ -148,7 +150,7 @@ function fed_insert_user_meta( $meta, $user, $update ) {
 				)
 			) {
 				// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-				$raw_val = wp_unslash( $_REQUEST[ $extra_field['input_meta'] ] );
+				$raw_val                            = wp_unslash( $_REQUEST[ $extra_field['input_meta'] ] );
 				$meta[ $extra_field['input_meta'] ] = serialize(
 					fed_sanitize_text_field( $raw_val )
 				);
@@ -167,7 +169,6 @@ function fed_insert_user_meta( $meta, $user, $update ) {
 	}
 
 	return apply_filters( 'fed_user_extra_fields_registration', $meta );
-
 }
 
 /**

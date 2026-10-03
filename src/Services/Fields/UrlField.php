@@ -19,10 +19,12 @@ class UrlField extends TextField {
 			$this->placeholder = 'https://example.com';
 		}
 
-		$attrs = $this->build_attributes( [
-			'type'  => $this->type,
-			'value' => $this->value,
-		] );
+		$attrs = $this->build_attributes(
+			array(
+				'type'  => $this->type,
+				'value' => $this->value,
+			)
+		);
 
 		return sprintf( '<input %s />', $attrs );
 	}

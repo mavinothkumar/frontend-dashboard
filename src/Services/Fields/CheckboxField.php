@@ -56,11 +56,13 @@ class CheckboxField extends BaseField {
 
 		// Single checkbox
 		$checked = checked( $val, $default_value, false );
-		$attrs   = $this->build_attributes( [
-			'type'  => 'checkbox',
-			'value' => $default_value,
-			'class' => trim( 'fed-custom-checkbox ' . $this->class_name ),
-		] );
+		$attrs   = $this->build_attributes(
+			array(
+				'type'  => 'checkbox',
+				'value' => $default_value,
+				'class' => trim( 'fed-custom-checkbox ' . $this->class_name ),
+			)
+		);
 
 		return sprintf(
 			'<label class="fed_checkbox_label fed-control-label inline-flex items-center gap-2 cursor-pointer text-sm text-slate-700 font-medium">

@@ -34,7 +34,7 @@ interface AiDriverInterface {
 	 * @param array  $options
 	 * @return string
 	 */
-	public function generateText( string $prompt, array $options = [] ): string;
+	public function generateText( string $prompt, array $options = array() ): string;
 
 	/**
 	 * Generate a professional user bio suggestion.
@@ -43,7 +43,7 @@ interface AiDriverInterface {
 	 * @param array  $skills
 	 * @return string
 	 */
-	public function suggestBio( string $profession, array $skills = [] ): string;
+	public function suggestBio( string $profession, array $skills = array() ): string;
 
 	/**
 	 * Check if content violates moderation standards.

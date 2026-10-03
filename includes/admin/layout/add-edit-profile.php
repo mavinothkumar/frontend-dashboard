@@ -23,9 +23,15 @@ function fed_get_admin_up_role_based( $row, $action, $menu_options ) {
 	$user_roles        = isset( $row['user_role'] ) && is_array( $row['user_role'] ) ? $row['user_role'] : array();
 
 	// Check if all roles are active or if specific
-	$active_roles_count = count( array_filter( $all_roles, function( $k ) use ( $user_roles ) {
-		return in_array( $k, $user_roles, true );
-	}, ARRAY_FILTER_USE_KEY ) );
+	$active_roles_count = count(
+		array_filter(
+			$all_roles,
+			function ( $k ) use ( $user_roles ) {
+				return in_array( $k, $user_roles, true );
+			},
+			ARRAY_FILTER_USE_KEY
+		)
+	);
 	$is_all_roles_mode  = empty( $user_roles ) || ( $active_roles_count === $total_roles_count );
 	?>
 	<!-- Card: Access Control & Role Permissions -->
@@ -205,9 +211,9 @@ function fed_get_admin_up_display_permission( $row, $action, $type = '' ) {
 		<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
 			<?php
 			if ( 'profile' === $action ) {
-				$is_file_type  = ( 'file' === $type );
-				$reg_val       = $is_file_type ? 'Disable' : ( isset( $row['show_register'] ) ? $row['show_register'] : 'Enable' );
-				$dash_val      = isset( $row['show_dashboard'] ) ? $row['show_dashboard'] : 'Enable';
+				$is_file_type = ( 'file' === $type );
+				$reg_val      = $is_file_type ? 'Disable' : ( isset( $row['show_register'] ) ? $row['show_register'] : 'Enable' );
+				$dash_val     = isset( $row['show_dashboard'] ) ? $row['show_dashboard'] : 'Enable';
 				?>
 				<!-- Registration Form Toggle -->
 				<div class="p-4 bg-slate-50/80 border border-slate-200/80 rounded-2xl flex items-center justify-between gap-3">
@@ -394,7 +400,7 @@ function fed_get_admin_up_input_meta( $row ) {
  * @param string $input_type Submit Input Type.
  * @param string $action     Action Type.
  */
-function fed_get_input_type_and_submit_btn( $input_type, $action, $row = [] ) {
+function fed_get_input_type_and_submit_btn( $input_type, $action, $row = array() ) {
 	$payload  = array_merge( \FED\Helpers\InputHelper::get(), \FED\Helpers\InputHelper::post() );
 	$input_id = '';
 	if ( is_array( $row ) && ! empty( $row['id'] ) ) {

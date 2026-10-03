@@ -19,7 +19,8 @@ if ( ! class_exists( 'FEDSCPRO' ) && ! defined( 'BC_FED_SC_PLUGIN' ) ) {
 		 */
 		public function __construct() {
 			add_filter(
-				'fed_admin_dashboard_settings_menu_header', array(
+				'fed_admin_dashboard_settings_menu_header',
+				array(
 					$this,
 					'dashboard_menu',
 				)
@@ -54,7 +55,6 @@ if ( ! class_exists( 'FEDSCPRO' ) && ! defined( 'BC_FED_SC_PLUGIN' ) ) {
 			$tabs = $this->sub_menus();
 
 			fed_common_layouts_admin_settings( array(), $tabs );
-
 		}
 
 		/**
@@ -141,7 +141,6 @@ if ( ! class_exists( 'FEDSCPRO' ) && ! defined( 'BC_FED_SC_PLUGIN' ) ) {
 			$options = apply_filters( 'fed_admin_social_connect_settings_menu', $options, '' );
 
 			return $options;
-
 		}
 
 		/**
@@ -621,7 +620,6 @@ if ( ! class_exists( 'FEDSCPRO' ) && ! defined( 'BC_FED_SC_PLUGIN' ) ) {
 			</div>
 
 			<?php
-
 		}
 	}
 

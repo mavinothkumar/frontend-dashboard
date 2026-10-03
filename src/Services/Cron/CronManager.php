@@ -36,14 +36,14 @@ class CronManager {
 	 * @return array
 	 */
 	public function registerCustomSchedules( array $schedules ): array {
-		$schedules['every_five_minutes'] = [
+		$schedules['every_five_minutes'] = array(
 			'interval' => 300,
 			'display'  => __( 'Every 5 Minutes', 'frontend-dashboard' ),
-		];
-		$schedules['weekly'] = [
+		);
+		$schedules['weekly']             = array(
 			'interval' => 604800,
 			'display'  => __( 'Once Weekly', 'frontend-dashboard' ),
-		];
+		);
 		return $schedules;
 	}
 

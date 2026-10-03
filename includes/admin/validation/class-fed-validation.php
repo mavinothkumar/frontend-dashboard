@@ -98,8 +98,7 @@ if ( ! class_exists( 'FED_Validation' ) ) {
 				if ( ! is_array( $this->value ) ) {
 					$this->errors[] = $this->name . ' is Invalid Format';
 				}
-			}
-			else {
+			} else {
 				$regex = '/^(' . $this->patterns[ $name ] . ')$/u';
 				if ( '' != $this->value && ! preg_match( $regex, $this->value ) ) {
 					$this->errors[] = $this->name . ' is Invalid ' . strtoupper( $name ) . ' Format';
@@ -169,11 +168,8 @@ if ( ! class_exists( 'FED_Validation' ) ) {
 				if ( strlen( $this->value ) < $length ) {
 					$this->errors[] = $this->name . ' Should be minimum value';
 				}
-			}
-			else {
-				if ( $this->value < $length ) {
+			} elseif ( $this->value < $length ) {
 					$this->errors[] = $this->name . ' lesser than the minimum value';
-				}
 			}
 
 			return $this;
@@ -192,11 +188,8 @@ if ( ! class_exists( 'FED_Validation' ) ) {
 				if ( strlen( $this->value ) > $length ) {
 					$this->errors[] = $this->name . ' greater than the Maximum value';
 				}
-			}
-			else {
-				if ( $this->value > $length ) {
+			} elseif ( $this->value > $length ) {
 					$this->errors[] = $this->name . ' greater than the Maximum value';
-				}
 			}
 
 			return $this;
@@ -216,7 +209,6 @@ if ( ! class_exists( 'FED_Validation' ) ) {
 			}
 
 			return $this;
-
 		}
 
 		/**
@@ -230,13 +222,12 @@ if ( ! class_exists( 'FED_Validation' ) ) {
 
 			if ( 4 != $this->file['error'] && $this->file['size'] > $size ) {
 				$this->errors[] = 'Il file ' . $this->name . ' supera la dimensione massima di ' . number_format(
-						$size / 1048576,
-						2
-					) . ' MB.';
+					$size / 1048576,
+					2
+				) . ' MB.';
 			}
 
 			return $this;
-
 		}
 
 		/**
@@ -265,7 +256,6 @@ if ( ! class_exists( 'FED_Validation' ) ) {
 			}
 
 			return $this;
-
 		}
 
 		/**
@@ -304,7 +294,6 @@ if ( ! class_exists( 'FED_Validation' ) ) {
 			$html .= '</ul>';
 
 			return $html;
-
 		}
 
 		/**
@@ -321,11 +310,9 @@ if ( ! class_exists( 'FED_Validation' ) ) {
 				}
 				exit;
 
-			}
-			else {
+			} else {
 				return true;
 			}
-
 		}
 
 		/**
@@ -364,7 +351,9 @@ if ( ! class_exists( 'FED_Validation' ) ) {
 		public static function is_alpha( $value ) {
 			if (
 			filter_var(
-				$value, FILTER_VALIDATE_REGEXP, array( 'options' => array( 'regexp' => '/^[a-zA-Z]+$/' ) )
+				$value,
+				FILTER_VALIDATE_REGEXP,
+				array( 'options' => array( 'regexp' => '/^[a-zA-Z]+$/' ) )
 			)
 			) {
 				return true;
@@ -381,7 +370,9 @@ if ( ! class_exists( 'FED_Validation' ) ) {
 		public static function is_alphanum( $value ) {
 			if (
 			filter_var(
-				$value, FILTER_VALIDATE_REGEXP, array( 'options' => array( 'regexp' => '/^[a-zA-Z0-9]+$/' ) )
+				$value,
+				FILTER_VALIDATE_REGEXP,
+				array( 'options' => array( 'regexp' => '/^[a-zA-Z0-9]+$/' ) )
 			)
 			) {
 				return true;
@@ -411,7 +402,8 @@ if ( ! class_exists( 'FED_Validation' ) ) {
 		public static function is_uri( $value ) {
 			if (
 			filter_var(
-				$value, FILTER_VALIDATE_REGEXP,
+				$value,
+				FILTER_VALIDATE_REGEXP,
 				array( 'options' => array( 'regexp' => '/^[A-Za-z0-9-\/_]+$/' ) )
 			)
 			) {

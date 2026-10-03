@@ -20,7 +20,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div id="fed-canvas-full-wrapper" class="fed-page-template fed-template-canvas-full w-full min-h-screen">
 		<main id="main" class="site-main w-full" role="main">
 			<?php
-			while ( have_posts() ) : the_post();
+			while ( have_posts() ) :
+				the_post();
 				the_content();
 			endwhile;
 			?>

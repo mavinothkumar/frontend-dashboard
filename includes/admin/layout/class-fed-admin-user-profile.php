@@ -32,7 +32,8 @@ if ( ! class_exists( 'FED_AdminUserProfile' ) ) {
 		 *
 		 * @param  WP_User $user  User Profile Fields.
 		 */
-		public function fed_show_user_profile( $user ) { ?>
+		public function fed_show_user_profile( $user ) {
+			?>
 			<h3><?php esc_attr_e( 'Frontend Dashboard', 'frontend-dashboard' ); ?></h3>
 			<table class="form-table bc_fed fed_profile_table">
 				<?php
@@ -78,11 +79,13 @@ if ( ! class_exists( 'FED_AdminUserProfile' ) ) {
 								?>
 							</td>
 						</tr>
-					<?php }
+						<?php
+					}
 				}
 				?>
 			</table>
-		<?php }
+			<?php
+		}
 
 		/**
 		 * Personal Options to Update on Backend.

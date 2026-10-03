@@ -118,9 +118,9 @@ if ( ! function_exists( 'fed_get_transactions_with_meta' ) ) {
 			$table_payment_items = $wpdb->prefix . BC_FED_TABLE_PAYMENT_ITEMS;
 
 			foreach ( $transactions as $index => $transaction ) {
-				$transaction_id                          = (int) $transaction['id'];
+				$transaction_id = (int) $transaction['id'];
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-				$m                                       = $wpdb->get_results(
+				$m = $wpdb->get_results(
 					$wpdb->prepare(
 						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 						"SELECT * FROM {$table_payment_items} WHERE payment_id = %d ORDER BY payment_item_id DESC",
@@ -159,12 +159,13 @@ if ( ! function_exists( 'fed_get_transactions' ) ) {
 	INNER JOIN  {$table_user} users
 	            ON payment.user_id = users.ID
 	ORDER BY    payment.id DESC
-	", ARRAY_A
+	",
+				ARRAY_A
 			);
 		} else {
 			$user_id = (int) get_current_user_id();
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
-			$result  = $wpdb->get_results(
+			$result = $wpdb->get_results(
 				$wpdb->prepare(
 					"
 	SELECT      *
@@ -175,8 +176,10 @@ if ( ! function_exists( 'fed_get_transactions' ) ) {
 	            ON payment.user_id = users.ID
     WHERE       payment.user_id = %d
 	ORDER BY    payment.id DESC
-	", $user_id
-				), ARRAY_A
+	",
+					$user_id
+				),
+				ARRAY_A
 			);
 
 			return $result;
@@ -207,12 +210,13 @@ if ( ! function_exists( 'fed_get_active_transactions' ) ) {
 	            ON payment.user_id = users.ID
     WHERE ends_at = 'active'
 	ORDER BY    payment.id DESC
-	", ARRAY_A
+	",
+				ARRAY_A
 			);
 		} else {
 			$user_id = (int) get_current_user_id();
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
-			$result  = $wpdb->get_results(
+			$result = $wpdb->get_results(
 				$wpdb->prepare(
 					"
 	SELECT      *
@@ -224,8 +228,10 @@ if ( ! function_exists( 'fed_get_active_transactions' ) ) {
     WHERE       payment.user_id = %d AND
                 status = 'active'
 	ORDER BY    payment.id DESC
-	", $user_id
-				), ARRAY_A
+	",
+					$user_id
+				),
+				ARRAY_A
 			);
 
 			return $result;
@@ -252,7 +258,7 @@ if ( ! function_exists( 'fed_get_transaction_with_meta' ) ) {
 		$table_payment_items = $wpdb->prefix . BC_FED_TABLE_PAYMENT_ITEMS;
 		$transaction_id      = (int) $transaction['id'];
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$m                   = $wpdb->get_results(
+		$m = $wpdb->get_results(
 			$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				"SELECT * FROM {$table_payment_items} WHERE payment_id = %d ORDER BY payment_item_id DESC",
@@ -380,7 +386,6 @@ if ( ! function_exists( 'fed_get_transaction_meta' ) ) {
 		}
 
 		return $transaction;
-
 	}
 }
 
@@ -395,7 +400,7 @@ if ( ! function_exists( 'fed_transaction_product_details' ) ) {
 	function fed_transaction_product_details( $transaction ) {
 		$items = '';
 		foreach ( $transaction['payment_items'] as $products ) {
-			$item  = unserialize( $products['object_items'] );
+			$item   = unserialize( $products['object_items'] );
 			$items .= sprintf(
 				'<strong>%s</strong> <br> <strong>Name:</strong> %s <br> <strong>Amount:</strong> %s %s<br> <strong>Plan Type:</strong> %s <br> <strong>Discount:</strong> %s <br> <strong>Tax:</strong> %s <br> <br>',
 				esc_attr( mb_strtoupper( $transaction['payment_type'] ) ),
@@ -437,8 +442,7 @@ if ( ! function_exists( 'fed_get_exact_amount' ) ) {
 		$discount = 0;
 		if ( isset( $object['amount'] ) && $object['amount'] ) {
 			$amount = $object['amount'];
-		}
-		else {
+		} else {
 			return 0;
 		}
 
@@ -466,19 +470,19 @@ if ( ! function_exists( 'fed_get_membership_expiry_date' ) ) {
 				return __( 'Free', 'frontend-dashboard' );
 			}
 
-//            if ($object['plan_type'] === 'custom') {
-//                $days = isset($object['plan_days']) ? $object['plan_days'] + 1 : '0';
-//
-//                return date('Y-m-d H:i:s', strtotime("+ {$days} days"));
-//            }
-//
-//            if ($object['plan_type'] === 'monthly') {
-//                return date('Y-m-d H:i:s', strtotime("+ 31 days"));
-//            }
-//
-//            if ($object['plan_type'] === 'annual') {
-//                return date('Y-m-d H:i:s', strtotime("+ 367 days"));
-//            }
+			// if ($object['plan_type'] === 'custom') {
+			// $days = isset($object['plan_days']) ? $object['plan_days'] + 1 : '0';
+			//
+			// return date('Y-m-d H:i:s', strtotime("+ {$days} days"));
+			// }
+			//
+			// if ($object['plan_type'] === 'monthly') {
+			// return date('Y-m-d H:i:s', strtotime("+ 31 days"));
+			// }
+			//
+			// if ($object['plan_type'] === 'annual') {
+			// return date('Y-m-d H:i:s', strtotime("+ 367 days"));
+			// }
 
 			if ( 'one_time' === $object['plan_type'] ) {
 				return __( 'One Time', 'frontend-dashboard' );
@@ -500,7 +504,8 @@ if ( ! function_exists( 'fed_payment_status' ) ) {
 	 */
 	function fed_payment_status() {
 		return apply_filters(
-			'fed_payment_status', array(
+			'fed_payment_status',
+			array(
 				'Success'   => __( 'Success', 'frontend-dashboard' ),
 				'Pending'   => __( 'Pending', 'frontend-dashboard' ),
 				'Hold'      => __( 'Hold', 'frontend-dashboard' ),
@@ -518,7 +523,8 @@ if ( ! function_exists( 'fed_discount_type' ) ) {
 	 */
 	function fed_discount_type() {
 		return apply_filters(
-			'fed_discount_type', array(
+			'fed_discount_type',
+			array(
 				'percentage' => '(%)',
 				'flat'       => 'Flat',
 			)
@@ -552,18 +558,18 @@ if ( ! function_exists( 'fed_get_registered_gateways' ) ) {
 
 		$default_gateways = array(
 			'bank_transfer' => array(
-				'id'          => 'bank_transfer',
-				'name'        => __( 'Direct Bank Transfer', 'frontend-dashboard' ),
-				'icon'        => 'fas fa-university',
-				'color'       => '#0f766e',
-				'tagline'     => __( 'Offline BACS & Wire Orders', 'frontend-dashboard' ),
-				'description' => __( 'Accept payments offline directly into your bank account with manual verification and automated receipt generation.', 'frontend-dashboard' ),
-				'type'        => 'core',
-				'badge'       => 'Free',
-				'badge_color' => '#0f766e',
-				'is_active'   => ( 'bank_transfer' === $current_gateway ),
-				'is_installed'=> true,
-				'settings_url'=> admin_url( 'admin.php?page=fed_payments&menu=gateways&submenu=FEDPayment@settings' ),
+				'id'           => 'bank_transfer',
+				'name'         => __( 'Direct Bank Transfer', 'frontend-dashboard' ),
+				'icon'         => 'fas fa-university',
+				'color'        => '#0f766e',
+				'tagline'      => __( 'Offline BACS & Wire Orders', 'frontend-dashboard' ),
+				'description'  => __( 'Accept payments offline directly into your bank account with manual verification and automated receipt generation.', 'frontend-dashboard' ),
+				'type'         => 'core',
+				'badge'        => 'Free',
+				'badge_color'  => '#0f766e',
+				'is_active'    => ( 'bank_transfer' === $current_gateway ),
+				'is_installed' => true,
+				'settings_url' => admin_url( 'admin.php?page=fed_payments&menu=gateways&submenu=FEDPayment@settings' ),
 			),
 		);
 
@@ -606,7 +612,7 @@ if ( ! function_exists( 'fed_get_payment_metrics' ) ) {
 	function fed_get_payment_metrics() {
 		global $wpdb;
 		$table_payment = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
-		
+
 		$total_revenue  = 0;
 		$total_txns     = 0;
 		$completed_txns = 0;
@@ -614,7 +620,7 @@ if ( ! function_exists( 'fed_get_payment_metrics' ) ) {
 		$refunded_txns  = 0;
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$table_exists = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $table_payment ) );
+		$table_exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table_payment ) );
 		if ( $table_exists === $table_payment ) {
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$results = $wpdb->get_results( "SELECT amount, status FROM {$table_payment}", ARRAY_A );
@@ -624,33 +630,33 @@ if ( ! function_exists( 'fed_get_payment_metrics' ) ) {
 					$status = strtolower( trim( $row['status'] ) );
 					if ( in_array( $status, array( 'completed', 'paid', 'success', 'succeeded' ), true ) ) {
 						$total_revenue += floatval( $row['amount'] );
-						$completed_txns++;
+						++$completed_txns;
 					} elseif ( in_array( $status, array( 'pending', 'processing', 'hold' ), true ) ) {
-						$pending_txns++;
+						++$pending_txns;
 					} elseif ( in_array( $status, array( 'refunded', 'cancelled', 'failed' ), true ) ) {
-						$refunded_txns++;
+						++$refunded_txns;
 					}
 				}
 			}
 		}
 
-		$gateways = fed_get_registered_gateways();
+		$gateways           = fed_get_registered_gateways();
 		$connected_gateways = 0;
 		foreach ( $gateways as $g ) {
 			if ( ! empty( $g['is_active'] ) ) {
-				$connected_gateways++;
+				++$connected_gateways;
 			}
 		}
 
 		return array(
-			'total_revenue'      => $total_revenue,
-			'total_transactions' => $total_txns,
-			'completed_txns'     => $completed_txns,
-			'pending_txns'       => $pending_txns,
-			'refunded_txns'      => $refunded_txns,
-			'active_subscriptions'=> intval( get_option( 'fed_active_subscriptions_count', 0 ) ),
-			'connected_gateways' => $connected_gateways,
-			'currency_symbol'    => '$',
+			'total_revenue'        => $total_revenue,
+			'total_transactions'   => $total_txns,
+			'completed_txns'       => $completed_txns,
+			'pending_txns'         => $pending_txns,
+			'refunded_txns'        => $refunded_txns,
+			'active_subscriptions' => intval( get_option( 'fed_active_subscriptions_count', 0 ) ),
+			'connected_gateways'   => $connected_gateways,
+			'currency_symbol'      => '$',
 		);
 	}
 }
@@ -703,4 +709,3 @@ if ( ! function_exists( 'fed_get_subscriptions' ) ) {
 		);
 	}
 }
-

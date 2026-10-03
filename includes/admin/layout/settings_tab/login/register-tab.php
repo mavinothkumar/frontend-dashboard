@@ -22,8 +22,8 @@ function fed_admin_register_settings_tab( $fed_login_register ) {
 	$email_notif = fed_get_data( 'register.register_email_notification', $fed_login_register );
 	?>
 	<form method="post"
-		  class="fed_admin_menu fed_ajax space-y-6"
-		  action="<?php echo esc_url( admin_url( 'admin-ajax.php?action=fed_admin_setting_form' ) ); ?>">
+			class="fed_admin_menu fed_ajax space-y-6"
+			action="<?php echo esc_url( admin_url( 'admin-ajax.php?action=fed_admin_setting_form' ) ); ?>">
 
 		<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
 		<?php

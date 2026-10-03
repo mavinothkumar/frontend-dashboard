@@ -25,17 +25,17 @@ class TableField extends BaseField {
 			$value = maybe_unserialize( $value );
 		}
 		if ( ! is_array( $value ) ) {
-			$value = [];
+			$value = array();
 		}
 
 		$schema_raw = is_string( $this->options ) ? $this->options : '';
 		$parts      = explode( '|', (string) $schema_raw );
 
-		$table_header = isset( $parts[0] ) && '' !== trim( $parts[0] ) ? explode( ',', trim( $parts[0] ) ) : [ __( 'Column 1', 'frontend-dashboard' ), __( 'Column 2', 'frontend-dashboard' ) ];
-		$table_rows   = isset( $parts[1] ) ? max( 1, (int) $parts[1] ) : 2;
-		$default_cell_values = isset( $parts[2] ) ? json_decode( $parts[2], true ) : [];
+		$table_header        = isset( $parts[0] ) && '' !== trim( $parts[0] ) ? explode( ',', trim( $parts[0] ) ) : array( __( 'Column 1', 'frontend-dashboard' ), __( 'Column 2', 'frontend-dashboard' ) );
+		$table_rows          = isset( $parts[1] ) ? max( 1, (int) $parts[1] ) : 2;
+		$default_cell_values = isset( $parts[2] ) ? json_decode( $parts[2], true ) : array();
 		if ( ! is_array( $default_cell_values ) ) {
-			$default_cell_values = [];
+			$default_cell_values = array();
 		}
 
 		$wrapper_classes = 'fed_table_wrapper w-full block overflow-hidden rounded-2xl bg-white shadow-2xs ' . esc_attr( $this->class_name );
@@ -53,9 +53,9 @@ class TableField extends BaseField {
 
 			case 'striped':
 				$wrapper_classes .= ' border border-slate-200/90';
-				$th_classes     .= ' text-white bg-slate-800 border-b border-slate-700 border-r border-slate-700/60 last:border-r-0';
-				$tr_classes     .= ' hover:bg-indigo-50/30 even:bg-slate-50/70 odd:bg-white border-b border-slate-100 last:border-0';
-				$td_classes     .= ' border-r border-slate-100 last:border-r-0';
+				$th_classes      .= ' text-white bg-slate-800 border-b border-slate-700 border-r border-slate-700/60 last:border-r-0';
+				$tr_classes      .= ' hover:bg-indigo-50/30 even:bg-slate-50/70 odd:bg-white border-b border-slate-100 last:border-0';
+				$td_classes      .= ' border-r border-slate-100 last:border-r-0';
 				break;
 
 			case 'compact':
@@ -68,17 +68,17 @@ class TableField extends BaseField {
 			case 'bordered':
 			default:
 				$wrapper_classes .= ' border border-slate-200/90';
-				$th_classes     .= ' text-slate-700 bg-slate-50/90 border-b border-slate-200/90 border-r border-slate-200/60 last:border-r-0';
-				$tr_classes     .= ' hover:bg-indigo-50/20 even:bg-slate-50/40 border-b border-slate-100 last:border-0';
-				$td_classes     .= ' border-r border-slate-100 last:border-r-0';
+				$th_classes      .= ' text-slate-700 bg-slate-50/90 border-b border-slate-200/90 border-r border-slate-200/60 last:border-r-0';
+				$tr_classes      .= ' hover:bg-indigo-50/20 even:bg-slate-50/40 border-b border-slate-100 last:border-0';
+				$td_classes      .= ' border-r border-slate-100 last:border-r-0';
 				break;
 		}
 
 		$th = '';
 		foreach ( $table_header as $idx => $header ) {
 			$header_text = trim( $header );
-			$th .= '<th class="' . esc_attr( $th_classes ) . '">';
-			$th .= '<div class="flex items-center gap-2">';
+			$th         .= '<th class="' . esc_attr( $th_classes ) . '">';
+			$th         .= '<div class="flex items-center gap-2">';
 			if ( 'striped' !== $table_template ) {
 				$th .= '<span class="w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0"></span>';
 			}
@@ -101,8 +101,8 @@ class TableField extends BaseField {
 					}
 
 					$text_size = ( 'compact' === $table_template ) ? 'text-[11px]' : 'text-xs';
-					$td .= '<td class="' . esc_attr( $td_classes ) . '">';
-					$td .= '<div class="px-2 py-1 ' . esc_attr( $text_size ) . ' font-medium text-slate-800 min-h-[30px] flex items-center">';
+					$td       .= '<td class="' . esc_attr( $td_classes ) . '">';
+					$td       .= '<div class="px-2 py-1 ' . esc_attr( $text_size ) . ' font-medium text-slate-800 min-h-[30px] flex items-center">';
 					if ( '' !== $cell_value ) {
 						$td .= esc_html( $cell_value );
 					} else {
@@ -119,9 +119,9 @@ class TableField extends BaseField {
 					$_name = ! empty( $this->name ) ? $this->name . '[' . $user_val_key . ']' : '';
 
 					$input_padding = ( 'compact' === $table_template ) ? 'px-2.5 py-1.5 text-[11px]' : 'px-3.5 py-2.5 text-xs';
-					$td .= '<td class="' . esc_attr( $td_classes ) . '">';
-					$td .= '<input type="text" ' . ( $this->is_readonly ? 'readonly="readonly"' : '' ) . ' ' . ( $this->is_disabled ? 'disabled="disabled"' : '' ) . ' name="' . esc_attr( $_name ) . '" value="' . esc_attr( $user_value ) . '" placeholder="' . esc_attr( $header_text ) . '" class="w-full font-medium text-slate-800 bg-white hover:bg-slate-50/80 focus:bg-white border border-slate-200/90 focus:border-indigo-500 rounded-xl ' . esc_attr( $input_padding ) . ' outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all placeholder:text-slate-300" ' . ( $this->is_required ? 'required="required"' : '' ) . ' />';
-					$td .= '</td>';
+					$td           .= '<td class="' . esc_attr( $td_classes ) . '">';
+					$td           .= '<input type="text" ' . ( $this->is_readonly ? 'readonly="readonly"' : '' ) . ' ' . ( $this->is_disabled ? 'disabled="disabled"' : '' ) . ' name="' . esc_attr( $_name ) . '" value="' . esc_attr( $user_value ) . '" placeholder="' . esc_attr( $header_text ) . '" class="w-full font-medium text-slate-800 bg-white hover:bg-slate-50/80 focus:bg-white border border-slate-200/90 focus:border-indigo-500 rounded-xl ' . esc_attr( $input_padding ) . ' outline-none focus:ring-4 focus:ring-indigo-500/10 transition-all placeholder:text-slate-300" ' . ( $this->is_required ? 'required="required"' : '' ) . ' />';
+					$td           .= '</td>';
 				}
 			}
 			$td .= '</tr>';
@@ -129,7 +129,11 @@ class TableField extends BaseField {
 
 		ob_start();
 		?>
-		<div class="<?php echo esc_attr( $wrapper_classes ); ?>" <?php if ( ! empty( $this->id_name ) ) : ?>id="<?php echo esc_attr( $this->id_name ); ?>"<?php endif; ?>>
+		<div class="<?php echo esc_attr( $wrapper_classes ); ?>" 
+		<?php
+		if ( ! empty( $this->id_name ) ) :
+			?>
+			id="<?php echo esc_attr( $this->id_name ); ?>"<?php endif; ?>>
 			<div class="overflow-x-auto w-full">
 				<table class="w-full text-left text-xs border-collapse m-0">
 					<thead>

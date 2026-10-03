@@ -198,10 +198,8 @@ if ( ! class_exists( 'FED_Validate' ) ) {
 				if ( strlen( $this->value ) < $length ) {
 					$this->errors[ $this->key ] = $this->name . ' Should be minimum value';
 				}
-			} else {
-				if ( $this->value < $length ) {
+			} elseif ( $this->value < $length ) {
 					$this->errors[ $this->key ] = $this->name . ' lesser than the minimum value';
-				}
 			}
 
 			return $this;
@@ -220,10 +218,8 @@ if ( ! class_exists( 'FED_Validate' ) ) {
 				if ( strlen( $this->value ) > $length ) {
 					$this->errors[ $this->key ] = $this->name . ' greater than the Maximum value';
 				}
-			} else {
-				if ( $this->value > $length ) {
+			} elseif ( $this->value > $length ) {
 					$this->errors[ $this->key ] = $this->name . ' greater than the Maximum value';
-				}
 			}
 
 			return $this;
@@ -243,7 +239,6 @@ if ( ! class_exists( 'FED_Validate' ) ) {
 			}
 
 			return $this;
-
 		}
 
 		/**
@@ -257,13 +252,12 @@ if ( ! class_exists( 'FED_Validate' ) ) {
 
 			if ( 4 != $this->file['error'] && $this->file['size'] > $size ) {
 				$this->errors[ $this->key ] = 'Il file ' . $this->name . ' supera la dimensione massima di ' . number_format(
-						$size / 1048576,
-						2
-					) . ' MB.';
+					$size / 1048576,
+					2
+				) . ' MB.';
 			}
 
 			return $this;
-
 		}
 
 		/**
@@ -292,7 +286,6 @@ if ( ! class_exists( 'FED_Validate' ) ) {
 			}
 
 			return $this;
-
 		}
 
 		/**
@@ -331,7 +324,6 @@ if ( ! class_exists( 'FED_Validate' ) ) {
 			$html .= '</ul>';
 
 			return $html;
-
 		}
 
 		/**
@@ -351,7 +343,6 @@ if ( ! class_exists( 'FED_Validate' ) ) {
 			} else {
 				return true;
 			}
-
 		}
 
 		/**
@@ -390,7 +381,9 @@ if ( ! class_exists( 'FED_Validate' ) ) {
 		public static function is_alpha( $value ) {
 			if (
 			filter_var(
-				$value, FILTER_VALIDATE_REGEXP, array( 'options' => array( 'regexp' => '/^[a-zA-Z]+$/' ) )
+				$value,
+				FILTER_VALIDATE_REGEXP,
+				array( 'options' => array( 'regexp' => '/^[a-zA-Z]+$/' ) )
 			)
 			) {
 				return true;
@@ -407,7 +400,9 @@ if ( ! class_exists( 'FED_Validate' ) ) {
 		public static function is_alphanum( $value ) {
 			if (
 			filter_var(
-				$value, FILTER_VALIDATE_REGEXP, array( 'options' => array( 'regexp' => '/^[a-zA-Z0-9]+$/' ) )
+				$value,
+				FILTER_VALIDATE_REGEXP,
+				array( 'options' => array( 'regexp' => '/^[a-zA-Z0-9]+$/' ) )
 			)
 			) {
 				return true;
@@ -437,7 +432,8 @@ if ( ! class_exists( 'FED_Validate' ) ) {
 		public static function is_uri( $value ) {
 			if (
 			filter_var(
-				$value, FILTER_VALIDATE_REGEXP,
+				$value,
+				FILTER_VALIDATE_REGEXP,
 				array( 'options' => array( 'regexp' => '/^[A-Za-z0-9-\/_]+$/' ) )
 			)
 			) {

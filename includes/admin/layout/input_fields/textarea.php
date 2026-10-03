@@ -21,8 +21,8 @@ function fed_admin_input_fields_multi_line( $row, $action, $menu_options ) {
 	?>
 	<div class="fed_input_type_container fed_input_multi_line_container space-y-7 <?php echo $is_active ? '' : 'hide hidden'; ?>" data-field-type="multi_line">
 		<form method="post"
-			  class="fed_admin_menu fed_ajax space-y-7"
-			  action="<?php echo esc_url( admin_url( 'admin-ajax.php?action=fed_admin_setting_up_form' ) ); ?>">
+				class="fed_admin_menu fed_ajax space-y-7"
+				action="<?php echo esc_url( admin_url( 'admin-ajax.php?action=fed_admin_setting_up_form' ) ); ?>">
 
 			<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
 			<?php

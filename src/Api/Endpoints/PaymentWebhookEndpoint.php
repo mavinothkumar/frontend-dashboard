@@ -22,11 +22,15 @@ class PaymentWebhookEndpoint {
 	const NAMESPACE = 'fed/v1';
 
 	public function register_routes(): void {
-		register_rest_route( self::NAMESPACE, '/payments/webhook/(?P<gateway>[a-zA-Z0-9_-]+)', [
-			'methods'             => [ 'POST', 'GET' ],
-			'callback'            => [ $this, 'handle_webhook' ],
-			'permission_callback' => '__return_true',
-		] );
+		register_rest_route(
+			self::NAMESPACE,
+			'/payments/webhook/(?P<gateway>[a-zA-Z0-9_-]+)',
+			array(
+				'methods'             => array( 'POST', 'GET' ),
+				'callback'            => array( $this, 'handle_webhook' ),
+				'permission_callback' => '__return_true',
+			)
+		);
 	}
 
 	public function handle_webhook( WP_REST_Request $request ) {
@@ -38,16 +42,22 @@ class PaymentWebhookEndpoint {
 		$response    = $manager->handleWebhook( $gatewayId, $httpRequest );
 
 		if ( ! $response->success ) {
-			return new WP_REST_Response( [
-				'success' => false,
-				'message' => $response->message,
-			], 400 );
+			return new WP_REST_Response(
+				array(
+					'success' => false,
+					'message' => $response->message,
+				),
+				400
+			);
 		}
 
-		return new WP_REST_Response( [
-			'success' => true,
-			'message' => $response->message,
-			'data'    => $response->rawResponse,
-		], 200 );
+		return new WP_REST_Response(
+			array(
+				'success' => true,
+				'message' => $response->message,
+				'data'    => $response->rawResponse,
+			),
+			200
+		);
 	}
 }

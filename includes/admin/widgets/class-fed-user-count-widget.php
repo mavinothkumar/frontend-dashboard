@@ -59,7 +59,6 @@ if ( ! class_exists( 'FEDUserCountWidget' ) ) {
 				$total_user_count['total_users']
 			);
 
-
 			if ( $users && count( $users ) > 0 ) {
 				$count   = wp_list_pluck( $users, 'count' );
 				$created = wp_list_pluck( $users, 'created' );
@@ -68,27 +67,27 @@ if ( ! class_exists( 'FEDUserCountWidget' ) ) {
 					<canvas id="fed_users_stat" width="1200" height="600"></canvas>
 				</div>
 				<script>
-                    var ctx = document.getElementById('fed_users_stat').getContext('2d');
-                    var payment_stat = new Chart(ctx, {
-                        type: 'bar',
-                        data: {
-                            labels: <?php echo wp_json_encode( $created ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>,
-                            datasets: [{
-                                label: '<?php echo esc_js( $users_count ); ?>',
-                                data: <?php echo wp_json_encode( $count ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>,
-                                backgroundColor: 'rgba(10, 170, 170,1)'
-                            }]
-                        },
-                        options: {
-                            scales: {
-                                yAxes: [{
-                                    ticks: {
-                                        beginAtZero: true
-                                    }
-                                }]
-                            }
-                        }
-                    });
+					var ctx = document.getElementById('fed_users_stat').getContext('2d');
+					var payment_stat = new Chart(ctx, {
+						type: 'bar',
+						data: {
+							labels: <?php echo wp_json_encode( $created ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>,
+							datasets: [{
+								label: '<?php echo esc_js( $users_count ); ?>',
+								data: <?php echo wp_json_encode( $count ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>,
+								backgroundColor: 'rgba(10, 170, 170,1)'
+							}]
+						},
+						options: {
+							scales: {
+								yAxes: [{
+									ticks: {
+										beginAtZero: true
+									}
+								}]
+							}
+						}
+					});
 				</script>
 				<?php
 			} else {
@@ -117,7 +116,6 @@ if ( ! class_exists( 'FEDUserCountWidget' ) ) {
 				);
 			}
 		}
-
 	}
 
 	new FEDUserCountWidget();

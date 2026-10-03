@@ -93,9 +93,9 @@ function fed_get_id_field( array $row ) {
 /**
  * Render Interactive Choices & Options Repeater Builder.
  *
- * @param  mixed   $input_val    Raw option values (legacy string, JSON, array).
- * @param  string  $field_type   Field type: 'select' or 'radio'.
- * @param  string  $is_multi_val Multi-select status for select fields.
+ * @param  mixed  $input_val    Raw option values (legacy string, JSON, array).
+ * @param  string $field_type   Field type: 'select' or 'radio'.
+ * @param  string $is_multi_val Multi-select status for select fields.
  */
 function fed_render_choices_builder( $input_val, $field_type = 'select', $is_multi_val = '' ) {
 	$options_map = function_exists( 'fed_parse_field_options' ) ? fed_parse_field_options( $input_val ) : array();
@@ -226,7 +226,7 @@ function fed_render_choices_builder( $input_val, $field_type = 'select', $is_mul
 							</div>
 						</div>
 						<?php
-						$idx++;
+						++$idx;
 					endforeach;
 					?>
 				</div>

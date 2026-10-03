@@ -24,8 +24,8 @@ function fed_admin_user_profile_hide_bar_tab( $fed_admin_options = array() ) {
 	$all_roles['fed_disable_all_user'] = __( 'Unregistered / Logged-out Users', 'frontend-dashboard' );
 	?>
 	<form method="post"
-		  class="fed_admin_menu fed_ajax space-y-6"
-		  action="<?php echo esc_url( admin_url( 'admin-ajax.php?action=fed_admin_setting_form' ) ); ?>">
+			class="fed_admin_menu fed_ajax space-y-6"
+			action="<?php echo esc_url( admin_url( 'admin-ajax.php?action=fed_admin_setting_form' ) ); ?>">
 
 		<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
 		<?php

@@ -169,7 +169,6 @@ function fed_admin_tab_post_role_delete( $request ) {
 		)
 	);
 	exit();
-
 }
 
 /**
@@ -191,12 +190,10 @@ function fed_admin_tab_user_upload( $request ) {
 		$contributor = get_role( $keys );
 		if ( array_key_exists( $keys, $user_options['user']['upload_permission'] ) ) {
 			$contributor->add_cap( 'upload_files' );
-		} else {
-			if ( 'administrator' === $keys ) {
+		} elseif ( 'administrator' === $keys ) {
 				$contributor->add_cap( 'upload_files' );
-			} else {
-				$contributor->remove_cap( 'upload_files' );
-			}
+		} else {
+			$contributor->remove_cap( 'upload_files' );
 		}
 	}
 

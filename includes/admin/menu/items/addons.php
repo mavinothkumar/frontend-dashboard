@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function fed_get_addons_catalog() {
 	// 1. Base Metadata & Visual Definitions
 	$meta_registry = array(
-		'frontend-dashboard-notification'              => array(
+		'frontend-dashboard-notification'               => array(
 			'category'      => 'communication',
 			'category_name' => __( 'Communication', 'frontend-dashboard' ),
 			'icon'          => 'fas fa-bell',
@@ -44,7 +44,7 @@ function fed_get_addons_catalog() {
 			'settings_url'  => admin_url( 'admin.php?page=fed_custom_post' ),
 			'description'   => __( 'Frontend Dashboard Custom Post is an add-on to add, customize, and manage custom post types and custom taxonomies (categories & tags) directly inside the Frontend Dashboard.', 'frontend-dashboard' ),
 		),
-		'frontend-dashboard-social-chat'               => array(
+		'frontend-dashboard-social-chat'                => array(
 			'category'      => 'communication',
 			'category_name' => __( 'Communication', 'frontend-dashboard' ),
 			'icon'          => 'fas fa-comments',
@@ -53,7 +53,7 @@ function fed_get_addons_catalog() {
 			'settings_url'  => admin_url( 'admin.php?page=fed_dashboard_menu' ),
 			'description'   => __( 'Frontend Dashboard Social Chat connects users directly with support or technical teams via WhatsApp, Telegram, and floating chat widgets.', 'frontend-dashboard' ),
 		),
-		'frontend-dashboard-captcha'                   => array(
+		'frontend-dashboard-captcha'                    => array(
 			'category'      => 'security',
 			'category_name' => __( 'Security & Auth', 'frontend-dashboard' ),
 			'icon'          => 'fas fa-shield-alt',
@@ -62,7 +62,7 @@ function fed_get_addons_catalog() {
 			'settings_url'  => admin_url( 'admin.php?page=fed_settings_login' ),
 			'description'   => __( 'Frontend Dashboard Captcha protects against spam bot submissions in Login, Registration, and frontend forms using Google reCAPTCHA, Cloudflare Turnstile, or Math Captcha.', 'frontend-dashboard' ),
 		),
-		'frontend-dashboard-message'                   => array(
+		'frontend-dashboard-message'                    => array(
 			'category'      => 'communication',
 			'category_name' => __( 'Communication', 'frontend-dashboard' ),
 			'icon'          => 'fas fa-envelope-open-text',
@@ -79,7 +79,7 @@ function fed_get_addons_catalog() {
 			'tags'          => array( 'User Table', 'Role Filter', 'Bulk Actions', 'Frontend Manager' ),
 			'settings_url'  => admin_url( 'admin.php?page=fed_user_profile' ),
 		),
-		'frontend-dashboard-social-connect'            => array(
+		'frontend-dashboard-social-connect'             => array(
 			'category'      => 'security',
 			'category_name' => __( 'Security & Auth', 'frontend-dashboard' ),
 			'icon'          => 'fas fa-users',
@@ -87,7 +87,7 @@ function fed_get_addons_catalog() {
 			'tags'          => array( 'OAuth 2.0', 'Google Login', 'Facebook Login', '1-Click Sign-in' ),
 			'settings_url'  => admin_url( 'admin.php?page=fed_settings_login' ),
 		),
-		'frontend-dashboard-payment'                   => array(
+		'frontend-dashboard-payment'                    => array(
 			'category'      => 'monetization',
 			'category_name' => __( 'Monetization', 'frontend-dashboard' ),
 			'icon'          => 'fas fa-credit-card',
@@ -117,7 +117,7 @@ function fed_get_addons_catalog() {
 	// 3. Fallback Built-in Official Catalog if API response is empty
 	if ( empty( $plugins_raw ) ) {
 		$plugins_raw = array(
-			'frontend-dashboard-notification'              => (object) array(
+			'frontend-dashboard-notification' => (object) array(
 				'id'           => 'BC_FED_NTF_PLUGIN',
 				'version'      => '1.1',
 				'directory'    => 'frontend-dashboard-notification/frontend-dashboard-notification.php',
@@ -126,7 +126,13 @@ function fed_get_addons_catalog() {
 				'thumbnail'    => 'https://buffercode.com/photos/1/plugins/frontend-dashboard-notification/frontend-dashboard-notification-600.png',
 				'download_url' => 'https://buffercode.com/plugin/frontend-dashboard-notification',
 				'install_slug' => 'frontend-dashboard-notification',
-				'pricing'      => (object) array( 'type' => 'Free', 'amount' => '0', 'currency' => '$', 'currency_code' => 'USD', 'purchase_url' => '' ),
+				'pricing'      => (object) array(
+					'type'          => 'Free',
+					'amount'        => '0',
+					'currency'      => '$',
+					'currency_code' => 'USD',
+					'purchase_url'  => '',
+				),
 			),
 			'frontend-dashboard-custom-post-and-taxonomies' => (object) array(
 				'id'           => 'FED_CP_PLUGIN',
@@ -137,9 +143,15 @@ function fed_get_addons_catalog() {
 				'thumbnail'    => 'https://buffercode.com/photos/1/plugins/frontend-dashboard-custom-post-taxonomies/custom_900.png',
 				'download_url' => 'https://buffercode.com/plugin/frontend-dashboard-custom-post-and-taxonomies',
 				'install_slug' => 'frontend-dashboard-custom-post',
-				'pricing'      => (object) array( 'type' => 'Free', 'amount' => '0', 'currency' => '$', 'currency_code' => 'USD', 'purchase_url' => '' ),
+				'pricing'      => (object) array(
+					'type'          => 'Free',
+					'amount'        => '0',
+					'currency'      => '$',
+					'currency_code' => 'USD',
+					'purchase_url'  => '',
+				),
 			),
-			'frontend-dashboard-social-chat'               => (object) array(
+			'frontend-dashboard-social-chat'  => (object) array(
 				'id'           => 'BC_FED_SCHAT_PLUGIN',
 				'version'      => '1.3',
 				'directory'    => 'frontend-dashboard-social-chat/frontend-dashboard-social-chat.php',
@@ -148,9 +160,15 @@ function fed_get_addons_catalog() {
 				'thumbnail'    => 'https://buffercode.com/photos/1/plugins/social-chat/frontend-dashboard-social-chat-600.png',
 				'download_url' => 'https://buffercode.com/plugin/frontend-dashboard-social-chat',
 				'install_slug' => 'frontend-dashboard-social-chat',
-				'pricing'      => (object) array( 'type' => 'Free', 'amount' => '0', 'currency' => '$', 'currency_code' => 'USD', 'purchase_url' => '' ),
+				'pricing'      => (object) array(
+					'type'          => 'Free',
+					'amount'        => '0',
+					'currency'      => '$',
+					'currency_code' => 'USD',
+					'purchase_url'  => '',
+				),
 			),
-			'frontend-dashboard-captcha'                   => (object) array(
+			'frontend-dashboard-captcha'      => (object) array(
 				'id'           => 'BC_FED_CAPTCHA_PLUGIN',
 				'version'      => '3.0.0',
 				'directory'    => 'frontend-dashboard-captcha/frontend-dashboard-captcha.php',
@@ -159,7 +177,13 @@ function fed_get_addons_catalog() {
 				'thumbnail'    => 'https://buffercode.com/photos/1/plugins/frontend-dashboard-captcha/captcha-600.png',
 				'download_url' => 'https://buffercode.com/plugin/frontend-dashboard-captcha',
 				'install_slug' => 'frontend-dashboard-captcha',
-				'pricing'      => (object) array( 'type' => 'Free', 'amount' => '0', 'currency' => '$', 'currency_code' => 'USD', 'purchase_url' => '' ),
+				'pricing'      => (object) array(
+					'type'          => 'Free',
+					'amount'        => '0',
+					'currency'      => '$',
+					'currency_code' => 'USD',
+					'purchase_url'  => '',
+				),
 			),
 		);
 	}
@@ -175,7 +199,13 @@ function fed_get_addons_catalog() {
 			'thumbnail'    => '',
 			'download_url' => 'https://buffercode.com/plugin/frontend-dashboard-message',
 			'install_slug' => 'frontend-dashboard-message',
-			'pricing'      => (object) array( 'type' => 'Free', 'amount' => '0', 'currency' => '$', 'currency_code' => 'USD', 'purchase_url' => '' ),
+			'pricing'      => (object) array(
+				'type'          => 'Free',
+				'amount'        => '0',
+				'currency'      => '$',
+				'currency_code' => 'USD',
+				'purchase_url'  => '',
+			),
 		);
 	}
 
@@ -294,7 +324,7 @@ function fed_get_other_plugins_catalog() {
 
 	// Fallback definitions in case the API is offline or hasn't returned them
 	if ( empty( $plugins_raw ) || ( ! isset( $plugins_raw['ad-fuz'] ) && ! isset( $plugins_raw['gatefuz'] ) ) ) {
-		$fallback = array(
+		$fallback    = array(
 			'ad-fuz'  => (object) array(
 				'id'               => 'AD_FUZ_PLUGIN',
 				'version'          => '1.3.13',
@@ -379,13 +409,13 @@ function fed_get_plugin_pages_menu() {
 	$other_plugins = fed_get_other_plugins_catalog();
 
 	// Calculate live statistics for Frontend Dashboard Add-ons
-	$total_addons     = count( $catalog );
-	$active_count     = 0;
-	$installed_count  = 0;
-	$pro_count        = 0;
+	$total_addons    = count( $catalog );
+	$active_count    = 0;
+	$installed_count = 0;
+	$pro_count       = 0;
 
 	foreach ( $catalog as $slug => &$item ) {
-		$file = $item['file'];
+		$file                 = $item['file'];
 		$item['is_installed'] = file_exists( WP_PLUGIN_DIR . '/' . $file );
 		$item['is_active']    = $item['is_installed'] && is_plugin_active( $file );
 
@@ -402,13 +432,13 @@ function fed_get_plugin_pages_menu() {
 		$item['has_update']    = ( $item['is_active'] && ! empty( $local_version ) && version_compare( $item['version'], $local_version, '>' ) );
 
 		if ( $item['is_active'] ) {
-			$active_count++;
+			++$active_count;
 		}
 		if ( $item['is_installed'] ) {
-			$installed_count++;
+			++$installed_count;
 		}
 		if ( ! empty( $item['is_pro'] ) ) {
-			$pro_count++;
+			++$pro_count;
 		}
 	}
 	unset( $item );
@@ -422,7 +452,7 @@ function fed_get_plugin_pages_menu() {
 	unset( $item );
 
 	$available_count = $total_addons - $active_count;
-	$nonce = wp_create_nonce( 'fed_nonce' );
+	$nonce           = wp_create_nonce( 'fed_nonce' );
 	?>
 	<style>
 		.fed-addons-wrap {
@@ -656,9 +686,9 @@ function fed_get_plugin_pages_menu() {
 		<div id="fed_addons_grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
 			<?php foreach ( $catalog as $slug => $addon ) : ?>
 				<?php
-				$is_active     = $addon['is_active'];
-				$is_installed  = $addon['is_installed'];
-				$is_pro        = ! empty( $addon['is_pro'] );
+				$is_active       = $addon['is_active'];
+				$is_installed    = $addon['is_installed'];
+				$is_pro          = ! empty( $addon['is_pro'] );
 				$has_update      = ! empty( $addon['has_update'] );
 				$local_version   = ! empty( $addon['local_version'] ) ? $addon['local_version'] : $addon['version'];
 				$is_incompatible = ( $is_active && ! empty( $local_version ) && version_compare( $local_version, '3.0.0', '<' ) );
@@ -883,10 +913,10 @@ function fed_get_plugin_pages_menu() {
 			<div id="fed_other_plugins_grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
 				<?php foreach ( $other_plugins as $slug => $item ) : ?>
 					<?php
-					$is_active     = $item['is_active'];
-					$is_installed  = $item['is_installed'];
-					$status_attr   = $is_active ? 'active' : ( $is_installed ? 'inactive' : 'available' );
-					$card_border   = 'border-slate-200/80 shadow-sm';
+					$is_active    = $item['is_active'];
+					$is_installed = $item['is_installed'];
+					$status_attr  = $is_active ? 'active' : ( $is_installed ? 'inactive' : 'available' );
+					$card_border  = 'border-slate-200/80 shadow-sm';
 					?>
 					<div class="fed-addon-card fed-ecosystem-card bg-white rounded-2xl border <?php echo esc_attr( $card_border ); ?> flex flex-col justify-between overflow-hidden"
 						data-category="ecosystem"

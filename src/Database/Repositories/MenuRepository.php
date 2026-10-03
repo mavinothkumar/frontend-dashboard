@@ -62,7 +62,7 @@ class MenuRepository extends BaseRepository {
 	 */
 	public function getMenusForRole( $role ) {
 		$menus      = $this->getOrderedMenus();
-		$accessible = [];
+		$accessible = array();
 
 		foreach ( $menus as $menu ) {
 			if ( empty( $menu['user_role'] ) ) {
@@ -85,12 +85,12 @@ class MenuRepository extends BaseRepository {
 	 * @return array
 	 */
 	public function getMenuTree() {
-		$menus = $this->getOrderedMenus();
-		$tree  = [];
-		$lookup = [];
+		$menus  = $this->getOrderedMenus();
+		$tree   = array();
+		$lookup = array();
 
 		foreach ( $menus as $menu ) {
-			$menu['children'] = [];
+			$menu['children']      = array();
 			$lookup[ $menu['id'] ] = $menu;
 		}
 

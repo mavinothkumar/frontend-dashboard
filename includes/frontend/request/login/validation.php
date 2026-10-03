@@ -52,11 +52,13 @@ function fed_validate_registration_form( $post ) {
 	if ( isset( $post['user_login'] ) ) {
 		if ( fed_validate_username( $post['user_login'] ) ) {
 			$fed_error->add(
-				'invalid_username', __( 'This Username is Illegal to use in this website', 'frontend-dashboard' )
+				'invalid_username',
+				__( 'This Username is Illegal to use in this website', 'frontend-dashboard' )
 			);
 		} elseif ( username_exists( $post['user_login'] ) ) {
 			$fed_error->add(
-				'username_exists', __( 'This username is already registered. Please choose another one.', 'frontend-dashboard' )
+				'username_exists',
+				__( 'This username is already registered. Please choose another one.', 'frontend-dashboard' )
 			);
 		}
 	}
@@ -138,4 +140,3 @@ function fed_validate_forgot_password( $post ) {
 
 	return $user_data;
 }
-

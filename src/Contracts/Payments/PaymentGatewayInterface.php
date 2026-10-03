@@ -50,7 +50,7 @@ interface PaymentGatewayInterface {
 	 * @param array $orderData
 	 * @return string
 	 */
-	public function renderCheckoutFields( array $orderData = [] ): string;
+	public function renderCheckoutFields( array $orderData = array() ): string;
 
 	/**
 	 * Process a payment request.

@@ -26,19 +26,27 @@ class MenuEndpoints {
 	}
 
 	public function register_routes(): void {
-		register_rest_route( self::NAMESPACE, '/menus', [
-			'methods'             => 'GET',
-			'callback'            => [ $this, 'get_menus' ],
-			'permission_callback' => 'is_user_logged_in',
-		] );
+		register_rest_route(
+			self::NAMESPACE,
+			'/menus',
+			array(
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'get_menus' ),
+				'permission_callback' => 'is_user_logged_in',
+			)
+		);
 
-		register_rest_route( self::NAMESPACE, '/menus/reorder', [
-			'methods'             => 'POST',
-			'callback'            => [ $this, 'reorder_menus' ],
-			'permission_callback' => function() {
-				return current_user_can( 'manage_options' );
-			},
-		] );
+		register_rest_route(
+			self::NAMESPACE,
+			'/menus/reorder',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'reorder_menus' ),
+				'permission_callback' => function () {
+					return current_user_can( 'manage_options' );
+				},
+			)
+		);
 	}
 
 	public function get_menus( WP_REST_Request $request ) {
@@ -48,35 +56,47 @@ class MenuEndpoints {
 
 		$menus = $this->menuRepo->getMenusForRole( $role );
 
-		return new WP_REST_Response( [
-			'success' => true,
-			'menus'   => $menus,
-		], 200 );
+		return new WP_REST_Response(
+			array(
+				'success' => true,
+				'menus'   => $menus,
+			),
+			200
+		);
 	}
 
 	public function reorder_menus( WP_REST_Request $request ) {
 		$params    = $request->get_json_params() ?: $request->get_body_params();
-		$validator = Validator::make( (array) $params, [
-			'items' => 'required',
-		] );
+		$validator = Validator::make(
+			(array) $params,
+			array(
+				'items' => 'required',
+			)
+		);
 
 		if ( $validator->fails() ) {
-			return new WP_Error( 'validation_failed', $validator->firstError(), [ 'status' => 422 ] );
+			return new WP_Error( 'validation_failed', $validator->firstError(), array( 'status' => 422 ) );
 		}
 
 		$items = (array) $params['items'];
 		foreach ( $items as $order => $item ) {
 			if ( isset( $item['id'] ) ) {
-				$this->menuRepo->update( (int) $item['id'], [
-					'menu_order' => (int) $order,
-					'parent_id'  => isset( $item['parent_id'] ) ? (string) $item['parent_id'] : '0',
-				] );
+				$this->menuRepo->update(
+					(int) $item['id'],
+					array(
+						'menu_order' => (int) $order,
+						'parent_id'  => isset( $item['parent_id'] ) ? (string) $item['parent_id'] : '0',
+					)
+				);
 			}
 		}
 
-		return new WP_REST_Response( [
-			'success' => true,
-			'message' => __( 'Menu order updated successfully', 'frontend-dashboard' ),
-		], 200 );
+		return new WP_REST_Response(
+			array(
+				'success' => true,
+				'message' => __( 'Menu order updated successfully', 'frontend-dashboard' ),
+			),
+			200
+		);
 	}
 }

@@ -14,10 +14,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 class HiddenField extends BaseField {
 
 	public function render() {
-		$attrs = $this->build_attributes( [
-			'type'  => 'hidden',
-			'value' => $this->value,
-		] );
+		$attrs = $this->build_attributes(
+			array(
+				'type'  => 'hidden',
+				'value' => $this->value,
+			)
+		);
 
 		return sprintf( '<input %s />', $attrs );
 	}

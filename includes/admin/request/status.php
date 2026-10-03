@@ -203,11 +203,11 @@ function fed_status_delete_option() {
 		global $wpdb;
 		$option_id = (int) $request['option_id'];
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$opt_row   = $wpdb->get_row( $wpdb->prepare( "SELECT option_name FROM `{$wpdb->options}` WHERE option_id = %d", $option_id ) );
-		$opt_name  = $opt_row ? $opt_row->option_name : "ID #{$option_id}";
+		$opt_row  = $wpdb->get_row( $wpdb->prepare( "SELECT option_name FROM `{$wpdb->options}` WHERE option_id = %d", $option_id ) );
+		$opt_name = $opt_row ? $opt_row->option_name : "ID #{$option_id}";
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$status    = $wpdb->delete( $wpdb->options, array( 'option_id' => $option_id ), array( '%d' ) );
+		$status = $wpdb->delete( $wpdb->options, array( 'option_id' => $option_id ), array( '%d' ) );
 
 		if ( $status ) {
 			if ( function_exists( 'fed_log_activity' ) ) {
@@ -382,7 +382,7 @@ function fed_tools_seed_pages() {
 	$forgot_id = fed_tools_find_or_create_page( 'forgot-password', 'Forgot Password', '[fed_forgot_password_only]', 'fed-canvas' );
 
 	// Update fed_admin_login settings mapping
-	$fed_admin_login = get_option( 'fed_admin_login', array() );
+	$fed_admin_login             = get_option( 'fed_admin_login', array() );
 	$fed_admin_login['settings'] = array(
 		'fed_login_url'             => (int) $login_id,
 		'fed_register_url'          => (int) $register_id,
@@ -431,11 +431,56 @@ function fed_tools_seed_menus() {
 	$user_roles = serialize( array_keys( fed_get_user_roles() ) );
 
 	$default_menus = array(
-		array( 'menu_slug' => 'dashboard', 'menu' => 'Dashboard', 'menu_order' => 1, 'menu_image_id' => 'fas fa-tachometer-alt', 'show_user_profile' => 'Enable', 'extra' => 'no', 'parent_id' => '0', 'user_role' => $user_roles ),
-		array( 'menu_slug' => 'profile', 'menu' => 'Profile', 'menu_order' => 2, 'menu_image_id' => 'fas fa-user', 'show_user_profile' => 'Enable', 'extra' => 'no', 'parent_id' => '0', 'user_role' => $user_roles ),
-		array( 'menu_slug' => 'post', 'menu' => 'Posts', 'menu_order' => 3, 'menu_image_id' => 'fas fa-newspaper', 'show_user_profile' => 'Enable', 'extra' => 'no', 'parent_id' => '0', 'user_role' => $user_roles ),
-		array( 'menu_slug' => 'payments', 'menu' => 'Payments', 'menu_order' => 4, 'menu_image_id' => 'fas fa-credit-card', 'show_user_profile' => 'Enable', 'extra' => 'no', 'parent_id' => '0', 'user_role' => $user_roles ),
-		array( 'menu_slug' => 'logout', 'menu' => 'Logout', 'menu_order' => 99, 'menu_image_id' => 'fas fa-sign-out-alt', 'show_user_profile' => 'Enable', 'extra' => 'no', 'parent_id' => '0', 'user_role' => $user_roles ),
+		array(
+			'menu_slug'         => 'dashboard',
+			'menu'              => 'Dashboard',
+			'menu_order'        => 1,
+			'menu_image_id'     => 'fas fa-tachometer-alt',
+			'show_user_profile' => 'Enable',
+			'extra'             => 'no',
+			'parent_id'         => '0',
+			'user_role'         => $user_roles,
+		),
+		array(
+			'menu_slug'         => 'profile',
+			'menu'              => 'Profile',
+			'menu_order'        => 2,
+			'menu_image_id'     => 'fas fa-user',
+			'show_user_profile' => 'Enable',
+			'extra'             => 'no',
+			'parent_id'         => '0',
+			'user_role'         => $user_roles,
+		),
+		array(
+			'menu_slug'         => 'post',
+			'menu'              => 'Posts',
+			'menu_order'        => 3,
+			'menu_image_id'     => 'fas fa-newspaper',
+			'show_user_profile' => 'Enable',
+			'extra'             => 'no',
+			'parent_id'         => '0',
+			'user_role'         => $user_roles,
+		),
+		array(
+			'menu_slug'         => 'payments',
+			'menu'              => 'Payments',
+			'menu_order'        => 4,
+			'menu_image_id'     => 'fas fa-credit-card',
+			'show_user_profile' => 'Enable',
+			'extra'             => 'no',
+			'parent_id'         => '0',
+			'user_role'         => $user_roles,
+		),
+		array(
+			'menu_slug'         => 'logout',
+			'menu'              => 'Logout',
+			'menu_order'        => 99,
+			'menu_image_id'     => 'fas fa-sign-out-alt',
+			'show_user_profile' => 'Enable',
+			'extra'             => 'no',
+			'parent_id'         => '0',
+			'user_role'         => $user_roles,
+		),
 	);
 
 	$inserted_count = 0;
@@ -445,7 +490,7 @@ function fed_tools_seed_menus() {
 		if ( ! $existing ) {
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$wpdb->insert( $menu_table, $m );
-			$inserted_count++;
+			++$inserted_count;
 		}
 	}
 
@@ -530,7 +575,7 @@ function fed_tools_seed_all() {
 	$register_id  = fed_tools_find_or_create_page( 'register', 'Register', '[fed_register_only]', 'fed-canvas' );
 	$forgot_id    = fed_tools_find_or_create_page( 'forgot-password', 'Forgot Password', '[fed_forgot_password_only]', 'fed-canvas' );
 
-	$fed_admin_login = get_option( 'fed_admin_login', array() );
+	$fed_admin_login             = get_option( 'fed_admin_login', array() );
 	$fed_admin_login['settings'] = array(
 		'fed_login_url'             => (int) $login_id,
 		'fed_register_url'          => (int) $register_id,
@@ -548,11 +593,56 @@ function fed_tools_seed_all() {
 	$user_roles = serialize( array_keys( fed_get_user_roles() ) );
 
 	$default_menus = array(
-		array( 'menu_slug' => 'dashboard', 'menu' => 'Dashboard', 'menu_order' => 1, 'menu_image_id' => 'fas fa-tachometer-alt', 'show_user_profile' => 'Enable', 'extra' => 'no', 'parent_id' => '0', 'user_role' => $user_roles ),
-		array( 'menu_slug' => 'profile', 'menu' => 'Profile', 'menu_order' => 2, 'menu_image_id' => 'fas fa-user', 'show_user_profile' => 'Enable', 'extra' => 'no', 'parent_id' => '0', 'user_role' => $user_roles ),
-		array( 'menu_slug' => 'post', 'menu' => 'Posts', 'menu_order' => 3, 'menu_image_id' => 'fas fa-newspaper', 'show_user_profile' => 'Enable', 'extra' => 'no', 'parent_id' => '0', 'user_role' => $user_roles ),
-		array( 'menu_slug' => 'payments', 'menu' => 'Payments', 'menu_order' => 4, 'menu_image_id' => 'fas fa-credit-card', 'show_user_profile' => 'Enable', 'extra' => 'no', 'parent_id' => '0', 'user_role' => $user_roles ),
-		array( 'menu_slug' => 'logout', 'menu' => 'Logout', 'menu_order' => 99, 'menu_image_id' => 'fas fa-sign-out-alt', 'show_user_profile' => 'Enable', 'extra' => 'no', 'parent_id' => '0', 'user_role' => $user_roles ),
+		array(
+			'menu_slug'         => 'dashboard',
+			'menu'              => 'Dashboard',
+			'menu_order'        => 1,
+			'menu_image_id'     => 'fas fa-tachometer-alt',
+			'show_user_profile' => 'Enable',
+			'extra'             => 'no',
+			'parent_id'         => '0',
+			'user_role'         => $user_roles,
+		),
+		array(
+			'menu_slug'         => 'profile',
+			'menu'              => 'Profile',
+			'menu_order'        => 2,
+			'menu_image_id'     => 'fas fa-user',
+			'show_user_profile' => 'Enable',
+			'extra'             => 'no',
+			'parent_id'         => '0',
+			'user_role'         => $user_roles,
+		),
+		array(
+			'menu_slug'         => 'post',
+			'menu'              => 'Posts',
+			'menu_order'        => 3,
+			'menu_image_id'     => 'fas fa-newspaper',
+			'show_user_profile' => 'Enable',
+			'extra'             => 'no',
+			'parent_id'         => '0',
+			'user_role'         => $user_roles,
+		),
+		array(
+			'menu_slug'         => 'payments',
+			'menu'              => 'Payments',
+			'menu_order'        => 4,
+			'menu_image_id'     => 'fas fa-credit-card',
+			'show_user_profile' => 'Enable',
+			'extra'             => 'no',
+			'parent_id'         => '0',
+			'user_role'         => $user_roles,
+		),
+		array(
+			'menu_slug'         => 'logout',
+			'menu'              => 'Logout',
+			'menu_order'        => 99,
+			'menu_image_id'     => 'fas fa-sign-out-alt',
+			'show_user_profile' => 'Enable',
+			'extra'             => 'no',
+			'parent_id'         => '0',
+			'user_role'         => $user_roles,
+		),
 	);
 
 	foreach ( $default_menus as $m ) {
@@ -685,4 +775,3 @@ function fed_tools_clear_activity_log() {
 }
 add_action( 'wp_ajax_fed_tools_seed_all', 'fed_tools_seed_all' );
 add_action( 'wp_ajax_nopriv_fed_tools_seed_all', 'fed_block_the_action' );
-

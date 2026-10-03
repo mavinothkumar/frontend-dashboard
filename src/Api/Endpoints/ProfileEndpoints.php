@@ -26,24 +26,32 @@ class ProfileEndpoints {
 	}
 
 	public function register_routes(): void {
-		register_rest_route( self::NAMESPACE, '/profile/fields', [
-			'methods'             => 'GET',
-			'callback'            => [ $this, 'get_fields' ],
-			'permission_callback' => 'is_user_logged_in',
-		] );
+		register_rest_route(
+			self::NAMESPACE,
+			'/profile/fields',
+			array(
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'get_fields' ),
+				'permission_callback' => 'is_user_logged_in',
+			)
+		);
 
-		register_rest_route( self::NAMESPACE, '/profile', [
-			'methods'             => 'POST',
-			'callback'            => [ $this, 'update_profile' ],
-			'permission_callback' => 'is_user_logged_in',
-		] );
+		register_rest_route(
+			self::NAMESPACE,
+			'/profile',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'update_profile' ),
+				'permission_callback' => 'is_user_logged_in',
+			)
+		);
 	}
 
 	public function get_fields( WP_REST_Request $request ) {
 		$fields = $this->profileRepo->getProfileFields();
 		$userId = get_current_user_id();
 
-		$data = [];
+		$data = array();
 		foreach ( $fields as $field ) {
 			$metaKey = $field['input_meta'];
 			$val     = get_user_meta( $userId, $metaKey, true );
@@ -57,13 +65,16 @@ class ProfileEndpoints {
 			}
 
 			$field['current_value'] = $val;
-			$data[] = $field;
+			$data[]                 = $field;
 		}
 
-		return new WP_REST_Response( [
-			'success' => true,
-			'fields'  => $data,
-		], 200 );
+		return new WP_REST_Response(
+			array(
+				'success' => true,
+				'fields'  => $data,
+			),
+			200
+		);
 	}
 
 	public function update_profile( WP_REST_Request $request ) {
@@ -73,10 +84,10 @@ class ProfileEndpoints {
 		$fields = $this->profileRepo->getProfileFields();
 
 		// Build dynamic validation rules
-		$rules = [];
+		$rules = array();
 		foreach ( $fields as $field ) {
 			$metaKey = $field['input_meta'];
-			$rule    = [];
+			$rule    = array();
 
 			if ( 'Enable' === $field['is_required'] || 'true' === $field['is_required'] ) {
 				$rule[] = 'required';
@@ -93,11 +104,18 @@ class ProfileEndpoints {
 
 		$validator = Validator::make( (array) $params, $rules );
 		if ( $validator->fails() ) {
-			return new WP_Error( 'validation_failed', $validator->firstError(), [ 'status' => 422, 'errors' => $validator->errors() ] );
+			return new WP_Error(
+				'validation_failed',
+				$validator->firstError(),
+				array(
+					'status' => 422,
+					'errors' => $validator->errors(),
+				)
+			);
 		}
 
 		// Core fields mapping
-		$userdata = [ 'ID' => $userId ];
+		$userdata = array( 'ID' => $userId );
 		if ( isset( $params['user_email'] ) ) {
 			$userdata['user_email'] = sanitize_email( $params['user_email'] );
 		}
@@ -122,14 +140,17 @@ class ProfileEndpoints {
 		// Custom meta fields update
 		foreach ( $fields as $field ) {
 			$metaKey = $field['input_meta'];
-			if ( array_key_exists( $metaKey, $params ) && ! in_array( $metaKey, [ 'user_email', 'first_name', 'last_name', 'display_name', 'description', 'user_url' ], true ) ) {
+			if ( array_key_exists( $metaKey, $params ) && ! in_array( $metaKey, array( 'user_email', 'first_name', 'last_name', 'display_name', 'description', 'user_url' ), true ) ) {
 				update_user_meta( $userId, $metaKey, sanitize_text_field( $params[ $metaKey ] ) );
 			}
 		}
 
-		return new WP_REST_Response( [
-			'success' => true,
-			'message' => __( 'Profile updated successfully', 'frontend-dashboard' ),
-		], 200 );
+		return new WP_REST_Response(
+			array(
+				'success' => true,
+				'message' => __( 'Profile updated successfully', 'frontend-dashboard' ),
+			),
+			200
+		);
 	}
 }

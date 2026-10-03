@@ -24,7 +24,7 @@ if ( ! function_exists( 'FED\app' ) ) {
 	 * @param array       $parameters
 	 * @return mixed|Application|\FED\Core\Container
 	 */
-	function app( $abstract = null, array $parameters = [] ) {
+	function app( $abstract = null, array $parameters = array() ) {
 		$app = Application::getInstance();
 
 		if ( is_null( $abstract ) ) {
@@ -43,7 +43,7 @@ if ( ! function_exists( 'FED\view' ) ) {
 	 * @param array  $data
 	 * @return string
 	 */
-	function view( $template, array $data = [] ) {
+	function view( $template, array $data = array() ) {
 		return app( View::class )->render( $template, $data );
 	}
 }
@@ -84,7 +84,7 @@ if ( ! function_exists( 'FED\field' ) ) {
 	 * @param array  $attributes
 	 * @return string
 	 */
-	function field( string $type, array $attributes = [] ): string {
+	function field( string $type, array $attributes = array() ): string {
 		return \FED\Services\Fields\FieldFactory::render( $type, $attributes );
 	}
 }
@@ -99,4 +99,3 @@ if ( ! function_exists( 'FED\gateways' ) ) {
 		return \FED\Services\Payments\PaymentGatewayManager::getInstance();
 	}
 }
-

@@ -24,7 +24,7 @@ class PostRepository extends BaseRepository {
 	 * @return array
 	 */
 	public function getFieldsForPostType( $postType = 'post' ) {
-		return $this->where( [ 'post_type' => $postType ], 'input_order ASC, id ASC' );
+		return $this->where( array( 'post_type' => $postType ), 'input_order ASC, id ASC' );
 	}
 
 	/**
@@ -56,6 +56,6 @@ class PostRepository extends BaseRepository {
 		$sql   = "SELECT DISTINCT `post_type` FROM `{$table}` WHERE `status` = 'active'";
 		$types = $this->db->get_col( $sql );
 
-		return $types ?: [];
+		return $types ?: array();
 	}
 }

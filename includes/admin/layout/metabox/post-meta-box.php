@@ -18,8 +18,14 @@ add_action( 'admin_init', 'fed_add_meta_boxes', 1 );
  * Add Post Meta Boxes
  */
 function fed_add_meta_boxes() {
-	add_meta_box( 'fed_meta_boxes', esc_html__( 'Frontend Dashboard Custom Fields', 'frontend-dashboard' ),
-		'fed_add_meta_boxes_display', array_keys( fed_get_public_post_types() ), 'normal', 'high' );
+	add_meta_box(
+		'fed_meta_boxes',
+		esc_html__( 'Frontend Dashboard Custom Fields', 'frontend-dashboard' ),
+		'fed_add_meta_boxes_display',
+		array_keys( fed_get_public_post_types() ),
+		'normal',
+		'high'
+	);
 }
 
 /**
@@ -32,7 +38,7 @@ function fed_add_meta_boxes_display() {
 	global $post;
 	$post_meta = fed_get_all_post_meta_key( $post->ID );
 	?>
-    <div class="bc_fed">
+	<div class="bc_fed">
 		<?php
 		foreach ( $extra_fields as $item ) {
 			$temp               = $item;
@@ -41,22 +47,21 @@ function fed_add_meta_boxes_display() {
 
 			if ( fed_get_current_screen_id() === $item['post_type'] ) {
 				?>
-                <div class="row fed_dashboard_item_field p-b-20">
-                    <div class="col-md-6">
-                        <div class="fed_header_font_color"><?php echo esc_html( $temp['label_name'] ); ?></div>
+				<div class="row fed_dashboard_item_field p-b-20">
+					<div class="col-md-6">
+						<div class="fed_header_font_color"><?php echo esc_html( $temp['label_name'] ); ?></div>
 						<?php
 						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo fed_get_input_details( $temp );
 						?>
-                    </div>
-                </div>
+					</div>
+				</div>
 				<?php
 			}
 		}
 		?>
-    </div>
+	</div>
 	<?php
-
 }
 
 add_action( 'save_post', 'fed_save_meta_boxes_display', 10, 2 );

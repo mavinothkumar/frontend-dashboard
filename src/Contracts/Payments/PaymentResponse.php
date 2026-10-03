@@ -19,7 +19,7 @@ class PaymentResponse {
 	public $redirectUrl;
 	public $rawResponse;
 
-	public function __construct( bool $success, string $transactionId = '', string $message = '', string $redirectUrl = '', array $rawResponse = [] ) {
+	public function __construct( bool $success, string $transactionId = '', string $message = '', string $redirectUrl = '', array $rawResponse = array() ) {
 		$this->success       = $success;
 		$this->transactionId = $transactionId;
 		$this->message       = $message;
@@ -27,11 +27,11 @@ class PaymentResponse {
 		$this->rawResponse   = $rawResponse;
 	}
 
-	public static function success( string $transactionId, string $message = 'Payment successful', array $raw = [] ) {
+	public static function success( string $transactionId, string $message = 'Payment successful', array $raw = array() ) {
 		return new self( true, $transactionId, $message, '', $raw );
 	}
 
-	public static function failed( string $message = 'Payment failed', array $raw = [] ) {
+	public static function failed( string $message = 'Payment failed', array $raw = array() ) {
 		return new self( false, '', $message, '', $raw );
 	}
 

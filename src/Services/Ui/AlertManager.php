@@ -26,10 +26,10 @@ class AlertManager {
 		if ( ! session_id() && ! headers_sent() ) {
 			@session_start();
 		}
-		$_SESSION[ self::FLASH_KEY ][] = [
+		$_SESSION[ self::FLASH_KEY ][] = array(
 			'type'    => sanitize_key( $type ),
 			'message' => sanitize_text_field( $message ),
-		];
+		);
 	}
 
 	/**
@@ -42,7 +42,7 @@ class AlertManager {
 			@session_start();
 		}
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		$messages = isset( $_SESSION[ self::FLASH_KEY ] ) ? (array) $_SESSION[ self::FLASH_KEY ] : [];
+		$messages = isset( $_SESSION[ self::FLASH_KEY ] ) ? (array) $_SESSION[ self::FLASH_KEY ] : array();
 		unset( $_SESSION[ self::FLASH_KEY ] );
 		return $messages;
 	}
@@ -56,12 +56,12 @@ class AlertManager {
 	 * @return string
 	 */
 	public static function renderBanner( string $type, string $message, bool $dismissible = true ): string {
-		$colors = [
+		$colors = array(
 			'success' => 'bg-emerald-50 text-emerald-800 border-emerald-300',
 			'error'   => 'bg-rose-50 text-rose-800 border-rose-300',
 			'warning' => 'bg-amber-50 text-amber-800 border-amber-300',
 			'info'    => 'bg-sky-50 text-sky-800 border-sky-300',
-		];
+		);
 
 		$colorClass = $colors[ $type ] ?? $colors['info'];
 		$msgHtml    = esc_html( $message );

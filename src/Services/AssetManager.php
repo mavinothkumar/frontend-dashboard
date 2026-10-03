@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Class AssetManager
- * 
+ *
  * Handles enqueueing Vite compiled CSS and JS assets in WordPress.
  */
 class AssetManager {
@@ -49,8 +49,8 @@ class AssetManager {
 	}
 
 	public function enqueue_scripts() {
-		$context    = is_admin() ? 'admin' : 'frontend';
-		$db_scripts = get_option( 'fed_general_scripts_styles', array() );
+		$context            = is_admin() ? 'admin' : 'frontend';
+		$db_scripts         = get_option( 'fed_general_scripts_styles', array() );
 		$is_style_disabled  = isset( $db_scripts[ $context ]['styles']['fed-style'] );
 		$is_script_disabled = isset( $db_scripts[ $context ]['scripts']['fed-main'] );
 
@@ -65,7 +65,7 @@ class AssetManager {
 		wp_enqueue_script( 'wp-dom-ready' );
 		wp_enqueue_script( 'wp-a11y' );
 
-		$dependencies = [ 'jquery' ];
+		$dependencies = array( 'jquery' );
 
 		if ( is_admin() ) {
 			if ( function_exists( 'wp_enqueue_media' ) ) {
@@ -76,26 +76,26 @@ class AssetManager {
 		if ( $this->is_dev ) {
 			// Enqueue Vite client for HMR
 			if ( ! $is_script_disabled ) {
-				wp_enqueue_script( 'fed-vite-client', 'http://localhost:3000/@vite/client', [], $this->version, true );
+				wp_enqueue_script( 'fed-vite-client', 'http://localhost:3000/@vite/client', array(), $this->version, true );
 				wp_enqueue_script( 'fed-main', 'http://localhost:3000/assets/js/main.js', $dependencies, $this->version, true );
 			}
 			if ( ! $is_style_disabled ) {
-				wp_enqueue_style( 'fed-style', 'http://localhost:3000/assets/css/main.css', [], $this->version );
+				wp_enqueue_style( 'fed-style', 'http://localhost:3000/assets/css/main.css', array(), $this->version );
 			}
 		} else {
 			// Production: read manifest.json
 			$manifest_path = BC_FED_PLUGIN_DIR . '/assets/dist/.vite/manifest.json';
 			if ( file_exists( $manifest_path ) ) {
 				$manifest = json_decode( file_get_contents( $manifest_path ), true );
-				
+
 				if ( ! $is_script_disabled && isset( $manifest['assets/js/main.js'] ) ) {
 					$js_file = $manifest['assets/js/main.js']['file'];
 					wp_enqueue_script( 'fed-main', BC_FED_PLUGIN_URL . '/assets/dist/' . $js_file, $dependencies, $this->version, true );
 				}
-				
+
 				if ( ! $is_style_disabled && isset( $manifest['assets/css/main.css'] ) ) {
 					$css_file = $manifest['assets/css/main.css']['file'];
-					wp_enqueue_style( 'fed-style', BC_FED_PLUGIN_URL . '/assets/dist/' . $css_file, [], $this->version );
+					wp_enqueue_style( 'fed-style', BC_FED_PLUGIN_URL . '/assets/dist/' . $css_file, array(), $this->version );
 				}
 			}
 		}

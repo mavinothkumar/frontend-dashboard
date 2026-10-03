@@ -24,7 +24,7 @@ class PaymentRepository extends BaseRepository {
 	 * @return array
 	 */
 	public function getTransactionsForUser( $userId ) {
-		return $this->where( [ 'user_id' => (int) $userId ], 'created_at DESC, id DESC' );
+		return $this->where( array( 'user_id' => (int) $userId ), 'created_at DESC, id DESC' );
 	}
 
 	/**
@@ -48,7 +48,7 @@ class PaymentRepository extends BaseRepository {
 		$sql   = $this->db->prepare( "SELECT * FROM `{$table}` WHERE `payment_id` = %d", (int) $paymentId );
 		$rows  = $this->db->get_results( $sql, ARRAY_A );
 
-		return $rows ?: [];
+		return $rows ?: array();
 	}
 
 	/**
@@ -58,7 +58,7 @@ class PaymentRepository extends BaseRepository {
 	 * @param array $items
 	 * @return int|false Payment ID on success, false on failure.
 	 */
-	public function createWithItems( array $paymentData, array $items = [] ) {
+	public function createWithItems( array $paymentData, array $items = array() ) {
 		$paymentId = $this->create( $paymentData );
 
 		if ( ! $paymentId ) {

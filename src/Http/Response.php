@@ -33,10 +33,13 @@ class Response {
 	 */
 	public static function success( $data = null, $message = '', $status = 200 ) {
 		status_header( $status );
-		wp_send_json_success( [
-			'message' => $message,
-			'data'    => $data,
-		], $status );
+		wp_send_json_success(
+			array(
+				'message' => $message,
+				'data'    => $data,
+			),
+			$status
+		);
 	}
 
 	/**
@@ -46,12 +49,15 @@ class Response {
 	 * @param int    $status
 	 * @param array  $errors
 	 */
-	public static function error( $message = 'Something went wrong', $status = 400, array $errors = [] ) {
+	public static function error( $message = 'Something went wrong', $status = 400, array $errors = array() ) {
 		status_header( $status );
-		wp_send_json_error( [
-			'message' => $message,
-			'errors'  => $errors,
-		], $status );
+		wp_send_json_error(
+			array(
+				'message' => $message,
+				'errors'  => $errors,
+			),
+			$status
+		);
 	}
 
 	/**

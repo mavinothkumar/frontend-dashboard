@@ -53,7 +53,6 @@ if ( ! function_exists( 'fed_fetch_table_row_by_id' ) ) {
 		}
 
 		return $result;
-
 	}
 }
 
@@ -84,7 +83,6 @@ if ( ! function_exists( 'fed_fetch_table_row_by_ids' ) ) {
 		}
 
 		return $result;
-
 	}
 }
 
@@ -122,8 +120,9 @@ if ( ! function_exists( 'fed_fetch_table_rows_by_key_value' ) ) {
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				"SELECT * FROM $table_name WHERE $key $condition %s $order",
 				esc_attr( $value )
-			), $output );
-
+			),
+			$output
+		);
 	}
 }
 
@@ -188,9 +187,13 @@ if ( ! function_exists( 'fed_fetch_table_rows_with_key' ) ) {
 		$results = fed_fetch_rows_by_table( $table );
 
 		if ( count( $results ) <= 0 && BC_FED_TABLE_POST !== $table ) {
-			return new WP_Error( 'fed_default_value_not_installed',
-				__( 'There is some trouble in installing the default value, please try to deactivate and activate the plugin or contact us on',
-					'frontend-dashboard' ) . make_clickable( 'https://buffercode.com/' ) );
+			return new WP_Error(
+				'fed_default_value_not_installed',
+				__(
+					'There is some trouble in installing the default value, please try to deactivate and activate the plugin or contact us on',
+					'frontend-dashboard'
+				) . make_clickable( 'https://buffercode.com/' )
+			);
 		}
 		$result_with_key = array();
 		foreach ( $results as $result ) {

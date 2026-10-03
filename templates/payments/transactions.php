@@ -19,7 +19,8 @@ $transactions = fed_get_transactions();
 			<?php if ( fed_is_admin() ) { ?>
 				<div class="flex justify-between items-center">
 					<h2 class="text-xl font-bold text-gray-900"><?php esc_html_e( 'Transactions', 'frontend-dashboard' ); ?></h2>
-					<a href="<?php
+					<a href="
+					<?php
 						echo esc_url(
 							fed_menu_page_url(
 								'fed_payments',
@@ -29,7 +30,8 @@ $transactions = fed_get_transactions();
 								)
 							)
 						);
-						?>"
+					?>
+								"
 						class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors fed_frontend_add_new_transaction">
 						<svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
 						<?php esc_attr_e( 'Add New Transaction', 'frontend-dashboard' ); ?>
@@ -58,13 +60,13 @@ $transactions = fed_get_transactions();
 						<?php
 						if ( count( $transactions ) ) {
 							foreach ( $transactions as $transaction ) {
-								$status = strtolower( $transaction['status'] );
+								$status      = strtolower( $transaction['status'] );
 								$badge_class = 'bg-gray-100 text-gray-800';
-								if ( in_array( $status, [ 'completed', 'paid', 'success', 'succeeded' ], true ) ) {
+								if ( in_array( $status, array( 'completed', 'paid', 'success', 'succeeded' ), true ) ) {
 									$badge_class = 'bg-green-100 text-green-800';
-								} elseif ( in_array( $status, [ 'pending', 'processing' ], true ) ) {
+								} elseif ( in_array( $status, array( 'pending', 'processing' ), true ) ) {
 									$badge_class = 'bg-yellow-100 text-yellow-800';
-								} elseif ( in_array( $status, [ 'failed', 'cancelled', 'refunded' ], true ) ) {
+								} elseif ( in_array( $status, array( 'failed', 'cancelled', 'refunded' ), true ) ) {
 									$badge_class = 'bg-red-100 text-red-800';
 								}
 								?>
@@ -86,17 +88,20 @@ $transactions = fed_get_transactions();
 										<div class="fed_transaction_items_container">
 											<span class="font-medium text-gray-900"><?php echo esc_html( mb_strtoupper( $transaction['payment_type'] ) ); ?></span>
 											<form class="fed_transaction_items inline-block ml-2"
-													action="<?php
+													action="
+													<?php
 													echo esc_url(
 														add_query_arg(
 															array(
 																'fed_action_hook' => 'FEDTransaction@items',
-															), fed_get_ajax_form_action(
+															),
+															fed_get_ajax_form_action(
 																'fed_ajax_request'
 															)
 														)
 													);
-													?>" method="post">
+													?>
+															" method="post">
 												<?php fed_wp_nonce_field(); ?>
 												<input type="hidden" name="transaction_id" value="<?php echo esc_attr( $transaction['id'] ); ?>"/>
 												<button type="submit" class="text-xs text-blue-600 hover:text-blue-800 underline">
@@ -116,7 +121,8 @@ $transactions = fed_get_transactions();
 									<td class="px-6 py-4 whitespace-nowrap text-gray-500 text-xs"><?php echo esc_html( $transaction['created'] ); ?></td>
 									<td class="px-6 py-4 whitespace-nowrap text-center">
 										<form method="post" class="fed_ajax_print_invoice inline-block"
-												action="<?php
+												action="
+												<?php
 												echo esc_url(
 													add_query_arg(
 														array( 'fed_action_hook' => 'FEDInvoice@download' ),
@@ -125,7 +131,8 @@ $transactions = fed_get_transactions();
 														)
 													)
 												);
-												?>">
+												?>
+														">
 											<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
 											<input type="hidden" name="transaction_id" value="<?php echo esc_attr( $transaction['id'] ); ?>"/>
 											<button type="submit" class="inline-flex items-center p-1.5 border border-gray-200 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-colors shadow-sm" title="<?php esc_attr_e( 'Download Invoice', 'frontend-dashboard' ); ?>">
@@ -187,13 +194,14 @@ $transactions = fed_get_transactions();
 					<?php
 					echo esc_url(
 						add_query_arg(
-							array( 'fed_action_hook' => 'FEDTransaction@update' ), fed_get_ajax_form_action(
+							array( 'fed_action_hook' => 'FEDTransaction@update' ),
+							fed_get_ajax_form_action(
 								'fed_ajax_request'
 							)
 						)
 					);
 					?>
-									   ">
+										">
 				<div class="modal-dialog modal-lg">
 					<div class="modal-content">
 						<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
@@ -202,7 +210,8 @@ $transactions = fed_get_transactions();
 							<h4 class="modal-title">
 								<?php
 								esc_attr_e(
-									'Add New Transaction', 'frontend-dashboard'
+									'Add New Transaction',
+									'frontend-dashboard'
 								);
 								?>
 							</h4>
@@ -231,7 +240,8 @@ $transactions = fed_get_transactions();
 												<label>
 													<?php
 													esc_attr_e(
-														'Transaction ID', 'frontend-dashboard'
+														'Transaction ID',
+														'frontend-dashboard'
 													);
 													?>
 												</label>
@@ -259,9 +269,10 @@ $transactions = fed_get_transactions();
 												<label>
 												<?php
 												esc_attr_e(
-													'Purchase Date', 'frontend-dashboard'
+													'Purchase Date',
+													'frontend-dashboard'
 												);
-													?>
+												?>
 													</label>
 												<input type="date"
 														placeholder="
@@ -280,9 +291,10 @@ $transactions = fed_get_transactions();
 												<label>
 												<?php
 												esc_attr_e(
-													'Payment Source', 'frontend-dashboard'
+													'Payment Source',
+													'frontend-dashboard'
 												);
-													?>
+												?>
 													</label>
 												<?php
 												// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -326,9 +338,10 @@ $transactions = fed_get_transactions();
 												<label>
 												<?php
 												esc_attr_e(
-													'Payment for', 'frontend-dashboard'
+													'Payment for',
+													'frontend-dashboard'
 												);
-													?>
+												?>
 													</label>
 												<select class="form-control" name='fed_pp_object_type'
 														id="fed_add_transaction_item"
@@ -341,13 +354,14 @@ $transactions = fed_get_transactions();
 																	'fed_nonce'       => wp_create_nonce(
 																		'fed_nonce'
 																	),
-																), fed_get_ajax_form_action(
+																),
+																fed_get_ajax_form_action(
 																	'fed_ajax_request'
 																)
 															)
 														);
 														?>
-														 ">
+														">
 													<?php
 													foreach (
 														array(

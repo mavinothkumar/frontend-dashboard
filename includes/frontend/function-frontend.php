@@ -11,12 +11,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Get Avatar.
  *
- * @param  string  $id_or_email  ID or Email.
- * @param  string  $alt  Alt.
- * @param  string  $class  Class.
- * @param  string  $extra  Extra.
- * @param  string  $size  Size.
- * @param  string  $attr  Attr.
+ * @param  string $id_or_email  ID or Email.
+ * @param  string $alt  Alt.
+ * @param  string $class  Class.
+ * @param  string $extra  Extra.
+ * @param  string $size  Size.
+ * @param  string $attr  Attr.
  *
  * @return string
  */
@@ -74,7 +74,6 @@ function fed_get_avatar( $id_or_email, $alt = '', $class = '', $extra = '', $siz
 		esc_attr( $class ),
 		$extra
 	);
-
 }
 
 /**
@@ -176,7 +175,6 @@ function fed_get_registration_content_fields() {
 	);
 
 	return $registration;
-
 }
 
 /**
@@ -186,18 +184,20 @@ function fed_process_user_profile_required_field() {
 	$fields = fed_fetch_table_by_is_required( BC_FED_TABLE_USER_PROFILE );
 
 	return array_reduce(
-		$fields, function ( $result, $item ) {
-		$result[ $item['input_meta'] ] = 'Please enter ' . $item['label_name'];
+		$fields,
+		function ( $result, $item ) {
+			$result[ $item['input_meta'] ] = 'Please enter ' . $item['label_name'];
 
-		return $result;
-	}, array()
+			return $result;
+		},
+		array()
 	);
 }
 
 /**
  * Process User Profile Required by Menu.
  *
- * @param  string  $menu  Menu.
+ * @param  string $menu  Menu.
  *
  * @return mixed
  */
@@ -205,11 +205,13 @@ function fed_process_user_profile_required_by_menu( $menu ) {
 	$fields = fed_fetch_user_profile_required_by_menu( $menu );
 
 	$values = array_reduce(
-		$fields, function ( $result, $item ) {
-		$result[ $item['input_meta'] ] = 'Please enter ' . $item['label_name'];
+		$fields,
+		function ( $result, $item ) {
+			$result[ $item['input_meta'] ] = 'Please enter ' . $item['label_name'];
 
-		return $result;
-	}, array()
+			return $result;
+		},
+		array()
 	);
 
 	return $values;
@@ -219,7 +221,7 @@ function fed_process_user_profile_required_by_menu( $menu ) {
 /**
  * Process Author Input Record.
  *
- * @param  object  $user  User Object.
+ * @param  object $user  User Object.
  * @param  array  $single_item  Single Item.
  *
  * @return string
@@ -253,16 +255,19 @@ function fed_process_author_details( $user, array $single_item ) {
 			array(
 				'value'    => $user->get( $single_item['input_meta'] ),
 				'disabled' => true,
-			), 'color'
+			),
+			'color'
 		);
 	}
 
 	if ( 'checkbox' === $single_item['input_type'] ) {
 		return fed_input_box(
-			$single_item['input_meta'], array(
-			'value'    => $user->get( $single_item['input_meta'] ),
-			'disabled' => true,
-		), 'checkbox'
+			$single_item['input_meta'],
+			array(
+				'value'    => $user->get( $single_item['input_meta'] ),
+				'disabled' => true,
+			),
+			'checkbox'
 		);
 	}
 
@@ -285,11 +290,11 @@ function fed_process_author_details( $user, array $single_item ) {
 			$range = explode( 'to', $user_date );
 
 			return ucfirst( strftime( $format, strtotime( $range[0] ) ) ) . ' to ' . ucfirst(
-					strftime(
-						$format,
-						strtotime( $range[1] )
-					)
-				);
+				strftime(
+					$format,
+					strtotime( $range[1] )
+				)
+			);
 
 		}
 
@@ -316,7 +321,8 @@ function fed_process_author_details( $user, array $single_item ) {
  */
 function fed_input_mandatory_required_fields() {
 	return apply_filters(
-		'fed_input_mandatory_required_fields', array(
+		'fed_input_mandatory_required_fields',
+		array(
 			'user_login',
 			'user_pass',
 			'confirmation_password',
@@ -328,8 +334,8 @@ function fed_input_mandatory_required_fields() {
 /**
  * Get WP Editor.
  *
- * @param  string  $content  Content.
- * @param  string  $id  ID.
+ * @param  string $content  Content.
+ * @param  string $id  ID.
  * @param  array  $options  Options.
  *
  * @return string
@@ -347,8 +353,8 @@ function fed_get_wp_editor( $content = '', $id = '', array $options = array() ) 
 /**
  * Get Dashboard Display Categories.
  *
- * @param  string  $post  Post.
- * @param  string  $cpt  CPT.
+ * @param  string $post  Post.
+ * @param  string $cpt  CPT.
  *
  * @return string
  */
@@ -371,8 +377,8 @@ function fed_get_dashboard_display_categories( $post = '', $cpt = '' ) {
 /**
  * Get Dashboard Display Tags.
  *
- * @param  string  $post  Post.
- * @param  string  $cpt  CPT.
+ * @param  string $post  Post.
+ * @param  string $cpt  CPT.
  *
  * @return string
  */
@@ -395,8 +401,8 @@ function fed_get_dashboard_display_tags( $post = '', $cpt = '' ) {
  * Convert Array to ID Name.
  *
  * @param  array  $array  Array.
- * @param  string  $key  Key.
- * @param  string  $type  Type.
+ * @param  string $key  Key.
+ * @param  string $type  Type.
  * @param  array  $compare  Compare.
  *
  * @return string
@@ -477,7 +483,7 @@ function fed_dashboard_get_post_format() {
 /**
  * Get post meta 0th element.
  *
- * @param  int  $id  post ID.
+ * @param  int $id  post ID.
  *
  * @return array.
  */
@@ -496,7 +502,7 @@ function fed_get_post_meta( $id ) {
 /**
  * Get Categories ID By Post ID.
  *
- * @param  int  $post_id  Post ID.
+ * @param  int $post_id  Post ID.
  *
  * @return array
  */
@@ -509,7 +515,7 @@ function fed_get_categories_id_by_post_id( $post_id ) {
 /**
  * Get Post Status Symbol.
  *
- * @param  string  $status  Status.
+ * @param  string $status  Status.
  *
  * @return string
  */
@@ -520,19 +526,20 @@ function fed_get_post_status_symbol( $status ) {
 	}
 	if ( 'pending' == $status ) {
 		return ' <i class="fa fa-pause bg-info-font fed_popover" data-toggle="popover" data-trigger="hover" title="' . esc_attr( $status ) . '" 
- data-content="' . __( 'Please wait, your post is in pending status, editor or admin will approve your post.',
-				'frontend-dashboard' ) . '"></i>';
+ data-content="' . __(
+			'Please wait, your post is in pending status, editor or admin will approve your post.',
+			'frontend-dashboard'
+		) . '"></i>';
 	}
 
 	return '<i class="fa fa-exclamation bg-danger-font fed_popover" data-toggle="popover" data-trigger="hover" title="' . esc_attr( $status ) . '" 
  data-content="' . esc_attr( $status ) . '"></i>';
-
 }
 
 /**
  * Get Tags ID by Post ID.
  *
- * @param  int  $post_id  Post ID.
+ * @param  int $post_id  Post ID.
  *
  * @return array
  */
@@ -546,8 +553,8 @@ function fed_get_tags_id_by_post_id( $post_id ) {
  * Convert Array Object to Key Value.
  *
  * @param  array  $array  Array.
- * @param  string  $key  Key.
- * @param  string  $value  Value.
+ * @param  string $key  Key.
+ * @param  string $value  Value.
  *
  * @return array
  */
@@ -598,7 +605,7 @@ function fed_get_payment_notification() {
 /**
  * Show Users By Role.
  *
- * @param  object  $fed_user_attr  User Attribute.
+ * @param  object $fed_user_attr  User Attribute.
  */
 function fed_show_users_by_role( $fed_user_attr ) {
 	$user_roles    = fed_get_user_roles();
@@ -691,8 +698,8 @@ function fed_show_users_by_role( $fed_user_attr ) {
 /**
  * Show User by Role.
  *
- * @param  object  $fed_user_attr  FED User Attr.
- * @param  int  $user_id  User ID.
+ * @param  object $fed_user_attr  FED User Attr.
+ * @param  int    $user_id  User ID.
  */
 function fed_show_user_by_role( $fed_user_attr, $user_id ) {
 	$user = new WP_User_Query(
@@ -722,7 +729,7 @@ function fed_show_user_by_role( $fed_user_attr, $user_id ) {
 /**
  * Show user profile page by user ID.
  *
- * @param  object  $user  User Data.
+ * @param  object $user  User Data.
  */
 function fed_show_user_profile_page( $user ) {
 	/**
@@ -818,7 +825,8 @@ function fed_show_user_profile_page( $user ) {
 										</span>
 										<?php
 										echo esc_attr(
-											ucwords( $menus[ $index ]['menu'] ), 'frontend-dashboard'
+											ucwords( $menus[ $index ]['menu'] ),
+											'frontend-dashboard'
 										);
 										?>
 									</a>
@@ -878,7 +886,8 @@ function fed_show_user_profile_page( $user ) {
 											<div class="fed_dashboard_label_name fed_header_font_color col-md-4 text-right-md text-right-not-sm text-right-not-xs">
 												<?php
 												echo esc_attr(
-													$single_item['label_name'], 'frontend-dashboard'
+													$single_item['label_name'],
+													'frontend-dashboard'
 												);
 												?>
 											</div>
@@ -921,7 +930,7 @@ function fed_show_user_profile_page( $user ) {
 					<div class="fed_post_excerpt">
 						<?php the_excerpt(); ?>
 					</div>
-				<?php
+					<?php
 				endwhile;
 				?>
 			</div>
@@ -932,7 +941,6 @@ function fed_show_user_profile_page( $user ) {
 	</div>
 	<?php
 	do_action( 'fed_user_profile_below' );
-
 }
 
 /**
@@ -966,8 +974,8 @@ function fed_get_403_error_page() {
 /**
  * Set Alert.
  *
- * @param  string  $key  Key.
- * @param  string  $message  Message.
+ * @param  string $key  Key.
+ * @param  string $message  Message.
  */
 function fed_set_alert( $key, $message ) {
 	set_transient( $key, $message, MINUTE_IN_SECONDS );
@@ -976,7 +984,7 @@ function fed_set_alert( $key, $message ) {
 /**
  * Show Alert.
  *
- * @param  string  $key  Key.
+ * @param  string $key  Key.
  *
  * @return string
  */
@@ -984,12 +992,12 @@ function fed_show_alert( $key ) {
 	$value = get_transient( $key );
 	$html  = '';
 	if ( $value ) {
-		$type = 'success';
+		$type    = 'success';
 		$message = '';
 		if ( is_array( $value ) ) {
 			if ( isset( $value['message'] ) ) {
 				$message = $value['message'];
-				$type = isset( $value['type'] ) ? $value['type'] : ( isset( $value['status'] ) && 'error' === $value['status'] ? 'danger' : 'success' );
+				$type    = isset( $value['type'] ) ? $value['type'] : ( isset( $value['status'] ) && 'error' === $value['status'] ? 'danger' : 'success' );
 			} else {
 				$message = isset( $value[0] ) ? $value[0] : '';
 			}

@@ -15,8 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Verify Nonce
  *
- * @param  array  $request  (Added null in version 1.5)
- * @param  null | string | array  $permission
+ * @param  array                 $request  (Added null in version 1.5)
+ * @param  null | string | array $permission
  */
 function fed_verify_nonce( $request = null, $permission = null ) {
 
@@ -54,8 +54,8 @@ function fed_verify_nonce( $request = null, $permission = null ) {
 /**
  * Check for Nonce
  *
- * @param  array  $request  Request.
- * @param  null | array | string  $permission  Permission.
+ * @param  array                 $request  Request.
+ * @param  null | array | string $permission  Permission.
  *
  * @internal param string $nonce Nonce.
  * @internal param string $key Key.
@@ -68,7 +68,7 @@ function fed_nonce_check( $request, $permission = null ) {
 /**
  * Show form fields on admin dashboard.
  *
- * @param  string  $selected  Selected.
+ * @param  string $selected  Selected.
  *
  * @return string | array
  */
@@ -76,7 +76,8 @@ function fed_admin_user_profile_select( $selected = '' ) {
 	$attr = array(
 		'class'   => 'fed_admin_input_items',
 		'options' => apply_filters(
-			'fed_admin_input_item_options', array(
+			'fed_admin_input_item_options',
+			array(
 				'single_line' => array(
 					'name'  => __( 'Single Line', 'frontend-dashboard' ),
 					'image' => plugins_url( '/assets/admin/images/inputs/single_line.png', BC_FED_PLUGIN ),
@@ -148,7 +149,7 @@ function fed_admin_user_profile_select( $selected = '' ) {
 /**
  * Enable or Disable.
  *
- * @param  string|bool  $condition  Condition.
+ * @param  string|bool $condition  Condition.
  *
  * @return string
  */
@@ -163,7 +164,7 @@ function fed_enable_disable( $condition = '' ) {
 /**
  * Is Required.
  *
- * @param  string  $condition  Condition.
+ * @param  string $condition  Condition.
  *
  * @return string
  */
@@ -178,7 +179,7 @@ function fed_is_required( $condition = '' ) {
 /**
  * Is True or False.
  *
- * @param  string  $condition  Condition.
+ * @param  string $condition  Condition.
  *
  * @return bool
  */
@@ -193,8 +194,8 @@ function fed_is_true_false( $condition = '' ) {
 /**
  * Profile Enable Disable.
  *
- * @param  string  $condition  Condition.
- * @param  string  $type  Type.
+ * @param  string $condition  Condition.
+ * @param  string $type  Type.
  *
  * @return array
  */
@@ -228,7 +229,7 @@ function fed_profile_enable_disable( $condition = '', $type = '' ) {
 /**
  * Get Input Details.
  *
- * @param  array  $attr  Attributes.
+ * @param  array $attr  Attributes.
  *
  * @return string
  */
@@ -309,7 +310,7 @@ function fed_get_input_details( $attr ) {
 /**
  * Get Input Group.
  *
- * @param  array  $attr  Attribute.
+ * @param  array $attr  Attribute.
  *
  * @return string
  */
@@ -332,7 +333,7 @@ function fed_get_input_group( $attr ) {
  * Seamlessly parses JSON objects/arrays, serialized PHP strings, multi-line strings,
  * and legacy pipe/comma delimited values into a normalized [key => label] array.
  *
- * @param  mixed  $input_value  Raw option value in any supported format.
+ * @param  mixed $input_value  Raw option value in any supported format.
  * @return array Normalized associative array of [key => label].
  */
 function fed_parse_field_options( $input_value ) {
@@ -345,8 +346,8 @@ function fed_parse_field_options( $input_value ) {
 		$parsed = array();
 		foreach ( $input_value as $k => $v ) {
 			if ( is_array( $v ) ) {
-				$key   = isset( $v['key'] ) ? $v['key'] : ( isset( $v['value'] ) ? $v['value'] : ( isset( $v['id'] ) ? $v['id'] : $k ) );
-				$label = isset( $v['label'] ) ? $v['label'] : ( isset( $v['text'] ) ? $v['text'] : ( isset( $v['name'] ) ? $v['name'] : ( isset( $v['title'] ) ? $v['title'] : (string) reset( $v ) ) ) );
+				$key                     = isset( $v['key'] ) ? $v['key'] : ( isset( $v['value'] ) ? $v['value'] : ( isset( $v['id'] ) ? $v['id'] : $k ) );
+				$label                   = isset( $v['label'] ) ? $v['label'] : ( isset( $v['text'] ) ? $v['text'] : ( isset( $v['name'] ) ? $v['name'] : ( isset( $v['title'] ) ? $v['title'] : (string) reset( $v ) ) ) );
 				$parsed[ (string) $key ] = (string) $label;
 			} elseif ( is_numeric( $k ) && is_string( $v ) ) {
 				$parsed[ (string) $v ] = (string) $v;
@@ -387,7 +388,7 @@ function fed_parse_field_options( $input_value ) {
 	foreach ( $json_candidates as $candidate ) {
 		$cand_trimmed = trim( $candidate );
 		if ( ( str_starts_with( $cand_trimmed, '[' ) && str_ends_with( $cand_trimmed, ']' ) ) ||
-		     ( str_starts_with( $cand_trimmed, '{' ) && str_ends_with( $cand_trimmed, '}' ) ) ) {
+			( str_starts_with( $cand_trimmed, '{' ) && str_ends_with( $cand_trimmed, '}' ) ) ) {
 			$json = json_decode( $cand_trimmed, true );
 			if ( is_array( $json ) ) {
 				return fed_parse_field_options( $json );
@@ -455,7 +456,7 @@ function fed_parse_field_options( $input_value ) {
 /**
  * Get Select Option Value.
  *
- * @param  string|array  $input_value  Input Value.
+ * @param  string|array $input_value  Input Value.
  * @return array
  */
 function fed_get_select_option_value( $input_value ) {
@@ -465,7 +466,7 @@ function fed_get_select_option_value( $input_value ) {
 /**
  * Get Radio Option Value.
  *
- * @param  string|array  $input_value  Input Value.
+ * @param  string|array $input_value  Input Value.
  * @return array
  */
 function fed_get_radio_option_value( $input_value ) {
@@ -527,7 +528,7 @@ function fed_default_user_roles() {
 /**
  * Get Default value for User Profile
  *
- * @param  string  $action  Action.
+ * @param  string $action  Action.
  *
  * @return array
  */
@@ -576,8 +577,8 @@ function fed_get_empty_value_for_user_profile( $action ) {
  * Process User Profile.
  *
  * @param  array  $row  User Profiles.
- * @param  string  $action  Action.
- * @param  string  $update  Status.
+ * @param  string $action  Action.
+ * @param  string $update  Status.
  *
  * @return array
  */
@@ -601,8 +602,7 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 		'input_type'     => isset( $row['input_type'] ) ? sanitize_text_field( $row['input_type'] ) : '',
 		'input_meta'     => isset( $row['input_meta'] ) ? sanitize_text_field( $row['input_meta'] ) : '',
 
-
-		'user_role' => ( isset( $row['user_role'] ) && ! empty( $row['user_role'] ) ) ? ( is_string(
+		'user_role'      => ( isset( $row['user_role'] ) && ! empty( $row['user_role'] ) ) ? ( is_string(
 			$row['user_role']
 		) ) ? unserialize( $row['user_role'] ) : serialize( array_keys( $row['user_role'] ) ) : array(),
 	);
@@ -621,8 +621,8 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 
 	if ( $action === 'post' ) {
 		$default['post_type'] = ( isset( $row['post_type'] ) && fed_check_post_type(
-				$row['post_type']
-			) ) ? sanitize_text_field( $row['post_type'] ) : 'post';
+			$row['post_type']
+		) ) ? sanitize_text_field( $row['post_type'] ) : 'post';
 	}
 	if ( $row['input_type'] === 'select' ) {
 		if ( $update === 'yes' ) {
@@ -659,7 +659,7 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 	if ( $row['input_type'] === 'date' ) {
 		if ( isset( $row['extended'] ) ) {
 			if ( $update === 'yes' ) {
-				$extended = array(
+				$extended            = array(
 					'date_format'         => isset( $row['extended']['date_format'] ) ? sanitize_text_field( $row['extended']['date_format'] ) : 'd-m-Y',
 					'enable_time'         => isset( $row['extended']['enable_time'] ) ? sanitize_text_field( $row['extended']['enable_time'] ) : 'false',
 					'date_mode'           => isset( $row['extended']['date_mode'] ) ? sanitize_text_field( $row['extended']['date_mode'] ) : 'single',
@@ -686,7 +686,7 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 	$default = apply_filters( 'fed_process_form_fields', $default, $row, $action, $update );
 
 	if ( 'profile' === $action ) {
-		$user_profile  = array(
+		$user_profile = array(
 			'show_register'     => fed_filter_show_register( $row ),
 			'show_dashboard'    => isset( $row['show_dashboard'] ) ? sanitize_text_field(
 				$row['show_dashboard']
@@ -729,7 +729,7 @@ function fed_normalize_icon_class( $icon ) {
 /**
  * Process Menu.
  *
- * @param  array  $row  Menu Items.
+ * @param  array $row  Menu Items.
  *
  * @return array
  */
@@ -762,7 +762,7 @@ function fed_process_menu( $row ) {
 /**
  * Convert comma separated and new line into key value pair.
  *
- * @param  string  $text  String.
+ * @param  string $text  String.
  *
  * @return array
  */
@@ -773,7 +773,7 @@ function fed_convert_comma_separated_key_value( $text ) {
 /**
  * Check is the field is belongs to extra profile.
  *
- * @param  string  $meta_key  Meta Key.
+ * @param  string $meta_key  Meta Key.
  *
  * @return bool
  */
@@ -785,13 +785,14 @@ function fed_check_field_is_belongs_to_extra( $meta_key = '' ) {
 	$user_data = fed_get_user_profile_default_meta_values();
 
 	$key = array_reduce(
-		$user_data, function ( $result, $item ) {
-		$result[] = $item['input_meta'];
+		$user_data,
+		function ( $result, $item ) {
+			$result[] = $item['input_meta'];
 
-		return $result;
-	}, array()
+			return $result;
+		},
+		array()
 	);
-
 
 	if ( in_array( $meta_key, $key, false ) ) {
 		return true;
@@ -816,7 +817,7 @@ function fed_no_update_fields() {
 /**
  * Changing Archive page author
  *
- * @param  string  $single_template  Template.
+ * @param  string $single_template  Template.
  *
  * @return string
  */
@@ -824,9 +825,9 @@ function get_custom_post_type_archive_template( $single_template ) {
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( isset( $_GET['fed_user_profile'] ) || is_author() ) {
 		$single_template = apply_filters(
-			                   'fed_change_author_frontend_page',
-			                   BC_FED_PLUGIN_DIR
-		                   ) . '/templates/author.php';
+			'fed_change_author_frontend_page',
+			BC_FED_PLUGIN_DIR
+		) . '/templates/author.php';
 
 	}
 
@@ -1952,7 +1953,7 @@ function fed_font_awesome_list() {
 /**
  * Yes Or No
  *
- * @param  string  $sort  Yes or No.
+ * @param  string $sort  Yes or No.
  *
  * @return array
  */
@@ -1967,13 +1968,12 @@ function fed_yes_no( $sort = 'DESC' ) {
 	}
 
 	return $value;
-
 }
 
 /**
  * Show or Hide
  *
- * @param  string  $sort  Yes or No.
+ * @param  string $sort  Yes or No.
  *
  * @return array
  */
@@ -1988,13 +1988,12 @@ function fed_show_hide( $sort = 'DESC' ) {
 	}
 
 	return $value;
-
 }
 
 /**
  * Show Register Filter
  *
- * @param  array  $row  Row.
+ * @param  array $row  Row.
  *
  * @return bool | string
  */
@@ -2039,7 +2038,7 @@ add_action( 'admin_init', 'fed_enable_file_uploads_by_role' );
 /**
  * Media Library Tab.
  *
- * @param  array  $tabs
+ * @param  array $tabs
  *
  * @return mixed
  */
@@ -2059,7 +2058,7 @@ add_action( 'pre_get_posts', 'fed_restrict_user_profile_picture' );
 /**
  * Restrict User Profile Picture.
  *
- * @param  WP_User_Query  $wp_query_obj  user query
+ * @param  WP_User_Query $wp_query_obj  user query
  */
 function fed_restrict_user_profile_picture( $wp_query_obj ) {
 
@@ -2081,7 +2080,6 @@ function fed_restrict_user_profile_picture( $wp_query_obj ) {
 	if ( ! current_user_can( 'manage_media_library' ) ) {
 		$wp_query_obj->set( 'author', $current_user->ID );
 	}
-
 }
 
 
@@ -2122,7 +2120,8 @@ function fed_get_script_loading_pages() {
  */
 function fed_get_post_status() {
 	return apply_filters(
-		'fed_update_post_status', array(
+		'fed_update_post_status',
+		array(
 			'draft'   => 'Draft',
 			'pending' => 'Pending',
 			'publish' => 'Publish',
@@ -2133,13 +2132,14 @@ function fed_get_post_status() {
 /**
  * Get Post Status.
  *
- * @param  string  $status  Status.
+ * @param  string $status  Status.
  *
  * @return string
  */
 function fed_get_display_post_status( $status ) {
 	$post_status = apply_filters(
-		'fed_display_post_status', array(
+		'fed_display_post_status',
+		array(
 			'pending' => 'Pending',
 			'publish' => 'Published',
 			'draft'   => 'Draft',
@@ -2152,7 +2152,7 @@ function fed_get_display_post_status( $status ) {
 /**
  * Get all post meta.
  *
- * @param  string  $postid  Post ID.
+ * @param  string $postid  Post ID.
  *
  * @return array | null
  *
@@ -2166,15 +2166,17 @@ function fed_get_all_post_meta( $postid ) {
 		$wpdb->prepare(
 			"SELECT meta_key, meta_value, meta_id, post_id
 			FROM $wpdb->postmeta WHERE post_id = %d
-			ORDER BY meta_key,meta_id", $postid
-		), ARRAY_A
+			ORDER BY meta_key,meta_id",
+			$postid
+		),
+		ARRAY_A
 	);
 }
 
 /**
  * Get all post meta key.
  *
- * @param  string  $postid  Post ID.
+ * @param  string $postid  Post ID.
  *
  * @return array
  */
@@ -2191,7 +2193,7 @@ function fed_get_all_post_meta_key( $postid ) {
 /**
  * Check Extension Loaded.
  *
- * @param  string  $extension  PHP Extensions.
+ * @param  string $extension  PHP Extensions.
  *
  * @return bool
  */
@@ -2206,7 +2208,7 @@ function fed_check_extension_loaded( $extension ) {
 /**
  * Get PayPal Admin Options
  *
- * @param  array  $options  Options.
+ * @param  array $options  Options.
  *
  * @return array
  *
@@ -2214,12 +2216,18 @@ function fed_check_extension_loaded( $extension ) {
  */
 function fed_get_paypal_admin_options( $options ) {
 	if ( ! $options || ! isset( $options['paypal'] ) ) {
-		return array( 'status' => false, 'message' => 'PayPal Options not set' );
+		return array(
+			'status'  => false,
+			'message' => 'PayPal Options not set',
+		);
 	}
 
 	if ( 'live' == $options['paypal']['mode'] ) {
 		if ( '' == $options['paypal']['live_client_id'] || '' == $options['paypal']['live_secrete_id'] ) {
-			return array( 'status' => false, 'message' => 'Live Client ID / Secrete ID not set' );
+			return array(
+				'status'  => false,
+				'message' => 'Live Client ID / Secrete ID not set',
+			);
 		}
 
 		return array(
@@ -2231,7 +2239,10 @@ function fed_get_paypal_admin_options( $options ) {
 
 	if ( 'sandbox' == $options['paypal']['mode'] ) {
 		if ( '' == $options['paypal']['sandbox_client_id'] || '' == $options['paypal']['sandbox_secrete_id'] ) {
-			return array( 'status' => false, 'message' => 'Sandbox Client ID / Secrete ID not set' );
+			return array(
+				'status'  => false,
+				'message' => 'Sandbox Client ID / Secrete ID not set',
+			);
 		}
 
 		return array(
@@ -2241,7 +2252,10 @@ function fed_get_paypal_admin_options( $options ) {
 		);
 	}
 
-	return array( 'status' => false, 'message' => 'Oops! Something went wrong' );
+	return array(
+		'status'  => false,
+		'message' => 'Oops! Something went wrong',
+	);
 }
 
 /**
@@ -2251,71 +2265,303 @@ function fed_get_paypal_admin_options( $options ) {
  */
 function fed_currency_type() {
 	return array(
-		'USD' => array( 'name' => 'US Dollar', 'symbol' => '$', 'hex' => '&#x24;' ),
-		'AED' => array( 'name' => 'United Arab Emirates Dirham', 'symbol' => 'د.إ', 'hex' => '&#x62f;&#x2e;&#x625;' ),
-		'ANG' => array( 'name' => 'NL Antillian Guilder', 'symbol' => 'ƒ', 'hex' => '&#x192;' ),
-		'ARS' => array( 'name' => 'Argentine Peso', 'symbol' => '$', 'hex' => '&#x24;' ),
-		'AUD' => array( 'name' => 'Australian Dollar', 'symbol' => 'A$', 'hex' => '&#x41;&#x24;' ),
-		'BRL' => array( 'name' => 'Brazilian Real', 'symbol' => 'R$', 'hex' => '&#x52;&#x24;' ),
-		'BSD' => array( 'name' => 'Bahamian Dollar', 'symbol' => 'B$', 'hex' => '&#x42;&#x24;' ),
-		'CAD' => array( 'name' => 'Canadian Dollar', 'symbol' => '$', 'hex' => '&#x24;' ),
-		'CHF' => array( 'name' => 'Swiss Franc', 'symbol' => 'CHF', 'hex' => '&#x43;&#x48;&#x46;' ),
-		'CLP' => array( 'name' => 'Chilean Peso', 'symbol' => '$', 'hex' => '&#x24;' ),
-		'CNY' => array( 'name' => 'Chinese Yuan Renminbi', 'symbol' => '¥', 'hex' => '&#xa5;' ),
-		'COP' => array( 'name' => 'Colombian Peso', 'symbol' => '$', 'hex' => '&#x24;' ),
-		'CZK' => array( 'name' => 'Czech Koruna', 'symbol' => 'Kč', 'hex' => '&#x4b;&#x10d;' ),
-		'DKK' => array( 'name' => 'Danish Krone', 'symbol' => 'kr', 'hex' => '&#x6b;&#x72;' ),
-		'EUR' => array( 'name' => 'Euro', 'symbol' => '€', 'hex' => '&#x20ac;' ),
-		'FJD' => array( 'name' => 'Fiji Dollar', 'symbol' => 'FJ$', 'hex' => '&#x46;&#x4a;&#x24;' ),
-		'GBP' => array( 'name' => 'British Pound', 'symbol' => '£', 'hex' => '&#xa3;' ),
-		'GHS' => array( 'name' => 'Ghanaian New Cedi', 'symbol' => 'GH₵', 'hex' => '&#x47;&#x48;&#x20b5;' ),
-		'GTQ' => array( 'name' => 'Guatemalan Quetzal', 'symbol' => 'Q', 'hex' => '&#x51;' ),
-		'HKD' => array( 'name' => 'Hong Kong Dollar', 'symbol' => '$', 'hex' => '&#x24;' ),
-		'HNL' => array( 'name' => 'Honduran Lempira', 'symbol' => 'L', 'hex' => '&#x4c;' ),
-		'HRK' => array( 'name' => 'Croatian Kuna', 'symbol' => 'kn', 'hex' => '&#x6b;&#x6e;' ),
-		'HUF' => array( 'name' => 'Hungarian Forint', 'symbol' => 'Ft', 'hex' => '&#x46;&#x74;' ),
-		'IDR' => array( 'name' => 'Indonesian Rupiah', 'symbol' => 'Rp', 'hex' => '&#x52;&#x70;' ),
-		'ILS' => array( 'name' => 'Israeli New Shekel', 'symbol' => '₪', 'hex' => '&#x20aa;' ),
-		'INR' => array( 'name' => 'Indian Rupee', 'symbol' => '₹', 'hex' => '&#x20b9;' ),
-		'ISK' => array( 'name' => 'Iceland Krona', 'symbol' => 'kr', 'hex' => '&#x6b;&#x72;' ),
-		'JMD' => array( 'name' => 'Jamaican Dollar', 'symbol' => 'J$', 'hex' => '&#x4a;&#x24;' ),
-		'JPY' => array( 'name' => 'Japanese Yen', 'symbol' => '¥', 'hex' => '&#xa5;' ),
-		'KRW' => array( 'name' => 'South-Korean Won', 'symbol' => '₩', 'hex' => '&#x20a9;' ),
-		'LKR' => array( 'name' => 'Sri Lanka Rupee', 'symbol' => '₨', 'hex' => '&#x20a8;' ),
-		'MAD' => array( 'name' => 'Moroccan Dirham', 'symbol' => '.د.م', 'hex' => '&#x2e;&#x62f;&#x2e;&#x645;' ),
-		'MMK' => array( 'name' => 'Myanmar Kyat', 'symbol' => 'K', 'hex' => '&#x4b;' ),
-		'MXN' => array( 'name' => 'Mexican Peso', 'symbol' => '$', 'hex' => '&#x24;' ),
-		'MYR' => array( 'name' => 'Malaysian Ringgit', 'symbol' => 'RM', 'hex' => '&#x52;&#x4d;' ),
-		'NOK' => array( 'name' => 'Norwegian Kroner', 'symbol' => 'kr', 'hex' => '&#x6b;&#x72;' ),
-		'NZD' => array( 'name' => 'New Zealand Dollar', 'symbol' => '$', 'hex' => '&#x24;' ),
-		'PAB' => array( 'name' => 'Panamanian Balboa', 'symbol' => 'B/.', 'hex' => '&#x42;&#x2f;&#x2e;' ),
-		'PEN' => array( 'name' => 'Peruvian Nuevo Sol', 'symbol' => 'S/.', 'hex' => '&#x53;&#x2f;&#x2e;' ),
-		'PHP' => array( 'name' => 'Philippine Peso', 'symbol' => '₱', 'hex' => '&#x20b1;' ),
-		'PKR' => array( 'name' => 'Pakistan Rupee', 'symbol' => '₨', 'hex' => '&#x20a8;' ),
-		'PLN' => array( 'name' => 'Polish Zloty', 'symbol' => 'zł', 'hex' => '&#x7a;&#x142;' ),
-		'RON' => array( 'name' => 'Romanian New Lei', 'symbol' => 'lei', 'hex' => '&#x6c;&#x65;&#x69;' ),
-		'RSD' => array( 'name' => 'Serbian Dinar', 'symbol' => 'RSD', 'hex' => '&#x52;&#x53;&#x44;' ),
-		'RUB' => array( 'name' => 'Russian Rouble', 'symbol' => 'руб', 'hex' => '&#x440;&#x443;&#x431;' ),
-		'SEK' => array( 'name' => 'Swedish Krona', 'symbol' => 'kr', 'hex' => '&#x6b;&#x72;' ),
-		'SGD' => array( 'name' => 'Singapore Dollar', 'symbol' => 'S$', 'hex' => '&#x53;&#x24;' ),
-		'THB' => array( 'name' => 'Thai Baht', 'symbol' => '฿', 'hex' => '&#xe3f;' ),
-		'TND' => array( 'name' => 'Tunisian Dinar', 'symbol' => 'DT', 'hex' => '&#x44;&#x54;' ),
-		'TRY' => array( 'name' => 'Turkish Lira', 'symbol' => 'TL', 'hex' => '&#x54;&#x4c;' ),
-		'TTD' => array( 'name' => 'Trinidad/Tobago Dollar', 'symbol' => '$', 'hex' => '&#x24;' ),
-		'TWD' => array( 'name' => 'Taiwan Dollar', 'symbol' => 'NT$', 'hex' => '&#x4e;&#x54;&#x24;' ),
-		'VEF' => array( 'name' => 'Venezuelan Bolivar Fuerte', 'symbol' => 'Bs', 'hex' => '&#x42;&#x73;' ),
-		'VND' => array( 'name' => 'Vietnamese Dong', 'symbol' => '₫', 'hex' => '&#x20ab;' ),
-		'XAF' => array( 'name' => 'CFA Franc BEAC', 'symbol' => 'FCFA', 'hex' => '&#x46;&#x43;&#x46;&#x41;' ),
-		'XCD' => array( 'name' => 'East Caribbean Dollar', 'symbol' => '$', 'hex' => '&#x24;' ),
-		'XPF' => array( 'name' => 'CFP Franc', 'symbol' => 'F', 'hex' => '&#x46;' ),
-		'ZAR' => array( 'name' => 'South African Rand', 'symbol' => 'R', 'hex' => '&#x52;' ),
+		'USD' => array(
+			'name'   => 'US Dollar',
+			'symbol' => '$',
+			'hex'    => '&#x24;',
+		),
+		'AED' => array(
+			'name'   => 'United Arab Emirates Dirham',
+			'symbol' => 'د.إ',
+			'hex'    => '&#x62f;&#x2e;&#x625;',
+		),
+		'ANG' => array(
+			'name'   => 'NL Antillian Guilder',
+			'symbol' => 'ƒ',
+			'hex'    => '&#x192;',
+		),
+		'ARS' => array(
+			'name'   => 'Argentine Peso',
+			'symbol' => '$',
+			'hex'    => '&#x24;',
+		),
+		'AUD' => array(
+			'name'   => 'Australian Dollar',
+			'symbol' => 'A$',
+			'hex'    => '&#x41;&#x24;',
+		),
+		'BRL' => array(
+			'name'   => 'Brazilian Real',
+			'symbol' => 'R$',
+			'hex'    => '&#x52;&#x24;',
+		),
+		'BSD' => array(
+			'name'   => 'Bahamian Dollar',
+			'symbol' => 'B$',
+			'hex'    => '&#x42;&#x24;',
+		),
+		'CAD' => array(
+			'name'   => 'Canadian Dollar',
+			'symbol' => '$',
+			'hex'    => '&#x24;',
+		),
+		'CHF' => array(
+			'name'   => 'Swiss Franc',
+			'symbol' => 'CHF',
+			'hex'    => '&#x43;&#x48;&#x46;',
+		),
+		'CLP' => array(
+			'name'   => 'Chilean Peso',
+			'symbol' => '$',
+			'hex'    => '&#x24;',
+		),
+		'CNY' => array(
+			'name'   => 'Chinese Yuan Renminbi',
+			'symbol' => '¥',
+			'hex'    => '&#xa5;',
+		),
+		'COP' => array(
+			'name'   => 'Colombian Peso',
+			'symbol' => '$',
+			'hex'    => '&#x24;',
+		),
+		'CZK' => array(
+			'name'   => 'Czech Koruna',
+			'symbol' => 'Kč',
+			'hex'    => '&#x4b;&#x10d;',
+		),
+		'DKK' => array(
+			'name'   => 'Danish Krone',
+			'symbol' => 'kr',
+			'hex'    => '&#x6b;&#x72;',
+		),
+		'EUR' => array(
+			'name'   => 'Euro',
+			'symbol' => '€',
+			'hex'    => '&#x20ac;',
+		),
+		'FJD' => array(
+			'name'   => 'Fiji Dollar',
+			'symbol' => 'FJ$',
+			'hex'    => '&#x46;&#x4a;&#x24;',
+		),
+		'GBP' => array(
+			'name'   => 'British Pound',
+			'symbol' => '£',
+			'hex'    => '&#xa3;',
+		),
+		'GHS' => array(
+			'name'   => 'Ghanaian New Cedi',
+			'symbol' => 'GH₵',
+			'hex'    => '&#x47;&#x48;&#x20b5;',
+		),
+		'GTQ' => array(
+			'name'   => 'Guatemalan Quetzal',
+			'symbol' => 'Q',
+			'hex'    => '&#x51;',
+		),
+		'HKD' => array(
+			'name'   => 'Hong Kong Dollar',
+			'symbol' => '$',
+			'hex'    => '&#x24;',
+		),
+		'HNL' => array(
+			'name'   => 'Honduran Lempira',
+			'symbol' => 'L',
+			'hex'    => '&#x4c;',
+		),
+		'HRK' => array(
+			'name'   => 'Croatian Kuna',
+			'symbol' => 'kn',
+			'hex'    => '&#x6b;&#x6e;',
+		),
+		'HUF' => array(
+			'name'   => 'Hungarian Forint',
+			'symbol' => 'Ft',
+			'hex'    => '&#x46;&#x74;',
+		),
+		'IDR' => array(
+			'name'   => 'Indonesian Rupiah',
+			'symbol' => 'Rp',
+			'hex'    => '&#x52;&#x70;',
+		),
+		'ILS' => array(
+			'name'   => 'Israeli New Shekel',
+			'symbol' => '₪',
+			'hex'    => '&#x20aa;',
+		),
+		'INR' => array(
+			'name'   => 'Indian Rupee',
+			'symbol' => '₹',
+			'hex'    => '&#x20b9;',
+		),
+		'ISK' => array(
+			'name'   => 'Iceland Krona',
+			'symbol' => 'kr',
+			'hex'    => '&#x6b;&#x72;',
+		),
+		'JMD' => array(
+			'name'   => 'Jamaican Dollar',
+			'symbol' => 'J$',
+			'hex'    => '&#x4a;&#x24;',
+		),
+		'JPY' => array(
+			'name'   => 'Japanese Yen',
+			'symbol' => '¥',
+			'hex'    => '&#xa5;',
+		),
+		'KRW' => array(
+			'name'   => 'South-Korean Won',
+			'symbol' => '₩',
+			'hex'    => '&#x20a9;',
+		),
+		'LKR' => array(
+			'name'   => 'Sri Lanka Rupee',
+			'symbol' => '₨',
+			'hex'    => '&#x20a8;',
+		),
+		'MAD' => array(
+			'name'   => 'Moroccan Dirham',
+			'symbol' => '.د.م',
+			'hex'    => '&#x2e;&#x62f;&#x2e;&#x645;',
+		),
+		'MMK' => array(
+			'name'   => 'Myanmar Kyat',
+			'symbol' => 'K',
+			'hex'    => '&#x4b;',
+		),
+		'MXN' => array(
+			'name'   => 'Mexican Peso',
+			'symbol' => '$',
+			'hex'    => '&#x24;',
+		),
+		'MYR' => array(
+			'name'   => 'Malaysian Ringgit',
+			'symbol' => 'RM',
+			'hex'    => '&#x52;&#x4d;',
+		),
+		'NOK' => array(
+			'name'   => 'Norwegian Kroner',
+			'symbol' => 'kr',
+			'hex'    => '&#x6b;&#x72;',
+		),
+		'NZD' => array(
+			'name'   => 'New Zealand Dollar',
+			'symbol' => '$',
+			'hex'    => '&#x24;',
+		),
+		'PAB' => array(
+			'name'   => 'Panamanian Balboa',
+			'symbol' => 'B/.',
+			'hex'    => '&#x42;&#x2f;&#x2e;',
+		),
+		'PEN' => array(
+			'name'   => 'Peruvian Nuevo Sol',
+			'symbol' => 'S/.',
+			'hex'    => '&#x53;&#x2f;&#x2e;',
+		),
+		'PHP' => array(
+			'name'   => 'Philippine Peso',
+			'symbol' => '₱',
+			'hex'    => '&#x20b1;',
+		),
+		'PKR' => array(
+			'name'   => 'Pakistan Rupee',
+			'symbol' => '₨',
+			'hex'    => '&#x20a8;',
+		),
+		'PLN' => array(
+			'name'   => 'Polish Zloty',
+			'symbol' => 'zł',
+			'hex'    => '&#x7a;&#x142;',
+		),
+		'RON' => array(
+			'name'   => 'Romanian New Lei',
+			'symbol' => 'lei',
+			'hex'    => '&#x6c;&#x65;&#x69;',
+		),
+		'RSD' => array(
+			'name'   => 'Serbian Dinar',
+			'symbol' => 'RSD',
+			'hex'    => '&#x52;&#x53;&#x44;',
+		),
+		'RUB' => array(
+			'name'   => 'Russian Rouble',
+			'symbol' => 'руб',
+			'hex'    => '&#x440;&#x443;&#x431;',
+		),
+		'SEK' => array(
+			'name'   => 'Swedish Krona',
+			'symbol' => 'kr',
+			'hex'    => '&#x6b;&#x72;',
+		),
+		'SGD' => array(
+			'name'   => 'Singapore Dollar',
+			'symbol' => 'S$',
+			'hex'    => '&#x53;&#x24;',
+		),
+		'THB' => array(
+			'name'   => 'Thai Baht',
+			'symbol' => '฿',
+			'hex'    => '&#xe3f;',
+		),
+		'TND' => array(
+			'name'   => 'Tunisian Dinar',
+			'symbol' => 'DT',
+			'hex'    => '&#x44;&#x54;',
+		),
+		'TRY' => array(
+			'name'   => 'Turkish Lira',
+			'symbol' => 'TL',
+			'hex'    => '&#x54;&#x4c;',
+		),
+		'TTD' => array(
+			'name'   => 'Trinidad/Tobago Dollar',
+			'symbol' => '$',
+			'hex'    => '&#x24;',
+		),
+		'TWD' => array(
+			'name'   => 'Taiwan Dollar',
+			'symbol' => 'NT$',
+			'hex'    => '&#x4e;&#x54;&#x24;',
+		),
+		'VEF' => array(
+			'name'   => 'Venezuelan Bolivar Fuerte',
+			'symbol' => 'Bs',
+			'hex'    => '&#x42;&#x73;',
+		),
+		'VND' => array(
+			'name'   => 'Vietnamese Dong',
+			'symbol' => '₫',
+			'hex'    => '&#x20ab;',
+		),
+		'XAF' => array(
+			'name'   => 'CFA Franc BEAC',
+			'symbol' => 'FCFA',
+			'hex'    => '&#x46;&#x43;&#x46;&#x41;',
+		),
+		'XCD' => array(
+			'name'   => 'East Caribbean Dollar',
+			'symbol' => '$',
+			'hex'    => '&#x24;',
+		),
+		'XPF' => array(
+			'name'   => 'CFP Franc',
+			'symbol' => 'F',
+			'hex'    => '&#x46;',
+		),
+		'ZAR' => array(
+			'name'   => 'South African Rand',
+			'symbol' => 'R',
+			'hex'    => '&#x52;',
+		),
 	);
 }
 
 /**
  * Get Currency Symbol
  *
- * @param  string  $currency  Currency.
+ * @param  string $currency  Currency.
  *
  * @return mixed
  */
@@ -2332,7 +2578,8 @@ function fed_get_currency_symbol( $currency ) {
  */
 function fed_get_country_code() {
 	return apply_filters(
-		'fed_extend_country_code', array(
+		'fed_extend_country_code',
+		array(
 			'empty' => 'Select Country',
 			'AF'    => 'AFGHANISTAN',
 			'AX'    => 'ÅLAND ISLANDS',
@@ -2584,7 +2831,7 @@ function fed_get_country_code() {
 /**
  * Country Code by ID.
  *
- * @param  string  $id  Country ID.
+ * @param  string $id  Country ID.
  *
  * @return mixed|string
  */
@@ -2601,7 +2848,8 @@ function fed_get_country_code_by_id( $id ) {
  */
 function fed_get_payment_sources() {
 	return apply_filters(
-		'fed_payment_sources', array(
+		'fed_payment_sources',
+		array(
 			'money_transfer' => 'Money Transfer',
 			'cheque'         => 'Cheque',
 		)
@@ -2667,7 +2915,6 @@ function fed_get_amount_based_on_user_role() {
 		}
 	}
 
-
 	return (float) $amount;
 }
 
@@ -2695,7 +2942,8 @@ function fed_paypal_payment_success_cancel_url() {
  */
 function fed_default_extended_fields() {
 	return apply_filters(
-		'fed_default_extended_fields', array(
+		'fed_default_extended_fields',
+		array(
 			'date_format' => 'd-m-Y',
 			'enable_time' => 'no',
 			'date_mode'   => 'single',
@@ -2784,8 +3032,8 @@ function fed_get_payment_cycles() {
 /**
  * Compare Two Array.
  *
- * @param  array  $array1  Array 1.
- * @param  array  $array2  Array 2.
+ * @param  array $array1  Array 1.
+ * @param  array $array2  Array 2.
  *
  * @return bool
  */
@@ -2796,7 +3044,7 @@ function fed_compare_two_array( $array1, $array2 ) {
 /**
  * Convert Payment Cycles to days.
  *
- * @param  array  $payment_cycle  Payment Cycle.
+ * @param  array $payment_cycle  Payment Cycle.
  *
  * @return int|string
  *
@@ -2808,7 +3056,7 @@ function fed_convert_payment_cycles_to_days( $payment_cycle ) {
 		case 'annually':
 			$days = '365';
 			break;
-		case 'monthly' :
+		case 'monthly':
 			$days = '30';
 			break;
 		case 'custom':
@@ -2822,7 +3070,7 @@ function fed_convert_payment_cycles_to_days( $payment_cycle ) {
 /**
  * Get User Name by ID.
  *
- * @param  string  $id  User ID.
+ * @param  string $id  User ID.
  *
  * @return string
  */
@@ -2835,7 +3083,7 @@ function fed_get_user_name_by_id( $id ) {
 /**
  * Display Name by ID.
  *
- * @param  string  $id  User ID.
+ * @param  string $id  User ID.
  *
  * @return string
  */
@@ -2860,7 +3108,7 @@ function fed_redirect_to_404() {
 /**
  * Show helper message
  *
- * @param  array  $message  Message.
+ * @param  array $message  Message.
  *
  * @return string
  */
@@ -2878,8 +3126,8 @@ function fed_show_help_message( array $message ) {
  * Convert to pricing
  * TODO: Payment
  *
- * @param  string  $cycle  Cycle.
- * @param  string  $custom  Custom.
+ * @param  string $cycle  Cycle.
+ * @param  string $custom  Custom.
  *
  * @return string
  */
@@ -2955,9 +3203,9 @@ function fed_plugin_versions() {
 /**
  * Convert this to that.
  *
- * @param  string  $source  Source.
- * @param  string  $_this  This.
- * @param  string  $that  That.
+ * @param  string $source  Source.
+ * @param  string $_this  This.
+ * @param  string $that  That.
  *
  * @return mixed
  */
@@ -2972,7 +3220,7 @@ add_action( 'admin_footer', 'fed_render_menu_icons_popup_footer' );
 function fed_render_menu_icons_popup_footer() {
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( ( isset( $_GET['page'] ) && in_array( wp_unslash( $_GET['page'] ), fed_get_script_loading_pages(), false ) ) ||
-	     ( isset( $GLOBALS['pagenow'] ) && in_array( $GLOBALS['pagenow'], fed_get_script_loading_pages(), false ) ) ) {
+		( isset( $GLOBALS['pagenow'] ) && in_array( $GLOBALS['pagenow'], fed_get_script_loading_pages(), false ) ) ) {
 		fed_menu_icons_popup();
 	}
 }
@@ -2986,7 +3234,7 @@ function fed_menu_icons_popup() {
 		return;
 	}
 	$rendered = true;
-	$icons = fed_font_awesome_list();
+	$icons    = fed_font_awesome_list();
 	?>
 	<style>
 		#fed_icon_picker_modal {
@@ -3059,9 +3307,10 @@ function fed_menu_icons_popup() {
 				<div class="fed-icon-modal-body p-5 overflow-y-auto flex-1 min-h-0" style="overflow-y: auto !important; overflow-x: hidden !important;">
 					<input type="hidden" id="fed_menu_box_id" name="fed_menu_box_id" value="" />
 					<div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2.5 fed_fa_container" id="fed_global_icons_grid">
-						<?php foreach ( $icons as $key => $unicode ) : 
+						<?php
+						foreach ( $icons as $key => $unicode ) :
 							$icon_name = str_replace( array( 'fas fa-', 'fab fa-', 'far fa-', 'fa fa-' ), '', $key );
-						?>
+							?>
 							<button type="button" 
 								class="fed_single_fa group p-2.5 flex flex-col items-center justify-center rounded-xl border border-slate-200 bg-white hover:bg-indigo-50 hover:border-indigo-300 hover:text-indigo-600 text-slate-700 transition-all duration-150 cursor-pointer shadow-2xs hover:shadow-xs" 
 								data-id="<?php echo esc_attr( $key ); ?>" 
@@ -3089,8 +3338,8 @@ function fed_menu_icons_popup() {
 /**
  * Compare two array and get the second array value.
  *
- * @param  array  $array1  Array 1.
- * @param  array  $array2  Array 2.
+ * @param  array $array1  Array 1.
+ * @param  array $array2  Array 2.
  *
  * @return array
  */
@@ -3109,8 +3358,8 @@ function fed_compare_two_arrays_get_second_value( array $array1, array $array2 )
  * Get Key Value Array.
  *
  * @param  array  $array
- * @param  string  $key
- * @param  null  $value
+ * @param  string $key
+ * @param  null   $value
  *
  * @return array
  */
@@ -3133,9 +3382,7 @@ function fed_get_key_value_array( array $array, $key, $value = null ) {
 				$new_array[ $item[ $key ] ] = $item;
 			}
 		}
-
 	}
-
 
 	return $new_array;
 }
@@ -3143,7 +3390,7 @@ function fed_get_key_value_array( array $array, $key, $value = null ) {
 /**
  * Get Category Tag Post format.
  *
- * @param  string  $post_type  Post Type.
+ * @param  string $post_type  Post Type.
  *
  * @return array
  */
@@ -3172,7 +3419,7 @@ function fed_get_category_tag_post_format( $post_type = 'post' ) {
  *
  * @param      $array
  * @param      $on
- * @param  int  $order
+ * @param  int $order
  *
  * @return array
  */
@@ -3214,7 +3461,7 @@ function fed_array_sort( $array, $on, $order = SORT_ASC ) {
 /**
  * Request Empty.
  *
- * @param  string  $request  Request.
+ * @param  string $request  Request.
  *
  * @return bool
  */
@@ -3230,7 +3477,7 @@ function fed_request_empty( $request = null ) {
 /**
  * Call Function Method.
  *
- * @param  array  $item  Item.
+ * @param  array $item  Item.
  */
 function fed_call_function_method( $item ) {
 	if ( is_string( $item['callable'] ) && function_exists( $item['callable'] ) ) {
@@ -3250,8 +3497,12 @@ function fed_call_function_method( $item ) {
 			<?php
 			$message = is_array( $item['callable'] ) ? $item['callable']['method'] : $item['callable'];
 			/* Translators: %s: Message. */
-			fed_show_alert_message( sprintf( __( 'OOPS! You have not add the callable function ( %s ), please add to show the body container', 'frontend-dashboard' ),
-				esc_html( $message ) ) );
+			fed_show_alert_message(
+				sprintf(
+					__( 'OOPS! You have not add the callable function ( %s ), please add to show the body container', 'frontend-dashboard' ),
+					esc_html( $message )
+				)
+			);
 
 			?>
 		</div>
@@ -3262,7 +3513,7 @@ function fed_call_function_method( $item ) {
 /**
  * AJAX Call Function Method.
  *
- * @param  array  $item  Item.
+ * @param  array $item  Item.
  */
 function fed_ajax_call_function_method( $item ) {
 	if ( ! is_array( $item ) || ! isset( $item['callable'] ) ) {
@@ -3319,9 +3570,9 @@ function fed_ajax_call_function_method( $item ) {
 		wp_send_json_error(
 			array(
 				'message' => __(
-					             'OOPS! You have not add the callable function, please add ',
-					             'frontend-dashboard'
-				             ) . esc_html( $error ) . __( ' to show the body container', 'frontend-dashboard' ),
+					'OOPS! You have not add the callable function, please add ',
+					'frontend-dashboard'
+				) . esc_html( $error ) . __( ' to show the body container', 'frontend-dashboard' ),
 			),
 			400
 		);
@@ -3332,8 +3583,8 @@ function fed_ajax_call_function_method( $item ) {
 /**
  * Execute Method by String.
  *
- * @param  string  $item  Item.
- * @param  null  $parameter  Parameter
+ * @param  string $item  Item.
+ * @param  null   $parameter  Parameter
  */
 function fed_execute_method_by_string( $item, $parameter = null ) {
 	if ( ! is_string( $item ) || empty( $item ) ) {
@@ -3378,8 +3629,7 @@ function fed_execute_method_by_string( $item, $parameter = null ) {
 						'arguments' => $parameter,
 					)
 				);
-			} else {
-				if ( wp_doing_ajax() ) {
+			} elseif ( wp_doing_ajax() ) {
 					wp_send_json_error(
 						array(
 							'errorMessage' => sprintf(
@@ -3392,7 +3642,6 @@ function fed_execute_method_by_string( $item, $parameter = null ) {
 						404
 					);
 					exit();
-				}
 			}
 		} else {
 			if ( wp_doing_ajax() ) {
@@ -3421,19 +3670,18 @@ function fed_execute_method_by_string( $item, $parameter = null ) {
 				?>
 			</div>
 			<?php
-			/* Translators: %s class name */
+			/*
+			Translators: %s class name */
 			// FED_Log::writeLog( 'Class ' . esc_html( $class[0] ) . ' does not exist' );
 		}
-
 	}
-
 }
 
 /**
  * Isset.
  *
- * @param  string  $value  Value.
- * @param  null  $default  Default.
+ * @param  string $value  Value.
+ * @param  null   $default  Default.
  *
  * @return null
  */
@@ -3444,8 +3692,8 @@ function fed_isset( $value, $default = null ) {
 /**
  * Isset Sanitize.
  *
- * @param  string  $value  Value.
- * @param  null  $default  Default.
+ * @param  string $value  Value.
+ * @param  null   $default  Default.
  *
  * @return null|string
  */
@@ -3459,7 +3707,7 @@ function fed_isset_sanitize( $value, $default = null ) {
  * Recursively sanitizes string scalars preserving multi-line enters/newlines
  * while stripping tags and invalid UTF-8 bytes.
  *
- * @param  array|string  $var  Var.
+ * @param  array|string $var  Var.
  *
  * @return array|string
  */
@@ -3475,8 +3723,8 @@ function fed_sanitize_text_field( $var ) {
  * Isset Request.
  *
  * @param  array  $request  Request.
- * @param  string  $key  Key.
- * @param  null  $default  Default.
+ * @param  string $key  Key.
+ * @param  null   $default  Default.
  *
  * @return null|string
  */
@@ -3490,11 +3738,11 @@ function fed_isset_request( $request, $key, $default = null ) {
 /**
  * Get Dat.
  *
- * @param  string  $key  Key.
- * @param  null|array  $target  Target.
- * @param  null|mixed  $default  Default.
+ * @param  string     $key  Key.
+ * @param  null|array $target  Target.
+ * @param  null|mixed $default  Default.
  *
- * @param  bool  $sanitize
+ * @param  bool       $sanitize
  *
  * @return mixed|null
  */
@@ -3539,8 +3787,8 @@ function fed_get_data( $key, $target = null, $default = null, $sanitize = true )
 /**
  * Get Value.
  *
- * @param  \Closure | array | string  $value  Value.
- * @param  bool  $sanitize  Sanitize.
+ * @param  \Closure | array | string $value  Value.
+ * @param  bool                      $sanitize  Sanitize.
  *
  * @return mixed
  */
@@ -3551,7 +3799,7 @@ function fed_get_value( $value, $sanitize = true ) {
 /**
  * Get Column Count.
  *
- * @param  string  $value  Value.
+ * @param  string $value  Value.
  *
  * @return string
  */
@@ -3580,10 +3828,10 @@ if ( ! function_exists( 'fed_set_data' ) ) {
 	/**
 	 * Set an item on an array or object using dot notation.
 	 *
-	 * @param  mixed  $target  Target.
-	 * @param  string|array  $key  Key.
-	 * @param  mixed  $value  Value.
-	 * @param  bool  $overwrite  Overwrite.
+	 * @param  mixed        $target  Target.
+	 * @param  string|array $key  Key.
+	 * @param  mixed        $value  Value.
+	 * @param  bool         $overwrite  Overwrite.
 	 *
 	 * @return mixed
 	 */
@@ -3591,7 +3839,7 @@ if ( ! function_exists( 'fed_set_data' ) ) {
 		$segments = is_array( $key ) ? $key : explode( '.', $key );
 		if ( ( $segment = array_shift( $segments ) ) === '*' ) {
 			if ( ! fed_accessible( $target ) ) {
-				$target = [];
+				$target = array();
 			}
 			if ( $segments ) {
 				foreach ( $target as &$inner ) {
@@ -3605,7 +3853,7 @@ if ( ! function_exists( 'fed_set_data' ) ) {
 		} elseif ( fed_accessible( $target ) ) {
 			if ( $segments ) {
 				if ( ! fed_exists( $target, $segment ) ) {
-					$target[ $segment ] = [];
+					$target[ $segment ] = array();
 				}
 				fed_set_data( $target[ $segment ], $segments, $value, $overwrite );
 			} elseif ( $overwrite || ! fed_exists( $target, $segment ) ) {
@@ -3614,14 +3862,14 @@ if ( ! function_exists( 'fed_set_data' ) ) {
 		} elseif ( is_object( $target ) ) {
 			if ( $segments ) {
 				if ( ! isset( $target->{$segment} ) ) {
-					$target->{$segment} = [];
+					$target->{$segment} = array();
 				}
 				fed_set_data( $target->{$segment}, $segments, $value, $overwrite );
 			} elseif ( $overwrite || ! isset( $target->{$segment} ) ) {
 				$target->{$segment} = $value;
 			}
 		} else {
-			$target = [];
+			$target = array();
 			if ( $segments ) {
 				fed_set_data( $target[ $segment ], $segments, $value, $overwrite );
 			} elseif ( $overwrite ) {
@@ -3635,7 +3883,7 @@ if ( ! function_exists( 'fed_set_data' ) ) {
 /**
  * Determine whether the given value is array accessible.
  *
- * @param  mixed  $value  Value.
+ * @param  mixed $value  Value.
  *
  * @return bool
  */
@@ -3646,8 +3894,8 @@ function fed_accessible( $value ) {
 /**
  * Determine if the given key exists in the provided array.
  *
- * @param  \ArrayAccess|array  $array  Array Value.
- * @param  string|int  $key  Key.
+ * @param  \ArrayAccess|array $array  Array Value.
+ * @param  string|int         $key  Key.
  *
  * @return bool
  */
@@ -3663,7 +3911,7 @@ function fed_exists( $array, $key ) {
  * Generate URL.
  *
  * @param  array  $parameters  Parameters.
- * @param  string  $url  URL.
+ * @param  string $url  URL.
  *
  * @return string.
  */
@@ -3676,8 +3924,8 @@ function fed_generate_url( array $parameters, $url ) {
 /**
  * Array to Object Sort by Key.
  *
- * @param  object  $a  Object One.
- * @param  object  $b  Object two.
+ * @param  object $a  Object One.
+ * @param  object $b  Object two.
  *
  * @return int
  */
@@ -3750,7 +3998,8 @@ function fed_get_table_status() {
  */
 function fed_get_tables() {
 	return apply_filters(
-		'fed_get_tables', array(
+		'fed_get_tables',
+		array(
 			'fed_user_profile' => array( 'order' => 'input_order' ),
 			'fed_post'         => array( 'order' => 'input_order' ),
 			'fed_menu'         => array( 'order' => 'menu_order' ),
@@ -3762,8 +4011,8 @@ function fed_get_tables() {
 /**
  * Get Menu Value.
  *
- * @param  array  $values  Values.
- * @param  array  $menus  Menus.
+ * @param  array $values  Values.
+ * @param  array $menus  Menus.
  *
  * @return array
  */
@@ -3895,8 +4144,8 @@ function fed_get_help_video_items() {
 	);
 }
 
-//add_filter( 'contextual_help', 'fed_remove_contextual_help', 999, 3 );
-///**
+// add_filter( 'contextual_help', 'fed_remove_contextual_help', 999, 3 );
+// **
 // * Remove Contextual Help.
 // *
 // * @param  string $old_help  Old Help.
@@ -3905,15 +4154,15 @@ function fed_get_help_video_items() {
 // *
 // * @return string
 // */
-//function fed_remove_contextual_help( $old_help, $screen_id, $screen ) {
-//	if ( $screen_id === 'toplevel_page_fed_settings_menu' ) {
-//		$screen->remove_help_tabs();
+// function fed_remove_contextual_help( $old_help, $screen_id, $screen ) {
+// if ( $screen_id === 'toplevel_page_fed_settings_menu' ) {
+// $screen->remove_help_tabs();
 //
-//		return '';
-//	}
+// return '';
+// }
 //
-//	return $old_help;
-//}
+// return $old_help;
+// }
 
 add_action( 'admin_footer_text', 'fed_show_help_icons' );
 /**
@@ -4213,7 +4462,7 @@ function fed_show_help_icons() {
 /**
  * Get Keys from Menu.
  *
- * @param  array  $menus  Menus.
+ * @param  array $menus  Menus.
  *
  * @return array
  */
@@ -4227,15 +4476,14 @@ function fed_get_keys_from_menu( $menus ) {
 	}
 
 	return $keys;
-
 }
 
 /**
  * Search Index From Array Recursively.
  *
  * @param  array  $array  Array Values.
- * @param  string  $index  Array Index.
- * @param  string  $submenu  Submenu.
+ * @param  string $index  Array Index.
+ * @param  string $submenu  Submenu.
  *
  * @return mixed
  */
@@ -4275,7 +4523,7 @@ function fed_get_admin_email() {
 /**
  * Get First Element In Array.
  *
- * @param  array  $array  Array.
+ * @param  array $array  Array.
  *
  * @return bool|int|string|null
  */
@@ -4291,7 +4539,7 @@ function fed_get_first_element_in_array( $array ) {
 /**
  * Get First Key in Array.
  *
- * @param  array  $array  Array.
+ * @param  array $array  Array.
  *
  * @return bool|int|string|null
  */
@@ -4310,16 +4558,18 @@ add_filter( 'wp_nav_menu_items', 'login_logout_menu', 10, 2 );
 /**
  * Login Logout Menu.
  *
- * @param  string  $items  Items.
- * @param  object  $args  Object.
+ * @param  string $items  Items.
+ * @param  object $args  Object.
  *
  * @return mixed|void
  */
 function login_logout_menu( $items, $args ) {
 	$fed_login = get_option( 'fed_admin_login' );
 
-	if ( ! empty( $args->theme_location ) && $args->theme_location === fed_get_data( 'login_menu.menu_item',
-			$fed_login )
+	if ( ! empty( $args->theme_location ) && $args->theme_location === fed_get_data(
+		'login_menu.menu_item',
+		$fed_login
+	)
 	) {
 		if ( is_user_logged_in() ) {
 			$items .= '<li><a href="' . fed_get_dashboard_url() . '">Dashboard</a></li>';
@@ -4335,17 +4585,17 @@ function login_logout_menu( $items, $args ) {
 /**
  * User Role Checkboxes.
  *
- * @param  string  $meta  Meta.
+ * @param  string $meta  Meta.
  * @param  array  $user_roles  User Roles.
 /**
  * Render Reusable Modern User Role Checkboxes Component.
  * Features: Live instant search, Select All, Clear All, selected counter, and responsive card layout.
  *
- * @param  string  $meta        Field name prefix (e.g. 'settings[users][allow]').
- * @param  array   $user_roles  Currently selected user roles array/keys.
- * @param  string  $column      Column size (legacy support: '3', '4', '6', '12').
- * @param  array   $extra       Extra custom roles (e.g. array('unregistered' => 'Unregistered')).
- * @param  array   $remove      Roles to exclude from list.
+ * @param  string $meta        Field name prefix (e.g. 'settings[users][allow]').
+ * @param  array  $user_roles  Currently selected user roles array/keys.
+ * @param  string $column      Column size (legacy support: '3', '4', '6', '12').
+ * @param  array  $extra       Extra custom roles (e.g. array('unregistered' => 'Unregistered')).
+ * @param  array  $remove      Roles to exclude from list.
  *
  * @return string  Rendered HTML.
  */
@@ -4373,8 +4623,8 @@ function fed_user_role_checkboxes( $meta, $user_roles = array(), $column = '4', 
 		}
 	}
 
-	$unique_id = 'fed_roles_' . wp_rand( 1000, 9999 );
-	$total_roles = count( $all_roles );
+	$unique_id      = 'fed_roles_' . wp_rand( 1000, 9999 );
+	$total_roles    = count( $all_roles );
 	$selected_count = count( array_intersect( array_keys( $all_roles ), $selected_keys ) );
 
 	ob_start();
@@ -4409,10 +4659,10 @@ function fed_user_role_checkboxes( $meta, $user_roles = array(), $column = '4', 
 		<div class="fed-roles-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;">
 			<?php
 			foreach ( $all_roles as $key => $role ) {
-				$is_checked = in_array( (string) $key, $selected_keys, true );
-				$card_bg    = $is_checked ? '#f0fdf4' : '#f8fafc';
+				$is_checked  = in_array( (string) $key, $selected_keys, true );
+				$card_bg     = $is_checked ? '#f0fdf4' : '#f8fafc';
 				$card_border = $is_checked ? '#86efac' : '#e2e8f0';
-				$card_color = $is_checked ? '#15803d' : '#334155';
+				$card_color  = $is_checked ? '#15803d' : '#334155';
 				?>
 				<label class="fed-role-item" data-role-name="<?php echo esc_attr( strtolower( $role . ' ' . $key ) ); ?>" style="display: flex; align-items: center; gap: 10px; background: <?php echo esc_attr( $card_bg ); ?>; border: 1px solid <?php echo esc_attr( $card_border ); ?>; padding: 10px 14px; border-radius: 8px; cursor: pointer; transition: all 0.15s ease; user-select: none; margin: 0;">
 					<input type="checkbox" name="<?php echo esc_attr( $meta . '[' . $key . ']' ); ?>" value="<?php echo esc_attr( $key ); ?>" class="fed-role-checkbox" <?php checked( $is_checked ); ?> style="width: 16px; height: 16px; accent-color: #128c7e; cursor: pointer; flex-shrink: 0;" />
@@ -4526,11 +4776,11 @@ function fed_user_role_checkboxes( $meta, $user_roles = array(), $column = '4', 
 if ( ! function_exists( 'fed_log' ) ) {
 	function fed_log( $message ) {
 		$log_file = BC_FED_PLUGIN_DIR . '/log/dashboard.log';
-		$dir = dirname( $log_file );
+		$dir      = dirname( $log_file );
 		if ( ! file_exists( $dir ) ) {
 			wp_mkdir_p( $dir );
 		}
-		$text = is_string( $message ) ? $message : wp_json_encode( $message );
+		$text      = is_string( $message ) ? $message : wp_json_encode( $message );
 		$formatted = '[' . current_time( 'Y-m-d H:i:s' ) . '] ' . $text . PHP_EOL;
 		@file_put_contents( $log_file, $formatted, FILE_APPEND );
 	}
@@ -4668,89 +4918,89 @@ if ( ! function_exists( 'fed_image_mime_types' ) ) {
 	function fed_image_mime_types() {
 		$base = site_url() . '/wp-includes/images/media/';
 		return array(
-			'video/x-ms-asf'                                                            => $base . 'video.png',
-			'video/x-ms-wmv'                                                            => $base . 'video.png',
-			'video/x-ms-wmx'                                                            => $base . 'video.png',
-			'video/x-ms-wm'                                                             => $base . 'video.png',
-			'video/avi'                                                                 => $base . 'video.png',
-			'video/divx'                                                                => $base . 'video.png',
-			'video/x-flv'                                                               => $base . 'video.png',
-			'video/quicktime'                                                           => $base . 'video.png',
-			'video/mpeg'                                                                => $base . 'video.png',
-			'video/mp4'                                                                 => $base . 'video.png',
-			'video/ogg'                                                                 => $base . 'video.png',
-			'video/webm'                                                                => $base . 'video.png',
-			'video/x-matroska'                                                          => $base . 'video.png',
-			'video/3gpp'                                                                => $base . 'video.png',
-			'video/3gpp2'                                                               => $base . 'video.png',
-			'text/plain'                                                                => $base . 'text.png',
-			'text/csv'                                                                  => $base . 'text.png',
-			'text/tab-separated-values'                                                 => $base . 'text.png',
-			'text/calendar'                                                             => $base . 'text.png',
-			'text/richtext'                                                             => $base . 'text.png',
-			'text/css'                                                                  => $base . 'text.png',
-			'text/html'                                                                 => $base . 'text.png',
-			'text/vtt'                                                                  => $base . 'text.png',
-			'application/ttaf+xml'                                                      => $base . 'text.png',
-			'audio/mpeg'                                                                => $base . 'audio.png',
-			'audio/x-realaudio'                                                         => $base . 'audio.png',
-			'audio/wav'                                                                 => $base . 'audio.png',
-			'audio/ogg'                                                                 => $base . 'audio.png',
-			'audio/midi'                                                                => $base . 'audio.png',
-			'audio/x-ms-wma'                                                            => $base . 'audio.png',
-			'audio/x-ms-wax'                                                            => $base . 'audio.png',
-			'audio/x-matroska'                                                          => $base . 'audio.png',
-			'application/rtf'                                                           => $base . 'archive.png',
-			'application/javascript'                                                    => $base . 'archive.png',
-			'application/pdf'                                                           => $base . 'document.png',
-			'application/x-shockwave-flash'                                             => $base . 'archive.png',
-			'application/java'                                                          => $base . 'archive.png',
-			'application/x-tar'                                                         => $base . 'archive.png',
-			'application/zip'                                                           => $base . 'archive.png',
-			'application/x-gzip'                                                        => $base . 'archive.png',
-			'application/rar'                                                           => $base . 'archive.png',
-			'application/x-7z-compressed'                                               => $base . 'archive.png',
-			'application/x-msdownload'                                                  => $base . 'archive.png',
-			'application/octet-stream'                                                  => $base . 'document.png',
-			'application/msword'                                                        => $base . 'document.png',
-			'application/vnd.ms-powerpoint'                                             => $base . 'document.png',
-			'application/vnd.ms-write'                                                  => $base . 'document.png',
-			'application/vnd.ms-excel'                                                  => $base . 'document.png',
-			'application/vnd.ms-access'                                                 => $base . 'document.png',
-			'application/vnd.ms-project'                                                => $base . 'document.png',
-			'application/vnd.openxmlformats-officedocument.wordprocessingml.document'   => $base . 'document.png',
-			'application/vnd.ms-word.document.macroEnabled.12'                          => $base . 'document.png',
-			'application/vnd.openxmlformats-officedocument.wordprocessingml.template'   => $base . 'document.png',
-			'application/vnd.ms-word.template.macroEnabled.12'                          => $base . 'document.png',
-			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'         => $base . 'document.png',
-			'application/vnd.ms-excel.sheet.macroEnabled.12'                            => $base . 'document.png',
-			'application/vnd.ms-excel.sheet.binary.macroEnabled.12'                     => $base . 'document.png',
-			'application/vnd.openxmlformats-officedocument.spreadsheetml.template'      => $base . 'document.png',
-			'application/vnd.ms-excel.template.macroEnabled.12'                         => $base . 'document.png',
-			'application/vnd.ms-excel.addin.macroEnabled.12'                            => $base . 'document.png',
+			'video/x-ms-asf'                              => $base . 'video.png',
+			'video/x-ms-wmv'                              => $base . 'video.png',
+			'video/x-ms-wmx'                              => $base . 'video.png',
+			'video/x-ms-wm'                               => $base . 'video.png',
+			'video/avi'                                   => $base . 'video.png',
+			'video/divx'                                  => $base . 'video.png',
+			'video/x-flv'                                 => $base . 'video.png',
+			'video/quicktime'                             => $base . 'video.png',
+			'video/mpeg'                                  => $base . 'video.png',
+			'video/mp4'                                   => $base . 'video.png',
+			'video/ogg'                                   => $base . 'video.png',
+			'video/webm'                                  => $base . 'video.png',
+			'video/x-matroska'                            => $base . 'video.png',
+			'video/3gpp'                                  => $base . 'video.png',
+			'video/3gpp2'                                 => $base . 'video.png',
+			'text/plain'                                  => $base . 'text.png',
+			'text/csv'                                    => $base . 'text.png',
+			'text/tab-separated-values'                   => $base . 'text.png',
+			'text/calendar'                               => $base . 'text.png',
+			'text/richtext'                               => $base . 'text.png',
+			'text/css'                                    => $base . 'text.png',
+			'text/html'                                   => $base . 'text.png',
+			'text/vtt'                                    => $base . 'text.png',
+			'application/ttaf+xml'                        => $base . 'text.png',
+			'audio/mpeg'                                  => $base . 'audio.png',
+			'audio/x-realaudio'                           => $base . 'audio.png',
+			'audio/wav'                                   => $base . 'audio.png',
+			'audio/ogg'                                   => $base . 'audio.png',
+			'audio/midi'                                  => $base . 'audio.png',
+			'audio/x-ms-wma'                              => $base . 'audio.png',
+			'audio/x-ms-wax'                              => $base . 'audio.png',
+			'audio/x-matroska'                            => $base . 'audio.png',
+			'application/rtf'                             => $base . 'archive.png',
+			'application/javascript'                      => $base . 'archive.png',
+			'application/pdf'                             => $base . 'document.png',
+			'application/x-shockwave-flash'               => $base . 'archive.png',
+			'application/java'                            => $base . 'archive.png',
+			'application/x-tar'                           => $base . 'archive.png',
+			'application/zip'                             => $base . 'archive.png',
+			'application/x-gzip'                          => $base . 'archive.png',
+			'application/rar'                             => $base . 'archive.png',
+			'application/x-7z-compressed'                 => $base . 'archive.png',
+			'application/x-msdownload'                    => $base . 'archive.png',
+			'application/octet-stream'                    => $base . 'document.png',
+			'application/msword'                          => $base . 'document.png',
+			'application/vnd.ms-powerpoint'               => $base . 'document.png',
+			'application/vnd.ms-write'                    => $base . 'document.png',
+			'application/vnd.ms-excel'                    => $base . 'document.png',
+			'application/vnd.ms-access'                   => $base . 'document.png',
+			'application/vnd.ms-project'                  => $base . 'document.png',
+			'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => $base . 'document.png',
+			'application/vnd.ms-word.document.macroEnabled.12' => $base . 'document.png',
+			'application/vnd.openxmlformats-officedocument.wordprocessingml.template' => $base . 'document.png',
+			'application/vnd.ms-word.template.macroEnabled.12' => $base . 'document.png',
+			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => $base . 'document.png',
+			'application/vnd.ms-excel.sheet.macroEnabled.12' => $base . 'document.png',
+			'application/vnd.ms-excel.sheet.binary.macroEnabled.12' => $base . 'document.png',
+			'application/vnd.openxmlformats-officedocument.spreadsheetml.template' => $base . 'document.png',
+			'application/vnd.ms-excel.template.macroEnabled.12' => $base . 'document.png',
+			'application/vnd.ms-excel.addin.macroEnabled.12' => $base . 'document.png',
 			'application/vnd.openxmlformats-officedocument.presentationml.presentation' => $base . 'document.png',
-			'application/vnd.ms-powerpoint.presentation.macroEnabled.12'                => $base . 'document.png',
-			'application/vnd.openxmlformats-officedocument.presentationml.slideshow'    => $base . 'document.png',
-			'application/vnd.ms-powerpoint.slideshow.macroEnabled.12'                   => $base . 'document.png',
-			'application/vnd.openxmlformats-officedocument.presentationml.template'     => $base . 'document.png',
-			'application/vnd.ms-powerpoint.template.macroEnabled.12'                    => $base . 'document.png',
-			'application/vnd.ms-powerpoint.addin.macroEnabled.12'                       => $base . 'document.png',
-			'application/vnd.openxmlformats-officedocument.presentationml.slide'        => $base . 'document.png',
-			'application/vnd.ms-powerpoint.slide.macroEnabled.12'                       => $base . 'document.png',
-			'application/onenote'                                                       => $base . 'document.png',
-			'application/oxps'                                                          => $base . 'document.png',
-			'application/vnd.ms-xpsdocument'                                            => $base . 'document.png',
-			'application/vnd.oasis.opendocument.text'                                   => $base . 'document.png',
-			'application/vnd.oasis.opendocument.presentation'                           => $base . 'document.png',
-			'application/vnd.oasis.opendocument.spreadsheet'                            => $base . 'document.png',
-			'application/vnd.oasis.opendocument.graphics'                               => $base . 'document.png',
-			'application/vnd.oasis.opendocument.chart'                                  => $base . 'document.png',
-			'application/vnd.oasis.opendocument.database'                               => $base . 'document.png',
-			'application/vnd.oasis.opendocument.formula'                                => $base . 'document.png',
-			'application/wordperfect'                                                   => $base . 'document.png',
-			'application/vnd.apple.keynote'                                             => $base . 'document.png',
-			'application/vnd.apple.numbers'                                             => $base . 'document.png',
-			'application/vnd.apple.pages'                                               => $base . 'document.png',
+			'application/vnd.ms-powerpoint.presentation.macroEnabled.12' => $base . 'document.png',
+			'application/vnd.openxmlformats-officedocument.presentationml.slideshow' => $base . 'document.png',
+			'application/vnd.ms-powerpoint.slideshow.macroEnabled.12' => $base . 'document.png',
+			'application/vnd.openxmlformats-officedocument.presentationml.template' => $base . 'document.png',
+			'application/vnd.ms-powerpoint.template.macroEnabled.12' => $base . 'document.png',
+			'application/vnd.ms-powerpoint.addin.macroEnabled.12' => $base . 'document.png',
+			'application/vnd.openxmlformats-officedocument.presentationml.slide' => $base . 'document.png',
+			'application/vnd.ms-powerpoint.slide.macroEnabled.12' => $base . 'document.png',
+			'application/onenote'                         => $base . 'document.png',
+			'application/oxps'                            => $base . 'document.png',
+			'application/vnd.ms-xpsdocument'              => $base . 'document.png',
+			'application/vnd.oasis.opendocument.text'     => $base . 'document.png',
+			'application/vnd.oasis.opendocument.presentation' => $base . 'document.png',
+			'application/vnd.oasis.opendocument.spreadsheet' => $base . 'document.png',
+			'application/vnd.oasis.opendocument.graphics' => $base . 'document.png',
+			'application/vnd.oasis.opendocument.chart'    => $base . 'document.png',
+			'application/vnd.oasis.opendocument.database' => $base . 'document.png',
+			'application/vnd.oasis.opendocument.formula'  => $base . 'document.png',
+			'application/wordperfect'                     => $base . 'document.png',
+			'application/vnd.apple.keynote'               => $base . 'document.png',
+			'application/vnd.apple.numbers'               => $base . 'document.png',
+			'application/vnd.apple.pages'                 => $base . 'document.png',
 		);
 	}
 }

@@ -13,8 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function fed_admin_setting_upl_request() {
 	// phpcs:ignore WordPress.Security.NonceVerification.Missing
-	$request                            = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
-	$fed_admin_settings_upl             = get_option( 'fed_admin_settings_upl', array() );
+	$request                = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
+	$fed_admin_settings_upl = get_option( 'fed_admin_settings_upl', array() );
 	if ( ! is_array( $fed_admin_settings_upl ) ) {
 		$fed_admin_settings_upl = array();
 	}

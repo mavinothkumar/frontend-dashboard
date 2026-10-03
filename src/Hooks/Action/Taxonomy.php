@@ -2,7 +2,6 @@
 
 namespace FED\Hooks\Action;
 
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -42,16 +41,18 @@ class Taxonomy {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$post_payload = isset( $_POST ) ? wp_unslash( $_POST ) : array();
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$get_payload  = isset( $_GET ) ? array_map( 'sanitize_text_field', wp_unslash( $_GET ) ) : array();
+		$get_payload = isset( $_GET ) ? array_map( 'sanitize_text_field', wp_unslash( $_GET ) ) : array();
 
 		fed_verify_nonce( $get_payload );
 
 		if ( isset( $post_payload['post_type'] ) && ! empty( $post_payload['post_type'] ) ) {
 			$taxonomies = get_object_taxonomies( fed_sanitize_text_field( $post_payload['post_type'] ), 'object' );
 			$taxonomies = array( '' => 'Please Select' ) + wp_list_pluck( $taxonomies, 'label', 'name' );
-			wp_send_json_success( array(
-				'message' => $taxonomies,
-			) );
+			wp_send_json_success(
+				array(
+					'message' => $taxonomies,
+				)
+			);
 			exit();
 		}
 

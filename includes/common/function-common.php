@@ -179,7 +179,7 @@ if ( ! function_exists( 'fed_get_random_string' ) ) {
 		$characters        = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		$characters_length = strlen( $characters );
 		$random_string     = '';
-		for ( $i = 0; $i < $length; $i ++ ) {
+		for ( $i = 0; $i < $length; $i++ ) {
 			$random_string .= $characters[ wp_rand( 0, $characters_length - 1 ) ];
 		}
 
@@ -222,7 +222,8 @@ if ( ! function_exists( 'fed_shortcode_lists' ) ) {
 	 */
 	function fed_shortcode_lists() {
 		return apply_filters(
-			'fed_shortcode_lists', array(
+			'fed_shortcode_lists',
+			array(
 				'fed_login',
 				'fed_login_only',
 				'fed_register_only',
@@ -356,7 +357,6 @@ if ( ! function_exists( 'fed_is_admin' ) ) {
 		$user = wp_get_current_user();
 
 		return in_array( 'administrator', $user->roles ) ? true : false;
-
 	}
 }
 
@@ -372,7 +372,6 @@ if ( ! function_exists( 'fed_is_user_role' ) ) {
 		$user = wp_get_current_user();
 
 		return in_array( $user_role, $user->roles ) ? true : false;
-
 	}
 }
 
@@ -384,7 +383,8 @@ if ( ! function_exists( 'fed_get_default_menu_type' ) ) {
 	 */
 	function fed_get_default_menu_type() {
 		return apply_filters(
-			'fed_get_default_menu_type', array(
+			'fed_get_default_menu_type',
+			array(
 				'post',
 				'user',
 				'logout',
@@ -445,7 +445,7 @@ if ( ! function_exists( 'bcdump' ) ) {
 			echo htmlentities( print_r( $var, true ) );
 		} elseif ( is_string( $var ) ) {
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			echo "string(" . strlen( $var ) . ") \"" . htmlentities( $var ) . "\"\n";
+			echo 'string(' . strlen( $var ) . ') "' . htmlentities( $var ) . "\"\n";
 		} else {
 			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_dump
 			var_dump( $var );
@@ -523,7 +523,6 @@ if ( ! function_exists( 'fed_encrypt' ) ) {
 		$iv             = substr( hash( 'sha256', $secret_iv ), 0, 16 );
 
 		return base64_encode( openssl_encrypt( $string, $encrypt_method, $key, 0, $iv ) );
-
 	}
 }
 
@@ -631,15 +630,16 @@ function fed_convert_array_value_to_string( array $array, $glue = ',', $include_
 	$glued_string = '';
 	// Recursively iterates array and adds key/value to glued string.
 	array_walk_recursive(
-		$array, function ( $value, $key ) use ( $glue, $include_keys, &$glued_string ) {
-		$include_keys and $glued_string .= $key . $glue;
-		$glued_string .= $value . $glue;
-	}
+		$array,
+		function ( $value, $key ) use ( $glue, $include_keys, &$glued_string ) {
+			$include_keys and $glued_string .= $key . $glue;
+			$glued_string                   .= $value . $glue;
+		}
 	);
 	// Removes last $glue from string.
 	strlen( $glue ) > 0 and $glued_string = substr( $glued_string, 0, - strlen( $glue ) );
 	// Trim ALL whitespace.
-	$trim_all and $glued_string = preg_replace( "/(\s)/ixsm", '', $glued_string );
+	$trim_all and $glued_string = preg_replace( '/(\s)/ixsm', '', $glued_string );
 
 	return (string) $glued_string;
 }
@@ -829,7 +829,8 @@ function fed_get_menu_url_by_slug( $menu_slug, $menu_type ) {
 							'fed_nonce' => wp_create_nonce(
 								'fed_nonce'
 							),
-						), $dashboard_url
+						),
+						$dashboard_url
 					);
 				}
 			}
@@ -852,7 +853,8 @@ function fed_get_menu_url_by_slug( $menu_slug, $menu_type ) {
 							'fed_nonce' => wp_create_nonce(
 								'fed_nonce'
 							),
-						), $dashboard_url
+						),
+						$dashboard_url
 					);
 				}
 			}
@@ -891,13 +893,18 @@ function fed_get_user_meta( $user_id, $key = '', $single = false ) {
  * Show Password Meter
  */
 
-add_action( 'fed_register_below_form_field', function ( $input_meta, $content ) {
-	if ( $content && ( 'user_pass' === $input_meta || 'confirmation_password' === $input_meta ) ) {
-		?>
+add_action(
+	'fed_register_below_form_field',
+	function ( $input_meta, $content ) {
+		if ( $content && ( 'user_pass' === $input_meta || 'confirmation_password' === $input_meta ) ) {
+			?>
 		<span class="fed_password_strength"></span>
-		<?php
-	}
-}, 10, 2 );
+			<?php
+		}
+	},
+	10,
+	2
+);
 
 /**
  * Get Incompatible Add-ons (< 3.0.0).

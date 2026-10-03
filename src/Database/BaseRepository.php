@@ -79,7 +79,7 @@ abstract class BaseRepository {
 		$table = $this->getTableName();
 		$rows  = $this->db->get_results( "SELECT * FROM `{$table}` ORDER BY {$orderBy}", ARRAY_A );
 
-		return $rows ?: [];
+		return $rows ?: array();
 	}
 
 	/**
@@ -90,10 +90,10 @@ abstract class BaseRepository {
 	 * @param int    $limit
 	 * @return array
 	 */
-	public function where( array $conditions = [], $orderBy = 'id ASC', $limit = 0 ) {
+	public function where( array $conditions = array(), $orderBy = 'id ASC', $limit = 0 ) {
 		$table  = $this->getTableName();
-		$where  = [];
-		$params = [];
+		$where  = array();
+		$params = array();
 
 		foreach ( $conditions as $col => $val ) {
 			$where[]  = "`{$col}` = %s";
@@ -109,7 +109,7 @@ abstract class BaseRepository {
 		}
 
 		$rows = $this->db->get_results( $sql, ARRAY_A );
-		return $rows ?: [];
+		return $rows ?: array();
 	}
 
 	/**
@@ -138,7 +138,7 @@ abstract class BaseRepository {
 	 */
 	public function update( $id, array $data ) {
 		$table  = $this->getTableName();
-		$result = $this->db->update( $table, $data, [ 'id' => (int) $id ] );
+		$result = $this->db->update( $table, $data, array( 'id' => (int) $id ) );
 
 		return false !== $result;
 	}
@@ -151,7 +151,7 @@ abstract class BaseRepository {
 	 */
 	public function delete( $id ) {
 		$table  = $this->getTableName();
-		$result = $this->db->delete( $table, [ 'id' => (int) $id ], [ '%d' ] );
+		$result = $this->db->delete( $table, array( 'id' => (int) $id ), array( '%d' ) );
 
 		return false !== $result;
 	}
@@ -162,10 +162,10 @@ abstract class BaseRepository {
 	 * @param array $conditions
 	 * @return int
 	 */
-	public function count( array $conditions = [] ) {
+	public function count( array $conditions = array() ) {
 		$table  = $this->getTableName();
-		$where  = [];
-		$params = [];
+		$where  = array();
+		$params = array();
 
 		foreach ( $conditions as $col => $val ) {
 			$where[]  = "`{$col}` = %s";

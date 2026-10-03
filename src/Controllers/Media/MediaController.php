@@ -95,12 +95,14 @@ class MediaController {
 			);
 		}
 
-		wp_send_json_success( array(
-			'items'       => $items,
-			'total'       => (int) $query->found_posts,
-			'total_pages' => (int) $query->max_num_pages,
-			'page'        => $page,
-		) );
+		wp_send_json_success(
+			array(
+				'items'       => $items,
+				'total'       => (int) $query->found_posts,
+				'total_pages' => (int) $query->max_num_pages,
+				'page'        => $page,
+			)
+		);
 	}
 
 	/**
@@ -140,19 +142,21 @@ class MediaController {
 		$filename  = $file_path ? basename( $file_path ) : get_the_title( $attachment_id );
 		$filesize  = ( $file_path && file_exists( $file_path ) ) ? size_format( filesize( $file_path ) ) : '';
 
-		wp_send_json_success( array(
-			'id'        => $attachment_id,
-			'title'     => get_the_title( $attachment_id ) ?: $filename,
-			'filename'  => $filename,
-			'url'       => $full_url ?: '',
-			'thumbnail' => $thumb_url ?: $full_url,
-			'medium'    => $med_url ?: $full_url,
-			'large'     => $large_url ?: $full_url,
-			'full'      => $full_url ?: '',
-			'width'     => ! empty( $meta['width'] ) ? $meta['width'] : '',
-			'height'    => ! empty( $meta['height'] ) ? $meta['height'] : '',
-			'filesize'  => $filesize,
-			'mime'      => get_post_mime_type( $attachment_id ),
-		) );
+		wp_send_json_success(
+			array(
+				'id'        => $attachment_id,
+				'title'     => get_the_title( $attachment_id ) ?: $filename,
+				'filename'  => $filename,
+				'url'       => $full_url ?: '',
+				'thumbnail' => $thumb_url ?: $full_url,
+				'medium'    => $med_url ?: $full_url,
+				'large'     => $large_url ?: $full_url,
+				'full'      => $full_url ?: '',
+				'width'     => ! empty( $meta['width'] ) ? $meta['width'] : '',
+				'height'    => ! empty( $meta['height'] ) ? $meta['height'] : '',
+				'filesize'  => $filesize,
+				'mime'      => get_post_mime_type( $attachment_id ),
+			)
+		);
 	}
 }

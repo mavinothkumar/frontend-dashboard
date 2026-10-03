@@ -149,7 +149,6 @@ if ( ! class_exists( 'FEDPPPRO' ) && ! defined( 'BC_FED_PP_PLUGIN' ) ) {
 			</div>
 
 			<?php
-
 		}
 	}
 

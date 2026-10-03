@@ -39,96 +39,165 @@ class CoreServiceProvider extends ServiceProvider {
 
 	public function register() {
 		// HTTP & Security
-		$this->container->singleton( Request::class, function() {
-			return Request::capture();
-		} );
-		$this->container->singleton( Response::class, function() {
-			return new Response();
-		} );
-		$this->container->singleton( Security::class, function() {
-			return new Security();
-		} );
-		$this->container->singleton( RbacManager::class, function() {
-			return new RbacManager();
-		} );
+		$this->container->singleton(
+			Request::class,
+			function () {
+				return Request::capture();
+			}
+		);
+		$this->container->singleton(
+			Response::class,
+			function () {
+				return new Response();
+			}
+		);
+		$this->container->singleton(
+			Security::class,
+			function () {
+				return new Security();
+			}
+		);
+		$this->container->singleton(
+			RbacManager::class,
+			function () {
+				return new RbacManager();
+			}
+		);
 
 		// Presentation, Theme & Assets
-		$this->container->singleton( View::class, function() {
-			return new View();
-		} );
-		$this->container->singleton( AssetManager::class, function() {
-			return new AssetManager( BC_FED_PLUGIN_VERSION );
-		} );
-		$this->container->singleton( ThemeManager::class, function() {
-			return new ThemeManager();
-		} );
-		$this->container->singleton( AlertManager::class, function() {
-			return new AlertManager();
-		} );
+		$this->container->singleton(
+			View::class,
+			function () {
+				return new View();
+			}
+		);
+		$this->container->singleton(
+			AssetManager::class,
+			function () {
+				return new AssetManager( BC_FED_PLUGIN_VERSION );
+			}
+		);
+		$this->container->singleton(
+			ThemeManager::class,
+			function () {
+				return new ThemeManager();
+			}
+		);
+		$this->container->singleton(
+			AlertManager::class,
+			function () {
+				return new AlertManager();
+			}
+		);
 
 		// Database Migration Manager
-		$this->container->singleton( MigrationManager::class, function() {
-			return new MigrationManager();
-		} );
+		$this->container->singleton(
+			MigrationManager::class,
+			function () {
+				return new MigrationManager();
+			}
+		);
 
 		// Database Repositories
-		$this->container->singleton( MenuRepository::class, function() {
-			return new MenuRepository();
-		} );
-		$this->container->singleton( UserProfileRepository::class, function() {
-			return new UserProfileRepository();
-		} );
-		$this->container->singleton( PostRepository::class, function() {
-			return new PostRepository();
-		} );
-		$this->container->singleton( PaymentRepository::class, function() {
-			return new PaymentRepository();
-		} );
+		$this->container->singleton(
+			MenuRepository::class,
+			function () {
+				return new MenuRepository();
+			}
+		);
+		$this->container->singleton(
+			UserProfileRepository::class,
+			function () {
+				return new UserProfileRepository();
+			}
+		);
+		$this->container->singleton(
+			PostRepository::class,
+			function () {
+				return new PostRepository();
+			}
+		);
+		$this->container->singleton(
+			PaymentRepository::class,
+			function () {
+				return new PaymentRepository();
+			}
+		);
 
 		// Field Factory
-		$this->container->singleton( FieldFactory::class, function() {
-			return new FieldFactory();
-		} );
+		$this->container->singleton(
+			FieldFactory::class,
+			function () {
+				return new FieldFactory();
+			}
+		);
 
 		// Logging & Diagnostics
-		$this->container->singleton( AuditLogger::class, function() {
-			return new AuditLogger();
-		} );
-		$this->container->singleton( SystemHealthChecker::class, function() {
-			return new SystemHealthChecker();
-		} );
+		$this->container->singleton(
+			AuditLogger::class,
+			function () {
+				return new AuditLogger();
+			}
+		);
+		$this->container->singleton(
+			SystemHealthChecker::class,
+			function () {
+				return new SystemHealthChecker();
+			}
+		);
 
 		// Cron & Background Scheduler
-		$this->container->singleton( CronManager::class, function() {
-			return new CronManager();
-		} );
+		$this->container->singleton(
+			CronManager::class,
+			function () {
+				return new CronManager();
+			}
+		);
 
 		// Notifications & Email
-		$this->container->singleton( MailService::class, function() {
-			return new MailService();
-		} );
-		$this->container->singleton( NotificationManager::class, function() {
-			return new NotificationManager();
-		} );
+		$this->container->singleton(
+			MailService::class,
+			function () {
+				return new MailService();
+			}
+		);
+		$this->container->singleton(
+			NotificationManager::class,
+			function () {
+				return new NotificationManager();
+			}
+		);
 
 		// Commercial Pro Provider Managers
-		$this->container->singleton( PaymentGatewayManager::class, function() {
-			return new PaymentGatewayManager();
-		} );
-		$this->container->singleton( SocialAuthManager::class, function() {
-			return new SocialAuthManager();
-		} );
-		$this->container->singleton( AiManager::class, function() {
-			return new AiManager();
-		} );
+		$this->container->singleton(
+			PaymentGatewayManager::class,
+			function () {
+				return new PaymentGatewayManager();
+			}
+		);
+		$this->container->singleton(
+			SocialAuthManager::class,
+			function () {
+				return new SocialAuthManager();
+			}
+		);
+		$this->container->singleton(
+			AiManager::class,
+			function () {
+				return new AiManager();
+			}
+		);
 
 		// REST API Manager
-		$this->container->singleton( ApiManager::class, function( $c ) {
-			return new ApiManager(
-				$c->make( MenuRepository::class ),
-				$c->make( UserProfileRepository::class )
-			);
-		} );
+		$this->container->singleton(
+			ApiManager::class,
+			function ( $c ) {
+				return new ApiManager(
+					$c->make( MenuRepository::class ),
+					$c->make( UserProfileRepository::class )
+				);
+			}
+		);
 	}
 
 	public function boot() {

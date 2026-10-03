@@ -14,7 +14,7 @@ if ( ! function_exists( 'fed_get_help_menu' ) ) {
 	 * Help Menu
 	 */
 	function fed_get_help_menu() {
-		$faq_domain_url = 'https://faq.frontenddashboard.com';
+		$faq_domain_url     = 'https://faq.frontenddashboard.com';
 		$faq_domain_display = 'faq.frontenddashboard.com';
 
 		$shortcodes = array(
@@ -199,7 +199,7 @@ if ( ! function_exists( 'fed_get_help_menu' ) ) {
 						<span style="font-size: 12px; color: #64748b; font-weight: 600;">
 							<?php
 							/* translators: %d: number of shortcodes */
-							echo sprintf( esc_html__( '%d Shortcodes', 'frontend-dashboard' ), count( $shortcodes ) );
+							printf( esc_html__( '%d Shortcodes', 'frontend-dashboard' ), count( $shortcodes ) );
 							?>
 						</span>
 					</div>

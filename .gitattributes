@@ -1,0 +1,30 @@
+# Set default behavior to automatically normalize line endings
+* text=auto
+
+# Ensure bash scripts keep LF line endings on Windows
+*.sh text eol=lf
+*.bat text eol=crlf
+
+# ─────────────────────────────────────────────────────────────────────────────
+# EXPORT-IGNORE: Exclude development tools, scripts, and tests from release ZIPs
+# ─────────────────────────────────────────────────────────────────────────────
+/.github                export-ignore
+/tests                  export-ignore
+/node_modules           export-ignore
+/log                    export-ignore
+.gitignore              export-ignore
+.gitattributes          export-ignore
+AGENTS.md               export-ignore
+build-plugin.sh         export-ignore
+check-quality.bat       export-ignore
+check-debug-log.php     export-ignore
+phpcs.xml.dist          export-ignore
+playwright.config.ts    export-ignore
+package.json            export-ignore
+package-lock.json       export-ignore
+postcss.config.js       export-ignore
+tailwind.config.js      export-ignore
+vite.config.js          export-ignore
+composer.json           export-ignore
+composer.lock           export-ignore
+README.md               export-ignore

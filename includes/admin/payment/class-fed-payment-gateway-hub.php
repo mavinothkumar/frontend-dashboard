@@ -20,7 +20,7 @@ if ( ! class_exists( 'FEDPaymentGatewayHub' ) ) {
 		 */
 		public function hub() {
 			$this->authorize();
-			$gateways = fed_get_registered_gateways();
+			$gateways        = fed_get_registered_gateways();
 			$current_gateway = fed_payment_gateway();
 			?>
 			<div class="bc_fed fed_gateway_hub_container" style="font-family: inherit;">
@@ -46,11 +46,11 @@ if ( ! class_exists( 'FEDPaymentGatewayHub' ) ) {
 				<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px;">
 					<?php
 					foreach ( $gateways as $gateway_id => $gateway ) {
-						$is_active = ! empty( $gateway['is_active'] );
+						$is_active    = ! empty( $gateway['is_active'] );
 						$is_installed = ! empty( $gateway['is_installed'] );
-						$is_pro = ( 'pro' === $gateway['type'] );
-						$badge_color = isset( $gateway['badge_color'] ) ? $gateway['badge_color'] : '#16a34a';
-						$brand_color = isset( $gateway['color'] ) ? $gateway['color'] : '#0f172a';
+						$is_pro       = ( 'pro' === $gateway['type'] );
+						$badge_color  = isset( $gateway['badge_color'] ) ? $gateway['badge_color'] : '#16a34a';
+						$brand_color  = isset( $gateway['color'] ) ? $gateway['color'] : '#0f172a';
 						?>
 						<div class="fed_gateway_card" style="background: #ffffff; border: 1px solid <?php echo $is_active ? '#86efac' : '#e2e8f0'; ?>; border-radius: 14px; padding: 22px 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between; position: relative; transition: all 0.2s ease;">
 							
