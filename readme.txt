@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.0.5
+Stable tag: 3.0.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -141,6 +141,9 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 == Changelog ==
 
+= 3.0.6 =
+* Security: Enforced strict capability and permission checks on REST API post creation, editing, and publishing endpoints (credit: Ali Hidayat).
+
 = 3.0.5 =
 * Security: Fixed user registration parameter handling to prevent unauthorized user updates and privilege escalation.
 * Security: Hardened AJAX / Post API dispatch routing and function execution handlers with strict allowlist and capability checks.
@@ -182,6 +185,9 @@ More Changelogs:
 https://faq.frontenddashboard.com/changelog/overview/
 
 == Upgrade Notice ==
+
+= 3.0.6 =
+Security update: Fixed REST API post endpoints with strict capability and permission verification. Upgrade immediately.
 
 = 3.0.5 =
 Security update: Fixed user registration parameter handling and hardened API/AJAX function routing with strict allowlists. Upgrade immediately.
