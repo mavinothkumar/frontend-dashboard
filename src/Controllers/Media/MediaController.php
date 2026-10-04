@@ -27,10 +27,7 @@ class MediaController {
 	 * Fetch WordPress media items for the current user.
 	 */
 	public function get_media_library() {
-		// Nonce check
-		if ( isset( $_REQUEST['fed_nonce'] ) ) {
-			check_ajax_referer( 'fed_nonce', 'fed_nonce', false );
-		}
+		check_ajax_referer( 'fed_nonce', 'fed_nonce' );
 
 		if ( ! is_user_logged_in() ) {
 			wp_send_json_error( array( 'message' => __( 'You must be logged in to view media.', 'frontend-dashboard' ) ), 403 );
@@ -109,10 +106,7 @@ class MediaController {
 	 * Handle image file upload to WordPress Media Library.
 	 */
 	public function upload_media_file() {
-		// Nonce check
-		if ( isset( $_REQUEST['fed_nonce'] ) ) {
-			check_ajax_referer( 'fed_nonce', 'fed_nonce', false );
-		}
+		check_ajax_referer( 'fed_nonce', 'fed_nonce' );
 
 		if ( ! is_user_logged_in() || ! current_user_can( 'upload_files' ) ) {
 			wp_send_json_error( array( 'message' => __( 'You do not have permission to upload files.', 'frontend-dashboard' ) ), 403 );
