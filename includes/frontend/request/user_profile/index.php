@@ -4,4 +4,3 @@
  *
  * @package frontend-dashboard.
  */
-

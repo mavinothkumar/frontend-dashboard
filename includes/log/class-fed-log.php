@@ -51,7 +51,8 @@ class FED_Log {
 	 * FED_Log constructor.
 	 */
 	protected function __construct() {
-		$this->file = fopen( self::get_file_name(), 'a+' );
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
+		$this->file = @fopen( self::get_file_name(), 'a+' );
 		if ( ! $this->file ) {
 			new WP_Error(
 				'403_FILE_PERMISSION',

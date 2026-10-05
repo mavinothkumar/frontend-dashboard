@@ -9,8 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 function fed_admin_setting_post_options_request() {
-	$message                 = '';
-	$request                 = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	$message = '';
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
+	$request                 = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	$fed_admin_settings_post = get_option( 'fed_admin_settings_post' );
 
 	/**
@@ -83,6 +84,9 @@ function fed_process_admin_settings_post_settings( $request ) {
 		'fed_post_status' => isset( $request['fed_post_status'] ) ? sanitize_text_field(
 			$request['fed_post_status']
 		) : 'publish',
+		'fed_editor_type' => isset( $request['fed_editor_type'] ) ? sanitize_text_field(
+			$request['fed_editor_type']
+		) : 'classic',
 	);
 }
 

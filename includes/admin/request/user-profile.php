@@ -14,16 +14,18 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param  string $post_id  Post ID.
  */
 function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
+
 	global $wpdb;
 	$input_meta = $request['input_meta'];
 
 	if ( 'profile' === $action ) {
 		$table_name = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
-	}
-	elseif ( 'post' === $action ) {
+	} elseif ( 'post' === $action ) {
 		$table_name = $wpdb->prefix . BC_FED_TABLE_POST;
-	}
-	else {
+	} else {
 		wp_send_json_error( array( 'message' => __( 'Hey, you are trying something naughty', 'frontend-dashboard' ) ) );
 	}
 
@@ -33,8 +35,14 @@ function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
 		 * Check for input meta already exist
 		 */
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$duplicate = $wpdb->get_row(
-			"SELECT * FROM $table_name WHERE input_meta LIKE '{$input_meta}' AND NOT id = $post_id "
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"SELECT * FROM {$table_name} WHERE input_meta = %s AND id != %d",
+				$input_meta,
+				(int) $post_id
+			)
 		);
 
 		if ( null !== $duplicate ) {
@@ -51,7 +59,8 @@ function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
 						strtoupper(
 							fed_convert_this_to_that(
 								$duplicate->input_type,
-								'_', ' '
+								'_',
+								' '
 							)
 						)
 					),
@@ -62,6 +71,7 @@ function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
 		/**
 		 * No duplicate found, so we can update the record.
 		 */
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$status = $wpdb->update( $table_name, $request, array( 'id' => (int) $post_id ) );
 
 		if ( false === $status ) {
@@ -72,12 +82,18 @@ function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
 			);
 		}
 		wp_send_json_success( array( 'message' => $request['label_name'] . ' has been successfully updated' ) );
-	}
-	else {
+	} else {
 		/**
 		 * Check for input meta already exist
 		 */
-		$duplicate = $wpdb->get_row( "SELECT * FROM $table_name WHERE input_meta = '{$input_meta}'" );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$duplicate = $wpdb->get_row(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"SELECT * FROM {$table_name} WHERE input_meta = %s",
+				$input_meta
+			)
+		);
 
 		if ( null !== $duplicate ) {
 			$error_message_2 = 'User Profile';
@@ -90,7 +106,8 @@ function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
 					'message' => sprintf(
 					/* Translators: %1$s : Label Name, %2$s : Error Message 1, %3$s : Error Message 2  */
 						__(
-							'Sorry, you have previously added %1$s  with input type %2$s on %3$s', 'frontend-dashboard'
+							'Sorry, you have previously added %1$s  with input type %2$s on %3$s',
+							'frontend-dashboard'
 						),
 						esc_attr(
 							strtoupper(
@@ -106,6 +123,7 @@ function fed_save_profile_post( $request, $action = '', $post_id = '' ) {
 		/**
 		 * Now we are free to insert the row
 		 */
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$status = $wpdb->insert(
 			$table_name,
 			$request
@@ -134,26 +152,44 @@ add_action( 'wp_ajax_fed_admin_menu_sorting', 'fed_admin_menu_sorting' );
  * Admin Menu Sorting.
  */
 function fed_admin_menu_sorting() {
-	global $wpdb;
-
-	$request_post = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
-	$request_get  = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
-
-	fed_verify_nonce( $request_get );
-
-	$tables = fed_get_tables();
-
-	if ( isset( $request_get['table'] ) && array_key_exists( $request_get['table'], $tables ) ) {
-		foreach ( $request_post['sort'] as $sort => $id ) {
-			$wpdb->update(
-				$wpdb->prefix . fed_sanitize_text_field( $request_get['table'] ),
-				array( $tables[ $request_get['table'] ]['order'] => $sort + 1 ),
-				array( 'id' => (int) $id )
-			);
-		}
-
-		wp_send_json_success( array( 'message' => 'Successfully sorted' ) );
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
 	}
 
-	wp_send_json_error( array( 'message' => 'Something went wrong' ) );
+	global $wpdb;
+
+	fed_verify_nonce();
+
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
+	$request_post = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$request_get = isset( $_GET ) ? fed_sanitize_text_field( wp_unslash( $_GET ) ) : array();
+
+	$table_key = isset( $request_post['table'] ) ? $request_post['table'] : ( isset( $request_get['table'] ) ? $request_get['table'] : 'fed_menu' );
+	$tables    = fed_get_tables();
+
+	$sort_items = isset( $request_post['order'] ) ? $request_post['order'] : ( isset( $request_post['sort'] ) ? $request_post['sort'] : array() );
+
+	if ( array_key_exists( $table_key, $tables ) && ! empty( $sort_items ) && is_array( $sort_items ) ) {
+		$table_name = $wpdb->get_blog_prefix() . fed_sanitize_text_field( $table_key );
+		$order_col  = $tables[ $table_key ]['order'];
+
+		foreach ( $sort_items as $sort => $id ) {
+			$item_id = (int) $id;
+			if ( $item_id > 0 ) {
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				$wpdb->update(
+					$table_name,
+					array( $order_col => (int) $sort + 1 ),
+					array( 'id' => $item_id ),
+					array( '%d' ),
+					array( '%d' )
+				);
+			}
+		}
+
+		wp_send_json_success( array( 'message' => __( 'Successfully sorted', 'frontend-dashboard' ) ) );
+	}
+
+	wp_send_json_error( array( 'message' => __( 'Something went wrong', 'frontend-dashboard' ) ) );
 }

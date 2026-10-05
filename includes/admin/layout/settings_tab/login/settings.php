@@ -49,7 +49,7 @@ function fed_admin_login_settings_tab( $fed_login_settings ) {
 				'input'        => wp_dropdown_pages(
 					array(
 						'name'             => 'fed_admin_login[settings][fed_login_url]',
-						'selected'         => isset( $fed_login_settings['settings']['fed_login_url'] ) ? $fed_login_settings['settings']['fed_login_url'] : '',
+						'selected'         => isset( $fed_login_settings['settings']['fed_login_url'] ) ? (int) $fed_login_settings['settings']['fed_login_url'] : 0,
 						'show_option_none' => 'Let it be default',
 						'class'            => 'form-control fed_multi_select',
 						'echo'             => false,
@@ -68,7 +68,7 @@ function fed_admin_login_settings_tab( $fed_login_settings ) {
 				'input'        => wp_dropdown_pages(
 					array(
 						'name'             => 'fed_admin_login[settings][fed_register_url]',
-						'selected'         => isset( $fed_login_settings['settings']['fed_register_url'] ) ? $fed_login_settings['settings']['fed_register_url'] : '',
+						'selected'         => isset( $fed_login_settings['settings']['fed_register_url'] ) ? (int) $fed_login_settings['settings']['fed_register_url'] : 0,
 						'show_option_none' => 'Let it be default',
 						'class'            => 'form-control fed_multi_select',
 						'echo'             => false,
@@ -86,7 +86,7 @@ function fed_admin_login_settings_tab( $fed_login_settings ) {
 				'input'        => wp_dropdown_pages(
 					array(
 						'name'             => 'fed_admin_login[settings][fed_forgot_password_url]',
-						'selected'         => isset( $fed_login_settings['settings']['fed_forgot_password_url'] ) ? $fed_login_settings['settings']['fed_forgot_password_url'] : '',
+						'selected'         => isset( $fed_login_settings['settings']['fed_forgot_password_url'] ) ? (int) $fed_login_settings['settings']['fed_forgot_password_url'] : 0,
 						'show_option_none' => 'Let it be default',
 						'class'            => 'form-control fed_multi_select',
 						'echo'             => false,
@@ -104,7 +104,7 @@ function fed_admin_login_settings_tab( $fed_login_settings ) {
 				'input' => wp_dropdown_pages(
 					array(
 						'name'             => 'fed_admin_login[settings][fed_redirect_register_url]',
-						'selected'         => isset( $fed_login_settings['settings']['fed_redirect_register_url'] ) ? $fed_login_settings['settings']['fed_redirect_register_url'] : '',
+						'selected'         => isset( $fed_login_settings['settings']['fed_redirect_register_url'] ) ? (int) $fed_login_settings['settings']['fed_redirect_register_url'] : 0,
 						'show_option_none' => 'Let it be default',
 						'class'            => 'form-control fed_multi_select',
 						'echo'             => false,
@@ -117,7 +117,7 @@ function fed_admin_login_settings_tab( $fed_login_settings ) {
 				'input' => wp_dropdown_pages(
 					array(
 						'name'             => 'fed_admin_login[settings][fed_redirect_login_url]',
-						'selected'         => isset( $fed_login_settings['settings']['fed_redirect_login_url'] ) ? $fed_login_settings['settings']['fed_redirect_login_url'] : '',
+						'selected'         => isset( $fed_login_settings['settings']['fed_redirect_login_url'] ) ? (int) $fed_login_settings['settings']['fed_redirect_login_url'] : 0,
 						'show_option_none' => 'Let it be default',
 						'class'            => 'form-control fed_multi_select',
 						'echo'             => false,
@@ -130,7 +130,7 @@ function fed_admin_login_settings_tab( $fed_login_settings ) {
 				'input' => wp_dropdown_pages(
 					array(
 						'name'             => 'fed_admin_login[settings][fed_redirect_logout_url]',
-						'selected'         => isset( $fed_login_settings['settings']['fed_redirect_logout_url'] ) ? $fed_login_settings['settings']['fed_redirect_logout_url'] : '',
+						'selected'         => isset( $fed_login_settings['settings']['fed_redirect_logout_url'] ) ? (int) $fed_login_settings['settings']['fed_redirect_logout_url'] : 0,
 						'show_option_none' => 'Let it be default',
 						'class'            => 'form-control fed_multi_select',
 						'echo'             => false,
@@ -143,7 +143,7 @@ function fed_admin_login_settings_tab( $fed_login_settings ) {
 				'input'        => wp_dropdown_pages(
 					array(
 						'name'             => 'fed_admin_login[settings][fed_dashboard_url]',
-						'selected'         => isset( $fed_login_settings['settings']['fed_dashboard_url'] ) ? $fed_login_settings['settings']['fed_dashboard_url'] : '',
+						'selected'         => isset( $fed_login_settings['settings']['fed_dashboard_url'] ) ? (int) $fed_login_settings['settings']['fed_dashboard_url'] : 0,
 						'show_option_none' => 'Let it be default',
 						'class'            => 'form-control fed_multi_select',
 						'echo'             => false,
@@ -165,4 +165,3 @@ function fed_admin_login_settings_tab( $fed_login_settings ) {
 
 	fed_common_simple_layout( $array );
 }
-

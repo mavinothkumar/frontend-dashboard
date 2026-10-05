@@ -19,13 +19,36 @@ add_action( 'wp_ajax_fed_admin_setting_form_dashboard_menu', 'fed_admin_setting_
 add_action( 'wp_ajax_fed_user_profile_delete', 'fed_user_profile_delete_function' );
 add_action( 'wp_ajax_fed_message_form', 'fed_message_form_function' );
 add_action( 'wp_ajax_fed_is_registered', 'fed_is_registered' );
+add_action( 'wp_ajax_fed_get_field_builder_modal', 'fed_get_field_builder_modal_function' );
+
+/**
+ * Render Field Builder Modal Markup via AJAX.
+ */
+function fed_get_field_builder_modal_function() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
+	fed_verify_nonce();
+
+	ob_start();
+	if ( function_exists( 'fed_get_add_profile_post_fields' ) ) {
+		fed_get_add_profile_post_fields();
+	}
+	$html = ob_get_clean();
+
+	wp_send_json_success( array( 'html' => $html ) );
+}
 
 /**
  * Admin Setting Page.
  */
 function fed_admin_setting_form_function() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
 
-	$request = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
+	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	/**
 	 * Check for Nonce
 	 */
@@ -52,6 +75,11 @@ function fed_admin_setting_form_function() {
 		exit();
 	}
 
+	if ( isset( $request['fed_admin_unique'] ) && 'fed_admin_setting_upl_hide_bar' == $request['fed_admin_unique'] ) {
+		fed_admin_setting_upl_hide_bar_request();
+		exit();
+	}
+
 	/**
 	 * Process Post Options
 	 */
@@ -68,7 +96,6 @@ function fed_admin_setting_form_function() {
 		exit();
 	}
 
-
 	/**
 	 * 3rd Party template redirect handle
 	 */
@@ -80,7 +107,12 @@ function fed_admin_setting_form_function() {
  * Admin User Profile Page
  */
 function fed_admin_setting_up_form_function() {
-	$post = $_POST; //filter_input_array( INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS );
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
+
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
+	$post = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 
 	if ( ! isset( $post['fed_action'] ) ) {
 		wp_send_json_error(
@@ -94,10 +126,10 @@ function fed_admin_setting_up_form_function() {
 	fed_verify_nonce( $post );
 
 	if ( ! isset( $post['label_name'] ) || empty( $post['label_name'] )
-	     || ! isset( $post['input_order'] ) || empty( $post['input_order'] )
-	     || ! isset( $post['input_meta'] ) || empty( $post['input_meta'] )
-	     || ! isset( $post['input_type'] )
-	     || ! isset( $post['input_id'] )
+		|| ! isset( $post['input_order'] ) || empty( $post['input_order'] )
+		|| ! isset( $post['input_meta'] ) || empty( $post['input_meta'] )
+		|| ! isset( $post['input_type'] )
+		|| ! isset( $post['input_id'] )
 	) {
 
 		wp_send_json_error( array( 'message' => 'Please fill required fields' ) );
@@ -105,49 +137,105 @@ function fed_admin_setting_up_form_function() {
 
 	}
 
+	$post_id = isset( $post['input_id'] ) && ! empty( $post['input_id'] ) ? (int) $post['input_id'] : '';
+
+	// Reserved / sensitive keys that should never be used as custom field keys
+	$reserved_keys = array(
+		'role',
+		'roles',
+		'caps',
+		'capabilities',
+		'wp_capabilities',
+		'user_level',
+		'user_pass',
+		'user_pass_confirm',
+		'confirmation_password',
+		'user_activation_key',
+		'user_status',
+		'ID',
+		'id',
+		'session_tokens',
+	);
+
 	/**
 	 * Check for default post value as input meta
 	 */
-	if (
-		( 'post' === $post['fed_action'] ) && ( '' === $post['input_id'] ) && in_array(
-			$post['input_meta'],
-			fed_get_default_post_items(), false
-		)
-	) {
-		wp_send_json_error(
-			array(
-				'message' => sprintf(
-				/* Translators: %s : Label Name */
-					__( 'Sorry! you cannot add the default post value %s', 'frontend-dashboard' ),
-					esc_attr( $post['label_name'] )
-				),
-			)
-		);
+	if ( 'post' === $post['fed_action'] ) {
+		$default_post_items = fed_get_default_post_items();
+		if ( empty( $post_id ) ) {
+			if ( in_array( $post['input_meta'], $default_post_items, true ) || in_array( $post['input_meta'], $reserved_keys, true ) ) {
+				wp_send_json_error(
+					array(
+						'message' => sprintf(
+							/* Translators: %s : Label Name */
+							__( 'Sorry! you cannot add the default post value %s', 'frontend-dashboard' ),
+							esc_attr( $post['label_name'] )
+						),
+					)
+				);
+			}
+		} else {
+			$existing = fed_fetch_table_row_by_id( BC_FED_TABLE_POST, $post_id );
+			if ( ! is_wp_error( $existing ) && $existing ) {
+				$is_default = ( isset( $existing['extra'] ) && 'no' === $existing['extra'] ) || in_array( $existing['input_meta'], $default_post_items, true );
+				if ( $is_default ) {
+					// Cannot rename input_meta of a default field
+					$post['input_meta'] = $existing['input_meta'];
+				} elseif ( in_array( $post['input_meta'], $default_post_items, true ) || in_array( $post['input_meta'], $reserved_keys, true ) ) {
+					wp_send_json_error(
+						array(
+							'message' => sprintf(
+								/* Translators: %s : Label Name */
+								__( 'Sorry! you cannot use reserved post field name %s', 'frontend-dashboard' ),
+								esc_attr( $post['label_name'] )
+							),
+						)
+					);
+				}
+			}
+		}
 	}
 
 	/**
 	 * Check for default user profile value as input meta
 	 */
-	if (
-		'profile' === $post['fed_action'] && '' === $post['input_id'] && in_array(
-			$post['input_meta'],
-			fed_get_default_profile_items(), false
-		)
-	) {
-		wp_send_json_error(
-			array(
-				'message' => sprintf(
-				/* Translators: %s : Label Name */
-					__( 'Sorry! you cannot add the default profile value %s', 'frontend-dashboard' ),
-					esc_attr( $post['label_name'] )
-				),
-			)
-		);
+	if ( 'profile' === $post['fed_action'] ) {
+		$default_profile_items = fed_get_default_profile_items();
+		if ( empty( $post_id ) ) {
+			if ( in_array( $post['input_meta'], $default_profile_items, true ) || in_array( $post['input_meta'], $reserved_keys, true ) ) {
+				wp_send_json_error(
+					array(
+						'message' => sprintf(
+							/* Translators: %s : Label Name */
+							__( 'Sorry! you cannot add the default profile value %s', 'frontend-dashboard' ),
+							esc_attr( $post['label_name'] )
+						),
+					)
+				);
+			}
+		} else {
+			$existing = fed_fetch_table_row_by_id( BC_FED_TABLE_USER_PROFILE, $post_id );
+			if ( ! is_wp_error( $existing ) && $existing ) {
+				$is_default = ( isset( $existing['extra'] ) && 'no' === $existing['extra'] ) || in_array( $existing['input_meta'], $default_profile_items, true );
+				if ( $is_default ) {
+					// Cannot rename input_meta of a default field
+					$post['input_meta'] = $existing['input_meta'];
+				} elseif ( in_array( $post['input_meta'], $default_profile_items, true ) || in_array( $post['input_meta'], $reserved_keys, true ) ) {
+					wp_send_json_error(
+						array(
+							'message' => sprintf(
+								/* Translators: %s : Label Name */
+								__( 'Sorry! you cannot use reserved profile field name %s', 'frontend-dashboard' ),
+								esc_attr( $post['label_name'] )
+							),
+						)
+					);
+				}
+			}
+		}
 	}
 
 	$values = fed_process_user_profile( $post, $post['fed_action'], 'yes' );
-
-	$post_id = isset( $post['input_id'] ) && ! empty( $post['input_id'] ) ? (int) $post['input_id'] : '';
 
 	fed_save_profile_post( $values, $post['fed_action'], $post_id );
 }
@@ -156,7 +244,12 @@ function fed_admin_setting_up_form_function() {
  * Edit Dashboard menu.
  */
 function fed_admin_setting_form_dashboard_menu_function() {
-	$post_all = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
+
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
+	$post_all = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	parse_str( $post_all['data'], $post );
 	$action  = $post_all['fed_action'];
 	$post_id = ( isset( $post['menu_id'] ) && ! empty( $post['menu_id'] ) ) ? (int) $post['menu_id'] : '';
@@ -208,7 +301,8 @@ function fed_admin_setting_form_dashboard_menu_function() {
 			wp_send_json_error(
 				array(
 					'message' => __(
-						'You are trying to delete a menu, which has Sub Menu(s), Please delete or move it to different Menu'
+						'You are trying to delete a menu, which has Sub Menu(s), Please delete or move it to different Menu',
+						'frontend-dashboard'
 					),
 				)
 			);
@@ -232,28 +326,36 @@ function fed_admin_setting_form_dashboard_menu_function() {
 			)
 		);
 	}
-
 }
 
 /**
  * Admin User Profile Layout Page.
  */
 function fed_admin_setting_upl_form_function() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
+
 	/**
 	 * Check for Nonce
 	 */
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 	if ( ! wp_verify_nonce( $_REQUEST['fed_admin_setting_upl_nonce'], 'fed_admin_setting_upl_nonce' ) ) {
 		wp_send_json_error( array( 'message' => 'Invalid Request' ) );
 		exit();
 	}
-
 }
 
 /**
  * Delete User Profile
  */
 function fed_user_profile_delete_function() {
-	$post_all = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
+
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
+	$post_all = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	parse_str( $post_all['data'], $post );
 	$action = $post_all['fed_up_action'];
 
@@ -309,10 +411,14 @@ function fed_user_profile_delete_function() {
  * Dismiss admin notice permanently.
  */
 function fed_message_form_function() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
+
 	/**
 	 * Check for Nonce
 	 */
-	if ( ! wp_verify_nonce( $_REQUEST['fed_message_nonce'], 'fed_message_nonce' ) ) {
+	if ( ! isset( $_REQUEST['fed_message_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['fed_message_nonce'] ) ), 'fed_message_nonce' ) ) {
 		wp_send_json_error( array( 'message' => 'Invalid Request' ) );
 		exit();
 	}
@@ -323,4 +429,64 @@ function fed_message_form_function() {
 		)
 	);
 	exit();
+}
+
+/**
+ * AJAX Search WordPress Pages (Paginated & Searchable on Demand).
+ */
+add_action( 'wp_ajax_fed_search_wp_pages', 'fed_search_wp_pages_ajax' );
+function fed_search_wp_pages_ajax() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
+
+	fed_verify_nonce();
+
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$query = isset( $_REQUEST['q'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['q'] ) ) : '';
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$selected_id = isset( $_REQUEST['selected_id'] ) ? (int) $_REQUEST['selected_id'] : 0;
+
+	$args = array(
+		'post_type'      => 'page',
+		'post_status'    => 'publish',
+		'posts_per_page' => 25,
+		'orderby'        => 'title',
+		'order'          => 'ASC',
+	);
+
+	if ( ! empty( $query ) ) {
+		$args['s'] = $query;
+	}
+
+	$pages   = get_posts( $args );
+	$results = array();
+
+	// If a specific selected_id is requested and not in the first 25, prepend it
+	if ( $selected_id > 0 ) {
+		$found = false;
+		foreach ( $pages as $p ) {
+			if ( (int) $p->ID === $selected_id ) {
+				$found = true;
+				break;
+			}
+		}
+		if ( ! $found ) {
+			$sel_post = get_post( $selected_id );
+			if ( $sel_post && 'page' === $sel_post->post_type ) {
+				array_unshift( $pages, $sel_post );
+			}
+		}
+	}
+
+	foreach ( $pages as $p ) {
+		/* translators: %d: Page ID */
+		$fallback_title = sprintf( __( '(Page #%d no title)', 'frontend-dashboard' ), $p->ID );
+		$results[]      = array(
+			'id'    => $p->ID,
+			'title' => $p->post_title ? $p->post_title : $fallback_title,
+		);
+	}
+
+	wp_send_json_success( array( 'pages' => $results ) );
 }

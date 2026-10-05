@@ -32,7 +32,8 @@ if ( ! class_exists( 'FED_AdminUserProfile' ) ) {
 		 *
 		 * @param  WP_User $user  User Profile Fields.
 		 */
-		public function fed_show_user_profile( $user ) { ?>
+		public function fed_show_user_profile( $user ) {
+			?>
 			<h3><?php esc_attr_e( 'Frontend Dashboard', 'frontend-dashboard' ); ?></h3>
 			<table class="form-table bc_fed fed_profile_table">
 				<?php
@@ -73,15 +74,18 @@ if ( ! class_exists( 'FED_AdminUserProfile' ) ) {
 
 							<td>
 								<?php
+								// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 								echo fed_get_input_details( $default_value );
 								?>
 							</td>
 						</tr>
-					<?php }
+						<?php
+					}
 				}
 				?>
 			</table>
-		<?php }
+			<?php
+		}
 
 		/**
 		 * Personal Options to Update on Backend.
@@ -113,7 +117,19 @@ if ( ! class_exists( 'FED_AdminUserProfile' ) ) {
 						'input_value' => isset( $field['input_value'] ) ? esc_attr( $field['input_value'] ) : '',
 					);
 
-					update_user_meta( $user_id, $default_value['input_meta'], sanitize_text_field( $_POST[ $default_value['input_meta'] ] ) );
+					// phpcs:ignore WordPress.Security.NonceVerification.Missing
+					if ( isset( $_POST[ $default_value['input_meta'] ] ) ) {
+						// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+						$raw_val = $_POST[ $default_value['input_meta'] ];
+						if ( is_array( $raw_val ) ) {
+							$sanitized = maybe_serialize( $raw_val );
+						} elseif ( in_array( $default_value['input_type'], array( 'multi_line', 'textarea', 'multiline' ), true ) ) {
+							$sanitized = sanitize_textarea_field( wp_unslash( $raw_val ) );
+						} else {
+							$sanitized = sanitize_text_field( wp_unslash( $raw_val ) );
+						}
+						update_user_meta( $user_id, $default_value['input_meta'], $sanitized );
+					}
 				}
 			}
 

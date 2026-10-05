@@ -1,7 +1,12 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 function fed_initial_setup() {
-	if($_POST && $_POST['slug']){
-		include( ABSPATH . 'wp-admin/includes/ajax-actions.php' );
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	if ( $_POST && $_POST['slug'] ) {
+		include ABSPATH . 'wp-admin/includes/ajax-actions.php';
 		wp_ajax_install_plugin();
 	}
 
@@ -207,39 +212,39 @@ function fed_initial_setup() {
 	</style>
 
 	<script type="text/javascript">
-        function resetActive(event, percent, step) {
-            $(".progress-bar").css("width", percent + "%").attr("aria-valuenow", percent);
-            $(".progress-completed").text(percent + "%");
+		function resetActive(event, percent, step) {
+			$(".progress-bar").css("width", percent + "%").attr("aria-valuenow", percent);
+			$(".progress-completed").text(percent + "%");
 
-            $("div").each(function () {
-                if ($(this).hasClass("activestep")) {
-                    $(this).removeClass("activestep");
-                }
-            });
+			$("div").each(function () {
+				if ($(this).hasClass("activestep")) {
+					$(this).removeClass("activestep");
+				}
+			});
 
-            if (event.target.className == "col-md-2") {
-                $(event.target).addClass("activestep");
-            }
-            else {
-                $(event.target.parentNode).addClass("activestep");
-            }
+			if (event.target.className == "col-md-2") {
+				$(event.target).addClass("activestep");
+			}
+			else {
+				$(event.target.parentNode).addClass("activestep");
+			}
 
-            hideSteps();
-            showCurrentStepInfo(step);
-        }
+			hideSteps();
+			showCurrentStepInfo(step);
+		}
 
-        function hideSteps() {
-            $("div").each(function () {
-                if ($(this).hasClass("activeStepInfo")) {
-                    $(this).removeClass("activeStepInfo");
-                    $(this).addClass("hiddenStepInfo");
-                }
-            });
-        }
+		function hideSteps() {
+			$("div").each(function () {
+				if ($(this).hasClass("activeStepInfo")) {
+					$(this).removeClass("activeStepInfo");
+					$(this).addClass("hiddenStepInfo");
+				}
+			});
+		}
 
-        function showCurrentStepInfo(step) {
-            var id = "#" + step;
-            $(id).addClass("activeStepInfo");
-        }
+		function showCurrentStepInfo(step) {
+			var id = "#" + step;
+			$(id).addClass("activeStepInfo");
+		}
 	</script>
 <?php } ?>

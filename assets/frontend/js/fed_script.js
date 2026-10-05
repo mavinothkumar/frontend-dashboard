@@ -8,26 +8,76 @@ jQuery(document).ready(function ($) {
     var b = $('body')
     var dashboard_menu = $('.fed_dashboard_menus')
 
-    $('[data-toggle="popover"]').popover()
+    if ( typeof $.fn.popover === 'function' ) {
+      $('[data-toggle="popover"]').popover()
+    }
 
-    // All Front End submission.
-    $('form.fed_form_post').on('submit', function (e) {
-      var click = $(this)
-      var data = click.serialize()
+    function executeFedFormPost($form) {
+      var data = $form.serialize()
       var url = frontend_dashboard.fed_login_form_post
-      var method = click.attr('method') || 'post'
+      var method = $form.attr('method') || 'post'
       fed_toggle_loader()
       $.ajax({
         type: method,
         data: data,
         url: url,
         success: function (results) {
-          console.log(results)
           fed_toggle_loader()
           fedAlert.loginStatus(results)
+        },
+        error: function (xhr) {
+          fed_toggle_loader()
+          var resp = xhr.responseJSON ? xhr.responseJSON : (xhr.responseText || 'Server Error: ' + xhr.status + ' ' + xhr.statusText)
+          fedAlert.loginStatus(resp)
         }
       })
+    }
+
+    // All Front End submission.
+    $('form.fed_form_post').on('submit', function (e) {
       e.preventDefault()
+      var click = $(this)
+      
+      // Check if Google reCAPTCHA v3 is active
+      if (
+        typeof grecaptcha !== 'undefined' &&
+        typeof frontend_dashboard !== 'undefined' &&
+        frontend_dashboard.fed_captcha_details &&
+        frontend_dashboard.fed_captcha_details.fed_captcha_version === 'v3' &&
+        frontend_dashboard.fed_captcha_details.fed_captcha_site_key &&
+        frontend_dashboard.fed_captcha_details.fed_captcha_enable === 'Enable'
+      ) {
+        var isLogin = click.find('input[name="fed_login_form"]').length || click.hasClass('fed_login_form') || (click.attr('action') && click.attr('action').indexOf('login') !== -1)
+        var isRegister = click.find('input[name="fed_register_form"]').length || click.hasClass('fed_register_form')
+        var actionName = isLogin ? 'login' : (isRegister ? 'register' : 'fed_submit')
+        
+        fed_toggle_loader()
+        grecaptcha.ready(function () {
+          grecaptcha.execute(frontend_dashboard.fed_captcha_details.fed_captcha_site_key, { action: actionName }).then(function (token) {
+            fed_toggle_loader()
+            var $tokenInput = click.find('input[name="g-recaptcha-response"]')
+            if (!$tokenInput.length) {
+              click.append('<input type="hidden" name="g-recaptcha-response" value="' + token + '" />')
+            } else {
+              $tokenInput.val(token)
+            }
+            executeFedFormPost(click)
+          }).catch(function (err) {
+            fed_toggle_loader()
+            if (typeof swal === 'function') {
+              swal({
+                title: 'reCAPTCHA Error',
+                text: err ? (err.message || String(err)) : 'Unable to verify reCAPTCHA. Please try again.',
+                type: 'error'
+              })
+            } else {
+              alert('reCAPTCHA Error: ' + (err ? (err.message || String(err)) : 'Unable to verify.'))
+            }
+          })
+        })
+      } else {
+        executeFedFormPost(click)
+      }
     })
 
     //Common submission. Disabiling for next few releases because of new one below.
@@ -192,25 +242,39 @@ jQuery(document).ready(function ($) {
       e.preventDefault()
     })
 
-    // Dashboard Post Save.
+    // Dashboard Post Save (Add New).
     b.on('submit', 'form.fed_dashboard_add_new_post', function (e) {
+      e.preventDefault()
       var click = $(this)
+      if (typeof window.FedEditors !== 'undefined' && typeof window.FedEditors.saveAll === 'function') {
+        window.FedEditors.saveAll()
+      }
+      if (typeof tinyMCE !== 'undefined') {
+        tinyMCE.triggerSave()
+      }
       var data = click.serialize()
       var url = click.attr('action')
       var method = click.attr('method') || 'post'
-      fed_toggle_loader()
+      fed_toggle_loader(true)
       $.ajax({
         type: method,
         data: data,
         url: url,
         success: function (results) {
-          console.log(results)
-          $('#fed_post_id_hidden').val(results.data.id)
+          fed_toggle_loader(false)
+          if (results.success && results.data && results.data.id) {
+            $('#fed_post_id_hidden').val(results.data.id)
+          }
           fedAlert.dashboardPostCommon(results)
-          fed_toggle_loader()
+        },
+        error: function () {
+          fed_toggle_loader(false)
+          swal({
+            title: frontend_dashboard.alert.something_went_wrong,
+            type: 'error'
+          })
         }
       })
-      e.preventDefault()
     })
 
     // Add new post request.
@@ -227,16 +291,29 @@ jQuery(document).ready(function ($) {
         async: false,
         url: url,
         success: function (results) {
-          // console.log(results);
           fed_toggle_loader()
           root.html(results)
         },
         complete: function () {
-          $('.flatpickr').flatpickr({})
+          if ($('.flatpickr').length) {
+            $('.flatpickr').flatpickr({})
+          }
+          if (typeof $.fn.select2 === 'function') {
+            root.find('.fed_multi_select, .fed_select2').select2({
+              dropdownCssClass: 'bc_fed_select2_dropdown',
+              width: '100%',
+              placeholder: function () {
+                return $(this).attr('placeholder') || $(this).data('placeholder') || 'Select options...'
+              },
+              allowClear: true
+            });
+          }
+          if (typeof window.FedEditors !== 'undefined' && typeof window.FedEditors.autoInitAll === 'function') {
+            window.FedEditors.autoInitAll()
+          }
         }
       })
       e.preventDefault()
-
     })
 
     // Show Edit post by ID.
@@ -253,18 +330,27 @@ jQuery(document).ready(function ($) {
         url: url,
         async: false,
         beforeSend: function () {
-          //tinyMCE.add('#post_content');
-          // tinyMCE.remove('#post_content');
         },
         success: function (results) {
-          // console.log(results);
           fed_toggle_loader()
           root.html(results)
         },
         complete: function () {
-          //tinyMCE.remove('#post_content');
           if ($('.flatpickr').length) {
             $('.flatpickr').flatpickr({})
+          }
+          if (typeof $.fn.select2 === 'function') {
+            root.find('.fed_multi_select, .fed_select2').select2({
+              dropdownCssClass: 'bc_fed_select2_dropdown',
+              width: '100%',
+              placeholder: function () {
+                return $(this).attr('placeholder') || $(this).data('placeholder') || 'Select options...'
+              },
+              allowClear: true
+            });
+          }
+          if (typeof window.FedEditors !== 'undefined' && typeof window.FedEditors.autoInitAll === 'function') {
+            window.FedEditors.autoInitAll()
           }
         }
       })
@@ -273,32 +359,47 @@ jQuery(document).ready(function ($) {
 
     // Process Edit post by ID.
     b.on('submit', 'form.fed_dashboard_process_edit_post_request', function (e) {
+      e.preventDefault()
       var click = $(this)
+      if (typeof window.FedEditors !== 'undefined' && typeof window.FedEditors.saveAll === 'function') {
+        window.FedEditors.saveAll()
+      }
+      if (typeof tinyMCE !== 'undefined') {
+        tinyMCE.triggerSave()
+      }
       var data = click.serialize()
       var url = click.attr('action')
       var method = click.attr('method') || 'post'
-      var root = click.closest('.fed_panel_body_container')
-      fed_toggle_loader()
+      fed_toggle_loader(true)
       $.ajax({
         type: method,
         data: data,
         url: url,
         success: function (results) {
+          fed_toggle_loader(false)
           fedAlert.dashboardPostCommon(results)
-          fed_toggle_loader()
+        },
+        error: function () {
+          fed_toggle_loader(false)
+          swal({
+            title: frontend_dashboard.alert.something_went_wrong,
+            type: 'error'
+          })
         }
       })
-      e.preventDefault()
     })
 
     // Delete post.
     b.on('submit', 'form.fed_dashboard_delete_post_by_id', function (e) {
+      e.preventDefault()
       var click = $(this)
       var data = click.serialize()
       var url = click.attr('action')
       var method = click.attr('method') || 'post'
-      var root = click.closest('.fed_dashboard_item_field_wrapper')
-      fed_toggle_loader()
+      var $row = click.closest('tr')
+      if (!$row.length) {
+        $row = click.closest('.fed_dashboard_item_field_wrapper')
+      }
       swal({
         title: frontend_dashboard.alert.confirmation.title,
         text: frontend_dashboard.alert.confirmation.text,
@@ -310,30 +411,38 @@ jQuery(document).ready(function ($) {
         showLoaderOnConfirm: true
       }).then(
         function () {
+          fed_toggle_loader(true)
           $.ajax({
             type: method,
             url: url,
             data: data,
             success: function (results) {
+              fed_toggle_loader(false)
               fedAlert.dashboardPostCommon(results)
-              if (results.success) root.html('')
+              if (results.success && $row.length) {
+                $row.css('background-color', '#fee2e2').fadeOut(400, function () {
+                  $(this).remove()
+                })
+              }
+            },
+            error: function () {
+              fed_toggle_loader(false)
+              swal({
+                title: frontend_dashboard.alert.something_went_wrong,
+                type: 'error'
+              })
             }
-
           })
         },
         function (dismiss) {
           if (dismiss === 'cancel') {
             swal({
-                title: frontend_dashboard.alert.title_cancelled,
-                type: 'error',
-                confirmButtonColor: '#0AAAAA'
-              }
-            )
+              title: frontend_dashboard.alert.title_cancelled,
+              type: 'info',
+              confirmButtonColor: '#0AAAAA'
+            })
           }
         })
-      fed_toggle_loader()
-
-      e.preventDefault()
     })
 
     // Show Post List Request.
@@ -368,39 +477,31 @@ jQuery(document).ready(function ($) {
      */
 
     b.on('click', '.fed_upload_container', function (e) {
-      var custom_uploader
       var button_click = $(this)
+      var wrapper = button_click.closest('.fed_upload_wrapper')
       e.preventDefault()
-      custom_uploader = wp.media.frames.file_frame = wp.media({
-        title: 'Upload',
-        button: {
-          text: 'Upload'
-        },
-        multiple: false
-      })
-      //When a file is selected, grab the URL and set it as the text field's value
-      custom_uploader.on('select', function () {
-        // var regex_image_type = /(image)/g;
-        attachment = custom_uploader.state().get('selection').first().toJSON()
-        console.log(attachment)
-        button_click.find('.fed_upload_image_dummy').addClass('fed_hide')
-        button_click.find('.fed_upload_input').val(attachment.id)
-        console.log(( attachment.mime ).indexOf('image'))
-        if (( attachment.mime ).indexOf('image') >= 0) {
-          console.log('image')
-          button_click.find('.fed_upload_image_actual').removeClass('fed_hide')
-          button_click.closest('.fed_upload_wrapper').find('.fed_remove_image').removeClass('fed_hide')
-          button_click.find('.fed_upload_image_container img').attr('src', attachment.url)
-        } else {
-          console.log('pdf')
-          console.log(attachment.icon)
-          button_click.closest('.fed_upload_wrapper').find('.fed_remove_image').addClass('fed_hide')
-          button_click.find('.fed_upload_image_container img').attr('src', attachment.icon)
-        }
 
-      })
-      //Open the uploader dialog
-      custom_uploader.open()
+      if (typeof window.fedOpenMediaPicker === 'function') {
+        window.fedOpenMediaPicker(function (attachment) {
+          wrapper.find('.fed_upload_image_dummy').addClass('fed_hide hidden')
+          wrapper.find('.fed_upload_input').val(attachment.id)
+          wrapper.find('.fed_upload_image_actual').removeClass('fed_hide hidden')
+
+          var previewSrc = attachment.url
+          if (attachment.sizes && attachment.sizes.thumbnail) {
+            previewSrc = attachment.sizes.thumbnail.url
+          } else if (attachment.icon && (attachment.mime || '').indexOf('image') === -1) {
+            previewSrc = attachment.icon
+          }
+
+          wrapper.find('.fed_upload_image_actual img').attr('src', previewSrc)
+          wrapper.find('.fed_upload_filename').text(attachment.filename || attachment.title || 'File Selected')
+        }, {
+          title: 'Upload File',
+          button: { text: 'Select File' },
+          multiple: false
+        })
+      }
     })
 
     b.on('mouseover', '.fed_show_on_hover_container', function () {
@@ -445,37 +546,52 @@ jQuery(document).ready(function ($) {
         var error
         if (results.success) {
           swal({
-            title: results.data.message || frontend_dashboard.alert.confirmation.title,
-            text: frontend_dashboard.alert.redirecting,
-            type: 'success',
-            showConfirmButton: false,
-            timer: 1000,
-            confirmButtonColor: '#0AAAAA'
-          }).then(
-            function () {
-            },
-            function () {
-              window.location.href = results.data.url
-            })
-        } else {
-          if (frontend_dashboard.fed_captcha_details && frontend_dashboard.fed_captcha_details.fed_captcha_enable === 'Enable') {
-            grecaptcha.reset()
-          }
-          if (results.data.user instanceof Array) {
-            error = results.data.user.join('</br>')
-          } else {
-            error = results.data.user
-          }
-          swal({
-            title: error,
-            type: 'error',
-            confirmButtonColor: '#DD6B55'
-          })
-        }
-      },
-      adminSettings: function (results) {
-        if (results.success) {
-          swal({
+			title: results && results.data && results.data.message ? results.data.message : frontend_dashboard.alert.confirmation.title,
+			text: frontend_dashboard.alert.redirecting,
+			type: 'success',
+			showConfirmButton: false,
+			timer: 1000,
+			confirmButtonColor: '#0AAAAA'
+		  }).then(
+			function () {
+			},
+			function () {
+			  window.location.href = results.data.url
+			})
+		} else {
+		  if (frontend_dashboard.fed_captcha_details && frontend_dashboard.fed_captcha_details.fed_captcha_enable === 'Enable') {
+			grecaptcha.reset()
+		  }
+		  if (results && results.data) {
+			if (results.data.user instanceof Array) {
+			  error = results.data.user.join('<br>')
+			} else if (results.data.user) {
+			  error = results.data.user
+			} else if (results.data.message) {
+			  error = results.data.message
+			} else {
+			  error = 'Unknown error occurred.'
+			}
+		  } else if (typeof results === 'string' && results.length > 0) {
+			error = results
+		  } else {
+			error = 'Something went wrong. Please try again.'
+		  }
+
+		  var cleanTitle = typeof error === 'string' ? error.replace(/<[^>]*>?/gm, ' ') : error
+
+		  swal({
+			title: cleanTitle,
+			html: true,
+			text: error,
+			type: 'error',
+			confirmButtonColor: '#DD6B55'
+		  })
+		}
+	  },
+	  adminSettings: function (results) {
+		if (results.success) {
+		  swal({
             title: results.data.message || frontend_dashboard.alert.something_went_wrong,
             type: 'success',
             confirmButtonColor: '#0AAAAA',
@@ -577,18 +693,161 @@ jQuery(document).ready(function ($) {
       )
     }
 
-    function fed_toggle_loader () {
-      $('.preview-area').toggleClass('hide')
+    // Color picker: Native color input change/input
+    b.on('input change', '.fed_color_native', function () {
+      var hex = $(this).val().toUpperCase();
+      var container = $(this).closest('.fed_color_picker_container');
+      container.find('.fed_color_swatch').css('background-color', hex);
+      var input = container.find('.fed_color_input');
+      if (input.val() !== hex) {
+        input.val(hex).trigger('change');
+      }
+    });
+
+    // Color picker: Text input typing/pasting
+    b.on('input', '.fed_color_input', function () {
+      var val = $(this).val().trim();
+      if (!val) return;
+      if (val.charAt(0) !== '#') {
+        val = '#' + val;
+      }
+      var container = $(this).closest('.fed_color_picker_container');
+      var valid3 = /^#([0-9A-Fa-f]{3})$/;
+      var valid6 = /^#([0-9A-Fa-f]{6})$/;
+      var fullHex = '';
+      if (valid6.test(val)) {
+        fullHex = val.toUpperCase();
+      } else if (valid3.test(val)) {
+        var r = val.charAt(1), g = val.charAt(2), b = val.charAt(3);
+        fullHex = ('#' + r + r + g + g + b + b).toUpperCase();
+      }
+      if (fullHex) {
+        container.find('.fed_color_swatch').css('background-color', fullHex);
+        container.find('.fed_color_native').val(fullHex.toLowerCase());
+      }
+    });
+
+    // Color picker: Text input blur formatting
+    b.on('blur', '.fed_color_input', function () {
+      var val = $(this).val().trim();
+      var container = $(this).closest('.fed_color_picker_container');
+      if (!val) return;
+      if (val.charAt(0) !== '#') {
+        val = '#' + val;
+      }
+      var valid3 = /^#([0-9A-Fa-f]{3})$/;
+      var valid6 = /^#([0-9A-Fa-f]{6})$/;
+      if (valid6.test(val)) {
+        var upper = val.toUpperCase();
+        $(this).val(upper);
+        container.find('.fed_color_swatch').css('background-color', upper);
+        container.find('.fed_color_native').val(val.toLowerCase());
+      } else if (valid3.test(val)) {
+        var r = val.charAt(1), g = val.charAt(2), b = val.charAt(3);
+        var full = ('#' + r + r + g + g + b + b).toUpperCase();
+        $(this).val(full);
+        container.find('.fed_color_swatch').css('background-color', full);
+        container.find('.fed_color_native').val(full.toLowerCase());
+      }
+    });
+
+    // Initialize Select2 on Multi-selects and Tag selects
+    if (typeof $.fn.select2 === 'function') {
+      $('.fed_multi_select, .fed_select2').select2({
+        dropdownCssClass: 'bc_fed_select2_dropdown',
+        width: '100%',
+        placeholder: function () {
+          return $(this).attr('placeholder') || $(this).data('placeholder') || 'Select options...'
+        },
+        allowClear: true
+      });
+    }
+
+    // WordPress Media Uploader for FileField / Featured Image
+    $(document).on('click', '.fed-media-dropzone, .fed-change-media-btn', function (e) {
+      e.preventDefault();
+      var box = $(this).closest('.fed-media-uploader-box');
+      var idInput = box.find('.fed-media-id-input');
+      var dropzone = box.find('.fed-media-dropzone');
+      var previewCard = box.find('.fed-media-preview-card');
+      var previewImg = box.find('.fed-preview-img');
+      var previewTitle = box.find('.fed-preview-title');
+
+      if (typeof window.fedOpenMediaPicker === 'function') {
+        window.fedOpenMediaPicker(function (attachment) {
+          idInput.val(attachment.id);
+          var thumbUrl = (attachment.sizes && attachment.sizes.thumbnail) 
+            ? attachment.sizes.thumbnail.url 
+            : ((attachment.sizes && attachment.sizes.medium) ? attachment.sizes.medium.url : attachment.url);
+
+          var existingImg = previewCard.find('.fed-preview-img');
+          if (existingImg.length) {
+            existingImg.attr('src', thumbUrl).show();
+            previewCard.find('.fed-preview-fallback').hide();
+          } else {
+            var fallback = previewCard.find('.fed-preview-fallback');
+            if (fallback.length) {
+              fallback.replaceWith('<img src="' + thumbUrl + '" alt="" class="w-14 h-14 object-cover rounded-xl border border-slate-200 bg-slate-50 shrink-0 fed-preview-img" />');
+            } else {
+              previewCard.find('.overflow-hidden').first().before('<img src="' + thumbUrl + '" alt="" class="w-14 h-14 object-cover rounded-xl border border-slate-200 bg-slate-50 shrink-0 fed-preview-img" />');
+            }
+          }
+          previewTitle.text(attachment.title || attachment.filename || 'Image Selected');
+          dropzone.addClass('hidden');
+          previewCard.removeClass('hidden');
+        }, {
+          title: 'Select or Upload Featured Image',
+          button: { text: 'Use this media' },
+          multiple: false
+        });
+      } else {
+        var fileInput = box.find('input[type="file"]');
+        if (fileInput.length) {
+          fileInput.click();
+        }
+      }
+    });
+
+    // Remove uploaded media
+    $(document).on('click', '.fed-remove-media-btn', function (e) {
+      e.preventDefault();
+      var box = $(this).closest('.fed-media-uploader-box');
+      box.find('.fed-media-id-input').val('');
+      box.find('.fed-media-preview-card').addClass('hidden');
+      box.find('.fed-media-dropzone').removeClass('hidden');
+    });
+
+    function fed_toggle_loader (show) {
+      if (typeof show === 'boolean') {
+        if (show) {
+          $('.preview-area').removeClass('hide hidden')
+        } else {
+          $('.preview-area').addClass('hide hidden')
+        }
+      } else {
+        if ($('.preview-area').hasClass('hide') || $('.preview-area').hasClass('hidden')) {
+          $('.preview-area').removeClass('hide hidden')
+        } else {
+          $('.preview-area').addClass('hide hidden')
+        }
+      }
     }
   }
 )
 
-jQuery.fed_toggle_loader = function () {
-  jQuery('.preview-area').toggleClass('hide')
-  if (jQuery('.fed_loader_message').length) {
-    window.setTimeout(function () {
-      jQuery('.fed_loader_message').toggleClass('hide')
-    }, 2000)
+jQuery.fed_toggle_loader = function (show) {
+  if (typeof show === 'boolean') {
+    if (show) {
+      jQuery('.preview-area').removeClass('hide hidden')
+    } else {
+      jQuery('.preview-area').addClass('hide hidden')
+    }
+  } else {
+    if (jQuery('.preview-area').hasClass('hide') || jQuery('.preview-area').hasClass('hidden')) {
+      jQuery('.preview-area').removeClass('hide hidden')
+    } else {
+      jQuery('.preview-area').addClass('hide hidden')
+    }
   }
 }
 
@@ -597,6 +856,13 @@ jQuery.fed_generate_random_number = function () {
 }
 
 var CaptchaCallback = function () {
+  if (
+    typeof frontend_dashboard === 'undefined' ||
+    !frontend_dashboard.fed_captcha_details ||
+    frontend_dashboard.fed_captcha_details.fed_captcha_version === 'v3'
+  ) {
+    return
+  }
   var fedRegister = document.getElementById('fedRegisterCaptcha')
   var fedLogin = document.getElementById('fedLoginCaptcha')
   if (fedRegister !== null) {
@@ -604,7 +870,6 @@ var CaptchaCallback = function () {
   }
   if (fedLogin !== null) {
     grecaptcha.render('fedLoginCaptcha', { 'sitekey': frontend_dashboard.fed_captcha_details.fed_captcha_site_key })
-
   }
 }
 

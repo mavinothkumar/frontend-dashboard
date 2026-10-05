@@ -42,17 +42,13 @@ function fed_reset_form_submit( $request ) {
 				'url'     => fed_get_login_url(),
 			)
 		);
-	}
-	else {
-		if ( $user instanceof WP_Error ) {
+	} elseif ( $user instanceof WP_Error ) {
 			wp_send_json_error(
 				array( 'user' => __( 'Invalid Key, Please try resetting the password again', 'frontend-dashboard' ) )
 			);
-		}
-		else {
-			wp_send_json_error(
-				array( 'user' => __( 'Something went wrong, Please try again later', 'frontend-dashboard' ) )
-			);
-		}
+	} else {
+		wp_send_json_error(
+			array( 'user' => __( 'Something went wrong, Please try again later', 'frontend-dashboard' ) )
+		);
 	}
 }

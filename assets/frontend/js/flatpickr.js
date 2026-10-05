@@ -967,18 +967,23 @@ function Flatpickr(element, config) {
     }
 
     function setSelectedDate(inputDate) {
-        if (Array.isArray(inputDate)) self.selectedDates = inputDate.map(self.parseDate);else if (inputDate) {
+        var parse = function (d) { return self.parseDate(d); };
+        if (Array.isArray(inputDate)) {
+            self.selectedDates = inputDate.map(parse);
+        } else if (inputDate) {
             switch (self.config.mode) {
                 case "single":
-                    self.selectedDates = [self.parseDate(inputDate)];
+                    self.selectedDates = [parse(inputDate)];
                     break;
 
                 case "multiple":
-                    self.selectedDates = inputDate.split("; ").map(self.parseDate);
+                    var sep = inputDate.indexOf(";") !== -1 ? /\s*;\s*/ : /\s*,\s*/;
+                    self.selectedDates = inputDate.split(sep).map(parse);
                     break;
 
                 case "range":
-                    self.selectedDates = inputDate.split(self.l10n.rangeSeparator).map(self.parseDate);
+                    var rsep = self.l10n && self.l10n.rangeSeparator ? self.l10n.rangeSeparator : " to ";
+                    self.selectedDates = inputDate.split(rsep).map(parse);
                     break;
 
                 default:
@@ -1596,37 +1601,68 @@ Flatpickr.prototype = {
     parseDate: function parseDate(date, timeless) {
         if (!date) return null;
 
-        var dateTimeRegex = /(\d+)/g,
-            timeRegex = /^(\d{1,2})[:\s](\d\d)?[:\s]?(\d\d)?\s?(a|p)?/i,
-            timestamp = /^(\d+)$/g,
+        var timestamp = /^(\d+)$/g,
             date_orig = date;
 
-        if (date.toFixed || timestamp.test(date)) // timestamp
-            date = new Date(date);else if (typeof date === "string") {
+        if (date.toFixed || timestamp.test(date)) {
+            date = new Date(date);
+        } else if (typeof date === "string") {
             date = date.trim();
 
             if (date === "today") {
                 date = new Date();
                 timeless = true;
-            } else if (this.config && this.config.parseDate) date = this.config.parseDate(date);else if (timeRegex.test(date)) {
-                // time picker
-                var m = date.match(timeRegex),
-                    hours = !m[4] ? m[1] // military time, no conversion needed
-                        : m[1] % 12 + (m[4].toLowerCase() === "p" ? 12 : 0); // am/pm
+            } else if (this.config && this.config.parseDate) {
+                date = this.config.parseDate(date);
+            } else {
+                var format = (this.config && (this.config.dateFormat || this.config.altFormat)) || "d-m-Y";
+                var numbers = date.match(/\d+/g);
+                if (numbers && numbers.length >= 3) {
+                    var year, month, day, hour = 0, minute = 0, second = 0;
 
-                date = new Date();
-                date.setHours(hours, m[2] || 0, m[3] || 0);
-            } else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
-                date = new Date(date);else if (dateTimeRegex.test(date) && /^[0-9]/.test(date)) {
-                var d = date.match(dateTimeRegex);
-                date = new Date(d[0] + "/" + (d[1] || 1) + "/" + (d[2] || 1) + " " + (d[3] || 0) + ":" + (d[4] || 0) + ":" + (d[5] || 0));
-            } else // fallback
-                date = new Date(date);
-        } else if (date instanceof Date) date = new Date(date.getTime()); // create a copy
+                    if (/^d/i.test(format)) {
+                        day = parseInt(numbers[0], 10);
+                        month = parseInt(numbers[1], 10) - 1;
+                        year = parseInt(numbers[2], 10);
+                    } else if (/^m/i.test(format)) {
+                        month = parseInt(numbers[0], 10) - 1;
+                        day = parseInt(numbers[1], 10);
+                        year = parseInt(numbers[2], 10);
+                    } else {
+                        year = parseInt(numbers[0], 10);
+                        month = parseInt(numbers[1], 10) - 1;
+                        day = parseInt(numbers[2], 10);
+                    }
 
-        if (!(date instanceof Date)) {
+                    if (year < 100) {
+                        year += 2000;
+                    }
+
+                    if (numbers.length >= 5) {
+                        hour = parseInt(numbers[3], 10) || 0;
+                        minute = parseInt(numbers[4], 10) || 0;
+                        if (numbers.length >= 6) {
+                            second = parseInt(numbers[5], 10) || 0;
+                        }
+                    }
+
+                    if (/pm/i.test(date) && hour < 12) {
+                        hour += 12;
+                    } else if (/am/i.test(date) && hour === 12) {
+                        hour = 0;
+                    }
+
+                    date = new Date(year, month, day, hour, minute, second);
+                } else {
+                    date = new Date(date);
+                }
+            }
+        } else if (date instanceof Date) {
+            date = new Date(date.getTime());
+        }
+
+        if (!(date instanceof Date) || isNaN(date.getTime())) {
             console.warn("flatpickr: invalid date " + date_orig);
-            console.info(this.element);
             return null;
         }
 

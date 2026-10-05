@@ -7,6 +7,10 @@
  * @package Frontend Dashboard.
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 add_filter( 'widget_text', 'do_shortcode' );
 
 add_shortcode( 'fed_list_taxonomy', 'fed_list_taxonomy' );
@@ -28,6 +32,7 @@ function fed_list_taxonomy( $attributes ) {
 				'current_category'    => 0,
 				'depth'               => 0,
 				'echo'                => 0,
+				// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 				'exclude'             => '',
 				'exclude_tree'        => '',
 				'feed'                => '',
@@ -41,15 +46,15 @@ function fed_list_taxonomy( $attributes ) {
 				'separator'           => '<br />',
 				'show_count'          => 0,
 				'show_option_all'     => '',
-				'show_option_none'    => __( 'No categories' ),
+				'show_option_none'    => __( 'No categories', 'frontend-dashboard' ),
 				'style'               => 'list',
 				'taxonomy'            => null,
 				'title_li'            => '',
 				'use_desc_for_title'  => 1,
-			), $attributes
+			),
+			$attributes
 		)
 	);
-
 
 	if ( $taxonomy ) {
 		$args = array(
@@ -58,6 +63,7 @@ function fed_list_taxonomy( $attributes ) {
 			'current_category'    => $current_category,
 			'depth'               => $depth,
 			'echo'                => $echo,
+			// phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 			'exclude'             => $exclude,
 			'exclude_tree'        => $exclude_tree,
 			'feed'                => $feed,

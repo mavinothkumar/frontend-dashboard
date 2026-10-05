@@ -5,6 +5,10 @@
  * @package Frontend Dashboard.
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 if ( ! shortcode_exists( 'fed_user' ) && ! function_exists( 'fed_user_fn' ) ) {
 	/**
 	 * Add Shortcode to the page.
@@ -18,15 +22,15 @@ if ( ! shortcode_exists( 'fed_user' ) && ! function_exists( 'fed_user_fn' ) ) {
 		$role = shortcode_atts(
 			array(
 				'role' => 'subscriber',
-			), $role, 'fed_user'
+			),
+			$role,
+			'fed_user'
 		);
-
 
 		$templates = new FED_Template_Loader();
 		ob_start();
 		$templates->set_template_data( $role, 'fed_user_attr' );
 		$templates->get_template_part( 'user_role' );
-
 
 		return ob_get_clean();
 	}

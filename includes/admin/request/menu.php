@@ -16,8 +16,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @param  string $post_id  Post ID.
  */
 function fed_admin_menu_save( $request, $post_id = '' ) {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
+
 	global $wpdb;
-	$menu_slug = $request['menu_slug'];
+	$menu_slug = sanitize_key( $request['menu_slug'] );
 
 	/**
 	 * TODO: changed prefix to get_blog_prefix() for multisite check.
@@ -31,16 +35,22 @@ function fed_admin_menu_save( $request, $post_id = '' ) {
 		/**
 		 * Check for input meta already exist
 		 */
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$duplicate = $wpdb->get_row(
-			"SELECT * FROM $table_name WHERE menu_slug LIKE '{$menu_slug}' AND NOT id = $post_id "
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"SELECT * FROM {$table_name} WHERE menu_slug = %s AND id != %d",
+				$menu_slug,
+				(int) $post_id
+			)
 		);
 
 		if ( null !== $duplicate ) {
 			wp_send_json_error(
 				array(
 					'message' => 'Sorry, you have previously added ' . strtoupper(
-							$duplicate->menu
-						) . ' with order ' . strtoupper( $duplicate->menu_order ),
+						$duplicate->menu
+					) . ' with order ' . strtoupper( $duplicate->menu_order ),
 				)
 			);
 			exit();
@@ -50,6 +60,7 @@ function fed_admin_menu_save( $request, $post_id = '' ) {
 		 * No duplicate found, so we can update the record.
 		 */
 		unset( $request['menu_slug'] );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$status = $wpdb->update( $table_name, $request, array( 'id' => (int) $post_id ) );
 
 		if ( false === $status ) {
@@ -61,20 +72,26 @@ function fed_admin_menu_save( $request, $post_id = '' ) {
 				'message' => $request['menu'] . ' has been successfully updated',
 			)
 		);
-	}
-	else {
+	} else {
 		/**
 		 * Check for input meta already exist
 		 */
 
-		$duplicate = $wpdb->get_row( "SELECT * FROM $table_name WHERE menu_slug LIKE '{$menu_slug}'" );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$duplicate = $wpdb->get_row(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"SELECT * FROM {$table_name} WHERE menu_slug = %s",
+				$menu_slug
+			)
+		);
 
 		if ( null !== $duplicate ) {
 			wp_send_json_error(
 				array(
 					'message' => 'Sorry, you have previously added ' . strtoupper(
-							$duplicate->menu
-						) . ' with order ' . strtoupper( $duplicate->menu_order ),
+						$duplicate->menu
+					) . ' with order ' . strtoupper( $duplicate->menu_order ),
 				)
 			);
 			exit();
@@ -83,6 +100,7 @@ function fed_admin_menu_save( $request, $post_id = '' ) {
 		/**
 		 * Now we are free to insert the row
 		 */
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$status = $wpdb->insert(
 			$table_name,
 			$request
@@ -127,8 +145,14 @@ add_action( 'wp_ajax_fed_menu_sorting_items', 'fed_menu_sorting_items' );
  * Menu Sorting Items.
  */
 function fed_menu_sorting_items() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
 
-	$request           = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	fed_verify_nonce();
+
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
+	$request           = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	$default_menu_type = fed_get_default_menu_type();
 	$menus             = array();
 
@@ -151,8 +175,7 @@ function fed_menu_sorting_items() {
 					'parent_type' => isset( $parent[0] ) ? $parent[0] : null,
 					'order'       => $data['order'],
 				);
-			}
-			else {
+			} else {
 				wp_send_json_error( array( 'message' => 'There is some issue in your custom menu, please check' ) );
 			}
 		}

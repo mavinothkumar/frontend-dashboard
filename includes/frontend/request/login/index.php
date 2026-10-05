@@ -19,7 +19,8 @@ add_action( 'wp_ajax_nopriv_fed_login_form_post', 'fed_wp_ajax_fed_login_form_po
  * Login Form Post.
  */
 function fed_wp_ajax_fed_login_form_post() {
-	$post_payload = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
+	$post_payload = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 
 	fed_verify_nonce();
 

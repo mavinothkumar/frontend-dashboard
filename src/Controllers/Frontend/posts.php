@@ -1,0 +1,485 @@
+<?php
+/**
+ * Posts.
+ *
+ * @package Frontend Dashboard.
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+/**
+ * Default Post Options
+ *
+ * @return array
+ */
+
+
+/**
+ * Process Dashboard Display Post
+ *
+ * @param  string $post_type  Post Type.
+ *
+ * @return WP_Query
+ */
+function fed_process_dashboard_display_post( $post_type = 'post' ) {
+	$user = get_userdata( get_current_user_id() );
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$paged = isset( $_REQUEST['page_number'] ) ? absint( $_REQUEST['page_number'] ) : 1;
+	$args  = array(
+		'orderby'        => 'post_date',
+		'order'          => 'DESC',
+		'posts_per_page' => get_option( 'posts_per_page', 10 ),
+		'paged'          => $paged,
+		'post_status'    => array_keys( fed_get_post_status() ),
+		'post_type'      => $post_type,
+	);
+
+	if ( ! apply_filters( 'fed_show_all_post_to_admin', fed_is_admin() ) ) {
+		$args['author'] = $user->ID;
+	}
+
+	return new WP_Query( $args );
+}
+
+
+/**
+ * Post Pagination.
+ *
+ * @param  WP_Query | \stdClass $post_object  Post.
+ * @param  array | null         $menu  Menu.
+ *
+ * @deprecated @ 2.1.22 Will be removed in future release
+ */
+function fed_get_post_pagination( $post_object, $menu = null ) {
+	$pagination_counts = ceil( $post_object->found_posts / get_option( 'posts_per_page', 10 ) );
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$current_page = isset( $_REQUEST['page_number'] ) ? absint( $_REQUEST['page_number'] ) : 1;
+
+	if ( $pagination_counts > 1 ) {
+		?>
+		<ul class="pagination pagination-small fed_post_pagination">
+		<?php
+		for ( $i = 1; $i <= $pagination_counts; $i++ ) {
+			$class = '';
+			if ( $current_page == $i ) {
+				$class = 'class="active"';
+			}
+			?>
+			<li <?php echo esc_attr( $class ); ?>>
+				<a href="<?php echo esc_url( add_query_arg( array( 'page_number' => $i ) ) ); ?>">
+					<span><?php echo esc_attr( $i ); ?></span>
+				</a>
+			</li>
+			<?php
+		}
+	}
+	?>
+	</ul>
+	<?php
+}
+
+/**
+ * Get Pagination
+ *
+ * @param  int $current_page  Current Page.
+ * @param  int $total_pages  Total Page.
+ *
+ * @return string
+ */
+function fed_get_pagination( $current_page, $total_pages ) {
+
+	if ( $total_pages > 1 && $current_page <= $total_pages ) {
+		$i = max( 2, $current_page - 5 );
+		?>
+		<nav class="pt-4 flex items-center justify-center">
+			<ul class="inline-flex items-center gap-1 bg-white p-1 rounded-2xl border border-slate-200/80 shadow-2xs fed_pagination text-xs font-semibold list-none m-0">
+				<li>
+					<a class="w-8 h-8 rounded-xl flex items-center justify-center transition-all no-underline <?php echo 1 === (int) $current_page ? 'bg-indigo-600 text-white font-bold shadow-2xs' : 'text-slate-600 hover:bg-slate-100'; ?>"
+						href="<?php echo esc_url( add_query_arg( array( 'page_number' => 1 ) ) ); ?>">1</a>
+				</li>
+				<?php
+				if ( $i > 2 ) {
+					echo '<li class="w-8 h-8 flex items-center justify-center text-slate-400">...</li>';
+				}
+				for ( ; $i < min( $current_page + 6, $total_pages ); $i++ ) {
+					$isActive = (int) $current_page === (int) $i;
+					?>
+					<li>
+						<a class="w-8 h-8 rounded-xl flex items-center justify-center transition-all no-underline <?php echo $isActive ? 'bg-indigo-600 text-white font-bold shadow-2xs' : 'text-slate-600 hover:bg-slate-100'; ?>"
+							href="<?php echo esc_url( add_query_arg( array( 'page_number' => (int) $i ) ) ); ?>"><?php echo (int) $i; ?></a>
+					</li>
+					<?php
+				}
+				if ( $i != $total_pages ) {
+					echo '<li class="w-8 h-8 flex items-center justify-center text-slate-400">...</li>';
+				}
+				$isLastActive = (int) $total_pages === (int) $current_page;
+				?>
+				<li>
+					<a class="w-8 h-8 rounded-xl flex items-center justify-center transition-all no-underline <?php echo $isLastActive ? 'bg-indigo-600 text-white font-bold shadow-2xs' : 'text-slate-600 hover:bg-slate-100'; ?>"
+						href="<?php echo esc_url( add_query_arg( array( 'page_number' => $total_pages ) ) ); ?>">
+						<?php echo (int) $total_pages; ?>
+					</a>
+				</li>
+			</ul>
+		</nav>
+		<?php
+	}
+}
+
+
+/**
+ * Process Add New Post.
+ *
+ * @param  array $post  Post.
+ */
+function fed_process_dashboard_add_new_post( $post ) {
+	/**
+	 * Validate Current user role can add new post type.
+	 */
+	$fed_admin_options = fed_get_post_settings_by_type( $post['fed_post_type'] );
+
+	$user_role = fed_get_current_user_role();
+	if (
+		count(
+			array_intersect( $user_role, array_keys( $fed_admin_options['permissions']['post_permission'] ) )
+		) > 0
+	) {
+		$extras      = fed_fetch_table_rows_with_key( BC_FED_TABLE_POST, 'input_meta' );
+		$post_status = isset( $fed_admin_options['settings']['fed_post_status'] ) ? sanitize_text_field(
+			$fed_admin_options['settings']['fed_post_status']
+		) : 'publish';
+
+		if ( empty( $post['post_title'] ) ) {
+			$error = new WP_Error(
+				'fed_dashboard_add_post_title_missing',
+				__( 'Please fill post title', 'frontend-dashboard' )
+			);
+			wp_send_json_error( array( 'message' => $error->get_error_messages() ) );
+		}
+
+		$default = array(
+			'post_title'     => sanitize_text_field( $post['post_title'] ),
+			'post_content'   => isset( $post['post_content'] ) ? wp_kses_post( $post['post_content'] ) : '',
+			'post_category'  => isset( $post['post_category'] ) ? sanitize_text_field( $post['post_category'] ) : '',
+			'tags_input'     => isset( $post['tags_input'] ) ? implode( ',', $post['tags_input'] ) : '',
+			'post_type'      => isset( $post['post_type'] ) ? sanitize_text_field( $post['post_type'] ) : 'post',
+			'comment_status' => isset( $post['comment_status'] ) ? sanitize_text_field(
+				$post['comment_status']
+			) : 'open',
+			'post_status'    => $post_status,
+		);
+
+		if ( isset( $post['ID'] ) ) {
+			$default['ID'] = (int) $post['ID'];
+		}
+
+		if ( isset( $post['_thumbnail_id'] ) ) {
+			$default['_thumbnail_id'] = ( '' == $post['_thumbnail_id'] ) ? - 1 : (int) $post['_thumbnail_id'];
+		}
+
+		if ( isset( $post['tax_input'] ) ) {
+			$default['tax_input'] = $post['tax_input'];
+		}
+
+		foreach ( $extras as $index => $extra ) {
+			$input_type = isset( $extra['input_type'] ) ? $extra['input_type'] : '';
+			if ( in_array( $input_type, array( 'textarea', 'multi_line', 'multiline' ), true ) ) {
+				$default['meta_input'][ $index ] = isset( $post[ $index ] ) ? sanitize_textarea_field( $post[ $index ] ) : '';
+			} else {
+				$default['meta_input'][ $index ] = isset( $post[ $index ] ) ? sanitize_text_field( $post[ $index ] ) : '';
+			}
+		}
+
+		$success = wp_insert_post( $default );
+
+		if ( $success instanceof WP_Error ) {
+			wp_send_json_error( $success->get_error_messages() );
+		}
+
+		wp_send_json_success(
+			array( 'message' => $post['post_title'] . __( ' Successfully Saved', 'frontend-dashboard' ) )
+		);
+	}
+	$error = new WP_Error(
+		'fed_action_not_allowed',
+		__( 'Sorry! your are not allowed to do this action', 'frontend-dashboard' )
+	);
+
+	wp_send_json_error( array( 'message' => $error->get_error_messages() ) );
+}
+
+/**
+ * Display Edit Post by ID
+ *
+ * @param  array $post  Post Values.
+ *
+ * @return string
+ */
+function fed_display_dashboard_edit_post_by_id( $post ) {
+	$post_table    = fed_fetch_rows_by_table( BC_FED_TABLE_POST );
+	$post_meta     = get_post_meta( $post->ID );
+	$post_settings = fed_get_post_settings_by_type( $post->post_type );
+
+	$html  = '';
+	$html .= '
+<div class="row">
+	<div class="col-md-5">
+		<form method="post"
+			  class="fed_dashboard_show_post_list_request"
+			  action=" ' . admin_url( 'admin-ajax.php?action=fed_dashboard_show_post_list_request' ) . '">';
+	$html .= fed_wp_nonce_field(
+		'fed_dashboard_show_post_list_request',
+		'fed_dashboard_show_post_list_request',
+		'',
+		false
+	);
+
+	$html .= fed_get_input_details(
+		array(
+			'input_type' => 'hidden',
+			'input_meta' => 'fed_post_type',
+			'user_value' => $post->post_type,
+		)
+	);
+
+	$html .= '
+			<button class="btn btn-primary"
+					type="submit">
+				<i class="fa fa-mail-reply"></i>
+				Back to ' . strtoupper( $post->post_type ) . '
+			</button>
+		</form>
+	</div>
+</div>';
+
+	$html .= '
+<form method="post"
+	  class="fed_dashboard_process_edit_post_request"
+	  action="' . admin_url( 'admin-ajax.php?action=fed_dashboard_process_edit_post_request' ) . '">';
+
+	$html .= fed_wp_nonce_field(
+		'fed_dashboard_process_edit_post_request',
+		'fed_dashboard_process_edit_post_request',
+		true,
+		false
+	);
+
+	$html .= fed_input_box( 'ID', array( 'value' => (int) $post->ID ), 'hidden' );
+
+	$html .= '
+	<input type="hidden"
+		   name="fed_post_type"
+		   value="' . $post->post_type . '">
+	';
+
+	$html .= '
+	<input type="hidden"
+		   name="post_type"
+		   value="' . $post->post_type . '">
+	';
+	/**
+	 * Post Title
+	 */
+	$html .= '
+	<div class="row fed_dashboard_item_field">
+		<div class="col-md-12">
+			<div class="fed_header_font_color">' . __( 'Title', 'frontend-dashboard' ) . '</div>
+			' . fed_input_box(
+				'post_title',
+				array(
+					'value'       => esc_attr( $post->post_title ),
+					'placeholder' => 'Post Title',
+				),
+				'single_line'
+			) . '
+		</div>
+
+	</div>
+	';
+	/**
+	 * Post Content
+	 */
+	if ( ! isset( $post_settings['dashboard']['post_content'] ) ) {
+		$html .= '
+	<div class="row fed_dashboard_item_field">
+		<div class="col-md-12">
+			<div class="fed_header_font_color">' . __( 'Content', 'frontend-dashboard' ) . '</div>
+			' . fed_render_post_editor( $post->post_content, 'post_content', $post->post_type ) . '
+		</div>
+
+	</div>
+	';
+	}
+	$html .= fed_show_category_tag_post_format( $post, $post_settings );
+
+	/**
+	 * Featured Image
+	 * _thumbnail_id
+	 */
+	if ( ! isset( $post_settings['dashboard']['featured_image'] ) ) {
+		$html .= '
+	<div class="row fed_dashboard_item_field">
+		<div class="col-md-12">
+			<div class="fed_header_font_color">' . __( 'Featured Image', 'frontend-dashboard' ) . '</div>
+			' . fed_input_box( '_thumbnail_id', array( 'value' => (int) $post_meta['_thumbnail_id'][0] ), 'file' ) .
+				'
+		</div>
+	</div>
+	';
+	}
+
+	/**
+	 * Comment Status
+	 */
+	if ( ! isset( $post_settings['dashboard']['allow_comments'] ) ) {
+		$html .= '
+	<div class="row fed_dashboard_item_field">
+		<div class="col-md-12">
+			<div class="fed_header_font_color">' . __( 'Allow Comments', 'frontend-dashboard' ) . '</div>
+			' . fed_input_box(
+				'comment_status',
+				array(
+					'default_value' => 'open',
+					'value'         => esc_attr( $post->comment_status ),
+				),
+				'checkbox'
+			) . '
+		</div>
+	</div>
+	';
+	}
+	/**
+	 * Extra Fields
+	 */
+	foreach ( $post_table as $item ) {
+		$temp               = $item;
+		$temp['user_value'] = $post_meta[ $item['input_meta'] ][0];
+		if ( $post->post_type === $item['post_type'] ) {
+			$html .= '
+	<div class="row fed_dashboard_item_field">
+		<div class="col-md-9">
+			<div class="fed_header_font_color">' . esc_html( $item['label_name'] ) . '</div>
+			' . fed_get_input_details( $temp ) . '
+		</div>
+	</div>
+	';
+		}
+	}
+	$html .= '
+	<div class="row fed_dashboard_item_field">
+		<div class="col-md-3 col-md-offset-4">
+			<button class="btn btn-primary"
+					type="submit">
+				<i class="fa fa-floppy-o"></i>
+				' . __( 'Save', 'frontend-dashboard' ) . '
+			</button>
+		</div>
+	</div>
+	';
+
+	$html .= '
+</form>';
+
+	return $html;
+}
+
+/**
+ * @param $post_type
+ *
+ * @return mixed|void
+ */
+function fed_get_post_settings_by_type( $post_type ) {
+
+	return apply_filters( 'fed_get_custom_post_settings_by_type', array(), $post_type );
+}
+
+
+/**
+ * @param $post
+ * @param $post_settings
+ */
+function fed_show_category_tag_post_format( $post, $post_settings ) {
+	$post_type = is_object( $post ) ? $post->post_type : $post;
+	$ctps      = fed_get_category_tag_post_format( $post_type );
+	$user_role = fed_get_current_user_role_key();
+
+	foreach ( $ctps as $index => $ctp ) {
+		if ( 'category' === $index ) {
+			foreach ( $ctp as $cindex => $category ) {
+				if ( ! isset( $post_settings['taxonomies'][ $cindex ][ $user_role ] ) ) {
+					?>
+					<div class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-2xs space-y-3">
+						<h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+							<i class="fas fa-folder text-indigo-500"></i>
+							<span><?php echo esc_attr( $category->label ); ?></span>
+						</h4>
+						<div>
+							<?php echo fed_get_dashboard_display_categories( $post, $category ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+						</div>
+					</div>
+					<?php
+				}
+			}
+		}
+		if ( 'tag' === $index ) {
+			foreach ( $ctp as $tindex => $tag ) {
+				if ( ! isset( $post_settings['taxonomies'][ $tindex ][ $user_role ] ) ) {
+					?>
+					<div class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-2xs space-y-3">
+						<div class="flex items-center justify-between">
+							<h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2 m-0">
+								<i class="fas fa-tags text-indigo-500"></i>
+								<span><?php echo esc_attr( $tag->label ); ?></span>
+							</h4>
+							<?php do_action( 'fed_frontend_dashboard_edit_tag_label', $tag, $post ); ?>
+						</div>
+						<div>
+							<?php echo fed_get_dashboard_display_tags( $post, $tag ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+						</div>
+					</div>
+					<?php
+				}
+			}
+		}
+		if ( 'post_format' === $index ) {
+			if ( ! isset( $post_settings['taxonomies']['post_format'][ $user_role ] ) ) {
+				$post_format = fed_dashboard_get_post_format();
+				if ( is_array( $post_format ) ) {
+					$post_value = isset( $post->ID ) ? esc_attr( get_post_format( $post->ID ) ) : 'standard';
+					if ( empty( $post_value ) ) {
+						$post_value = 'standard';
+					}
+					$format_options = array(
+						'standard' => __( 'Standard', 'frontend-dashboard' ),
+					);
+					foreach ( $post_format as $pf ) {
+						$format_options[ $pf ] = ucfirst( $pf );
+					}
+					?>
+					<div class="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-2xs space-y-3">
+						<h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+							<i class="fas fa-newspaper text-indigo-500"></i>
+							<span><?php esc_html_e( 'Post Format', 'frontend-dashboard' ); ?></span>
+						</h4>
+						<div>
+							<?php
+							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							echo fed_form_select(
+								array(
+									'input_meta'  => 'tax_input[post_format][]',
+									'input_value' => $format_options,
+									'user_value'  => $post_value,
+									'class_name'  => 'form-control',
+								)
+							);
+							?>
+						</div>
+					</div>
+					<?php
+				}
+			}
+		}
+	}
+}

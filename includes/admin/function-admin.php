@@ -15,8 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Verify Nonce
  *
- * @param  array  $request  (Added null in version 1.5)
- * @param  null | string | array  $permission
+ * @param  array                 $request  (Added null in version 1.5)
+ * @param  null | string | array $permission
  */
 function fed_verify_nonce( $request = null, $permission = null ) {
 
@@ -54,8 +54,8 @@ function fed_verify_nonce( $request = null, $permission = null ) {
 /**
  * Check for Nonce
  *
- * @param  array  $request  Request.
- * @param  null | array | string  $permission  Permission.
+ * @param  array                 $request  Request.
+ * @param  null | array | string $permission  Permission.
  *
  * @internal param string $nonce Nonce.
  * @internal param string $key Key.
@@ -68,7 +68,7 @@ function fed_nonce_check( $request, $permission = null ) {
 /**
  * Show form fields on admin dashboard.
  *
- * @param  string  $selected  Selected.
+ * @param  string $selected  Selected.
  *
  * @return string | array
  */
@@ -76,7 +76,8 @@ function fed_admin_user_profile_select( $selected = '' ) {
 	$attr = array(
 		'class'   => 'fed_admin_input_items',
 		'options' => apply_filters(
-			'fed_admin_input_item_options', array(
+			'fed_admin_input_item_options',
+			array(
 				'single_line' => array(
 					'name'  => __( 'Single Line', 'frontend-dashboard' ),
 					'image' => plugins_url( '/assets/admin/images/inputs/single_line.png', BC_FED_PLUGIN ),
@@ -113,6 +114,30 @@ function fed_admin_user_profile_select( $selected = '' ) {
 					'name'  => __( 'URL', 'frontend-dashboard' ),
 					'image' => plugins_url( '/assets/admin/images/inputs/url.png', BC_FED_PLUGIN ),
 				),
+				'date'        => array(
+					'name'  => __( 'Date', 'frontend-dashboard' ),
+					'image' => plugins_url( '/assets/admin/images/inputs/date.png', BC_FED_PLUGIN ),
+				),
+				'file'        => array(
+					'name'  => __( 'File', 'frontend-dashboard' ),
+					'image' => plugins_url( '/assets/admin/images/inputs/file.png', BC_FED_PLUGIN ),
+				),
+				'color'       => array(
+					'name'  => __( 'Color', 'frontend-dashboard' ),
+					'image' => plugins_url( '/assets/admin/images/inputs/color.png', BC_FED_PLUGIN ),
+				),
+				'wp_editor'   => array(
+					'name'  => __( 'WP Editor', 'frontend-dashboard' ),
+					'image' => plugins_url( '/assets/admin/images/inputs/wp_editor.png', BC_FED_PLUGIN ),
+				),
+				'label'       => array(
+					'name'  => __( 'Label', 'frontend-dashboard' ),
+					'image' => plugins_url( '/assets/admin/images/inputs/label.png', BC_FED_PLUGIN ),
+				),
+				'table'       => array(
+					'name'  => __( 'Table', 'frontend-dashboard' ),
+					'image' => plugins_url( '/assets/admin/images/inputs/table.png', BC_FED_PLUGIN ),
+				),
 			)
 		),
 		'value'   => $selected,
@@ -124,7 +149,7 @@ function fed_admin_user_profile_select( $selected = '' ) {
 /**
  * Enable or Disable.
  *
- * @param  string|bool  $condition  Condition.
+ * @param  string|bool $condition  Condition.
  *
  * @return string
  */
@@ -139,7 +164,7 @@ function fed_enable_disable( $condition = '' ) {
 /**
  * Is Required.
  *
- * @param  string  $condition  Condition.
+ * @param  string $condition  Condition.
  *
  * @return string
  */
@@ -154,7 +179,7 @@ function fed_is_required( $condition = '' ) {
 /**
  * Is True or False.
  *
- * @param  string  $condition  Condition.
+ * @param  string $condition  Condition.
  *
  * @return bool
  */
@@ -169,8 +194,8 @@ function fed_is_true_false( $condition = '' ) {
 /**
  * Profile Enable Disable.
  *
- * @param  string  $condition  Condition.
- * @param  string  $type  Type.
+ * @param  string $condition  Condition.
+ * @param  string $type  Type.
  *
  * @return array
  */
@@ -204,7 +229,7 @@ function fed_profile_enable_disable( $condition = '', $type = '' ) {
 /**
  * Get Input Details.
  *
- * @param  array  $attr  Attributes.
+ * @param  array $attr  Attributes.
  *
  * @return string
  */
@@ -252,6 +277,31 @@ function fed_get_input_details( $attr ) {
 			$input .= fed_form_radio( $attr );
 			break;
 
+		case 'file':
+		case 'files':
+			$input .= fed_form_file( $attr );
+			break;
+
+		case 'date':
+			$input .= fed_form_date( $attr );
+			break;
+
+		case 'color':
+			$input .= fed_form_color( $attr );
+			break;
+
+		case 'wp_editor':
+			$input .= fed_form_wp_editor( $attr );
+			break;
+
+		case 'label':
+			$input .= fed_form_label( $attr );
+			break;
+
+		case 'table':
+			$input .= fed_form_table( $attr );
+			break;
+
 	}
 
 	return apply_filters( 'fed_custom_input_fields', $input, $attr );
@@ -260,7 +310,7 @@ function fed_get_input_details( $attr ) {
 /**
  * Get Input Group.
  *
- * @param  array  $attr  Attribute.
+ * @param  array $attr  Attribute.
  *
  * @return string
  */
@@ -278,20 +328,149 @@ function fed_get_input_group( $attr ) {
 }
 
 /**
+ * Unified Field Options Parser.
+ *
+ * Seamlessly parses JSON objects/arrays, serialized PHP strings, multi-line strings,
+ * and legacy pipe/comma delimited values into a normalized [key => label] array.
+ *
+ * @param  mixed $input_value  Raw option value in any supported format.
+ * @return array Normalized associative array of [key => label].
+ */
+function fed_parse_field_options( $input_value ) {
+	if ( empty( $input_value ) && '0' !== $input_value ) {
+		return array();
+	}
+
+	// 1. Array handling
+	if ( is_array( $input_value ) ) {
+		$parsed = array();
+		foreach ( $input_value as $k => $v ) {
+			if ( is_array( $v ) ) {
+				$key                     = isset( $v['key'] ) ? $v['key'] : ( isset( $v['value'] ) ? $v['value'] : ( isset( $v['id'] ) ? $v['id'] : $k ) );
+				$label                   = isset( $v['label'] ) ? $v['label'] : ( isset( $v['text'] ) ? $v['text'] : ( isset( $v['name'] ) ? $v['name'] : ( isset( $v['title'] ) ? $v['title'] : (string) reset( $v ) ) ) );
+				$parsed[ (string) $key ] = (string) $label;
+			} elseif ( is_numeric( $k ) && is_string( $v ) ) {
+				$parsed[ (string) $v ] = (string) $v;
+			} else {
+				$parsed[ (string) $k ] = (string) $v;
+			}
+		}
+		return $parsed;
+	}
+
+	if ( ! is_string( $input_value ) ) {
+		return array();
+	}
+
+	$unslashed = function_exists( 'wp_unslash' ) ? wp_unslash( $input_value ) : stripslashes( $input_value );
+	$trimmed   = trim( $unslashed );
+	if ( '' === $trimmed ) {
+		return array();
+	}
+
+	// 2. Serialized PHP string
+	if ( ( str_starts_with( $trimmed, 'a:' ) || str_starts_with( $trimmed, 's:' ) || str_starts_with( $trimmed, 'O:' ) ) && @unserialize( $trimmed ) !== false ) {
+		$unserialized = @unserialize( $trimmed );
+		if ( is_array( $unserialized ) ) {
+			return fed_parse_field_options( $unserialized );
+		}
+	}
+
+	// 3. JSON format (array or object) - test multiple decoded variations
+	$json_candidates = array(
+		$trimmed,
+		stripslashes( $trimmed ),
+		html_entity_decode( $trimmed, ENT_QUOTES, 'UTF-8' ),
+		stripslashes( html_entity_decode( $trimmed, ENT_QUOTES, 'UTF-8' ) ),
+		trim( $input_value ),
+	);
+
+	foreach ( $json_candidates as $candidate ) {
+		$cand_trimmed = trim( $candidate );
+		if ( ( str_starts_with( $cand_trimmed, '[' ) && str_ends_with( $cand_trimmed, ']' ) ) ||
+			( str_starts_with( $cand_trimmed, '{' ) && str_ends_with( $cand_trimmed, '}' ) ) ) {
+			$json = json_decode( $cand_trimmed, true );
+			if ( is_array( $json ) ) {
+				return fed_parse_field_options( $json );
+			}
+		}
+	}
+
+	// 4. Multi-line and delimited strings
+	$result = array();
+	$lines  = preg_split( '/\r\n|\r|\n/', $trimmed );
+
+	foreach ( $lines as $line ) {
+		$line = trim( $line );
+		if ( '' === $line ) {
+			continue;
+		}
+
+		$segments = array( $line );
+		if ( substr_count( $line, '|' ) > 1 || ( substr_count( $line, '|' ) >= 1 && substr_count( $line, ',' ) >= 1 ) ) {
+			$segments = explode( '|', $line );
+		}
+
+		foreach ( $segments as $segment ) {
+			$segment = trim( $segment );
+			if ( '' === $segment ) {
+				continue;
+			}
+
+			if ( strpos( $segment, '=>' ) !== false ) {
+				$parts = explode( '=>', $segment, 2 );
+				$key   = trim( $parts[0] );
+				$label = trim( $parts[1] );
+			} elseif ( strpos( $segment, '|' ) !== false ) {
+				$parts = explode( '|', $segment, 2 );
+				$key   = trim( $parts[0] );
+				$label = trim( $parts[1] );
+			} elseif ( strpos( $segment, ',' ) !== false ) {
+				$parts = explode( ',', $segment, 2 );
+				$key   = trim( $parts[0] );
+				$label = trim( $parts[1] );
+			} elseif ( strpos( $segment, ':' ) !== false ) {
+				$parts = explode( ':', $segment, 2 );
+				$key   = trim( $parts[0] );
+				$label = trim( $parts[1] );
+			} else {
+				$key   = $segment;
+				$label = $segment;
+			}
+
+			if ( '' !== $key || '' !== $label ) {
+				if ( '' === $key ) {
+					$key = $label;
+				}
+				if ( '' === $label ) {
+					$label = $key;
+				}
+				$result[ (string) $key ] = (string) $label;
+			}
+		}
+	}
+
+	return $result;
+}
+
+/**
  * Get Select Option Value.
  *
- * @param  string|array  $input_value  Input Value.
- *
+ * @param  string|array $input_value  Input Value.
  * @return array
  */
 function fed_get_select_option_value( $input_value ) {
-	if ( is_string( $input_value ) ) {
-		return strlen( $input_value ) > 0 ? fed_convert_comma_separated_key_value( $input_value ) : array();
-	}
-	if ( is_array( $input_value ) ) {
-		return count( $input_value ) > 0 ? $input_value : array();
-	}
+	return fed_parse_field_options( $input_value );
+}
 
+/**
+ * Get Radio Option Value.
+ *
+ * @param  string|array $input_value  Input Value.
+ * @return array
+ */
+function fed_get_radio_option_value( $input_value ) {
+	return fed_parse_field_options( $input_value );
 }
 
 /**
@@ -349,7 +528,7 @@ function fed_default_user_roles() {
 /**
  * Get Default value for User Profile
  *
- * @param  string  $action  Action.
+ * @param  string $action  Action.
  *
  * @return array
  */
@@ -398,13 +577,14 @@ function fed_get_empty_value_for_user_profile( $action ) {
  * Process User Profile.
  *
  * @param  array  $row  User Profiles.
- * @param  string  $action  Action.
- * @param  string  $update  Status.
+ * @param  string $action  Action.
+ * @param  string $update  Status.
  *
  * @return array
  */
 function fed_process_user_profile( $row, $action, $update = 'no' ) {
 	$default = array(
+		'id'             => isset( $row['id'] ) ? (int) $row['id'] : ( isset( $row['input_id'] ) ? (int) $row['input_id'] : '' ),
 		'label_name'     => isset( $row['label_name'] ) ? sanitize_text_field(
 			htmlentities( $row['label_name'] )
 		) : '',
@@ -413,7 +593,7 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 		'placeholder'    => isset( $row['placeholder'] ) ? sanitize_text_field( $row['placeholder'] ) : '',
 		'class_name'     => isset( $row['class_name'] ) ? sanitize_text_field( $row['class_name'] ) : '',
 		'id_name'        => isset( $row['id_name'] ) ? sanitize_text_field( $row['id_name'] ) : '',
-		'input_value'    => isset( $row['input_value'] ) ? wp_kses_post( $row['input_value'] ) : '',
+		'input_value'    => isset( $row['input_value'] ) ? ( function_exists( 'wp_unslash' ) ? wp_unslash( $row['input_value'] ) : stripslashes( $row['input_value'] ) ) : '',
 		'input_location' => isset( $row['location'] ) ? sanitize_text_field( $row['location'] ) : '',
 		'input_min'      => isset( $row['input_min'] ) ? sanitize_text_field( $row['input_min'] ) : '',
 		'input_max'      => isset( $row['input_max'] ) ? sanitize_text_field( $row['input_max'] ) : '',
@@ -422,8 +602,7 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 		'input_type'     => isset( $row['input_type'] ) ? sanitize_text_field( $row['input_type'] ) : '',
 		'input_meta'     => isset( $row['input_meta'] ) ? sanitize_text_field( $row['input_meta'] ) : '',
 
-
-		'user_role' => ( isset( $row['user_role'] ) && ! empty( $row['user_role'] ) ) ? ( is_string(
+		'user_role'      => ( isset( $row['user_role'] ) && ! empty( $row['user_role'] ) ) ? ( is_string(
 			$row['user_role']
 		) ) ? unserialize( $row['user_role'] ) : serialize( array_keys( $row['user_role'] ) ) : array(),
 	);
@@ -442,8 +621,8 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 
 	if ( $action === 'post' ) {
 		$default['post_type'] = ( isset( $row['post_type'] ) && fed_check_post_type(
-				$row['post_type']
-			) ) ? sanitize_text_field( $row['post_type'] ) : 'post';
+			$row['post_type']
+		) ) ? sanitize_text_field( $row['post_type'] ) : 'post';
 	}
 	if ( $row['input_type'] === 'select' ) {
 		if ( $update === 'yes' ) {
@@ -481,18 +660,14 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 		if ( isset( $row['extended'] ) ) {
 			if ( $update === 'yes' ) {
 				$extended            = array(
-					'date_format' => isset( $row['extended']['date_format'] ) ? sanitize_text_field(
-						$row['extended']['date_format']
-					) : 'd-m-Y',
-					'enable_time' => isset( $row['extended']['enable_time'] ) ? sanitize_text_field(
-						$row['extended']['enable_time']
-					) : 'no',
-					'date_mode'   => isset( $row['extended']['date_mode'] ) ? sanitize_text_field(
-						$row['extended']['date_mode']
-					) : 'single',
-					'time_24hr'   => isset( $row['extended']['time_24hr'] ) ? sanitize_text_field(
-						$row['extended']['time_24hr']
-					) : '24_hours',
+					'date_format'         => isset( $row['extended']['date_format'] ) ? sanitize_text_field( $row['extended']['date_format'] ) : 'd-m-Y',
+					'enable_time'         => isset( $row['extended']['enable_time'] ) ? sanitize_text_field( $row['extended']['enable_time'] ) : 'false',
+					'date_mode'           => isset( $row['extended']['date_mode'] ) ? sanitize_text_field( $row['extended']['date_mode'] ) : 'single',
+					'time_24hr'           => isset( $row['extended']['time_24hr'] ) ? sanitize_text_field( $row['extended']['time_24hr'] ) : 'true',
+					'enable_seconds'      => isset( $row['extended']['enable_seconds'] ) ? sanitize_text_field( $row['extended']['enable_seconds'] ) : 'false',
+					'min_date'            => isset( $row['extended']['min_date'] ) ? sanitize_text_field( $row['extended']['min_date'] ) : '',
+					'max_date'            => isset( $row['extended']['max_date'] ) ? sanitize_text_field( $row['extended']['max_date'] ) : '',
+					'disable_user_access' => isset( $row['extended']['disable_user_access'] ) ? wp_kses_post( $row['extended']['disable_user_access'] ) : '',
 				);
 				$default['extended'] = serialize( $extended );
 			} else {
@@ -511,7 +686,7 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 	$default = apply_filters( 'fed_process_form_fields', $default, $row, $action, $update );
 
 	if ( 'profile' === $action ) {
-		$user_profile  = array(
+		$user_profile = array(
 			'show_register'     => fed_filter_show_register( $row ),
 			'show_dashboard'    => isset( $row['show_dashboard'] ) ? sanitize_text_field(
 				$row['show_dashboard']
@@ -532,16 +707,37 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 
 /**
  * Process Menu
+/**
+ * Normalize icon class string to prevent missing spaces or malformed prefixes.
  *
- * @param  array  $row  Menu Items.
+ * @param string $icon Icon class string.
+ * @return string
+ */
+function fed_normalize_icon_class( $icon ) {
+	$icon = trim( (string) $icon );
+	if ( empty( $icon ) || 'ERROR' === $icon ) {
+		return 'fas fa-link';
+	}
+	// Correct missing space e.g. fasfa-xxx -> fas fa-xxx, fafa-xxx -> fa fa-xxx
+	$icon = preg_replace( '/^(fa[sbr]?)(fa-)/i', '$1 $2', $icon );
+	if ( 0 === strpos( $icon, 'fa-' ) ) {
+		$icon = 'fas ' . $icon;
+	}
+	return $icon;
+}
+
+/**
+ * Process Menu.
+ *
+ * @param  array $row  Menu Items.
  *
  * @return array
  */
 function fed_process_menu( $row ) {
 	$default_value = array(
-		'menu_slug'         => isset( $row['fed_menu_slug'] ) ? sanitize_text_field( trim( $row['fed_menu_slug'] ) ) : 'ERROR',
+		'menu_slug'         => isset( $row['fed_menu_slug'] ) ? sanitize_key( trim( $row['fed_menu_slug'] ) ) : 'ERROR',
 		'menu'              => isset( $row['fed_menu_name'] ) ? sanitize_text_field( trim( $row['fed_menu_name'] ) ) : 'ERROR',
-		'menu_image_id'     => isset( $row['menu_image_id'] ) ? sanitize_text_field( trim( $row['menu_image_id'] ) ) : 'ERROR',
+		'menu_image_id'     => isset( $row['menu_image_id'] ) ? fed_normalize_icon_class( sanitize_text_field( trim( $row['menu_image_id'] ) ) ) : 'fas fa-link',
 		'show_user_profile' => isset( $row['show_user_profile'] ) ? sanitize_text_field(
 			trim( $row['show_user_profile'] )
 		) : 'Enable',
@@ -550,8 +746,15 @@ function fed_process_menu( $row ) {
 			$row['user_role']
 		) ? unserialize( $row['user_role'] ) : serialize( array_keys( $row['user_role'] ) ) ) : '',
 		'extended'          => isset( $row['extended'] ) ? sanitize_text_field( $row['extended'] ) : '',
-
+		'menu_key'          => isset( $row['fed_menu_key'] ) ? sanitize_text_field( $row['fed_menu_key'] ) : null,
+		'menu_value'        => '',
 	);
+
+	if ( isset( $row['fed_menu_key'] ) && 'yes' === $row['fed_menu_key'] && isset( $row['fed_menu_value'] ) ) {
+		$default_value['menu_value'] = sanitize_text_field( $row['fed_menu_value'] );
+	} elseif ( isset( $row['fed_menu_key'] ) && 'url' === $row['fed_menu_key'] && isset( $row['fed_menu_value_url'] ) ) {
+		$default_value['menu_value'] = serialize( $row['fed_menu_value_url'] );
+	}
 
 	return apply_filters( 'fed_process_menu', $default_value, $row );
 }
@@ -559,27 +762,18 @@ function fed_process_menu( $row ) {
 /**
  * Convert comma separated and new line into key value pair.
  *
- * @param  string  $text  String.
+ * @param  string $text  String.
  *
  * @return array
  */
 function fed_convert_comma_separated_key_value( $text ) {
-	$s = array();
-	if ( is_string( $text ) ) {
-		$n = explode( '|', $text );
-		foreach ( $n as $m ) {
-			$mm          = explode( ',', $m );
-			$s[ $mm[0] ] = $mm[1];
-		}
-	}
-
-	return $s;
+	return fed_parse_field_options( $text );
 }
 
 /**
  * Check is the field is belongs to extra profile.
  *
- * @param  string  $meta_key  Meta Key.
+ * @param  string $meta_key  Meta Key.
  *
  * @return bool
  */
@@ -591,13 +785,14 @@ function fed_check_field_is_belongs_to_extra( $meta_key = '' ) {
 	$user_data = fed_get_user_profile_default_meta_values();
 
 	$key = array_reduce(
-		$user_data, function ( $result, $item ) {
-		$result[] = $item['input_meta'];
+		$user_data,
+		function ( $result, $item ) {
+			$result[] = $item['input_meta'];
 
-		return $result;
-	}, array()
+			return $result;
+		},
+		array()
 	);
-
 
 	if ( in_array( $meta_key, $key, false ) ) {
 		return true;
@@ -622,16 +817,17 @@ function fed_no_update_fields() {
 /**
  * Changing Archive page author
  *
- * @param  string  $single_template  Template.
+ * @param  string $single_template  Template.
  *
  * @return string
  */
 function get_custom_post_type_archive_template( $single_template ) {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( isset( $_GET['fed_user_profile'] ) || is_author() ) {
 		$single_template = apply_filters(
-			                   'fed_change_author_frontend_page',
-			                   BC_FED_PLUGIN_DIR
-		                   ) . '/templates/author.php';
+			'fed_change_author_frontend_page',
+			BC_FED_PLUGIN_DIR
+		) . '/templates/author.php';
 
 	}
 
@@ -1757,7 +1953,7 @@ function fed_font_awesome_list() {
 /**
  * Yes Or No
  *
- * @param  string  $sort  Yes or No.
+ * @param  string $sort  Yes or No.
  *
  * @return array
  */
@@ -1772,13 +1968,12 @@ function fed_yes_no( $sort = 'DESC' ) {
 	}
 
 	return $value;
-
 }
 
 /**
  * Show or Hide
  *
- * @param  string  $sort  Yes or No.
+ * @param  string $sort  Yes or No.
  *
  * @return array
  */
@@ -1793,13 +1988,12 @@ function fed_show_hide( $sort = 'DESC' ) {
 	}
 
 	return $value;
-
 }
 
 /**
  * Show Register Filter
  *
- * @param  array  $row  Row.
+ * @param  array $row  Row.
  *
  * @return bool | string
  */
@@ -1844,7 +2038,7 @@ add_action( 'admin_init', 'fed_enable_file_uploads_by_role' );
 /**
  * Media Library Tab.
  *
- * @param  array  $tabs
+ * @param  array $tabs
  *
  * @return mixed
  */
@@ -1864,7 +2058,7 @@ add_action( 'pre_get_posts', 'fed_restrict_user_profile_picture' );
 /**
  * Restrict User Profile Picture.
  *
- * @param  WP_User_Query  $wp_query_obj  user query
+ * @param  WP_User_Query $wp_query_obj  user query
  */
 function fed_restrict_user_profile_picture( $wp_query_obj ) {
 
@@ -1878,6 +2072,7 @@ function fed_restrict_user_profile_picture( $wp_query_obj ) {
 		return;
 	}
 
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 	if ( 'admin-ajax.php' != $pagenow || 'query-attachments' != $_REQUEST['action'] ) {
 		return;
 	}
@@ -1885,7 +2080,6 @@ function fed_restrict_user_profile_picture( $wp_query_obj ) {
 	if ( ! current_user_can( 'manage_media_library' ) ) {
 		$wp_query_obj->set( 'author', $current_user->ID );
 	}
-
 }
 
 
@@ -1898,7 +2092,12 @@ function fed_get_script_loading_pages() {
 	$fed_menus      = new FED_AdminMenu();
 	$fed_menu_items = array_keys( $fed_menus->fed_get_main_sub_menu() );
 	$default        = array(
+		'fed_dashboard',
+		'fed_settings',
 		'fed_settings_menu',
+		'fed_user_profile',
+		'fed_post_fields',
+		'fed_add_user_profile',
 		'fed_user_profile_layout',
 		'fed_orders',
 		'fed_payments',
@@ -1921,7 +2120,8 @@ function fed_get_script_loading_pages() {
  */
 function fed_get_post_status() {
 	return apply_filters(
-		'fed_update_post_status', array(
+		'fed_update_post_status',
+		array(
 			'draft'   => 'Draft',
 			'pending' => 'Pending',
 			'publish' => 'Publish',
@@ -1932,13 +2132,14 @@ function fed_get_post_status() {
 /**
  * Get Post Status.
  *
- * @param  string  $status  Status.
+ * @param  string $status  Status.
  *
  * @return string
  */
 function fed_get_display_post_status( $status ) {
 	$post_status = apply_filters(
-		'fed_display_post_status', array(
+		'fed_display_post_status',
+		array(
 			'pending' => 'Pending',
 			'publish' => 'Published',
 			'draft'   => 'Draft',
@@ -1951,7 +2152,7 @@ function fed_get_display_post_status( $status ) {
 /**
  * Get all post meta.
  *
- * @param  string  $postid  Post ID.
+ * @param  string $postid  Post ID.
  *
  * @return array | null
  *
@@ -1960,19 +2161,22 @@ function fed_get_display_post_status( $status ) {
 function fed_get_all_post_meta( $postid ) {
 	global $wpdb;
 
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	return $wpdb->get_results(
 		$wpdb->prepare(
 			"SELECT meta_key, meta_value, meta_id, post_id
 			FROM $wpdb->postmeta WHERE post_id = %d
-			ORDER BY meta_key,meta_id", $postid
-		), ARRAY_A
+			ORDER BY meta_key,meta_id",
+			$postid
+		),
+		ARRAY_A
 	);
 }
 
 /**
  * Get all post meta key.
  *
- * @param  string  $postid  Post ID.
+ * @param  string $postid  Post ID.
  *
  * @return array
  */
@@ -1989,7 +2193,7 @@ function fed_get_all_post_meta_key( $postid ) {
 /**
  * Check Extension Loaded.
  *
- * @param  string  $extension  PHP Extensions.
+ * @param  string $extension  PHP Extensions.
  *
  * @return bool
  */
@@ -2004,7 +2208,7 @@ function fed_check_extension_loaded( $extension ) {
 /**
  * Get PayPal Admin Options
  *
- * @param  array  $options  Options.
+ * @param  array $options  Options.
  *
  * @return array
  *
@@ -2012,12 +2216,18 @@ function fed_check_extension_loaded( $extension ) {
  */
 function fed_get_paypal_admin_options( $options ) {
 	if ( ! $options || ! isset( $options['paypal'] ) ) {
-		return array( 'status' => false, 'message' => 'PayPal Options not set' );
+		return array(
+			'status'  => false,
+			'message' => 'PayPal Options not set',
+		);
 	}
 
 	if ( 'live' == $options['paypal']['mode'] ) {
 		if ( '' == $options['paypal']['live_client_id'] || '' == $options['paypal']['live_secrete_id'] ) {
-			return array( 'status' => false, 'message' => 'Live Client ID / Secrete ID not set' );
+			return array(
+				'status'  => false,
+				'message' => 'Live Client ID / Secrete ID not set',
+			);
 		}
 
 		return array(
@@ -2029,7 +2239,10 @@ function fed_get_paypal_admin_options( $options ) {
 
 	if ( 'sandbox' == $options['paypal']['mode'] ) {
 		if ( '' == $options['paypal']['sandbox_client_id'] || '' == $options['paypal']['sandbox_secrete_id'] ) {
-			return array( 'status' => false, 'message' => 'Sandbox Client ID / Secrete ID not set' );
+			return array(
+				'status'  => false,
+				'message' => 'Sandbox Client ID / Secrete ID not set',
+			);
 		}
 
 		return array(
@@ -2039,7 +2252,10 @@ function fed_get_paypal_admin_options( $options ) {
 		);
 	}
 
-	return array( 'status' => false, 'message' => 'Oops! Something went wrong' );
+	return array(
+		'status'  => false,
+		'message' => 'Oops! Something went wrong',
+	);
 }
 
 /**
@@ -2049,71 +2265,303 @@ function fed_get_paypal_admin_options( $options ) {
  */
 function fed_currency_type() {
 	return array(
-		'USD' => array( 'name' => 'US Dollar', 'symbol' => '$', 'hex' => '&#x24;' ),
-		'AED' => array( 'name' => 'United Arab Emirates Dirham', 'symbol' => 'د.إ', 'hex' => '&#x62f;&#x2e;&#x625;' ),
-		'ANG' => array( 'name' => 'NL Antillian Guilder', 'symbol' => 'ƒ', 'hex' => '&#x192;' ),
-		'ARS' => array( 'name' => 'Argentine Peso', 'symbol' => '$', 'hex' => '&#x24;' ),
-		'AUD' => array( 'name' => 'Australian Dollar', 'symbol' => 'A$', 'hex' => '&#x41;&#x24;' ),
-		'BRL' => array( 'name' => 'Brazilian Real', 'symbol' => 'R$', 'hex' => '&#x52;&#x24;' ),
-		'BSD' => array( 'name' => 'Bahamian Dollar', 'symbol' => 'B$', 'hex' => '&#x42;&#x24;' ),
-		'CAD' => array( 'name' => 'Canadian Dollar', 'symbol' => '$', 'hex' => '&#x24;' ),
-		'CHF' => array( 'name' => 'Swiss Franc', 'symbol' => 'CHF', 'hex' => '&#x43;&#x48;&#x46;' ),
-		'CLP' => array( 'name' => 'Chilean Peso', 'symbol' => '$', 'hex' => '&#x24;' ),
-		'CNY' => array( 'name' => 'Chinese Yuan Renminbi', 'symbol' => '¥', 'hex' => '&#xa5;' ),
-		'COP' => array( 'name' => 'Colombian Peso', 'symbol' => '$', 'hex' => '&#x24;' ),
-		'CZK' => array( 'name' => 'Czech Koruna', 'symbol' => 'Kč', 'hex' => '&#x4b;&#x10d;' ),
-		'DKK' => array( 'name' => 'Danish Krone', 'symbol' => 'kr', 'hex' => '&#x6b;&#x72;' ),
-		'EUR' => array( 'name' => 'Euro', 'symbol' => '€', 'hex' => '&#x20ac;' ),
-		'FJD' => array( 'name' => 'Fiji Dollar', 'symbol' => 'FJ$', 'hex' => '&#x46;&#x4a;&#x24;' ),
-		'GBP' => array( 'name' => 'British Pound', 'symbol' => '£', 'hex' => '&#xa3;' ),
-		'GHS' => array( 'name' => 'Ghanaian New Cedi', 'symbol' => 'GH₵', 'hex' => '&#x47;&#x48;&#x20b5;' ),
-		'GTQ' => array( 'name' => 'Guatemalan Quetzal', 'symbol' => 'Q', 'hex' => '&#x51;' ),
-		'HKD' => array( 'name' => 'Hong Kong Dollar', 'symbol' => '$', 'hex' => '&#x24;' ),
-		'HNL' => array( 'name' => 'Honduran Lempira', 'symbol' => 'L', 'hex' => '&#x4c;' ),
-		'HRK' => array( 'name' => 'Croatian Kuna', 'symbol' => 'kn', 'hex' => '&#x6b;&#x6e;' ),
-		'HUF' => array( 'name' => 'Hungarian Forint', 'symbol' => 'Ft', 'hex' => '&#x46;&#x74;' ),
-		'IDR' => array( 'name' => 'Indonesian Rupiah', 'symbol' => 'Rp', 'hex' => '&#x52;&#x70;' ),
-		'ILS' => array( 'name' => 'Israeli New Shekel', 'symbol' => '₪', 'hex' => '&#x20aa;' ),
-		'INR' => array( 'name' => 'Indian Rupee', 'symbol' => '₹', 'hex' => '&#x20b9;' ),
-		'ISK' => array( 'name' => 'Iceland Krona', 'symbol' => 'kr', 'hex' => '&#x6b;&#x72;' ),
-		'JMD' => array( 'name' => 'Jamaican Dollar', 'symbol' => 'J$', 'hex' => '&#x4a;&#x24;' ),
-		'JPY' => array( 'name' => 'Japanese Yen', 'symbol' => '¥', 'hex' => '&#xa5;' ),
-		'KRW' => array( 'name' => 'South-Korean Won', 'symbol' => '₩', 'hex' => '&#x20a9;' ),
-		'LKR' => array( 'name' => 'Sri Lanka Rupee', 'symbol' => '₨', 'hex' => '&#x20a8;' ),
-		'MAD' => array( 'name' => 'Moroccan Dirham', 'symbol' => '.د.م', 'hex' => '&#x2e;&#x62f;&#x2e;&#x645;' ),
-		'MMK' => array( 'name' => 'Myanmar Kyat', 'symbol' => 'K', 'hex' => '&#x4b;' ),
-		'MXN' => array( 'name' => 'Mexican Peso', 'symbol' => '$', 'hex' => '&#x24;' ),
-		'MYR' => array( 'name' => 'Malaysian Ringgit', 'symbol' => 'RM', 'hex' => '&#x52;&#x4d;' ),
-		'NOK' => array( 'name' => 'Norwegian Kroner', 'symbol' => 'kr', 'hex' => '&#x6b;&#x72;' ),
-		'NZD' => array( 'name' => 'New Zealand Dollar', 'symbol' => '$', 'hex' => '&#x24;' ),
-		'PAB' => array( 'name' => 'Panamanian Balboa', 'symbol' => 'B/.', 'hex' => '&#x42;&#x2f;&#x2e;' ),
-		'PEN' => array( 'name' => 'Peruvian Nuevo Sol', 'symbol' => 'S/.', 'hex' => '&#x53;&#x2f;&#x2e;' ),
-		'PHP' => array( 'name' => 'Philippine Peso', 'symbol' => '₱', 'hex' => '&#x20b1;' ),
-		'PKR' => array( 'name' => 'Pakistan Rupee', 'symbol' => '₨', 'hex' => '&#x20a8;' ),
-		'PLN' => array( 'name' => 'Polish Zloty', 'symbol' => 'zł', 'hex' => '&#x7a;&#x142;' ),
-		'RON' => array( 'name' => 'Romanian New Lei', 'symbol' => 'lei', 'hex' => '&#x6c;&#x65;&#x69;' ),
-		'RSD' => array( 'name' => 'Serbian Dinar', 'symbol' => 'RSD', 'hex' => '&#x52;&#x53;&#x44;' ),
-		'RUB' => array( 'name' => 'Russian Rouble', 'symbol' => 'руб', 'hex' => '&#x440;&#x443;&#x431;' ),
-		'SEK' => array( 'name' => 'Swedish Krona', 'symbol' => 'kr', 'hex' => '&#x6b;&#x72;' ),
-		'SGD' => array( 'name' => 'Singapore Dollar', 'symbol' => 'S$', 'hex' => '&#x53;&#x24;' ),
-		'THB' => array( 'name' => 'Thai Baht', 'symbol' => '฿', 'hex' => '&#xe3f;' ),
-		'TND' => array( 'name' => 'Tunisian Dinar', 'symbol' => 'DT', 'hex' => '&#x44;&#x54;' ),
-		'TRY' => array( 'name' => 'Turkish Lira', 'symbol' => 'TL', 'hex' => '&#x54;&#x4c;' ),
-		'TTD' => array( 'name' => 'Trinidad/Tobago Dollar', 'symbol' => '$', 'hex' => '&#x24;' ),
-		'TWD' => array( 'name' => 'Taiwan Dollar', 'symbol' => 'NT$', 'hex' => '&#x4e;&#x54;&#x24;' ),
-		'VEF' => array( 'name' => 'Venezuelan Bolivar Fuerte', 'symbol' => 'Bs', 'hex' => '&#x42;&#x73;' ),
-		'VND' => array( 'name' => 'Vietnamese Dong', 'symbol' => '₫', 'hex' => '&#x20ab;' ),
-		'XAF' => array( 'name' => 'CFA Franc BEAC', 'symbol' => 'FCFA', 'hex' => '&#x46;&#x43;&#x46;&#x41;' ),
-		'XCD' => array( 'name' => 'East Caribbean Dollar', 'symbol' => '$', 'hex' => '&#x24;' ),
-		'XPF' => array( 'name' => 'CFP Franc', 'symbol' => 'F', 'hex' => '&#x46;' ),
-		'ZAR' => array( 'name' => 'South African Rand', 'symbol' => 'R', 'hex' => '&#x52;' ),
+		'USD' => array(
+			'name'   => 'US Dollar',
+			'symbol' => '$',
+			'hex'    => '&#x24;',
+		),
+		'AED' => array(
+			'name'   => 'United Arab Emirates Dirham',
+			'symbol' => 'د.إ',
+			'hex'    => '&#x62f;&#x2e;&#x625;',
+		),
+		'ANG' => array(
+			'name'   => 'NL Antillian Guilder',
+			'symbol' => 'ƒ',
+			'hex'    => '&#x192;',
+		),
+		'ARS' => array(
+			'name'   => 'Argentine Peso',
+			'symbol' => '$',
+			'hex'    => '&#x24;',
+		),
+		'AUD' => array(
+			'name'   => 'Australian Dollar',
+			'symbol' => 'A$',
+			'hex'    => '&#x41;&#x24;',
+		),
+		'BRL' => array(
+			'name'   => 'Brazilian Real',
+			'symbol' => 'R$',
+			'hex'    => '&#x52;&#x24;',
+		),
+		'BSD' => array(
+			'name'   => 'Bahamian Dollar',
+			'symbol' => 'B$',
+			'hex'    => '&#x42;&#x24;',
+		),
+		'CAD' => array(
+			'name'   => 'Canadian Dollar',
+			'symbol' => '$',
+			'hex'    => '&#x24;',
+		),
+		'CHF' => array(
+			'name'   => 'Swiss Franc',
+			'symbol' => 'CHF',
+			'hex'    => '&#x43;&#x48;&#x46;',
+		),
+		'CLP' => array(
+			'name'   => 'Chilean Peso',
+			'symbol' => '$',
+			'hex'    => '&#x24;',
+		),
+		'CNY' => array(
+			'name'   => 'Chinese Yuan Renminbi',
+			'symbol' => '¥',
+			'hex'    => '&#xa5;',
+		),
+		'COP' => array(
+			'name'   => 'Colombian Peso',
+			'symbol' => '$',
+			'hex'    => '&#x24;',
+		),
+		'CZK' => array(
+			'name'   => 'Czech Koruna',
+			'symbol' => 'Kč',
+			'hex'    => '&#x4b;&#x10d;',
+		),
+		'DKK' => array(
+			'name'   => 'Danish Krone',
+			'symbol' => 'kr',
+			'hex'    => '&#x6b;&#x72;',
+		),
+		'EUR' => array(
+			'name'   => 'Euro',
+			'symbol' => '€',
+			'hex'    => '&#x20ac;',
+		),
+		'FJD' => array(
+			'name'   => 'Fiji Dollar',
+			'symbol' => 'FJ$',
+			'hex'    => '&#x46;&#x4a;&#x24;',
+		),
+		'GBP' => array(
+			'name'   => 'British Pound',
+			'symbol' => '£',
+			'hex'    => '&#xa3;',
+		),
+		'GHS' => array(
+			'name'   => 'Ghanaian New Cedi',
+			'symbol' => 'GH₵',
+			'hex'    => '&#x47;&#x48;&#x20b5;',
+		),
+		'GTQ' => array(
+			'name'   => 'Guatemalan Quetzal',
+			'symbol' => 'Q',
+			'hex'    => '&#x51;',
+		),
+		'HKD' => array(
+			'name'   => 'Hong Kong Dollar',
+			'symbol' => '$',
+			'hex'    => '&#x24;',
+		),
+		'HNL' => array(
+			'name'   => 'Honduran Lempira',
+			'symbol' => 'L',
+			'hex'    => '&#x4c;',
+		),
+		'HRK' => array(
+			'name'   => 'Croatian Kuna',
+			'symbol' => 'kn',
+			'hex'    => '&#x6b;&#x6e;',
+		),
+		'HUF' => array(
+			'name'   => 'Hungarian Forint',
+			'symbol' => 'Ft',
+			'hex'    => '&#x46;&#x74;',
+		),
+		'IDR' => array(
+			'name'   => 'Indonesian Rupiah',
+			'symbol' => 'Rp',
+			'hex'    => '&#x52;&#x70;',
+		),
+		'ILS' => array(
+			'name'   => 'Israeli New Shekel',
+			'symbol' => '₪',
+			'hex'    => '&#x20aa;',
+		),
+		'INR' => array(
+			'name'   => 'Indian Rupee',
+			'symbol' => '₹',
+			'hex'    => '&#x20b9;',
+		),
+		'ISK' => array(
+			'name'   => 'Iceland Krona',
+			'symbol' => 'kr',
+			'hex'    => '&#x6b;&#x72;',
+		),
+		'JMD' => array(
+			'name'   => 'Jamaican Dollar',
+			'symbol' => 'J$',
+			'hex'    => '&#x4a;&#x24;',
+		),
+		'JPY' => array(
+			'name'   => 'Japanese Yen',
+			'symbol' => '¥',
+			'hex'    => '&#xa5;',
+		),
+		'KRW' => array(
+			'name'   => 'South-Korean Won',
+			'symbol' => '₩',
+			'hex'    => '&#x20a9;',
+		),
+		'LKR' => array(
+			'name'   => 'Sri Lanka Rupee',
+			'symbol' => '₨',
+			'hex'    => '&#x20a8;',
+		),
+		'MAD' => array(
+			'name'   => 'Moroccan Dirham',
+			'symbol' => '.د.م',
+			'hex'    => '&#x2e;&#x62f;&#x2e;&#x645;',
+		),
+		'MMK' => array(
+			'name'   => 'Myanmar Kyat',
+			'symbol' => 'K',
+			'hex'    => '&#x4b;',
+		),
+		'MXN' => array(
+			'name'   => 'Mexican Peso',
+			'symbol' => '$',
+			'hex'    => '&#x24;',
+		),
+		'MYR' => array(
+			'name'   => 'Malaysian Ringgit',
+			'symbol' => 'RM',
+			'hex'    => '&#x52;&#x4d;',
+		),
+		'NOK' => array(
+			'name'   => 'Norwegian Kroner',
+			'symbol' => 'kr',
+			'hex'    => '&#x6b;&#x72;',
+		),
+		'NZD' => array(
+			'name'   => 'New Zealand Dollar',
+			'symbol' => '$',
+			'hex'    => '&#x24;',
+		),
+		'PAB' => array(
+			'name'   => 'Panamanian Balboa',
+			'symbol' => 'B/.',
+			'hex'    => '&#x42;&#x2f;&#x2e;',
+		),
+		'PEN' => array(
+			'name'   => 'Peruvian Nuevo Sol',
+			'symbol' => 'S/.',
+			'hex'    => '&#x53;&#x2f;&#x2e;',
+		),
+		'PHP' => array(
+			'name'   => 'Philippine Peso',
+			'symbol' => '₱',
+			'hex'    => '&#x20b1;',
+		),
+		'PKR' => array(
+			'name'   => 'Pakistan Rupee',
+			'symbol' => '₨',
+			'hex'    => '&#x20a8;',
+		),
+		'PLN' => array(
+			'name'   => 'Polish Zloty',
+			'symbol' => 'zł',
+			'hex'    => '&#x7a;&#x142;',
+		),
+		'RON' => array(
+			'name'   => 'Romanian New Lei',
+			'symbol' => 'lei',
+			'hex'    => '&#x6c;&#x65;&#x69;',
+		),
+		'RSD' => array(
+			'name'   => 'Serbian Dinar',
+			'symbol' => 'RSD',
+			'hex'    => '&#x52;&#x53;&#x44;',
+		),
+		'RUB' => array(
+			'name'   => 'Russian Rouble',
+			'symbol' => 'руб',
+			'hex'    => '&#x440;&#x443;&#x431;',
+		),
+		'SEK' => array(
+			'name'   => 'Swedish Krona',
+			'symbol' => 'kr',
+			'hex'    => '&#x6b;&#x72;',
+		),
+		'SGD' => array(
+			'name'   => 'Singapore Dollar',
+			'symbol' => 'S$',
+			'hex'    => '&#x53;&#x24;',
+		),
+		'THB' => array(
+			'name'   => 'Thai Baht',
+			'symbol' => '฿',
+			'hex'    => '&#xe3f;',
+		),
+		'TND' => array(
+			'name'   => 'Tunisian Dinar',
+			'symbol' => 'DT',
+			'hex'    => '&#x44;&#x54;',
+		),
+		'TRY' => array(
+			'name'   => 'Turkish Lira',
+			'symbol' => 'TL',
+			'hex'    => '&#x54;&#x4c;',
+		),
+		'TTD' => array(
+			'name'   => 'Trinidad/Tobago Dollar',
+			'symbol' => '$',
+			'hex'    => '&#x24;',
+		),
+		'TWD' => array(
+			'name'   => 'Taiwan Dollar',
+			'symbol' => 'NT$',
+			'hex'    => '&#x4e;&#x54;&#x24;',
+		),
+		'VEF' => array(
+			'name'   => 'Venezuelan Bolivar Fuerte',
+			'symbol' => 'Bs',
+			'hex'    => '&#x42;&#x73;',
+		),
+		'VND' => array(
+			'name'   => 'Vietnamese Dong',
+			'symbol' => '₫',
+			'hex'    => '&#x20ab;',
+		),
+		'XAF' => array(
+			'name'   => 'CFA Franc BEAC',
+			'symbol' => 'FCFA',
+			'hex'    => '&#x46;&#x43;&#x46;&#x41;',
+		),
+		'XCD' => array(
+			'name'   => 'East Caribbean Dollar',
+			'symbol' => '$',
+			'hex'    => '&#x24;',
+		),
+		'XPF' => array(
+			'name'   => 'CFP Franc',
+			'symbol' => 'F',
+			'hex'    => '&#x46;',
+		),
+		'ZAR' => array(
+			'name'   => 'South African Rand',
+			'symbol' => 'R',
+			'hex'    => '&#x52;',
+		),
 	);
 }
 
 /**
  * Get Currency Symbol
  *
- * @param  string  $currency  Currency.
+ * @param  string $currency  Currency.
  *
  * @return mixed
  */
@@ -2130,7 +2578,8 @@ function fed_get_currency_symbol( $currency ) {
  */
 function fed_get_country_code() {
 	return apply_filters(
-		'fed_extend_country_code', array(
+		'fed_extend_country_code',
+		array(
 			'empty' => 'Select Country',
 			'AF'    => 'AFGHANISTAN',
 			'AX'    => 'ÅLAND ISLANDS',
@@ -2382,7 +2831,7 @@ function fed_get_country_code() {
 /**
  * Country Code by ID.
  *
- * @param  string  $id  Country ID.
+ * @param  string $id  Country ID.
  *
  * @return mixed|string
  */
@@ -2399,7 +2848,8 @@ function fed_get_country_code_by_id( $id ) {
  */
 function fed_get_payment_sources() {
 	return apply_filters(
-		'fed_payment_sources', array(
+		'fed_payment_sources',
+		array(
 			'money_transfer' => 'Money Transfer',
 			'cheque'         => 'Cheque',
 		)
@@ -2465,7 +2915,6 @@ function fed_get_amount_based_on_user_role() {
 		}
 	}
 
-
 	return (float) $amount;
 }
 
@@ -2493,7 +2942,8 @@ function fed_paypal_payment_success_cancel_url() {
  */
 function fed_default_extended_fields() {
 	return apply_filters(
-		'fed_default_extended_fields', array(
+		'fed_default_extended_fields',
+		array(
 			'date_format' => 'd-m-Y',
 			'enable_time' => 'no',
 			'date_mode'   => 'single',
@@ -2582,8 +3032,8 @@ function fed_get_payment_cycles() {
 /**
  * Compare Two Array.
  *
- * @param  array  $array1  Array 1.
- * @param  array  $array2  Array 2.
+ * @param  array $array1  Array 1.
+ * @param  array $array2  Array 2.
  *
  * @return bool
  */
@@ -2594,7 +3044,7 @@ function fed_compare_two_array( $array1, $array2 ) {
 /**
  * Convert Payment Cycles to days.
  *
- * @param  array  $payment_cycle  Payment Cycle.
+ * @param  array $payment_cycle  Payment Cycle.
  *
  * @return int|string
  *
@@ -2606,7 +3056,7 @@ function fed_convert_payment_cycles_to_days( $payment_cycle ) {
 		case 'annually':
 			$days = '365';
 			break;
-		case 'monthly' :
+		case 'monthly':
 			$days = '30';
 			break;
 		case 'custom':
@@ -2620,7 +3070,7 @@ function fed_convert_payment_cycles_to_days( $payment_cycle ) {
 /**
  * Get User Name by ID.
  *
- * @param  string  $id  User ID.
+ * @param  string $id  User ID.
  *
  * @return string
  */
@@ -2633,7 +3083,7 @@ function fed_get_user_name_by_id( $id ) {
 /**
  * Display Name by ID.
  *
- * @param  string  $id  User ID.
+ * @param  string $id  User ID.
  *
  * @return string
  */
@@ -2658,7 +3108,7 @@ function fed_redirect_to_404() {
 /**
  * Show helper message
  *
- * @param  array  $message  Message.
+ * @param  array $message  Message.
  *
  * @return string
  */
@@ -2676,8 +3126,8 @@ function fed_show_help_message( array $message ) {
  * Convert to pricing
  * TODO: Payment
  *
- * @param  string  $cycle  Cycle.
- * @param  string  $custom  Custom.
+ * @param  string $cycle  Cycle.
+ * @param  string $custom  Custom.
  *
  * @return string
  */
@@ -2703,10 +3153,13 @@ function fed_get_public_post_types() {
 	$post_type = get_post_types( array( 'public' => true ), 'objects' );
 	$new_type  = array();
 	foreach ( $post_type as $index => $type ) {
+		if ( 'attachment' === $index ) {
+			continue;
+		}
 		$new_type[ $index ] = $type->label;
 	}
 
-	return $new_type;
+	return apply_filters( 'fed_public_post_types', $new_type );
 }
 
 /**
@@ -2717,9 +3170,12 @@ function fed_get_public_post_types() {
  * @return bool
  */
 function fed_check_post_type( $post_type ) {
-	$post_types = get_post_types( array( 'public' => true ) );
+	if ( 'attachment' === $post_type ) {
+		return false;
+	}
+	$post_types = fed_get_public_post_types();
 
-	return isset( $post_types[ $post_type ] ) ? true : false;
+	return isset( $post_types[ $post_type ] );
 }
 
 /**
@@ -2747,9 +3203,9 @@ function fed_plugin_versions() {
 /**
  * Convert this to that.
  *
- * @param  string  $source  Source.
- * @param  string  $_this  This.
- * @param  string  $that  That.
+ * @param  string $source  Source.
+ * @param  string $_this  This.
+ * @param  string $that  That.
  *
  * @return mixed
  */
@@ -2757,51 +3213,121 @@ function fed_convert_this_to_that( $source, $_this, $that ) {
 	return str_replace( $_this, $that, $source );
 }
 
+add_action( 'admin_footer', 'fed_render_menu_icons_popup_footer' );
+/**
+ * Render Menu Icons Popup in Admin Footer for FED pages.
+ */
+function fed_render_menu_icons_popup_footer() {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	if ( ( isset( $_GET['page'] ) && in_array( wp_unslash( $_GET['page'] ), fed_get_script_loading_pages(), false ) ) ||
+		( isset( $GLOBALS['pagenow'] ) && in_array( $GLOBALS['pagenow'], fed_get_script_loading_pages(), false ) ) ) {
+		fed_menu_icons_popup();
+	}
+}
+
 /**
  * Show Menu Icons Popup.
  */
 function fed_menu_icons_popup() {
+	static $rendered = false;
+	if ( $rendered ) {
+		return;
+	}
+	$rendered = true;
+	$icons    = fed_font_awesome_list();
 	?>
+	<style>
+		#fed_icon_picker_modal {
+			overflow: hidden !important;
+		}
+		#fed_icon_picker_modal .fed-icon-modal-dialog {
+			overflow: hidden !important;
+		}
+		#fed_icon_picker_modal .fed-icon-modal-body {
+			overflow-y: auto !important;
+			overflow-x: hidden !important;
+			flex: 1 1 auto !important;
+			min-height: 0 !important;
+			scrollbar-width: thin;
+			scrollbar-color: #cbd5e1 #f8fafc;
+		}
+		#fed_icon_picker_modal .fed-icon-modal-body::-webkit-scrollbar {
+			width: 6px;
+		}
+		#fed_icon_picker_modal .fed-icon-modal-body::-webkit-scrollbar-track {
+			background: #f8fafc;
+		}
+		#fed_icon_picker_modal .fed-icon-modal-body::-webkit-scrollbar-thumb {
+			background-color: #cbd5e1;
+			border-radius: 9999px;
+		}
+		#fed_icon_picker_modal .fed_fa_container {
+			max-height: none !important;
+			overflow: visible !important;
+		}
+		#fed_icon_picker_modal #fed_global_icon_search {
+			padding-left: 38px !important;
+			padding-right: 14px !important;
+			min-height: 42px !important;
+			height: 42px !important;
+			border-radius: 12px !important;
+			box-sizing: border-box !important;
+		}
+	</style>
 	<div class="bc_fed">
-		<div class="modal fade fed_show_fa_list"
-				tabindex="-1"
-				role="dialog"
-		>
-			<div class="modal-dialog modal-lg"
-					role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button"
-								class="close"
-								data-dismiss="modal"
-								aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h4 class="modal-title"><?php _e( 'Please Select one Image', 'frontend-dashboard' ) ?></h4>
-					</div>
-					<div class="modal-body">
-						<input type="hidden"
-								id="fed_menu_box_id"
-								name="fed_menu_box_id"
-								value=""/>
-						<div class="row fed_fa_container">
-							<?php foreach ( fed_font_awesome_list() as $key => $list ) {
-								echo '<div class="col-md-1 fed_single_fa" 
-							data-dismiss="modal"
-							data-id="' . $key . '"
-							data-toggle="popover"
-							title="' . esc_attr( $list ) . '"
-							data-trigger="hover"
-							data-viewport=""
-							data-content="' . esc_attr( $list ) . '"
-							>
-							<span class="' . esc_attr( $key ) . '"  data-id="' . esc_attr( $key ) . '" id="' . esc_attr(
-										$key
-									) . '"></span>
-							</div>';
-							} ?>
+		<div id="fed_icon_picker_modal" class="fed_show_fa_list fixed inset-0 z-[99999] bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6 md:p-8 transition-all duration-200 hidden opacity-0 pointer-events-none" style="display: none; overflow: hidden !important;" tabindex="-1" role="dialog">
+			<div class="fed-icon-modal-dialog bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-4xl w-full h-[82vh] max-h-[720px] min-h-[480px] flex flex-col overflow-hidden transform scale-95 transition-all duration-200" role="document">
+				<!-- Header -->
+				<div class="px-6 py-4 bg-slate-50 border-b border-slate-200/80 flex items-center justify-between shrink-0">
+					<div class="flex items-center gap-3">
+						<div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-base font-semibold shadow-2xs">
+							<i class="fa fa-th-large"></i>
+						</div>
+						<div>
+							<h3 class="text-sm font-bold text-slate-900 m-0"><?php esc_html_e( 'Select Icon', 'frontend-dashboard' ); ?></h3>
+							<p class="text-xs text-slate-500 m-0"><?php esc_html_e( 'Click any icon to assign it to your menu item', 'frontend-dashboard' ); ?></p>
 						</div>
 					</div>
+					<button type="button" class="fed_close_icon_modal text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 w-8 h-8 rounded-lg flex items-center justify-center transition-colors text-xl font-bold cursor-pointer leading-none" aria-label="Close">
+						&times;
+					</button>
+				</div>
+
+				<!-- Search Bar -->
+				<div class="p-4 border-b border-slate-100 bg-white shrink-0">
+					<div class="relative flex items-center" style="position: relative !important;">
+						<span class="fed-search-icon-wrapper" style="position: absolute !important; left: 14px !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 10 !important; pointer-events: none !important; color: #94a3b8 !important; display: flex !important; align-items: center !important;">
+							<i class="fas fa-search text-xs" style="font-size: 13px !important; color: #94a3b8 !important;"></i>
+						</span>
+						<input type="text" id="fed_global_icon_search" placeholder="<?php esc_attr_e( 'Search icons (e.g. user, chart, settings, bell, star)...', 'frontend-dashboard' ); ?>" class="w-full text-xs text-slate-800 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all outline-none" style="padding-left: 38px !important; padding-right: 14px !important; min-height: 42px !important; height: 42px !important; border-radius: 12px !important; box-sizing: border-box !important;" />
+					</div>
+				</div>
+
+				<!-- Body: Icons Grid (Single scrollable container) -->
+				<div class="fed-icon-modal-body p-5 overflow-y-auto flex-1 min-h-0" style="overflow-y: auto !important; overflow-x: hidden !important;">
+					<input type="hidden" id="fed_menu_box_id" name="fed_menu_box_id" value="" />
+					<div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2.5 fed_fa_container" id="fed_global_icons_grid">
+						<?php
+						foreach ( $icons as $key => $unicode ) :
+							$icon_name = str_replace( array( 'fas fa-', 'fab fa-', 'far fa-', 'fa fa-' ), '', $key );
+							?>
+							<button type="button" 
+								class="fed_single_fa group p-2.5 flex flex-col items-center justify-center rounded-xl border border-slate-200 bg-white hover:bg-indigo-50 hover:border-indigo-300 hover:text-indigo-600 text-slate-700 transition-all duration-150 cursor-pointer shadow-2xs hover:shadow-xs" 
+								data-id="<?php echo esc_attr( $key ); ?>" 
+								title="<?php echo esc_attr( $key ); ?>">
+								<i class="<?php echo esc_attr( $key ); ?> text-lg mb-1 group-hover:scale-110 transition-transform"></i>
+								<span class="text-[9px] text-slate-400 group-hover:text-indigo-600 font-mono truncate max-w-full text-center block"><?php echo esc_html( $icon_name ); ?></span>
+							</button>
+						<?php endforeach; ?>
+					</div>
+				</div>
+
+				<!-- Footer -->
+				<div class="px-6 py-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between shrink-0 text-xs text-slate-500">
+					<span id="fed_global_icon_count_display"><?php echo count( $icons ); ?> <?php esc_html_e( 'icons available', 'frontend-dashboard' ); ?></span>
+					<button type="button" class="fed_close_icon_modal px-4 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium rounded-lg transition-colors cursor-pointer">
+						<?php esc_html_e( 'Cancel', 'frontend-dashboard' ); ?>
+					</button>
 				</div>
 			</div>
 		</div>
@@ -2812,8 +3338,8 @@ function fed_menu_icons_popup() {
 /**
  * Compare two array and get the second array value.
  *
- * @param  array  $array1  Array 1.
- * @param  array  $array2  Array 2.
+ * @param  array $array1  Array 1.
+ * @param  array $array2  Array 2.
  *
  * @return array
  */
@@ -2832,8 +3358,8 @@ function fed_compare_two_arrays_get_second_value( array $array1, array $array2 )
  * Get Key Value Array.
  *
  * @param  array  $array
- * @param  string  $key
- * @param  null  $value
+ * @param  string $key
+ * @param  null   $value
  *
  * @return array
  */
@@ -2856,9 +3382,7 @@ function fed_get_key_value_array( array $array, $key, $value = null ) {
 				$new_array[ $item[ $key ] ] = $item;
 			}
 		}
-
 	}
-
 
 	return $new_array;
 }
@@ -2866,7 +3390,7 @@ function fed_get_key_value_array( array $array, $key, $value = null ) {
 /**
  * Get Category Tag Post format.
  *
- * @param  string  $post_type  Post Type.
+ * @param  string $post_type  Post Type.
  *
  * @return array
  */
@@ -2895,7 +3419,7 @@ function fed_get_category_tag_post_format( $post_type = 'post' ) {
  *
  * @param      $array
  * @param      $on
- * @param  int  $order
+ * @param  int $order
  *
  * @return array
  */
@@ -2937,12 +3461,12 @@ function fed_array_sort( $array, $on, $order = SORT_ASC ) {
 /**
  * Request Empty.
  *
- * @param  string  $request  Request.
+ * @param  string $request  Request.
  *
  * @return bool
  */
-function fed_request_empty( $request ) {
-	if ( '' == trim( $request ) ) {
+function fed_request_empty( $request = null ) {
+	if ( null === $request || '' === trim( (string) $request ) ) {
 		return true;
 	}
 
@@ -2950,102 +3474,10 @@ function fed_request_empty( $request ) {
 }
 
 
-if ( ! function_exists( 'array_column' ) ) {
-	/**
-	 * Returns the values from a single column of the input array, identified by
-	 * the $columnKey.
-	 *
-	 * Optionally, you may provide an $indexKey to index the values in the returned
-	 * array by the values from the $indexKey column in the input array.
-	 *
-	 * @param  array  $input  A multi-dimensional array (record set) from which to pull a column of values.
-	 * @param  mixed  $columnKey  The column of values to return. This value may be the integer key of the column you wish to retrieve, or it may be the string key name for an associative array.
-	 * @param  mixed  $indexKey  (Optional.) The column to use as the index/keys for the returned array. This value may be the integer key of the column, or it may be the string key name.
-	 *
-	 * @return array
-	 */
-	function array_column( $input = null, $columnKey = null, $indexKey = null ) {
-		// Using func_get_args() in order to check for proper number of
-		// parameters and trigger errors exactly as the built-in array_column()
-		// does in PHP 5.5.
-		$argc   = func_num_args();
-		$params = func_get_args();
-		if ( $argc < 2 ) {
-			trigger_error( "array_column() expects at least 2 parameters, {$argc} given", E_USER_WARNING );
-
-			return null;
-		}
-		if ( ! is_array( $params[0] ) ) {
-			trigger_error(
-				'array_column() expects parameter 1 to be array, ' . gettype( $params[0] ) . ' given',
-				E_USER_WARNING
-			);
-
-			return null;
-		}
-		if ( ! is_int( $params[1] )
-		     && ! is_float( $params[1] )
-		     && ! is_string( $params[1] )
-		     && $params[1] !== null
-		     && ! ( is_object( $params[1] ) && method_exists( $params[1], '__toString' ) )
-		) {
-			trigger_error( 'array_column(): The column key should be either a string or an integer', E_USER_WARNING );
-
-			return false;
-		}
-		if (
-			isset( $params[2] )
-			&& ! is_int( $params[2] )
-			&& ! is_float( $params[2] )
-			&& ! is_string( $params[2] )
-			&& ! ( is_object( $params[2] ) && method_exists( $params[2], '__toString' ) )
-		) {
-			trigger_error( 'array_column(): The index key should be either a string or an integer', E_USER_WARNING );
-
-			return false;
-		}
-		$paramsInput     = $params[0];
-		$paramsColumnKey = ( $params[1] !== null ) ? (string) $params[1] : null;
-		$paramsIndexKey  = null;
-		if ( isset( $params[2] ) ) {
-			if ( is_float( $params[2] ) || is_int( $params[2] ) ) {
-				$paramsIndexKey = (int) $params[2];
-			} else {
-				$paramsIndexKey = (string) $params[2];
-			}
-		}
-		$resultArray = array();
-		foreach ( $paramsInput as $row ) {
-			$key    = $value = null;
-			$keySet = $valueSet = false;
-			if ( $paramsIndexKey !== null && array_key_exists( $paramsIndexKey, $row ) ) {
-				$keySet = true;
-				$key    = (string) $row[ $paramsIndexKey ];
-			}
-			if ( $paramsColumnKey === null ) {
-				$valueSet = true;
-				$value    = $row;
-			} elseif ( is_array( $row ) && array_key_exists( $paramsColumnKey, $row ) ) {
-				$valueSet = true;
-				$value    = $row[ $paramsColumnKey ];
-			}
-			if ( $valueSet ) {
-				if ( $keySet ) {
-					$resultArray[ $key ] = $value;
-				} else {
-					$resultArray[] = $value;
-				}
-			}
-		}
-
-		return $resultArray;
-	}
-}
-
 /**
  * Call Function Method.
  *
- * @param  array  $item  Item.
+ * @param  array $item  Item.
  */
 function fed_call_function_method( $item ) {
 	if ( is_string( $item['callable'] ) && function_exists( $item['callable'] ) ) {
@@ -3065,8 +3497,12 @@ function fed_call_function_method( $item ) {
 			<?php
 			$message = is_array( $item['callable'] ) ? $item['callable']['method'] : $item['callable'];
 			/* Translators: %s: Message. */
-			fed_show_alert_message( sprintf( __( 'OOPS! You have not add the callable function ( %s ), please add to show the body container', 'frontend-dashboard' ),
-				esc_html( $message ) ) );
+			fed_show_alert_message(
+				sprintf(
+					__( 'OOPS! You have not add the callable function ( %s ), please add to show the body container', 'frontend-dashboard' ),
+					esc_html( $message )
+				)
+			);
 
 			?>
 		</div>
@@ -3077,54 +3513,150 @@ function fed_call_function_method( $item ) {
 /**
  * AJAX Call Function Method.
  *
- * @param  array  $item  Item.
+ * @param  array $item  Item.
  */
 function fed_ajax_call_function_method( $item ) {
-	if ( is_string( $item['callable'] ) && function_exists( $item['callable'] ) ) {
-		$parameter = isset( $item['arguments'] ) ? $item['arguments'] : '';
-		call_user_func( $item['callable'], $parameter );
+	if ( ! is_array( $item ) || ! isset( $item['callable'] ) ) {
+		wp_send_json_error( array( 'message' => __( 'Invalid callable provided.', 'frontend-dashboard' ) ), 400 );
+		exit();
+	}
+
+	if ( is_string( $item['callable'] ) ) {
+		$func = trim( $item['callable'] );
+		// Allowlist check: only allow functions starting with fed_ or in allowed list
+		$allowed = ( 0 === stripos( $func, 'fed_' ) || 0 === stripos( $func, 'FED' ) );
+		$allowed = apply_filters( 'fed_allowed_ajax_callable_function', $allowed, $func );
+
+		if ( $allowed && function_exists( $func ) ) {
+			$parameter = isset( $item['arguments'] ) ? $item['arguments'] : '';
+			call_user_func( $func, $parameter );
+			return;
+		}
+
+		wp_send_json_error(
+			array(
+				'message' => __( 'Unauthorized or invalid function call.', 'frontend-dashboard' ),
+			),
+			403
+		);
+		exit();
 	} elseif (
-		is_array( $item['callable'] ) && method_exists(
-			$item['callable']['object'],
-			$item['callable']['method']
-		)
+		is_array( $item['callable'] ) &&
+		isset( $item['callable']['object'], $item['callable']['method'] ) &&
+		is_string( $item['callable']['method'] ) &&
+		0 !== strpos( $item['callable']['method'], '__' ) &&
+		method_exists( $item['callable']['object'], $item['callable']['method'] )
 	) {
-		$parameter = isset( $item['arguments'] ) ? $item['arguments'] : '';
-		call_user_func( array( $item['callable']['object'], $item['callable']['method'] ), $parameter );
+		$class_name = is_object( $item['callable']['object'] ) ? get_class( $item['callable']['object'] ) : ( is_string( $item['callable']['object'] ) ? $item['callable']['object'] : '' );
+		$allowed    = ( 0 === stripos( $class_name, 'FED' ) || 0 === stripos( $class_name, 'BC_' ) );
+		$allowed    = apply_filters( 'fed_allowed_ajax_callable_class', $allowed, $class_name, $item['callable']['method'] );
+
+		if ( $allowed ) {
+			$parameter = isset( $item['arguments'] ) ? $item['arguments'] : '';
+			call_user_func( array( $item['callable']['object'], $item['callable']['method'] ), $parameter );
+			return;
+		}
+
+		wp_send_json_error(
+			array(
+				'message' => __( 'Unauthorized class method execution.', 'frontend-dashboard' ),
+			),
+			403
+		);
+		exit();
 	} else {
-		$error = is_array( $item['callable'] ) ? $item['callable']['method'] : $item['callable'];
+		$error = is_array( $item['callable'] ) ? ( isset( $item['callable']['method'] ) ? $item['callable']['method'] : 'unknown' ) : $item['callable'];
 
 		wp_send_json_error(
 			array(
 				'message' => __(
-					             'OOPS! You have not add the callable function, please add ',
-					             'frontend-dashboard'
-				             ) . $error . __( ' to show the body container', 'frontend-dashboard' ),
-			)
+					'OOPS! You have not add the callable function, please add ',
+					'frontend-dashboard'
+				) . esc_html( $error ) . __( ' to show the body container', 'frontend-dashboard' ),
+			),
+			400
 		);
+		exit();
 	}
 }
 
 /**
  * Execute Method by String.
  *
- * @param  string  $item  Item.
- * @param  null  $parameter  Parameter
+ * @param  string $item  Item.
+ * @param  null   $parameter  Parameter
  */
 function fed_execute_method_by_string( $item, $parameter = null ) {
+	if ( ! is_string( $item ) || empty( $item ) ) {
+		return;
+	}
+
 	$class = explode( '@', $item );
 	if ( is_array( $class ) && isset( $class[0] ) ) {
-		if ( class_exists( $class[0] ) ) {
-			fed_call_function_method(
-				array(
-					'callable'  => array(
-						'object' => new $class[0],
-						'method' => isset( $class[1] ) ? $class[1] : 'update',
-					),
-					'arguments' => $parameter,
-				)
-			);
+		$class_name  = trim( $class[0] );
+		$method_name = isset( $class[1] ) && ! empty( $class[1] ) ? trim( $class[1] ) : 'update';
+
+		// Disallow magic methods or invalid method names
+		if ( 0 === strpos( $method_name, '__' ) ) {
+			if ( wp_doing_ajax() ) {
+				wp_send_json_error( array( 'errorMessage' => __( 'Invalid method call.', 'frontend-dashboard' ) ), 403 );
+				exit();
+			}
+			return;
+		}
+
+		// Validate class belongs to FED / BC namespaces or allowlist
+		$is_allowed = ( 0 === stripos( $class_name, 'FED' ) || 0 === stripos( $class_name, 'BC_' ) );
+		$is_allowed = apply_filters( 'fed_allowed_execute_class', $is_allowed, $class_name, $method_name );
+
+		if ( ! $is_allowed ) {
+			if ( wp_doing_ajax() ) {
+				wp_send_json_error( array( 'errorMessage' => __( 'Unauthorized class execution.', 'frontend-dashboard' ) ), 403 );
+				exit();
+			}
+			return;
+		}
+
+		if ( class_exists( $class_name ) ) {
+			$instance = new $class_name();
+			if ( method_exists( $instance, $method_name ) && is_callable( array( $instance, $method_name ) ) ) {
+				fed_call_function_method(
+					array(
+						'callable'  => array(
+							'object' => $instance,
+							'method' => $method_name,
+						),
+						'arguments' => $parameter,
+					)
+				);
+			} elseif ( wp_doing_ajax() ) {
+					wp_send_json_error(
+						array(
+							'errorMessage' => sprintf(
+								/* Translators: 1: Method name, 2: Class name */
+								__( 'Method %1$s does not exist in class %2$s', 'frontend-dashboard' ),
+								esc_html( $method_name ),
+								esc_html( $class_name )
+							),
+						),
+						404
+					);
+					exit();
+			}
 		} else {
+			if ( wp_doing_ajax() ) {
+				wp_send_json_error(
+					array(
+						'errorMessage' => sprintf(
+							/* Translators: %s : Class name */
+							__( 'Class %s does not exist', 'frontend-dashboard' ),
+							esc_html( $class_name )
+						),
+					),
+					404
+				);
+				exit();
+			}
 			?>
 			<div class="bc_fed fed_add_page_profile_container">
 				<?php
@@ -3132,25 +3664,24 @@ function fed_execute_method_by_string( $item, $parameter = null ) {
 					sprintf(
 					/* Translators: %s : Class */
 						__( 'Class %s does not exist', 'frontend-dashboard' ),
-						esc_html( $class[0] )
+						esc_html( $class_name )
 					)
 				);
 				?>
 			</div>
 			<?php
-			/* Translators: %s class name */
+			/*
+			Translators: %s class name */
 			// FED_Log::writeLog( 'Class ' . esc_html( $class[0] ) . ' does not exist' );
 		}
-
 	}
-
 }
 
 /**
  * Isset.
  *
- * @param  string  $value  Value.
- * @param  null  $default  Default.
+ * @param  string $value  Value.
+ * @param  null   $default  Default.
  *
  * @return null
  */
@@ -3161,8 +3692,8 @@ function fed_isset( $value, $default = null ) {
 /**
  * Isset Sanitize.
  *
- * @param  string  $value  Value.
- * @param  null  $default  Default.
+ * @param  string $value  Value.
+ * @param  null   $default  Default.
  *
  * @return null|string
  */
@@ -3173,7 +3704,10 @@ function fed_isset_sanitize( $value, $default = null ) {
 /**
  * Sanitize Text Field.
  *
- * @param  array| string  $var  Var.
+ * Recursively sanitizes string scalars preserving multi-line enters/newlines
+ * while stripping tags and invalid UTF-8 bytes.
+ *
+ * @param  array|string $var  Var.
  *
  * @return array|string
  */
@@ -3182,15 +3716,15 @@ function fed_sanitize_text_field( $var ) {
 		return array_map( 'fed_sanitize_text_field', $var );
 	}
 
-	return is_scalar( $var ) ? sanitize_text_field( $var ) : $var;
+	return is_scalar( $var ) ? sanitize_textarea_field( (string) $var ) : $var;
 }
 
 /**
  * Isset Request.
  *
  * @param  array  $request  Request.
- * @param  string  $key  Key.
- * @param  null  $default  Default.
+ * @param  string $key  Key.
+ * @param  null   $default  Default.
  *
  * @return null|string
  */
@@ -3204,19 +3738,22 @@ function fed_isset_request( $request, $key, $default = null ) {
 /**
  * Get Dat.
  *
- * @param  string  $key  Key.
- * @param  null|array  $target  Target.
- * @param  null|mixed  $default  Default.
+ * @param  string     $key  Key.
+ * @param  null|array $target  Target.
+ * @param  null|mixed $default  Default.
  *
- * @param  bool  $sanitize
+ * @param  bool       $sanitize
  *
  * @return mixed|null
  */
 function fed_get_data( $key, $target = null, $default = null, $sanitize = true ) {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( $target === null && ! isset( $_REQUEST ) ) {
 		return $default;
 	}
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( $target === null && isset( $_REQUEST ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$target = $_REQUEST;
 	}
 
@@ -3250,8 +3787,8 @@ function fed_get_data( $key, $target = null, $default = null, $sanitize = true )
 /**
  * Get Value.
  *
- * @param  \Closure | array | string  $value  Value.
- * @param  bool  $sanitize  Sanitize.
+ * @param  \Closure | array | string $value  Value.
+ * @param  bool                      $sanitize  Sanitize.
  *
  * @return mixed
  */
@@ -3262,7 +3799,7 @@ function fed_get_value( $value, $sanitize = true ) {
 /**
  * Get Column Count.
  *
- * @param  string  $value  Value.
+ * @param  string $value  Value.
  *
  * @return string
  */
@@ -3291,10 +3828,10 @@ if ( ! function_exists( 'fed_set_data' ) ) {
 	/**
 	 * Set an item on an array or object using dot notation.
 	 *
-	 * @param  mixed  $target  Target.
-	 * @param  string|array  $key  Key.
-	 * @param  mixed  $value  Value.
-	 * @param  bool  $overwrite  Overwrite.
+	 * @param  mixed        $target  Target.
+	 * @param  string|array $key  Key.
+	 * @param  mixed        $value  Value.
+	 * @param  bool         $overwrite  Overwrite.
 	 *
 	 * @return mixed
 	 */
@@ -3302,7 +3839,7 @@ if ( ! function_exists( 'fed_set_data' ) ) {
 		$segments = is_array( $key ) ? $key : explode( '.', $key );
 		if ( ( $segment = array_shift( $segments ) ) === '*' ) {
 			if ( ! fed_accessible( $target ) ) {
-				$target = [];
+				$target = array();
 			}
 			if ( $segments ) {
 				foreach ( $target as &$inner ) {
@@ -3316,7 +3853,7 @@ if ( ! function_exists( 'fed_set_data' ) ) {
 		} elseif ( fed_accessible( $target ) ) {
 			if ( $segments ) {
 				if ( ! fed_exists( $target, $segment ) ) {
-					$target[ $segment ] = [];
+					$target[ $segment ] = array();
 				}
 				fed_set_data( $target[ $segment ], $segments, $value, $overwrite );
 			} elseif ( $overwrite || ! fed_exists( $target, $segment ) ) {
@@ -3325,14 +3862,14 @@ if ( ! function_exists( 'fed_set_data' ) ) {
 		} elseif ( is_object( $target ) ) {
 			if ( $segments ) {
 				if ( ! isset( $target->{$segment} ) ) {
-					$target->{$segment} = [];
+					$target->{$segment} = array();
 				}
 				fed_set_data( $target->{$segment}, $segments, $value, $overwrite );
 			} elseif ( $overwrite || ! isset( $target->{$segment} ) ) {
 				$target->{$segment} = $value;
 			}
 		} else {
-			$target = [];
+			$target = array();
 			if ( $segments ) {
 				fed_set_data( $target[ $segment ], $segments, $value, $overwrite );
 			} elseif ( $overwrite ) {
@@ -3346,7 +3883,7 @@ if ( ! function_exists( 'fed_set_data' ) ) {
 /**
  * Determine whether the given value is array accessible.
  *
- * @param  mixed  $value  Value.
+ * @param  mixed $value  Value.
  *
  * @return bool
  */
@@ -3357,8 +3894,8 @@ function fed_accessible( $value ) {
 /**
  * Determine if the given key exists in the provided array.
  *
- * @param  \ArrayAccess|array  $array  Array Value.
- * @param  string|int  $key  Key.
+ * @param  \ArrayAccess|array $array  Array Value.
+ * @param  string|int         $key  Key.
  *
  * @return bool
  */
@@ -3374,7 +3911,7 @@ function fed_exists( $array, $key ) {
  * Generate URL.
  *
  * @param  array  $parameters  Parameters.
- * @param  string  $url  URL.
+ * @param  string $url  URL.
  *
  * @return string.
  */
@@ -3387,8 +3924,8 @@ function fed_generate_url( array $parameters, $url ) {
 /**
  * Array to Object Sort by Key.
  *
- * @param  object  $a  Object One.
- * @param  object  $b  Object two.
+ * @param  object $a  Object One.
+ * @param  object $b  Object two.
  *
  * @return int
  */
@@ -3412,9 +3949,10 @@ function fed_get_table_status() {
 	$menu_meta    = $wpdb->prefix . BC_FED_TABLE_MENU_META;
 	$post         = $wpdb->prefix . BC_FED_TABLE_POST;
 
+	// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	$table_status['user_profile'] = array(
 		'title'       => 'User Profile',
-		'status'      => $wpdb->get_var( "SHOW TABLES LIKE '$user_profile'" ) != $user_profile ? fed_enable_disable(
+		'status'      => $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $user_profile ) ) ) != $user_profile ? fed_enable_disable(
 			false
 		) : fed_enable_disable( true ),
 		'plugin_name' => BC_FED_APP_NAME,
@@ -3422,7 +3960,7 @@ function fed_get_table_status() {
 	);
 	$table_status['menu']         = array(
 		'title'       => 'Menu',
-		'status'      => $wpdb->get_var( "SHOW TABLES LIKE '$menu'" ) != $menu ? fed_enable_disable(
+		'status'      => $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $menu ) ) ) != $menu ? fed_enable_disable(
 			false
 		) : fed_enable_disable( true ),
 		'plugin_name' => BC_FED_APP_NAME,
@@ -3430,7 +3968,7 @@ function fed_get_table_status() {
 	);
 	$table_status['menu_meta']    = array(
 		'title'       => 'Menu Meta',
-		'status'      => $wpdb->get_var( "SHOW TABLES LIKE '$menu_meta'" ) != $menu_meta ? fed_enable_disable(
+		'status'      => $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $menu_meta ) ) ) != $menu_meta ? fed_enable_disable(
 			false
 		) : fed_enable_disable( true ),
 		'plugin_name' => BC_FED_APP_NAME,
@@ -3439,12 +3977,13 @@ function fed_get_table_status() {
 
 	$table_status['post'] = array(
 		'title'       => 'Post',
-		'status'      => $wpdb->get_var( "SHOW TABLES LIKE '$post'" ) != $post ? fed_enable_disable(
+		'status'      => $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $post ) ) ) != $post ? fed_enable_disable(
 			false
 		) : fed_enable_disable( true ),
 		'plugin_name' => BC_FED_APP_NAME,
 		'position'    => 0,
 	);
+	// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 	$tables = apply_filters( 'fed_status_get_table_status', $table_status );
 
@@ -3459,7 +3998,8 @@ function fed_get_table_status() {
  */
 function fed_get_tables() {
 	return apply_filters(
-		'fed_get_tables', array(
+		'fed_get_tables',
+		array(
 			'fed_user_profile' => array( 'order' => 'input_order' ),
 			'fed_post'         => array( 'order' => 'input_order' ),
 			'fed_menu'         => array( 'order' => 'menu_order' ),
@@ -3471,8 +4011,8 @@ function fed_get_tables() {
 /**
  * Get Menu Value.
  *
- * @param  array  $values  Values.
- * @param  array  $menus  Menus.
+ * @param  array $values  Values.
+ * @param  array $menus  Menus.
  *
  * @return array
  */
@@ -3604,8 +4144,8 @@ function fed_get_help_video_items() {
 	);
 }
 
-//add_filter( 'contextual_help', 'fed_remove_contextual_help', 999, 3 );
-///**
+// add_filter( 'contextual_help', 'fed_remove_contextual_help', 999, 3 );
+// **
 // * Remove Contextual Help.
 // *
 // * @param  string $old_help  Old Help.
@@ -3614,90 +4154,306 @@ function fed_get_help_video_items() {
 // *
 // * @return string
 // */
-//function fed_remove_contextual_help( $old_help, $screen_id, $screen ) {
-//	if ( $screen_id === 'toplevel_page_fed_settings_menu' ) {
-//		$screen->remove_help_tabs();
+// function fed_remove_contextual_help( $old_help, $screen_id, $screen ) {
+// if ( $screen_id === 'toplevel_page_fed_settings_menu' ) {
+// $screen->remove_help_tabs();
 //
-//		return '';
-//	}
+// return '';
+// }
 //
-//	return $old_help;
-//}
+// return $old_help;
+// }
 
 add_action( 'admin_footer_text', 'fed_show_help_icons' );
 /**
- * Show Help Icons.
+ * Show Modern Floating Quick Resources Hub.
  */
 function fed_show_help_icons() {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( isset( $_GET, $_GET['page'] ) && in_array( $_GET['page'], fed_get_script_loading_pages() ) ) {
 		?>
+		<style>
+			.fed-floating-hub {
+				position: fixed !important;
+				bottom: 24px !important;
+				right: 24px !important;
+				z-index: 99990 !important;
+				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif !important;
+				box-sizing: border-box !important;
+			}
+			.fed-floating-hub * {
+				box-sizing: border-box !important;
+			}
+			.fed-hub-fab {
+				width: 52px !important;
+				height: 52px !important;
+				border-radius: 50% !important;
+				background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+				color: #ffffff !important;
+				border: 2px solid #ffffff !important;
+				outline: none !important;
+				cursor: pointer !important;
+				display: flex !important;
+				align-items: center !important;
+				justify-content: center !important;
+				box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.45), 0 8px 10px -6px rgba(37, 99, 235, 0.3) !important;
+				transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+			}
+			.fed-hub-fab:hover {
+				transform: scale(1.08) !important;
+				box-shadow: 0 14px 28px -5px rgba(37, 99, 235, 0.55), 0 10px 12px -6px rgba(37, 99, 235, 0.35) !important;
+			}
+			.fed-hub-fab.is-active {
+				background: #0f172a !important;
+				transform: scale(1.02) !important;
+				box-shadow: 0 10px 20px -5px rgba(15, 23, 42, 0.4) !important;
+			}
+			.fed-hub-menu-panel {
+				position: absolute !important;
+				bottom: 64px !important;
+				right: 0 !important;
+				width: 250px !important;
+				background: #ffffff !important;
+				border-radius: 18px !important;
+				border: 1px solid rgba(226, 232, 240, 0.9) !important;
+				box-shadow: 0 20px 35px -10px rgba(15, 23, 42, 0.2), 0 1px 3px 0 rgba(0, 0, 0, 0.05) !important;
+				overflow: hidden !important;
+				transform-origin: bottom right !important;
+				transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+			}
+			.fed-hub-menu-panel.is-hidden {
+				opacity: 0 !important;
+				transform: scale(0.9) translateY(12px) !important;
+				pointer-events: none !important;
+				display: none !important;
+			}
+			.fed-hub-header {
+				background: linear-gradient(135deg, #1e293b, #0f172a) !important;
+				padding: 12px 14px !important;
+				color: #ffffff !important;
+			}
+			.fed-hub-title {
+				display: block !important;
+				font-size: 13px !important;
+				font-weight: 700 !important;
+				color: #ffffff !important;
+				line-height: 1.2 !important;
+			}
+			.fed-hub-subtitle {
+				display: block !important;
+				font-size: 10px !important;
+				color: #94a3b8 !important;
+				margin-top: 2px !important;
+			}
+			.fed-hub-items {
+				padding: 6px !important;
+				max-height: 360px !important;
+				overflow-y: auto !important;
+			}
+			.fed-hub-item {
+				display: flex !important;
+				align-items: center !important;
+				padding: 7px 10px !important;
+				border-radius: 10px !important;
+				text-decoration: none !important;
+				color: #334155 !important;
+				transition: background 0.15s ease-in-out !important;
+				margin-bottom: 2px !important;
+			}
+			.fed-hub-item:hover {
+				background: #f1f5f9 !important;
+				text-decoration: none !important;
+			}
+			.fed-hub-icon-wrap {
+				width: 30px !important;
+				height: 30px !important;
+				border-radius: 8px !important;
+				display: flex !important;
+				align-items: center !important;
+				justify-content: center !important;
+				font-size: 13px !important;
+				margin-right: 10px !important;
+				flex-shrink: 0 !important;
+				color: #ffffff !important;
+			}
+			.fed-hub-item-label {
+				font-size: 12px !important;
+				font-weight: 600 !important;
+				color: #1e293b !important;
+				line-height: 1.2 !important;
+			}
+			.fed-hub-item-sub {
+				font-size: 10px !important;
+				color: #64748b !important;
+				line-height: 1.1 !important;
+			}
+		</style>
 
-		<div class="bc_fed fed_sticky_help_bar">
-			<div class="fed_sticky_close_open">
-				<div class="fed_sticky_open hide">
-					<i class="fas fa-angle-double-left fa-2x"></i>
+		<div class="bc_fed fed-floating-hub" id="fed_floating_hub">
+			<!-- Collapsible Menu Panel -->
+			<div class="fed-hub-menu-panel is-hidden" id="fed_hub_menu_panel">
+				<div class="fed-hub-header">
+					<span class="fed-hub-title"><?php esc_html_e( 'Quick Resources', 'frontend-dashboard' ); ?></span>
+					<span class="fed-hub-subtitle"><?php esc_html_e( 'Frontend Dashboard Hub', 'frontend-dashboard' ); ?></span>
 				</div>
-				<div class="fed_sticky_close">X</div>
+				<div class="fed-hub-items">
+					<!-- Demo -->
+					<a target="_blank" rel="noopener noreferrer" href="https://demo.frontenddashboard.com" class="fed-hub-item">
+						<div class="fed-hub-icon-wrap" style="background: linear-gradient(135deg, #ec4899, #f43f5e);">
+							<i class="fas fa-eye"></i>
+						</div>
+						<div>
+							<div class="fed-hub-item-label"><?php esc_html_e( 'Live Demo', 'frontend-dashboard' ); ?></div>
+							<div class="fed-hub-item-sub"><?php esc_html_e( 'Interactive preview', 'frontend-dashboard' ); ?></div>
+						</div>
+					</a>
+					<!-- Rate Us -->
+					<a target="_blank" rel="noopener noreferrer" href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/#new-post" class="fed-hub-item">
+						<div class="fed-hub-icon-wrap" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+							<i class="fas fa-star"></i>
+						</div>
+						<div>
+							<div class="fed-hub-item-label"><?php esc_html_e( 'Leave a Review', 'frontend-dashboard' ); ?></div>
+							<div class="fed-hub-item-sub"><?php esc_html_e( 'Support plugin', 'frontend-dashboard' ); ?></div>
+						</div>
+					</a>
+					<!-- Donate -->
+					<a target="_blank" rel="noopener noreferrer" href="https://paypal.me/buffercode" class="fed-hub-item">
+						<div class="fed-hub-icon-wrap" style="background: linear-gradient(135deg, #10b981, #059669);">
+							<i class="fas fa-hand-holding-usd"></i>
+						</div>
+						<div>
+							<div class="fed-hub-item-label"><?php esc_html_e( 'Donate', 'frontend-dashboard' ); ?></div>
+							<div class="fed-hub-item-sub"><?php esc_html_e( 'Support creation', 'frontend-dashboard' ); ?></div>
+						</div>
+					</a>
+					<!-- Addons -->
+					<a href="<?php menu_page_url( 'fed_plugin_pages' ); ?>" class="fed-hub-item">
+						<div class="fed-hub-icon-wrap" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
+							<i class="fas fa-puzzle-piece"></i>
+						</div>
+						<div>
+							<div class="fed-hub-item-label"><?php esc_html_e( 'Add-Ons', 'frontend-dashboard' ); ?></div>
+							<div class="fed-hub-item-sub"><?php esc_html_e( 'Extensions store', 'frontend-dashboard' ); ?></div>
+						</div>
+					</a>
+					<!-- Help & Docs -->
+					<a href="<?php menu_page_url( 'fed_help' ); ?>" class="fed-hub-item">
+						<div class="fed-hub-icon-wrap" style="background: linear-gradient(135deg, #0284c7, #0369a1);">
+							<i class="fas fa-question-circle"></i>
+						</div>
+						<div>
+							<div class="fed-hub-item-label"><?php esc_html_e( 'Help & Docs', 'frontend-dashboard' ); ?></div>
+							<div class="fed-hub-item-sub"><?php esc_html_e( 'Documentation', 'frontend-dashboard' ); ?></div>
+						</div>
+					</a>
+					<!-- Videos -->
+					<a target="_blank" rel="noopener noreferrer" href="https://buffercode.com/category/name/frontend-dashboard" class="fed-hub-item">
+						<div class="fed-hub-icon-wrap" style="background: linear-gradient(135deg, #ef4444, #b91c1c);">
+							<i class="fab fa-youtube"></i>
+						</div>
+						<div>
+							<div class="fed-hub-item-label"><?php esc_html_e( 'Video Tutorials', 'frontend-dashboard' ); ?></div>
+							<div class="fed-hub-item-sub"><?php esc_html_e( 'Watch guides', 'frontend-dashboard' ); ?></div>
+						</div>
+					</a>
+					<!-- Twitter / X -->
+					<a target="_blank" rel="noopener noreferrer" href="https://twitter.com/buffercode/" class="fed-hub-item">
+						<div class="fed-hub-icon-wrap" style="background: #0f172a;">
+							<i class="fab fa-twitter"></i>
+						</div>
+						<div>
+							<div class="fed-hub-item-label"><?php esc_html_e( 'Twitter / X', 'frontend-dashboard' ); ?></div>
+							<div class="fed-hub-item-sub"><?php esc_html_e( '@buffercode', 'frontend-dashboard' ); ?></div>
+						</div>
+					</a>
+					<!-- Facebook -->
+					<a target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/buffercode/" class="fed-hub-item">
+						<div class="fed-hub-icon-wrap" style="background: #1877f2;">
+							<i class="fab fa-facebook-f"></i>
+						</div>
+						<div>
+							<div class="fed-hub-item-label"><?php esc_html_e( 'Community', 'frontend-dashboard' ); ?></div>
+							<div class="fed-hub-item-sub"><?php esc_html_e( 'Facebook group', 'frontend-dashboard' ); ?></div>
+						</div>
+					</a>
+				</div>
 			</div>
-			<div class="fed_sticky_items">
-				<div class="fed_sticky_item fed_demo">
-					<a target="_blank"
-							href="https://demo.frontenddashboard.com">
-						<i class="fas fa-eye fa-2x bc_fed_jump"></i>
-						<div class="fed_sticky_title">
-							Demo
-						</div>
-					</a>
-				</div>
-				<div class="fed_sticky_item">
-					<a target="_blank"
-							href="https://wordpress.org/support/plugin/frontend-dashboard/reviews/?filter=5#new-post">
-						<i class="fas fa-star fa-2x bc_fed_spin"></i>
-						<div class="fed_sticky_title">
-							Rate Us
-						</div>
-					</a>
-				</div>
-				<div class="fed_sticky_item fed_bg_red">
-					<a href="https://paypal.me/buffercode" target="_blank">
-						<i class="fas fa-hand-holding-usd fa-2x"></i>
-						<div class="fed_sticky_title">Donate</div>
-					</a>
-				</div>
-				<div class="fed_sticky_item fed_bg_addons">
-					<a href="<?php menu_page_url( 'fed_plugin_pages' ); ?>">
-						<i class="fas fa-puzzle-piece fa-2x"></i>
-						<div class="fed_sticky_title">Addons</div>
-					</a>
-				</div>
-				<div class="fed_sticky_item">
-					<a href="<?php menu_page_url( 'fed_help' ); ?>">
-						<i class="fas fa-question-circle fa-2x"></i>
-						<div class="fed_sticky_title">
-							Help!
-						</div>
-					</a>
-				</div>
-				<div class="fed_sticky_item">
-					<a href="https://buffercode.com/category/name/frontend-dashboard" target="_blank">
-						<i class="fab fa-youtube fa-2x"></i>
-						<div class="fed_sticky_title">Videos</div>
-					</a>
-				</div>
-				<div class="fed_sticky_item">
-					<a href="https://twitter.com/buffercode/" target="_blank">
-						<i class="fab fa-twitter fa-2x"></i>
-						<div class="fed_sticky_title">Twitter</div>
-					</a>
-				</div>
-				<div class="fed_sticky_item">
-					<a href="https://www.facebook.com/buffercode/" target="_blank">
-						<i class="fab fa-facebook fa-2x"></i>
-						<div class="fed_sticky_title">Facebook</div>
-					</a>
-				</div>
-			</div>
+
+			<!-- Circular FAB Trigger -->
+			<button type="button" id="fed_floating_hub_btn" class="fed-hub-fab" title="<?php esc_attr_e( 'Frontend Dashboard Quick Resources', 'frontend-dashboard' ); ?>" aria-label="<?php esc_attr_e( 'Help & Resources', 'frontend-dashboard' ); ?>">
+				<i id="fed_hub_fab_icon" class="fas fa-question text-lg"></i>
+			</button>
 		</div>
+
+		<script>
+		(function() {
+			const hubBtn = document.getElementById('fed_floating_hub_btn');
+			const hubPanel = document.getElementById('fed_hub_menu_panel');
+			const hubIcon = document.getElementById('fed_hub_fab_icon');
+			const storageKey = 'fed_floating_hub_state';
+
+			if (!hubBtn || !hubPanel) return;
+
+			function openHub(saveState) {
+				hubPanel.classList.remove('is-hidden');
+				hubBtn.classList.add('is-active');
+				if (hubIcon) {
+					hubIcon.className = 'fas fa-times text-lg';
+				}
+				if (saveState) {
+					localStorage.setItem(storageKey, 'open');
+				}
+			}
+
+			function closeHub(saveState) {
+				hubPanel.classList.add('is-hidden');
+				hubBtn.classList.remove('is-active');
+				if (hubIcon) {
+					hubIcon.className = 'fas fa-question text-lg';
+				}
+				if (saveState) {
+					localStorage.setItem(storageKey, 'closed');
+				}
+			}
+
+			// Initialize from localStorage (default is closed)
+			const savedState = localStorage.getItem(storageKey);
+			if (savedState === 'open') {
+				openHub(false);
+			} else {
+				closeHub(false);
+			}
+
+			// Toggle on button click
+			hubBtn.addEventListener('click', function(e) {
+				e.stopPropagation();
+				if (hubPanel.classList.contains('is-hidden')) {
+					openHub(true);
+				} else {
+					closeHub(true);
+				}
+			});
+
+			// Close when clicking outside
+			document.addEventListener('click', function(e) {
+				if (!e.target.closest('#fed_floating_hub')) {
+					if (!hubPanel.classList.contains('is-hidden')) {
+						closeHub(true);
+					}
+				}
+			});
+
+			// Close on Escape key
+			document.addEventListener('keydown', function(e) {
+				if (e.key === 'Escape') {
+					if (!hubPanel.classList.contains('is-hidden')) {
+						closeHub(true);
+					}
+				}
+			});
+		})();
+		</script>
 		<?php
 	}
 }
@@ -3706,7 +4462,7 @@ function fed_show_help_icons() {
 /**
  * Get Keys from Menu.
  *
- * @param  array  $menus  Menus.
+ * @param  array $menus  Menus.
  *
  * @return array
  */
@@ -3720,15 +4476,14 @@ function fed_get_keys_from_menu( $menus ) {
 	}
 
 	return $keys;
-
 }
 
 /**
  * Search Index From Array Recursively.
  *
  * @param  array  $array  Array Values.
- * @param  string  $index  Array Index.
- * @param  string  $submenu  Submenu.
+ * @param  string $index  Array Index.
+ * @param  string $submenu  Submenu.
  *
  * @return mixed
  */
@@ -3768,7 +4523,7 @@ function fed_get_admin_email() {
 /**
  * Get First Element In Array.
  *
- * @param  array  $array  Array.
+ * @param  array $array  Array.
  *
  * @return bool|int|string|null
  */
@@ -3784,7 +4539,7 @@ function fed_get_first_element_in_array( $array ) {
 /**
  * Get First Key in Array.
  *
- * @param  array  $array  Array.
+ * @param  array $array  Array.
  *
  * @return bool|int|string|null
  */
@@ -3803,16 +4558,18 @@ add_filter( 'wp_nav_menu_items', 'login_logout_menu', 10, 2 );
 /**
  * Login Logout Menu.
  *
- * @param  string  $items  Items.
- * @param  object  $args  Object.
+ * @param  string $items  Items.
+ * @param  object $args  Object.
  *
  * @return mixed|void
  */
 function login_logout_menu( $items, $args ) {
 	$fed_login = get_option( 'fed_admin_login' );
 
-	if ( ! empty( $args->theme_location ) && $args->theme_location === fed_get_data( 'login_menu.menu_item',
-			$fed_login )
+	if ( ! empty( $args->theme_location ) && $args->theme_location === fed_get_data(
+		'login_menu.menu_item',
+		$fed_login
+	)
 	) {
 		if ( is_user_logged_in() ) {
 			$items .= '<li><a href="' . fed_get_dashboard_url() . '">Dashboard</a></li>';
@@ -3828,54 +4585,532 @@ function login_logout_menu( $items, $args ) {
 /**
  * User Role Checkboxes.
  *
- * @param  string  $meta  Meta.
+ * @param  string $meta  Meta.
  * @param  array  $user_roles  User Roles.
- * @param  string  $column  Column.
- * @param  array  $extra  Extra
- * @param  array  $remove  Remove.
+/**
+ * Render Reusable Modern User Role Checkboxes Component.
+ * Features: Live instant search, Select All, Clear All, selected counter, and responsive card layout.
  *
- * @return string
+ * @param  string $meta        Field name prefix (e.g. 'settings[users][allow]').
+ * @param  array  $user_roles  Currently selected user roles array/keys.
+ * @param  string $column      Column size (legacy support: '3', '4', '6', '12').
+ * @param  array  $extra       Extra custom roles (e.g. array('unregistered' => 'Unregistered')).
+ * @param  array  $remove      Roles to exclude from list.
+ *
+ * @return string  Rendered HTML.
  */
-function fed_user_role_checkboxes( $meta, $user_roles = array(), $column = '6', $extra = array(), $remove = null ) {
-	$all_roles = array_merge( fed_get_user_roles(), $extra );
-	if ( $remove ) {
+function fed_user_role_checkboxes( $meta, $user_roles = array(), $column = '4', $extra = array(), $remove = null ) {
+	$all_roles = array_merge( $extra, fed_get_user_roles() );
+	if ( $remove && is_array( $remove ) ) {
 		foreach ( $remove as $remove_user_role ) {
 			unset( $all_roles[ $remove_user_role ] );
 		}
 	}
-	$html = '';
-	$html .= '<div class="row">';
-	foreach ( $all_roles as $key => $role ) {
-		$c_value = array_key_exists( $key, $user_roles ) ? 'Enable' : 'Disable';
 
-		$html .= '<div class="col-md-' . $column . '">
-                    ' . fed_form_checkbox(
-				array(
-					'input_meta'    => $meta . '[' . $key . ']',
-					'default_value' => 'Enable',
-					'label'         => $role,
-					'user_value'    => $c_value,
-				)
-			) . '
-                </div>';
+	if ( empty( $all_roles ) ) {
+		return '<div style="color: #94a3b8; font-size: 13px; font-style: italic;">' . esc_html__( 'No user roles found.', 'frontend-dashboard' ) . '</div>';
 	}
-	$html .= '</div>';
 
-	return $html;
+	// Normalize selected roles into simple array of keys
+	$selected_keys = array();
+	if ( is_array( $user_roles ) ) {
+		foreach ( $user_roles as $k => $v ) {
+			if ( is_numeric( $k ) && is_string( $v ) ) {
+				$selected_keys[] = $v;
+			} elseif ( ! empty( $v ) && 'Disable' !== $v ) {
+				$selected_keys[] = (string) $k;
+			}
+		}
+	}
+
+	$unique_id      = 'fed_roles_' . wp_rand( 1000, 9999 );
+	$total_roles    = count( $all_roles );
+	$selected_count = count( array_intersect( array_keys( $all_roles ), $selected_keys ) );
+
+	ob_start();
+	?>
+	<div class="fed-user-roles-component" id="<?php echo esc_attr( $unique_id ); ?>" style="font-family: inherit; margin-top: 6px;">
+		
+		<!-- Search & Quick Action Toolbar -->
+		<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap;">
+			
+			<!-- Search Bar -->
+			<div style="position: relative; flex: 1; min-width: 200px; max-width: 320px;">
+				<i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 13px; pointer-events: none;"></i>
+				<input type="text" class="fed-role-search-input" placeholder="<?php esc_attr_e( 'Search user roles...', 'frontend-dashboard' ); ?>" style="width: 100%; border: 1px solid #cbd5e1; border-radius: 8px; padding: 7px 12px 7px 34px; font-size: 13px; color: #1e293b; background: #ffffff; outline: none; box-shadow: 0 1px 2px rgba(0,0,0,0.02); transition: border-color 0.15s ease;" />
+			</div>
+
+			<!-- Select All / Clear All & Badge Counter -->
+			<div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+				<button type="button" class="fed-role-select-all" style="background: #ffffff; border: 1px solid #cbd5e1; color: #334155; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s ease;">
+					<i class="fas fa-check-double" style="color: #16a34a; font-size: 11px;"></i> <?php esc_html_e( 'Select All', 'frontend-dashboard' ); ?>
+				</button>
+				<button type="button" class="fed-role-clear-all" style="background: #ffffff; border: 1px solid #cbd5e1; color: #334155; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s ease;">
+					<i class="fas fa-times" style="color: #ef4444; font-size: 11px;"></i> <?php esc_html_e( 'Clear All', 'frontend-dashboard' ); ?>
+				</button>
+				<span class="fed-role-counter-pill" style="background: #f1f5f9; color: #475569; font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 9999px; border: 1px solid #e2e8f0; display: inline-flex; align-items: center; gap: 4px;">
+					<span class="fed-role-selected-count"><?php echo esc_html( $selected_count ); ?></span> / <?php echo esc_html( $total_roles ); ?> <?php esc_html_e( 'selected', 'frontend-dashboard' ); ?>
+				</span>
+			</div>
+
+		</div>
+
+		<!-- Roles Card Grid -->
+		<div class="fed-roles-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;">
+			<?php
+			foreach ( $all_roles as $key => $role ) {
+				$is_checked  = in_array( (string) $key, $selected_keys, true );
+				$card_bg     = $is_checked ? '#f0fdf4' : '#f8fafc';
+				$card_border = $is_checked ? '#86efac' : '#e2e8f0';
+				$card_color  = $is_checked ? '#15803d' : '#334155';
+				?>
+				<label class="fed-role-item" data-role-name="<?php echo esc_attr( strtolower( $role . ' ' . $key ) ); ?>" style="display: flex; align-items: center; gap: 10px; background: <?php echo esc_attr( $card_bg ); ?>; border: 1px solid <?php echo esc_attr( $card_border ); ?>; padding: 10px 14px; border-radius: 8px; cursor: pointer; transition: all 0.15s ease; user-select: none; margin: 0;">
+					<input type="checkbox" name="<?php echo esc_attr( $meta . '[' . $key . ']' ); ?>" value="<?php echo esc_attr( $key ); ?>" class="fed-role-checkbox" <?php checked( $is_checked ); ?> style="width: 16px; height: 16px; accent-color: #128c7e; cursor: pointer; flex-shrink: 0;" />
+					<span class="fed-role-name" style="font-size: 13px; font-weight: <?php echo $is_checked ? '700' : '500'; ?>; color: <?php echo esc_attr( $card_color ); ?>; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+						<?php echo esc_html( $role ); ?>
+					</span>
+				</label>
+			<?php } ?>
+		</div>
+
+		<!-- No Results Found Message (Hidden by default) -->
+		<div class="fed-roles-no-results" style="display: none; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 18px; text-align: center; color: #64748b; font-size: 13px; margin-top: 8px;">
+			<i class="fas fa-search" style="margin-right: 6px; color: #94a3b8;"></i> <?php esc_html_e( 'No matching user roles found.', 'frontend-dashboard' ); ?>
+		</div>
+
+		<!-- Interactive Helper Script for Search, Select All, Clear All -->
+		<script type="text/javascript">
+		(function() {
+			if ( typeof window.fedInitRoleSelectors === 'undefined' ) {
+				window.fedInitRoleSelectors = function() {
+					if ( typeof jQuery === 'undefined' ) return;
+					var $ = jQuery;
+
+					// Live Search Filter
+					$( document ).off( 'input.fedRoleSearch', '.fed-role-search-input' ).on( 'input.fedRoleSearch', '.fed-role-search-input', function() {
+						var query = $( this ).val().toLowerCase().trim();
+						var $container = $( this ).closest( '.fed-user-roles-component' );
+						var $items = $container.find( '.fed-role-item' );
+						var visibleCount = 0;
+
+						$items.each( function() {
+							var name = $( this ).data( 'role-name' ) || '';
+							if ( ! query || name.indexOf( query ) > -1 ) {
+								$( this ).show();
+								visibleCount++;
+							} else {
+								$( this ).hide();
+							}
+						} );
+
+						$container.find( '.fed-roles-no-results' ).toggle( visibleCount === 0 );
+					} );
+
+					// Update Card State & Selected Counter
+					function updateRoleComponentState( $container ) {
+						var $checkboxes = $container.find( '.fed-role-checkbox' );
+						var selected = 0;
+
+						$checkboxes.each( function() {
+							var checked = $( this ).is( ':checked' );
+							var $item = $( this ).closest( '.fed-role-item' );
+							var $name = $item.find( '.fed-role-name' );
+
+							if ( checked ) {
+								selected++;
+								$item.css( { 'background': '#f0fdf4', 'border-color': '#86efac' } );
+								$name.css( { 'color': '#15803d', 'font-weight': '700' } );
+							} else {
+								$item.css( { 'background': '#f8fafc', 'border-color': '#e2e8f0' } );
+								$name.css( { 'color': '#334155', 'font-weight': '500' } );
+							}
+						} );
+
+						$container.find( '.fed-role-selected-count' ).text( selected );
+					}
+
+					// Checkbox Change Handler
+					$( document ).off( 'change.fedRoleCheck', '.fed-role-checkbox' ).on( 'change.fedRoleCheck', '.fed-role-checkbox', function() {
+						var $container = $( this ).closest( '.fed-user-roles-component' );
+						updateRoleComponentState( $container );
+					} );
+
+					// Select All Button
+					$( document ).off( 'click.fedRoleSelectAll', '.fed-role-select-all' ).on( 'click.fedRoleSelectAll', '.fed-role-select-all', function( e ) {
+						e.preventDefault();
+						var $container = $( this ).closest( '.fed-user-roles-component' );
+						$container.find( '.fed-role-item:visible .fed-role-checkbox' ).prop( 'checked', true );
+						updateRoleComponentState( $container );
+					} );
+
+					// Clear All Button
+					$( document ).off( 'click.fedRoleClearAll', '.fed-role-clear-all' ).on( 'click.fedRoleClearAll', '.fed-role-clear-all', function( e ) {
+						e.preventDefault();
+						var $container = $( this ).closest( '.fed-user-roles-component' );
+						$container.find( '.fed-role-item:visible .fed-role-checkbox' ).prop( 'checked', false );
+						updateRoleComponentState( $container );
+					} );
+				};
+
+				if ( document.readyState === 'loading' ) {
+					document.addEventListener( 'DOMContentLoaded', window.fedInitRoleSelectors );
+				} else {
+					window.fedInitRoleSelectors();
+				}
+			} else {
+				window.fedInitRoleSelectors();
+			}
+		})();
+		</script>
+
+	</div>
+	<?php
+	return ob_get_clean();
 }
 
 /**
- * The below code tested to check input tag works in Custom Label.
+ * Append message to the plugin debug/activity log file.
+ *
+ * @param string|array|object $message
  */
-//add_filter('wp_kses_allowed_html', 'fed_wp_kses_add_input', 10, 2);
-//
-//function fed_wp_kses_add_input($tags, $context)
-//{
-//    $tags['input'] = array(
-//            'type'    => true,
-//            'name'    => true,
-//            'value'   => true,
-//            'checked' => true,
-//    );
-//    return $tags;
-//}
+if ( ! function_exists( 'fed_log' ) ) {
+	function fed_log( $message ) {
+		$log_file = BC_FED_PLUGIN_DIR . '/log/dashboard.log';
+		$dir      = dirname( $log_file );
+		if ( ! file_exists( $dir ) ) {
+			wp_mkdir_p( $dir );
+		}
+		$text      = is_string( $message ) ? $message : wp_json_encode( $message );
+		$formatted = '[' . current_time( 'Y-m-d H:i:s' ) . '] ' . $text . PHP_EOL;
+		@file_put_contents( $log_file, $formatted, FILE_APPEND );
+	}
+}
+
+/**
+ * Log an administrative / system activity to the Database and Log File.
+ *
+ * @param string $action_type e.g. 'seeder', 'database', 'option', 'cron', 'settings', 'auth'
+ * @param string $action_title e.g. 'Seeder: 1-Click Bootstrap Suite'
+ * @param string|array $description Detailed description or data
+ * @param string $status 'success' | 'warning' | 'error'
+ * @param int|null $user_id Optional user ID
+ * @return int|false Insert ID or false
+ */
+if ( ! function_exists( 'fed_log_activity' ) ) {
+	function fed_log_activity( $action_type, $action_title, $description = '', $status = 'success', $user_id = null ) {
+		global $wpdb;
+
+		if ( null === $user_id ) {
+			$user_id = get_current_user_id();
+		}
+
+		$user              = $user_id ? get_userdata( $user_id ) : null;
+		$user_login        = $user ? $user->user_login : ( 0 === (int) $user_id ? 'System' : 'Guest' );
+		$user_email        = $user ? $user->user_email : '';
+		$user_display_name = $user ? $user->display_name : ( 0 === (int) $user_id ? 'System / Cron' : 'Guest' );
+
+		$ip_address = '';
+		if ( ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
+			$ip_address = sanitize_text_field( wp_unslash( $_SERVER['HTTP_CLIENT_IP'] ) );
+		} elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
+			$ip_address = sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ) );
+		} elseif ( ! empty( $_SERVER['REMOTE_ADDR'] ) ) {
+			$ip_address = sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) );
+		}
+
+		if ( is_array( $description ) || is_object( $description ) ) {
+			$description = wp_json_encode( $description, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
+		}
+
+		$table_name = $wpdb->prefix . ( defined( 'BC_FED_TABLE_ACTIVITY_LOG' ) ? BC_FED_TABLE_ACTIVITY_LOG : 'fed_activity_log' );
+
+		// Ensure table exists
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table_name ) ) ) !== $table_name ) {
+			if ( function_exists( 'fed_plugin_activation' ) ) {
+				fed_plugin_activation();
+			}
+		}
+
+		$user_agent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? substr( sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ), 0, 255 ) : '';
+
+		// Map status to PSR level
+		$level = $status;
+		if ( 'success' === $status ) {
+			$level = 'info';
+		}
+
+		$data = array(
+			'user_id'           => (int) $user_id,
+			'user_login'        => sanitize_text_field( $user_login ),
+			'user_email'        => sanitize_email( $user_email ),
+			'user_display_name' => sanitize_text_field( $user_display_name ),
+			'channel'           => sanitize_text_field( $action_type ),
+			'level'             => sanitize_text_field( $level ),
+			'action'            => sanitize_text_field( $action_title ),
+			'message'           => (string) $description,
+			'context'           => is_array( $description ) ? wp_json_encode( $description ) : null,
+			'action_type'       => sanitize_text_field( $action_type ),
+			'action_title'      => sanitize_text_field( $action_title ),
+			'description'       => (string) $description,
+			'status'            => sanitize_text_field( $status ),
+			'ip_address'        => sanitize_text_field( $ip_address ),
+			'user_agent'        => sanitize_text_field( $user_agent ),
+			'created_at'        => current_time( 'mysql' ),
+		);
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+		$inserted = $wpdb->insert( $table_name, $data );
+
+		// Also write to file log
+		if ( function_exists( 'fed_log' ) ) {
+			fed_log( sprintf( '[%s] [%s] %s by %s (%s) - %s', strtoupper( $status ), strtoupper( $action_type ), $action_title, $user_login, $ip_address, substr( wp_strip_all_tags( (string) $description ), 0, 200 ) ) );
+		}
+
+		return $inserted ? $wpdb->insert_id : false;
+	}
+}
+
+if ( ! function_exists( 'fed_get_date_formats' ) ) {
+	/**
+	 * Get Supported Date Formats
+	 *
+	 * @return array
+	 */
+	function fed_get_date_formats() {
+		$date_formats = array(
+			'd-m-Y'  => 'Date-Month-Year (14-09-2026)',
+			'm-d-Y'  => 'Month-Date-Year (09-14-2026)',
+			'Y-m-d'  => 'Year-Month-Date (2026-09-14)',
+			'd/m/Y'  => 'Date/Month/Year (14/09/2026)',
+			'm/d/Y'  => 'Month/Date/Year (09/14/2026)',
+			'Y/m/d'  => 'Year/Month/Date (2026/09/14)',
+			'd.m.Y'  => 'Date.Month.Year (14.09.2026)',
+			'F j, Y' => 'Full Month Date, Year (September 14, 2026)',
+			'M j, Y' => 'Short Month Date, Year (Sep 14, 2026)',
+		);
+
+		return apply_filters( 'fed_get_date_formats_filter', $date_formats );
+	}
+}
+
+if ( ! function_exists( 'fed_get_date_mode' ) ) {
+	/**
+	 * Get Date Picker Selection Modes
+	 *
+	 * @return array
+	 */
+	function fed_get_date_mode() {
+		return array(
+			'single'   => __( 'Single Date', 'frontend-dashboard' ),
+			'multiple' => __( 'Multiple Dates', 'frontend-dashboard' ),
+			'range'    => __( 'Date Range', 'frontend-dashboard' ),
+		);
+	}
+}
+
+if ( ! function_exists( 'fed_image_mime_types' ) ) {
+	/**
+	 * Get MIME Type Icon Mapping
+	 *
+	 * @return array
+	 */
+	function fed_image_mime_types() {
+		$base = site_url() . '/wp-includes/images/media/';
+		return array(
+			'video/x-ms-asf'                              => $base . 'video.png',
+			'video/x-ms-wmv'                              => $base . 'video.png',
+			'video/x-ms-wmx'                              => $base . 'video.png',
+			'video/x-ms-wm'                               => $base . 'video.png',
+			'video/avi'                                   => $base . 'video.png',
+			'video/divx'                                  => $base . 'video.png',
+			'video/x-flv'                                 => $base . 'video.png',
+			'video/quicktime'                             => $base . 'video.png',
+			'video/mpeg'                                  => $base . 'video.png',
+			'video/mp4'                                   => $base . 'video.png',
+			'video/ogg'                                   => $base . 'video.png',
+			'video/webm'                                  => $base . 'video.png',
+			'video/x-matroska'                            => $base . 'video.png',
+			'video/3gpp'                                  => $base . 'video.png',
+			'video/3gpp2'                                 => $base . 'video.png',
+			'text/plain'                                  => $base . 'text.png',
+			'text/csv'                                    => $base . 'text.png',
+			'text/tab-separated-values'                   => $base . 'text.png',
+			'text/calendar'                               => $base . 'text.png',
+			'text/richtext'                               => $base . 'text.png',
+			'text/css'                                    => $base . 'text.png',
+			'text/html'                                   => $base . 'text.png',
+			'text/vtt'                                    => $base . 'text.png',
+			'application/ttaf+xml'                        => $base . 'text.png',
+			'audio/mpeg'                                  => $base . 'audio.png',
+			'audio/x-realaudio'                           => $base . 'audio.png',
+			'audio/wav'                                   => $base . 'audio.png',
+			'audio/ogg'                                   => $base . 'audio.png',
+			'audio/midi'                                  => $base . 'audio.png',
+			'audio/x-ms-wma'                              => $base . 'audio.png',
+			'audio/x-ms-wax'                              => $base . 'audio.png',
+			'audio/x-matroska'                            => $base . 'audio.png',
+			'application/rtf'                             => $base . 'archive.png',
+			'application/javascript'                      => $base . 'archive.png',
+			'application/pdf'                             => $base . 'document.png',
+			'application/x-shockwave-flash'               => $base . 'archive.png',
+			'application/java'                            => $base . 'archive.png',
+			'application/x-tar'                           => $base . 'archive.png',
+			'application/zip'                             => $base . 'archive.png',
+			'application/x-gzip'                          => $base . 'archive.png',
+			'application/rar'                             => $base . 'archive.png',
+			'application/x-7z-compressed'                 => $base . 'archive.png',
+			'application/x-msdownload'                    => $base . 'archive.png',
+			'application/octet-stream'                    => $base . 'document.png',
+			'application/msword'                          => $base . 'document.png',
+			'application/vnd.ms-powerpoint'               => $base . 'document.png',
+			'application/vnd.ms-write'                    => $base . 'document.png',
+			'application/vnd.ms-excel'                    => $base . 'document.png',
+			'application/vnd.ms-access'                   => $base . 'document.png',
+			'application/vnd.ms-project'                  => $base . 'document.png',
+			'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => $base . 'document.png',
+			'application/vnd.ms-word.document.macroEnabled.12' => $base . 'document.png',
+			'application/vnd.openxmlformats-officedocument.wordprocessingml.template' => $base . 'document.png',
+			'application/vnd.ms-word.template.macroEnabled.12' => $base . 'document.png',
+			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' => $base . 'document.png',
+			'application/vnd.ms-excel.sheet.macroEnabled.12' => $base . 'document.png',
+			'application/vnd.ms-excel.sheet.binary.macroEnabled.12' => $base . 'document.png',
+			'application/vnd.openxmlformats-officedocument.spreadsheetml.template' => $base . 'document.png',
+			'application/vnd.ms-excel.template.macroEnabled.12' => $base . 'document.png',
+			'application/vnd.ms-excel.addin.macroEnabled.12' => $base . 'document.png',
+			'application/vnd.openxmlformats-officedocument.presentationml.presentation' => $base . 'document.png',
+			'application/vnd.ms-powerpoint.presentation.macroEnabled.12' => $base . 'document.png',
+			'application/vnd.openxmlformats-officedocument.presentationml.slideshow' => $base . 'document.png',
+			'application/vnd.ms-powerpoint.slideshow.macroEnabled.12' => $base . 'document.png',
+			'application/vnd.openxmlformats-officedocument.presentationml.template' => $base . 'document.png',
+			'application/vnd.ms-powerpoint.template.macroEnabled.12' => $base . 'document.png',
+			'application/vnd.ms-powerpoint.addin.macroEnabled.12' => $base . 'document.png',
+			'application/vnd.openxmlformats-officedocument.presentationml.slide' => $base . 'document.png',
+			'application/vnd.ms-powerpoint.slide.macroEnabled.12' => $base . 'document.png',
+			'application/onenote'                         => $base . 'document.png',
+			'application/oxps'                            => $base . 'document.png',
+			'application/vnd.ms-xpsdocument'              => $base . 'document.png',
+			'application/vnd.oasis.opendocument.text'     => $base . 'document.png',
+			'application/vnd.oasis.opendocument.presentation' => $base . 'document.png',
+			'application/vnd.oasis.opendocument.spreadsheet' => $base . 'document.png',
+			'application/vnd.oasis.opendocument.graphics' => $base . 'document.png',
+			'application/vnd.oasis.opendocument.chart'    => $base . 'document.png',
+			'application/vnd.oasis.opendocument.database' => $base . 'document.png',
+			'application/vnd.oasis.opendocument.formula'  => $base . 'document.png',
+			'application/wordperfect'                     => $base . 'document.png',
+			'application/vnd.apple.keynote'               => $base . 'document.png',
+			'application/vnd.apple.numbers'               => $base . 'document.png',
+			'application/vnd.apple.pages'                 => $base . 'document.png',
+		);
+	}
+}
+
+if ( ! function_exists( 'fed_get_image_by_type' ) ) {
+	/**
+	 * Get Image or Fallback MIME Icon for Attachment
+	 *
+	 * @param array $options Options array containing 'user_value' (attachment ID).
+	 * @return string URL of image or mime icon.
+	 */
+	function fed_get_image_by_type( $options ) {
+		$attachment_id = isset( $options['user_value'] ) ? (int) $options['user_value'] : 0;
+		if ( ! $attachment_id ) {
+			return site_url() . '/wp-includes/images/media/default.png';
+		}
+		$mime_type = get_post_mime_type( $attachment_id );
+		$defaults  = fed_image_mime_types();
+
+		if ( false !== strpos( (string) $mime_type, 'image' ) ) {
+			$url = wp_get_attachment_image_url( $attachment_id, array( 100, 100 ) );
+			if ( $url ) {
+				return $url;
+			}
+		}
+
+		if ( isset( $defaults[ $mime_type ] ) ) {
+			return $defaults[ $mime_type ];
+		}
+
+		return site_url() . '/wp-includes/images/media/default.png';
+	}
+}
+
+if ( ! function_exists( 'fede_get_image_by_type' ) ) {
+	/**
+	 * Backward compatibility wrapper.
+	 */
+	function fede_get_image_by_type( $options ) {
+		return fed_get_image_by_type( $options );
+	}
+}
+
+/**
+ * Process Extended Form Fields for Built-in Extra Types
+ */
+add_filter( 'fed_process_form_fields', 'fed_core_process_extended_form_fields', 10, 4 );
+function fed_core_process_extended_form_fields( $default, $row, $action, $update ) {
+	$type = isset( $row['input_type'] ) ? $row['input_type'] : '';
+
+	if ( 'wp_editor' === $type ) {
+		if ( 'yes' === $update ) {
+			$default['extended'] = serialize(
+				array(
+					'settings' => array(
+						'textarea_name' => fed_get_data( 'input_meta', $row ),
+						'media_buttons' => fed_get_data( 'extended.settings.media_buttons', $row, 'true' ),
+						'textarea_rows' => fed_get_data( 'extended.settings.textarea_rows', $row, 10 ),
+						'editor_class'  => fed_get_data( 'class_name', $row ),
+						'editor_height' => fed_get_data( 'extended.settings.editor_height', $row, 250 ),
+						'quicktags'     => fed_get_data( 'extended.settings.quicktags', $row, 'true' ),
+					),
+				)
+			);
+			return $default;
+		}
+	}
+
+	if ( 'table' === $type ) {
+		if ( 'yes' === $update ) {
+			$default['extended'] = serialize(
+				array(
+					'table_mode'          => isset( $row['extended']['table_mode'] ) ? sanitize_text_field( $row['extended']['table_mode'] ) : 'editable',
+					'table_template'      => isset( $row['extended']['table_template'] ) ? sanitize_text_field( $row['extended']['table_template'] ) : 'bordered',
+					'disable_user_access' => isset( $row['extended']['disable_user_access'] ) ? wp_kses_post( $row['extended']['disable_user_access'] ) : '',
+				)
+			);
+			return $default;
+		}
+	}
+
+	if ( 'date' === $type ) {
+		if ( 'yes' === $update ) {
+			$default['extended'] = serialize(
+				array(
+					'date_format'         => isset( $row['extended']['date_format'] ) ? sanitize_text_field( $row['extended']['date_format'] ) : 'd-m-Y',
+					'enable_time'         => isset( $row['extended']['enable_time'] ) ? sanitize_text_field( $row['extended']['enable_time'] ) : 'false',
+					'date_mode'           => isset( $row['extended']['date_mode'] ) ? sanitize_text_field( $row['extended']['date_mode'] ) : 'single',
+					'time_24hr'           => isset( $row['extended']['time_24hr'] ) ? sanitize_text_field( $row['extended']['time_24hr'] ) : 'false',
+					'enable_seconds'      => isset( $row['extended']['enable_seconds'] ) ? sanitize_text_field( $row['extended']['enable_seconds'] ) : 'false',
+					'min_date'            => isset( $row['extended']['min_date'] ) ? sanitize_text_field( $row['extended']['min_date'] ) : '',
+					'max_date'            => isset( $row['extended']['max_date'] ) ? sanitize_text_field( $row['extended']['max_date'] ) : '',
+					'disable_user_access' => isset( $row['extended']['disable_user_access'] ) ? wp_kses_post( $row['extended']['disable_user_access'] ) : '',
+				)
+			);
+			return $default;
+		}
+	}
+
+	return $default;
+}
+
+add_filter( 'fed_default_extended_fields', 'fed_core_default_extended_fields' );
+function fed_core_default_extended_fields( $fields ) {
+	$array = array(
+		'settings'       => array(),
+		'table_mode'     => 'editable',
+		'table_template' => 'bordered',
+	);
+
+	return array_merge( (array) $fields, $array );
+}
+

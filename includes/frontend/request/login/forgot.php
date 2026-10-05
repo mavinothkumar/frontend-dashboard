@@ -21,7 +21,6 @@ function fed_forgot_form_submit( $post ) {
 	$user_data    = fed_validate_forgot_password( $post );
 	$redirect_url = fed_get_login_url();
 
-
 	if ( $user_data instanceof WP_Error ) {
 		wp_send_json_error( array( 'user' => $user_data->get_error_messages() ) );
 		exit();
@@ -37,23 +36,26 @@ function fed_forgot_form_submit( $post ) {
 	}
 	$redirect_url = ( false == $redirect_url ) ? get_admin_url() : $redirect_url;
 
-	$message = __(
-		           'Someone has requested a password reset for the following account:', 'frontend-dashboard'
-	           ) . "\r\n\r\n";
+	$message  = __(
+		'Someone has requested a password reset for the following account:',
+		'frontend-dashboard'
+	) . "\r\n\r\n";
 	$message .= network_home_url( '/' ) . "\r\n\r\n";
 	$message .= __( 'Username: ', 'frontend-dashboard' ) . $user_login . "\r\n\r\n";
 	$message .= __(
-		            'If this was a mistake, just ignore this email and nothing will happen.',
-		            'frontend-dashboard'
-	            ) . "\r\n\r\n";
+		'If this was a mistake, just ignore this email and nothing will happen.',
+		'frontend-dashboard'
+	) . "\r\n\r\n";
 	$message .= __( 'To reset your password, visit the following address:', 'frontend-dashboard' ) . "\r\n\r\n";
 	$message .= '<a href="' . add_query_arg(
-			array(
-				'page_type'   => 'reset_password',
-				'action' => 'fed_reset',
-				'key'    => $key,
-				'login'  => rawurlencode( $user_login ),
-			), $redirect_url ) . '">' . esc_url( $redirect_url ) . '</a>' . "\r\n\r\n";
+		array(
+			'page_type' => 'reset_password',
+			'action'    => 'fed_reset',
+			'key'       => $key,
+			'login'     => rawurlencode( $user_login ),
+		),
+		$redirect_url
+	) . '">' . esc_url( $redirect_url ) . '</a>' . "\r\n\r\n";
 
 	if ( is_multisite() ) {
 		$blogname = $GLOBALS['current_site']->site_name;
@@ -111,4 +113,3 @@ function fed_lostpassword_url( $lostpassword_url ) {
 
 	return $lostpassword_url;
 }
-

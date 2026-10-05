@@ -11,12 +11,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Get Avatar.
  *
- * @param  string  $id_or_email  ID or Email.
- * @param  string  $alt  Alt.
- * @param  string  $class  Class.
- * @param  string  $extra  Extra.
- * @param  string  $size  Size.
- * @param  string  $attr  Attr.
+ * @param  string $id_or_email  ID or Email.
+ * @param  string $alt  Alt.
+ * @param  string $class  Class.
+ * @param  string $extra  Extra.
+ * @param  string $size  Size.
+ * @param  string $attr  Attr.
  *
  * @return string
  */
@@ -74,7 +74,6 @@ function fed_get_avatar( $id_or_email, $alt = '', $class = '', $extra = '', $siz
 		esc_attr( $class ),
 		$extra
 	);
-
 }
 
 /**
@@ -176,7 +175,6 @@ function fed_get_registration_content_fields() {
 	);
 
 	return $registration;
-
 }
 
 /**
@@ -186,18 +184,20 @@ function fed_process_user_profile_required_field() {
 	$fields = fed_fetch_table_by_is_required( BC_FED_TABLE_USER_PROFILE );
 
 	return array_reduce(
-		$fields, function ( $result, $item ) {
-		$result[ $item['input_meta'] ] = 'Please enter ' . $item['label_name'];
+		$fields,
+		function ( $result, $item ) {
+			$result[ $item['input_meta'] ] = 'Please enter ' . $item['label_name'];
 
-		return $result;
-	}, array()
+			return $result;
+		},
+		array()
 	);
 }
 
 /**
  * Process User Profile Required by Menu.
  *
- * @param  string  $menu  Menu.
+ * @param  string $menu  Menu.
  *
  * @return mixed
  */
@@ -205,11 +205,13 @@ function fed_process_user_profile_required_by_menu( $menu ) {
 	$fields = fed_fetch_user_profile_required_by_menu( $menu );
 
 	$values = array_reduce(
-		$fields, function ( $result, $item ) {
-		$result[ $item['input_meta'] ] = 'Please enter ' . $item['label_name'];
+		$fields,
+		function ( $result, $item ) {
+			$result[ $item['input_meta'] ] = 'Please enter ' . $item['label_name'];
 
-		return $result;
-	}, array()
+			return $result;
+		},
+		array()
 	);
 
 	return $values;
@@ -219,7 +221,7 @@ function fed_process_user_profile_required_by_menu( $menu ) {
 /**
  * Process Author Input Record.
  *
- * @param  object  $user  User Object.
+ * @param  object $user  User Object.
  * @param  array  $single_item  Single Item.
  *
  * @return string
@@ -253,16 +255,19 @@ function fed_process_author_details( $user, array $single_item ) {
 			array(
 				'value'    => $user->get( $single_item['input_meta'] ),
 				'disabled' => true,
-			), 'color'
+			),
+			'color'
 		);
 	}
 
 	if ( 'checkbox' === $single_item['input_type'] ) {
 		return fed_input_box(
-			$single_item['input_meta'], array(
-			'value'    => $user->get( $single_item['input_meta'] ),
-			'disabled' => true,
-		), 'checkbox'
+			$single_item['input_meta'],
+			array(
+				'value'    => $user->get( $single_item['input_meta'] ),
+				'disabled' => true,
+			),
+			'checkbox'
 		);
 	}
 
@@ -285,11 +290,11 @@ function fed_process_author_details( $user, array $single_item ) {
 			$range = explode( 'to', $user_date );
 
 			return ucfirst( strftime( $format, strtotime( $range[0] ) ) ) . ' to ' . ucfirst(
-					strftime(
-						$format,
-						strtotime( $range[1] )
-					)
-				);
+				strftime(
+					$format,
+					strtotime( $range[1] )
+				)
+			);
 
 		}
 
@@ -316,7 +321,8 @@ function fed_process_author_details( $user, array $single_item ) {
  */
 function fed_input_mandatory_required_fields() {
 	return apply_filters(
-		'fed_input_mandatory_required_fields', array(
+		'fed_input_mandatory_required_fields',
+		array(
 			'user_login',
 			'user_pass',
 			'confirmation_password',
@@ -328,8 +334,8 @@ function fed_input_mandatory_required_fields() {
 /**
  * Get WP Editor.
  *
- * @param  string  $content  Content.
- * @param  string  $id  ID.
+ * @param  string $content  Content.
+ * @param  string $id  ID.
  * @param  array  $options  Options.
  *
  * @return string
@@ -347,8 +353,8 @@ function fed_get_wp_editor( $content = '', $id = '', array $options = array() ) 
 /**
  * Get Dashboard Display Categories.
  *
- * @param  string  $post  Post.
- * @param  string  $cpt  CPT.
+ * @param  string $post  Post.
+ * @param  string $cpt  CPT.
  *
  * @return string
  */
@@ -371,8 +377,8 @@ function fed_get_dashboard_display_categories( $post = '', $cpt = '' ) {
 /**
  * Get Dashboard Display Tags.
  *
- * @param  string  $post  Post.
- * @param  string  $cpt  CPT.
+ * @param  string $post  Post.
+ * @param  string $cpt  CPT.
  *
  * @return string
  */
@@ -395,8 +401,8 @@ function fed_get_dashboard_display_tags( $post = '', $cpt = '' ) {
  * Convert Array to ID Name.
  *
  * @param  array  $array  Array.
- * @param  string  $key  Key.
- * @param  string  $type  Type.
+ * @param  string $key  Key.
+ * @param  string $type  Type.
  * @param  array  $compare  Compare.
  *
  * @return string
@@ -437,6 +443,28 @@ function fed_convert_array_to_id_name( array $array, $key = 'term_id', $type = '
 }
 
 /**
+ * Render Post Content Editor.
+ *
+ * @param  string      $content     Content.
+ * @param  string      $input_meta  Input Meta Name.
+ * @param  string      $post_type   Post Type.
+ * @param  string|null $editor_type Editor Type.
+ *
+ * @return string
+ */
+function fed_render_post_editor( $content = '', $input_meta = 'post_content', $post_type = 'post', $editor_type = null ) {
+	if ( class_exists( '\\FED\\Services\\Editor\\EditorRenderer' ) ) {
+		return \FED\Services\Editor\EditorRenderer::render( $content, $input_meta, $post_type, $editor_type );
+	}
+	if ( function_exists( 'wp_editor' ) ) {
+		ob_start();
+		wp_editor( $content, $input_meta, array( 'quicktags' => true ) );
+		return ob_get_clean();
+	}
+	return '<textarea name="' . esc_attr( $input_meta ) . '" class="form-control" rows="10">' . esc_textarea( $content ) . '</textarea>';
+}
+
+/**
  * Get post format.
  */
 function fed_dashboard_get_post_format() {
@@ -455,7 +483,7 @@ function fed_dashboard_get_post_format() {
 /**
  * Get post meta 0th element.
  *
- * @param  int  $id  post ID.
+ * @param  int $id  post ID.
  *
  * @return array.
  */
@@ -474,7 +502,7 @@ function fed_get_post_meta( $id ) {
 /**
  * Get Categories ID By Post ID.
  *
- * @param  int  $post_id  Post ID.
+ * @param  int $post_id  Post ID.
  *
  * @return array
  */
@@ -487,7 +515,7 @@ function fed_get_categories_id_by_post_id( $post_id ) {
 /**
  * Get Post Status Symbol.
  *
- * @param  string  $status  Status.
+ * @param  string $status  Status.
  *
  * @return string
  */
@@ -498,19 +526,20 @@ function fed_get_post_status_symbol( $status ) {
 	}
 	if ( 'pending' == $status ) {
 		return ' <i class="fa fa-pause bg-info-font fed_popover" data-toggle="popover" data-trigger="hover" title="' . esc_attr( $status ) . '" 
- data-content="' . __( 'Please wait, your post is in pending status, editor or admin will approve your post.',
-				'frontend-dashboard' ) . '"></i>';
+ data-content="' . __(
+			'Please wait, your post is in pending status, editor or admin will approve your post.',
+			'frontend-dashboard'
+		) . '"></i>';
 	}
 
 	return '<i class="fa fa-exclamation bg-danger-font fed_popover" data-toggle="popover" data-trigger="hover" title="' . esc_attr( $status ) . '" 
  data-content="' . esc_attr( $status ) . '"></i>';
-
 }
 
 /**
  * Get Tags ID by Post ID.
  *
- * @param  int  $post_id  Post ID.
+ * @param  int $post_id  Post ID.
  *
  * @return array
  */
@@ -524,8 +553,8 @@ function fed_get_tags_id_by_post_id( $post_id ) {
  * Convert Array Object to Key Value.
  *
  * @param  array  $array  Array.
- * @param  string  $key  Key.
- * @param  string  $value  Value.
+ * @param  string $key  Key.
+ * @param  string $value  Value.
  *
  * @return array
  */
@@ -542,6 +571,7 @@ function fed_convert_array_object_to_key_value( $array, $key = 'slug', $value = 
  * Get Payment Notificcation.
  */
 function fed_get_payment_notification() {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( isset( $_REQUEST['success'] ) && 'no' == $_REQUEST['success'] ) {
 		?>
 		<div class="alert alert-danger">
@@ -555,6 +585,7 @@ function fed_get_payment_notification() {
 		</div>
 		<?php
 	}
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	if ( isset( $_REQUEST['success'] ) && 'yes' == $_REQUEST['success'] && isset( $_REQUEST['tid'] ) ) {
 		?>
 		<div class="alert alert-success">
@@ -564,6 +595,7 @@ function fed_get_payment_notification() {
 					aria-hidden="true">&times;
 			</button>
 			<strong>Payment Success!</strong>
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			Thanks for your payment - You transaction ID : <?php echo esc_attr( sanitize_text_field( wp_unslash( $_REQUEST['tid'] ) ) ); ?>
 		</div>
 		<?php
@@ -573,7 +605,7 @@ function fed_get_payment_notification() {
 /**
  * Show Users By Role.
  *
- * @param  object  $fed_user_attr  User Attribute.
+ * @param  object $fed_user_attr  User Attribute.
  */
 function fed_show_users_by_role( $fed_user_attr ) {
 	$user_roles    = fed_get_user_roles();
@@ -666,8 +698,8 @@ function fed_show_users_by_role( $fed_user_attr ) {
 /**
  * Show User by Role.
  *
- * @param  object  $fed_user_attr  FED User Attr.
- * @param  int  $user_id  User ID.
+ * @param  object $fed_user_attr  FED User Attr.
+ * @param  int    $user_id  User ID.
  */
 function fed_show_user_by_role( $fed_user_attr, $user_id ) {
 	$user = new WP_User_Query(
@@ -697,7 +729,7 @@ function fed_show_user_by_role( $fed_user_attr, $user_id ) {
 /**
  * Show user profile page by user ID.
  *
- * @param  object  $user  User Data.
+ * @param  object $user  User Data.
  */
 function fed_show_user_profile_page( $user ) {
 	/**
@@ -793,7 +825,8 @@ function fed_show_user_profile_page( $user ) {
 										</span>
 										<?php
 										echo esc_attr(
-											ucwords( $menus[ $index ]['menu'] ), 'frontend-dashboard'
+											ucwords( $menus[ $index ]['menu'] ),
+											'frontend-dashboard'
 										);
 										?>
 									</a>
@@ -853,7 +886,8 @@ function fed_show_user_profile_page( $user ) {
 											<div class="fed_dashboard_label_name fed_header_font_color col-md-4 text-right-md text-right-not-sm text-right-not-xs">
 												<?php
 												echo esc_attr(
-													$single_item['label_name'], 'frontend-dashboard'
+													$single_item['label_name'],
+													'frontend-dashboard'
 												);
 												?>
 											</div>
@@ -896,7 +930,7 @@ function fed_show_user_profile_page( $user ) {
 					<div class="fed_post_excerpt">
 						<?php the_excerpt(); ?>
 					</div>
-				<?php
+					<?php
 				endwhile;
 				?>
 			</div>
@@ -907,7 +941,6 @@ function fed_show_user_profile_page( $user ) {
 	</div>
 	<?php
 	do_action( 'fed_user_profile_below' );
-
 }
 
 /**
@@ -941,8 +974,8 @@ function fed_get_403_error_page() {
 /**
  * Set Alert.
  *
- * @param  string  $key  Key.
- * @param  string  $message  Message.
+ * @param  string $key  Key.
+ * @param  string $message  Message.
  */
 function fed_set_alert( $key, $message ) {
 	set_transient( $key, $message, MINUTE_IN_SECONDS );
@@ -951,7 +984,7 @@ function fed_set_alert( $key, $message ) {
 /**
  * Show Alert.
  *
- * @param  string  $key  Key.
+ * @param  string $key  Key.
  *
  * @return string
  */
@@ -959,13 +992,64 @@ function fed_show_alert( $key ) {
 	$value = get_transient( $key );
 	$html  = '';
 	if ( $value ) {
+		$type    = 'success';
+		$message = '';
 		if ( is_array( $value ) ) {
-			$value = $value[0];
+			if ( isset( $value['message'] ) ) {
+				$message = $value['message'];
+				$type    = isset( $value['type'] ) ? $value['type'] : ( isset( $value['status'] ) && 'error' === $value['status'] ? 'danger' : 'success' );
+			} else {
+				$message = isset( $value[0] ) ? $value[0] : '';
+			}
+		} else {
+			$message = (string) $value;
 		}
-		$html .= '<div class="fkm_hide_alert alert alert-success m-y-10">
-							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-							<strong>' . wp_kses_post( $value ) . '</strong>
-						</div>';
+
+		if ( empty( $message ) ) {
+			$message = __( 'Successfully Updated', 'frontend-dashboard' );
+		}
+
+		$is_error   = ( 'danger' === $type || 'error' === $type || stripos( $message, 'error' ) !== false || stripos( $message, 'sorry' ) !== false || stripos( $message, 'failed' ) !== false || stripos( $message, 'please' ) !== false || stripos( $message, 'invalid' ) !== false || stripos( $message, 'match' ) !== false || stripos( $message, 'already' ) !== false || stripos( $message, 'wrong' ) !== false );
+		$is_warning = ( 'warning' === $type );
+		$is_info    = ( 'info' === $type );
+
+		if ( $is_error ) {
+			$bg_class    = 'bg-rose-50 border-rose-200 text-rose-800';
+			$icon_bg     = 'bg-rose-100 text-rose-600';
+			$icon_svg    = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
+			$close_hover = 'text-rose-400 hover:text-rose-600 hover:bg-rose-100';
+		} elseif ( $is_warning ) {
+			$bg_class    = 'bg-amber-50 border-amber-200 text-amber-800';
+			$icon_bg     = 'bg-amber-100 text-amber-600';
+			$icon_svg    = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>';
+			$close_hover = 'text-amber-400 hover:text-amber-600 hover:bg-amber-100';
+		} elseif ( $is_info ) {
+			$bg_class    = 'bg-sky-50 border-sky-200 text-sky-800';
+			$icon_bg     = 'bg-sky-100 text-sky-600';
+			$icon_svg    = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
+			$close_hover = 'text-sky-400 hover:text-sky-600 hover:bg-sky-100';
+		} else {
+			$bg_class    = 'bg-emerald-50/90 border-emerald-200/90 text-emerald-900';
+			$icon_bg     = 'bg-emerald-100 text-emerald-600';
+			$icon_svg    = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>';
+			$close_hover = 'text-emerald-500 hover:text-emerald-700 hover:bg-emerald-100';
+		}
+
+		$html .= '
+		<div class="fed_alert_notification flex items-center justify-between p-4 my-4 rounded-2xl border shadow-2xs transition-all duration-300 ' . esc_attr( $bg_class ) . '" role="alert">
+			<div class="flex items-center gap-3 min-w-0">
+				<div class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ' . esc_attr( $icon_bg ) . '">
+					' . $icon_svg . '
+				</div>
+				<div class="min-w-0 text-xs sm:text-sm font-semibold leading-normal">
+					' . wp_kses_post( $message ) . '
+				</div>
+			</div>
+			<button type="button" class="fed-close-alert-btn p-1.5 rounded-lg transition-colors cursor-pointer shrink-0 ml-3 ' . esc_attr( $close_hover ) . '" onclick="this.closest(\'.fed_alert_notification\').remove();" aria-label="Close">
+				<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+			</button>
+		</div>';
+
 		delete_transient( $key );
 	}
 
@@ -984,7 +1068,7 @@ function fed_show_form_label( $content ) {
 		( ! isset( $content['input_type'] ) && ! empty( $content['name'] ) ) ||
 		( isset( $content['input_type'] ) && 'label' !== $content['input_type'] && ! empty( $content['name'] ) )
 	) {
-		$label = '<label>' . esc_attr__( $content['name'], 'frontend-dashboard' ) . '</label>';
+		$label = '<label>' . esc_html( $content['name'] ) . '</label>';
 	}
 
 	$label = apply_filters( 'fed_show_form_label', $label, $content );

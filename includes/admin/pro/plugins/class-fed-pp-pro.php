@@ -84,9 +84,9 @@ if ( ! class_exists( 'FEDPPPRO' ) && ! defined( 'BC_FED_PP_PLUGIN' ) ) {
 			<div class="row m-b-20">
 				<div class="col-md-4">
 					<form method="post" action="https://buffercode.com/payment/bc/payment_start">
-						<input type='hidden' name='redirect_url' value="<?php echo fed_current_page_url(); ?>"/>
-						<input type='hidden' name='domain' value="<?php echo fed_get_domain_name(); ?>"/>
-						<input type='hidden' name='contact_email' value="<?php echo fed_get_admin_email(); ?>"/>
+						<input type='hidden' name='redirect_url' value="<?php echo esc_url( fed_current_page_url() ); ?>"/>
+						<input type='hidden' name='domain' value="<?php echo esc_attr( fed_get_domain_name() ); ?>"/>
+						<input type='hidden' name='contact_email' value="<?php echo esc_attr( fed_get_admin_email() ); ?>"/>
 						<input type='hidden' name='plugin_name' value='frontend-dashboard-payment-pro'/>
 						<input type='hidden' name='amount' value='29'/>
 						<input type='hidden' name='plan_type' value='annual'/>
@@ -110,9 +110,9 @@ if ( ! class_exists( 'FEDPPPRO' ) && ! defined( 'BC_FED_PP_PLUGIN' ) ) {
 				</div>
 				<div class="col-md-4">
 					<form method="post" action="https://buffercode.com/payment/bc/payment_start">
-						<input type='hidden' name='redirect_url' value="<?php echo fed_current_page_url(); ?>"/>
-						<input type='hidden' name='domain' value="<?php echo fed_get_domain_name(); ?>"/>
-						<input type='hidden' name='contact_email' value="<?php echo fed_get_admin_email(); ?>"/>
+						<input type='hidden' name='redirect_url' value="<?php echo esc_url( fed_current_page_url() ); ?>"/>
+						<input type='hidden' name='domain' value="<?php echo esc_attr( fed_get_domain_name() ); ?>"/>
+						<input type='hidden' name='contact_email' value="<?php echo esc_attr( fed_get_admin_email() ); ?>"/>
 						<input type='hidden' name='plugin_name' value='frontend-dashboard-payment-pro'/>
 						<input type='hidden' name='amount' value='99'/>
 						<input type='hidden' name='plan_type' value='lifetime'/>
@@ -149,7 +149,6 @@ if ( ! class_exists( 'FEDPPPRO' ) && ! defined( 'BC_FED_PP_PLUGIN' ) ) {
 			</div>
 
 			<?php
-
 		}
 	}
 

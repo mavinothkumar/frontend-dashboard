@@ -5,6 +5,10 @@
  * @package frontend-dashboard.
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 if ( ! class_exists( 'FED_Post_Widget' ) ) {
 	/**
 	 * Class FED_Post_Widget
@@ -16,12 +20,14 @@ if ( ! class_exists( 'FED_Post_Widget' ) ) {
 		public function __construct() {
 			parent::__construct( 'fed-post-widget', 'FED Post Widget' );
 
-			add_action( 'widgets_init', function () {
-				register_widget( 'FED_Post_Widget' );
-			} );
+			add_action(
+				'widgets_init',
+				function () {
+					register_widget( 'FED_Post_Widget' );
+				}
+			);
 
 			add_action( 'wp_print_styles', array( $this, 'enqueue_style' ) );
-
 		}
 
 		/**
@@ -30,7 +36,8 @@ if ( ! class_exists( 'FED_Post_Widget' ) ) {
 		public function enqueue_style() {
 			if ( is_active_widget( false, false, 'fed-post-widget' ) ) {
 				if ( ! wp_script_is( 'fed_global_admin_style', 'enqueued' ) ) {
-					wp_enqueue_style( 'fed_global_admin_style',
+					wp_enqueue_style(
+						'fed_global_admin_style',
 						plugins_url(
 							'/assets/admin/css/fed_global_admin_style.css',
 							BC_FED_PLUGIN
@@ -46,8 +53,8 @@ if ( ! class_exists( 'FED_Post_Widget' ) ) {
 		/**
 		 * Widget.
 		 *
-		 * @param  array  $args  Arguments.
-		 * @param  array  $instance  Instance.
+		 * @param  array $args  Arguments.
+		 * @param  array $instance  Instance.
 		 */
 		public function widget( $args, $instance ) {
 			$post_type                  = fed_get_data( 'fed_post_type', $instance );
@@ -64,6 +71,7 @@ if ( ! class_exists( 'FED_Post_Widget' ) ) {
 			);
 
 			if ( $fed_taxonomy && ! empty( $fed_taxonomy ) ) {
+				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 				$options['tax_query'] = array(
 					array(
 						'taxonomy' => $fed_taxonomy,
@@ -71,6 +79,7 @@ if ( ! class_exists( 'FED_Post_Widget' ) ) {
 					),
 				);
 				if ( $fed_term && ! empty( $fed_term ) ) {
+					// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 					$options['tax_query'] = array(
 						array(
 							'taxonomy'         => $fed_taxonomy,
@@ -84,9 +93,11 @@ if ( ! class_exists( 'FED_Post_Widget' ) ) {
 
 			$pages = get_posts( $options );
 
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo $args['before_widget'];
 
 			if ( ! empty( $instance['title'] ) ) {
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];
 			}
 			?>
@@ -117,15 +128,15 @@ if ( ! class_exists( 'FED_Post_Widget' ) ) {
 													echo esc_attr(
 														get_the_author_meta(
 															'display_name',
-															$page->post_author )
+															$page->post_author
+														)
 													);
 													?>
 												</div>
 											<?php } ?>
 											<?php if ( 'yes' === $fed_post_widget_date ) { ?>
 												<div class="fed_post_widget_layout_items_content_date">
-													<?php echo esc_attr( date( 'M d, Y',
-														strtotime( $page->post_date ) ) ); ?>
+													<?php echo esc_attr( gmdate( 'M d, Y', strtotime( $page->post_date ) ) ); ?>
 												</div>
 											<?php } ?>
 										</div>
@@ -142,13 +153,12 @@ if ( ! class_exists( 'FED_Post_Widget' ) ) {
 			<?php
 			// phpcs:ignore
 			echo $args['after_widget'];
-
 		}
 
 		/**
 		 * Form.
 		 *
-		 * @param  array  $instance  Instance.
+		 * @param  array $instance  Instance.
 		 *
 		 * @return string|void
 		 */
@@ -170,20 +180,25 @@ if ( ! class_exists( 'FED_Post_Widget' ) ) {
 				$post_type_value = $instance['fed_post_type'];
 				$taxonomies      = get_object_taxonomies( fed_sanitize_text_field( $post_type_value ), 'object' );
 				$taxonomies      = array(
-					                   '' => __( 'Please Select', 'frontend-dashboard' ),
-				                   ) + wp_list_pluck( $taxonomies, 'label', 'name' );
+					'' => __( 'Please Select', 'frontend-dashboard' ),
+				) + wp_list_pluck( $taxonomies, 'label', 'name' );
 			}
 			if ( ! empty( $instance['fed_taxonomy'] ) ) {
 				$taxonomy_value = $instance['fed_taxonomy'];
-				$terms          = get_terms( array(
-					'taxonomy'   => $taxonomy_value,
-					'hide_empty' => false,
-					'orderby'    => 'name',
-					'order'      => 'ASC',
-					'parent'     => '0',
-				) );
-				$terms          = array( '0' => __( 'Please Select', 'frontend-dashboard' ) ) + wp_list_pluck( $terms,
-						'name', 'term_id' );
+				$terms          = get_terms(
+					array(
+						'taxonomy'   => $taxonomy_value,
+						'hide_empty' => false,
+						'orderby'    => 'name',
+						'order'      => 'ASC',
+						'parent'     => '0',
+					)
+				);
+				$terms          = array( '0' => __( 'Please Select', 'frontend-dashboard' ) ) + wp_list_pluck(
+					$terms,
+					'name',
+					'term_id'
+				);
 			}
 
 			if ( ! empty( $instance['fed_term'] ) ) {
@@ -203,41 +218,46 @@ if ( ! class_exists( 'FED_Post_Widget' ) ) {
 								<input type="text"
 										class="form-control"
 										name="<?php echo esc_attr( $this->get_field_name( 'fed_post_widget_title' ) ); ?>"
-										value="<?php echo $title; ?>"/>
+										value="<?php echo esc_attr( $title ); ?>"/>
 							</div>
 							<div class="fed_widget_item_message"></div>
 						</div>
 						<div class="fed_widget_item fed_widget_post_type_wrapper m-b-10">
 							<div class="fed_widget_item_label">
-								<?php esc_attr_e( 'Select Post Type' ); ?>
+								<?php esc_attr_e( 'Select Post Type', 'frontend-dashboard' ); ?>
 							</div>
 							<div class="fed_widget_item_content">
 								<?php
-								echo fed_form_select( array(
-									'input_value' => $post_types,
-									'input_meta'  => $this->get_field_name( 'fed_post_type' ),
-									'user_value'  => $post_type_value,
-									'class_name'  => 'fed_widget_post_type',
-									'extra'       => 'style="width: 100%" data-url=' . fed_get_ajax_form_action( 'fed_get_taxonomy_by_post_type&fed_nonce=' . wp_create_nonce( 'fed_nonce' ) ),
-								) );
+								// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+								echo fed_form_select(
+									array(
+										'input_value' => $post_types,
+										'input_meta'  => $this->get_field_name( 'fed_post_type' ),
+										'user_value'  => $post_type_value,
+										'class_name'  => 'fed_widget_post_type',
+										'extra'       => 'style="width: 100%" data-url=' . fed_get_ajax_form_action( 'fed_get_taxonomy_by_post_type&fed_nonce=' . wp_create_nonce( 'fed_nonce' ) ),
+									)
+								);
 								?>
 							</div>
 							<div class="fed_widget_item_message"></div>
 						</div>
 						<div class="fed_widget_item fed_widget_taxonomy_list m-b-10">
 							<div class="fed_widget_item_label">
-								<?php esc_attr_e( 'Select Taxonomies' ); ?>
+								<?php esc_attr_e( 'Select Taxonomies', 'frontend-dashboard' ); ?>
 							</div>
 							<div class="fed_widget_item_content">
 								<?php
-								// phpcs:ignore
-								echo fed_form_select( array(
-									'input_value' => $taxonomies,
-									'input_meta'  => $this->get_field_name( 'fed_taxonomy' ),
-									'user_value'  => $taxonomy_value,
-									'extra'       => 'style="width: 100%" data-url=' . fed_get_ajax_form_action( 'fed_get_terms_by_taxonomy&fed_nonce=' . wp_create_nonce( 'fed_nonce' ) ),
-									'class_name'  => 'fed_widget_taxonomy',
-								) );
+								// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+								echo fed_form_select(
+									array(
+										'input_value' => $taxonomies,
+										'input_meta'  => $this->get_field_name( 'fed_taxonomy' ),
+										'user_value'  => $taxonomy_value,
+										'extra'       => 'style="width: 100%" data-url=' . fed_get_ajax_form_action( 'fed_get_terms_by_taxonomy&fed_nonce=' . wp_create_nonce( 'fed_nonce' ) ),
+										'class_name'  => 'fed_widget_taxonomy',
+									)
+								);
 								?>
 							</div>
 							<div class="fed_widget_item_message"></div>
@@ -248,13 +268,16 @@ if ( ! class_exists( 'FED_Post_Widget' ) ) {
 							</div>
 							<div class="fed_widget_item_content">
 								<?php
-								echo fed_form_select( array(
-									'input_value' => $terms,
-									'input_meta'  => $this->get_field_name( 'fed_term' ),
-									'user_value'  => $term_value,
-									'extra'       => 'style="width: 100%"',
-									'class_name'  => 'fed_widget_term',
-								) );
+								// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+								echo fed_form_select(
+									array(
+										'input_value' => $terms,
+										'input_meta'  => $this->get_field_name( 'fed_term' ),
+										'user_value'  => $term_value,
+										'extra'       => 'style="width: 100%"',
+										'class_name'  => 'fed_widget_term',
+									)
+								);
 								?>
 							</div>
 							<div class="fed_widget_item_message"></div>
@@ -292,14 +315,13 @@ if ( ! class_exists( 'FED_Post_Widget' ) ) {
 				</div>
 			</div>
 			<?php
-
 		}
 
 		/**
 		 * Update.
 		 *
-		 * @param  array  $new_instance  New Instance.
-		 * @param  array  $old_instance  Old Instance.
+		 * @param  array $new_instance  New Instance.
+		 * @param  array $old_instance  Old Instance.
 		 *
 		 * @return array
 		 */

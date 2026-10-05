@@ -70,23 +70,28 @@ if ( ! function_exists( 'fed_loader' ) ) {
 	/**
 	 * Loader.
 	 *
-	 * @param  string $hide  Hide.
-	 *
-	 * @param  null   $message  Message.
+	 * @param  string      $hide     Hide class ('hide' or 'hidden').
+	 * @param  string|null $message  Optional message.
 	 *
 	 * @return string
 	 */
 	function fed_loader( $hide = 'hide', $message = null ) {
-		$html = '<div class="preview-area ' . $hide . '">
-        <div class="spinner_circle">
-            <div class="double-bounce1"></div>
-            <div class="double-bounce2"></div>
-        </div>';
+		$hide_class = ( 'hide' === $hide || 'hidden' === $hide ) ? 'hide hidden' : $hide;
+		$msg_text   = ! empty( $message ) ? $message : __( 'Please wait...', 'frontend-dashboard' );
 
-		if ( $message ) {
-			$html .= '<div class="fed_loader_message hide">' . $message . '</div>';
-		}
-
+		$html  = '<div class="preview-area fed-global-loader-overlay ' . esc_attr( $hide_class ) . '">';
+		$html .= '<div class="fed-loader-card">';
+		$html .= '  <div class="fed-loader-spinner">';
+		$html .= '    <svg class="fed-spinner-svg" viewBox="0 0 50 50">';
+		$html .= '      <circle class="fed-spinner-path" cx="25" cy="25" r="20" fill="none" stroke-width="4"></circle>';
+		$html .= '    </svg>';
+		$html .= '  </div>';
+		$html .= '  <div class="fed-loader-text">' . esc_html( $msg_text ) . '</div>';
+		$html .= '  <div class="spinner_circle" style="display:none !important;">';
+		$html .= '    <div class="double-bounce1"></div>';
+		$html .= '    <div class="double-bounce2"></div>';
+		$html .= '  </div>';
+		$html .= '</div>';
 		$html .= '</div>';
 
 		return $html;
@@ -154,6 +159,7 @@ if ( ! function_exists( 'fed_wp_nonce_field' ) ) {
 		}
 
 		if ( $echo ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo $nonce_field;
 		}
 
@@ -173,8 +179,8 @@ if ( ! function_exists( 'fed_get_random_string' ) ) {
 		$characters        = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		$characters_length = strlen( $characters );
 		$random_string     = '';
-		for ( $i = 0; $i < $length; $i ++ ) {
-			$random_string .= $characters[ rand( 0, $characters_length - 1 ) ];
+		for ( $i = 0; $i < $length; $i++ ) {
+			$random_string .= $characters[ wp_rand( 0, $characters_length - 1 ) ];
 		}
 
 		return $random_string;
@@ -216,7 +222,8 @@ if ( ! function_exists( 'fed_shortcode_lists' ) ) {
 	 */
 	function fed_shortcode_lists() {
 		return apply_filters(
-			'fed_shortcode_lists', array(
+			'fed_shortcode_lists',
+			array(
 				'fed_login',
 				'fed_login_only',
 				'fed_register_only',
@@ -350,7 +357,6 @@ if ( ! function_exists( 'fed_is_admin' ) ) {
 		$user = wp_get_current_user();
 
 		return in_array( 'administrator', $user->roles ) ? true : false;
-
 	}
 }
 
@@ -366,7 +372,6 @@ if ( ! function_exists( 'fed_is_user_role' ) ) {
 		$user = wp_get_current_user();
 
 		return in_array( $user_role, $user->roles ) ? true : false;
-
 	}
 }
 
@@ -378,7 +383,8 @@ if ( ! function_exists( 'fed_get_default_menu_type' ) ) {
 	 */
 	function fed_get_default_menu_type() {
 		return apply_filters(
-			'fed_get_default_menu_type', array(
+			'fed_get_default_menu_type',
+			array(
 				'post',
 				'user',
 				'logout',
@@ -435,10 +441,13 @@ if ( ! function_exists( 'bcdump' ) ) {
 		echo '<pre style="font-size:11px;">';
 
 		if ( is_array( $var ) || is_object( $var ) ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.PHP.DevelopmentFunctions.error_log_print_r
 			echo htmlentities( print_r( $var, true ) );
 		} elseif ( is_string( $var ) ) {
-			echo "string(" . strlen( $var ) . ") \"" . htmlentities( $var ) . "\"\n";
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo 'string(' . strlen( $var ) . ') "' . htmlentities( $var ) . "\"\n";
 		} else {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_dump
 			var_dump( $var );
 		}
 
@@ -514,7 +523,6 @@ if ( ! function_exists( 'fed_encrypt' ) ) {
 		$iv             = substr( hash( 'sha256', $secret_iv ), 0, 16 );
 
 		return base64_encode( openssl_encrypt( $string, $encrypt_method, $key, 0, $iv ) );
-
 	}
 }
 
@@ -580,10 +588,14 @@ function fed_check_admin_notifications() {
  * Show Notifications Message.
  */
 function fed_show_notifications_message() {
+	if ( empty( $_SESSION['fed_admin_errors'] ) || ! is_array( $_SESSION['fed_admin_errors'] ) ) {
+		return;
+	}
 	?>
 	<div class="error notice">
 		<p>
-			<?php echo fed_convert_array_value_to_string( $_SESSION['fed_admin_errors'], ',' ); ?>
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			<?php echo esc_html( fed_convert_array_value_to_string( $_SESSION['fed_admin_errors'], ',' ) ); ?>
 		</p>
 	</div>
 	<?php
@@ -618,15 +630,16 @@ function fed_convert_array_value_to_string( array $array, $glue = ',', $include_
 	$glued_string = '';
 	// Recursively iterates array and adds key/value to glued string.
 	array_walk_recursive(
-		$array, function ( $value, $key ) use ( $glue, $include_keys, &$glued_string ) {
-		$include_keys and $glued_string .= $key . $glue;
-		$glued_string .= $value . $glue;
-	}
+		$array,
+		function ( $value, $key ) use ( $glue, $include_keys, &$glued_string ) {
+			$include_keys and $glued_string .= $key . $glue;
+			$glued_string                   .= $value . $glue;
+		}
 	);
 	// Removes last $glue from string.
 	strlen( $glue ) > 0 and $glued_string = substr( $glued_string, 0, - strlen( $glue ) );
 	// Trim ALL whitespace.
-	$trim_all and $glued_string = preg_replace( "/(\s)/ixsm", '', $glued_string );
+	$trim_all and $glued_string = preg_replace( '/(\s)/ixsm', '', $glued_string );
 
 	return (string) $glued_string;
 }
@@ -638,10 +651,44 @@ function fed_convert_array_value_to_string( array $array, $glue = ',', $include_
  * @param  string $type  Type.
  */
 function fed_show_alert_message( $message, $type = 'danger' ) {
+	$is_error   = ( 'danger' === $type || 'error' === $type );
+	$is_warning = ( 'warning' === $type );
+	$is_info    = ( 'info' === $type );
+
+	if ( $is_error ) {
+		$bg_class    = 'bg-rose-50 border-rose-200 text-rose-800';
+		$icon_bg     = 'bg-rose-100 text-rose-600';
+		$icon_svg    = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
+		$close_hover = 'text-rose-400 hover:text-rose-600 hover:bg-rose-100';
+	} elseif ( $is_warning ) {
+		$bg_class    = 'bg-amber-50 border-amber-200 text-amber-800';
+		$icon_bg     = 'bg-amber-100 text-amber-600';
+		$icon_svg    = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>';
+		$close_hover = 'text-amber-400 hover:text-amber-600 hover:bg-amber-100';
+	} elseif ( $is_info ) {
+		$bg_class    = 'bg-sky-50 border-sky-200 text-sky-800';
+		$icon_bg     = 'bg-sky-100 text-sky-600';
+		$icon_svg    = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
+		$close_hover = 'text-sky-400 hover:text-sky-600 hover:bg-sky-100';
+	} else {
+		$bg_class    = 'bg-emerald-50/90 border-emerald-200/90 text-emerald-900';
+		$icon_bg     = 'bg-emerald-100 text-emerald-600';
+		$icon_svg    = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>';
+		$close_hover = 'text-emerald-500 hover:text-emerald-700 hover:bg-emerald-100';
+	}
 	?>
-	<div class="alert alert-<?php echo esc_attr( $type ); ?>">
-		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-		<strong><?php echo wp_kses_post( $message ); ?></strong>
+	<div class="fed_alert_notification flex items-center justify-between p-4 my-4 rounded-2xl border shadow-2xs transition-all duration-300 <?php echo esc_attr( $bg_class ); ?>" role="alert">
+		<div class="flex items-center gap-3 min-w-0">
+			<div class="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 <?php echo esc_attr( $icon_bg ); ?>">
+				<?php echo $icon_svg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			</div>
+			<div class="min-w-0 text-xs sm:text-sm font-semibold leading-normal">
+				<?php echo wp_kses_post( $message ); ?>
+			</div>
+		</div>
+		<button type="button" class="fed-close-alert-btn p-1.5 rounded-lg transition-colors cursor-pointer shrink-0 ml-3 <?php echo esc_attr( $close_hover ); ?>" onclick="this.closest('.fed_alert_notification').remove();" aria-label="Close">
+			<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+		</button>
 	</div>
 	<?php
 }
@@ -743,7 +790,7 @@ function fed_get_current_user( $key = 'id' ) {
  * @return false|string
  */
 function fed_timestamp_to_date_format( $timestamp ) {
-	return $timestamp && ! empty( $timestamp ) ? date( get_option( 'date_format' ), $timestamp ) : 'ERROR';
+	return $timestamp && ! empty( $timestamp ) ? gmdate( get_option( 'date_format' ), $timestamp ) : 'ERROR';
 }
 
 /**
@@ -754,7 +801,7 @@ function fed_timestamp_to_date_format( $timestamp ) {
  * @return false|string
  */
 function fed_get_formatted_date( $date ) {
-	return $date && ! empty( $date ) ? date( get_option( 'date_format' ), strtotime( $date ) ) : 'ERROR';
+	return $date && ! empty( $date ) ? gmdate( get_option( 'date_format' ), strtotime( $date ) ) : 'ERROR';
 }
 
 
@@ -782,13 +829,15 @@ function fed_get_menu_url_by_slug( $menu_slug, $menu_type ) {
 							'fed_nonce' => wp_create_nonce(
 								'fed_nonce'
 							),
-						), $dashboard_url
+						),
+						$dashboard_url
 					);
 				}
 			}
 
 			return false;
 		} else {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$dashboard_container = new FED_Routes( $_REQUEST );
 
 			$menu = $dashboard_container->setDashboardMenuQuery();
@@ -804,7 +853,8 @@ function fed_get_menu_url_by_slug( $menu_slug, $menu_type ) {
 							'fed_nonce' => wp_create_nonce(
 								'fed_nonce'
 							),
-						), $dashboard_url
+						),
+						$dashboard_url
 					);
 				}
 			}
@@ -843,10 +893,51 @@ function fed_get_user_meta( $user_id, $key = '', $single = false ) {
  * Show Password Meter
  */
 
-add_action( 'fed_register_below_form_field', function ( $input_meta, $content ) {
-	if ( $content && ( 'user_pass' === $input_meta || 'confirmation_password' === $input_meta ) ) {
-		?>
+add_action(
+	'fed_register_below_form_field',
+	function ( $input_meta, $content ) {
+		if ( $content && ( 'user_pass' === $input_meta || 'confirmation_password' === $input_meta ) ) {
+			?>
 		<span class="fed_password_strength"></span>
-		<?php
+			<?php
+		}
+	},
+	10,
+	2
+);
+
+/**
+ * Get Incompatible Add-ons (< 3.0.0).
+ *
+ * @return array
+ */
+function fed_get_incompatible_addons() {
+	if ( class_exists( '\FED\Services\Diagnostics\AddonCompatibilityManager' ) ) {
+		return \FED\Services\Diagnostics\AddonCompatibilityManager::instance()->get_incompatible_addons();
 	}
-}, 10, 2 );
+	return array();
+}
+
+/**
+ * Check if there are incompatible add-ons.
+ *
+ * @return bool
+ */
+function fed_has_incompatible_addons() {
+	if ( class_exists( '\FED\Services\Diagnostics\AddonCompatibilityManager' ) ) {
+		return \FED\Services\Diagnostics\AddonCompatibilityManager::instance()->has_incompatible_addons();
+	}
+	return false;
+}
+
+/**
+ * Render Header Banner for Incompatible Add-ons.
+ *
+ * @return string HTML
+ */
+function fed_render_addon_compatibility_banner() {
+	if ( class_exists( '\FED\Services\Diagnostics\AddonCompatibilityManager' ) ) {
+		return \FED\Services\Diagnostics\AddonCompatibilityManager::instance()->render_in_app_banner();
+	}
+	return '';
+}

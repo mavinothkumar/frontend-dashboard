@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<ruleset name="Frontend Dashboard Coding Standards">
+    <description>Quality and security ruleset for Frontend Dashboard plugin development.</description>
+
+    <!-- Scan only PHP files -->
+    <arg name="extensions" value="php"/>
+    
+    <!-- Show progress and sniff codes in output -->
+    <arg value="ps"/>
+    <arg name="colors"/>
+
+    <!-- Directories to scan -->
+    <file>.</file>
+
+    <!-- Exclude third-party and build directories -->
+    <exclude-pattern>/vendor/*</exclude-pattern>
+    <exclude-pattern>/node_modules/*</exclude-pattern>
+    <exclude-pattern>/assets/*</exclude-pattern>
+    <exclude-pattern>/dist/*</exclude-pattern>
+    <exclude-pattern>/log/*</exclude-pattern>
+    <exclude-pattern>*.min.js</exclude-pattern>
+    <exclude-pattern>*.min.css</exclude-pattern>
+
+    <!-- Include WordPress rulesets -->
+    <rule ref="WordPress"/>
+    <rule ref="WordPress-Core"/>
+    <rule ref="WordPress-Docs"/>
+    <rule ref="WordPress-Extra"/>
+
+    <!-- Set minimum supported WP version -->
+    <config name="minimum_wp_version" value="6.0"/>
+
+    <!-- Set text domain for i18n checks -->
+    <rule ref="WordPress.WP.I18n">
+        <properties>
+            <property name="text_domain" type="array">
+                <element value="frontend-dashboard"/>
+            </property>
+        </properties>
+    </rule>
+
+    <!-- Verify all global variables/functions/classes are properly prefixed -->
+    <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+        <properties>
+            <property name="prefixes" type="array">
+                <element value="fed"/>
+                <element value="FED"/>
+                <element value="frontend_dashboard"/>
+                <element value="FrontendDashboard"/>
+            </property>
+        </properties>
+    </rule>
+</ruleset>

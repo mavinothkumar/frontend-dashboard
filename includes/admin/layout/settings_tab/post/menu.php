@@ -22,7 +22,10 @@ function fed_admin_post_menu_tab( $fed_admin_options ) {
 
 		<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
 
-		<?php echo fed_loader(); ?>
+		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo fed_loader();
+		?>
 
 		<input type="hidden"
 				name="fed_admin_unique"
@@ -37,14 +40,16 @@ function fed_admin_post_menu_tab( $fed_admin_options ) {
 					<div class="col-md-4 fed_menu_title">Post Menu Name</div>
 					<div class="col-md-8">
 						<?php
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo fed_input_box(
 							'fed_post_menu_name',
 							array(
 								'name'        => 'fed_post_options[menu][rename_post]',
-								'placeholder' => __( 'Please enter new name for Post' ),
+								'placeholder' => __( 'Please enter new name for Post', 'frontend-dashboard' ),
 								'value'       => isset( $fed_admin_options['menu']['rename_post'] ) ? $fed_admin_options['menu']['rename_post'] : 'Post',
-							), 'single_line'
-						)
+							),
+							'single_line'
+						);
 						?>
 					</div>
 				</div>
@@ -52,13 +57,15 @@ function fed_admin_post_menu_tab( $fed_admin_options ) {
 					<div class="col-md-4 fed_menu_title">Post Menu Position</div>
 					<div class="col-md-8">
 						<?php
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo fed_input_box(
 							'post_menu_position',
 							array(
 								'name'        => 'fed_post_options[menu][post_position]',
 								'value'       => isset( $fed_admin_options['menu']['post_position'] ) ? $fed_admin_options['menu']['post_position'] : 2,
-								'placeholder' => __( 'Post Menu Position' ),
-							), 'number'
+								'placeholder' => __( 'Post Menu Position', 'frontend-dashboard' ),
+							),
+							'number'
 						);
 						?>
 					</div>
@@ -67,16 +74,18 @@ function fed_admin_post_menu_tab( $fed_admin_options ) {
 					<div class="col-md-4 fed_menu_title">Post Menu Icon</div>
 					<div class="col-md-8">
 						<?php
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo fed_input_box(
 							'fed_payment_options[menu][post_menu_icon]',
 							array(
 								'name'        => 'fed_post_options[menu][post_menu_icon]',
-								'placeholder' => __( 'Please Select Post Menu Icon' ),
+								'placeholder' => __( 'Please Select Post Menu Icon', 'frontend-dashboard' ),
 								'value'       => isset( $fed_admin_options['menu']['post_menu_icon'] ) ? $fed_admin_options['menu']['post_menu_icon'] : 'fa fa-file-text',
 								'class'       => 'post_menu_icon',
 								'extra'       => 'data-toggle="modal" data-target=".fed_show_fa_list" placeholder="Menu Icon" data-fed_menu_box_id="post_menu_icon"',
-							), 'single_line'
-						)
+							),
+							'single_line'
+						);
 						?>
 					</div>
 				</div>

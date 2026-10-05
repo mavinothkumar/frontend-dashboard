@@ -17,9 +17,16 @@ add_action( 'wp_ajax_fed_admin_add_orders', 'fed_admin_add_orders_function' );
  * Admin Orders.
  */
 function fed_admin_orders_function() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
+
+	fed_verify_nonce();
+
 	global $wpdb;
 	$table_name = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
-	$request    = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
+	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 
 	$response = fed_admin_order_id_validation( $request );
 	$order    = $response['order'];
@@ -46,9 +53,10 @@ function fed_admin_orders_function() {
 		'country_code'   => isset( $request['country_code'] ) ? sanitize_text_field(
 			$request['country_code']
 		) : $order['country_code'],
-		'updated_at'     => date( 'Y-m-d H:i:s' ),
+		'updated_at'     => gmdate( 'Y-m-d H:i:s' ),
 	);
 
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	$status = $wpdb->update( $table_name, $orders, array( 'id' => $id ) );
 
 	if ( false === $status ) {
@@ -60,73 +68,67 @@ function fed_admin_orders_function() {
 
 	wp_send_json_success( array( 'message' => __( 'Orders has been successfully updated', 'frontend-dashboard' ) ) );
 	exit();
-
 }
 
 /**
  * Admin Order Delete.
  */
 function fed_admin_order_delete_function() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
+
+	fed_verify_nonce();
+
 	global $wpdb;
 	$table_name = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
-	$request    = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
+	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	parse_str( $request['data'], $request );
 	$response = fed_admin_order_id_validation( $request );
 	$order    = $response['order'];
 	$id       = $response['id'];
 
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	$verify = $wpdb->delete( $table_name, array( 'id' => $id ), array( '%d' ) );
 
 	if ( $verify ) {
-		wp_send_json_success(
-			array(
-				'message' => sprintf(
-				/* Translators: %s : Transaction ID */
-					__( 'Transaction ID %s has been deleted successfully', 'frontend-dashboard' ),
-					esc_attr( $order['transaction_id'] )
-				),
-				'reload'  => admin_url() . 'admin.php?page=fed_orders',
-			)
-		);
+		wp_send_json_success( array( 'message' => __( 'Payment has been successfully deleted', 'frontend-dashboard' ) ) );
 		exit();
 	}
 
-	wp_send_json_error(
-		array(
-			'message' => __(
-				'Something went wrong, please refresh the page and delete it again.', 'frontend-dashboard'
-			),
-		)
-	);
+	wp_send_json_error( array( 'message' => __( 'Sorry could not find the payment record', 'frontend-dashboard' ) ) );
 	exit();
 }
 
 /**
- * Admin Order ID Validation
+ * Validate Order.
  *
  * @param  array $request  Request.
  *
  * @return array
  */
 function fed_admin_order_id_validation( $request ) {
-	if ( ! wp_verify_nonce( $request['fed_admin_order_delete'], 'fed_admin_order_delete' ) ) {
-		wp_send_json_error( array( 'message' => 'Invalid Request' ) );
+	if ( ! isset( $request['id'] ) || '' == $request['id'] ) {
+		wp_send_json_error(
+			array( 'message' => __( 'Sorry no record found to update your details', 'frontend-dashboard' ) )
+		);
+		exit();
+	}
+	$id = (int) $request['id'];
+
+	$order = fed_fetch_table_row_by_id( BC_FED_TABLE_PAYMENT, $id );
+
+	if ( $order instanceof WP_Error ) {
+		wp_send_json_error(
+			array( 'message' => __( 'Sorry no record found to update your details', 'frontend-dashboard' ) )
+		);
 		exit();
 	}
 
-	$id = isset( $request['order_id'] ) ? (int) $request['order_id'] : 0;
-	if ( ! $id ) {
-		wp_send_json_error( array( 'message' => 'The Order ID is missing, please refresh the page and try again' ) );
-		exit();
-	}
-	$order = fed_fetch_table_row_by_id( BC_FED_TABLE_PAYMENT, $id );
-	if ( $order instanceof WP_Error ) {
+	if ( ! $order ) {
 		wp_send_json_error(
-			array(
-				'message' => __(
-					'The Order ID not available now, please refresh the page and try again.', 'frontend-dashboard'
-				),
-			)
+			array( 'message' => __( 'Sorry no record found to update your details', 'frontend-dashboard' ) )
 		);
 		exit();
 	}
@@ -141,13 +143,21 @@ function fed_admin_order_id_validation( $request ) {
  * Order Search User to Add
  */
 function fed_order_search_add_function() {
-	$request = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
+
+	fed_verify_nonce();
+
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
+	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	if ( ! isset( $request['fed_order_search'] ) || '' == $request['fed_order_search'] ) {
 		wp_send_json_error( array( 'message' => __( 'Please fill the search field', 'frontend-dashboard' ) ) );
 		exit();
 	}
 	$user = get_user_by(
-		sanitize_text_field( $request['order_search_key'] ), sanitize_text_field( $request['fed_order_search'] )
+		sanitize_text_field( $request['order_search_key'] ),
+		sanitize_text_field( $request['fed_order_search'] )
 	);
 
 	if ( ! $user ) {
@@ -166,19 +176,22 @@ function fed_order_search_add_function() {
 			),
 		)
 	);
-
 }
 
 /**
  * Admin Add Order
  */
 function fed_admin_add_orders_function() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ) );
+	}
+
 	global $wpdb;
 	$table_name = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
-	$request    = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	$request    = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 
 	if ( ! wp_verify_nonce( $request['fed_admin_add_orders'], 'fed_admin_add_orders' ) ) {
-		wp_send_json_error( array( 'message' => __( 'Invalid Request' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Invalid Request', 'frontend-dashboard' ) ) );
 		exit();
 	}
 	$validation = fed_order_add_validation( $request );
@@ -193,8 +206,9 @@ function fed_admin_add_orders_function() {
 		'payer_id'       => wp_generate_password( 13, false ),
 		'invoice_number' => wp_generate_password( 13, false ),
 		'sku'            => current_time( 'YmdHis' ) . '_' . $request['user_id'] . '_' . wp_generate_password(
-				6, false
-			),
+			6,
+			false
+		),
 		'user_id'        => isset( $request['user_id'] ) ? (int) $request['user_id'] : '',
 		'email'          => isset( $request['email'] ) ? sanitize_email( $request['email'] ) : '',
 		'first_name'     => isset( $request['first_name'] ) ? sanitize_text_field( $request['first_name'] ) : '',
@@ -214,10 +228,11 @@ function fed_admin_add_orders_function() {
 		'currency_type'  => isset( $request['currency_type'] ) ? sanitize_text_field(
 			$request['currency_type']
 		) : 'paypal',
-		'created_at'     => date( 'Y-m-d H:i:s' ),
-		'updated_at'     => date( 'Y-m-d H:i:s' ),
+		'created_at'     => gmdate( 'Y-m-d H:i:s' ),
+		'updated_at'     => gmdate( 'Y-m-d H:i:s' ),
 	);
 
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 	$status = $wpdb->insert(
 		$table_name,
 		$orders

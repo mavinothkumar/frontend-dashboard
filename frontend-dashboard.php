@@ -3,8 +3,8 @@
  * Plugin Name: Frontend Dashboard
  * Plugin URI: https://buffercode.com/plugin/frontend-dashboard
  * Description: Frontend dashboard makes you flexible way to customize the user dashboard on frontend rather than WordPress wp-admin dashboard.
- * Version: 2.3
- * Author: vinoth06.
+ * Version: 3.0.6
+ * Author: vinoth06
  * Author URI: https://buffercode.com/
  * License: GPLv2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Version Number
  */
-define( 'BC_FED_PLUGIN_VERSION', '2.3' );
+define( 'BC_FED_PLUGIN_VERSION', '3.0.6' );
 define( 'BC_FED_PLUGIN_VERSION_TYPE', 'FREE' );
 
 /**
@@ -46,6 +46,10 @@ define( 'BC_FED_PLUGIN_NAME', trim( dirname( BC_FED_PLUGIN_BASENAME ), '/' ) );
  * Plugin Directory
  */
 define( 'BC_FED_PLUGIN_DIR', untrailingslashit( dirname( BC_FED_PLUGIN ) ) );
+/**
+ * Plugin URL
+ */
+define( 'BC_FED_PLUGIN_URL', untrailingslashit( plugin_dir_url( BC_FED_PLUGIN ) ) );
 
 /**
  * User Profile Table Name
@@ -62,9 +66,13 @@ define( 'BC_FED_TABLE_MENU_META', 'fed_menu_meta' );
 define( 'BC_FED_TABLE_POST', 'fed_post' );
 define( 'BC_FED_TABLE_PAYMENT', 'fed_payment' );
 define( 'BC_FED_TABLE_PAYMENT_ITEMS', 'fed_payment_items' );
+define( 'BC_FED_TABLE_ACTIVITY_LOG', 'fed_activity_log' );
 /**
  * Plugin URL
  */
 define( 'BC_FED_API_PLUGIN_LIST', 'https://buffercode/api/v1/fed/plugin_list' );
 
-require_once BC_FED_PLUGIN_DIR . '/fed-autoload.php';
+require_once BC_FED_PLUGIN_DIR . '/vendor/autoload.php';
+
+// Initialize the plugin
+\FED\Plugin::instance();

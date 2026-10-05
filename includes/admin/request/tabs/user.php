@@ -14,7 +14,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function fed_admin_user_options_request() {
 	$message = '';
-	$request = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing
+	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 
 	/**
 	 * User Upload.
@@ -62,7 +63,7 @@ function fed_admin_tab_post_role( $request ) {
 	if ( empty( $role_name ) || empty( $role_slug ) ) {
 		wp_send_json_error(
 			array(
-				'message' => __( 'Please fill all the fields' ),
+				'message' => __( 'Please fill all the fields', 'frontend-dashboard' ),
 			)
 		);
 		exit();
@@ -73,13 +74,11 @@ function fed_admin_tab_post_role( $request ) {
 	 */
 	$default_user_role = fed_default_user_roles();
 	if ( array_key_exists( $role_slug, $default_user_role ) ) {
+		/* translators: %s: Role name */
+		$err_msg = sprintf( __( 'Sorry! You cannot add the default user roles %s', 'frontend-dashboard' ), esc_attr( $role_name ) );
 		wp_send_json_error(
 			array(
-				/* translators: %s : Role Name */
-				'message' => sprintf(
-					__( 'Sorry! You cannot add the default user roles %s', 'frontend-dashboard' ),
-					esc_attr( $role_name )
-				),
+				'message' => $err_msg,
 			)
 		);
 		exit();
@@ -88,13 +87,11 @@ function fed_admin_tab_post_role( $request ) {
 	 * New user role should not be same as already exist
 	 */
 	if ( array_key_exists( $role_slug, fed_get_extra_user_roles() ) ) {
+		/* translators: %s: Role name */
+		$err_msg = sprintf( __( 'Sorry! You have already added the user role %s', 'frontend-dashboard' ), esc_attr( $role_name ) );
 		wp_send_json_error(
 			array(
-				/* translators: %s : Role Name */
-				'message' => sprintf(
-					__( 'Sorry! You have already added the user role %s', 'frontend-dashboard' ),
-					esc_attr( $role_name )
-				),
+				'message' => $err_msg,
 			)
 		);
 		exit();
@@ -109,13 +106,11 @@ function fed_admin_tab_post_role( $request ) {
 	);
 	update_option( $user_roles, $roles );
 
+	/* translators: %s: Role name */
+	$success_msg = sprintf( __( '%s User Role Added Successfully', 'frontend-dashboard' ), esc_attr( $role_name ) );
 	wp_send_json_success(
 		array(
-			/* translators: %s : Role Name */
-			'message' => sprintf(
-				__( '%s User Role Added Successfully', 'frontend-dashboard' ),
-				esc_attr( $role_name )
-			),
+			'message' => $success_msg,
 			'reload'  => admin_url() . 'admin.php?page=fed_settings_menu#user',
 		)
 	);
@@ -138,13 +133,11 @@ function fed_admin_tab_post_role_delete( $request ) {
 	 */
 	$default_user_role = fed_default_user_roles();
 	if ( array_key_exists( $role_slug, $default_user_role ) ) {
+		/* translators: %s: Role name */
+		$del_err = sprintf( __( 'Sorry! You cannot delete the default user roles %s', 'frontend-dashboard' ), esc_attr( $role_name ) );
 		wp_send_json_error(
 			array(
-				/* translators: %s : Role Name */
-				'message' => sprintf(
-					__( 'Sorry! You cannot delete the default user roles %s', 'frontend-dashboard' ),
-					esc_attr( $role_name )
-				),
+				'message' => $del_err,
 			)
 		);
 		exit();
@@ -153,13 +146,11 @@ function fed_admin_tab_post_role_delete( $request ) {
 	 * Trying to delete the unavailable user role
 	 */
 	if ( ! array_key_exists( $role_slug, fed_get_extra_user_roles() ) ) {
+		/* translators: %s: Role name */
+		$unav_err = sprintf( __( 'Sorry! The user role %s is not available.', 'frontend-dashboard' ), esc_attr( $role_name ) );
 		wp_send_json_error(
 			array(
-				/* translators: %s : Role Name */
-				'message' => sprintf(
-					__( 'Sorry! The user role %s is not available.', 'frontend-dashboard' ),
-					esc_attr( $role_name )
-				),
+				'message' => $unav_err,
 			)
 		);
 		exit();
@@ -169,18 +160,15 @@ function fed_admin_tab_post_role_delete( $request ) {
 
 	update_option( $user_roles, $roles );
 
+	/* translators: %s: Role name */
+	$del_success = sprintf( __( 'User Role %s Deleted Successfully', 'frontend-dashboard' ), esc_attr( $role_name ) );
 	wp_send_json_success(
 		array(
-			/* translators: %s : Role Name */
-			'message' => sprintf(
-				__( 'User Role %s Deleted Successfully', 'frontend-dashboard' ),
-				esc_attr( $role_name )
-			),
+			'message' => $del_success,
 			'reload'  => admin_url() . 'admin.php?page=fed_settings_menu#user',
 		)
 	);
 	exit();
-
 }
 
 /**
@@ -202,21 +190,17 @@ function fed_admin_tab_user_upload( $request ) {
 		$contributor = get_role( $keys );
 		if ( array_key_exists( $keys, $user_options['user']['upload_permission'] ) ) {
 			$contributor->add_cap( 'upload_files' );
-		}
-		else {
-			if ( 'administrator' === $keys ) {
+		} elseif ( 'administrator' === $keys ) {
 				$contributor->add_cap( 'upload_files' );
-			}
-			else {
-				$contributor->remove_cap( 'upload_files' );
-			}
+		} else {
+			$contributor->remove_cap( 'upload_files' );
 		}
 	}
 
 	update_option( 'fed_admin_settings_user', $user_options );
 	wp_send_json_success(
 		array(
-			'message' => __( 'User Upload Permission Updated Successfully ' ),
+			'message' => __( 'User Upload Permission Updated Successfully', 'frontend-dashboard' ),
 		)
 	);
 }

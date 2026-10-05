@@ -18,7 +18,9 @@ jQuery(document).ready(function ($) {
       success: function (results) {
         if (results.success) {
           modal.find('.modal-body').html(results.data.html)
-          modal.modal('show')
+          if ( typeof modal.modal === 'function' ) {
+            modal.modal('show')
+          }
         } else {
           swal({
             title: results.data.message,

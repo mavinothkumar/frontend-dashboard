@@ -5,6 +5,10 @@
  * @package Frontend Dashboard.
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Login Form.
  *
@@ -48,48 +52,25 @@ function fed_login_only() {
 		),
 		'content'  => array(
 			'user_login'    => array(
-				'name' => sprintf(
-				/* translators: %s: User Login Label */
-					esc_html__(
-						'%s',
-						'frontend-dashboard'
-					), $login_info['user_login']['label_name']
-				),
-
+				'name'        => isset( $login_info['user_login']['label_name'] ) ? esc_html( $login_info['user_login']['label_name'] ) : __( 'Username', 'frontend-dashboard' ),
 				'input'       => fed_input_box(
 					'user_login',
 					array(
-						'placeholder' => sprintf(
-						/* Translators:  %s: User Login Placeholder */
-							esc_html__(
-								'%s',
-								'frontend-dashboard'
-							), $login_info['user_login']['placeholder']
-						),
-					), 'single_line'
+						'placeholder' => isset( $login_info['user_login']['placeholder'] ) ? esc_attr( $login_info['user_login']['placeholder'] ) : '',
+					),
+					'single_line'
 				),
 				'input_order' => 7,
 				'input_type'  => 'single_line',
 			),
 			'user_password' => array(
-				'name'        => sprintf(
-				/* translators: %s: User Password Label */
-					esc_html__(
-						'%s',
-						'frontend-dashboard'
-					), $login_info['user_pass']['label_name']
-				),
+				'name'        => isset( $login_info['user_pass']['label_name'] ) ? esc_html( $login_info['user_pass']['label_name'] ) : __( 'Password', 'frontend-dashboard' ),
 				'input'       => fed_input_box(
 					'user_password',
 					array(
-						'placeholder' => sprintf(
-						/* translators: %s: User Password Placeholder */
-							esc_html__(
-								'%s',
-								'frontend-dashboard'
-							), $login_info['user_pass']['label_name']
-						),
-					), 'password'
+						'placeholder' => isset( $login_info['user_pass']['label_name'] ) ? esc_attr( $login_info['user_pass']['label_name'] ) : '',
+					),
+					'password'
 				),
 				'input_order' => 9,
 				'input_type'  => 'single_line',
@@ -104,7 +85,8 @@ function fed_login_only() {
 							'fed_login_remember_me',
 							__( 'Remember Me', 'frontend-dashboard' )
 						),
-					), 'checkbox'
+					),
+					'checkbox'
 				),
 				'input_order' => 15,
 				'input_type'  => '',
@@ -169,7 +151,8 @@ function fed_forgot_password_only() {
  * @return array
  */
 function fed_reset_password_only() {
-	$get_payload = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$get_payload = isset( $_GET ) ? fed_sanitize_text_field( wp_unslash( $_GET ) ) : array();
 
 	return array(
 		'menu'     => array(
@@ -181,7 +164,8 @@ function fed_reset_password_only() {
 				'name'        => __( 'Password', 'frontend-dashboard' ),
 				'input'       => fed_input_box(
 					'user_password',
-					array( 'placeholder' => __( 'Password', 'frontend-dashboard' ) ), 'password'
+					array( 'placeholder' => __( 'Password', 'frontend-dashboard' ) ),
+					'password'
 				),
 				'input_order' => 7,
 			),
@@ -198,7 +182,8 @@ function fed_reset_password_only() {
 				'name'        => '',
 				'input'       => fed_input_box(
 					'key',
-					array( 'value' => isset( $get_payload['key'] ) ? $get_payload['key'] : '' ), 'hidden'
+					array( 'value' => isset( $get_payload['key'] ) ? $get_payload['key'] : '' ),
+					'hidden'
 				),
 				'input_order' => 30,
 			),
@@ -206,7 +191,8 @@ function fed_reset_password_only() {
 				'name'        => '',
 				'input'       => fed_input_box(
 					'login',
-					array( 'value' => isset( $get_payload['login'] ) ? $get_payload['login'] : '' ), 'hidden'
+					array( 'value' => isset( $get_payload['login'] ) ? $get_payload['login'] : '' ),
+					'hidden'
 				),
 				'input_order' => 30,
 			),

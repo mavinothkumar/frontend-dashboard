@@ -18,13 +18,15 @@ if ( ! class_exists( 'FEDMPPRO' ) && ! defined( 'BC_FED_MP_PLUGIN' ) ) {
 		 */
 		public function __construct() {
 			add_filter(
-				'fed_add_main_sub_menu', array(
+				'fed_add_main_sub_menu',
+				array(
 					$this,
 					'main_sub_menu',
 				)
 			);
 			add_filter(
-				'fed_admin_script_loading_pages', array(
+				'fed_admin_script_loading_pages',
+				array(
 					$this,
 					'script_loading_pages',
 				)
@@ -65,7 +67,8 @@ if ( ! class_exists( 'FEDMPPRO' ) && ! defined( 'BC_FED_MP_PLUGIN' ) ) {
 		 * Menu
 		 */
 		public function menu() {
-			$get_payload = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$get_payload = isset( $_GET ) ? fed_sanitize_text_field( wp_unslash( $_GET ) ) : array();
 			$action      = ( isset( $get_payload, $get_payload['action'] ) && ! empty( $get_payload['action'] ) ) ? urldecode(
 				$get_payload['action']
 			) : false;
@@ -74,6 +77,7 @@ if ( ! class_exists( 'FEDMPPRO' ) && ! defined( 'BC_FED_MP_PLUGIN' ) ) {
 				$page = in_array( $action, $this->page_list() ) ? $action : array();
 				if ( is_string( $page ) ) {
 					$action = true;
+					// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 					fed_execute_method_by_string( $page, $_GET );
 				}
 			}
@@ -120,7 +124,8 @@ if ( ! class_exists( 'FEDMPPRO' ) && ! defined( 'BC_FED_MP_PLUGIN' ) ) {
 		 * Header Menu.
 		 */
 		public function header_menu() {
-			$get_payload = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$get_payload = isset( $_GET ) ? fed_sanitize_text_field( wp_unslash( $_GET ) ) : array();
 			?>
 			<div class="bc_fed">
 				<div class="m-t-10">
@@ -130,7 +135,8 @@ if ( ! class_exists( 'FEDMPPRO' ) && ! defined( 'BC_FED_MP_PLUGIN' ) ) {
 							$active = '';
 							if (
 								isset( $get_payload, $get_payload['action'] ) && in_array(
-									$get_payload['action'], $item['menu']
+									$get_payload['action'],
+									$item['menu']
 								)
 							) {
 								$active = 'active';
@@ -144,7 +150,8 @@ if ( ! class_exists( 'FEDMPPRO' ) && ! defined( 'BC_FED_MP_PLUGIN' ) ) {
 								<?php
 								echo esc_url(
 									fed_menu_page_url(
-										'fed_membership_pro', array(
+										'fed_membership_pro',
+										array(
 											'action' => $index,
 										)
 									)
@@ -221,9 +228,14 @@ if ( ! class_exists( 'FEDMPPRO' ) && ! defined( 'BC_FED_MP_PLUGIN' ) ) {
 					<div class="col-md-10">
 						<div class="panel panel-primary">
 							<div class="panel-heading">
-								<h3 class="panel-title"><?php esc_attr_e(
-										'Membership Pro', 'frontend-dashboard'
-									); ?></h3>
+								<h3 class="panel-title">
+								<?php
+								esc_attr_e(
+									'Membership Pro',
+									'frontend-dashboard'
+								);
+								?>
+														</h3>
 							</div>
 							<div class="panel-body">
 								<div class="row m-b-20">
@@ -231,22 +243,26 @@ if ( ! class_exists( 'FEDMPPRO' ) && ! defined( 'BC_FED_MP_PLUGIN' ) ) {
 										<form method="post"
 												action="https://buffercode.com/payment/bc/payment_start">
 											<input type='hidden' name='redirect_url'
-													value="<?php echo fed_current_page_url(); ?>"/>
+													value="<?php echo esc_url( fed_current_page_url() ); ?>"/>
 											<input type='hidden' name='domain'
-													value="<?php echo esc_textarea(fed_get_domain_name()); ?>"/>
+													value="<?php echo esc_attr( fed_get_domain_name() ); ?>"/>
 											<input type='hidden' name='contact_email'
-													value="<?php echo esc_textarea( fed_get_admin_email() ); ?>"/>
+													value="<?php echo esc_attr( fed_get_admin_email() ); ?>"/>
 											<input type='hidden' name='plugin_name'
 													value='frontend-dashboard-membership-pro'/>
 											<input type='hidden' name='amount' value='29'/>
 											<input type='hidden' name='plan_type' value='annual'/>
 											<button type="submit" style="
-													background:url(<?php echo esc_url(
-												plugins_url(
-													'assets/admin/images/pro/buy-now-29.png',
-													BC_FED_PLUGIN
-												)
-											) ?>);
+													background:url(
+													<?php
+													echo esc_url(
+														plugins_url(
+															'assets/admin/images/pro/buy-now-29.png',
+															BC_FED_PLUGIN
+														)
+													);
+													?>
+																	);
 													background-repeat: no-repeat;
 													width:200px;
 													height: 148px;
@@ -258,20 +274,26 @@ if ( ! class_exists( 'FEDMPPRO' ) && ! defined( 'BC_FED_MP_PLUGIN' ) ) {
 										<form method="post"
 												action="https://buffercode.com/payment/bc/payment_start">
 											<input type='hidden' name='redirect_url'
-													value="<?php echo fed_current_page_url(); ?>"/>
+													value="<?php echo esc_url( fed_current_page_url() ); ?>"/>
 											<input type='hidden' name='domain'
-													value="<?php echo fed_get_domain_name(); ?>"/>
+													value="<?php echo esc_attr( fed_get_domain_name() ); ?>"/>
 											<input type='hidden' name='contact_email'
-													value="<?php echo fed_get_admin_email(); ?>"/>
+													value="<?php echo esc_attr( fed_get_admin_email() ); ?>"/>
 											<input type='hidden' name='plugin_name'
 													value='frontend-dashboard-membership-pro'/>
 											<input type='hidden' name='amount' value='99'/>
 											<input type='hidden' name='plan_type' value='lifetime'/>
 											<button type="submit" style="
-													background:url(<?php echo plugins_url(
-												'assets/admin/images/pro/buy-now-99.png',
-												BC_FED_PLUGIN
-											) ?>);
+													background:url(
+													<?php
+													echo esc_url(
+														plugins_url(
+															'assets/admin/images/pro/buy-now-99.png',
+															BC_FED_PLUGIN
+														)
+													);
+													?>
+																	);
 													background-repeat: no-repeat;
 													width:200px;
 													height: 148px;

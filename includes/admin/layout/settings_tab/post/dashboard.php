@@ -21,7 +21,10 @@ function fed_admin_post_dashboard_tab( $fed_admin_options ) {
 
 		<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
 
-		<?php echo fed_loader(); ?>
+		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo fed_loader();
+		?>
 
 		<input type="hidden" name="fed_admin_unique" value="fed_admin_settings_post"/>
 
@@ -36,13 +39,15 @@ function fed_admin_post_dashboard_tab( $fed_admin_options ) {
 					<div class="col-md-3 fed_menu_title">Disable Post Content</div>
 					<div class="col-md-4">
 						<?php
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo fed_input_box(
 							'fed_admin_login_settings_template',
 							array(
 								'name'          => 'dashboard[fed_admin_login_settings_template]',
 								'value'         => isset( $fed_admin_options['dashboard']['post_content'] ) ? $fed_admin_options['dashboard']['post_content'] : '',
 								'default_value' => 'Enable',
-							), 'checkbox'
+							),
+							'checkbox'
 						);
 						?>
 					</div>
@@ -52,13 +57,15 @@ function fed_admin_post_dashboard_tab( $fed_admin_options ) {
 					<div class="col-md-3 fed_menu_title">Disable Post Category</div>
 					<div class="col-md-4">
 						<?php
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo fed_input_box(
 							'fed_post_dashboard_category',
 							array(
 								'name'          => 'dashboard[fed_post_dashboard_category]',
 								'value'         => isset( $fed_admin_options['dashboard']['fed_post_dashboard_category'] ) ? $fed_admin_options['dashboard']['fed_post_dashboard_category'] : '',
 								'default_value' => 'Enable',
-							), 'checkbox'
+							),
+							'checkbox'
 						);
 						?>
 					</div>
@@ -68,12 +75,15 @@ function fed_admin_post_dashboard_tab( $fed_admin_options ) {
 					<div class="col-md-4">
 
 						<?php
-						echo fed_input_box( 'fed_post_dashboard_tag',
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						echo fed_input_box(
+							'fed_post_dashboard_tag',
 							array(
 								'name'          => 'dashboard[fed_post_dashboard_tag]',
 								'value'         => isset( $fed_admin_options['dashboard']['fed_post_dashboard_tag'] ) ? $fed_admin_options['dashboard']['fed_post_dashboard_tag'] : '',
 								'default_value' => 'Enable',
-							), 'checkbox'
+							),
+							'checkbox'
 						);
 						?>
 					</div>
@@ -83,13 +93,15 @@ function fed_admin_post_dashboard_tab( $fed_admin_options ) {
 					<div class="col-md-4">
 
 						<?php
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo fed_input_box(
 							'featured_image',
 							array(
 								'name'          => 'dashboard[featured_image]',
 								'value'         => isset( $fed_admin_options['dashboard']['featured_image'] ) ? $fed_admin_options['dashboard']['featured_image'] : '',
 								'default_value' => 'Enable',
-							), 'checkbox'
+							),
+							'checkbox'
 						);
 						?>
 					</div>
@@ -100,13 +112,15 @@ function fed_admin_post_dashboard_tab( $fed_admin_options ) {
 					<div class="col-md-4">
 
 						<?php
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo fed_input_box(
 							'post_format',
 							array(
 								'name'          => 'dashboard[post_format]',
 								'value'         => isset( $fed_admin_options['dashboard']['post_format'] ) ? $fed_admin_options['dashboard']['post_format'] : '',
 								'default_value' => 'Enable',
-							), 'checkbox'
+							),
+							'checkbox'
 						);
 						?>
 					</div>
@@ -117,13 +131,15 @@ function fed_admin_post_dashboard_tab( $fed_admin_options ) {
 					<div class="col-md-4">
 
 						<?php
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo fed_input_box(
 							'allow_comments',
 							array(
 								'name'          => 'dashboard[allow_comments]',
 								'value'         => isset( $fed_admin_options['dashboard']['allow_comments'] ) ? $fed_admin_options['dashboard']['allow_comments'] : '',
 								'default_value' => 'Enable',
-							), 'checkbox'
+							),
+							'checkbox'
 						);
 						?>
 					</div>

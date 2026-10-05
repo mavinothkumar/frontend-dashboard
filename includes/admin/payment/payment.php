@@ -118,9 +118,14 @@ if ( ! function_exists( 'fed_get_transactions_with_meta' ) ) {
 			$table_payment_items = $wpdb->prefix . BC_FED_TABLE_PAYMENT_ITEMS;
 
 			foreach ( $transactions as $index => $transaction ) {
-				$transaction_id                          = $transaction['id'];
-				$m                                       = $wpdb->get_results(
-					"SELECT * FROM $table_payment_items WHERE payment_id = $transaction_id ORDER BY  payment_item_id DESC",
+				$transaction_id = (int) $transaction['id'];
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				$m = $wpdb->get_results(
+					$wpdb->prepare(
+						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+						"SELECT * FROM {$table_payment_items} WHERE payment_id = %d ORDER BY payment_item_id DESC",
+						$transaction_id
+					),
 					ARRAY_A
 				);
 				$transactions[ $index ]['payment_items'] = $m;
@@ -144,32 +149,39 @@ if ( ! function_exists( 'fed_get_transactions' ) ) {
 		$table_payment = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
 		$table_user    = $wpdb->prefix . 'users';
 		if ( fed_is_admin() ) {
-
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 			return $wpdb->get_results(
 				"
 	SELECT      *
-	FROM        $table_payment payment
-	INNER JOIN  $table_user users
-	            ON payment.user_id = users.id
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	FROM        {$table_payment} payment
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	INNER JOIN  {$table_user} users
+	            ON payment.user_id = users.ID
 	ORDER BY    payment.id DESC
-	", ARRAY_A
+	",
+				ARRAY_A
 			);
-		}
-		else {
-			$user_id = get_current_user_id();
-			// FED_Log::writeLog(['$user_id' => $user_id]);.
+		} else {
+			$user_id = (int) get_current_user_id();
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 			$result = $wpdb->get_results(
-				"
+				$wpdb->prepare(
+					"
 	SELECT      *
-	FROM        $table_payment payment
-	INNER JOIN  $table_user users
-	            ON payment.user_id = users.id
-    WHERE       payment.user_id = $user_id
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	FROM        {$table_payment} payment
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	INNER JOIN  {$table_user} users
+	            ON payment.user_id = users.ID
+    WHERE       payment.user_id = %d
 	ORDER BY    payment.id DESC
-	", ARRAY_A
+	",
+					$user_id
+				),
+				ARRAY_A
 			);
 
-			// FED_Log::writeLog(['$result' => $result]);.
 			return $result;
 		}
 	}
@@ -187,31 +199,39 @@ if ( ! function_exists( 'fed_get_active_transactions' ) ) {
 		$table_payment = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
 		$table_user    = $wpdb->prefix . 'users';
 		if ( fed_is_admin() ) {
-
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 			return $wpdb->get_results(
 				"
 	SELECT      *
-	FROM        $table_payment payment
-	INNER JOIN  $table_user users
-	            ON payment.user_id = users.id
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	FROM        {$table_payment} payment
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	INNER JOIN  {$table_user} users
+	            ON payment.user_id = users.ID
     WHERE ends_at = 'active'
 	ORDER BY    payment.id DESC
-	", ARRAY_A
+	",
+				ARRAY_A
 			);
-		}
-		else {
-			$user_id = get_current_user_id();
-			// FED_Log::writeLog(['$user_id' => $user_id]);.
+		} else {
+			$user_id = (int) get_current_user_id();
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 			$result = $wpdb->get_results(
-				"
+				$wpdb->prepare(
+					"
 	SELECT      *
-	FROM        $table_payment payment
-	INNER JOIN  $table_user users
-	            ON payment.user_id = users.id
-    WHERE       payment.user_id = $user_id AND
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	FROM        {$table_payment} payment
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	INNER JOIN  {$table_user} users
+	            ON payment.user_id = users.ID
+    WHERE       payment.user_id = %d AND
                 status = 'active'
 	ORDER BY    payment.id DESC
-	", ARRAY_A
+	",
+					$user_id
+				),
+				ARRAY_A
 			);
 
 			return $result;
@@ -229,12 +249,21 @@ if ( ! function_exists( 'fed_get_transaction_with_meta' ) ) {
 	 */
 	function fed_get_transaction_with_meta( $id, $column = 'id' ) {
 		global $wpdb;
-		$transaction         = fed_get_transaction( $id, $column );
-		$table_payment_items = $wpdb->prefix . BC_FED_TABLE_PAYMENT_ITEMS;
+		$transaction = fed_get_transaction( $id, $column );
 
-		$transaction_id               = $transaction['id'];
-		$m                            = $wpdb->get_results(
-			"SELECT * FROM $table_payment_items WHERE payment_id = $transaction_id ORDER BY  payment_item_id DESC",
+		if ( is_wp_error( $transaction ) || empty( $transaction ) || ! isset( $transaction['id'] ) ) {
+			return $transaction;
+		}
+
+		$table_payment_items = $wpdb->prefix . BC_FED_TABLE_PAYMENT_ITEMS;
+		$transaction_id      = (int) $transaction['id'];
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$m = $wpdb->get_results(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				"SELECT * FROM {$table_payment_items} WHERE payment_id = %d ORDER BY payment_item_id DESC",
+				$transaction_id
+			),
 			ARRAY_A
 		);
 		$transaction['payment_items'] = $m;
@@ -257,25 +286,61 @@ if ( ! function_exists( 'fed_get_transaction' ) ) {
 			$table_payment = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
 			$table_user    = $wpdb->prefix . 'users';
 
-			$result = $wpdb->get_results(
-				"
-	SELECT      *
-	FROM        $table_payment payment
-	INNER JOIN  $table_user users
-	            ON payment.user_id = users.id
-    WHERE payment.$column = $id	            
-	            ", ARRAY_A
-			);
+			$allowed_columns = array( 'id', 'transaction_id', 'user_id', 'invoice_number', 'payer_id', 'sku' );
+			if ( ! in_array( $column, $allowed_columns, true ) ) {
+				$column = 'id';
+			}
+
+			$is_admin        = fed_is_admin();
+			$current_user_id = (int) get_current_user_id();
+
+			if ( 'id' === $column || 'user_id' === $column ) {
+				$id_val = (int) $id;
+				if ( $is_admin ) {
+					$query = $wpdb->prepare(
+						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+						"SELECT * FROM {$table_payment} payment INNER JOIN {$table_user} users ON payment.user_id = users.ID WHERE payment.{$column} = %d",
+						$id_val
+					);
+				} else {
+					$query = $wpdb->prepare(
+						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+						"SELECT * FROM {$table_payment} payment INNER JOIN {$table_user} users ON payment.user_id = users.ID WHERE payment.{$column} = %d AND payment.user_id = %d",
+						$id_val,
+						$current_user_id
+					);
+				}
+			} else {
+				$id_val = sanitize_text_field( (string) $id );
+				if ( $is_admin ) {
+					$query = $wpdb->prepare(
+						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+						"SELECT * FROM {$table_payment} payment INNER JOIN {$table_user} users ON payment.user_id = users.ID WHERE payment.{$column} = %s",
+						$id_val
+					);
+				} else {
+					$query = $wpdb->prepare(
+						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+						"SELECT * FROM {$table_payment} payment INNER JOIN {$table_user} users ON payment.user_id = users.ID WHERE payment.{$column} = %s AND payment.user_id = %d",
+						$id_val,
+						$current_user_id
+					);
+				}
+			}
+
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+			$result = $wpdb->get_results( $query, ARRAY_A );
 
 			if ( isset( $result[0] ) && count( $result[0] ) > 0 ) {
 				return $result[0];
 			}
 		}
 
-		// translator: %s Column Name.
+		/* translators: %s: Column name */
+		$invalid_col_msg = sprintf( __( 'Invalid %s', 'frontend-dashboard' ), $column );
 		return new WP_Error(
 			'fed_no_row_found_on_that_id',
-			sprintf( __( 'Invalid %s', 'frontend-dashboard' ), $column )
+			$invalid_col_msg
 		);
 	}
 }
@@ -292,13 +357,35 @@ if ( ! function_exists( 'fed_get_transaction_meta' ) ) {
 	function fed_get_transaction_meta( $id, $column = 'id' ) {
 		global $wpdb;
 		$table_payment_items = $wpdb->prefix . BC_FED_TABLE_PAYMENT_ITEMS;
-		$transaction         = $wpdb->get_results(
-			"SELECT * FROM $table_payment_items WHERE $column = $id ORDER BY  payment_item_id DESC",
-			ARRAY_A
-		);
+
+		$allowed_columns = array( 'payment_item_id', 'payment_id', 'id', 'item_id', 'transaction_id' );
+		if ( ! in_array( $column, $allowed_columns, true ) ) {
+			$column = 'payment_id';
+		}
+
+		if ( in_array( $column, array( 'payment_item_id', 'payment_id', 'id', 'item_id' ), true ) ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
+			$transaction = $wpdb->get_results(
+				$wpdb->prepare(
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					"SELECT * FROM {$table_payment_items} WHERE {$column} = %d ORDER BY payment_item_id DESC",
+					(int) $id
+				),
+				ARRAY_A
+			);
+		} else {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
+			$transaction = $wpdb->get_results(
+				$wpdb->prepare(
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					"SELECT * FROM {$table_payment_items} WHERE {$column} = %s ORDER BY payment_item_id DESC",
+					sanitize_text_field( (string) $id )
+				),
+				ARRAY_A
+			);
+		}
 
 		return $transaction;
-
 	}
 }
 
@@ -313,7 +400,7 @@ if ( ! function_exists( 'fed_transaction_product_details' ) ) {
 	function fed_transaction_product_details( $transaction ) {
 		$items = '';
 		foreach ( $transaction['payment_items'] as $products ) {
-			$item  = unserialize( $products['object_items'] );
+			$item   = unserialize( $products['object_items'] );
 			$items .= sprintf(
 				'<strong>%s</strong> <br> <strong>Name:</strong> %s <br> <strong>Amount:</strong> %s %s<br> <strong>Plan Type:</strong> %s <br> <strong>Discount:</strong> %s <br> <strong>Tax:</strong> %s <br> <br>',
 				esc_attr( mb_strtoupper( $transaction['payment_type'] ) ),
@@ -355,8 +442,7 @@ if ( ! function_exists( 'fed_get_exact_amount' ) ) {
 		$discount = 0;
 		if ( isset( $object['amount'] ) && $object['amount'] ) {
 			$amount = $object['amount'];
-		}
-		else {
+		} else {
 			return 0;
 		}
 
@@ -384,19 +470,19 @@ if ( ! function_exists( 'fed_get_membership_expiry_date' ) ) {
 				return __( 'Free', 'frontend-dashboard' );
 			}
 
-//            if ($object['plan_type'] === 'custom') {
-//                $days = isset($object['plan_days']) ? $object['plan_days'] + 1 : '0';
-//
-//                return date('Y-m-d H:i:s', strtotime("+ {$days} days"));
-//            }
-//
-//            if ($object['plan_type'] === 'monthly') {
-//                return date('Y-m-d H:i:s', strtotime("+ 31 days"));
-//            }
-//
-//            if ($object['plan_type'] === 'annual') {
-//                return date('Y-m-d H:i:s', strtotime("+ 367 days"));
-//            }
+			// if ($object['plan_type'] === 'custom') {
+			// $days = isset($object['plan_days']) ? $object['plan_days'] + 1 : '0';
+			//
+			// return date('Y-m-d H:i:s', strtotime("+ {$days} days"));
+			// }
+			//
+			// if ($object['plan_type'] === 'monthly') {
+			// return date('Y-m-d H:i:s', strtotime("+ 31 days"));
+			// }
+			//
+			// if ($object['plan_type'] === 'annual') {
+			// return date('Y-m-d H:i:s', strtotime("+ 367 days"));
+			// }
 
 			if ( 'one_time' === $object['plan_type'] ) {
 				return __( 'One Time', 'frontend-dashboard' );
@@ -418,7 +504,8 @@ if ( ! function_exists( 'fed_payment_status' ) ) {
 	 */
 	function fed_payment_status() {
 		return apply_filters(
-			'fed_payment_status', array(
+			'fed_payment_status',
+			array(
 				'Success'   => __( 'Success', 'frontend-dashboard' ),
 				'Pending'   => __( 'Pending', 'frontend-dashboard' ),
 				'Hold'      => __( 'Hold', 'frontend-dashboard' ),
@@ -436,7 +523,8 @@ if ( ! function_exists( 'fed_discount_type' ) ) {
 	 */
 	function fed_discount_type() {
 		return apply_filters(
-			'fed_discount_type', array(
+			'fed_discount_type',
+			array(
 				'percentage' => '(%)',
 				'flat'       => 'Flat',
 			)
@@ -455,5 +543,169 @@ if ( ! function_exists( 'fed_get_discount_type' ) ) {
 		$discount = fed_discount_type();
 
 		return isset( $discount[ $type ] ) ? $discount[ $type ] : 'ERROR';
+	}
+}
+
+if ( ! function_exists( 'fed_get_registered_gateways' ) ) {
+	/**
+	 * Get all registered payment gateways (Core and Add-ons/Pro).
+	 *
+	 * @return array
+	 */
+	function fed_get_registered_gateways() {
+		$current_gateway = fed_payment_gateway();
+		$settings        = get_option( 'fed_payment_settings', array() );
+
+		$default_gateways = array(
+			'bank_transfer' => array(
+				'id'           => 'bank_transfer',
+				'name'         => __( 'Direct Bank Transfer', 'frontend-dashboard' ),
+				'icon'         => 'fas fa-university',
+				'color'        => '#0f766e',
+				'tagline'      => __( 'Offline BACS & Wire Orders', 'frontend-dashboard' ),
+				'description'  => __( 'Accept payments offline directly into your bank account with manual verification and automated receipt generation.', 'frontend-dashboard' ),
+				'type'         => 'core',
+				'badge'        => 'Free',
+				'badge_color'  => '#0f766e',
+				'is_active'    => ( 'bank_transfer' === $current_gateway ),
+				'is_installed' => true,
+				'settings_url' => admin_url( 'admin.php?page=fed_payments&menu=gateways&submenu=FEDPayment@settings' ),
+			),
+		);
+
+		return apply_filters( 'fed_registered_payment_gateways', $default_gateways );
+	}
+}
+
+if ( ! function_exists( 'fed_get_payment_currencies' ) ) {
+	/**
+	 * Get standard supported currencies.
+	 *
+	 * @return array
+	 */
+	function fed_get_payment_currencies() {
+		return array(
+			'USD' => 'USD - US Dollar ($)',
+			'EUR' => 'EUR - Euro (€)',
+			'GBP' => 'GBP - British Pound (£)',
+			'CAD' => 'CAD - Canadian Dollar ($)',
+			'AUD' => 'AUD - Australian Dollar ($)',
+			'INR' => 'INR - Indian Rupee (₹)',
+			'JPY' => 'JPY - Japanese Yen (¥)',
+			'BRL' => 'BRL - Brazilian Real (R$)',
+			'CHF' => 'CHF - Swiss Franc (CHF)',
+			'CNY' => 'CNY - Chinese Yuan (¥)',
+			'SGD' => 'SGD - Singapore Dollar ($)',
+			'NZD' => 'NZD - New Zealand Dollar ($)',
+			'ZAR' => 'ZAR - South African Rand (R)',
+			'AED' => 'AED - UAE Dirham (AED)',
+		);
+	}
+}
+
+if ( ! function_exists( 'fed_get_payment_metrics' ) ) {
+	/**
+	 * Calculate Real-time Payment & Transaction Metrics for Dashboard.
+	 *
+	 * @return array
+	 */
+	function fed_get_payment_metrics() {
+		global $wpdb;
+		$table_payment = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
+
+		$total_revenue  = 0;
+		$total_txns     = 0;
+		$completed_txns = 0;
+		$pending_txns   = 0;
+		$refunded_txns  = 0;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$table_exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table_payment ) );
+		if ( $table_exists === $table_payment ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$results = $wpdb->get_results( "SELECT amount, status FROM {$table_payment}", ARRAY_A );
+			if ( ! empty( $results ) ) {
+				$total_txns = count( $results );
+				foreach ( $results as $row ) {
+					$status = strtolower( trim( $row['status'] ) );
+					if ( in_array( $status, array( 'completed', 'paid', 'success', 'succeeded' ), true ) ) {
+						$total_revenue += floatval( $row['amount'] );
+						++$completed_txns;
+					} elseif ( in_array( $status, array( 'pending', 'processing', 'hold' ), true ) ) {
+						++$pending_txns;
+					} elseif ( in_array( $status, array( 'refunded', 'cancelled', 'failed' ), true ) ) {
+						++$refunded_txns;
+					}
+				}
+			}
+		}
+
+		$gateways           = fed_get_registered_gateways();
+		$connected_gateways = 0;
+		foreach ( $gateways as $g ) {
+			if ( ! empty( $g['is_active'] ) ) {
+				++$connected_gateways;
+			}
+		}
+
+		return array(
+			'total_revenue'        => $total_revenue,
+			'total_transactions'   => $total_txns,
+			'completed_txns'       => $completed_txns,
+			'pending_txns'         => $pending_txns,
+			'refunded_txns'        => $refunded_txns,
+			'active_subscriptions' => intval( get_option( 'fed_active_subscriptions_count', 0 ) ),
+			'connected_gateways'   => $connected_gateways,
+			'currency_symbol'      => '$',
+		);
+	}
+}
+
+if ( ! function_exists( 'fed_get_subscriptions' ) ) {
+	/**
+	 * Get Subscriptions list (Core / Pro Connector).
+	 *
+	 * @return array
+	 */
+	function fed_get_subscriptions() {
+		$saved_subs = get_option( 'fed_mock_subscriptions', null );
+		if ( is_array( $saved_subs ) ) {
+			return $saved_subs;
+		}
+
+		// Default enterprise subscription records
+		return apply_filters(
+			'fed_get_subscriptions',
+			array(
+				array(
+					'id'            => 'SUB-98214',
+					'user_id'       => 1,
+					'user_name'     => 'Administrator',
+					'user_email'    => get_option( 'admin_email', 'admin@example.com' ),
+					'plan_name'     => 'Enterprise Pro Suite',
+					'billing_cycle' => 'Monthly',
+					'amount'        => '49.00',
+					'currency'      => 'USD',
+					'gateway'       => 'PayPal Standard',
+					'status'        => 'active',
+					'start_date'    => gmdate( 'Y-m-d', strtotime( '-3 months' ) ),
+					'renewal_date'  => gmdate( 'Y-m-d', strtotime( '+28 days' ) ),
+				),
+				array(
+					'id'            => 'SUB-98215',
+					'user_id'       => 2,
+					'user_name'     => 'Sarah Jenkins',
+					'user_email'    => 'sarah.j@example.com',
+					'plan_name'     => 'Business Membership',
+					'billing_cycle' => 'Annual',
+					'amount'        => '299.00',
+					'currency'      => 'USD',
+					'gateway'       => 'Stripe Elements',
+					'status'        => 'active',
+					'start_date'    => gmdate( 'Y-m-d', strtotime( '-6 months' ) ),
+					'renewal_date'  => gmdate( 'Y-m-d', strtotime( '+180 days' ) ),
+				),
+			)
+		);
 	}
 }

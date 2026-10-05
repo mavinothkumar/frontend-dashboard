@@ -56,15 +56,18 @@ function fed_next_updates() {
 	}
 
 	global $wpdb;
+	// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 	$menu_table      = $wpdb->prefix . BC_FED_TABLE_MENU;
 	$menu_meta_table = $wpdb->prefix . BC_FED_TABLE_MENU_META;
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	$menu_query      = $wpdb->get_results( "SELECT * from {$menu_table} LIMIT 1" );
 	$charset_collate = $wpdb->get_charset_collate();
 	if ( ! isset( $menu_query[0]->parent_id ) ) {
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query( "ALTER TABLE {$menu_table} ADD parent_id VARCHAR(10) NOT NULL DEFAULT '0'" );
 	}
 
-	if ( $wpdb->get_var( "SHOW TABLES LIKE '{$menu_meta_table}'" ) != $menu_meta_table ) {
+	if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $menu_meta_table ) ) ) != $menu_meta_table ) {
 		$menu_meta = 'CREATE TABLE `' . $menu_meta_table . "` (
 		  meta_id BIGINT(20) NOT NULL AUTO_INCREMENT,
 		  menu_id BIGINT(20) NOT NULL,
@@ -76,7 +79,7 @@ function fed_next_updates() {
 
 		dbDelta( $menu_meta );
 	}
-
+	// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 }
 
 /**
@@ -95,7 +98,8 @@ function fed_plugin_activation() {
 
 	$charset_collate = $wpdb->get_charset_collate();
 
-	if ( $wpdb->get_var( "SHOW TABLES LIKE '{$user_profile_table}'" ) != $user_profile_table ) {
+	// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
+	if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $user_profile_table ) ) ) != $user_profile_table ) {
 		$user_profile = 'CREATE TABLE `' . $user_profile_table . "` (
 		  id BIGINT(20) NOT NULL AUTO_INCREMENT,
 		  input_meta char(32) NOT NULL,
@@ -128,7 +132,7 @@ function fed_plugin_activation() {
 
 		dbDelta( $user_profile );
 	}
-	if ( $wpdb->get_var( "SHOW TABLES LIKE '{$post_table}'" ) != $post_table ) {
+	if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $post_table ) ) ) != $post_table ) {
 		$post = 'CREATE TABLE `' . $post_table . "` (
 		  id BIGINT(20) NOT NULL AUTO_INCREMENT,
 		  input_meta char(32) NOT NULL,
@@ -156,7 +160,7 @@ function fed_plugin_activation() {
 		  ) $charset_collate;";
 		dbDelta( $post );
 	}
-	if ( $wpdb->get_var( "SHOW TABLES LIKE '{$menu_table}'" ) != $menu_table ) {
+	if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $menu_table ) ) ) != $menu_table ) {
 		$menu = 'CREATE TABLE `' . $menu_table . "` (
 		  id BIGINT(20) NOT NULL AUTO_INCREMENT,
 		  menu_slug char(32) NOT NULL,
@@ -174,7 +178,7 @@ function fed_plugin_activation() {
 		dbDelta( $menu );
 	}
 
-	if ( $wpdb->get_var( "SHOW TABLES LIKE '{$payment_table}'" ) != $payment_table ) {
+	if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $payment_table ) ) ) != $payment_table ) {
 		$payment = 'CREATE TABLE `' . $payment_table . "` (
 		  id BIGINT(20) NOT NULL AUTO_INCREMENT,
 		  user_id BIGINT(20) NOT NULL,
@@ -194,7 +198,7 @@ function fed_plugin_activation() {
 		dbDelta( $payment );
 	}
 
-	if ( $wpdb->get_var( "SHOW TABLES LIKE '{$payment_items_table}'" ) != $payment_items_table ) {
+	if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $payment_items_table ) ) ) != $payment_items_table ) {
 		$payment_items_table = 'CREATE TABLE `' . $payment_items_table . "` (
 		  payment_item_id BIGINT(20) NOT NULL AUTO_INCREMENT,
 		  payment_id BIGINT(20) NOT NULL,
@@ -210,17 +214,55 @@ function fed_plugin_activation() {
 	}
 
 	// Adding Three Column.
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	$payment_update_1 = $wpdb->get_row( "SELECT * FROM $payment_table" );
 	if ( is_array( $payment_update_1 ) && ! array_key_exists( 'trail_period', $payment_update_1 ) ) {
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query( "ALTER TABLE $payment_table ADD COLUMN trail_period VARCHAR(255) NULL AFTER `status`,  ADD COLUMN payment_method VARCHAR(255) NULL AFTER `status`, ADD COLUMN ends_at_time VARCHAR(255) NULL AFTER `ends_at`" );
 
 	}
 	if ( is_array( $payment_update_1 ) && ! array_key_exists( 'invoice_id', $payment_update_1 ) ) {
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query( "ALTER TABLE $payment_table ADD COLUMN invoice_id VARCHAR(255) NULL AFTER `status`" );
 	}
 
-	update_option( 'fed_plugin_version', BC_FED_PLUGIN_VERSION );
+	$activity_log_table = $wpdb->prefix . ( defined( 'BC_FED_TABLE_ACTIVITY_LOG' ) ? BC_FED_TABLE_ACTIVITY_LOG : 'fed_activity_log' );
+	$activity_log_sql   = "CREATE TABLE `{$activity_log_table}` (
+	  id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+	  user_id BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
+	  user_login VARCHAR(60) NOT NULL DEFAULT '',
+	  user_email VARCHAR(100) NOT NULL DEFAULT '',
+	  user_display_name VARCHAR(250) NOT NULL DEFAULT '',
+	  channel VARCHAR(50) NOT NULL DEFAULT 'system',
+	  level VARCHAR(20) NOT NULL DEFAULT 'info',
+	  action VARCHAR(255) NOT NULL DEFAULT '',
+	  message TEXT NULL,
+	  context LONGTEXT NULL,
+	  action_type VARCHAR(100) NOT NULL DEFAULT 'system',
+	  action_title VARCHAR(255) NOT NULL DEFAULT '',
+	  description TEXT NULL,
+	  status VARCHAR(20) NOT NULL DEFAULT 'info',
+	  ip_address VARCHAR(45) NOT NULL DEFAULT '',
+	  user_agent VARCHAR(255) NULL DEFAULT '',
+	  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	  PRIMARY KEY  (id),
+	  KEY user_id (user_id),
+	  KEY channel (channel),
+	  KEY level (level),
+	  KEY action_type (action_type),
+	  KEY created_at (created_at)
+	) $charset_collate;";
 
+	dbDelta( $activity_log_sql );
+
+	// Clean up legacy redundant fed_logs table if it exists
+	$legacy_logs_table = $wpdb->prefix . 'fed_logs';
+	if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $legacy_logs_table ) ) ) === $legacy_logs_table ) {
+		$wpdb->query( "DROP TABLE IF EXISTS `{$wpdb->prefix}fed_logs`" );
+	}
+	// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
+
+	update_option( 'fed_plugin_version', BC_FED_PLUGIN_VERSION );
 }
 
 /**
@@ -228,14 +270,17 @@ function fed_plugin_activation() {
  */
 function fed_plugin_data() {
 	global $wpdb;
+	// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	$fed_get_user_roles = array_keys( fed_get_user_roles() );
 	$profile_data       = fed_get_user_profile_default_meta_values();
 
 	$profile_table = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
 	$menu_table    = $wpdb->prefix . BC_FED_TABLE_MENU;
 
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	$profile_count = $wpdb->get_var( "SELECT COUNT(*) FROM $profile_table" );
-	$menu_count    = $wpdb->get_var( "SELECT COUNT(*) FROM $menu_table" );
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	$menu_count = $wpdb->get_var( "SELECT COUNT(*) FROM $menu_table" );
 
 	if ( $profile_count <= 0 ) {
 		foreach ( $profile_data as $datum ) {
@@ -260,7 +305,7 @@ function fed_plugin_data() {
 			)
 		);
 	}
-
+	// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 }
 
 // register_activation_hook( BC_FED_PLUGIN, 'fed_plugin_activation' );
@@ -467,7 +512,8 @@ function fed_plugin_meta_data() {
  * Admin Notice
  */
 function fed_admin_notice() {
-	$get_payload = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$get_payload = isset( $_GET ) ? fed_sanitize_text_field( wp_unslash( $_GET ) ) : array();
 	if ( isset( $get_payload['page'] ) && in_array( $get_payload['page'], fed_get_script_loading_pages(), false ) ) {
 		$get_notification = get_option( 'fed_admin_message_notification' );
 		$api              = get_transient( 'fed_plugin_list_api' );
@@ -486,9 +532,11 @@ function fed_admin_notice() {
 						?>
 						<div class="notice notice-info">
 							<div class="fed_flex_start_center">
-								<img width="50px" src="<?php echo $plugin->thumbnail; ?>"/>
+								<img width="50px" src="<?php echo esc_url( $plugin->thumbnail ); ?>"/>
 								<h2 class="fed_p_l_20">
-									<?php echo $plugin->title . ' has been updated to newer version ' . $plugin->version . ' kindly <a href="' . $plugin->download_url . '">Update</a>'; ?>
+									<?php
+									echo esc_html( $plugin->title ) . ' ' . esc_html__( 'has been updated to newer version', 'frontend-dashboard' ) . ' ' . esc_html( $plugin->version ) . ' ' . esc_html__( 'kindly', 'frontend-dashboard' ) . ' <a href="' . esc_url( $plugin->download_url ) . '">' . esc_html__( 'Update', 'frontend-dashboard' ) . '</a>';
+									?>
 								</h2>
 							</div>
 						</div>
@@ -562,7 +610,8 @@ function fed_admin_notice() {
 function get_plugin_list() {
 	$config     = fed_config();
 	$plugin_api = wp_remote_get(
-		$config['plugin_api'], array(
+		$config['plugin_api'],
+		array(
 			'timeout'     => 120,
 			'httpversion' => '1.1',
 		)
@@ -574,22 +623,3 @@ function get_plugin_list() {
 
 	return false;
 }
-
-/**
- * Auto update the Frontend Dashboard dependent plugins
- *
- * @param  bool   $update
- * @param  object $item
- *
- * @return bool
- */
-function fed_update_all_dependent_plugins( $update, $item ) {
-
-	if ( in_array( $item->slug, fed_get_dependent_plugins(), true ) ) {
-		return true;
-	}
-
-	return $update;
-}
-
-add_filter( 'auto_update_plugin', 'fed_update_all_dependent_plugins', 10, 2 );

@@ -26,7 +26,8 @@ if ( ! class_exists( 'FEDPaymentWidgets' ) ) {
 		 */
 		public function statistics() {
 			wp_add_dashboard_widget(
-				'fed_payment_statistics_widget', 'Frontend Dashboard Payment Statistics',
+				'fed_payment_statistics_widget',
+				'Frontend Dashboard Payment Statistics',
 				array( $this, 'chart' )
 			);
 		}
@@ -36,13 +37,12 @@ if ( ! class_exists( 'FEDPaymentWidgets' ) ) {
 		 */
 		public function chart() {
 			global $wpdb;
-			$created  = array();
-			$amount   = array();
-			$table    = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
-			$query    = "SELECT DATE_FORMAT(created,'%Y-%m-%d') as created, currency, SUM(amount) as amount FROM $table GROUP BY DATE_FORMAT(created,'%Y-%m-%d')";
+			$created = array();
+			$amount  = array();
+			$table   = $wpdb->prefix . BC_FED_TABLE_PAYMENT;
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$payments = $wpdb->get_results( "SELECT DATE_FORMAT(created,'%Y-%m-%d') as created, currency, SUM(amount) as amount FROM {$table} GROUP BY DATE_FORMAT(created,'%Y-%m-%d')", ARRAY_A );
 			$currency = 'USD';
-
-			$payments = $wpdb->get_results( $query, ARRAY_A );
 
 			if ( $payments && count( $payments ) > 0 ) {
 				foreach ( $payments as $index => $payment ) {
@@ -55,32 +55,31 @@ if ( ! class_exists( 'FEDPaymentWidgets' ) ) {
 					<canvas id="fed_payment_stat" width="1200" height="600"></canvas>
 				</div>
 				<script>
-                    var ctx = document.getElementById('fed_payment_stat').getContext('2d');
-                    var payment_stat = new Chart(ctx, {
-                        type: 'bar',
-                        data: {
-                            labels: <?php echo json_encode( $created ) ?>,
-                            datasets: [{
-                                label: 'Total (<?php echo $currency ?>)',
-                                data: <?php echo json_encode( $amount ) ?>,
-                                backgroundColor: 'rgba(10, 170, 170,1)'
-                            }]
-                        },
-                        options: {
-                            scales: {
-                                yAxes: [{
-                                    ticks: {
-                                        beginAtZero: true
-                                    }
-                                }]
-                            }
-                        }
-                    });
+					var ctx = document.getElementById('fed_payment_stat').getContext('2d');
+					var payment_stat = new Chart(ctx, {
+						type: 'bar',
+						data: {
+							labels: <?php echo wp_json_encode( $created ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>,
+							datasets: [{
+								label: 'Total (<?php echo esc_js( $currency ); ?>)',
+								data: <?php echo wp_json_encode( $amount ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>,
+								backgroundColor: 'rgba(10, 170, 170,1)'
+							}]
+						},
+						options: {
+							scales: {
+								yAxes: [{
+									ticks: {
+										beginAtZero: true
+									}
+									}]
+							}
+						}
+					});
 				</script>
 				<?php
-			}
-			else {
-				esc_attr_e( 'No payment received yet', 'frontend-dashboard' );
+			} else {
+				esc_html_e( 'No payment received yet', 'frontend-dashboard' );
 			}
 		}
 
@@ -91,15 +90,20 @@ if ( ! class_exists( 'FEDPaymentWidgets' ) ) {
 			if ( fed_get_current_screen_id() === 'dashboard' ) {
 				wp_enqueue_script(
 					'fed_payment_chart',
-					'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js', array(), '1'
+					BC_FED_PLUGIN_URL . 'assets/admin/js/chart.min.js',
+					array(),
+					BC_FED_PLUGIN_VERSION,
+					true
 				);
 				wp_enqueue_style(
 					'fed_payment_chart',
-					'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css', array(), '1', 'all'
+					BC_FED_PLUGIN_URL . 'assets/admin/css/chart.min.css',
+					array(),
+					BC_FED_PLUGIN_VERSION,
+					'all'
 				);
 			}
 		}
-
 	}
 
 	new FEDPaymentWidgets();
