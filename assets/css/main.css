@@ -151,12 +151,6 @@
   /* Universal Hide / Loader Rules */
   .bc_fed .hide,
   .fed_admin_menu .hide,
-  .preview-area.hide,
-  .preview-area.hidden,
-  .hide {
-    display: none !important;
-  }
-
   .bc_fed .preview-area.hide,
   .bc_fed .preview-area.hidden {
     display: none !important;
@@ -276,6 +270,15 @@
     background-color: #ffffff !important;
     box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.35), 0 0 0 1px rgba(0, 0, 0, 0.05) !important;
   }
+}
+
+/* WordPress Core & Admin Table Compatibility: Prevent table.fixed from becoming position: fixed */
+table.fixed,
+table.wp-list-table,
+.wp-list-table.fixed,
+table.wp-list-table.fixed {
+  position: static !important;
+  table-layout: fixed !important;
 }
 
 

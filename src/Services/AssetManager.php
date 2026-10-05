@@ -39,7 +39,52 @@ class AssetManager {
 		return $tag;
 	}
 
+	/**
+	 * Check whether the current admin screen belongs to Frontend Dashboard or its add-ons.
+	 *
+	 * @param string $hook_suffix Admin hook suffix.
+	 * @return bool
+	 */
+	public function is_fed_admin_screen( $hook_suffix = '' ) {
+		if ( ! is_admin() ) {
+			return false;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
+
+		if ( ! empty( $page ) ) {
+			// Matches any Frontend Dashboard or Addon admin page.
+			if ( 0 === strpos( $page, 'fed_' ) || 0 === strpos( $page, 'fed-' ) || 0 === strpos( $page, 'frontend-dashboard' ) ) {
+				return true;
+			}
+		}
+
+		if ( function_exists( 'fed_get_script_loading_pages' ) ) {
+			$allowed = fed_get_script_loading_pages();
+			if ( ! empty( $page ) && in_array( $page, $allowed, true ) ) {
+				return true;
+			}
+			if ( ! empty( $hook_suffix ) && in_array( $hook_suffix, $allowed, true ) ) {
+				// Don't load full modern assets on generic WP core screens.
+				$core_screens = array( 'post.php', 'user-edit.php', 'post-new.php', 'profile.php', 'widgets.php' );
+				if ( ! in_array( $hook_suffix, $core_screens, true ) ) {
+					return true;
+				}
+			}
+		}
+
+		return (bool) apply_filters( 'frontend_dashboard_is_admin_screen', false, $hook_suffix, $page );
+	}
+
+	/**
+	 * Print early WP JS shims to prevent third-party/core script errors.
+	 */
 	public function print_early_shims() {
+		if ( is_admin() && ! $this->is_fed_admin_screen() ) {
+			return;
+		}
+
 		static $printed = false;
 		if ( $printed ) {
 			return;
@@ -48,7 +93,16 @@ class AssetManager {
 		echo '<script id="fed-early-shims">window.wp=(typeof window.wp==="object"&&window.wp!==null)?window.wp:{};window.wp.editor=(typeof window.wp.editor==="object"&&window.wp.editor!==null)?window.wp.editor:{};window.wp.autop=window.wp.autop||{autop:function(t){return t;},removep:function(t){return t;}};window.wp.i18n=(typeof window.wp.i18n==="object"&&window.wp.i18n!==null)?window.wp.i18n:{__:function(t){return t;},_x:function(t){return t;},_n:function(s,p,n){return n===1?s:p;},_nx:function(s,p,n){return n===1?s:p;},isRtl:function(){return false;},setLocaleData:function(){},sprintf:function(t){return t;}};if(!window.wp.i18n.__){window.wp.i18n.__=function(t){return t;};}window.wp.hooks=window.wp.hooks||{addAction:function(){},addFilter:function(){},applyFilters:function(h,v){return v;},doAction:function(){},removeAction:function(){},removeFilter:function(){},hasAction:function(){return false;},hasFilter:function(){return false;}};</script>';
 	}
 
-	public function enqueue_scripts() {
+	/**
+	 * Enqueue Frontend Dashboard modern scripts and styles.
+	 *
+	 * @param string $hook_suffix Admin hook suffix.
+	 */
+	public function enqueue_scripts( $hook_suffix = '' ) {
+		if ( is_admin() && ! $this->is_fed_admin_screen( $hook_suffix ) ) {
+			return;
+		}
+
 		$context            = is_admin() ? 'admin' : 'frontend';
 		$db_scripts         = get_option( 'fed_general_scripts_styles', array() );
 		$is_style_disabled  = isset( $db_scripts[ $context ]['styles']['fed-style'] );
