@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.0.6
+Stable tag: 3.0.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -141,6 +141,11 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 == Changelog ==
 
+= 3.0.7 =
+* Fix: Resolved "Sorry, you are not allowed to access this page" permission error by correcting Add-ons marketplace URL to `fed_plugin_pages` in compatibility notices.
+* Enhancement: Registered `fed_addons` as a fallback submenu alias to guarantee seamless access on legacy or bookmarked URLs.
+* Fix: Restricted frontend stylesheet and script loading strictly to Frontend Dashboard screens to prevent CSS collisions (including table.fixed overrides) on third-party pages.
+
 = 3.0.6 =
 * Security: Enforced strict capability and permission checks on REST API post creation, editing, and publishing endpoints (credit: Ali Hidayat).
 
@@ -185,6 +190,9 @@ More Changelogs:
 https://faq.frontenddashboard.com/changelog/overview/
 
 == Upgrade Notice ==
+
+= 3.0.7 =
+Maintenance and compatibility update: Fixes Add-ons navigation access link, registers fed_addons alias, and prevents global CSS collisions.
 
 = 3.0.6 =
 Security update: Fixed REST API post endpoints with strict capability and permission verification. Upgrade immediately.

@@ -101,6 +101,14 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 				'fed_add_user_profile',
 				array( $this, 'add_user_profile' )
 			);
+			add_submenu_page(
+				null,
+				__( 'Add-Ons', 'frontend-dashboard' ),
+				__( 'Add-Ons', 'frontend-dashboard' ),
+				'manage_options',
+				'fed_addons',
+				array( $this, 'plugin_pages' )
+			);
 
 			do_action( 'fed_add_main_sub_menu_action' );
 		}

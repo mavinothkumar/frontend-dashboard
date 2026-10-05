@@ -203,7 +203,7 @@ class AddonCompatibilityManager {
 			return;
 		}
 
-		$addons_url  = admin_url( 'admin.php?page=fed_addons' );
+		$addons_url  = admin_url( 'admin.php?page=fed_plugin_pages' );
 		$plugins_url = admin_url( 'plugins.php' );
 		?>
 		<div class="notice notice-error is-dismissible fed-compatibility-notice" style="border-left-color: #ef4444; background: #ffffff; padding: 16px 20px; border-radius: 12px; box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.08); margin: 20px 20px 20px 0;">
@@ -276,7 +276,7 @@ class AddonCompatibilityManager {
 			return '';
 		}
 
-		$addons_url = admin_url( 'admin.php?page=fed_addons' );
+		$addons_url = admin_url( 'admin.php?page=fed_plugin_pages' );
 
 		ob_start();
 		?>
