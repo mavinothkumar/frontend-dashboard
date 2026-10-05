@@ -141,6 +141,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // require_once BC_FED_PLUGIN_DIR . $file;
 // }
 // }
+
 do_action( 'fed/vendor/autoload:before' );
 require_once BC_FED_PLUGIN_DIR . '/vendor/autoload.php';
 do_action( 'fed/vendor/autoload:before' );
