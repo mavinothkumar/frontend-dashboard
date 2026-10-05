@@ -11,8 +11,9 @@ pnpm-debug.log*
 composer.phar
 
 # Build Artifacts & Archives
-dist/
-build/
+/dist/
+/build/
+!assets/dist/
 *.zip
 *.tar.gz
 *.tgz
