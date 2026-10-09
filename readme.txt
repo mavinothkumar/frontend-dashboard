@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.0.9
+Stable tag: 3.0.10
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -141,6 +141,10 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 == Changelog ==
 
+= 3.0.10 (2026-10-09) =
+* Fix: Resolved a JavaScript reference error (`emptyState` variable) in the media modal that prevented the single-item Attachment Details sidebar from displaying the Alt Text, Title, Caption, and Description fields.
+* Enhancement: Multi-select thumbnail badges now display clean document indicators, and selecting a single item reliably populates all metadata and display settings with live auto-saving.
+
 = 3.0.9 (2026-10-09) =
 * Enhancement: Upgraded upload queue with individual animated progress bars, live transfer percentages, file badges, and concurrent upload tracking (Thanks to Muhammad Umer).
 * Enhancement: Added full Attachment Details sidebar enabling live editing of Alt Text, Title, Caption, Description, Alignment (none/left/center/right), Link To (none/file/page/custom URL), and Size (full/large/medium/thumbnail) before inserting into the editor.
@@ -206,6 +210,9 @@ More Changelogs:
 https://faq.frontenddashboard.com/changelog/overview/
 
 == Upgrade Notice ==
+
+= 3.0.10 =
+Fixes Attachment Details sidebar rendering in the media modal when a single media file is selected, ensuring Alt Text, Title, Caption, and Description fields display and save properly.
 
 = 3.0.9 =
 Media modal improvements: Individual upload progress bars, full attachment details editing panel (Alt text, Title, Caption, Alignment, Link To, Size), instant filter dropdown performance, strict media type filtering, view isolation, and smooth "Load More Media" pagination.

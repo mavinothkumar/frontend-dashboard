@@ -1186,9 +1186,8 @@ class FedMediaModal {
     }
 
     // Exactly 1 item selected: render full detail editing form
-    emptyState.classList.add('hidden');
-    multiState.classList.add('hidden');
-    singleState.classList.remove('hidden');
+    if (multiState) multiState.classList.add('hidden');
+    if (singleState) singleState.classList.remove('hidden');
 
     const item = this.selectedItem;
     if (!item) return;
