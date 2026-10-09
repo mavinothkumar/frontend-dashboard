@@ -360,6 +360,197 @@ if ( ! function_exists( 'fed_is_admin' ) ) {
 	}
 }
 
+if ( ! function_exists( 'fed_is_elevated_role' ) ) {
+	/**
+	 * Check if a WordPress user role has elevated administrative or editorial capabilities.
+	 *
+	 * @param string $role_slug Role slug.
+	 * @return bool
+	 */
+	function fed_is_elevated_role( $role_slug ) {
+		if ( empty( $role_slug ) || ! is_string( $role_slug ) ) {
+			return false;
+		}
+
+		$normalized = strtolower( trim( $role_slug ) );
+
+		if ( 'administrator' === $normalized ) {
+			return true;
+		}
+
+		$role = get_role( $normalized );
+		if ( ! $role || empty( $role->capabilities ) || ! is_array( $role->capabilities ) ) {
+			return false;
+		}
+
+		$elevated_capabilities = array(
+			'manage_options',
+			'edit_others_posts',
+			'edit_others_pages',
+			'delete_others_posts',
+			'delete_others_pages',
+			'promote_users',
+			'delete_users',
+			'create_users',
+			'edit_users',
+			'unfiltered_html',
+			'activate_plugins',
+			'edit_plugins',
+			'edit_themes',
+			'switch_themes',
+			'install_plugins',
+			'install_themes',
+			'update_core',
+			'update_plugins',
+			'update_themes',
+		);
+
+		foreach ( $elevated_capabilities as $cap ) {
+			if ( ! empty( $role->capabilities[ $cap ] ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+}
+
+if ( ! function_exists( 'fed_get_allowed_action_hooks' ) ) {
+	/**
+	 * Get allowed action hooks map with required capabilities.
+	 *
+	 * @return array
+	 */
+	function fed_get_allowed_action_hooks() {
+		$hooks = array(
+			'fedinstalladdons@install'               => 'install_plugins',
+			'fedinstalladdons@activate'              => 'activate_plugins',
+			'fedemail@update'                        => 'manage_options',
+			'fedemail@test_email'                    => 'manage_options',
+			'fedinvoicetemplate@update'              => 'manage_options',
+			'fedinvoice@update'                      => 'manage_options',
+			'fedinvoice'                             => 'manage_options',
+			'fedinvoice@store_user'                  => 'manage_options',
+			'fedpayment@update'                      => 'manage_options',
+			'fedpayment'                             => 'manage_options',
+			'fedsubscription@save_plan'              => 'manage_options',
+			'fedsubscription@duplicate_plan'         => 'manage_options',
+			'fedsubscription@delete_plan'            => 'manage_options',
+			'fedtransaction@save_manual_transaction' => 'manage_options',
+			'fedtransaction@add_new_item'            => 'manage_options',
+			'fedtransaction@add_items'               => 'manage_options',
+			'fedtransaction@update'                  => 'manage_options',
+			'fedtransaction@items'                   => 'read',
+			'fedinvoice@download'                    => 'read',
+			'fedschatwhatsapp@settings_update'       => 'manage_options',
+			'fedschatwhatsapp@layout_update'         => 'manage_options',
+			'fedschatwhatsapp@user_update'           => 'manage_options',
+			'fedschatwhatsapp@ajax_dummy_user_form'  => 'manage_options',
+		);
+
+		return apply_filters( 'fed_allowed_action_hooks', $hooks );
+	}
+}
+
+if ( ! function_exists( 'fed_get_allowed_action_functions' ) ) {
+	/**
+	 * Get allowed callable action functions map with required capabilities.
+	 *
+	 * @return array
+	 */
+	function fed_get_allowed_action_functions() {
+		$functions = array(
+			'fed_admin_frontend_login_menu_save' => 'manage_options',
+		);
+
+		return apply_filters( 'fed_allowed_action_functions', $functions );
+	}
+}
+
+if ( ! function_exists( 'fed_verify_action_hook_authorization' ) ) {
+	/**
+	 * Verify if an action hook string (Class@method) is authorized for current user.
+	 *
+	 * @param string $item Class@method or Class.
+	 * @return bool
+	 */
+	function fed_verify_action_hook_authorization( $item ) {
+		if ( ! is_string( $item ) || empty( $item ) ) {
+			return false;
+		}
+
+		$parts       = explode( '@', trim( $item ) );
+		$class_name  = trim( $parts[0] );
+		$method_name = isset( $parts[1] ) && ! empty( $parts[1] ) ? trim( $parts[1] ) : 'update';
+
+		$hook_key  = strtolower( $class_name . '@' . $method_name );
+		$class_key = strtolower( $class_name );
+
+		$allowed_hooks = fed_get_allowed_action_hooks();
+
+		$required_cap = null;
+		if ( isset( $allowed_hooks[ $hook_key ] ) ) {
+			$required_cap = $allowed_hooks[ $hook_key ];
+		} elseif ( isset( $allowed_hooks[ $class_key ] ) ) {
+			$required_cap = $allowed_hooks[ $class_key ];
+		}
+
+		if ( null === $required_cap ) {
+			/**
+			 * Filter to allow custom capability resolution for extensions.
+			 *
+			 * @param string|null $required_cap Capability required.
+			 * @param string      $class_name   Class name.
+			 * @param string      $method_name  Method name.
+			 */
+			$custom_cap = apply_filters( 'fed_action_hook_required_capability', null, $class_name, $method_name );
+			if ( is_string( $custom_cap ) && ! empty( $custom_cap ) ) {
+				$required_cap = $custom_cap;
+			} else {
+				return false;
+			}
+		}
+
+		return current_user_can( $required_cap );
+	}
+}
+
+if ( ! function_exists( 'fed_verify_action_fn_authorization' ) ) {
+	/**
+	 * Verify if a callable function is authorized for current user.
+	 *
+	 * @param string $func Function name.
+	 * @return bool
+	 */
+	function fed_verify_action_fn_authorization( $func ) {
+		if ( ! is_string( $func ) || empty( $func ) ) {
+			return false;
+		}
+
+		$func_key          = strtolower( trim( $func ) );
+		$allowed_functions = fed_get_allowed_action_functions();
+
+		if ( ! isset( $allowed_functions[ $func_key ] ) ) {
+			/**
+			 * Filter to allow custom function capability resolution for extensions.
+			 *
+			 * @param string|null $required_cap Capability required.
+			 * @param string      $func         Function name.
+			 */
+			$custom_cap = apply_filters( 'fed_action_fn_required_capability', null, $func );
+			if ( is_string( $custom_cap ) && ! empty( $custom_cap ) ) {
+				$required_cap = $custom_cap;
+			} else {
+				return false;
+			}
+		} else {
+			$required_cap = $allowed_functions[ $func_key ];
+		}
+
+		return current_user_can( $required_cap );
+	}
+}
+
 if ( ! function_exists( 'fed_is_user_role' ) ) {
 	/**
 	 * Check is User Role.
@@ -941,3 +1132,122 @@ function fed_render_addon_compatibility_banner() {
 	}
 	return '';
 }
+
+if ( ! function_exists( 'fed_no_texturize_tags' ) ) {
+	/**
+	 * Prevent wptexturize from converting quotes inside textarea elements.
+	 *
+	 * @param array $tags HTML tags not to texturize.
+	 * @return array
+	 */
+	function fed_no_texturize_tags( $tags ) {
+		if ( ! in_array( 'textarea', (array) $tags, true ) ) {
+			$tags[] = 'textarea';
+		}
+		return $tags;
+	}
+	add_filter( 'no_texturize_tags', 'fed_no_texturize_tags' );
+}
+
+if ( ! function_exists( 'fed_no_texturize_shortcodes' ) ) {
+	/**
+	 * Prevent wptexturize from converting quotes inside FED shortcodes.
+	 *
+	 * @param array $shortcodes Shortcodes not to texturize.
+	 * @return array
+	 */
+	function fed_no_texturize_shortcodes( $shortcodes ) {
+		$fed_shortcodes = array(
+			'fed_dashboard',
+			'frontend_dashboard',
+			'fed_login',
+			'frontend_dashboard_login',
+			'fed_register',
+			'fed_forgot_password',
+			'fed_transactions',
+		);
+		return array_unique( array_merge( (array) $shortcodes, $fed_shortcodes ) );
+	}
+	add_filter( 'no_texturize_shortcodes', 'fed_no_texturize_shortcodes' );
+}
+
+if ( ! function_exists( 'fed_clean_html_tag_attributes' ) ) {
+	/**
+	 * Clean and normalize quotes inside HTML tags to prevent broken attributes.
+	 *
+	 * Strips smart/curly quotes, mixed quotes, and HTML quote entities from inside
+	 * HTML tag attributes, ensuring standard ASCII double-quoted attributes: name="value".
+	 *
+	 * @param string $content HTML content.
+	 * @return string Cleaned HTML content.
+	 */
+	function fed_clean_html_tag_attributes( $content ) {
+		if ( ! is_string( $content ) || '' === $content ) {
+			return $content;
+		}
+
+		$entity_map = array(
+			'&ldquo;' => '“',
+			'&rdquo;' => '”',
+			'&#8220;' => '“',
+			'&#8221;' => '”',
+			'&#8243;' => '″',
+			'&#147;'  => '“',
+			'&#148;'  => '”',
+		);
+
+		return preg_replace_callback(
+			'/<([a-z][a-z0-9]*)\b([^>]*?)(\/?)>/i',
+			static function ( $tag_matches ) use ( $entity_map ) {
+				$tag_name   = $tag_matches[1];
+				$attributes = $tag_matches[2];
+				$closing    = $tag_matches[3];
+
+				if ( empty( trim( $attributes ) ) ) {
+					return $tag_matches[0];
+				}
+
+				$attributes = strtr( $attributes, $entity_map );
+
+				$pattern = '/([a-zA-Z0-9_\-:]+)\s*=\s*(?:'
+					. '("([^"]*)")|'
+					. '(\'([^\']*)\')|'
+					. '([“\xe2\x80\x9c]([^”\xe2\x80\x9d]*)[”\xe2\x80\x9d])|'
+					. '([”\xe2\x80\x9d]([^”\xe2\x80\x9d]*)[”\xe2\x80\x9d])|'
+					. '([^\s"\'>]+)'
+					. ')/u';
+
+				$new_attributes = preg_replace_callback(
+					$pattern,
+					static function ( $attr_matches ) {
+						$attr_name = $attr_matches[1];
+						$raw_val   = '';
+
+						if ( isset( $attr_matches[3] ) && '' !== $attr_matches[3] ) {
+							$raw_val = $attr_matches[3];
+						} elseif ( isset( $attr_matches[5] ) && '' !== $attr_matches[5] ) {
+							$raw_val = $attr_matches[5];
+						} elseif ( isset( $attr_matches[7] ) && '' !== $attr_matches[7] ) {
+							$raw_val = $attr_matches[7];
+						} elseif ( isset( $attr_matches[9] ) && '' !== $attr_matches[9] ) {
+							$raw_val = $attr_matches[9];
+						} elseif ( isset( $attr_matches[10] ) ) {
+							$raw_val = $attr_matches[10];
+						}
+
+						$curly_chars = "\xe2\x80\x9c\xe2\x80\x9d\xe2\x80\xb3\x22\x27“”″\"'";
+						$clean_val   = trim( $raw_val, $curly_chars );
+
+						return $attr_name . '="' . esc_attr( $clean_val ) . '"';
+					},
+					$attributes
+				);
+
+				$slash = ( '' !== $closing ) ? ' ' . $closing : '';
+				return '<' . $tag_name . ' ' . trim( $new_attributes ) . $slash . '>';
+			},
+			$content
+		);
+	}
+}
+

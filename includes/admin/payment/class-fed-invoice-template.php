@@ -168,6 +168,13 @@ if ( ! class_exists( 'FEDInvoiceTemplate' ) ) {
 		 * @param  array $request  Request.
 		 */
 		public function update( $request ) {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ), 403 );
+				exit();
+			}
+
+			fed_verify_nonce( $request );
+
 			$validate = new FED_Validation();
 			$validate->name( 'Template' )->value( isset( $request['template'] ) ? $request['template'] : '' )->required();
 

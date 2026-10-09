@@ -373,7 +373,7 @@ class PostEndpoints {
 
 		$postData = array(
 			'post_title'   => sanitize_text_field( $params['post_title'] ),
-			'post_content' => wp_kses_post( $params['post_content'] ),
+			'post_content' => wp_kses_post( function_exists( 'fed_clean_html_tag_attributes' ) ? fed_clean_html_tag_attributes( $params['post_content'] ) : $params['post_content'] ),
 			'post_excerpt' => isset( $params['post_excerpt'] ) ? sanitize_textarea_field( $params['post_excerpt'] ) : '',
 			'post_status'  => $requestedStatus,
 			'post_type'    => $postType,
@@ -419,7 +419,7 @@ class PostEndpoints {
 			$postData['post_title'] = sanitize_text_field( $params['post_title'] );
 		}
 		if ( isset( $params['post_content'] ) ) {
-			$postData['post_content'] = wp_kses_post( $params['post_content'] );
+			$postData['post_content'] = wp_kses_post( function_exists( 'fed_clean_html_tag_attributes' ) ? fed_clean_html_tag_attributes( $params['post_content'] ) : $params['post_content'] );
 		}
 		if ( isset( $params['post_excerpt'] ) ) {
 			$postData['post_excerpt'] = sanitize_textarea_field( $params['post_excerpt'] );

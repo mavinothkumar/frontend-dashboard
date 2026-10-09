@@ -27,6 +27,11 @@ function fed_register_form_submit( $post ) {
 
 	do_action( 'fed_register_before_validation', $post );
 
+	if ( ! get_option( 'users_can_register' ) ) {
+		wp_send_json_error( array( 'user' => array( __( 'User registration is currently closed.', 'frontend-dashboard' ) ) ), 403 );
+		exit();
+	}
+
 	$redirect_url    = fed_registration_redirect();
 	$fed_admin_login = get_option( 'fed_admin_login' );
 	$notification    = isset( $fed_admin_login['register']['register_email_notification'] ) ? $fed_admin_login['register']['register_email_notification'] : '';
@@ -41,12 +46,12 @@ function fed_register_form_submit( $post ) {
 	// Determine valid user role
 	$allowed_roles = fed_is_role_in_registration();
 	$default_role  = get_option( 'default_role', 'subscriber' );
-	if ( 'administrator' === strtolower( (string) $default_role ) ) {
+	if ( fed_is_elevated_role( $default_role ) ) {
 		$default_role = 'subscriber';
 	}
 
 	$role = $default_role;
-	if ( $allowed_roles && isset( $post['role'] ) && array_key_exists( $post['role'], $allowed_roles ) && 'administrator' !== strtolower( (string) $post['role'] ) ) {
+	if ( $allowed_roles && isset( $post['role'] ) && array_key_exists( $post['role'], $allowed_roles ) && ! fed_is_elevated_role( $post['role'] ) ) {
 		$role = sanitize_text_field( $post['role'] );
 	}
 

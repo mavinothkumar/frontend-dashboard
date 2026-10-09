@@ -48,6 +48,12 @@ if ( ! class_exists( 'FEDInstallAddons' ) ) {
 		 * @param  array $request  Request.
 		 */
 		public function activate( $request ) {
+			if ( ! current_user_can( 'activate_plugins' ) && ! current_user_can( 'manage_options' ) ) {
+				wp_die( esc_html__( 'Sorry, you are not allowed to activate plugins on this site.', 'frontend-dashboard' ), 403 );
+			}
+
+			fed_verify_nonce( $request );
+
 			$server_payload = filter_input_array( INPUT_SERVER, FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 			$plugin_name    = fed_get_data( 'plugin_name', $request, false );
 			$location       = $server_payload['HTTP_REFERER'];

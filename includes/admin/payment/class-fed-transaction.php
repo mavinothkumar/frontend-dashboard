@@ -376,11 +376,12 @@ if ( ! class_exists( 'FEDTransaction' ) ) {
 		 * @param array $request
 		 */
 		public function save_manual_transaction( $request ) {
-			$this->authorize();
-
-			if ( ! fed_is_admin() ) {
-				wp_send_json_error( array( 'message' => __( 'Permission denied.', 'frontend-dashboard' ) ) );
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_send_json_error( array( 'message' => __( 'Permission denied.', 'frontend-dashboard' ) ), 403 );
+				exit();
 			}
+
+			fed_verify_nonce( $request );
 
 			$user_id        = isset( $request['user_id'] ) ? intval( $request['user_id'] ) : get_current_user_id();
 			$transaction_id = isset( $request['transaction_id'] ) ? fed_sanitize_text_field( $request['transaction_id'] ) : 'TXN-' . time();
@@ -726,6 +727,12 @@ if ( ! class_exists( 'FEDTransaction' ) ) {
 		 * @param  array $request  Request.
 		 */
 		public function add_new_item( $request ) {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_send_json_error( array( 'message' => __( 'Permission denied.', 'frontend-dashboard' ) ), 403 );
+				exit();
+			}
+
+			fed_verify_nonce( $request );
 		}
 
 		/**

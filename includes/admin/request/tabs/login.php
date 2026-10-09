@@ -12,6 +12,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Handle all Admin login settings request
  */
 function fed_admin_setting_login_request() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ), 403 );
+		exit();
+	}
+
+	fed_verify_nonce();
+
 	$message = '';
 	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$requests        = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
@@ -76,12 +83,21 @@ function fed_admin_login_settings_save( $request ) {
  * @return array
  */
 function fed_admin_login_register_save( $request ) {
+	$roles           = isset( $request['role'] ) && is_array( $request['role'] ) ? $request['role'] : array();
+	$sanitized_roles = array();
+	foreach ( $roles as $role_key => $role_val ) {
+		$role_slug = sanitize_key( $role_key );
+		if ( ! fed_is_elevated_role( $role_slug ) ) {
+			$sanitized_roles[ $role_slug ] = sanitize_text_field( $role_val );
+		}
+	}
+
 	return array(
-		'role'                        => isset( $request['role'] ) ? $request['role'] : array(),
-		'name'                        => isset( $request['name'] ) ? $request['name'] : 'User Role',
-		'position'                    => isset( $request['position'] ) ? $request['position'] : 999,
-		'auto_login'                  => isset( $request['auto_login'] ) ? $request['auto_login'] : '',
-		'register_email_notification' => isset( $request['register_email_notification'] ) ? $request['register_email_notification'] : 'both',
+		'role'                        => $sanitized_roles,
+		'name'                        => isset( $request['name'] ) ? sanitize_text_field( $request['name'] ) : 'User Role',
+		'position'                    => isset( $request['position'] ) ? absint( $request['position'] ) : 999,
+		'auto_login'                  => isset( $request['auto_login'] ) ? sanitize_text_field( $request['auto_login'] ) : '',
+		'register_email_notification' => isset( $request['register_email_notification'] ) ? sanitize_text_field( $request['register_email_notification'] ) : 'both',
 	);
 }
 

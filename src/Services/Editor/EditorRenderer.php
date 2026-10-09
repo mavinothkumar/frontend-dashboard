@@ -80,7 +80,11 @@ class EditorRenderer {
 			return '';
 		}
 		// Remove <!-- wp:... --> and <!-- /wp:... -->
-		return preg_replace( '/<!--\s*\/?wp:[^>]*-->\s*/', '', $content );
+		$content = preg_replace( '/<!--\s*\/?wp:[^>]*-->\s*/', '', $content );
+		if ( function_exists( 'fed_clean_html_tag_attributes' ) ) {
+			$content = fed_clean_html_tag_attributes( $content );
+		}
+		return $content;
 	}
 
 	/**
@@ -102,6 +106,8 @@ class EditorRenderer {
 			$plugins            = array_diff( $plugins, array( 'wplink', 'wpeditimage', 'wpview', 'wpgallery' ) );
 			$mceInit['plugins'] = implode( ',', $plugins );
 		}
+		// Ensure straight ASCII quotes and prevent entity conversion corrupting attributes
+		$mceInit['entity_encoding'] = 'raw';
 		return $mceInit;
 	}
 
@@ -109,6 +115,11 @@ class EditorRenderer {
 	 * Render Classic WP Editor (TinyMCE)
 	 */
 	protected static function render_classic( $content, $input_meta ) {
+		// Clean and normalize quotes inside HTML tags to prevent broken attributes.
+		if ( ! empty( $content ) && is_string( $content ) && function_exists( 'fed_clean_html_tag_attributes' ) ) {
+			$content = fed_clean_html_tag_attributes( $content );
+		}
+
 		if ( function_exists( 'fed_get_early_wp_shims_js' ) ) {
 			$shims = fed_get_early_wp_shims_js();
 			wp_add_inline_script( 'jquery-core', $shims, 'before' );
@@ -127,7 +138,7 @@ class EditorRenderer {
 		ob_start();
 		?>
 		<script id="fed-classic-editor-shims">
-		window.wp=(typeof window.wp==="object"&&window.wp!==null)?window.wp:{};window.wp.editor=(typeof window.wp.editor==="object"&&window.wp.editor!==null)?window.wp.editor:{};window.wp.autop=window.wp.autop||{autop:function(t){return t;},removep:function(t){return t;}};window.wp.i18n=(typeof window.wp.i18n==="object"&&window.wp.i18n!==null)?window.wp.i18n:{__:function(t){return t;},_x:function(t){return t;},_n:function(s,p,n){return n===1?s:p;},_nx:function(s,p,n){return n===1?s:p;},isRtl:function(){return false;},setLocaleData:function(){},sprintf:function(t){return t;}};if(!window.wp.i18n.__){window.wp.i18n.__=function(t){return t;};}window.wp.hooks=window.wp.hooks||{addAction:function(){},addFilter:function(){},applyFilters:function(h,v){return v;},doAction:function(){},removeAction:function(){},removeFilter:function(){},hasAction:function(){return false;},hasFilter:function(){return false;}};
+		window.wp=(typeof window.wp==="object"&&window.wp!==null)?window.wp:{};window.wp.editor=(typeof window.wp.editor==="object"&&window.wp.editor!==null)?window.wp.editor:{};window.wp.autop=window.wp.autop||{autop:function(t){return t;},removep:function(t){return t;}};window.wp.i18n=(typeof window.wp.i18n==="object"&&window.wp.i18n!==null)?window.wp.i18n:{__:function(t){return t;},_x:function(t){return t;},_n:function(s,p,n){return n===1?s:p;},_nx:function(s,p,n){return n===1?s:p;},isRtl:function(){return false;},setLocaleData:function(){},sprintf:function(t){return t;}};if(!window.wp.i18n.__){window.wp.i18n.__=function(t){return t;};}window.wp.hooks=window.wp.hooks||{addAction:function(){},addFilter:function(){},applyFilters:function(h,v){return v;},doAction:function(){},removeAction:function(){},removeFilter:function(){},hasAction:function(){return false;},hasFilter:function(){return false;}};if(typeof window.setUserSetting==="function"){window.setUserSetting("editor","tinymce");}
 		</script>
 		<div class="fed-classic-editor-wrapper relative">
 			<div class="mb-2.5 flex items-center justify-between">
@@ -142,15 +153,17 @@ class EditorRenderer {
 			if ( function_exists( 'wp_editor' ) ) {
 				add_filter( 'tiny_mce_plugins', array( __CLASS__, 'filter_clean_tinymce_plugins' ) );
 				add_filter( 'tiny_mce_before_init', array( __CLASS__, 'filter_clean_tinymce_init' ), 10, 2 );
+				add_filter( 'user_can_richedit', '__return_true' );
 
 				wp_editor(
 					$content,
 					$input_meta,
 					array(
-						'media_buttons' => false,
-						'quicktags'     => true,
-						'textarea_rows' => 12,
-						'tinymce'       => array(
+						'default_editor' => 'tinymce',
+						'media_buttons'  => false,
+						'quicktags'      => true,
+						'textarea_rows'  => 12,
+						'tinymce'        => array(
 							'wp_autoresize_on' => true,
 						),
 					)
@@ -158,6 +171,7 @@ class EditorRenderer {
 
 				remove_filter( 'tiny_mce_plugins', array( __CLASS__, 'filter_clean_tinymce_plugins' ) );
 				remove_filter( 'tiny_mce_before_init', array( __CLASS__, 'filter_clean_tinymce_init' ) );
+				remove_filter( 'user_can_richedit', '__return_true' );
 			} else {
 				?>
 				<textarea name="<?php echo esc_attr( $input_meta ); ?>" class="form-control" rows="12"><?php echo esc_textarea( $content ); ?></textarea>

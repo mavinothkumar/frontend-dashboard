@@ -13,6 +13,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Admin User Options Request.
  */
 function fed_admin_user_options_request() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ), 403 );
+		exit();
+	}
+
+	fed_verify_nonce();
+
 	$message = '';
 	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
@@ -51,6 +58,13 @@ function fed_admin_user_options_request() {
  * @param  array $request  Request.
  */
 function fed_admin_tab_post_role( $request ) {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ), 403 );
+		exit();
+	}
+
+	fed_verify_nonce( $request );
+
 	global $wpdb;
 	$user_roles = $wpdb->prefix . 'user_roles';
 	$roles      = get_option( $user_roles );
@@ -122,6 +136,13 @@ function fed_admin_tab_post_role( $request ) {
  * @param  array $request  Request.
  */
 function fed_admin_tab_post_role_delete( $request ) {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ), 403 );
+		exit();
+	}
+
+	fed_verify_nonce( $request );
+
 	global $wpdb;
 	$user_roles = $wpdb->prefix . 'user_roles';
 	$roles      = get_option( $user_roles );
@@ -177,6 +198,13 @@ function fed_admin_tab_post_role_delete( $request ) {
  * @param  array $request  Request.
  */
 function fed_admin_tab_user_upload( $request ) {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ), 403 );
+		exit();
+	}
+
+	fed_verify_nonce( $request );
+
 	$user_options         = get_option( 'fed_admin_settings_user' );
 	$user_options['user'] = array(
 		'upload_permission' => isset( $request['user']['upload_permission'] ) ? $request['user']['upload_permission'] : array(),

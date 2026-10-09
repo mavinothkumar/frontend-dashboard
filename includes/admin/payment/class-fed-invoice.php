@@ -251,6 +251,13 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 		 * @param  array $request  Request.
 		 */
 		public function update( $request ) {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ), 403 );
+				exit();
+			}
+
+			fed_verify_nonce( $request );
+
 			$invoice            = get_option( 'fed_invoice_settings' );
 			$invoice['details'] = array(
 				'logo'         => isset( $request['logo'] ) ? (int) $request['logo'] : '',
@@ -297,6 +304,8 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 		 * @param  array $request  Request.
 		 */
 		public function download( $request ) {
+			fed_verify_nonce( $request );
+
 			$validate = new FED_Validation();
 			$validate->name( 'Transaction ID' )->value( (int) $request['transaction_id'] )->required();
 
@@ -310,6 +319,11 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 
 			if ( $payment instanceof WP_Error ) {
 				wp_send_json_error( array( 'message' => $payment->get_error_message() ) );
+			}
+
+			if ( ! current_user_can( 'manage_options' ) && (int) get_current_user_id() !== (int) $payment['user_id'] ) {
+				wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ), 403 );
+				exit();
 			}
 
 			$settings = get_option( 'fed_invoice_settings' );
@@ -672,6 +686,13 @@ if ( ! class_exists( 'FEDInvoice' ) ) {
 		 * @param  array $request  Request.
 		 */
 		public function store_user( $request ) {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ), 403 );
+				exit();
+			}
+
+			fed_verify_nonce( $request );
+
 			$invoice                 = get_option( 'fed_invoice_settings' );
 			$invoice['user_address'] = array(
 				'name'      => isset( $request['name'] ) ? (int) $request['name'] : '',

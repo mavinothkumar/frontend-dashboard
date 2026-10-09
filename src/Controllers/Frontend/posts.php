@@ -159,9 +159,14 @@ function fed_process_dashboard_add_new_post( $post ) {
 			wp_send_json_error( array( 'message' => $error->get_error_messages() ) );
 		}
 
+		$raw_content = isset( $post['post_content'] ) ? wp_unslash( $post['post_content'] ) : '';
+		if ( is_string( $raw_content ) && '' !== $raw_content && function_exists( 'fed_clean_html_tag_attributes' ) ) {
+			$raw_content = fed_clean_html_tag_attributes( $raw_content );
+		}
+
 		$default = array(
 			'post_title'     => sanitize_text_field( $post['post_title'] ),
-			'post_content'   => isset( $post['post_content'] ) ? wp_kses_post( $post['post_content'] ) : '',
+			'post_content'   => wp_kses_post( $raw_content ),
 			'post_category'  => isset( $post['post_category'] ) ? sanitize_text_field( $post['post_category'] ) : '',
 			'tags_input'     => isset( $post['tags_input'] ) ? implode( ',', $post['tags_input'] ) : '',
 			'post_type'      => isset( $post['post_type'] ) ? sanitize_text_field( $post['post_type'] ) : 'post',

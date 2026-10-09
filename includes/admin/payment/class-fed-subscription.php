@@ -720,8 +720,12 @@ if ( ! class_exists( 'FEDSubscription' ) ) {
 		 * Authorize.
 		 */
 		public function authorize() {
-			if ( ! fed_is_admin() ) {
-				wp_die( esc_html__( 'Sorry! You are not allowed to do this action | Error: FEDSubscription@authorize', 'frontend-dashboard' ) );
+			if ( ! current_user_can( 'manage_options' ) ) {
+				if ( wp_doing_ajax() ) {
+					wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ), 403 );
+					exit();
+				}
+				wp_die( esc_html__( 'Sorry! You are not allowed to do this action | Error: FEDSubscription@authorize', 'frontend-dashboard' ), 403 );
 			}
 		}
 	}

@@ -12,6 +12,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Admin Setting User Profile Request
  */
 function fed_admin_setting_upl_request() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ), 403 );
+		exit();
+	}
+
+	fed_verify_nonce();
+
 	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request                = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	$fed_admin_settings_upl = get_option( 'fed_admin_settings_upl', array() );
@@ -57,6 +64,13 @@ function fed_admin_setting_upl_request() {
  * Admin Setting Hide Admin Bar Request.
  */
 function fed_admin_setting_upl_hide_bar_request() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ), 403 );
+		exit();
+	}
+
+	fed_verify_nonce();
+
 	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request                = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	$fed_admin_settings_upl = get_option( 'fed_admin_settings_upl_hide_admin_bar', array() );
@@ -117,6 +131,13 @@ if ( ! function_exists( 'fed_hide_admin_bar_init_handler' ) ) {
  * Admin Setting User Profile Level Color request.
  */
 function fed_admin_setting_upl_color_request() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ), 403 );
+		exit();
+	}
+
+	fed_verify_nonce();
+
 	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request                = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
 	$fed_admin_settings_upl = get_option( 'fed_admin_setting_upl_color', array() );

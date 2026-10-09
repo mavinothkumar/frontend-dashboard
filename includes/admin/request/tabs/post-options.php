@@ -9,6 +9,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 function fed_admin_setting_post_options_request() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permission denied', 'frontend-dashboard' ) ), 403 );
+		exit();
+	}
+
+	fed_verify_nonce();
+
 	$message = '';
 	// phpcs:ignore WordPress.Security.NonceVerification.Missing
 	$request                 = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();

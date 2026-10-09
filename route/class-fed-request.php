@@ -45,6 +45,21 @@ if ( ! class_exists( 'FED_Requests' ) ) {
 			 */
 			fed_verify_nonce( $request );
 
+			if ( isset( $request['fed_action_hook'] ) ) {
+				$hook = urldecode( $request['fed_action_hook'] );
+				if ( ! fed_verify_action_hook_authorization( $hook ) ) {
+					wp_send_json_error( array( 'message' => __( 'Permission denied.', 'frontend-dashboard' ) ), 403 );
+					exit();
+				}
+			}
+
+			if ( isset( $request['fed_action_hook_fn'] ) && ! empty( $request['fed_action_hook_fn'] ) ) {
+				if ( ! is_string( $request['fed_action_hook_fn'] ) || ! fed_verify_action_fn_authorization( $request['fed_action_hook_fn'] ) ) {
+					wp_send_json_error( array( 'message' => __( 'Permission denied.', 'frontend-dashboard' ) ), 403 );
+					exit();
+				}
+			}
+
 			do_action( 'fed_before_ajax_request_action_hook_call', $request );
 
 			if ( isset( $request['fed_action_hook'] ) ) {
@@ -84,6 +99,19 @@ if ( ! class_exists( 'FED_Requests' ) ) {
 			 */
 			fed_verify_nonce( $request );
 
+			if ( isset( $request['fed_action_hook'] ) ) {
+				$hook = urldecode( $request['fed_action_hook'] );
+				if ( ! fed_verify_action_hook_authorization( $hook ) ) {
+					wp_die( esc_html__( 'Permission denied.', 'frontend-dashboard' ), 403 );
+				}
+			}
+
+			if ( isset( $request['fed_action_hook_fn'] ) && ! empty( $request['fed_action_hook_fn'] ) ) {
+				if ( ! is_string( $request['fed_action_hook_fn'] ) || ! fed_verify_action_fn_authorization( $request['fed_action_hook_fn'] ) ) {
+					wp_die( esc_html__( 'Permission denied.', 'frontend-dashboard' ), 403 );
+				}
+			}
+
 			do_action( 'fed_before_ajax_request_action_hook_call', $request );
 
 			if ( isset( $request['fed_action_hook'] ) ) {
@@ -122,6 +150,19 @@ if ( ! class_exists( 'FED_Requests' ) ) {
 				check_admin_referer( 'updates' );
 			} else {
 				fed_verify_nonce( $request );
+			}
+
+			if ( isset( $request['fed_action_hook'] ) ) {
+				$hook = urldecode( $request['fed_action_hook'] );
+				if ( ! fed_verify_action_hook_authorization( $hook ) ) {
+					wp_die( esc_html__( 'Permission denied.', 'frontend-dashboard' ), 403 );
+				}
+			}
+
+			if ( isset( $request['fed_action_hook_fn'] ) && ! empty( $request['fed_action_hook_fn'] ) ) {
+				if ( ! is_string( $request['fed_action_hook_fn'] ) || ! fed_verify_action_fn_authorization( $request['fed_action_hook_fn'] ) ) {
+					wp_die( esc_html__( 'Permission denied.', 'frontend-dashboard' ), 403 );
+				}
 			}
 
 			do_action( 'fed_before_api_request_action_hook_call', $request );
@@ -164,6 +205,21 @@ if ( ! class_exists( 'FED_Requests' ) ) {
 				check_ajax_referer( 'updates' );
 			} else {
 				fed_verify_nonce( $request );
+			}
+
+			if ( isset( $request['fed_action_hook'] ) ) {
+				$hook = urldecode( $request['fed_action_hook'] );
+				if ( ! fed_verify_action_hook_authorization( $hook ) ) {
+					wp_send_json_error( array( 'message' => __( 'Permission denied.', 'frontend-dashboard' ) ), 403 );
+					exit();
+				}
+			}
+
+			if ( isset( $request['fed_action_hook_fn'] ) && ! empty( $request['fed_action_hook_fn'] ) ) {
+				if ( ! is_string( $request['fed_action_hook_fn'] ) || ! fed_verify_action_fn_authorization( $request['fed_action_hook_fn'] ) ) {
+					wp_send_json_error( array( 'message' => __( 'Permission denied.', 'frontend-dashboard' ) ), 403 );
+					exit();
+				}
 			}
 
 			do_action( 'fed_before_ajax_request_action_hook_call', $request );

@@ -19,7 +19,13 @@ function fed_validate_registration_form( $post ) {
 	/**
 	 * Both Password Match.
 	 */
-	$fed_error        = new WP_Error();
+	$fed_error = new WP_Error();
+
+	if ( ! get_option( 'users_can_register' ) ) {
+		$fed_error->add( 'registration_disabled', __( 'User registration is currently closed.', 'frontend-dashboard' ) );
+		return $fed_error;
+	}
+
 	$mandatory_fields = fed_registration_mandatory_fields();
 	$role             = fed_is_role_in_registration();
 
@@ -40,8 +46,8 @@ function fed_validate_registration_form( $post ) {
 	}
 
 	if ( isset( $post['role'] ) && ! empty( $post['role'] ) ) {
-		if ( 'administrator' === strtolower( (string) $post['role'] ) ) {
-			$fed_error->add( 'invalid_role', __( 'Administrator role cannot be registered.', 'frontend-dashboard' ) );
+		if ( fed_is_elevated_role( $post['role'] ) ) {
+			$fed_error->add( 'invalid_role', __( 'Elevated roles cannot be selected at registration.', 'frontend-dashboard' ) );
 		} elseif ( $role && ! array_key_exists( $post['role'], $role ) ) {
 			$fed_error->add( 'invalid_role', __( 'Invalid Role', 'frontend-dashboard' ) );
 		} elseif ( ! $role ) {

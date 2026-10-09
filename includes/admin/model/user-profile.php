@@ -217,8 +217,15 @@ function fed_is_role_in_registration( $fed_admin_login = '' ) {
 	}
 	if ( isset( $fed_admin_login['register']['role'] ) && count( $fed_admin_login['register']['role'] ) > 0 ) {
 		$user_role = fed_get_user_roles();
+		$intersect = array_intersect_key( $user_role, $fed_admin_login['register']['role'] );
+		$filtered  = array();
+		foreach ( $intersect as $slug => $label ) {
+			if ( ! fed_is_elevated_role( $slug ) ) {
+				$filtered[ $slug ] = $label;
+			}
+		}
 
-		return array_intersect_key( $user_role, $fed_admin_login['register']['role'] );
+		return ! empty( $filtered ) ? $filtered : false;
 	}
 
 	return false;

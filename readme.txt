@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.0.7
+Stable tag: 3.0.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -141,6 +141,22 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 == Changelog ==
 
+= 3.0.9 (2026-10-09) =
+* Enhancement: Upgraded upload queue with individual animated progress bars, live transfer percentages, file badges, and concurrent upload tracking (Thanks to Muhammad Umer).
+* Enhancement: Added full Attachment Details sidebar enabling live editing of Alt Text, Title, Caption, Description, Alignment (none/left/center/right), Link To (none/file/page/custom URL), and Size (full/large/medium/thumbnail) before inserting into the editor.
+* Fix: Resolved filter dropdown performance and media filtering: enforced strict client-side type isolation so PDFs are completely excluded when the Images filter is active, added AbortController request cancellation, and bypassed disk I/O with cached metadata.
+* Fix: Resolved media library empty state overlapping the dropzone on the Upload tab, and prevented initial modal open from flashing "No media files found" while loading.
+* Enhancement: Enhanced "Load More Media" pagination with inline loading indicators and item deduplication without blanking out the grid.
+* Enhancement: Enabled automatic AJAX persistence for attachment Alt text, Title, Caption, and Description edits in the media modal.
+
+= 3.0.8 =
+* Security: Enforced strict capability and authorization checks across all AJAX, admin-post, and API request dispatchers.
+* Security: Replaced generic prefix callable matching with strict allowlists mapped to required capabilities (`manage_options`, `edit_posts`, etc.).
+* Security: Hardened user registration against privilege escalation by preventing elevated role assignments and enforcing WordPress `users_can_register` option.
+* Security: Added explicit capability checks across all admin setting handlers, invoice operations, and role management functions (Thanks to Đỗ Trung Kiên - patchstack.com).
+* Fix: Modernized Classic Editor media modal with support for multi-upload, multi-select media insertion, and non-image previews (PDFs, docs, audio, and video) (Thanks to Muhammad Umer - https://github.com/mavinothkumar/frontend-dashboard/issues/16).
+* Fix: Prevented smart quote (`”`) conversion and attribute corruption during post publishing and updates, keeping image tags and attributes fully preserved across save and reload cycles.
+
 = 3.0.7 =
 * Fix: Resolved "Sorry, you are not allowed to access this page" permission error by correcting Add-ons marketplace URL to `fed_plugin_pages` in compatibility notices.
 * Enhancement: Registered `fed_addons` as a fallback submenu alias to guarantee seamless access on legacy or bookmarked URLs.
@@ -190,6 +206,12 @@ More Changelogs:
 https://faq.frontenddashboard.com/changelog/overview/
 
 == Upgrade Notice ==
+
+= 3.0.9 =
+Media modal improvements: Individual upload progress bars, full attachment details editing panel (Alt text, Title, Caption, Alignment, Link To, Size), instant filter dropdown performance, strict media type filtering, view isolation, and smooth "Load More Media" pagination.
+
+= 3.0.8 =
+Security and feature update: Fixed missing authorization and privilege escalation vulnerabilities across AJAX dispatchers (Thanks to Đỗ Trung Kiên - patchstack.com), upgraded Classic Editor media modal with multi-upload, multi-select, and file previews (Thanks to Muhammad Umer - https://github.com/mavinothkumar/frontend-dashboard/issues/16), and fixed post content smart quote formatting. Upgrade immediately.
 
 = 3.0.7 =
 Maintenance and compatibility update: Fixes Add-ons navigation access link, registers fed_addons alias, and prevents global CSS collisions.

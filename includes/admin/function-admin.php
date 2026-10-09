@@ -29,24 +29,26 @@ function fed_verify_nonce( $request = null, $permission = null ) {
 
 	if ( ! $request || ! isset( $request['fed_nonce'] ) ) {
 		$message = __( 'Invalid Request - 700', 'frontend-dashboard' );
-		wp_doing_ajax() ? wp_send_json_error( array( 'message' => esc_attr( $message ) ) ) : wp_die( esc_attr( $message ) );
+		wp_doing_ajax() ? wp_send_json_error( array( 'message' => esc_attr( $message ) ), 403 ) : wp_die( esc_attr( $message ), 403 );
 	}
 
 	if ( ! $request || ! wp_verify_nonce( $request['fed_nonce'], 'fed_nonce' ) ) {
 		$message = __( 'Invalid Request - 701', 'frontend-dashboard' );
-		wp_doing_ajax() ? wp_send_json_error( array( 'message' => esc_attr( $message ) ) ) : wp_die( esc_attr( $message ) );
+		wp_doing_ajax() ? wp_send_json_error( array( 'message' => esc_attr( $message ) ), 403 ) : wp_die( esc_attr( $message ), 403 );
 	}
 
 	if ( $request && null !== $permission ) {
 		$user_role = fed_get_current_user_role_key();
-		if ( is_string( $permission ) && $user_role !== $permission ) {
-			$message = __( 'Invalid Request - 702', 'frontend-dashboard' );
-			wp_doing_ajax() ? wp_send_json_error( array( 'message' => esc_attr( $message ) ) ) : wp_die( esc_attr( $message ) );
-
+		if ( is_string( $permission ) ) {
+			$has_perm = ( $user_role === $permission ) || current_user_can( $permission );
+			if ( ! $has_perm ) {
+				$message = __( 'Invalid Request - 702', 'frontend-dashboard' );
+				wp_doing_ajax() ? wp_send_json_error( array( 'message' => esc_attr( $message ) ), 403 ) : wp_die( esc_attr( $message ), 403 );
+			}
 		}
 		if ( is_array( $permission ) && ! in_array( $user_role, $permission, true ) ) {
 			$message = __( 'Invalid Request - 703', 'frontend-dashboard' );
-			wp_doing_ajax() ? wp_send_json_error( array( 'message' => esc_attr( $message ) ) ) : wp_die( esc_attr( $message ) );
+			wp_doing_ajax() ? wp_send_json_error( array( 'message' => esc_attr( $message ) ), 403 ) : wp_die( esc_attr( $message ), 403 );
 		}
 	}
 }
@@ -3523,11 +3525,18 @@ function fed_ajax_call_function_method( $item ) {
 
 	if ( is_string( $item['callable'] ) ) {
 		$func = trim( $item['callable'] );
-		// Allowlist check: only allow functions starting with fed_ or in allowed list
-		$allowed = ( 0 === stripos( $func, 'fed_' ) || 0 === stripos( $func, 'FED' ) );
-		$allowed = apply_filters( 'fed_allowed_ajax_callable_function', $allowed, $func );
 
-		if ( $allowed && function_exists( $func ) ) {
+		if ( ! fed_verify_action_fn_authorization( $func ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Unauthorized or invalid function call.', 'frontend-dashboard' ),
+				),
+				403
+			);
+			exit();
+		}
+
+		if ( function_exists( $func ) ) {
 			$parameter = isset( $item['arguments'] ) ? $item['arguments'] : '';
 			call_user_func( $func, $parameter );
 			return;
@@ -3535,9 +3544,9 @@ function fed_ajax_call_function_method( $item ) {
 
 		wp_send_json_error(
 			array(
-				'message' => __( 'Unauthorized or invalid function call.', 'frontend-dashboard' ),
+				'message' => __( 'Function does not exist.', 'frontend-dashboard' ),
 			),
-			403
+			404
 		);
 		exit();
 	} elseif (
@@ -3547,23 +3556,23 @@ function fed_ajax_call_function_method( $item ) {
 		0 !== strpos( $item['callable']['method'], '__' ) &&
 		method_exists( $item['callable']['object'], $item['callable']['method'] )
 	) {
-		$class_name = is_object( $item['callable']['object'] ) ? get_class( $item['callable']['object'] ) : ( is_string( $item['callable']['object'] ) ? $item['callable']['object'] : '' );
-		$allowed    = ( 0 === stripos( $class_name, 'FED' ) || 0 === stripos( $class_name, 'BC_' ) );
-		$allowed    = apply_filters( 'fed_allowed_ajax_callable_class', $allowed, $class_name, $item['callable']['method'] );
+		$class_name  = is_object( $item['callable']['object'] ) ? get_class( $item['callable']['object'] ) : ( is_string( $item['callable']['object'] ) ? $item['callable']['object'] : '' );
+		$method_name = $item['callable']['method'];
+		$hook_string = $class_name . '@' . $method_name;
 
-		if ( $allowed ) {
-			$parameter = isset( $item['arguments'] ) ? $item['arguments'] : '';
-			call_user_func( array( $item['callable']['object'], $item['callable']['method'] ), $parameter );
-			return;
+		if ( ! fed_verify_action_hook_authorization( $hook_string ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Unauthorized class method execution.', 'frontend-dashboard' ),
+				),
+				403
+			);
+			exit();
 		}
 
-		wp_send_json_error(
-			array(
-				'message' => __( 'Unauthorized class method execution.', 'frontend-dashboard' ),
-			),
-			403
-		);
-		exit();
+		$parameter = isset( $item['arguments'] ) ? $item['arguments'] : '';
+		call_user_func( array( $item['callable']['object'], $item['callable']['method'] ), $parameter );
+		return;
 	} else {
 		$error = is_array( $item['callable'] ) ? ( isset( $item['callable']['method'] ) ? $item['callable']['method'] : 'unknown' ) : $item['callable'];
 
@@ -3584,7 +3593,7 @@ function fed_ajax_call_function_method( $item ) {
  * Execute Method by String.
  *
  * @param  string $item  Item.
- * @param  null   $parameter  Parameter
+ * @param  null   $parameter  Parameter.
  */
 function fed_execute_method_by_string( $item, $parameter = null ) {
 	if ( ! is_string( $item ) || empty( $item ) ) {
@@ -3596,7 +3605,7 @@ function fed_execute_method_by_string( $item, $parameter = null ) {
 		$class_name  = trim( $class[0] );
 		$method_name = isset( $class[1] ) && ! empty( $class[1] ) ? trim( $class[1] ) : 'update';
 
-		// Disallow magic methods or invalid method names
+		// Disallow magic methods or invalid method names.
 		if ( 0 === strpos( $method_name, '__' ) ) {
 			if ( wp_doing_ajax() ) {
 				wp_send_json_error( array( 'errorMessage' => __( 'Invalid method call.', 'frontend-dashboard' ) ), 403 );
@@ -3605,16 +3614,13 @@ function fed_execute_method_by_string( $item, $parameter = null ) {
 			return;
 		}
 
-		// Validate class belongs to FED / BC namespaces or allowlist
-		$is_allowed = ( 0 === stripos( $class_name, 'FED' ) || 0 === stripos( $class_name, 'BC_' ) );
-		$is_allowed = apply_filters( 'fed_allowed_execute_class', $is_allowed, $class_name, $method_name );
-
-		if ( ! $is_allowed ) {
+		// Validate class@method belongs to explicit allowlist and has required capability.
+		if ( ! fed_verify_action_hook_authorization( $item ) ) {
 			if ( wp_doing_ajax() ) {
 				wp_send_json_error( array( 'errorMessage' => __( 'Unauthorized class execution.', 'frontend-dashboard' ) ), 403 );
 				exit();
 			}
-			return;
+			wp_die( esc_html__( 'Unauthorized class execution.', 'frontend-dashboard' ), 403 );
 		}
 
 		if ( class_exists( $class_name ) ) {
