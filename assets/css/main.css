@@ -281,5 +281,32 @@ table.wp-list-table.fixed {
   table-layout: fixed !important;
 }
 
+/* Responsive Mobile Drawer Navigation */
+@media (max-width: 1023px) {
+  .bc_fed aside.fed_dashboard_menus {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    z-index: 999999 !important;
+    width: 280px !important;
+    max-width: 85vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.05) !important;
+  }
+
+  .bc_fed aside.fed_dashboard_menus.fed_mobile_open {
+    transform: translateX(0) !important;
+  }
+
+  .bc_fed .fed_mobile_backdrop.active {
+    display: block !important;
+  }
+}
+
+
 
 

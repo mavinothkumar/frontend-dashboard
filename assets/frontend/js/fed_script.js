@@ -541,6 +541,29 @@ jQuery(document).ready(function ($) {
       e.preventDefault()
     })
 
+    // Responsive Mobile Dashboard Navigation Drawer Toggle
+    $(document).on('click', '.fed_mobile_nav_toggle', function (e) {
+      e.preventDefault()
+      e.stopPropagation()
+      var sidebar = $('aside.fed_dashboard_menus')
+      var backdrop = $('.fed_mobile_backdrop')
+      sidebar.toggleClass('fed_mobile_open')
+      if (sidebar.hasClass('fed_mobile_open')) {
+        backdrop.removeClass('hidden').addClass('active')
+        $('body').css('overflow', 'hidden')
+      } else {
+        backdrop.removeClass('active').addClass('hidden')
+        $('body').css('overflow', '')
+      }
+    })
+
+    $(document).on('click', '.fed_mobile_nav_close, .fed_mobile_backdrop', function (e) {
+      e.preventDefault()
+      $('aside.fed_dashboard_menus').removeClass('fed_mobile_open')
+      $('.fed_mobile_backdrop').removeClass('active').addClass('hidden')
+      $('body').css('overflow', '')
+    })
+
     var fedAlert = {
       loginStatus: function (results) {
         var error

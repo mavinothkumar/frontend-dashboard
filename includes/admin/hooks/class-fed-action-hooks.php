@@ -176,25 +176,71 @@ if ( ! class_exists( 'FED_ActionHooks' ) ) {
 				.bc_fed.fed_dashboard_container {
 					min-height: 100vh !important;
 				}
-				.bc_fed .fed_dashboard_wrapper {
-					display: flex !important;
-					flex-direction: row !important;
-					align-items: stretch !important;
-					min-height: 100vh !important;
-					width: 100% !important;
+				@media (min-width: 1024px) {
+					.bc_fed .fed_dashboard_wrapper {
+						display: flex !important;
+						flex-direction: row !important;
+						align-items: stretch !important;
+						min-height: 100vh !important;
+						width: 100% !important;
+					}
+					.bc_fed aside.fed_dashboard_menus {
+						display: flex !important;
+						flex-direction: column !important;
+						justify-content: space-between !important;
+						align-self: stretch !important;
+						min-height: 100vh !important;
+						width: 260px !important;
+						min-width: 260px !important;
+						max-width: 260px !important;
+						box-sizing: border-box !important;
+						position: relative !important;
+						flex-shrink: 0 !important;
+						transform: none !important;
+						left: auto !important;
+						top: auto !important;
+						bottom: auto !important;
+						z-index: 20 !important;
+						box-shadow: none !important;
+					}
 				}
-				.bc_fed aside.fed_dashboard_menus {
-					display: flex !important;
-					flex-direction: column !important;
-					justify-content: space-between !important;
-					align-self: stretch !important;
-					min-height: 100vh !important;
-					width: 260px !important;
-					min-width: 260px !important;
-					max-width: 260px !important;
-					box-sizing: border-box !important;
-					position: relative !important;
-					flex-shrink: 0 !important;
+				@media (max-width: 1023px) {
+					.bc_fed .fed_dashboard_wrapper {
+						display: flex !important;
+						flex-direction: column !important;
+						min-height: 100vh !important;
+						width: 100% !important;
+					}
+					.bc_fed aside.fed_dashboard_menus {
+						position: fixed !important;
+						top: 0 !important;
+						left: 0 !important;
+						bottom: 0 !important;
+						z-index: 999999 !important;
+						width: 280px !important;
+						max-width: 85vw !important;
+						height: 100vh !important;
+						height: 100dvh !important;
+						min-height: 100vh !important;
+						display: flex !important;
+						flex-direction: column !important;
+						justify-content: space-between !important;
+						box-sizing: border-box !important;
+						transform: translateX(-100%) !important;
+						transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+						box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.05) !important;
+					}
+					.bc_fed aside.fed_dashboard_menus.fed_mobile_open {
+						transform: translateX(0) !important;
+					}
+					.bc_fed .fed_mobile_backdrop.active {
+						display: block !important;
+					}
+					.bc_fed main.fed_dashboard_items {
+						width: 100% !important;
+						min-width: 0 !important;
+						flex: 1 1 auto !important;
+					}
 				}
 				.bc_fed .fed_sidebar_scrollable {
 					flex: 1 1 auto !important;
