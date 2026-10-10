@@ -145,8 +145,6 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 * Fix: Resolved mobile layout display regression on mobile viewports (< 1024px) where the desktop sidebar width was forcing side-by-side horizontal compression.
 * Feature: Added responsive mobile navigation top bar with hamburger menu toggle, off-canvas slide-over drawer navigation, and dismissible backdrop.
 * Enhancement: Optimized mobile viewport padding across main dashboard cards, ensuring clean full-width content rendering across all mobile phone and tablet screen sizes.
-
-= 3.0.10 (2026-10-09) =
 * Fix: Resolved a JavaScript reference error (`emptyState` variable) in the media modal that prevented the single-item Attachment Details sidebar from displaying the Alt Text, Title, Caption, and Description fields.
 * Enhancement: Multi-select thumbnail badges now display clean document indicators, and selecting a single item reliably populates all metadata and display settings with live auto-saving.
 
