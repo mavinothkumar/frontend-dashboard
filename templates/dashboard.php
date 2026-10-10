@@ -24,6 +24,49 @@ $logoUrl    = $logoId ? wp_get_attachment_image_url( $logoId, 'full' ) : '';
 $logoWidth  = ! empty( $uplOptions['settings']['fed_upl_website_logo_width'] ) ? 'max-width: ' . intval( $uplOptions['settings']['fed_upl_website_logo_width'] ) . 'px;' : 'max-width: 180px;';
 $logoHeight = ! empty( $uplOptions['settings']['fed_upl_website_logo_height'] ) ? 'max-height: ' . intval( $uplOptions['settings']['fed_upl_website_logo_height'] ) . 'px;' : 'max-height: 44px;';
 ?>
+<style id="fed-mobile-nav-styles">
+@media (max-width: 1023px) {
+	.bc_fed.fed_dashboard_container .fed_dashboard_wrapper {
+		display: flex !important;
+		flex-direction: column !important;
+		min-height: 100vh !important;
+		width: 100% !important;
+	}
+	.bc_fed.fed_dashboard_container aside.fed_dashboard_menus {
+		position: fixed !important;
+		top: 0 !important;
+		left: 0 !important;
+		bottom: 0 !important;
+		z-index: 999999 !important;
+		width: 280px !important;
+		max-width: 85vw !important;
+		height: 100vh !important;
+		height: 100dvh !important;
+		min-height: 100vh !important;
+		display: flex !important;
+		flex-direction: column !important;
+		justify-content: space-between !important;
+		box-sizing: border-box !important;
+		transform: translateX(-100%) !important;
+		transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+		box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25), 0 10px 10px -5px rgba(0, 0, 0, 0.1) !important;
+	}
+	.bc_fed.fed_dashboard_container aside.fed_dashboard_menus.fed_mobile_open,
+	body.fed_mobile_nav_open aside.fed_dashboard_menus {
+		transform: translateX(0) !important;
+	}
+	.bc_fed .fed_mobile_backdrop.active,
+	body.fed_mobile_nav_open .fed_mobile_backdrop {
+		display: block !important;
+		opacity: 1 !important;
+	}
+	.bc_fed.fed_dashboard_container main.fed_dashboard_items {
+		width: 100% !important;
+		min-width: 0 !important;
+		flex: 1 1 auto !important;
+	}
+}
+</style>
 <div class="bc_fed fed_dashboard_container min-h-screen font-sans antialiased text-slate-800" style="background-color: var(--fed-body-bg, #F8FAFC); color: var(--fed-text-main, #0F172A);">
 	<?php echo fed_loader(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 	<?php do_action( 'fed_inside_dashboard_container_top' ); ?>
@@ -33,9 +76,10 @@ $logoHeight = ! empty( $uplOptions['settings']['fed_upl_website_logo_height'] ) 
 		style="background-color: var(--fed-sidebar-bg, #FFFFFF); border-color: var(--fed-border, #E2E8F0);">
 		<div class="flex items-center gap-3">
 			<button type="button" 
-				class="fed_mobile_nav_toggle p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors focus:outline-none"
+				onclick="window.fedToggleMobileNav(event)"
+				class="fed_mobile_nav_toggle p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors focus:outline-none cursor-pointer"
 				aria-label="<?php esc_attr_e( 'Toggle navigation menu', 'frontend-dashboard' ); ?>">
-				<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+				<svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
 			</button>
 			<?php if ( $logoUrl ) : ?>
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="block py-1">
@@ -61,7 +105,9 @@ $logoHeight = ! empty( $uplOptions['settings']['fed_upl_website_logo_height'] ) 
 	</header>
 
 	<!-- Mobile Off-Canvas Backdrop -->
-	<div class="fed_mobile_backdrop fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-xs transition-opacity duration-300 hidden lg:hidden" aria-hidden="true"></div>
+	<div class="fed_mobile_backdrop fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-xs transition-opacity duration-300 hidden lg:hidden" 
+		onclick="window.fedCloseMobileNav(event)"
+		aria-hidden="true"></div>
 
 	<div class="flex flex-col lg:flex-row min-h-screen w-full fed_dashboard_wrapper relative">
 
@@ -94,9 +140,10 @@ $logoHeight = ! empty( $uplOptions['settings']['fed_upl_website_logo_height'] ) 
 					</div>
 					<!-- Mobile Close (X) Button -->
 					<button type="button" 
-						class="lg:hidden fed_mobile_nav_close p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors focus:outline-none shrink-0" 
+						onclick="window.fedCloseMobileNav(event)"
+						class="lg:hidden fed_mobile_nav_close p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors focus:outline-none shrink-0 cursor-pointer" 
 						aria-label="<?php esc_attr_e( 'Close menu', 'frontend-dashboard' ); ?>">
-						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+						<svg class="w-5 h-5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
 					</button>
 				</div>
 
@@ -195,81 +242,70 @@ $logoHeight = ! empty( $uplOptions['settings']['fed_upl_website_logo_height'] ) 
 
 	</div>
 </div>
-<script>
-(function() {
-	function initFedMobileNav() {
-		var toggleBtn = document.querySelector('.fed_mobile_nav_toggle');
-		var closeBtn  = document.querySelector('.fed_mobile_nav_close');
-		var sidebar   = document.querySelector('aside.fed_dashboard_menus');
-		var backdrop  = document.querySelector('.fed_mobile_backdrop');
-
-		if (!sidebar) return;
-
-		function openNav() {
-			sidebar.classList.add('fed_mobile_open');
-			if (backdrop) {
-				backdrop.classList.remove('hidden');
-				backdrop.classList.add('active');
-			}
-			document.body.style.overflow = 'hidden';
-		}
-
-		function closeNav() {
-			sidebar.classList.remove('fed_mobile_open');
-			if (backdrop) {
-				backdrop.classList.remove('active');
-				backdrop.classList.add('hidden');
-			}
-			document.body.style.overflow = '';
-		}
-
-		if (toggleBtn) {
-			toggleBtn.addEventListener('click', function(e) {
-				e.preventDefault();
-				e.stopPropagation();
-				if (sidebar.classList.contains('fed_mobile_open')) {
-					closeNav();
-				} else {
-					openNav();
-				}
-			});
-		}
-
-		if (closeBtn) {
-			closeBtn.addEventListener('click', function(e) {
-				e.preventDefault();
-				closeNav();
-			});
-		}
-
-		if (backdrop) {
-			backdrop.addEventListener('click', function() {
-				closeNav();
-			});
-		}
-
-		document.addEventListener('keydown', function(e) {
-			if (e.key === 'Escape' && sidebar.classList.contains('fed_mobile_open')) {
-				closeNav();
-			}
-		});
-
-		var navLinks = sidebar.querySelectorAll('a');
-		for (var i = 0; i < navLinks.length; i++) {
-			navLinks[i].addEventListener('click', function() {
-				if (window.innerWidth < 1024) {
-					closeNav();
-				}
-			});
-		}
+<script id="fed-mobile-nav-script">
+window.fedToggleMobileNav = function(e) {
+	if (e) {
+		if (typeof e.preventDefault === 'function') e.preventDefault();
+		if (typeof e.stopPropagation === 'function') e.stopPropagation();
 	}
+	var sidebar  = document.querySelector('aside.fed_dashboard_menus');
+	var isOpen   = document.body.classList.contains('fed_mobile_nav_open') || (sidebar && sidebar.classList.contains('fed_mobile_open'));
 
-	if (document.readyState === 'loading') {
-		document.addEventListener('DOMContentLoaded', initFedMobileNav);
+	if (isOpen) {
+		window.fedCloseMobileNav();
 	} else {
-		initFedMobileNav();
+		window.fedOpenMobileNav();
 	}
-})();
+};
+
+window.fedOpenMobileNav = function(e) {
+	if (e && typeof e.preventDefault === 'function') e.preventDefault();
+	var sidebar  = document.querySelector('aside.fed_dashboard_menus');
+	var backdrop = document.querySelector('.fed_mobile_backdrop');
+	document.body.classList.add('fed_mobile_nav_open');
+	if (sidebar) sidebar.classList.add('fed_mobile_open');
+	if (backdrop) {
+		backdrop.classList.remove('hidden');
+		backdrop.classList.add('active');
+	}
+	document.body.style.overflow = 'hidden';
+};
+
+window.fedCloseMobileNav = function(e) {
+	if (e && typeof e.preventDefault === 'function') e.preventDefault();
+	var sidebar  = document.querySelector('aside.fed_dashboard_menus');
+	var backdrop = document.querySelector('.fed_mobile_backdrop');
+	document.body.classList.remove('fed_mobile_nav_open');
+	if (sidebar) sidebar.classList.remove('fed_mobile_open');
+	if (backdrop) {
+		backdrop.classList.remove('active');
+		backdrop.classList.add('hidden');
+	}
+	document.body.style.overflow = '';
+};
+
+// Handle Escape key to close
+document.addEventListener('keydown', function(e) {
+	if (e.key === 'Escape' && document.body.classList.contains('fed_mobile_nav_open')) {
+		window.fedCloseMobileNav();
+	}
+});
+
+// Auto-close drawer on real navigation links (without closing on submenu expanders)
+document.addEventListener('click', function(e) {
+	if (!document.body.classList.contains('fed_mobile_nav_open')) return;
+	var target = e.target.closest('a');
+	if (!target) return;
+	var sidebar = document.querySelector('aside.fed_dashboard_menus');
+	if (sidebar && sidebar.contains(target)) {
+		var href = target.getAttribute('href');
+		if (href && href !== '#' && href.indexOf('javascript:') !== 0 && !target.classList.contains('fed_menu_slug')) {
+			if (window.innerWidth < 1024) {
+				window.fedCloseMobileNav();
+			}
+		}
+	}
+});
 </script>
 <?php
 do_action( 'fed_after_dashboard_container' );
