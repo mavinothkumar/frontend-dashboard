@@ -1049,6 +1049,14 @@ Pricing
 
 /* Modern App Shell Sidebar Layout & Responsive Mobile Drawer */
 @media (min-width: 1024px) {
+	.bc_fed .fed_mobile_header {
+		display: none !important;
+	}
+
+	.bc_fed .fed_mobile_backdrop {
+		display: none !important;
+	}
+
 	.bc_fed.fed_dashboard_container .fed_dashboard_wrapper {
 		display: flex !important;
 		flex-direction: row !important;
@@ -1079,6 +1087,14 @@ Pricing
 }
 
 @media (max-width: 1023px) {
+	.bc_fed .fed_mobile_header {
+		display: flex !important;
+		align-items: center !important;
+		justify-content: space-between !important;
+		width: 100% !important;
+		box-sizing: border-box !important;
+	}
+
 	.bc_fed.fed_dashboard_container .fed_dashboard_wrapper {
 		display: flex !important;
 		flex-direction: column !important;
@@ -1119,6 +1135,22 @@ Pricing
 		min-width: 0 !important;
 		flex: 1 1 auto !important;
 	}
+}
+
+/* Defensive Left-Alignment Overrides against centered theme CSS */
+.bc_fed .fed_dashboard_header_row,
+.bc_fed .fed_dashboard_breadcrumb_wrapper,
+.bc_fed .fed_dashboard_page_title,
+.bc_fed .fed_dashboard_page_breadcrumb,
+.bc_fed .fed_mobile_header,
+.bc_fed .fed_mobile_header .fed_mobile_brand {
+	text-align: left !important;
+}
+
+.bc_fed .fed_dashboard_page_title,
+.bc_fed .fed_dashboard_page_breadcrumb {
+	margin-left: 0 !important;
+	margin-right: auto !important;
 }
 
 .bc_fed .fed_sidebar_scrollable {
@@ -1173,4 +1205,36 @@ Pricing
 	min-width: 32px !important;
 	flex-shrink: 0 !important;
 	margin-left: auto !important;
+}
+
+/* Small Mobile Responsiveness (<= 480px, e.g. 320x858) */
+@media (max-width: 480px) {
+	.bc_fed.fed_dashboard_container {
+		overflow-x: hidden !important;
+	}
+
+	.bc_fed.fed_dashboard_container main.fed_dashboard_items > div:last-child {
+		padding: 12px !important;
+	}
+
+	.bc_fed .fed_dashboard_main_card {
+		padding: 16px 12px !important;
+		min-height: auto !important;
+		border-radius: 16px !important;
+		box-sizing: border-box !important;
+		max-width: 100% !important;
+	}
+
+	.bc_fed .fed_mobile_header {
+		padding-left: 12px !important;
+		padding-right: 12px !important;
+	}
+
+	.bc_fed .fed_mobile_header .fed_mobile_brand span {
+		max-width: 140px !important;
+	}
+
+	.bc_fed .fed_dashboard_header_row {
+		padding: 12px !important;
+	}
 }

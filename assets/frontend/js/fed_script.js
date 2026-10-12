@@ -536,22 +536,82 @@ jQuery(document).ready(function ($) {
       e.preventDefault()
     })
 
-    $('.fed_menu_slug ').on('click', function (e) {
-      $(this).closest('.fed_menu_ul').toggleClass('in')
-      e.preventDefault()
-    })
-
     // Responsive Mobile Dashboard Navigation Drawer Toggle
-    $(document).on('click', '.fed_mobile_nav_toggle', function (e) {
-      if (typeof window.fedToggleMobileNav === 'function') {
-        window.fedToggleMobileNav(e)
+    var fedLastToggle = 0
+
+    function fedOpenMobileNav () {
+      if (window.innerWidth >= 1024) return
+      var sidebar = $('aside.fed_dashboard_menus')
+      var backdrop = $('.fed_mobile_backdrop')
+      $('body').addClass('fed_mobile_nav_open')
+      sidebar.addClass('fed_mobile_open')
+      backdrop.removeClass('hidden').addClass('active')
+      $('body').css('overflow', 'hidden')
+    }
+
+    function fedCloseMobileNav () {
+      var sidebar = $('aside.fed_dashboard_menus')
+      var backdrop = $('.fed_mobile_backdrop')
+      $('body').removeClass('fed_mobile_nav_open')
+      sidebar.removeClass('fed_mobile_open')
+      backdrop.removeClass('active').addClass('hidden')
+      $('body').css('overflow', '')
+    }
+
+    function fedToggleMobileNav (e) {
+      if (e && typeof e.preventDefault === 'function') e.preventDefault()
+      if (window.innerWidth >= 1024) return
+      var now = Date.now()
+      if (now - fedLastToggle < 300) return
+      fedLastToggle = now
+
+      var sidebar = $('aside.fed_dashboard_menus')
+      var isOpen = $('body').hasClass('fed_mobile_nav_open') || sidebar.hasClass('fed_mobile_open')
+      if (isOpen) {
+        fedCloseMobileNav()
+      } else {
+        fedOpenMobileNav()
       }
+    }
+
+    window.fedToggleMobileNav = fedToggleMobileNav
+    window.fedOpenMobileNav = fedOpenMobileNav
+    window.fedCloseMobileNav = fedCloseMobileNav
+
+    $(document).on('click', '.fed_mobile_nav_toggle', function (e) {
+      fedToggleMobileNav(e)
     })
 
     $(document).on('click', '.fed_mobile_nav_close, .fed_mobile_backdrop', function (e) {
-      if (typeof window.fedCloseMobileNav === 'function') {
-        window.fedCloseMobileNav(e)
+      if (e && typeof e.preventDefault === 'function') e.preventDefault()
+      fedCloseMobileNav()
+    })
+
+    $(document).on('keydown', function (e) {
+      if (e.key === 'Escape' && $('body').hasClass('fed_mobile_nav_open')) {
+        fedCloseMobileNav()
       }
+    })
+
+    $(window).on('resize', function () {
+      if (window.innerWidth >= 1024 && $('body').hasClass('fed_mobile_nav_open')) {
+        fedCloseMobileNav()
+      }
+    })
+
+    // Auto-close drawer on real navigation link clicks
+    $(document).on('click', 'aside.fed_dashboard_menus a', function () {
+      var href = $(this).attr('href')
+      if (href && href !== '#' && href.indexOf('javascript:') !== 0 && !$(this).hasClass('fed_menu_slug')) {
+        if (window.innerWidth < 1024) {
+          fedCloseMobileNav()
+        }
+      }
+    })
+
+    $('.fed_menu_slug ').on('click', function (e) {
+      $(this).closest('.fed_menu_ul').toggleClass('in')
+      e.preventDefault()
     })
 
     var fedAlert = {

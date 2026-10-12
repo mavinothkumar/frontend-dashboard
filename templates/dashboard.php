@@ -25,7 +25,22 @@ $logoWidth  = ! empty( $uplOptions['settings']['fed_upl_website_logo_width'] ) ?
 $logoHeight = ! empty( $uplOptions['settings']['fed_upl_website_logo_height'] ) ? 'max-height: ' . intval( $uplOptions['settings']['fed_upl_website_logo_height'] ) . 'px;' : 'max-height: 44px;';
 ?>
 <style id="fed-mobile-nav-styles">
+@media (min-width: 1024px) {
+	.bc_fed .fed_mobile_header {
+		display: none !important;
+	}
+	.bc_fed .fed_mobile_backdrop {
+		display: none !important;
+	}
+}
 @media (max-width: 1023px) {
+	.bc_fed .fed_mobile_header {
+		display: flex !important;
+		align-items: center !important;
+		justify-content: space-between !important;
+		width: 100% !important;
+		box-sizing: border-box !important;
+	}
 	.bc_fed.fed_dashboard_container .fed_dashboard_wrapper {
 		display: flex !important;
 		flex-direction: column !important;
@@ -66,38 +81,53 @@ $logoHeight = ! empty( $uplOptions['settings']['fed_upl_website_logo_height'] ) 
 		flex: 1 1 auto !important;
 	}
 }
+
+/* Defensive Left-Alignment Overrides against centered theme CSS */
+.bc_fed .fed_dashboard_header_row,
+.bc_fed .fed_dashboard_breadcrumb_wrapper,
+.bc_fed .fed_dashboard_page_title,
+.bc_fed .fed_dashboard_page_breadcrumb,
+.bc_fed .fed_mobile_header,
+.bc_fed .fed_mobile_header .fed_mobile_brand {
+	text-align: left !important;
+}
+
+.bc_fed .fed_dashboard_page_title,
+.bc_fed .fed_dashboard_page_breadcrumb {
+	margin-left: 0 !important;
+	margin-right: auto !important;
+}
 </style>
 <div class="bc_fed fed_dashboard_container min-h-screen font-sans antialiased text-slate-800" style="background-color: var(--fed-body-bg, #F8FAFC); color: var(--fed-text-main, #0F172A);">
 	<?php echo fed_loader(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 	<?php do_action( 'fed_inside_dashboard_container_top' ); ?>
 
-	<!-- Mobile Top Navigation Bar (Visible on < 1024px) -->
+	<!-- Mobile Top Navigation Bar (Hidden on >= 1024px) -->
 	<header class="lg:hidden fed_mobile_header sticky top-0 z-40 flex items-center justify-between px-4 py-3 border-b shadow-2xs"
-		style="background-color: var(--fed-sidebar-bg, #FFFFFF); border-color: var(--fed-border, #E2E8F0);">
-		<div class="flex items-center gap-3">
+		style="background-color: var(--fed-sidebar-bg, #FFFFFF); border-color: var(--fed-border, #E2E8F0); text-align: left;">
+		<div class="fed_mobile_brand flex items-center gap-3 text-left" style="text-align: left; justify-content: flex-start;">
 			<button type="button" 
-				onclick="window.fedToggleMobileNav(event)"
 				class="fed_mobile_nav_toggle p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors focus:outline-none cursor-pointer"
 				aria-label="<?php esc_attr_e( 'Toggle navigation menu', 'frontend-dashboard' ); ?>">
 				<svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
 			</button>
 			<?php if ( $logoUrl ) : ?>
-				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="block py-1">
+				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="block py-1" style="text-align: left;">
 					<img src="<?php echo esc_url( $logoUrl ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" class="object-contain" style="<?php echo esc_attr( $logoWidth . ' ' . $logoHeight ); ?>" />
 				</a>
 			<?php else : ?>
-				<div class="flex items-center gap-2">
+				<div class="flex items-center gap-2" style="text-align: left;">
 					<div class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs shadow-2xs shrink-0"
 						style="background-color: var(--fed-primary, #4F46E5); color: var(--fed-primary-font, #FFFFFF);">
 						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
 					</div>
-					<span class="font-bold text-sm tracking-tight truncate max-w-[160px] sm:max-w-xs" style="color: var(--fed-sidebar-text, #0F172A);">
+					<span class="font-bold text-sm tracking-tight truncate max-w-[160px] sm:max-w-xs" style="color: var(--fed-sidebar-text, #0F172A); text-align: left;">
 						<?php echo esc_html( get_bloginfo( 'name' ) ?: 'Dashboard' ); ?>
 					</span>
 				</div>
 			<?php endif; ?>
 		</div>
-		<div class="flex items-center gap-2">
+		<div class="flex items-center gap-2 shrink-0">
 			<img class="w-8 h-8 rounded-full object-cover ring-2 ring-white shadow-2xs" 
 				src="<?php echo esc_url( get_avatar_url( $currentUser->ID ) ); ?>" 
 				alt="<?php echo esc_attr( $currentUser->display_name ); ?>">
@@ -106,7 +136,6 @@ $logoHeight = ! empty( $uplOptions['settings']['fed_upl_website_logo_height'] ) 
 
 	<!-- Mobile Off-Canvas Backdrop -->
 	<div class="fed_mobile_backdrop fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-xs transition-opacity duration-300 hidden lg:hidden" 
-		onclick="window.fedCloseMobileNav(event)"
 		aria-hidden="true"></div>
 
 	<div class="flex flex-col lg:flex-row min-h-screen w-full fed_dashboard_wrapper relative">
@@ -140,7 +169,6 @@ $logoHeight = ! empty( $uplOptions['settings']['fed_upl_website_logo_height'] ) 
 					</div>
 					<!-- Mobile Close (X) Button -->
 					<button type="button" 
-						onclick="window.fedCloseMobileNav(event)"
 						class="lg:hidden fed_mobile_nav_close p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors focus:outline-none shrink-0 cursor-pointer" 
 						aria-label="<?php esc_attr_e( 'Close menu', 'frontend-dashboard' ); ?>">
 						<svg class="w-5 h-5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -188,13 +216,13 @@ $logoHeight = ! empty( $uplOptions['settings']['fed_upl_website_logo_height'] ) 
 		<!-- Right Main Content Canvas -->
 		<main class="flex-1 min-w-0 flex flex-col fed_dashboard_items transition-colors" style="background-color: var(--fed-body-bg, #F8FAFC); flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column;">
 			<!-- Top Breadcrumb & Action Row -->
-			<div class="px-4 sm:px-8 py-4 sm:py-5 border-b border-slate-200/60 flex items-center justify-between gap-4"
-				style="border-color: var(--fed-border, #E2E8F0); background-color: var(--fed-body-bg, #F8FAFC);">
-				<div>
-					<h1 class="text-base sm:text-lg font-bold tracking-tight capitalize m-0" style="color: var(--fed-text-main, #0F172A);">
+			<div class="px-4 sm:px-8 py-4 sm:py-5 border-b border-slate-200/60 flex items-center justify-between gap-4 fed_dashboard_header_row"
+				style="border-color: var(--fed-border, #E2E8F0); background-color: var(--fed-body-bg, #F8FAFC); text-align: left;">
+				<div class="fed_dashboard_breadcrumb_wrapper" style="text-align: left;">
+					<h1 class="text-base sm:text-lg font-bold tracking-tight capitalize m-0 fed_dashboard_page_title" style="color: var(--fed-text-main, #0F172A); text-align: left; margin: 0;">
 						<?php echo esc_html( str_replace( array( '-', '_' ), ' ', $activeSlug ) ); ?>
 					</h1>
-					<p class="text-xs font-medium m-0 mt-0.5" style="color: var(--fed-sidebar-text, #64748B); opacity: 0.85;">
+					<p class="text-xs font-medium m-0 mt-0.5 fed_dashboard_page_breadcrumb" style="color: var(--fed-sidebar-text, #64748B); opacity: 0.85; text-align: left; margin: 2px 0 0 0;">
 						<?php esc_html_e( 'Dashboard', 'frontend-dashboard' ); ?> / <span class="capitalize"><?php echo esc_html( str_replace( array( '-', '_' ), ' ', $activeSlug ) ); ?></span>
 					</p>
 				</div>
@@ -242,70 +270,6 @@ $logoHeight = ! empty( $uplOptions['settings']['fed_upl_website_logo_height'] ) 
 
 	</div>
 </div>
-<script id="fed-mobile-nav-script">
-window.fedToggleMobileNav = function(e) {
-	if (e) {
-		if (typeof e.preventDefault === 'function') e.preventDefault();
-		if (typeof e.stopPropagation === 'function') e.stopPropagation();
-	}
-	var sidebar  = document.querySelector('aside.fed_dashboard_menus');
-	var isOpen   = document.body.classList.contains('fed_mobile_nav_open') || (sidebar && sidebar.classList.contains('fed_mobile_open'));
 
-	if (isOpen) {
-		window.fedCloseMobileNav();
-	} else {
-		window.fedOpenMobileNav();
-	}
-};
-
-window.fedOpenMobileNav = function(e) {
-	if (e && typeof e.preventDefault === 'function') e.preventDefault();
-	var sidebar  = document.querySelector('aside.fed_dashboard_menus');
-	var backdrop = document.querySelector('.fed_mobile_backdrop');
-	document.body.classList.add('fed_mobile_nav_open');
-	if (sidebar) sidebar.classList.add('fed_mobile_open');
-	if (backdrop) {
-		backdrop.classList.remove('hidden');
-		backdrop.classList.add('active');
-	}
-	document.body.style.overflow = 'hidden';
-};
-
-window.fedCloseMobileNav = function(e) {
-	if (e && typeof e.preventDefault === 'function') e.preventDefault();
-	var sidebar  = document.querySelector('aside.fed_dashboard_menus');
-	var backdrop = document.querySelector('.fed_mobile_backdrop');
-	document.body.classList.remove('fed_mobile_nav_open');
-	if (sidebar) sidebar.classList.remove('fed_mobile_open');
-	if (backdrop) {
-		backdrop.classList.remove('active');
-		backdrop.classList.add('hidden');
-	}
-	document.body.style.overflow = '';
-};
-
-// Handle Escape key to close
-document.addEventListener('keydown', function(e) {
-	if (e.key === 'Escape' && document.body.classList.contains('fed_mobile_nav_open')) {
-		window.fedCloseMobileNav();
-	}
-});
-
-// Auto-close drawer on real navigation links (without closing on submenu expanders)
-document.addEventListener('click', function(e) {
-	if (!document.body.classList.contains('fed_mobile_nav_open')) return;
-	var target = e.target.closest('a');
-	if (!target) return;
-	var sidebar = document.querySelector('aside.fed_dashboard_menus');
-	if (sidebar && sidebar.contains(target)) {
-		var href = target.getAttribute('href');
-		if (href && href !== '#' && href.indexOf('javascript:') !== 0 && !target.classList.contains('fed_menu_slug')) {
-			if (window.innerWidth < 1024) {
-				window.fedCloseMobileNav();
-			}
-		}
-	}
-});
-</script>
 <?php
 do_action( 'fed_after_dashboard_container' );

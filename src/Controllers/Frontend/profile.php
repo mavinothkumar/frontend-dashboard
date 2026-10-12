@@ -41,30 +41,31 @@ function fed_display_dashboard_profile( $menu_item ) {
 	<div class="fed_dashboard_item space-y-6">
 
 		<!-- Profile Identity Header -->
-		<div class="rounded-2xl p-6 sm:p-7 border shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 transition-colors"
+		<div class="rounded-2xl p-4 sm:p-7 border shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 transition-colors w-full box-border"
 			style="background-color: var(--fed-body-bg, #F8FAFC); border-color: var(--fed-border, #E2E8F0);">
 			<!-- Left: Avatar & Identity -->
-			<div class="flex items-center gap-5">
-				<div class="relative flex-shrink-0">
-					<img class="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl object-cover ring-2 ring-white/60 shadow-xs"
+			<div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 w-full min-w-0">
+				<div class="relative flex-shrink-0" style="width: 72px; height: 72px; min-width: 72px; max-width: 72px;">
+					<img class="rounded-2xl object-cover ring-2 ring-white/60 shadow-xs"
+						style="width: 72px; height: 72px; min-width: 72px; max-width: 72px; object-fit: cover; display: block;"
 						src="<?php echo esc_url( get_avatar_url( $user ? $user->ID : 0, array( 'size' => 180 ) ) ); ?>"
 						alt="<?php echo esc_attr( $user ? $user->display_name : '' ); ?>">
 					<span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full" title="<?php esc_attr_e( 'Active', 'frontend-dashboard' ); ?>"></span>
 				</div>
-				<div>
-					<div class="flex flex-wrap items-center gap-2.5 mb-1">
-						<h2 class="text-lg sm:text-xl font-black tracking-tight m-0" style="color: var(--fed-text-main, #0F172A);">
+				<div class="min-w-0 flex-1 w-full" style="min-width: 0; flex: 1 1 auto; overflow-wrap: break-word; word-break: break-word;">
+					<div class="flex flex-wrap items-center gap-2 mb-1">
+						<h2 class="text-base sm:text-xl font-black tracking-tight m-0" style="color: var(--fed-text-main, #0F172A); overflow-wrap: break-word; word-break: break-word;">
 							<?php echo esc_html( $user ? $user->display_name : 'User' ); ?>
 						</h2>
-						<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold shadow-2xs"
+						<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold shadow-2xs shrink-0"
 								style="background-color: var(--fed-active-bg, #EEF2FF); color: var(--fed-active-text, #4F46E5);">
 							<?php echo esc_html( $primaryRole ); ?>
 						</span>
 					</div>
-					<p class="text-xs font-mono font-medium flex items-center gap-1.5 mb-1.5 m-0" style="color: var(--fed-sidebar-text, #64748B);">
+					<p class="text-xs font-mono font-medium flex items-center gap-1.5 mb-1 m-0" style="color: var(--fed-sidebar-text, #64748B);">
 						<span>@<?php echo esc_html( $user ? $user->user_login : '' ); ?></span>
 					</p>
-					<p class="text-xs m-0" style="color: var(--fed-sidebar-text, #64748B); opacity: 0.85;">
+					<p class="text-xs m-0 leading-relaxed" style="color: var(--fed-sidebar-text, #64748B); opacity: 0.85; overflow-wrap: break-word; word-break: break-word;">
 						<?php esc_html_e( 'Manage and update your account details, personal profile, and preferences.', 'frontend-dashboard' ); ?>
 					</p>
 				</div>
@@ -72,7 +73,7 @@ function fed_display_dashboard_profile( $menu_item ) {
 
 			<!-- Right: Quick Metadata -->
 			<?php if ( $registeredDate ) : ?>
-				<div class="flex sm:flex-col items-center sm:items-end gap-1 text-xs pt-3 sm:pt-0 border-t sm:border-t-0 w-full sm:w-auto"
+				<div class="flex sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-1 text-xs pt-3 sm:pt-0 border-t sm:border-t-0 w-full sm:w-auto shrink-0"
 					style="border-color: var(--fed-border, #E2E8F0); color: var(--fed-sidebar-text, #64748B);">
 					<span class="opacity-75"><?php esc_html_e( 'Member Since', 'frontend-dashboard' ); ?></span>
 					<span class="font-bold" style="color: var(--fed-text-main, #0F172A);"><?php echo esc_html( $registeredDate ); ?></span>

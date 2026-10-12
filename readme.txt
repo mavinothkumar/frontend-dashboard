@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.0.11
+Stable tag: 3.0.12
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -141,6 +141,13 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 == Changelog ==
 
+= 3.0.12 (2026-10-11) =
+* Fix: Resolved syntax error (`Uncaught SyntaxError: Invalid or unexpected token`) caused by WordPress `wptexturize` formatting ampersands in inline script tags, by moving all mobile drawer controllers to the external enqueued frontend script.
+* Fix: Prevented mobile hamburger header from appearing on desktop viewports (>= 1024px) by enforcing strict scoped desktop display rules.
+* Fix: Resolved mobile drawer click collision and double-toggle race condition with debounce throttling and native event delegation.
+* Enhancement: Optimized responsive layout for ultra-small mobile screens (320px width), fixing avatar sizing and enabling responsive stacking for the profile identity card to prevent horizontal text clipping.
+* Enhancement: Added defensive left-alignment CSS resets to prevent parent theme styles from centering dashboard breadcrumbs, titles, and headers.
+
 = 3.0.11 (2026-10-10) =
 * Fix: Resolved mobile layout display regression on mobile viewports (< 1024px) where the desktop sidebar width was forcing side-by-side horizontal compression.
 * Feature: Added responsive mobile navigation top bar with hamburger menu toggle, off-canvas slide-over drawer navigation, and dismissible backdrop.
@@ -213,6 +220,9 @@ More Changelogs:
 https://faq.frontenddashboard.com/changelog/overview/
 
 == Upgrade Notice ==
+
+= 3.0.12 =
+Fixes mobile hamburger drawer responsiveness and wptexturize script syntax errors, prevents mobile header from showing on desktop viewports, and optimizes layout for 320px mobile screens.
 
 = 3.0.10 =
 Fixes Attachment Details sidebar rendering in the media modal when a single media file is selected, ensuring Alt Text, Title, Caption, and Description fields display and save properly.
