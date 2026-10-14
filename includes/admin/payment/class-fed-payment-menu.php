@@ -280,8 +280,10 @@ if ( ! class_exists( 'FEDPaymentMenu' ) ) {
 					}
 					?>
 					<div style="margin-top: 10px;">
+						<?php
 						// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-						<?php fed_execute_method_by_string( $sub_menu_action, $_GET ); ?>
+						fed_execute_method_by_string( $sub_menu_action, $_GET );
+						?>
 					</div>
 					<?php
 				}

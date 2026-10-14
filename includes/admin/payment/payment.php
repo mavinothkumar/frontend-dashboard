@@ -153,9 +153,7 @@ if ( ! function_exists( 'fed_get_transactions' ) ) {
 			return $wpdb->get_results(
 				"
 	SELECT      *
-	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	FROM        {$table_payment} payment
-	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	INNER JOIN  {$table_user} users
 	            ON payment.user_id = users.ID
 	ORDER BY    payment.id DESC
@@ -169,9 +167,7 @@ if ( ! function_exists( 'fed_get_transactions' ) ) {
 				$wpdb->prepare(
 					"
 	SELECT      *
-	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	FROM        {$table_payment} payment
-	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	INNER JOIN  {$table_user} users
 	            ON payment.user_id = users.ID
     WHERE       payment.user_id = %d
@@ -203,9 +199,7 @@ if ( ! function_exists( 'fed_get_active_transactions' ) ) {
 			return $wpdb->get_results(
 				"
 	SELECT      *
-	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	FROM        {$table_payment} payment
-	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	INNER JOIN  {$table_user} users
 	            ON payment.user_id = users.ID
     WHERE ends_at = 'active'
@@ -220,9 +214,7 @@ if ( ! function_exists( 'fed_get_active_transactions' ) ) {
 				$wpdb->prepare(
 					"
 	SELECT      *
-	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	FROM        {$table_payment} payment
-	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	INNER JOIN  {$table_user} users
 	            ON payment.user_id = users.ID
     WHERE       payment.user_id = %d AND

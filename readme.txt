@@ -141,7 +141,10 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 == Changelog ==
 
-= 3.0.12 (2026-10-11) =
+= 3.0.12 (2026-10-14) =
+* Fix: Resolved `Unauthorized class execution` error on Payments Dashboard (`?page=fed_payments&menu=dashboard`) by registering payment controller methods in the authorized action hooks map.
+* Fix: Eliminated raw `// phpcs:ignore` comment leak in payment layout output and cleaned embedded comments inside database query strings.
+* Enhancement: Removed legacy Membership Pro admin menu (`?page=fed_membership_pro`) and deprecated mock upsell teaser classes to streamline admin navigation.
 * Fix: Resolved syntax error (`Uncaught SyntaxError: Invalid or unexpected token`) caused by WordPress `wptexturize` formatting ampersands in inline script tags, by moving all mobile drawer controllers to the external enqueued frontend script.
 * Fix: Prevented mobile hamburger header from appearing on desktop viewports (>= 1024px) by enforcing strict scoped desktop display rules.
 * Fix: Resolved mobile drawer click collision and double-toggle race condition with debounce throttling and native event delegation.
