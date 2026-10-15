@@ -110,7 +110,16 @@ class DashboardRoutes {
 			return new WP_Error( 'no_menus', __( 'No dashboard menus available.', 'frontend-dashboard' ) );
 		}
 
-		$first_element_key = array_keys( $menu );
+		// Exclude hidden or disabled menus when resolving default landing tab
+		$visible_menus = array();
+		foreach ( $menu as $k => $item ) {
+			if ( ( ! isset( $item['show_user_profile'] ) || 'Disable' !== $item['show_user_profile'] ) &&
+				( ! isset( $item['status'] ) || 'inactive' !== $item['status'] ) ) {
+				$visible_menus[ $k ] = $item;
+			}
+		}
+
+		$first_element_key = ! empty( $visible_menus ) ? array_keys( $visible_menus ) : array_keys( $menu );
 		$first_element     = $first_element_key[0];
 
 		$hasFullQuery   = count( array_diff( $this->getDefaultMenuQuery(), array_keys( $this->request ) ) ) === 0;
@@ -133,6 +142,14 @@ class DashboardRoutes {
 						$matched_menu = $item;
 						break;
 					}
+				}
+			}
+
+			// Prevent non-admin users from accessing hidden/disabled menus directly
+			if ( $matched_menu && ! current_user_can( 'manage_options' ) ) {
+				if ( ( isset( $matched_menu['show_user_profile'] ) && 'Disable' === $matched_menu['show_user_profile'] ) ||
+					( isset( $matched_menu['status'] ) && 'inactive' === $matched_menu['status'] ) ) {
+					$matched_menu = null;
 				}
 			}
 		}

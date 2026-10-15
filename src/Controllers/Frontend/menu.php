@@ -128,6 +128,14 @@ function fed_display_dashboard_menu( $menus ) {
 			continue;
 		}
 
+		if ( isset( $menu['show_user_profile'] ) && 'Disable' === $menu['show_user_profile'] ) {
+			continue;
+		}
+
+		if ( isset( $menu['status'] ) && 'inactive' === $menu['status'] ) {
+			continue;
+		}
+
 		$menu_format = fed_format_menu_items( $menu, $index, $first_element, $dashboard_url, $index );
 		$is_submenu  = false;
 		$parent_id   = isset( $get_payload['parent_id'] ) ? sanitize_text_field( $get_payload['parent_id'] ) : '';

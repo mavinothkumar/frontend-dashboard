@@ -68,6 +68,16 @@ function fed_fetch_table_rows_with_key_front_end( $table, $key ) {
 			}
 		}
 
+		// If menu is disabled or inactive, hide it on the frontend.
+		if ( ! fed_is_admin() ) {
+			if ( isset( $result['show_user_profile'] ) && 'Disable' === $result['show_user_profile'] ) {
+				continue;
+			}
+			if ( isset( $result['status'] ) && 'inactive' === $result['status'] ) {
+				continue;
+			}
+		}
+
 		$result['menu_type']          = isset( $result['menu_type'] ) ? $result['menu_type'] : 'user';
 		$item_key                     = isset( $result[ $key ] ) ? $result[ $key ] : ( isset( $result['menu_slug'] ) ? $result['menu_slug'] : uniqid( 'fed_m_' ) );
 		$result_with_key[ $item_key ] = $result;
