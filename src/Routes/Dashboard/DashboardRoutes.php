@@ -68,7 +68,15 @@ class DashboardRoutes {
 	 * @param array $menu
 	 */
 	public function renderPaywallBanner( $menu ) {
-		$menuSlug = isset( $menu['menu_request']['menu_slug'] ) ? esc_html( ucfirst( str_replace( array( '-', '_' ), ' ', $menu['menu_request']['menu_slug'] ) ) ) : 'This Section';
+		$menu_id = $menu['menu_request']['menu_id'] ?? '';
+		$title   = '';
+		if ( ! empty( $menu_id ) && isset( $menu['menu_items'][ $menu_id ] ) ) {
+			$title = $menu['menu_items'][ $menu_id ]['menu'] ?? ( $menu['menu_items'][ $menu_id ]['menu_title'] ?? '' );
+		}
+		if ( empty( $title ) && isset( $menu['menu_request']['menu_slug'] ) ) {
+			$title = ucfirst( str_replace( array( '-', '_' ), ' ', $menu['menu_request']['menu_slug'] ) );
+		}
+		$menuSlug = ! empty( $title ) ? esc_html( $title ) : 'This Section';
 		?>
 		<div class="fed_paywall_container text-center py-12 px-6 flex flex-col items-center justify-center max-w-lg mx-auto">
 			<div class="w-16 h-16 rounded-2xl bg-amber-500/10 text-amber-600 flex items-center justify-center mb-5 text-2xl shadow-xs">
@@ -110,20 +118,32 @@ class DashboardRoutes {
 		$matched_menu   = null;
 
 		if ( $requested_slug ) {
-			foreach ( $menu as $item ) {
-				if ( isset( $item['menu_slug'] ) && $item['menu_slug'] === $requested_slug ) {
-					$matched_menu = $item;
-					break;
+			$requested_id = ! empty( $this->request['menu_id'] ) ? sanitize_key( $this->request['menu_id'] ) : '';
+			if ( $requested_id ) {
+				foreach ( $menu as $k => $item ) {
+					if ( ( (string) $k === $requested_id || ( isset( $item['id'] ) && (string) $item['id'] === $requested_id ) ) && isset( $item['menu_slug'] ) && $item['menu_slug'] === $requested_slug ) {
+						$matched_menu = $item;
+						break;
+					}
+				}
+			}
+			if ( ! $matched_menu ) {
+				foreach ( $menu as $item ) {
+					if ( isset( $item['menu_slug'] ) && $item['menu_slug'] === $requested_slug ) {
+						$matched_menu = $item;
+						break;
+					}
 				}
 			}
 		}
 
 		if ( $matched_menu ) {
+			$matched_id = isset( $matched_menu['id'] ) ? $matched_menu['id'] : ( isset( $this->request['menu_id'] ) ? sanitize_key( $this->request['menu_id'] ) : 0 );
 			$menu_items = array(
 				'menu_request' => array(
 					'menu_type' => isset( $matched_menu['menu_type'] ) ? $matched_menu['menu_type'] : ( isset( $this->request['menu_type'] ) ? sanitize_key( $this->request['menu_type'] ) : 'custom' ),
 					'menu_slug' => $matched_menu['menu_slug'],
-					'menu_id'   => isset( $matched_menu['id'] ) ? $matched_menu['id'] : ( isset( $this->request['menu_id'] ) ? absint( $this->request['menu_id'] ) : 0 ),
+					'menu_id'   => is_numeric( $matched_id ) ? absint( $matched_id ) : sanitize_key( (string) $matched_id ),
 					'fed_nonce' => wp_create_nonce( 'fed_nonce' ),
 				),
 			);
