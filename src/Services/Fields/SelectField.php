@@ -15,7 +15,9 @@ class SelectField extends BaseField {
 
 	public function render() {
 		$is_multiple = isset( $this->extended['multiple'] ) && 'Enable' === $this->extended['multiple'];
-		$name        = $is_multiple ? $this->name . '[]' : $this->name;
+		if ( $is_multiple && ! str_ends_with( $this->name, '[]' ) ) {
+			$this->name .= '[]';
+		}
 		$options_raw = function_exists( 'fed_get_select_option_value' )
 			? fed_get_select_option_value( $this->options )
 			: (array) $this->options;
@@ -59,7 +61,6 @@ class SelectField extends BaseField {
 
 		$extra_attrs = array();
 		if ( $is_multiple ) {
-			$extra_attrs['name']     = $this->name . '[]';
 			$extra_attrs['multiple'] = 'multiple';
 			if ( strpos( $this->class_name, 'fed_multi_select' ) === false ) {
 				$this->class_name = trim( $this->class_name . ' fed_multi_select' );

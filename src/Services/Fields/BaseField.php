@@ -108,8 +108,9 @@ abstract class BaseField {
 	protected function build_attributes( array $extra_attrs = array() ) {
 		$attrs = array();
 
-		if ( ! empty( $this->name ) ) {
-			$attrs[] = sprintf( 'name="%s"', esc_attr( $this->name ) );
+		$name_attr = isset( $extra_attrs['name'] ) ? $extra_attrs['name'] : $this->name;
+		if ( ! empty( $name_attr ) ) {
+			$attrs[] = sprintf( 'name="%s"', esc_attr( $name_attr ) );
 		}
 		if ( ! empty( $this->id_name ) ) {
 			$attrs[] = sprintf( 'id="%s"', esc_attr( $this->id_name ) );
@@ -134,7 +135,7 @@ abstract class BaseField {
 		}
 
 		foreach ( $extra_attrs as $key => $val ) {
-			if ( is_null( $val ) || false === $val ) {
+			if ( is_null( $val ) || false === $val || 'name' === $key ) {
 				continue;
 			}
 			if ( true === $val ) {
