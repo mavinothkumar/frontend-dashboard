@@ -253,6 +253,11 @@ if ( ! function_exists( 'fed_js_translation' ) ) {
 			'fed_login_form_post' => admin_url(
 				'admin-ajax.php?action=fed_login_form_post&fed_nonce=' . wp_create_nonce( 'fed_nonce' )
 			),
+			'media'               => array(
+				'ajax_url'            => admin_url( 'admin-ajax.php' ),
+				'nonce'               => wp_create_nonce( 'fed_nonce' ),
+				'pdf_embedder_active' => class_exists( '\PDFEmbedder\Plugin' ) || function_exists( 'pdf_embedder' ) || shortcode_exists( 'pdf-embedder' ),
+			),
 			'alert'               => array(
 				'confirmation'                  => array(
 					'title'   => __( 'Are you sure?', 'frontend-dashboard' ),

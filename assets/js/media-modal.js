@@ -49,6 +49,8 @@ class FedMediaModal {
     this.options = {};
     this.currentAbortController = null;
     this.saveDetailsTimeout = null;
+    this.customTabs = new Map();
+    this.customFilters = [];
 
     this.createDom();
     this.bindEvents();
@@ -210,7 +212,7 @@ class FedMediaModal {
 
         <!-- Navigation Tabs & Search & Filters -->
         <div class="px-6 py-2.5 border-b border-slate-100 bg-white flex flex-wrap items-center justify-between gap-3 shrink-0">
-          <div class="flex items-center gap-2 p-1 bg-slate-100/80 rounded-xl">
+          <div class="fed-tabs-container flex items-center gap-2 p-1 bg-slate-100/80 rounded-xl">
             <button type="button" class="fed-tab-btn px-4 py-1.5 rounded-lg text-xs font-semibold transition-all shadow-xs bg-white text-indigo-600 flex items-center gap-1.5" data-tab="library">
               <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
@@ -251,7 +253,7 @@ class FedMediaModal {
         </div>
 
         <!-- Modal Body -->
-        <div class="flex-1 overflow-hidden relative flex flex-col">
+        <div class="fed-modal-body-container flex-1 overflow-hidden relative flex flex-col">
           
           <!-- Library Tab View -->
           <div class="fed-view-library flex-1 flex flex-row overflow-hidden relative">
@@ -761,7 +763,7 @@ class FedMediaModal {
       else if (chosenSize === 'large' && item.large) selectedUrl = item.large;
     }
 
-    return {
+    let result = {
       id: item.id,
       title: item.title || item.filename || '',
       url: selectedUrl,
@@ -786,6 +788,41 @@ class FedMediaModal {
         full: { url: item.full || item.url }
       }
     };
+
+    if (window.wp && window.wp.hooks && typeof window.wp.hooks.applyFilters === 'function') {
+      result = window.wp.hooks.applyFilters('fed.media.format_item', result);
+    }
+
+    return result;
+  }
+
+  registerTab(config) {
+    if (!config || !config.id || !config.label) return;
+    this.customTabs.set(config.id, config);
+
+    const tabsContainer = this.el.querySelector('.fed-tabs-container');
+    if (tabsContainer && !tabsContainer.querySelector(`[data-tab="${escapeAttr(config.id)}"]`)) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'fed-tab-btn px-4 py-1.5 rounded-lg text-xs font-semibold transition-all text-slate-600 hover:text-slate-900 flex items-center gap-1.5';
+      btn.setAttribute('data-tab', config.id);
+      btn.innerHTML = `${config.icon || ''}<span>${escapeHtml(config.label)}</span>`;
+      btn.addEventListener('click', () => this.switchTab(config.id));
+      tabsContainer.appendChild(btn);
+
+      const modalBody = this.el.querySelector('.fed-modal-body-container');
+      if (modalBody && !modalBody.querySelector(`.fed-view-custom-${config.id}`)) {
+        const pane = document.createElement('div');
+        pane.className = `fed-view-custom fed-view-custom-${config.id} flex-1 overflow-y-auto p-6 hidden`;
+        modalBody.appendChild(pane);
+      }
+    }
+  }
+
+  registerFilter(fn) {
+    if (typeof fn === 'function') {
+      this.customFilters.push(fn);
+    }
   }
 
   switchTab(tab) {
@@ -804,6 +841,9 @@ class FedMediaModal {
     const libraryView = el.querySelector('.fed-view-library');
     const uploadView = el.querySelector('.fed-view-upload');
 
+    // Hide any custom view panes
+    el.querySelectorAll('.fed-view-custom').forEach(pane => pane.classList.add('hidden'));
+
     if (tab === 'library') {
       controlsWrapper.classList.remove('hidden');
       libraryView.classList.remove('hidden');
@@ -811,10 +851,22 @@ class FedMediaModal {
       if (!this.items.length && !this.isLoading) {
         this.fetchMedia(1);
       }
-    } else {
+    } else if (tab === 'upload') {
       controlsWrapper.classList.add('hidden');
       libraryView.classList.add('hidden');
       uploadView.classList.remove('hidden');
+    } else if (this.customTabs.has(tab)) {
+      controlsWrapper.classList.add('hidden');
+      libraryView.classList.add('hidden');
+      uploadView.classList.add('hidden');
+      const customPane = el.querySelector(`.fed-view-custom-${tab}`);
+      if (customPane) {
+        customPane.classList.remove('hidden');
+        const customConfig = this.customTabs.get(tab);
+        if (typeof customConfig.render === 'function') {
+          customConfig.render(customPane, this);
+        }
+      }
     }
   }
 
@@ -981,7 +1033,7 @@ class FedMediaModal {
 
     // Filter items client-side strictly by current filter
     const activeFilter = this.mimeFilter || 'all';
-    const displayItems = this.items.filter(item => {
+    let displayItems = this.items.filter(item => {
       const isImg = Boolean(item.is_image) || (item.mime && item.mime.toLowerCase().startsWith('image/'));
       const isAud = Boolean(item.mime && item.mime.toLowerCase().startsWith('audio/'));
       const isVid = Boolean(item.mime && item.mime.toLowerCase().startsWith('video/'));
@@ -993,6 +1045,16 @@ class FedMediaModal {
       if (activeFilter === 'video') return isVid;
       return true;
     });
+
+    if (this.customFilters && this.customFilters.length) {
+      this.customFilters.forEach(fn => {
+        try {
+          displayItems = displayItems.filter(fn);
+        } catch (e) {
+          console.error('Frontend Dashboard: Error in media custom filter:', e);
+        }
+      });
+    }
 
     if (!displayItems.length) {
       if (!this.isLoading) {
@@ -1441,4 +1503,20 @@ export function getMediaModal() {
 export function openMediaPicker(callback, options = {}) {
   const modal = getMediaModal();
   modal.open(callback, options);
+}
+
+/**
+ * Register a custom tab in the media modal
+ */
+export function registerMediaTab(config) {
+  const modal = getMediaModal();
+  modal.registerTab(config);
+}
+
+/**
+ * Register a custom media grid filter
+ */
+export function registerMediaFilter(fn) {
+  const modal = getMediaModal();
+  modal.registerFilter(fn);
 }

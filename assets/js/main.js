@@ -15,11 +15,29 @@ if (!window.wp.i18n) {
 
 import { initTipTapEditor, autoInitTipTap, saveAllTipTap } from './editors/tiptap';
 import { initEditorJs, autoInitEditorJs, saveAllEditorJs } from './editors/editorjs';
-import { openMediaPicker } from './media-modal';
+import { openMediaPicker, getMediaModal, registerMediaTab, registerMediaFilter } from './media-modal';
 
 // Expose native modern media picker globally
 window.fedOpenMediaPicker = function(callback, options) {
   openMediaPicker(callback, options);
+};
+
+// Expose comprehensive media picker API for third-party plugins
+window.FedMedia = {
+  open: openMediaPicker,
+  getModal: getMediaModal,
+  registerTab(config) {
+    registerMediaTab(config);
+  },
+  registerFilter(fn) {
+    registerMediaFilter(fn);
+  },
+  registerItemTransformer(fn) {
+    if (typeof fn === 'function') {
+      this._itemTransformers.push(fn);
+    }
+  },
+  _itemTransformers: []
 };
 
 // Expose global API for Frontend Dashboard
@@ -52,6 +70,8 @@ function escapeAttr(str) {
 function escapeHtml(str) {
   return String(str || '')
     .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
 }
@@ -95,6 +115,115 @@ function insertHtmlIntoEditor(editorId, html) {
   }
 }
 
+/**
+ * Send items to WordPress backend to apply 'media_send_to_editor' (e.g. PDF Embedder) and 'fed_media_send_to_editor'
+ */
+async function sendMediaToEditor(items, editorId) {
+  let ajaxUrl = '/wp-admin/admin-ajax.php';
+  let nonce = '';
+
+  if (typeof frontend_dashboard !== 'undefined' && frontend_dashboard.fed_admin_form_post) {
+    ajaxUrl = frontend_dashboard.fed_admin_form_post.split('?')[0];
+    const match = frontend_dashboard.fed_admin_form_post.match(/fed_nonce=([^&]+)/);
+    if (match) nonce = match[1];
+  }
+  if (!nonce) {
+    const nonceInput = document.querySelector('input[name="fed_nonce"]');
+    if (nonceInput) nonce = nonceInput.value;
+  }
+
+  const formData = new FormData();
+  formData.append('action', 'fed_send_media_to_editor');
+  formData.append('fed_nonce', nonce);
+  formData.append('editor_id', editorId);
+
+  items.forEach((item, index) => {
+    Object.keys(item).forEach((key) => {
+      if (typeof item[key] !== 'object' || item[key] === null) {
+        formData.append(`items[${index}][${key}]`, item[key] !== undefined && item[key] !== null ? item[key] : '');
+      }
+    });
+  });
+
+  try {
+    const res = await fetch(ajaxUrl, {
+      method: 'POST',
+      body: formData,
+      credentials: 'same-origin'
+    });
+    const data = await res.json();
+    if (data && data.success && data.data && Array.isArray(data.data.snippets)) {
+      return data.data.snippets;
+    }
+  } catch (err) {
+    console.warn('Frontend Dashboard: Could not fetch server media transformation, falling back to local.', err);
+  }
+
+  return null;
+}
+
+/**
+ * Robust client-side fallback formatting with native PDF Embedder support
+ */
+function formatClientMediaSnippet(item) {
+  if (!item || !item.url) return '';
+  const url = escapeAttr(item.url);
+  const isImage = Boolean(item.is_image) || (item.mime && item.mime.startsWith('image/'));
+  const isPdf = item.mime === 'application/pdf' || (item.url && item.url.match(/\.pdf$/i));
+  const isPdfEmbedderActive = Boolean(
+    (typeof frontend_dashboard !== 'undefined' && frontend_dashboard.media && frontend_dashboard.media.pdf_embedder_active) ||
+    (typeof window.pdfemb_args !== 'undefined') ||
+    (typeof window.PDFEMB_NS !== 'undefined')
+  );
+
+  // PDF Embedder shortcode transformation
+  if (isPdf && isPdfEmbedderActive) {
+    const titleAttr = item.title ? ` title="${escapeAttr(item.title)}"` : '';
+    return `[pdf-embedder url="${url}"${titleAttr}]`;
+  }
+
+  if (!isImage) {
+    // Document / Non-image link
+    const labelText = item.title || item.filename || 'Download File';
+    const label = escapeHtml(labelText);
+    let linkHref = url;
+    if (item.linkTo === 'custom' && item.linkUrl) {
+      linkHref = escapeAttr(item.linkUrl);
+    } else if (item.linkTo === 'post' && item.link) {
+      linkHref = escapeAttr(item.link);
+    }
+    return `<p><a href="${linkHref}" target="_blank" rel="noopener noreferrer">${label}</a></p>`;
+  }
+
+  // Standard WordPress Image element with user-configured display settings
+  const alt = escapeAttr(item.alt || item.title || '');
+  const alignClass = item.align && item.align !== 'none' ? `align${item.align}` : 'alignnone';
+  const sizeClass = item.size ? `size-${item.size}` : 'size-full';
+  const idClass = item.id ? ` wp-image-${item.id}` : '';
+  let imgTag = `<img src="${url}" alt="${alt}" class="${alignClass} ${sizeClass}${idClass}" />`;
+
+  let linkHref = '';
+  if (item.linkTo === 'file') {
+    linkHref = escapeAttr(item.full || item.url);
+  } else if (item.linkTo === 'post' && item.link) {
+    linkHref = escapeAttr(item.link);
+  } else if (item.linkTo === 'custom' && item.linkUrl) {
+    linkHref = escapeAttr(item.linkUrl);
+  }
+
+  if (linkHref) {
+    imgTag = `<a href="${linkHref}">${imgTag}</a>`;
+  }
+
+  if (item.caption) {
+    const captionText = escapeHtml(item.caption);
+    const widthAttr = item.width ? ` width="${item.width}"` : '';
+    return `[caption id="attachment_${item.id}" align="${alignClass}"${widthAttr}]${imgTag} ${captionText}[/caption]`;
+  }
+
+  return `<p>${imgTag}</p>`;
+}
+
 // Classic TinyMCE Add Media Button Binding
 document.addEventListener('click', (e) => {
   const btn = e.target.closest('.fed-classic-add-media-btn');
@@ -102,60 +231,54 @@ document.addEventListener('click', (e) => {
   e.preventDefault();
   const editorId = btn.getAttribute('data-editor') || 'post_content';
   
-  window.fedOpenMediaPicker((selected) => {
+  window.fedOpenMediaPicker(async (selected) => {
     const items = Array.isArray(selected) ? selected : [selected];
-    const htmlSnippets = [];
+    if (!items.length) return;
 
-    items.forEach((item) => {
-      if (!item || !item.url) return;
-      const url = escapeAttr(item.url);
-      const isImage = Boolean(item.is_image) || (item.mime && item.mime.startsWith('image/'));
+    // 1. Fetch server-filtered snippets (executes WordPress core 'media_send_to_editor' and FED filters)
+    let snippets = await sendMediaToEditor(items, editorId);
 
-      if (!isImage) {
-        // Document / Non-image link
-        const labelText = item.title || item.filename || 'Download File';
-        const label = escapeHtml(labelText);
-        let linkHref = url;
-        if (item.linkTo === 'custom' && item.linkUrl) {
-          linkHref = escapeAttr(item.linkUrl);
-        } else if (item.linkTo === 'post' && item.link) {
-          linkHref = escapeAttr(item.link);
-        }
-        htmlSnippets.push(`<p><a href="${linkHref}" target="_blank" rel="noopener noreferrer">${label}</a></p>`);
-      } else {
-        // Standard WordPress Image element with user-configured display settings
-        const alt = escapeAttr(item.alt || item.title || '');
-        const alignClass = item.align && item.align !== 'none' ? `align${item.align}` : 'alignnone';
-        const sizeClass = item.size ? `size-${item.size}` : 'size-full';
-        const idClass = item.id ? ` wp-image-${item.id}` : '';
-        let imgTag = `<img src="${url}" alt="${alt}" class="${alignClass} ${sizeClass}${idClass}" />`;
+    // 2. If server formatting is unavailable, fall back to robust client generator
+    if (!snippets || !snippets.length) {
+      snippets = items.map(item => formatClientMediaSnippet(item)).filter(Boolean);
+    }
 
-        let linkHref = '';
-        if (item.linkTo === 'file') {
-          linkHref = escapeAttr(item.full || item.url);
-        } else if (item.linkTo === 'post' && item.link) {
-          linkHref = escapeAttr(item.link);
-        } else if (item.linkTo === 'custom' && item.linkUrl) {
-          linkHref = escapeAttr(item.linkUrl);
-        }
+    // 3. Apply client-side JavaScript filters and registered transformers
+    snippets = snippets.map((snippet, idx) => {
+      let finalSnippet = snippet;
+      const item = items[idx];
 
-        if (linkHref) {
-          imgTag = `<a href="${linkHref}">${imgTag}</a>`;
-        }
-
-        if (item.caption) {
-          const captionText = escapeHtml(item.caption);
-          const widthAttr = item.width ? ` width="${item.width}"` : '';
-          htmlSnippets.push(`[caption id="attachment_${item.id}" align="${alignClass}"${widthAttr}]${imgTag} ${captionText}[/caption]`);
-        } else {
-          htmlSnippets.push(`<p>${imgTag}</p>`);
-        }
+      if (window.wp && window.wp.hooks && typeof window.wp.hooks.applyFilters === 'function') {
+        finalSnippet = window.wp.hooks.applyFilters('fed.media.insert_html', finalSnippet, item, editorId);
+        finalSnippet = window.wp.hooks.applyFilters('fed_media_send_to_editor', finalSnippet, item, editorId);
       }
+
+      if (window.FedMedia && Array.isArray(window.FedMedia._itemTransformers)) {
+        window.FedMedia._itemTransformers.forEach((fn) => {
+          try {
+            finalSnippet = fn(finalSnippet, item, editorId) || finalSnippet;
+          } catch (err) {
+            console.error('Frontend Dashboard: Error in media item transformer:', err);
+          }
+        });
+      }
+
+      return finalSnippet;
     });
 
-    if (!htmlSnippets.length) return;
+    if (!snippets.length) return;
 
-    insertHtmlIntoEditor(editorId, htmlSnippets.join('\n\n'));
+    const combinedHtml = snippets.join('\n\n');
+    insertHtmlIntoEditor(editorId, combinedHtml);
+
+    // 4. Dispatch actions and events for third-party extensions
+    if (window.wp && window.wp.hooks && typeof window.wp.hooks.doAction === 'function') {
+      window.wp.hooks.doAction('fed.media.inserted', snippets, items, editorId);
+    }
+
+    document.dispatchEvent(new CustomEvent('fed:media:inserted', {
+      detail: { snippets, items, editorId }
+    }));
   }, {
     title: 'Insert Media into Classic Editor',
     multiple: true,
@@ -171,4 +294,3 @@ if (document.readyState === 'loading') {
 } else {
   window.FedEditors.autoInitAll();
 }
-

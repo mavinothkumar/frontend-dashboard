@@ -141,13 +141,16 @@ class EditorRenderer {
 		window.wp=(typeof window.wp==="object"&&window.wp!==null)?window.wp:{};window.wp.editor=(typeof window.wp.editor==="object"&&window.wp.editor!==null)?window.wp.editor:{};window.wp.autop=window.wp.autop||{autop:function(t){return t;},removep:function(t){return t;}};window.wp.i18n=(typeof window.wp.i18n==="object"&&window.wp.i18n!==null)?window.wp.i18n:{__:function(t){return t;},_x:function(t){return t;},_n:function(s,p,n){return n===1?s:p;},_nx:function(s,p,n){return n===1?s:p;},isRtl:function(){return false;},setLocaleData:function(){},sprintf:function(t){return t;}};if(!window.wp.i18n.__){window.wp.i18n.__=function(t){return t;};}window.wp.hooks=window.wp.hooks||{addAction:function(){},addFilter:function(){},applyFilters:function(h,v){return v;},doAction:function(){},removeAction:function(){},removeFilter:function(){},hasAction:function(){return false;},hasFilter:function(){return false;}};if(typeof window.setUserSetting==="function"){window.setUserSetting("editor","tinymce");}
 		</script>
 		<div class="fed-classic-editor-wrapper relative">
-			<div class="mb-2.5 flex items-center justify-between">
-				<button type="button" class="fed-classic-add-media-btn inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold transition-all border border-indigo-100/80 shadow-2xs cursor-pointer" data-editor="<?php echo esc_attr( $input_meta ); ?>">
-					<svg class="w-4 h-4 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-					</svg>
-					<span><?php esc_html_e( 'Add Media', 'frontend-dashboard' ); ?></span>
-				</button>
+			<div class="mb-2.5 flex items-center flex-wrap gap-2 justify-between">
+				<div class="flex items-center flex-wrap gap-2">
+					<button type="button" class="fed-classic-add-media-btn inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold transition-all border border-indigo-100/80 shadow-2xs cursor-pointer" data-editor="<?php echo esc_attr( $input_meta ); ?>">
+						<svg class="w-4 h-4 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+						</svg>
+						<span><?php esc_html_e( 'Add Media', 'frontend-dashboard' ); ?></span>
+					</button>
+					<?php do_action( 'fed_editor_media_buttons', $input_meta ); ?>
+				</div>
 			</div>
 			<?php
 			if ( function_exists( 'wp_editor' ) ) {

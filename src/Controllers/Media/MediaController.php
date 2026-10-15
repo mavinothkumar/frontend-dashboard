@@ -27,6 +27,7 @@ class MediaController {
 		$loader->add_action( 'wp_ajax_fed_get_media_library', $this, 'get_media_library' );
 		$loader->add_action( 'wp_ajax_fed_upload_media_file', $this, 'upload_media_file' );
 		$loader->add_action( 'wp_ajax_fed_save_attachment_details', $this, 'save_attachment_details' );
+		$loader->add_action( 'wp_ajax_fed_send_media_to_editor', $this, 'send_media_to_editor' );
 	}
 
 	/**
@@ -121,8 +122,9 @@ class MediaController {
 			$query_args['author'] = get_current_user_id();
 		}
 
-		$query = new \WP_Query( $query_args );
-		$items = array();
+		$query_args = apply_filters( 'fed_media_library_query_args', $query_args );
+		$query      = new \WP_Query( $query_args );
+		$items      = array();
 
 		foreach ( $query->posts as $post ) {
 			$items[] = $this->format_attachment( $post->ID );
@@ -237,7 +239,7 @@ class MediaController {
 		$height = ! empty( $meta['height'] ) ? (int) $meta['height'] : '';
 		$dims   = ( $is_image && $width && $height ) ? "{$width} × {$height}" : '';
 
-		return array(
+		$formatted = array(
 			'id'          => (int) $id,
 			'title'       => html_entity_decode( $title, ENT_QUOTES, 'UTF-8' ),
 			'filename'    => html_entity_decode( $filename, ENT_QUOTES, 'UTF-8' ),
@@ -260,6 +262,8 @@ class MediaController {
 			'filesize'    => $filesize,
 			'date'        => get_the_date( 'M j, Y', $id ),
 		);
+
+		return apply_filters( 'fed_media_format_attachment', $formatted, (int) $id );
 	}
 
 	/**
@@ -286,6 +290,157 @@ class MediaController {
 			wp_send_json_error( array( 'message' => $attachment_id->get_error_message() ), 400 );
 		}
 
+		do_action( 'fed_media_file_uploaded', $attachment_id );
+
 		wp_send_json_success( $this->format_attachment( $attachment_id ) );
+	}
+
+	/**
+	 * AJAX endpoint to format and filter media snippets for insertion into the editor.
+	 *
+	 * Applies WordPress core 'media_send_to_editor' filter (for third-party plugins like PDF Embedder)
+	 * and dedicated 'fed_media_send_to_editor' filter for custom FED integrations.
+	 */
+	public function send_media_to_editor() {
+		check_ajax_referer( 'fed_nonce', 'fed_nonce' );
+
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( array( 'message' => __( 'You must be logged in to insert media.', 'frontend-dashboard' ) ), 403 );
+		}
+
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Items array is deeply sanitized per-field below.
+		$raw_items = isset( $_POST['items'] ) && is_array( $_POST['items'] ) ? wp_unslash( $_POST['items'] ) : array();
+		$editor_id = isset( $_POST['editor_id'] ) ? sanitize_text_field( wp_unslash( $_POST['editor_id'] ) ) : 'post_content';
+
+		if ( empty( $raw_items ) ) {
+			wp_send_json_error( array( 'message' => __( 'No items provided.', 'frontend-dashboard' ) ), 400 );
+		}
+
+		$snippets = array();
+
+		foreach ( $raw_items as $item ) {
+			if ( empty( $item ) || ! is_array( $item ) ) {
+				continue;
+			}
+
+			$id       = isset( $item['id'] ) ? absint( $item['id'] ) : 0;
+			$url      = isset( $item['url'] ) ? esc_url_raw( $item['url'] ) : '';
+			$title    = isset( $item['title'] ) ? sanitize_text_field( $item['title'] ) : '';
+			$alt      = isset( $item['alt'] ) ? sanitize_text_field( $item['alt'] ) : '';
+			$caption  = isset( $item['caption'] ) ? wp_kses_post( $item['caption'] ) : '';
+			$align    = isset( $item['align'] ) ? sanitize_key( $item['align'] ) : 'none';
+			$size     = isset( $item['size'] ) ? sanitize_key( $item['size'] ) : 'full';
+			$link_to  = isset( $item['linkTo'] ) ? sanitize_key( $item['linkTo'] ) : 'none';
+			$link_url = isset( $item['linkUrl'] ) ? esc_url_raw( $item['linkUrl'] ) : '';
+			$mime     = isset( $item['mime'] ) ? sanitize_text_field( $item['mime'] ) : '';
+			$width    = isset( $item['width'] ) ? absint( $item['width'] ) : 0;
+			$height   = isset( $item['height'] ) ? absint( $item['height'] ) : 0;
+			$is_image = ! empty( $item['is_image'] ) || ( ! empty( $mime ) && 0 === strpos( $mime, 'image/' ) );
+
+			// If ID is valid, enhance with WordPress attachment data.
+			$post_obj = $id ? get_post( $id ) : null;
+			if ( $post_obj && 'attachment' === $post_obj->post_type ) {
+				if ( empty( $title ) ) {
+					$title = $post_obj->post_title;
+				}
+				if ( empty( $caption ) ) {
+					$caption = $post_obj->post_excerpt;
+				}
+				if ( empty( $mime ) ) {
+					$mime = $post_obj->post_mime_type;
+				}
+				if ( empty( $url ) ) {
+					$url = wp_get_attachment_url( $id );
+				}
+			}
+
+			// Generate base HTML representation.
+			$html = '';
+
+			if ( $is_image ) {
+				$align_class = ( 'none' !== $align && ! empty( $align ) ) ? 'align' . $align : 'alignnone';
+				$size_class  = ! empty( $size ) ? 'size-' . $size : 'size-full';
+				$id_class    = $id ? ' wp-image-' . $id : '';
+
+				$img_tag = sprintf(
+					'<img src="%s" alt="%s" class="%s" />',
+					esc_url( $url ),
+					esc_attr( $alt ? $alt : $title ),
+					esc_attr( trim( "{$align_class} {$size_class}{$id_class}" ) )
+				);
+
+				$href = '';
+				if ( 'file' === $link_to ) {
+					$href = ! empty( $item['full'] ) ? esc_url_raw( $item['full'] ) : $url;
+				} elseif ( 'post' === $link_to && $id ) {
+					$href = get_attachment_link( $id );
+				} elseif ( 'custom' === $link_to && ! empty( $link_url ) ) {
+					$href = $link_url;
+				}
+
+				if ( ! empty( $href ) ) {
+					$img_tag = sprintf( '<a href="%s">%s</a>', esc_url( $href ), $img_tag );
+				}
+
+				if ( ! empty( $caption ) ) {
+					$width_attr = $width ? ' width="' . $width . '"' : '';
+					$html       = sprintf(
+						'[caption id="attachment_%d" align="%s"%s]%s %s[/caption]',
+						$id,
+						esc_attr( $align_class ),
+						$width_attr,
+						$img_tag,
+						$caption
+					);
+				} else {
+					$html = '<p>' . $img_tag . '</p>';
+				}
+			} elseif ( ! empty( $mime ) && ( 0 === strpos( $mime, 'video/' ) || 0 === strpos( $mime, 'audio/' ) ) ) {
+				$tag  = 0 === strpos( $mime, 'video/' ) ? 'video' : 'audio';
+				$html = sprintf( '[%s src="%s"][/%s]', $tag, esc_url( $url ), $tag );
+			} else {
+				// Document / PDF / Other attachment.
+				$label = ! empty( $title ) ? $title : ( ! empty( $item['filename'] ) ? sanitize_text_field( $item['filename'] ) : __( 'Download File', 'frontend-dashboard' ) );
+				$href  = $url;
+				if ( 'custom' === $link_to && ! empty( $link_url ) ) {
+					$href = $link_url;
+				} elseif ( 'post' === $link_to && $id ) {
+					$href = get_attachment_link( $id );
+				}
+
+				$html = sprintf(
+					'<p><a href="%s" target="_blank" rel="noopener noreferrer">%s</a></p>',
+					esc_url( $href ),
+					esc_html( $label )
+				);
+			}
+
+			// Prepare standard attachment array for WordPress core 'media_send_to_editor' hook.
+			$attachment_meta = array(
+				'id'           => $id,
+				'url'          => $url,
+				'post_title'   => $title,
+				'post_excerpt' => $caption,
+				'image_alt'    => $alt,
+				'align'        => $align,
+				'image-size'   => $size,
+			);
+
+			/**
+			 * 1. Native WordPress Core filter hook:
+			 * Allows PDF Embedder and any third-party plugin to convert media into shortcodes or custom embeds.
+			 */
+			$filtered_html = apply_filters( 'media_send_to_editor', $html, $id, $attachment_meta );
+
+			/**
+			 * 2. Dedicated Frontend Dashboard filter hook:
+			 * Allows plugins to customize media HTML specifically for Frontend Dashboard views.
+			 */
+			$filtered_html = apply_filters( 'fed_media_send_to_editor', $filtered_html, $id, $item, $editor_id );
+
+			$snippets[] = $filtered_html;
+		}
+
+		wp_send_json_success( array( 'snippets' => $snippets ) );
 	}
 }
