@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.0.13
+Stable tag: 3.0.14
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -140,6 +140,11 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 
 == Changelog ==
+
+= 3.0.14 (2026-10-15) =
+* Fix: Resolved category and hierarchical taxonomy selection not updating when creating or editing posts from Frontend Dashboard view.
+* Fix: Preserved associative array term IDs in select field options builder, ensuring taxonomy term IDs are saved instead of term names.
+* Fix: Guaranteed taxonomy term assignment across user roles (Subscribers, Authors, Contributors) by ensuring terms in tax_input are explicitly set after post insertion.
 
 = 3.0.13 (2026-10-14) =
 * Fix: Resolved `Unauthorized class execution` error on Payments Dashboard (`?page=fed_payments&menu=dashboard`) by registering payment controller methods in the authorized action hooks map.

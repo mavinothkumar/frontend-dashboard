@@ -167,8 +167,6 @@ function fed_process_dashboard_add_new_post( $post ) {
 		$default = array(
 			'post_title'     => sanitize_text_field( $post['post_title'] ),
 			'post_content'   => wp_kses_post( $raw_content ),
-			'post_category'  => isset( $post['post_category'] ) ? sanitize_text_field( $post['post_category'] ) : '',
-			'tags_input'     => isset( $post['tags_input'] ) ? implode( ',', $post['tags_input'] ) : '',
 			'post_type'      => isset( $post['post_type'] ) ? sanitize_text_field( $post['post_type'] ) : 'post',
 			'comment_status' => isset( $post['comment_status'] ) ? sanitize_text_field(
 				$post['comment_status']
@@ -176,12 +174,30 @@ function fed_process_dashboard_add_new_post( $post ) {
 			'post_status'    => $post_status,
 		);
 
+		if ( isset( $post['post_category'] ) ) {
+			$default['post_category'] = is_array( $post['post_category'] )
+				? array_map( 'absint', $post['post_category'] )
+				: array_filter( array( absint( $post['post_category'] ) ) );
+		} elseif ( isset( $post['tax_input']['category'] ) ) {
+			$default['post_category'] = array_map( 'absint', (array) $post['tax_input']['category'] );
+		}
+
+		if ( isset( $post['tags_input'] ) ) {
+			$default['tags_input'] = is_array( $post['tags_input'] )
+				? implode( ',', array_map( 'sanitize_text_field', $post['tags_input'] ) )
+				: sanitize_text_field( $post['tags_input'] );
+		} elseif ( isset( $post['tax_input']['post_tag'] ) ) {
+			$default['tags_input'] = is_array( $post['tax_input']['post_tag'] )
+				? implode( ',', array_map( 'sanitize_text_field', $post['tax_input']['post_tag'] ) )
+				: sanitize_text_field( $post['tax_input']['post_tag'] );
+		}
+
 		if ( isset( $post['ID'] ) ) {
 			$default['ID'] = (int) $post['ID'];
 		}
 
 		if ( isset( $post['_thumbnail_id'] ) ) {
-			$default['_thumbnail_id'] = ( '' == $post['_thumbnail_id'] ) ? - 1 : (int) $post['_thumbnail_id'];
+			$default['_thumbnail_id'] = ( '' === $post['_thumbnail_id'] ) ? -1 : (int) $post['_thumbnail_id'];
 		}
 
 		if ( isset( $post['tax_input'] ) ) {
@@ -201,6 +217,21 @@ function fed_process_dashboard_add_new_post( $post ) {
 
 		if ( $success instanceof WP_Error ) {
 			wp_send_json_error( $success->get_error_messages() );
+		}
+
+		if ( isset( $post['tax_input'] ) && is_array( $post['tax_input'] ) ) {
+			foreach ( $post['tax_input'] as $taxonomy => $terms ) {
+				if ( ! taxonomy_exists( $taxonomy ) ) {
+					continue;
+				}
+				$terms = is_array( $terms ) ? array_filter( $terms ) : $terms;
+				if ( is_taxonomy_hierarchical( $taxonomy ) ) {
+					$terms = array_unique( array_map( 'absint', (array) $terms ) );
+					wp_set_object_terms( $success, $terms, $taxonomy );
+				} else {
+					wp_set_post_terms( $success, $terms, $taxonomy );
+				}
+			}
 		}
 
 		wp_send_json_success(

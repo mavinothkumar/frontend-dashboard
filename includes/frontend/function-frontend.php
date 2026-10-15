@@ -413,7 +413,10 @@ function fed_convert_array_to_id_name( array $array, $key = 'term_id', $type = '
 
 	if ( $array ) {
 		foreach ( $array as $value ) {
-			$new_category[ $value->$key ] = $value->name;
+			$new_category[] = array(
+				'key'   => (string) $value->$key,
+				'label' => $value->name,
+			);
 		}
 
 		$html .= fed_get_input_details(
@@ -433,7 +436,7 @@ function fed_convert_array_to_id_name( array $array, $key = 'term_id', $type = '
 	return fed_get_input_details(
 		array(
 			'input_value' => array(),
-			'input_meta'  => $type,
+			'input_meta'  => 'tax_input[' . $type . ']',
 			'input_type'  => 'select',
 			'user_value'  => '',
 			'id_name'     => $type,

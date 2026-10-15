@@ -345,13 +345,17 @@ function fed_parse_field_options( $input_value ) {
 
 	// 1. Array handling
 	if ( is_array( $input_value ) ) {
-		$parsed = array();
+		$parsed  = array();
+		$is_list = function_exists( 'array_is_list' )
+			? array_is_list( $input_value )
+			: ( array_keys( $input_value ) === range( 0, count( $input_value ) - 1 ) );
+
 		foreach ( $input_value as $k => $v ) {
 			if ( is_array( $v ) ) {
 				$key                     = isset( $v['key'] ) ? $v['key'] : ( isset( $v['value'] ) ? $v['value'] : ( isset( $v['id'] ) ? $v['id'] : $k ) );
 				$label                   = isset( $v['label'] ) ? $v['label'] : ( isset( $v['text'] ) ? $v['text'] : ( isset( $v['name'] ) ? $v['name'] : ( isset( $v['title'] ) ? $v['title'] : (string) reset( $v ) ) ) );
 				$parsed[ (string) $key ] = (string) $label;
-			} elseif ( is_numeric( $k ) && is_string( $v ) ) {
+			} elseif ( $is_list && is_string( $v ) ) {
 				$parsed[ (string) $v ] = (string) $v;
 			} else {
 				$parsed[ (string) $k ] = (string) $v;

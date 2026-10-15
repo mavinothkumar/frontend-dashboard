@@ -25,6 +25,7 @@ class SelectField extends BaseField {
 			$val = maybe_unserialize( $val );
 		}
 
+		$val_strings  = is_array( $val ) ? array_map( 'strval', $val ) : array();
 		$options_html = '';
 		foreach ( $options_raw as $key => $label ) {
 			$display_label = $label;
@@ -43,7 +44,7 @@ class SelectField extends BaseField {
 			}
 
 			$selected = '';
-			if ( is_array( $val ) && in_array( $key, $val, true ) ) {
+			if ( is_array( $val ) && in_array( (string) $key, $val_strings, true ) ) {
 				$selected = 'selected="selected"';
 			} elseif ( ! is_array( $val ) && (string) $key === (string) $val ) {
 				$selected = 'selected="selected"';
