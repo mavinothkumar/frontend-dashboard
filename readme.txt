@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.0.14
+Stable tag: 3.0.15
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -140,6 +140,10 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 
 == Changelog ==
+
+= 3.0.15 (2026-10-16) =
+* Fix: Restored full compatibility with PDF Embedder plugin, routing custom media modal insertion through WordPress native `media_send_to_editor` pipeline.
+* Enhancement: Introduced extensible media picker developer API (`window.FedMedia`, `fed_send_media_to_editor`, `fed_media_format_attachment`, and toolbar action hooks) for seamless third-party plugin integrations.
 
 = 3.0.14 (2026-10-15) =
 * Fix: Resolved category and hierarchical taxonomy selection not updating when creating or editing posts from Frontend Dashboard view.
