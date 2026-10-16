@@ -71,7 +71,9 @@
             '<button type="button" class="fed-modal-btn fed-modal-btn-confirm" id="fed-modal-confirm-btn">OK</button>' +
             '<button type="button" class="fed-modal-btn fed-modal-btn-cancel" id="fed-modal-cancel-btn">Cancel</button>' +
           '</div>' +
-          '<div class="fed-modal-timer-bar" id="fed-modal-timer-bar"></div>' +
+          '<div class="fed-modal-timer-track" id="fed-modal-timer-track">' +
+            '<div class="fed-modal-timer-bar" id="fed-modal-timer-bar"></div>' +
+          '</div>' +
         '</div>';
       document.body.appendChild(backdrop);
     }
@@ -166,6 +168,10 @@
       if (ICONS[type]) {
         iconWrap.innerHTML = ICONS[type];
         iconWrap.style.display = 'flex';
+        iconWrap.style.justifyContent = 'center';
+        iconWrap.style.alignItems = 'center';
+        iconWrap.style.width = '100%';
+        iconWrap.style.margin = '0 auto 1.25rem auto';
       } else {
         iconWrap.innerHTML = '';
         iconWrap.style.display = 'none';
@@ -204,7 +210,11 @@
 
       closeBtn.style.display = showCloseBtn ? 'flex' : 'none';
 
-      // Timer Bar
+      // Timer Bar & Track
+      var timerTrack = document.getElementById('fed-modal-timer-track');
+      if (timerTrack) {
+        timerTrack.style.display = timer ? 'block' : 'none';
+      }
       timerBar.style.width = '0%';
       timerBar.style.display = timer ? 'block' : 'none';
 
