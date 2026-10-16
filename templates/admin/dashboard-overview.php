@@ -380,8 +380,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=fed_post_fields' ) ); ?>" style="display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 8px; background: #f8fafc; border: 1px solid #e2e8f0; color: #334155; text-decoration: none; font-weight: 600; font-size: 13px;">
 				<i class="fas fa-edit" style="color: #0aaaaa; font-size: 16px;"></i> <?php esc_html_e( 'Post & CPT Fields', 'frontend-dashboard' ); ?>
 			</a>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=fed_payments' ) ); ?>" style="display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 8px; background: #f8fafc; border: 1px solid #e2e8f0; color: #334155; text-decoration: none; font-weight: 600; font-size: 13px;">
-				<i class="fas fa-credit-card" style="color: #0aaaaa; font-size: 16px;"></i> <?php esc_html_e( 'Payments & Billing', 'frontend-dashboard' ); ?>
+			<?php
+			$payments_url   = ( class_exists( '\GateFuz\Plugin' ) || defined( 'GATEFUZ_VERSION' ) ) ? admin_url( 'admin.php?page=gate-fuz-invoices' ) : admin_url( 'admin.php?page=fed_payments' );
+			$payments_title = ( class_exists( '\GateFuz\Plugin' ) || defined( 'GATEFUZ_VERSION' ) ) ? __( 'GateFuz Invoices & Billing', 'frontend-dashboard' ) : __( 'Payments & Billing', 'frontend-dashboard' );
+			?>
+			<a href="<?php echo esc_url( $payments_url ); ?>" style="display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 8px; background: #f8fafc; border: 1px solid #e2e8f0; color: #334155; text-decoration: none; font-weight: 600; font-size: 13px;">
+				<i class="fas fa-file-invoice-dollar" style="color: #0aaaaa; font-size: 16px;"></i> <?php echo esc_html( $payments_title ); ?>
 			</a>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=fed_settings' ) ); ?>" style="display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 8px; background: #f8fafc; border: 1px solid #e2e8f0; color: #334155; text-decoration: none; font-weight: 600; font-size: 13px;">
 				<i class="fas fa-sliders-h" style="color: #0aaaaa; font-size: 16px;"></i> <?php esc_html_e( 'Settings Tabs', 'frontend-dashboard' ); ?>

@@ -43,7 +43,26 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 				wp_safe_redirect( add_query_arg( $params, admin_url( 'admin.php' ) ) );
 				exit;
 			}
+			// Redirect legacy Payments menu to GateFuz when GateFuz is active
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			if ( isset( $_GET['page'] ) && 'fed_payments' === $_GET['page'] ) {
+				if ( class_exists( '\GateFuz\Plugin' ) || defined( 'GATEFUZ_VERSION' ) ) {
+					$target_page = 'gate-fuz-invoices';
+					// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+					$menu_arg = isset( $_GET['menu'] ) ? sanitize_key( wp_unslash( $_GET['menu'] ) ) : '';
+					if ( 'gateways' === $menu_arg ) {
+						$target_page = 'gate-fuz-gateways';
+					} elseif ( 'transactions' === $menu_arg ) {
+						$target_page = 'gate-fuz-transactions';
+					} elseif ( 'subscriptions' === $menu_arg ) {
+						$target_page = 'gate-fuz-subscriptions';
+					}
+					wp_safe_redirect( admin_url( 'admin.php?page=' . $target_page ) );
+					exit;
+				}
+			}
 		}
+
 
 		/**
 		 * Ensure global $title is always a non-null string for FED admin pages to avoid PHP 8.1+ strip_tags(null) notice.
@@ -109,6 +128,16 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 				'fed_addons',
 				array( $this, 'plugin_pages' )
 			);
+			if ( class_exists( '\GateFuz\Plugin' ) || defined( 'GATEFUZ_VERSION' ) ) {
+				add_submenu_page(
+					null,
+					__( 'Payments & Billing', 'frontend-dashboard' ),
+					__( 'Payments & Billing', 'frontend-dashboard' ),
+					'manage_options',
+					'fed_payments',
+					array( $this, 'payments' )
+				);
+			}
 
 			do_action( 'fed_add_main_sub_menu_action' );
 		}
@@ -716,13 +745,6 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 					'callback'   => array( $this, 'post_fields' ),
 					'position'   => 25,
 				),
-				'fed_payments'       => array(
-					'page_title' => __( 'Payments', 'frontend-dashboard' ),
-					'menu_title' => __( 'Payments', 'frontend-dashboard' ),
-					'capability' => 'manage_options',
-					'callback'   => array( $this, 'payments' ),
-					'position'   => 40,
-				),
 				'fed_settings'       => array(
 					'page_title' => __( 'Settings', 'frontend-dashboard' ),
 					'menu_title' => __( 'Settings', 'frontend-dashboard' ),
@@ -752,6 +774,17 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 					'position'   => 100,
 				),
 			);
+
+			// Only expose native Payments menu if GateFuz is not active.
+			if ( ! class_exists( '\GateFuz\Plugin' ) && ! defined( 'GATEFUZ_VERSION' ) ) {
+				$menu['fed_payments'] = array(
+					'page_title' => __( 'Payments', 'frontend-dashboard' ),
+					'menu_title' => __( 'Payments', 'frontend-dashboard' ),
+					'capability' => 'manage_options',
+					'callback'   => array( $this, 'payments' ),
+					'position'   => 40,
+				);
+			}
 
 			$main_menu = apply_filters( 'fed_add_main_sub_menu', $menu );
 

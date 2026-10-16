@@ -114,6 +114,10 @@ You can configure editor preferences under **Frontend Dashboard → Settings →
 * To retrieve post custom fields:
   `$post_meta = get_post_meta( $post_id, 'your_custom_field_key', true );`
 
+= Where are Payments and Invoices configured? =
+
+Payment Gateways, Invoices & Billing profiles, and Transaction Ledgers are now dedicatedly powered and managed by the **GateFuz** plugin. The legacy Payments menu in Frontend Dashboard has been deprecated and centralized into GateFuz (under **GateFuz > Gateways** and **GateFuz > Invoices**). All existing company invoice settings (`fed_invoice_settings`) and transaction tables are automatically preserved and loaded by GateFuz with zero data loss.
+
 = List of Available Shortcodes =
 
 * `[fed_login]` — Complete authentication portal (login, registration, password reset).
@@ -243,7 +247,7 @@ https://faq.frontenddashboard.com/changelog/overview/
 == Upgrade Notice ==
 
 = 3.0.16 =
-Fixes frontend authentication notification modal UI and centering, and enhances modal progress track styling.
+Fixes frontend authentication notification modal UI and centering, enhances modal progress track styling, and centralizes payment gateways, invoices, and billing profiles into the dedicated GateFuz engine while deprecating the legacy FED Payments menu.
 
 = 3.0.15 =
 Fixes dashboard breadcrumb alignment and sidebar brand icon positioning, restores Brand Logo display on login and registration pages, restores PDF Embedder plugin compatibility, and provides an extensible media modal developer API.

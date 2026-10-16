@@ -70,8 +70,8 @@ if ( ! function_exists( 'fed_get_help_menu' ) ) {
 				'a' => __( 'In <strong>Frontend Dashboard &rarr; Dashboard Menu</strong>, each menu item allows you to configure <em>Role Visibility</em>. You can restrict specific tabs (e.g. Posts, Invoices, Chat) to specific user roles or make them globally available.', 'frontend-dashboard' ),
 			),
 			array(
-				'q' => __( 'How do I configure payments, gateways, and subscription packages?', 'frontend-dashboard' ),
-				'a' => __( 'Visit <strong>Frontend Dashboard &rarr; Payments</strong>. You have 5 dedicated sections: <em>Dashboard</em> (financial metrics), <em>Transactions</em> (full ledger & manual entries), <em>Subscriptions</em> (subscribers ledger and subscription plans builder), <em>Payment Gateways</em> (Gateways Hub), and <em>Invoices</em> (template customizer & company profile).', 'frontend-dashboard' ),
+				'q' => __( 'Where are Payments, Gateways, and Invoices configured?', 'frontend-dashboard' ),
+				'a' => __( 'Payment gateways, transactions, and company invoice profiles are centralized in the dedicated <strong>GateFuz</strong> plugin (under <strong>GateFuz &rarr; Gateways</strong> and <strong>GateFuz &rarr; Invoices</strong>). The legacy Payments menu in Frontend Dashboard is deprecated to eliminate duplicate menus and split transaction ledgers. All existing company invoice settings are automatically synchronized with GateFuz without any data loss.', 'frontend-dashboard' ),
 			),
 			array(
 				'q' => __( 'Where can I find developer hooks, filters, and API documentation?', 'frontend-dashboard' ),

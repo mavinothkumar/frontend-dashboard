@@ -135,6 +135,27 @@ if ( ! class_exists( 'FEDPaymentMenu' ) ) {
 					</div>
 				</div>
 
+				<?php if ( class_exists( '\GateFuz\Plugin' ) || defined( 'GATEFUZ_VERSION' ) ) : ?>
+					<div style="background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
+						<div style="display: flex; align-items: center; gap: 12px;">
+							<span style="width: 36px; height: 36px; border-radius: 10px; background: #4f46e5; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 16px;">
+								<i class="fas fa-bolt"></i>
+							</span>
+							<div>
+								<h4 style="margin: 0; font-size: 14px; font-weight: 700; color: #1e1b4b;">
+									<?php esc_html_e( 'GateFuz Payment & Invoicing Engine is Active', 'frontend-dashboard' ); ?>
+								</h4>
+								<p style="margin: 2px 0 0 0; font-size: 12.5px; color: #4338ca;">
+									<?php esc_html_e( 'Payment gateways, transactions, and company billing invoices are centralized and managed in GateFuz.', 'frontend-dashboard' ); ?>
+								</p>
+							</div>
+						</div>
+						<a href="<?php echo esc_url( admin_url( 'admin.php?page=gate-fuz-invoices' ) ); ?>" class="fed-btn-primary" style="padding: 8px 16px; border-radius: 8px; font-size: 12.5px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+							<span><?php esc_html_e( 'Open GateFuz Invoices &rarr;', 'frontend-dashboard' ); ?></span>
+						</a>
+					</div>
+				<?php endif; ?>
+
 				<?php if ( ! empty( $menus ) ) { ?>
 					<!-- Modern 5-Tab Navigation Bar -->
 					<div style="margin-bottom: 20px;">
