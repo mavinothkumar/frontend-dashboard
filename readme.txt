@@ -238,6 +238,15 @@ https://faq.frontenddashboard.com/changelog/overview/
 
 == Upgrade Notice ==
 
+= 3.0.15 =
+Fixes dashboard breadcrumb alignment and sidebar brand icon positioning, restores Brand Logo display on login and registration pages, restores PDF Embedder plugin compatibility, and provides an extensible media modal developer API.
+
+= 3.0.14 =
+Fixes post category and hierarchical taxonomy persistence, resolves multi-select array serialization, and guarantees term assignment across non-admin user roles.
+
+= 3.0.13 =
+Resolves Payments Dashboard controller authorization and cleans deprecated upsell classes.
+
 = 3.0.12 =
 Fixes mobile hamburger drawer responsiveness and wptexturize script syntax errors, prevents mobile header from showing on desktop viewports, and optimizes layout for 320px mobile screens.
 
