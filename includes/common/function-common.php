@@ -1278,22 +1278,16 @@ if ( ! function_exists( 'fed_get_brand_logo_html' ) ) {
 	 * @return string HTML logo markup.
 	 */
 	function fed_get_brand_logo_html( $args = array() ) {
-		$context    = isset( $args['context'] ) ? sanitize_key( $args['context'] ) : 'login';
-		$login_opts = get_option( 'fed_admin_login', array() );
-		$upl_opts   = get_option( 'fed_admin_settings_upl', array() );
-		$logo_id    = 0;
+		$context  = isset( $args['context'] ) ? sanitize_key( $args['context'] ) : 'login';
+		$upl_opts = get_option( 'fed_admin_settings_upl', array() );
+		$logo_id  = 0;
 
-		// 1. Check Login specific logo setting.
-		if ( ! empty( $login_opts['settings']['fed_login_logo'] ) ) {
-			$logo_id = (int) $login_opts['settings']['fed_login_logo'];
-		}
-
-		// 2. Fall back to Dashboard Brand Logo.
-		if ( ! $logo_id && ! empty( $upl_opts['settings']['fed_upl_website_logo'] ) ) {
+		// 1. Primary: Dashboard Brand Logo from Frontend Dashboard > Settings > Dashboard > Settings
+		if ( ! empty( $upl_opts['settings']['fed_upl_website_logo'] ) ) {
 			$logo_id = (int) $upl_opts['settings']['fed_upl_website_logo'];
 		}
 
-		// 3. Fall back to WordPress Site Custom Logo.
+		// 2. Fall back to WordPress Site Custom Logo
 		if ( ! $logo_id && function_exists( 'has_custom_logo' ) && has_custom_logo() ) {
 			$logo_id = (int) get_theme_mod( 'custom_logo' );
 		}
