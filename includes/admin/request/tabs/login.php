@@ -65,6 +65,7 @@ function fed_admin_setting_login_request() {
  */
 function fed_admin_login_settings_save( $request ) {
 	return array(
+		'fed_login_logo'            => ! empty( $request['settings']['fed_login_logo'] ) && (int) $request['settings']['fed_login_logo'] > 0 ? (int) $request['settings']['fed_login_logo'] : '',
 		'fed_login_url'             => ! empty( $request['settings']['fed_login_url'] ) && (int) $request['settings']['fed_login_url'] > 0 ? (int) $request['settings']['fed_login_url'] : '',
 		'fed_register_url'          => ! empty( $request['settings']['fed_register_url'] ) && (int) $request['settings']['fed_register_url'] > 0 ? (int) $request['settings']['fed_register_url'] : '',
 		'fed_forgot_password_url'   => ! empty( $request['settings']['fed_forgot_password_url'] ) && (int) $request['settings']['fed_forgot_password_url'] > 0 ? (int) $request['settings']['fed_forgot_password_url'] : '',

@@ -21,6 +21,10 @@ do_action( 'fed_before_forgot_password_only_form' );
 		?>
 		<div class="flex justify-center">
 			<div class="w-full max-w-md">
+				<?php
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo fed_get_brand_logo_html( array( 'context' => 'forgot_password_only' ) );
+				?>
 				<div class="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-100">
 					<div class="bg-blue-600 px-6 py-4">
 						<h3 class="text-white text-lg font-semibold tracking-wide">

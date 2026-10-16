@@ -43,6 +43,22 @@ function fed_admin_login_settings_tab( $fed_login_settings ) {
 			),
 		),
 		'input'  => array(
+			'Brand Logo'                    => array(
+				'col'          => 'col-md-12',
+				'name'         => __( 'Brand / Login Logo', 'frontend-dashboard' ),
+				'input'        => fed_get_input_details(
+					array(
+						'input_meta' => 'fed_admin_login[settings][fed_login_logo]',
+						'user_value' => isset( $fed_login_settings['settings']['fed_login_logo'] ) ? $fed_login_settings['settings']['fed_login_logo'] : null,
+						'input_type' => 'file',
+					)
+				),
+				'help_message' => fed_show_help_message(
+					array(
+						'content' => __( 'Upload your brand logo to display on login, registration, and forgot password pages.', 'frontend-dashboard' ),
+					)
+				),
+			),
 			'Login Page URL'                => array(
 				'col'          => 'col-md-6',
 				'name'         => 'Login Page URL',

@@ -1268,3 +1268,64 @@ if ( ! function_exists( 'fed_clean_html_tag_attributes' ) ) {
 	}
 }
 
+if ( ! function_exists( 'fed_get_brand_logo_html' ) ) {
+	/**
+	 * Get brand logo HTML markup.
+	 *
+	 * Checks Login logo, Dashboard brand logo (fed_upl_website_logo), theme custom logo, and applies filters.
+	 *
+	 * @param array $args Optional custom arguments (context, wrapper_class).
+	 * @return string HTML logo markup.
+	 */
+	function fed_get_brand_logo_html( $args = array() ) {
+		$context    = isset( $args['context'] ) ? sanitize_key( $args['context'] ) : 'login';
+		$login_opts = get_option( 'fed_admin_login', array() );
+		$upl_opts   = get_option( 'fed_admin_settings_upl', array() );
+		$logo_id    = 0;
+
+		// 1. Check Login specific logo setting.
+		if ( ! empty( $login_opts['settings']['fed_login_logo'] ) ) {
+			$logo_id = (int) $login_opts['settings']['fed_login_logo'];
+		}
+
+		// 2. Fall back to Dashboard Brand Logo.
+		if ( ! $logo_id && ! empty( $upl_opts['settings']['fed_upl_website_logo'] ) ) {
+			$logo_id = (int) $upl_opts['settings']['fed_upl_website_logo'];
+		}
+
+		// 3. Fall back to WordPress Site Custom Logo.
+		if ( ! $logo_id && function_exists( 'has_custom_logo' ) && has_custom_logo() ) {
+			$logo_id = (int) get_theme_mod( 'custom_logo' );
+		}
+
+		$logo_url = $logo_id ? wp_get_attachment_image_url( $logo_id, 'full' ) : '';
+		$logo_url = apply_filters( 'fed_brand_logo_url', $logo_url, $context, $logo_id );
+
+		if ( empty( $logo_url ) ) {
+			return '';
+		}
+
+		$width_val  = ! empty( $upl_opts['settings']['fed_upl_website_logo_width'] ) ? intval( $upl_opts['settings']['fed_upl_website_logo_width'] ) : 0;
+		$height_val = ! empty( $upl_opts['settings']['fed_upl_website_logo_height'] ) ? intval( $upl_opts['settings']['fed_upl_website_logo_height'] ) : 0;
+
+		$max_width  = $width_val ? 'max-width: ' . $width_val . 'px;' : 'max-width: 220px;';
+		$max_height = $height_val ? 'max-height: ' . $height_val . 'px;' : 'max-height: 56px;';
+		$style      = esc_attr( $max_width . ' ' . $max_height );
+		$blog_name  = get_bloginfo( 'name' );
+		$home_url   = esc_url( home_url( '/' ) );
+
+		$wrapper_class = isset( $args['wrapper_class'] ) ? sanitize_text_field( $args['wrapper_class'] ) : 'fed-brand-logo-wrapper mb-6 flex justify-center text-center';
+
+		$html = sprintf(
+			'<div class="%s"><a href="%s" class="inline-block transition-transform duration-200 hover:opacity-90"><img src="%s" alt="%s" class="object-contain mx-auto" style="%s" /></a></div>',
+			esc_attr( $wrapper_class ),
+			$home_url,
+			esc_url( $logo_url ),
+			esc_attr( $blog_name ),
+			$style
+		);
+
+		return apply_filters( 'fed_brand_logo_html', $html, $logo_url, $context );
+	}
+}
+

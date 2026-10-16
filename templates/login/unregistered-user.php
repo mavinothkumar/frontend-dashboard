@@ -76,6 +76,10 @@ if ( $menu ) {
 		
 		<div class="flex justify-center">
 			<div class="w-full max-w-md">
+				<?php
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo fed_get_brand_logo_html( array( 'context' => 'login_tabs' ) );
+				?>
 				<div class="bg-white shadow-xl rounded-2xl overflow-hidden border border-slate-200/80">
 					
 					<!-- Tab Navigation -->
