@@ -44,6 +44,22 @@ class ShortcodeController {
 
 		// Enable shortcodes in text widgets
 		add_filter( 'widget_text', 'do_shortcode' );
+
+		// Clean up wpautop rogue empty tags on pages containing Frontend Dashboard
+		add_filter( 'the_content', array( $this, 'clean_shortcode_autop' ), 99 );
+	}
+
+	/**
+	 * Strip rogue empty paragraphs and breaks injected by wpautop inside Frontend Dashboard containers.
+	 *
+	 * @param string $content Content.
+	 * @return string
+	 */
+	public function clean_shortcode_autop( $content ) {
+		if ( is_string( $content ) && false !== strpos( $content, 'fed_dashboard_container' ) ) {
+			$content = preg_replace( '/<p[^>]*>\s*(?:<br\s*\/?>)?\s*<\/p>/i', '', $content );
+		}
+		return $content;
 	}
 
 	/**
@@ -54,7 +70,9 @@ class ShortcodeController {
 	public function render_dashboard() {
 		ob_start();
 		$this->templates->get_template_part( 'dashboard' );
-		return ob_get_clean();
+		$html = ob_get_clean();
+
+		return preg_replace( '/<p[^>]*>\s*(?:<br\s*\/?>)?\s*<\/p>/i', '', (string) $html );
 	}
 
 	/**
