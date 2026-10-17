@@ -112,14 +112,27 @@ $logoHeight = ! empty( $uplOptions['settings']['fed_upl_website_logo_height'] ) 
 .bc_fed .fed_dashboard_items > br,
 .bc_fed .fed_sidebar_scrollable > p:empty,
 .bc_fed .fed_sidebar_scrollable > br,
+.bc_fed .fed_sidebar_brand_container > p,
+.bc_fed .fed_sidebar_brand_container > br,
 .bc_fed .fed_sidebar_brand_wrapper > p,
 .bc_fed .fed_sidebar_brand_wrapper > br,
 .bc_fed .fed_sidebar_brand_text > p,
 .bc_fed .fed_sidebar_brand_text > br,
+.bc_fed .fed_sidebar_brand_text br,
+.bc_fed .fed_sidebar_brand_title br,
+.bc_fed .fed_sidebar_brand_subtitle br,
+.bc_fed .fed_mobile_nav_close br,
 .bc_fed .fed_dashboard_breadcrumb_wrapper > p:empty {
 	display: none !important;
 	margin: 0 !important;
 	padding: 0 !important;
+}
+
+.bc_fed .fed_sidebar_brand_container p {
+	margin: 0 !important;
+	padding: 0 !important;
+	display: inline-flex !important;
+	align-items: center !important;
 }
 
 .bc_fed .fed_dashboard_breadcrumb_wrapper {
@@ -293,25 +306,12 @@ $logoHeight = ! empty( $uplOptions['settings']['fed_upl_website_logo_height'] ) 
 							</a>
 						<?php else : ?>
 							<div class="fed_sidebar_brand_icon w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm shadow-xs shrink-0 transition-colors"
-								style="width: 36px; height: 36px; min-width: 36px; max-width: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background-color: var(--fed-primary, #4F46E5); color: var(--fed-primary-font, #FFFFFF); margin: 0; padding: 0;">
-								<svg style="width: 20px; height: 20px; display: block; margin: auto;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-							</div>
-							<div class="fed_sidebar_brand_text overflow-hidden" style="min-width: 0; flex: 1 1 auto; overflow: hidden; display: flex; flex-direction: column; justify-content: center; text-align: left; margin: 0; padding: 0;">
-								<span class="fed_sidebar_brand_title font-bold text-sm tracking-tight block truncate" style="font-size: 14px; font-weight: 700; color: var(--fed-sidebar-text, #0F172A); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; line-height: 1.25; margin: 0; padding: 0; text-align: left;">
-									<?php echo esc_html( get_bloginfo( 'name' ) ?: 'Dashboard' ); ?>
-								</span>
-								<span class="fed_sidebar_brand_subtitle text-[10px] font-semibold block uppercase tracking-wider opacity-60" style="font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--fed-sidebar-text, #64748B); opacity: 0.6; display: block; line-height: 1.2; margin: 2px 0 0 0; padding: 0; text-align: left;">
-									<?php esc_html_e( 'Frontend Dashboard', 'frontend-dashboard' ); ?>
-								</span>
-							</div>
+								style="width: 36px; height: 36px; min-width: 36px; max-width: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background-color: var(--fed-primary, #4F46E5); color: var(--fed-primary-font, #FFFFFF); margin: 0; padding: 0;"><svg style="width: 20px; height: 20px; display: block; margin: auto;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg></div>
+							<div class="fed_sidebar_brand_text overflow-hidden" style="min-width: 0; flex: 1 1 auto; overflow: hidden; display: flex; flex-direction: column; justify-content: center; text-align: left; margin: 0 0 0 12px; padding: 0;"><span class="fed_sidebar_brand_title font-bold text-sm tracking-tight block truncate" style="font-size: 14px; font-weight: 700; color: var(--fed-sidebar-text, #0F172A); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; line-height: 1.25; margin: 0; padding: 0; text-align: left;"><?php echo esc_html( get_bloginfo( 'name' ) ?: 'Dashboard' ); ?></span><span class="fed_sidebar_brand_subtitle text-[10px] font-semibold block uppercase tracking-wider opacity-60" style="font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--fed-sidebar-text, #64748B); opacity: 0.6; display: block; line-height: 1.2; margin: 2px 0 0 0; padding: 0; text-align: left;"><?php esc_html_e( 'Frontend Dashboard', 'frontend-dashboard' ); ?></span></div>
 						<?php endif; ?>
 					</div>
 					<!-- Mobile Close (X) Button -->
-					<button type="button" 
-						class="lg:hidden fed_mobile_nav_close p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors focus:outline-none shrink-0 cursor-pointer" 
-						aria-label="<?php esc_attr_e( 'Close menu', 'frontend-dashboard' ); ?>">
-						<svg class="w-5 h-5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-					</button>
+					<button type="button" class="lg:hidden fed_mobile_nav_close p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors focus:outline-none shrink-0 cursor-pointer" aria-label="<?php esc_attr_e( 'Close menu', 'frontend-dashboard' ); ?>"><svg class="w-5 h-5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
 				</div>
 
 				<!-- Navigation Menu -->

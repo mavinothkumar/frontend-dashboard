@@ -65,7 +65,15 @@ class ShortcodeController {
 
 			// Strip unwanted <br> tags injected inside mobile nav buttons and SVG wrappers.
 			$content = preg_replace( '/(<button[^>]*class="[^"]*fed_mobile_nav_toggle[^"]*"[^>]*>)\s*<br\s*\/?>/i', '$1', $content );
+			$content = preg_replace( '/(<button[^>]*class="[^"]*fed_mobile_nav_close[^"]*"[^>]*>)\s*<br\s*\/?>/i', '$1', $content );
 			$content = preg_replace( '/<br\s*\/?>\s*(<\/button>)/i', '$1', $content );
+
+			// Strip unwanted <br> tags inside sidebar brand title and subtitle spans.
+			$content = preg_replace( '/(<span[^>]*class="[^"]*fed_sidebar_brand_[^"]*"[^>]*>)\s*<br\s*\/?>/i', '$1', $content );
+			$content = preg_replace( '/<br\s*\/?>\s*(<\/span>)/i', '$1', $content );
+
+			// Strip rogue <p> wrappers around the mobile close button.
+			$content = preg_replace( '/<p[^>]*>\s*(<!--.*?-->\s*)?(<button[^>]*class="[^"]*fed_mobile_nav_close[^"]*"[^>]*>.*?<\/button>)\s*<\/p>/is', '$2', $content );
 		}
 		return $content;
 	}
