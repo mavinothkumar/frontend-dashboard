@@ -211,37 +211,62 @@ $logoHeight = ! empty( $uplOptions['settings']['fed_upl_website_logo_height'] ) 
 	text-overflow: ellipsis !important;
 	display: block !important;
 }
+
+/* Mobile Header Alignment & wpautop Defense */
+.bc_fed .fed_mobile_header {
+	display: flex !important;
+	align-items: center !important;
+	justify-content: flex-start !important;
+	width: 100% !important;
+	box-sizing: border-box !important;
+}
+
+.bc_fed .fed_mobile_header > p,
+.bc_fed .fed_mobile_header > br,
+.bc_fed .fed_mobile_header p:empty,
+.bc_fed .fed_mobile_brand p,
+.bc_fed .fed_mobile_brand br,
+.bc_fed .fed_mobile_brand p:empty,
+.bc_fed .fed_mobile_nav_toggle br {
+	display: none !important;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+.bc_fed .fed_mobile_header .fed_mobile_brand {
+	margin-left: 0 !important;
+	margin-right: auto !important;
+	display: flex !important;
+	align-items: center !important;
+	gap: 12px !important;
+}
+
+.bc_fed .fed_mobile_header .fed_mobile_user_avatar {
+	margin-left: auto !important;
+	display: flex !important;
+	align-items: center !important;
+}
 </style>
 <div class="bc_fed fed_dashboard_container min-h-screen font-sans antialiased text-slate-800" style="background-color: var(--fed-body-bg, #F8FAFC); color: var(--fed-text-main, #0F172A);">
 	<?php echo fed_loader(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 	<?php do_action( 'fed_inside_dashboard_container_top' ); ?>
 
 	<!-- Mobile Top Navigation Bar (Hidden on >= 1024px) -->
-	<header class="lg:hidden fed_mobile_header sticky top-0 z-40 flex items-center justify-between px-4 py-3 border-b shadow-2xs"
-		style="background-color: var(--fed-sidebar-bg, #FFFFFF); border-color: var(--fed-border, #E2E8F0); text-align: left;">
-		<div class="fed_mobile_brand flex items-center gap-3 text-left" style="text-align: left; justify-content: flex-start;">
+	<header class="lg:hidden fed_mobile_header sticky top-0 z-40 flex items-center justify-start px-4 py-3 border-b shadow-2xs"
+		style="background-color: var(--fed-sidebar-bg, #FFFFFF); border-color: var(--fed-border, #E2E8F0); text-align: left; justify-content: flex-start;">
+		<div class="fed_mobile_brand flex items-center gap-3 text-left" style="text-align: left; justify-content: flex-start; margin-right: auto;">
 			<button type="button" 
 				class="fed_mobile_nav_toggle p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors focus:outline-none cursor-pointer"
-				aria-label="<?php esc_attr_e( 'Toggle navigation menu', 'frontend-dashboard' ); ?>">
-				<svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-			</button>
+				aria-label="<?php esc_attr_e( 'Toggle navigation menu', 'frontend-dashboard' ); ?>"><svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg></button>
 			<?php if ( $logoUrl ) : ?>
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="block py-1" style="text-align: left;">
 					<img src="<?php echo esc_url( $logoUrl ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" class="object-contain" style="<?php echo esc_attr( $logoWidth . ' ' . $logoHeight ); ?>" />
 				</a>
 			<?php else : ?>
-				<div class="flex items-center gap-2" style="text-align: left;">
-					<div class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs shadow-2xs shrink-0"
-						style="background-color: var(--fed-primary, #4F46E5); color: var(--fed-primary-font, #FFFFFF);">
-						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-					</div>
-					<span class="font-bold text-sm tracking-tight truncate max-w-[160px] sm:max-w-xs" style="color: var(--fed-sidebar-text, #0F172A); text-align: left;">
-						<?php echo esc_html( get_bloginfo( 'name' ) ?: 'Dashboard' ); ?>
-					</span>
-				</div>
+				<div class="flex items-center gap-2" style="text-align: left;"><div class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs shadow-2xs shrink-0" style="background-color: var(--fed-primary, #4F46E5); color: var(--fed-primary-font, #FFFFFF);"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg></div><span class="font-bold text-sm tracking-tight truncate max-w-[160px] sm:max-w-xs" style="color: var(--fed-sidebar-text, #0F172A); text-align: left;"><?php echo esc_html( get_bloginfo( 'name' ) ?: 'Dashboard' ); ?></span></div>
 			<?php endif; ?>
 		</div>
-		<div class="flex items-center gap-2 shrink-0">
+		<div class="fed_mobile_user_avatar flex items-center gap-2 shrink-0" style="margin-left: auto;">
 			<img class="w-8 h-8 rounded-full object-cover ring-2 ring-white shadow-2xs" 
 				src="<?php echo esc_url( get_avatar_url( $currentUser->ID ) ); ?>" 
 				alt="<?php echo esc_attr( $currentUser->display_name ); ?>">

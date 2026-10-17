@@ -146,6 +146,7 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 == Changelog ==
 
 = 3.0.16 (2026-10-16) =
+* Fix: Corrected mobile top navigation header alignment where the hamburger menu toggle and dashboard brand title were pushed into the center of the mobile screen due to WordPress `wpautop` injecting phantom paragraph tags into flex containers; enforced strict left-aligned flex containers, auto margins, and automatic tag pruning.
 * Fix: Corrected frontend login, logout, and registration notification modal layout, centering icon badges defensively and preventing external addon styles or theme flex-shrink rules from misaligning the icon to the left.
 * Enhancement: Modernized notification modal appearance with soft ambient icon halo rings, polished typography hierarchy, and an integrated progress bar track for automated redirects.
 * Enhancement: Centralized Payment Gateways & Invoices into GateFuz: Deprecated the legacy built-in Payments menu in Frontend Dashboard in favor of the dedicated GateFuz payment gateway engine. When GateFuz is active, legacy Payments submenus are suppressed and bookmarks to `?page=fed_payments` seamlessly redirect to GateFuz Invoices (`?page=gate-fuz-invoices`). All existing company billing profiles and invoice settings remain fully preserved.

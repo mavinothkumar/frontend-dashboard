@@ -46,7 +46,7 @@ class ShortcodeController {
 		add_filter( 'widget_text', 'do_shortcode' );
 
 		// Clean up wpautop rogue empty tags on pages containing Frontend Dashboard
-		add_filter( 'the_content', array( $this, 'clean_shortcode_autop' ), 99 );
+		add_filter( 'the_content', array( $this, 'clean_shortcode_autop' ), 999 );
 	}
 
 	/**
@@ -57,7 +57,15 @@ class ShortcodeController {
 	 */
 	public function clean_shortcode_autop( $content ) {
 		if ( is_string( $content ) && false !== strpos( $content, 'fed_dashboard_container' ) ) {
+			// Strip empty paragraphs and paragraphs containing only whitespace or breaks.
 			$content = preg_replace( '/<p[^>]*>\s*(?:<br\s*\/?>)?\s*<\/p>/i', '', $content );
+
+			// Strip rogue <p> tags wrapping direct block children inside header or brand containers.
+			$content = preg_replace( '/(<header[^>]*class="[^"]*fed_mobile_header[^"]*"[^>]*>)\s*<p[^>]*>\s*<\/p>/i', '$1', $content );
+
+			// Strip unwanted <br> tags injected inside mobile nav buttons and SVG wrappers.
+			$content = preg_replace( '/(<button[^>]*class="[^"]*fed_mobile_nav_toggle[^"]*"[^>]*>)\s*<br\s*\/?>/i', '$1', $content );
+			$content = preg_replace( '/<br\s*\/?>\s*(<\/button>)/i', '$1', $content );
 		}
 		return $content;
 	}
@@ -72,7 +80,8 @@ class ShortcodeController {
 		$this->templates->get_template_part( 'dashboard' );
 		$html = ob_get_clean();
 
-		return preg_replace( '/<p[^>]*>\s*(?:<br\s*\/?>)?\s*<\/p>/i', '', (string) $html );
+		$cleaned = preg_replace( '/<p[^>]*>\s*(?:<br\s*\/?>)?\s*<\/p>/i', '', (string) $html );
+		return preg_replace( '/(<header[^>]*class="[^"]*fed_mobile_header[^"]*"[^>]*>)\s*<p[^>]*>\s*<\/p>/i', '$1', $cleaned );
 	}
 
 	/**
