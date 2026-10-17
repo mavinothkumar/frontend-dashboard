@@ -26,7 +26,8 @@ $logoHeight = ! empty( $uplOptions['settings']['fed_upl_website_logo_height'] ) 
 ?>
 <style id="fed-mobile-nav-styles">
 @media (min-width: 1024px) {
-	.bc_fed .fed_mobile_header {
+	.bc_fed .fed_mobile_header,
+	.bc_fed header.fed_mobile_header {
 		display: none !important;
 	}
 	.bc_fed .fed_mobile_backdrop {
@@ -37,7 +38,7 @@ $logoHeight = ! empty( $uplOptions['settings']['fed_upl_website_logo_height'] ) 
 	.bc_fed .fed_mobile_header {
 		display: flex !important;
 		align-items: center !important;
-		justify-content: space-between !important;
+		justify-content: flex-start !important;
 		width: 100% !important;
 		box-sizing: border-box !important;
 	}
@@ -225,39 +226,48 @@ $logoHeight = ! empty( $uplOptions['settings']['fed_upl_website_logo_height'] ) 
 	display: block !important;
 }
 
-/* Mobile Header Alignment & wpautop Defense */
-.bc_fed .fed_mobile_header {
-	display: flex !important;
-	align-items: center !important;
-	justify-content: flex-start !important;
-	width: 100% !important;
-	box-sizing: border-box !important;
+/* Mobile Header Alignment & wpautop Defense (Strictly mobile viewports < 1024px) */
+@media (max-width: 1023px) {
+	.bc_fed .fed_mobile_header {
+		display: flex !important;
+		align-items: center !important;
+		justify-content: flex-start !important;
+		width: 100% !important;
+		box-sizing: border-box !important;
+	}
+
+	.bc_fed .fed_mobile_header > p,
+	.bc_fed .fed_mobile_header > br,
+	.bc_fed .fed_mobile_header p:empty,
+	.bc_fed .fed_mobile_brand p,
+	.bc_fed .fed_mobile_brand br,
+	.bc_fed .fed_mobile_brand p:empty,
+	.bc_fed .fed_mobile_nav_toggle br {
+		display: none !important;
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+
+	.bc_fed .fed_mobile_header .fed_mobile_brand {
+		margin-left: 0 !important;
+		margin-right: auto !important;
+		display: flex !important;
+		align-items: center !important;
+		gap: 12px !important;
+	}
+
+	.bc_fed .fed_mobile_header .fed_mobile_user_avatar {
+		margin-left: auto !important;
+		display: flex !important;
+		align-items: center !important;
+	}
 }
 
-.bc_fed .fed_mobile_header > p,
-.bc_fed .fed_mobile_header > br,
-.bc_fed .fed_mobile_header p:empty,
-.bc_fed .fed_mobile_brand p,
-.bc_fed .fed_mobile_brand br,
-.bc_fed .fed_mobile_brand p:empty,
-.bc_fed .fed_mobile_nav_toggle br {
-	display: none !important;
-	margin: 0 !important;
-	padding: 0 !important;
-}
-
-.bc_fed .fed_mobile_header .fed_mobile_brand {
-	margin-left: 0 !important;
-	margin-right: auto !important;
-	display: flex !important;
-	align-items: center !important;
-	gap: 12px !important;
-}
-
-.bc_fed .fed_mobile_header .fed_mobile_user_avatar {
-	margin-left: auto !important;
-	display: flex !important;
-	align-items: center !important;
+@media (min-width: 1024px) {
+	.bc_fed .fed_mobile_header,
+	.bc_fed header.fed_mobile_header {
+		display: none !important;
+	}
 }
 </style>
 <div class="bc_fed fed_dashboard_container min-h-screen font-sans antialiased text-slate-800" style="background-color: var(--fed-body-bg, #F8FAFC); color: var(--fed-text-main, #0F172A);">
