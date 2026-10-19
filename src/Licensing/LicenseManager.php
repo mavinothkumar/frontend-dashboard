@@ -50,6 +50,10 @@ class LicenseManager {
 
 		// Register Dynamic Submenu
 		LicenseAdminController::register_menu();
+
+		// Automatic Plugin Updates & Info for Active Pro Addons
+		add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'filter_update_plugins' ) );
+		add_filter( 'plugins_api', array( $this, 'filter_plugins_api' ), 20, 3 );
 	}
 
 	/**
@@ -288,5 +292,80 @@ class LicenseManager {
 				'message' => __( 'Plugin update check completed.', 'frontend-dashboard' ),
 			)
 		);
+	}
+
+	/**
+	 * Check for updates for active Pro extensions against Buffercode API.
+	 *
+	 * @param object $transient
+	 * @return object
+	 */
+	public function filter_update_plugins( $transient ) {
+		if ( empty( $transient->checked ) || ! is_object( $transient ) ) {
+			return $transient;
+		}
+
+		$addons   = LicenseRegistry::get_registered_addons();
+		$licenses = $this->get_licenses();
+
+		foreach ( $addons as $slug => $addon ) {
+			if ( empty( $licenses[ $slug ]['key'] ) || 'active' !== ( ! empty( $licenses[ $slug ]['status'] ) ? $licenses[ $slug ]['status'] : '' ) ) {
+				continue;
+			}
+
+			$key             = $licenses[ $slug ]['key'];
+			$current_version = ! empty( $addon['version'] ) ? $addon['version'] : '1.0.0';
+			$basename        = ! empty( $addon['basename'] ) ? $addon['basename'] : '';
+
+			if ( empty( $basename ) ) {
+				continue;
+			}
+
+			$response = LicenseApiClient::check_version( $key, $slug, $current_version );
+
+			if ( ! empty( $response['new_version'] ) && version_compare( $current_version, $response['new_version'], '<' ) ) {
+				$obj              = new \stdClass();
+				$obj->slug        = $slug;
+				$obj->plugin      = $basename;
+				$obj->new_version = $response['new_version'];
+				$obj->url         = ! empty( $response['url'] ) ? $response['url'] : $addon['doc_url'];
+				$obj->package     = ! empty( $response['package'] ) ? $response['package'] : '';
+				if ( ! empty( $response['tested'] ) ) {
+					$obj->tested = $response['tested'];
+				}
+				$transient->response[ $basename ] = $obj;
+			}
+		}
+
+		return $transient;
+	}
+
+	/**
+	 * Provide plugin information popup data for active Pro extensions.
+	 *
+	 * @param false|object|array $result
+	 * @param string             $action
+	 * @param object             $args
+	 * @return false|object|array
+	 */
+	public function filter_plugins_api( $result, $action, $args ) {
+		if ( ( 'plugin_information' === $action || 'query_plugins' === $action ) && ! empty( $args->slug ) ) {
+			$slug  = sanitize_key( $args->slug );
+			$addon = LicenseRegistry::get_addon( $slug );
+
+			if ( $addon ) {
+				$license = $this->get_license( $slug );
+				$key     = ! empty( $license['key'] ) ? $license['key'] : '';
+
+				if ( ! empty( $key ) ) {
+					$info = LicenseApiClient::get_plugin_info( $key, $slug );
+					if ( ! empty( $info['success'] ) && ! empty( $info['data'] ) && is_array( $info['data'] ) ) {
+						return (object) $info['data'];
+					}
+				}
+			}
+		}
+
+		return $result;
 	}
 }
