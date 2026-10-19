@@ -1114,6 +1114,7 @@ class FedMediaModal {
       const card = document.createElement('div');
       const isSelected = this.selectedItems.has(item.id);
       const isImage = Boolean(item.is_image) || (item.mime && item.mime.toLowerCase().startsWith('image/'));
+      const hasPreview = Boolean(item.has_preview) || (item.thumbnail && item.thumbnail !== item.url && item.thumbnail !== item.icon);
 
       card.className = `fed-media-card group relative aspect-square rounded-2xl overflow-hidden border-2 cursor-pointer transition-all duration-150 select-none ${
         isSelected 
@@ -1122,9 +1123,15 @@ class FedMediaModal {
       }`;
 
       let mediaPreviewHtml = '';
-      if (isImage) {
+      if (isImage || hasPreview) {
+        const previewUrl = item.thumbnail || item.medium || item.url;
+        const fileBadge = (!isImage && item.ext) 
+          ? `<span class="absolute top-2 left-2 z-10 px-1.5 py-0.5 rounded text-[8px] font-extrabold uppercase bg-red-600/90 text-white shadow-xs tracking-wider">${escapeHtml(item.ext)}</span>`
+          : '';
+
         mediaPreviewHtml = `
-          <img src="${item.thumbnail || item.url}" alt="${escapeAttr(item.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" loading="lazy" />
+          ${fileBadge}
+          <img src="${previewUrl}" alt="${escapeAttr(item.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" loading="lazy" />
           <div class="absolute inset-0 bg-gradient-to-t from-slate-900/75 via-slate-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-2 text-white">
             <span class="text-[10px] font-bold truncate leading-tight">${escapeHtml(item.title || item.filename)}</span>
             <span class="text-[9px] text-slate-300">${item.filesize || ''}</span>
@@ -1241,8 +1248,9 @@ class FedMediaModal {
         const thumb = document.createElement('div');
         thumb.className = 'w-9 h-9 rounded-lg overflow-hidden border border-slate-200 bg-slate-100 shrink-0';
         const isImage = Boolean(item.is_image) || (item.mime && item.mime.startsWith('image/'));
-        if (isImage) {
-          thumb.innerHTML = `<img src="${item.thumbnail || item.url}" class="w-full h-full object-cover" />`;
+        const hasPreview = Boolean(item.has_preview) || (item.thumbnail && item.thumbnail !== item.url && item.thumbnail !== item.icon);
+        if (isImage || hasPreview) {
+          thumb.innerHTML = `<img src="${item.thumbnail || item.medium || item.url}" class="w-full h-full object-cover" />`;
         } else {
           const fileExt = item.ext || 'FILE';
           thumb.innerHTML = `<div class="w-full h-full flex items-center justify-center font-bold text-[9px] text-slate-600">${fileExt}</div>`;
@@ -1261,12 +1269,13 @@ class FedMediaModal {
     if (!item) return;
 
     const isImage = Boolean(item.is_image) || (item.mime && item.mime.startsWith('image/'));
+    const hasPreview = Boolean(item.has_preview) || (item.thumbnail && item.thumbnail !== item.url && item.thumbnail !== item.icon);
     const fileExt = item.ext || (item.filename ? item.filename.split('.').pop().toUpperCase() : 'FILE');
 
     // Thumbnail / Icon
     const thumbWrap = el.querySelector('.fed-single-thumb-wrap');
-    if (isImage) {
-      thumbWrap.innerHTML = `<img src="${item.thumbnail || item.url}" alt="${escapeAttr(item.title)}" class="w-full h-full object-cover" />`;
+    if (isImage || hasPreview) {
+      thumbWrap.innerHTML = `<img src="${item.medium || item.thumbnail || item.url}" alt="${escapeAttr(item.title)}" class="w-full h-full object-cover" />`;
     } else {
       const iconConfig = this.getFileIconConfig(fileExt, item.mime);
       thumbWrap.innerHTML = `<div class="w-full h-full ${iconConfig.bgClass} ${iconConfig.textClass} flex items-center justify-center font-extrabold text-xs uppercase">${fileExt}</div>`;

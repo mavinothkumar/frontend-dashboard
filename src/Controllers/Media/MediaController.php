@@ -222,6 +222,55 @@ class MediaController {
 		$mime = ! empty( $mime ) ? $mime : '';
 		$ext  = $file_path ? pathinfo( $file_path, PATHINFO_EXTENSION ) : '';
 
+		// Resolve generated image previews for non-image attachments (e.g., PDF previews, documents).
+		if ( empty( $thumb_url ) ) {
+			if ( ! empty( $meta['sizes'] ) && is_array( $meta['sizes'] ) ) {
+				$base_url = str_replace( wp_basename( $full_url ), '', $full_url );
+				if ( ! empty( $meta['sizes']['thumbnail']['file'] ) ) {
+					$thumb_url = esc_url_raw( $base_url . $meta['sizes']['thumbnail']['file'] );
+				} elseif ( ! empty( $meta['sizes']['medium']['file'] ) ) {
+					$thumb_url = esc_url_raw( $base_url . $meta['sizes']['medium']['file'] );
+				} elseif ( ! empty( $meta['sizes']['full']['file'] ) ) {
+					$thumb_url = esc_url_raw( $base_url . $meta['sizes']['full']['file'] );
+				} else {
+					$first_size = reset( $meta['sizes'] );
+					if ( ! empty( $first_size['file'] ) ) {
+						$thumb_url = esc_url_raw( $base_url . $first_size['file'] );
+					}
+				}
+			}
+
+			if ( empty( $thumb_url ) && function_exists( 'wp_prepare_attachment_for_js' ) ) {
+				$js_data = wp_prepare_attachment_for_js( $id );
+				if ( ! empty( $js_data['sizes']['thumbnail']['url'] ) ) {
+					$thumb_url = $js_data['sizes']['thumbnail']['url'];
+				} elseif ( ! empty( $js_data['sizes']['medium']['url'] ) ) {
+					$thumb_url = $js_data['sizes']['medium']['url'];
+				} elseif ( ! empty( $js_data['sizes']['full']['url'] ) ) {
+					$thumb_url = $js_data['sizes']['full']['url'];
+				} elseif ( ! empty( $js_data['image']['src'] ) && ( empty( $js_data['icon'] ) || $js_data['image']['src'] !== $js_data['icon'] ) ) {
+					$thumb_url = $js_data['image']['src'];
+				}
+			}
+
+			if ( empty( $thumb_url ) ) {
+				$thumb_id = get_post_thumbnail_id( $id );
+				if ( $thumb_id ) {
+					$thumb_url = wp_get_attachment_image_url( $thumb_id, 'thumbnail' );
+				}
+			}
+		}
+
+		if ( empty( $med_url ) ) {
+			if ( ! empty( $meta['sizes']['medium']['file'] ) ) {
+				$base_url = str_replace( wp_basename( $full_url ), '', $full_url );
+				$med_url  = esc_url_raw( $base_url . $meta['sizes']['medium']['file'] );
+			} elseif ( ! empty( $thumb_url ) ) {
+				$med_url = $thumb_url;
+			}
+		}
+
+		$has_preview    = ! empty( $thumb_url );
 		$fallback_image = $is_image ? $full_url : '';
 		$thumbnail      = ! empty( $thumb_url ) ? $thumb_url : $fallback_image;
 		$medium         = ! empty( $med_url ) ? $med_url : $fallback_image;
@@ -253,6 +302,7 @@ class MediaController {
 			'large'       => $large,
 			'full'        => $full,
 			'is_image'    => (bool) $is_image,
+			'has_preview' => (bool) $has_preview,
 			'icon'        => $icon,
 			'mime'        => $mime,
 			'ext'         => strtoupper( $ext ),
