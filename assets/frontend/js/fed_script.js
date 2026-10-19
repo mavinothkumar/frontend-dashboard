@@ -721,7 +721,17 @@ jQuery(document).ready(function ($) {
             type: 'success',
             text: '',
             confirmButtonColor: '#0AAAAA',
-          })
+          }).then(function () {
+            var redirect = (results.data && (results.data.redirect_url || results.data.redirect)) ? (results.data.redirect_url || results.data.redirect) : '';
+            if (redirect) {
+              window.location.href = redirect;
+            }
+          }, function () {
+            var redirect = (results.data && (results.data.redirect_url || results.data.redirect)) ? (results.data.redirect_url || results.data.redirect) : '';
+            if (redirect) {
+              window.location.href = redirect;
+            }
+          });
         } else if (results.success == false) {
           var error = ''
           if (results.data.message instanceof Array) {

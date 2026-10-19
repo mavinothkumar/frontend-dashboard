@@ -243,8 +243,17 @@ function fed_process_dashboard_add_new_post( $post ) {
 			}
 		}
 
+		$redirect_url = ! empty( $_POST['fed_redirect_url'] )
+			? esc_url_raw( wp_unslash( $_POST['fed_redirect_url'] ) )
+			: ( wp_get_referer() ? remove_query_arg( array( 'post_status', 'post_id' ), wp_get_referer() ) : '' );
+
 		wp_send_json_success(
-			array( 'message' => $post['post_title'] . __( ' Successfully Saved', 'frontend-dashboard' ) )
+			array(
+				'message'      => $post['post_title'] . __( ' Successfully Saved', 'frontend-dashboard' ),
+				'redirect_url' => $redirect_url,
+				'redirect'     => $redirect_url,
+				'id'           => $success,
+			)
 		);
 	}
 	$error = new WP_Error(
