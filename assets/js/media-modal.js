@@ -61,6 +61,9 @@ class FedMediaModal {
   }
 
   getAjaxUrl() {
+    if (typeof frontend_dashboard !== 'undefined' && frontend_dashboard.media && frontend_dashboard.media.ajax_url) {
+      return frontend_dashboard.media.ajax_url;
+    }
     if (typeof frontend_dashboard !== 'undefined' && frontend_dashboard.fed_admin_form_post) {
       return frontend_dashboard.fed_admin_form_post.split('?')[0];
     }
@@ -68,6 +71,9 @@ class FedMediaModal {
   }
 
   getNonce() {
+    if (typeof frontend_dashboard !== 'undefined' && frontend_dashboard.media && frontend_dashboard.media.nonce) {
+      return frontend_dashboard.media.nonce;
+    }
     if (typeof frontend_dashboard !== 'undefined' && frontend_dashboard.fed_admin_form_post) {
       const match = frontend_dashboard.fed_admin_form_post.match(/fed_nonce=([^&]+)/);
       if (match) return match[1];

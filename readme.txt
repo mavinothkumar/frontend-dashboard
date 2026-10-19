@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.0.16
+Stable tag: 3.0.17
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -145,6 +145,17 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 == Changelog ==
 
+= 3.0.17 (2026-10-19) =
+* Fix: Resolved PHP warning `Undefined variable $hasFullQuery` in `DashboardRoutes.php` by properly defining `$has_full_query` for menu request validation and applying defensive parameter sanitization across fallback dashboard routes.
+* Fix: Resolved PDF Embedder compatibility regression where inserting a PDF via Frontend Dashboard custom media picker was inserting a plain file link instead of the `[pdf-embedder url="..."]` shortcode. Ensured `window.frontend_dashboard` is localized on the enqueued Vite bundle, synchronized media configuration and nonces across Classic Visual (TinyMCE) and Code (Quicktags/Textarea) modes, added a fail-safe server-side shortcode fallback when PDF Embedder is active, and automatically normalized raw viewer wrapper HTML back to shortcode syntax to prevent attribute stripping on save.
+* Enhancement: Added `fed_is_system_menu` filter and locked system menu protection in Dashboard Menu manager (`?page=fed_dashboard_menu`), ensuring extension modules like Frontend Dashboard Pay Per Post ("My Submissions") and Frontend Dashboard Membership ("My Membership") are locked against accidental deletion while remaining fully customizable for title/label, icon, drag-and-drop order sorting, and role permissions.
+* Fix: Resolved menu label spacing in Dashboard Menu manager, ensuring menu names with spaces (e.g. "My Membership", "Custom Menus", "My Submissions") preserve user-entered spacing without being trimmed or combined into single words.
+* Fix: Prevented modal closing (Close 'X' button, Cancel button, backdrop click, Escape key) while save or update is in progress, adding in-modal spinner and loading state.
+* Enhancement: Persisted success toast notifications across page reloads via session storage so confirmation messages display reliably after updating menu details.
+* Enhancement: Added fallback support for `menu_tab` parameter in dashboard URL router (`DashboardRoutes.php`).
+* Fix: Enhanced `PaymentGatewayManager::getEnabledGateways()` to verify gateway configuration state (`isConfigured()`) alongside enabled status (`isEnabled()`), ensuring unconfigured or inactive payment gateways are excluded from frontend checkout screens.
+* Compatibility: Fully compatible with GateFuz v1.1.3 and Frontend Dashboard Pay Per Post v3.0.0.
+
 = 3.0.16 (2026-10-17) =
 * Fix: Corrected mobile top navigation header alignment where the hamburger menu toggle and dashboard brand title were pushed into the center of the mobile screen due to WordPress `wpautop` injecting phantom paragraph tags into flex containers; enforced strict left-aligned flex containers, auto margins, and automatic tag pruning.
 * Fix: Resolved vertical spacing distortion and gap in the mobile drawer brand header between the Dashboard title and subtitle caused by rogue `<br>` and `<p>` tags injected by WordPress `wpautop`; enforced rigid text resets, whitespace pruning, and scoped paragraph margin resets.
@@ -248,6 +259,9 @@ More Changelogs:
 https://faq.frontenddashboard.com/changelog/overview/
 
 == Upgrade Notice ==
+
+= 3.0.17 =
+Resolves undefined route query warnings in DashboardRoutes, restores PDF Embedder shortcode insertion compatibility from the custom media picker across all editor modes, and ensures unconfigured or inactive payment gateways are excluded from frontend checkout screens. Fully compatible with GateFuz v1.1.3 and Frontend Dashboard Pay Per Post v3.0.0.
 
 = 3.0.16 =
 Fixes frontend authentication notification modal UI and centering, enhances modal progress track styling, and centralizes payment gateways, invoices, and billing profiles into the dedicated GateFuz engine while deprecating the legacy FED Payments menu.

@@ -331,13 +331,21 @@ function fed_get_dashboard_menu_items() {
 			<?php
 			if ( ! empty( $menus ) ) {
 				foreach ( $menus as $menu ) {
-					$menu_id           = (int) $menu['id'];
-					$menu_name         = esc_attr( $menu['menu'] );
-					$menu_slug         = esc_attr( $menu['menu_slug'] );
-					$menu_icon         = ! empty( $menu['menu_image_id'] ) ? esc_attr( fed_normalize_icon_class( $menu['menu_image_id'] ) ) : 'fas fa-link';
-					$menu_order        = (int) $menu['menu_order'];
-					$is_extra          = ( isset( $menu['extra'] ) && 'no' === $menu['extra'] ) ? 'no' : 'yes';
-					$is_system_core    = ( 'no' === $is_extra || in_array( $menu_slug, array( 'profile', 'logout', 'post' ), true ) );
+					$menu_id      = (int) $menu['id'];
+					$menu_name    = ! empty( $menu['menu'] ) ? esc_attr( $menu['menu'] ) : ( ! empty( $menu['menu_name'] ) ? esc_attr( $menu['menu_name'] ) : '' );
+					$menu_slug    = esc_attr( $menu['menu_slug'] );
+					$menu_icon    = ! empty( $menu['menu_image_id'] ) ? esc_attr( fed_normalize_icon_class( $menu['menu_image_id'] ) ) : 'fas fa-link';
+					$menu_order   = (int) $menu['menu_order'];
+					$is_extra     = ( isset( $menu['extra'] ) && 'no' === $menu['extra'] ) ? 'no' : 'yes';
+					$locked_slugs = array( 'profile', 'logout', 'post' );
+					if ( defined( 'FED_MEMBERSHIPS_VERSION' ) || defined( 'FED_MEMBERSHIP_VERSION' ) ) {
+						$locked_slugs[] = 'my-membership';
+					}
+					if ( defined( 'FED_PAY_PER_POST_VERSION' ) ) {
+						$locked_slugs[] = 'my-submissions';
+					}
+					$is_system_core    = ( 'no' === $is_extra || in_array( $menu_slug, $locked_slugs, true ) );
+					$is_system_core    = (bool) apply_filters( 'fed_is_system_menu', $is_system_core, $menu, $menu_slug );
 					$show_user_profile = isset( $menu['show_user_profile'] ) ? $menu['show_user_profile'] : 'Enable';
 					$raw_roles         = isset( $menu['user_role'] ) ? $menu['user_role'] : '';
 					$menu_key          = isset( $menu['menu_key'] ) ? $menu['menu_key'] : '';
@@ -363,7 +371,7 @@ function fed_get_dashboard_menu_items() {
 					?>
 					<div class="fed-menu-card bg-white rounded-xl py-3.5 px-4 sm:px-6 border border-slate-200/90 shadow-2xs hover:shadow-xs hover:border-slate-300 transition-all flex flex-col xl:flex-row xl:items-center justify-between gap-4 group cursor-default"
 						data-id="<?php echo esc_attr( $menu_id ); ?>"
-						data-name="<?php echo esc_attr( $menu['menu'] ); ?>"
+						data-name="<?php echo esc_attr( $menu_name ); ?>"
 						data-slug="<?php echo esc_attr( $menu_slug ); ?>"
 						data-icon="<?php echo esc_attr( $menu['menu_image_id'] ); ?>"
 						data-order="<?php echo esc_attr( $menu_order ); ?>"
@@ -388,7 +396,7 @@ function fed_get_dashboard_menu_items() {
 							<!-- Title & Meta Badges (Clean non-breaking sequence) -->
 							<div class="fed-card-details flex flex-wrap items-center gap-2.5 min-w-0 flex-1">
 								<span class="fed-menu-title text-sm font-bold text-slate-900 truncate mr-1">
-									<?php echo esc_html( $menu['menu'] ); ?>
+									<?php echo esc_html( $menu_name ); ?>
 								</span>
 
 								<!-- Slug Badge -->
@@ -799,9 +807,21 @@ function fed_get_dashboard_menu_items() {
 		var ajaxUrl = '<?php echo esc_url( $ajax_url ); ?>';
 		var nonce = '<?php echo esc_attr( $nonce ); ?>';
 		var totalRoles = <?php echo (int) $total_roles_count; ?>;
+		var isSavingMenu = false;
 
 		// Delete Modal state
 		var itemToDelete = null;
+
+		// Persisted Toast Notification (survives page reloads)
+		try {
+			var persistedToast = sessionStorage.getItem('fed_menu_success_toast');
+			if (persistedToast) {
+				sessionStorage.removeItem('fed_menu_success_toast');
+				setTimeout(function() {
+					showToast(persistedToast, false);
+				}, 150);
+			}
+		} catch (e) {}
 
 		// Helper: Toast Notification
 		function showToast(message, isError) {
@@ -1020,11 +1040,16 @@ function fed_get_dashboard_menu_items() {
 
 		// 3. Open Modal for Add
 		function openAddModal() {
+			isSavingMenu = false;
+			$('#fed_modal_close_btn, #fed_modal_cancel_btn').prop('disabled', false).removeClass('opacity-40 cursor-not-allowed pointer-events-none');
+			var $submitBtn = $('#fed_modal_submit_btn');
+			$submitBtn.prop('disabled', false).removeClass('opacity-75 opacity-80 cursor-not-allowed pointer-events-none bg-emerald-600').addClass('fed-btn-primary');
+
 			$('#fed_modal_error_box').addClass('hidden');
 			$('#fed_modal_title').text('Add New Dashboard Menu');
 			$('#fed_modal_subtitle').text('Configure title, icon, role access, and target links.');
 			$('#fed_modal_icon_box').html('<i class="fas fa-plus text-xs" style="color:#ffffff !important;"></i>');
-			$('#fed_modal_submit_text').text('Add Menu');
+			$submitBtn.html('<i class="fas fa-plus text-xs" style="color:#ffffff !important;"></i> <span id="fed_modal_submit_text" style="color:#ffffff !important;">Add Menu</span>');
 
 			$('#fed_form_menu_id').val('');
 			$('#fed_form_menu_name').val('');
@@ -1065,6 +1090,11 @@ function fed_get_dashboard_menu_items() {
 		// 4. Open Modal for Edit
 		$sortableList.on('click', '.fed-btn-edit', function(e) {
 			e.preventDefault();
+			isSavingMenu = false;
+			$('#fed_modal_close_btn, #fed_modal_cancel_btn').prop('disabled', false).removeClass('opacity-40 cursor-not-allowed pointer-events-none');
+			var $submitBtn = $('#fed_modal_submit_btn');
+			$submitBtn.prop('disabled', false).removeClass('opacity-75 opacity-80 cursor-not-allowed pointer-events-none bg-emerald-600').addClass('fed-btn-primary');
+
 			$('#fed_modal_error_box').addClass('hidden');
 			var $card = $(this).closest('.fed-menu-card');
 			var id = $card.data('id');
@@ -1081,7 +1111,7 @@ function fed_get_dashboard_menu_items() {
 			$('#fed_modal_title').text('Edit Menu: ' + name);
 			$('#fed_modal_subtitle').text('Update navigation attributes, permissions, and target link.');
 			$('#fed_modal_icon_box').html('<i class="fas fa-edit text-xs" style="color:#ffffff !important;"></i>');
-			$('#fed_modal_submit_text').text('Update Menu');
+			$submitBtn.html('<i class="fas fa-save text-xs" style="color:#ffffff !important;"></i> <span id="fed_modal_submit_text" style="color:#ffffff !important;">Update Menu</span>');
 
 			$('#fed_form_menu_id').val(id);
 			$('#fed_form_menu_name').val(name);
@@ -1206,6 +1236,9 @@ function fed_get_dashboard_menu_items() {
 
 		// Close Menu Modal
 		function closeMenuModal() {
+			if (isSavingMenu) {
+				return;
+			}
 			$menuModal.find('.modal-content-box').removeClass('scale-100 opacity-100').addClass('scale-95 opacity-0');
 			setTimeout(function() {
 				$menuModal.addClass('hidden');
@@ -1215,7 +1248,31 @@ function fed_get_dashboard_menu_items() {
 
 		$('#fed_modal_close_btn, #fed_modal_cancel_btn').on('click', function(e) {
 			e.preventDefault();
+			if (isSavingMenu) {
+				return;
+			}
 			closeMenuModal();
+		});
+
+		// Prevent backdrop click close while saving
+		$menuModal.on('click', function(e) {
+			if ($(e.target).is($menuModal)) {
+				if (isSavingMenu) {
+					return;
+				}
+				closeMenuModal();
+			}
+		});
+
+		// Prevent Escape key close while saving
+		$(document).on('keydown', function(e) {
+			if (e.key === 'Escape' && !$menuModal.hasClass('hidden')) {
+				if (isSavingMenu) {
+					e.preventDefault();
+					return;
+				}
+				closeMenuModal();
+			}
 		});
 
 		// Auto slugify name when creating new menu
@@ -1240,37 +1297,6 @@ function fed_get_dashboard_menu_items() {
 			});
 		});
 
-		// Role Helper Functions
-		function updateRolesCounter() {
-			var total = $('.fed-role-checkbox').length;
-			var checked = $('.fed-role-checkbox:checked').length;
-			$('#fed_role_selected_count').text(checked + ' / ' + total);
-		}
-
-		function setRoleMode(mode) {
-			if (mode === 'all') {
-				$('#fed_role_mode_all_btn').addClass('bg-white text-indigo-700 shadow-2xs').removeClass('text-slate-600');
-				$('#fed_role_mode_specific_btn').removeClass('bg-white text-indigo-700 shadow-2xs').addClass('text-slate-600');
-				$('#fed_specific_roles_wrapper').addClass('hidden');
-				$('.fed-role-checkbox').prop('checked', true);
-			} else {
-				$('#fed_role_mode_specific_btn').addClass('bg-white text-indigo-700 shadow-2xs').removeClass('text-slate-600');
-				$('#fed_role_mode_all_btn').removeClass('bg-white text-indigo-700 shadow-2xs').addClass('text-slate-600');
-				$('#fed_specific_roles_wrapper').removeClass('hidden');
-			}
-			updateRolesCounter();
-		}
-
-		$('#fed_role_mode_all_btn').on('click', function(e) {
-			e.preventDefault();
-			setRoleMode('all');
-		});
-
-		$('#fed_role_mode_specific_btn').on('click', function(e) {
-			e.preventDefault();
-			setRoleMode('specific');
-		});
-
 		// Role Selection Quick Actions
 		$('#fed_roles_select_all').on('click', function(e) {
 			e.preventDefault();
@@ -1291,7 +1317,12 @@ function fed_get_dashboard_menu_items() {
 		// 5. Submit Modal Form (AJAX Save / Update)
 		$('#fed_modal_menu_form').on('submit', function(e) {
 			e.preventDefault();
+			if (isSavingMenu) {
+				return;
+			}
+
 			var $form = $(this);
+			var isEdit = !!$('#fed_form_menu_id').val();
 			var menuName = $('#fed_form_menu_name').val().trim();
 			var menuSlug = $('#fed_form_menu_slug').val().trim();
 			var showProfile = $('#fed_form_show_user_profile').is(':checked') ? 'Enable' : 'Disable';
@@ -1326,11 +1357,13 @@ function fed_get_dashboard_menu_items() {
 				serializedData += '&fed_menu_key=';
 			}
 
-			var $submitBtn = $('#fed_modal_submit_btn');
-			$submitBtn.prop('disabled', true).addClass('opacity-75');
+			// Lock modal actions during save/update
+			isSavingMenu = true;
+			$('#fed_modal_close_btn, #fed_modal_cancel_btn').prop('disabled', true).addClass('opacity-40 cursor-not-allowed pointer-events-none');
 
-			// Show CSS loader
-			$('.preview-area').removeClass('hide');
+			var $submitBtn = $('#fed_modal_submit_btn');
+			$submitBtn.prop('disabled', true).addClass('opacity-80 cursor-not-allowed pointer-events-none');
+			$submitBtn.html('<i class="fas fa-spinner fa-spin text-xs" style="color: #ffffff !important;"></i> <span style="color: #ffffff !important;">' + (isEdit ? 'Updating Menu...' : 'Saving Menu...') + '</span>');
 
 			$.ajax({
 				url: ajaxUrl + '?action=fed_admin_setting_form_dashboard_menu',
@@ -1341,16 +1374,27 @@ function fed_get_dashboard_menu_items() {
 				},
 				success: function(response) {
 					if (response && response.success) {
-						// On success: close modal, show toast, and keep CSS loader active until page finishes reloading
-						closeMenuModal();
-						showToast((response.data && response.data.message) || 'Dashboard menu saved successfully.', false);
+						var successMsg = (response.data && response.data.message) || (isEdit ? 'Menu updated successfully.' : 'Menu added successfully.');
+						// Visual success feedback on submit button inside modal
+						$submitBtn.removeClass('fed-btn-primary').addClass('bg-emerald-600').html('<i class="fas fa-check text-xs" style="color: #ffffff !important;"></i> <span style="color: #ffffff !important;">Saved!</span>');
+						// Persist toast to display once after window reload
+						try {
+							sessionStorage.setItem('fed_menu_success_toast', successMsg);
+						} catch (e) {}
+
 						setTimeout(function() {
-							window.location.reload();
-						}, 600);
+							isSavingMenu = false;
+							closeMenuModal();
+							setTimeout(function() {
+								window.location.reload();
+							}, 300);
+						}, 700);
 					} else {
-						// On error: hide loader, re-enable button, display inline error banner in modal and show toast
-						$('.preview-area').addClass('hide');
-						$submitBtn.prop('disabled', false).removeClass('opacity-75');
+						// On error: unlock modal, restore buttons, display error
+						isSavingMenu = false;
+						$('#fed_modal_close_btn, #fed_modal_cancel_btn').prop('disabled', false).removeClass('opacity-40 cursor-not-allowed pointer-events-none');
+						$submitBtn.prop('disabled', false).removeClass('opacity-80 cursor-not-allowed pointer-events-none bg-emerald-600').addClass('fed-btn-primary');
+						$submitBtn.html('<i class="fas fa-save text-xs" style="color: #ffffff !important;"></i> <span id="fed_modal_submit_text" style="color: #ffffff !important;">' + (isEdit ? 'Update Menu' : 'Add Menu') + '</span>');
 						var errMsg = (response && response.data && response.data.message) || 'Failed to save menu.';
 						$('#fed_modal_error_msg').text(errMsg);
 						$('#fed_modal_error_box').removeClass('hidden');
@@ -1358,8 +1402,10 @@ function fed_get_dashboard_menu_items() {
 					}
 				},
 				error: function() {
-					$('.preview-area').addClass('hide');
-					$submitBtn.prop('disabled', false).removeClass('opacity-75');
+					isSavingMenu = false;
+					$('#fed_modal_close_btn, #fed_modal_cancel_btn').prop('disabled', false).removeClass('opacity-40 cursor-not-allowed pointer-events-none');
+					$submitBtn.prop('disabled', false).removeClass('opacity-80 cursor-not-allowed pointer-events-none bg-emerald-600').addClass('fed-btn-primary');
+					$submitBtn.html('<i class="fas fa-save text-xs" style="color: #ffffff !important;"></i> <span id="fed_modal_submit_text" style="color: #ffffff !important;">' + (isEdit ? 'Update Menu' : 'Add Menu') + '</span>');
 					var errMsg = 'An unexpected network or server error occurred.';
 					$('#fed_modal_error_msg').text(errMsg);
 					$('#fed_modal_error_box').removeClass('hidden');
@@ -1443,11 +1489,6 @@ function fed_get_dashboard_menu_items() {
 
 		// 7. Searchable Icon Picker Modal integration
 		$('#fed_form_menu_icon').on('input change', function() {
-			var val = $(this).val().trim() || 'fas fa-link';
-			$('#fed_selected_icon_preview').html('<i class="' + val + '"></i>');
-		});
-
-		$('#fed_form_menu_icon').on('input', function() {
 			var val = $(this).val().trim() || 'fas fa-link';
 			$('#fed_selected_icon_preview').html('<i class="' + val + '"></i>');
 		});

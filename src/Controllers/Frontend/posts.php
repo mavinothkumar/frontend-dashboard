@@ -160,8 +160,17 @@ function fed_process_dashboard_add_new_post( $post ) {
 		}
 
 		$raw_content = isset( $post['post_content'] ) ? wp_unslash( $post['post_content'] ) : '';
-		if ( is_string( $raw_content ) && '' !== $raw_content && function_exists( 'fed_clean_html_tag_attributes' ) ) {
-			$raw_content = fed_clean_html_tag_attributes( $raw_content );
+		if ( is_string( $raw_content ) && '' !== $raw_content ) {
+			// Normalize any raw PDF Embedder viewer wrappers into clean shortcodes so attributes are not stripped by wp_kses_post.
+			$raw_content = preg_replace(
+				'/<div\s+class="wp-block-pdfemb-pdf-embedder-viewer"[^>]*>\s*<a\s+class="pdfemb-viewer"\s+href="([^"]+)"[^>]*>.*?<\/a>\s*<\/div>/is',
+				'[pdf-embedder url="$1"]',
+				$raw_content
+			);
+
+			if ( function_exists( 'fed_clean_html_tag_attributes' ) ) {
+				$raw_content = fed_clean_html_tag_attributes( $raw_content );
+			}
 		}
 
 		$default = array(
@@ -301,6 +310,8 @@ function fed_display_dashboard_edit_post_by_id( $post ) {
 		true,
 		false
 	);
+
+	$html .= '<input type="hidden" name="fed_nonce" value="' . esc_attr( wp_create_nonce( 'fed_nonce' ) ) . '">';
 
 	$html .= fed_input_box( 'ID', array( 'value' => (int) $post->ID ), 'hidden' );
 

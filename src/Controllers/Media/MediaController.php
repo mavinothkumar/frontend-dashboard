@@ -432,6 +432,23 @@ class MediaController {
 			 */
 			$filtered_html = apply_filters( 'media_send_to_editor', $html, $id, $attachment_meta );
 
+			// Fail-safe PDF Embedder check: if PDF Embedder is active and this is a PDF, but media_send_to_editor didn't modify it.
+			$is_pdf = ( ! empty( $mime ) && 'application/pdf' === $mime )
+				|| (bool) preg_match( '/\.pdf(\?|$)/i', $url )
+				|| ( isset( $item['ext'] ) && 'PDF' === strtoupper( $item['ext'] ) );
+
+			$pdfemb_active = class_exists( '\PDFEmbedder\Plugin' )
+				|| function_exists( 'pdf_embedder' )
+				|| shortcode_exists( 'pdf-embedder' );
+
+			if ( $is_pdf && $pdfemb_active && $html === $filtered_html ) {
+				$title_attr = '';
+				if ( ! empty( $title ) && basename( (string) wp_parse_url( $url, PHP_URL_PATH ) ) !== $title ) {
+					$title_attr = ' title="' . esc_attr( $title ) . '"';
+				}
+				$filtered_html = '[pdf-embedder url="' . esc_url( $url ) . '"' . $title_attr . ']';
+			}
+
 			/**
 			 * 2. Dedicated Frontend Dashboard filter hook:
 			 * Allows plugins to customize media HTML specifically for Frontend Dashboard views.

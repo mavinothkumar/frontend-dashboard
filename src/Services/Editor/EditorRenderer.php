@@ -115,9 +115,20 @@ class EditorRenderer {
 	 * Render Classic WP Editor (TinyMCE)
 	 */
 	protected static function render_classic( $content, $input_meta ) {
+		$is_pdfemb_active = class_exists( '\PDFEmbedder\Plugin' ) || function_exists( 'pdf_embedder' ) || shortcode_exists( 'pdf-embedder' );
+
 		// Clean and normalize quotes inside HTML tags to prevent broken attributes.
-		if ( ! empty( $content ) && is_string( $content ) && function_exists( 'fed_clean_html_tag_attributes' ) ) {
-			$content = fed_clean_html_tag_attributes( $content );
+		if ( ! empty( $content ) && is_string( $content ) ) {
+			// Normalize any raw PDF Embedder viewer wrappers into clean shortcodes.
+			$content = preg_replace(
+				'/<div\s+class="wp-block-pdfemb-pdf-embedder-viewer"[^>]*>\s*<a\s+class="pdfemb-viewer"\s+href="([^"]+)"[^>]*>.*?<\/a>\s*<\/div>/is',
+				'[pdf-embedder url="$1"]',
+				$content
+			);
+
+			if ( function_exists( 'fed_clean_html_tag_attributes' ) ) {
+				$content = fed_clean_html_tag_attributes( $content );
+			}
 		}
 
 		if ( function_exists( 'fed_get_early_wp_shims_js' ) ) {
@@ -139,6 +150,7 @@ class EditorRenderer {
 		?>
 		<script id="fed-classic-editor-shims">
 		window.wp=(typeof window.wp==="object"&&window.wp!==null)?window.wp:{};window.wp.editor=(typeof window.wp.editor==="object"&&window.wp.editor!==null)?window.wp.editor:{};window.wp.autop=window.wp.autop||{autop:function(t){return t;},removep:function(t){return t;}};window.wp.i18n=(typeof window.wp.i18n==="object"&&window.wp.i18n!==null)?window.wp.i18n:{__:function(t){return t;},_x:function(t){return t;},_n:function(s,p,n){return n===1?s:p;},_nx:function(s,p,n){return n===1?s:p;},isRtl:function(){return false;},setLocaleData:function(){},sprintf:function(t){return t;}};if(!window.wp.i18n.__){window.wp.i18n.__=function(t){return t;};}window.wp.hooks=window.wp.hooks||{addAction:function(){},addFilter:function(){},applyFilters:function(h,v){return v;},doAction:function(){},removeAction:function(){},removeFilter:function(){},hasAction:function(){return false;},hasFilter:function(){return false;}};if(typeof window.setUserSetting==="function"){window.setUserSetting("editor","tinymce");}
+		window.frontend_dashboard=window.frontend_dashboard||{};window.frontend_dashboard.media=window.frontend_dashboard.media||{};window.frontend_dashboard.media.ajax_url=window.frontend_dashboard.media.ajax_url||<?php echo wp_json_encode( admin_url( 'admin-ajax.php' ) ); ?>;window.frontend_dashboard.media.nonce=window.frontend_dashboard.media.nonce||<?php echo wp_json_encode( wp_create_nonce( 'fed_nonce' ) ); ?>;window.frontend_dashboard.media.pdf_embedder_active=<?php echo $is_pdfemb_active ? 'true' : 'false'; ?>;window.fed_pdf_embedder_active=<?php echo $is_pdfemb_active ? 'true' : 'false'; ?>;
 		</script>
 		<div class="fed-classic-editor-wrapper relative">
 			<div class="mb-2.5 flex items-center flex-wrap gap-2 justify-between">

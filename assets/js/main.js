@@ -112,6 +112,8 @@ function insertHtmlIntoEditor(editorId, html) {
     const val = textarea.value;
     textarea.value = val.substring(0, start) + html + val.substring(end);
     textarea.selectionStart = textarea.selectionEnd = start + html.length;
+    textarea.dispatchEvent(new Event('input', { bubbles: true }));
+    textarea.dispatchEvent(new Event('change', { bubbles: true }));
   }
 }
 
@@ -122,8 +124,15 @@ async function sendMediaToEditor(items, editorId) {
   let ajaxUrl = '/wp-admin/admin-ajax.php';
   let nonce = '';
 
-  if (typeof frontend_dashboard !== 'undefined' && frontend_dashboard.fed_admin_form_post) {
+  if (typeof frontend_dashboard !== 'undefined' && frontend_dashboard.media && frontend_dashboard.media.ajax_url) {
+    ajaxUrl = frontend_dashboard.media.ajax_url;
+  } else if (typeof frontend_dashboard !== 'undefined' && frontend_dashboard.fed_admin_form_post) {
     ajaxUrl = frontend_dashboard.fed_admin_form_post.split('?')[0];
+  }
+
+  if (typeof frontend_dashboard !== 'undefined' && frontend_dashboard.media && frontend_dashboard.media.nonce) {
+    nonce = frontend_dashboard.media.nonce;
+  } else if (typeof frontend_dashboard !== 'undefined' && frontend_dashboard.fed_admin_form_post) {
     const match = frontend_dashboard.fed_admin_form_post.match(/fed_nonce=([^&]+)/);
     if (match) nonce = match[1];
   }
@@ -169,9 +178,10 @@ function formatClientMediaSnippet(item) {
   if (!item || !item.url) return '';
   const url = escapeAttr(item.url);
   const isImage = Boolean(item.is_image) || (item.mime && item.mime.startsWith('image/'));
-  const isPdf = item.mime === 'application/pdf' || (item.url && item.url.match(/\.pdf$/i));
+  const isPdf = item.mime === 'application/pdf' || (item.url && item.url.match(/\.pdf(\?|$)/i)) || (item.ext && item.ext.toUpperCase() === 'PDF');
   const isPdfEmbedderActive = Boolean(
     (typeof frontend_dashboard !== 'undefined' && frontend_dashboard.media && frontend_dashboard.media.pdf_embedder_active) ||
+    window.fed_pdf_embedder_active === true ||
     (typeof window.pdfemb_args !== 'undefined') ||
     (typeof window.PDFEMB_NS !== 'undefined')
   );

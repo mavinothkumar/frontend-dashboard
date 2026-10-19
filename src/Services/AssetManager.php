@@ -127,11 +127,15 @@ class AssetManager {
 			}
 		}
 
+		$translation_data = function_exists( 'fed_js_translation' ) ? fed_js_translation() : array();
+		$translation_data = apply_filters( 'fed_convert_php_js_var', $translation_data );
+
 		if ( $this->is_dev ) {
 			// Enqueue Vite client for HMR
 			if ( ! $is_script_disabled ) {
 				wp_enqueue_script( 'fed-vite-client', 'http://localhost:3000/@vite/client', array(), $this->version, true );
 				wp_enqueue_script( 'fed-main', 'http://localhost:3000/assets/js/main.js', $dependencies, $this->version, true );
+				wp_localize_script( 'fed-main', 'frontend_dashboard', $translation_data );
 			}
 			if ( ! $is_style_disabled ) {
 				wp_enqueue_style( 'fed-style', 'http://localhost:3000/assets/css/main.css', array(), $this->version );
@@ -145,6 +149,7 @@ class AssetManager {
 				if ( ! $is_script_disabled && isset( $manifest['assets/js/main.js'] ) ) {
 					$js_file = $manifest['assets/js/main.js']['file'];
 					wp_enqueue_script( 'fed-main', BC_FED_PLUGIN_URL . '/assets/dist/' . $js_file, $dependencies, $this->version, true );
+					wp_localize_script( 'fed-main', 'frontend_dashboard', $translation_data );
 				}
 
 				if ( ! $is_style_disabled && isset( $manifest['assets/css/main.css'] ) ) {

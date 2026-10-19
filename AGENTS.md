@@ -11,7 +11,7 @@ You are developing the WordPress plugin **Frontend Dashboard** and its suite of 
 - `frontend-dashboard-social-connect`
 - `frontend-dashboard-templates`
 - `frontend-dashboard-user-management`
-- `fed-pay-per-post`
+- `frontend-dashboard-pay-per-post`
 - `gate-fuz`
 
 As an AI coding assistant, you MUST follow this protocol without exception. You are responsible for writing secure, standard-compliant, self-verified code.

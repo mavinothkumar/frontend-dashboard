@@ -291,6 +291,23 @@ function fed_admin_setting_form_dashboard_menu_function() {
 			wp_send_json_error( array( 'message' => $is_id->get_error_message( 'fed_no_row_found_on_that_id' ) ) );
 		}
 
+		$is_extra     = ( isset( $is_id['extra'] ) && 'no' === $is_id['extra'] ) ? 'no' : 'yes';
+		$locked_slugs = array( 'profile', 'logout', 'post' );
+		if ( defined( 'FED_MEMBERSHIPS_VERSION' ) || defined( 'FED_MEMBERSHIP_VERSION' ) ) {
+			$locked_slugs[] = 'my-membership';
+		}
+		if ( defined( 'FED_PAY_PER_POST_VERSION' ) ) {
+			$locked_slugs[] = 'my-submissions';
+		}
+		$menu_slug      = isset( $is_id['menu_slug'] ) ? $is_id['menu_slug'] : '';
+		$is_system_core = ( 'no' === $is_extra || in_array( $menu_slug, $locked_slugs, true ) );
+		$is_system_core = (bool) apply_filters( 'fed_is_system_menu', $is_system_core, $is_id, $menu_slug );
+
+		if ( $is_system_core ) {
+			wp_send_json_error( array( 'message' => __( 'System menus cannot be deleted.', 'frontend-dashboard' ) ) );
+			exit();
+		}
+
 		/**
 		 * Check deleting item is parent item in Sub Menu.
 		 */

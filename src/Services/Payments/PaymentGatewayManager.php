@@ -83,16 +83,23 @@ class PaymentGatewayManager {
 	 * @return array<string, PaymentGatewayInterface>
 	 */
 	public function getEnabledGateways(): array {
+		$enabled = array();
+		foreach ( $this->gateways as $id => $gateway ) {
+			if ( method_exists( $gateway, 'isEnabled' ) && ! $gateway->isEnabled() ) {
+				continue;
+			}
+			if ( method_exists( $gateway, 'isConfigured' ) && ! $gateway->isConfigured() ) {
+				continue;
+			}
+			$enabled[ $id ] = $gateway;
+		}
+
 		$current_gateway = function_exists( 'fed_payment_gateway' ) ? fed_payment_gateway() : false;
-		if ( ! $current_gateway ) {
-			return $this->gateways;
+		if ( $current_gateway && isset( $enabled[ $current_gateway ] ) ) {
+			return array( $current_gateway => $enabled[ $current_gateway ] );
 		}
 
-		if ( isset( $this->gateways[ $current_gateway ] ) ) {
-			return array( $current_gateway => $this->gateways[ $current_gateway ] );
-		}
-
-		return $this->gateways;
+		return $enabled;
 	}
 
 	/**
