@@ -2130,9 +2130,9 @@ function fed_get_post_status() {
 	return apply_filters(
 		'fed_update_post_status',
 		array(
-			'draft'   => 'Draft',
-			'pending' => 'Pending',
-			'publish' => 'Publish',
+			'draft'   => __( 'Draft', 'frontend-dashboard' ),
+			'pending' => __( 'Pending Review', 'frontend-dashboard' ),
+			'publish' => __( 'Publish', 'frontend-dashboard' ),
 		)
 	);
 }
@@ -2148,13 +2148,13 @@ function fed_get_display_post_status( $status ) {
 	$post_status = apply_filters(
 		'fed_display_post_status',
 		array(
-			'pending' => 'Pending',
-			'publish' => 'Published',
-			'draft'   => 'Draft',
+			'pending' => __( 'Pending Review', 'frontend-dashboard' ),
+			'publish' => __( 'Published', 'frontend-dashboard' ),
+			'draft'   => __( 'Draft', 'frontend-dashboard' ),
 		)
 	);
 
-	return isset( $post_status[ $status ] ) ? $post_status[ $status ] : 'pending';
+	return isset( $post_status[ $status ] ) ? $post_status[ $status ] : __( 'Pending Review', 'frontend-dashboard' );
 }
 
 /**
