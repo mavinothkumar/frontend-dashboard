@@ -64,6 +64,8 @@ class UserProfileModel {
 				} else {
 					$new_value[ $site_option ] = '';
 				}
+			} elseif ( function_exists( 'fed_no_update_fields' ) && in_array( $site_option, fed_no_update_fields(), true ) && ! current_user_can( 'manage_options' ) ) {
+				$new_value[ $site_option ] = $user_obj->has_prop( $site_option ) ? $user_obj->get( $site_option ) : '';
 			} elseif ( array_key_exists( $site_option, $post ) ) {
 				if ( is_array( $post[ $site_option ] ) ) {
 					$new_value[ $site_option ] = serialize( $post[ $site_option ] );

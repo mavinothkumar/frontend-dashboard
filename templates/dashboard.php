@@ -289,10 +289,17 @@ $logoHeight = ! empty( $uplOptions['settings']['fed_upl_website_logo_height'] ) 
 				<div class="flex items-center gap-2" style="text-align: left;"><div class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs shadow-2xs shrink-0" style="background-color: var(--fed-primary, #4F46E5); color: var(--fed-primary-font, #FFFFFF);"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg></div><span class="font-bold text-sm tracking-tight truncate max-w-[160px] sm:max-w-xs" style="color: var(--fed-sidebar-text, #0F172A); text-align: left;"><?php echo esc_html( get_bloginfo( 'name' ) ?: 'Dashboard' ); ?></span></div>
 			<?php endif; ?>
 		</div>
-		<div class="fed_mobile_user_avatar flex items-center gap-2 shrink-0" style="margin-left: auto;">
+		<div class="fed_mobile_user_avatar flex items-center gap-2 shrink-0" style="margin-left: auto; display: flex; align-items: center;">
 			<img class="w-8 h-8 rounded-full object-cover ring-2 ring-white shadow-2xs" 
 				src="<?php echo esc_url( get_avatar_url( $currentUser->ID ) ); ?>" 
 				alt="<?php echo esc_attr( $currentUser->display_name ); ?>">
+			<a href="<?php echo esc_url( wp_logout_url( fed_get_logout_redirect_url() ) ); ?>" 
+				title="<?php esc_attr_e( 'Sign out', 'frontend-dashboard' ); ?>"
+				class="fed_mobile_logout_btn p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors flex items-center justify-center shrink-0 cursor-pointer"
+				style="display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; padding: 6px; border-radius: 8px; color: #94a3b8; text-decoration: none;"
+				aria-label="<?php esc_attr_e( 'Sign out', 'frontend-dashboard' ); ?>">
+				<svg style="width: 18px; height: 18px; display: block;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+			</a>
 		</div>
 	</header>
 
@@ -317,7 +324,12 @@ $logoHeight = ! empty( $uplOptions['settings']['fed_upl_website_logo_height'] ) 
 						<?php else : ?>
 							<div class="fed_sidebar_brand_icon w-9 h-9 rounded-xl flex items-center justify-center font-bold text-sm shadow-xs shrink-0 transition-colors"
 								style="width: 36px; height: 36px; min-width: 36px; max-width: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background-color: var(--fed-primary, #4F46E5); color: var(--fed-primary-font, #FFFFFF); margin: 0; padding: 0;"><svg style="width: 20px; height: 20px; display: block; margin: auto;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg></div>
-							<div class="fed_sidebar_brand_text overflow-hidden" style="min-width: 0; flex: 1 1 auto; overflow: hidden; display: flex; flex-direction: column; justify-content: center; text-align: left; margin: 0 0 0 12px; padding: 0;"><span class="fed_sidebar_brand_title font-bold text-sm tracking-tight block truncate" style="font-size: 14px; font-weight: 700; color: var(--fed-sidebar-text, #0F172A); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; line-height: 1.25; margin: 0; padding: 0; text-align: left;"><?php echo esc_html( get_bloginfo( 'name' ) ?: 'Dashboard' ); ?></span><span class="fed_sidebar_brand_subtitle text-[10px] font-semibold block uppercase tracking-wider opacity-60" style="font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--fed-sidebar-text, #64748B); opacity: 0.6; display: block; line-height: 1.2; margin: 2px 0 0 0; padding: 0; text-align: left;"><?php esc_html_e( 'Frontend Dashboard', 'frontend-dashboard' ); ?></span></div>
+							<div class="fed_sidebar_brand_text overflow-hidden" style="min-width: 0; flex: 1 1 auto; overflow: hidden; display: flex; flex-direction: column; justify-content: center; text-align: left; margin: 0 0 0 12px; padding: 0;">
+								<span class="fed_sidebar_brand_title font-bold text-sm tracking-tight block truncate" style="font-size: 14px; font-weight: 700; color: var(--fed-sidebar-text, #0F172A); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; line-height: 1.25; margin: 0; padding: 0; text-align: left;"><?php echo esc_html( get_bloginfo( 'name' ) ?: 'Dashboard' ); ?></span>
+								<?php if ( apply_filters( 'fed_show_sidebar_brand_subtitle', true ) ) : ?>
+									<span class="fed_sidebar_brand_subtitle text-[10px] font-semibold block uppercase tracking-wider opacity-60" style="font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--fed-sidebar-text, #64748B); opacity: 0.6; display: block; line-height: 1.2; margin: 2px 0 0 0; padding: 0; text-align: left;"><?php esc_html_e( 'Frontend Dashboard', 'frontend-dashboard' ); ?></span>
+								<?php endif; ?>
+							</div>
 						<?php endif; ?>
 					</div>
 					<!-- Mobile Close (X) Button -->
@@ -338,7 +350,7 @@ $logoHeight = ! empty( $uplOptions['settings']['fed_upl_website_logo_height'] ) 
 
 			<!-- Compact User Profile in Sidebar Footer -->
 			<div class="fed_sidebar_user_section p-4 sm:p-5 border-t border-slate-100 flex items-center justify-between gap-3 shrink-0 transition-colors"
-				style="border-top: 1px solid var(--fed-border, #E2E8F0); background-color: var(--fed-sidebar-bg, #FFFFFF);">
+				style="border-top: 1px solid var(--fed-border, #E2E8F0); background-color: var(--fed-sidebar-bg, #FFFFFF); padding-bottom: max(1.25rem, env(safe-area-inset-bottom, 1.25rem));">
 				<div class="fed_sidebar_user_info flex items-center gap-3 overflow-hidden" style="display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1 1 auto; overflow: hidden;">
 					<div class="relative shrink-0" style="position: relative; width: 36px; height: 36px; min-width: 36px; max-width: 36px; flex-shrink: 0;">
 						<img class="w-9 h-9 rounded-full object-cover ring-2 ring-white/20 shadow-2xs" 

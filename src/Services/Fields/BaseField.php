@@ -63,9 +63,10 @@ abstract class BaseField {
 		}
 		$this->extended = is_array( $extended ) ? $extended : array();
 
-		// Handle user permission access check
+		// Handle user permission access check (only applies to profile/post editing, never during registration).
+		$is_register         = ! empty( $attributes['is_register'] );
 		$disable_user_access = isset( $this->extended['disable_user_access'] ) ? $this->extended['disable_user_access'] : null;
-		if ( 'Disable' === $disable_user_access && ! $this->is_admin() ) {
+		if ( ! $is_register && 'Disable' === $disable_user_access && ! $this->is_admin() ) {
 			$this->name        = '';
 			$this->is_readonly = true;
 			$this->is_disabled = true;

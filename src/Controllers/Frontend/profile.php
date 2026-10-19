@@ -72,8 +72,11 @@ function fed_display_dashboard_profile( $menu_item ) {
 			</div>
 
 			<!-- Right: Quick Metadata -->
-			<?php if ( $registeredDate ) : ?>
-				<div class="flex sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-1 text-xs pt-3 sm:pt-0 border-t sm:border-t-0 w-full sm:w-auto shrink-0"
+			<?php
+			$show_member_since = apply_filters( 'fed_show_profile_member_since', true, $user );
+			if ( $registeredDate && $show_member_since ) :
+				?>
+				<div class="fed_profile_member_since flex sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-1 text-xs pt-3 sm:pt-0 border-t sm:border-t-0 w-full sm:w-auto shrink-0"
 					style="border-color: var(--fed-border, #E2E8F0); color: var(--fed-sidebar-text, #64748B);">
 					<span class="opacity-75"><?php esc_html_e( 'Member Since', 'frontend-dashboard' ); ?></span>
 					<span class="font-bold" style="color: var(--fed-text-main, #0F172A);"><?php echo esc_html( $registeredDate ); ?></span>

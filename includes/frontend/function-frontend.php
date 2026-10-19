@@ -117,6 +117,12 @@ function fed_get_registration_content_fields() {
 
 	$registration = array();
 	foreach ( $details as $detail ) {
+		$extended = maybe_unserialize( $detail['extended'] );
+		if ( is_array( $extended ) && isset( $extended['disable_user_access'] ) ) {
+			// On registration forms, visitors must be able to enter values for enabled fields.
+			// Admin-only edit restrictions apply only to profile editing after registration.
+			unset( $extended['disable_user_access'] );
+		}
 		$registration[ $detail['input_meta'] ] = array(
 			'name'        => $detail['label_name'],
 			'input'       => fed_get_input_details(
@@ -133,11 +139,12 @@ function fed_get_registration_content_fields() {
 					'user_value'  => $detail['input_value'],
 					'input_type'  => $detail['input_type'],
 					'input_value' => $detail['input_value'],
-					'extended'    => $detail['extended'],
+					'extended'    => $extended,
+					'is_register' => true,
 				)
 			),
 			'input_order' => $detail['input_order'],
-			'extended'    => $detail['extended'],
+			'extended'    => $extended,
 			'input_type'  => $detail['input_type'],
 			'input_meta'  => $detail['input_meta'],
 		);
