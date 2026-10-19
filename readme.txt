@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.0.17
+Stable tag: 3.0.18
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -144,6 +144,12 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 
 == Changelog ==
+
+= 3.0.18 (2026-10-19) =
+* Feature: Universal Client-Side PDF First-Page Preview Rendering. When WordPress core does not generate thumbnail images for PDF attachments (such as hosting and local environments without Ghostscript or ImageMagick), Frontend Dashboard custom media picker asynchronously renders a crisp first-page thumbnail in the browser using Mozilla PDF.js. Displays document cover previews across media grid cards, single attachment inspection details, and multi-selection trays with an overlay badge.
+* Fix: Enhanced `MediaController.php` attachment formatting with multi-tier fallback to resolve generated preview images from attachment metadata sizes, `wp_prepare_attachment_for_js()`, or post thumbnail IDs.
+* Feature: Post Submission Workflow: Automatically redirect frontend authors and users directly to the post list view upon successful post submission or review request.
+* Compatibility: Fully compatible with Frontend Dashboard Custom Post and Taxonomies v3.0.6, GateFuz v1.1.3, and Frontend Dashboard Pay Per Post v3.0.0.
 
 = 3.0.17 (2026-10-19) =
 * Fix: Resolved PDF Embedder preview thumbnail display in the custom media picker. When WordPress or plugins generate image previews for PDF documents, the custom media picker now retrieves and displays the rendered preview image consistently with the WordPress core Media Library instead of falling back to a generic document placeholder icon.
