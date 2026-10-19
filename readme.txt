@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.0.18
+Stable tag: 3.0.19
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -144,6 +144,11 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 
 == Changelog ==
+
+= 3.0.19 (2026-10-19) =
+* Feature: Centralized Pro Licensing & Automated Updates Engine: Integrated automated package delivery and version metadata inspection connecting Frontend Dashboard Core directly with the Buffercode API (`https://buffercode.com/api/v2/plugin/update/`) via WordPress core `plugins_api` and `pre_set_site_transient_update_plugins` pipelines for active Pro extensions.
+* Fix: Direct Renew URL: Updated Centralized License Hub to route addon renewals directly to the Buffercode Downloads dashboard (`https://buffercode.com/dashboard/dashboard/downloads`).
+* Enhancement: Pro Add-on Registry: Coordinated unified license registration across official Pro extensions (Membership, Pay Per Post, User Management, and Social Connect).
 
 = 3.0.18 (2026-10-19) =
 * Feature: Universal Client-Side PDF First-Page Preview Rendering. When WordPress core does not generate thumbnail images for PDF attachments (such as hosting and local environments without Ghostscript or ImageMagick), Frontend Dashboard custom media picker asynchronously renders a crisp first-page thumbnail in the browser using Mozilla PDF.js. Displays document cover previews across media grid cards, single attachment inspection details, and multi-selection trays with an overlay badge.
