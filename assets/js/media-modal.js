@@ -10,6 +10,20 @@
  */
 
 let modalInstance = null;
+let pdfPreviewModule = null;
+
+async function fetchPdfPreview(url, targetWidth = 320) {
+  try {
+    if (!pdfPreviewModule) {
+      pdfPreviewModule = await import('./pdf-preview.js');
+    }
+    return await pdfPreviewModule.getPdfPreview(url, targetWidth);
+  } catch (err) {
+    console.warn('Frontend Dashboard: Could not load PDF preview generator', err);
+    return null;
+  }
+}
+
 
 function escapeAttr(str) {
   return String(str || '')
@@ -1112,9 +1126,13 @@ class FedMediaModal {
 
     displayItems.forEach(item => {
       const card = document.createElement('div');
+      card.setAttribute('data-id', String(item.id));
       const isSelected = this.selectedItems.has(item.id);
       const isImage = Boolean(item.is_image) || (item.mime && item.mime.toLowerCase().startsWith('image/'));
       const hasPreview = Boolean(item.has_preview) || (item.thumbnail && item.thumbnail !== item.url && item.thumbnail !== item.icon);
+      const isPdf = (item.mime === 'application/pdf') || 
+                    (item.ext && item.ext.toUpperCase() === 'PDF') || 
+                    (item.filename && item.filename.toLowerCase().endsWith('.pdf'));
 
       card.className = `fed-media-card group relative aspect-square rounded-2xl overflow-hidden border-2 cursor-pointer transition-all duration-150 select-none ${
         isSelected 
@@ -1157,10 +1175,47 @@ class FedMediaModal {
             </div>
           </div>
         `;
+
+        if (isPdf && item.url) {
+          fetchPdfPreview(item.url, 320).then(previewUrl => {
+            if (!previewUrl) return;
+            item.thumbnail = previewUrl;
+            item.medium = previewUrl;
+            item.has_preview = true;
+
+            const currentCard = grid.querySelector(`.fed-media-card[data-id="${item.id}"]`);
+            if (currentCard) {
+              const previewWrap = currentCard.querySelector('.fed-media-preview-wrap');
+              if (previewWrap) {
+                previewWrap.innerHTML = `
+                  <span class="absolute top-2 left-2 z-10 px-1.5 py-0.5 rounded text-[8px] font-extrabold uppercase bg-red-600/90 text-white shadow-xs tracking-wider">PDF</span>
+                  <img src="${previewUrl}" alt="${escapeAttr(item.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" />
+                  <div class="absolute inset-0 bg-gradient-to-t from-slate-900/75 via-slate-900/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-2 text-white">
+                    <span class="text-[10px] font-bold truncate leading-tight">${escapeHtml(item.title || item.filename)}</span>
+                    <span class="text-[9px] text-slate-300">${item.filesize || ''}</span>
+                  </div>
+                `;
+              }
+            }
+
+            if (this.selectedItem && this.selectedItem.id === item.id) {
+              const thumbWrap = this.el.querySelector('.fed-single-thumb-wrap');
+              if (thumbWrap) {
+                thumbWrap.innerHTML = `<img src="${previewUrl}" alt="${escapeAttr(item.title)}" class="w-full h-full object-cover" />`;
+              }
+            }
+
+            if (this.selectedItems.has(item.id) && this.selectedItems.size > 1) {
+              this.renderSidebar();
+            }
+          });
+        }
       }
 
       card.innerHTML = `
-        ${mediaPreviewHtml}
+        <div class="fed-media-preview-wrap w-full h-full">
+          ${mediaPreviewHtml}
+        </div>
         ${
           isSelected 
             ? `<div class="absolute top-2 right-2 w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px] shadow-sm animate-in zoom-in-50 z-10"><svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg></div>` 
@@ -1249,11 +1304,26 @@ class FedMediaModal {
         thumb.className = 'w-9 h-9 rounded-lg overflow-hidden border border-slate-200 bg-slate-100 shrink-0';
         const isImage = Boolean(item.is_image) || (item.mime && item.mime.startsWith('image/'));
         const hasPreview = Boolean(item.has_preview) || (item.thumbnail && item.thumbnail !== item.url && item.thumbnail !== item.icon);
+        const isPdf = (item.mime === 'application/pdf') || 
+                      (item.ext && item.ext.toUpperCase() === 'PDF') || 
+                      (item.filename && item.filename.toLowerCase().endsWith('.pdf'));
+
         if (isImage || hasPreview) {
           thumb.innerHTML = `<img src="${item.thumbnail || item.medium || item.url}" class="w-full h-full object-cover" />`;
         } else {
           const fileExt = item.ext || 'FILE';
           thumb.innerHTML = `<div class="w-full h-full flex items-center justify-center font-bold text-[9px] text-slate-600">${fileExt}</div>`;
+
+          if (isPdf && item.url) {
+            fetchPdfPreview(item.url, 120).then(previewUrl => {
+              if (previewUrl && this.selectedItems.has(item.id)) {
+                item.thumbnail = previewUrl;
+                item.medium = previewUrl;
+                item.has_preview = true;
+                thumb.innerHTML = `<img src="${previewUrl}" class="w-full h-full object-cover" />`;
+              }
+            });
+          }
         }
         thumbsContainer.appendChild(thumb);
       });
@@ -1270,6 +1340,9 @@ class FedMediaModal {
 
     const isImage = Boolean(item.is_image) || (item.mime && item.mime.startsWith('image/'));
     const hasPreview = Boolean(item.has_preview) || (item.thumbnail && item.thumbnail !== item.url && item.thumbnail !== item.icon);
+    const isPdf = (item.mime === 'application/pdf') || 
+                  (item.ext && item.ext.toUpperCase() === 'PDF') || 
+                  (item.filename && item.filename.toLowerCase().endsWith('.pdf'));
     const fileExt = item.ext || (item.filename ? item.filename.split('.').pop().toUpperCase() : 'FILE');
 
     // Thumbnail / Icon
@@ -1279,6 +1352,17 @@ class FedMediaModal {
     } else {
       const iconConfig = this.getFileIconConfig(fileExt, item.mime);
       thumbWrap.innerHTML = `<div class="w-full h-full ${iconConfig.bgClass} ${iconConfig.textClass} flex items-center justify-center font-extrabold text-xs uppercase">${fileExt}</div>`;
+
+      if (isPdf && item.url) {
+        fetchPdfPreview(item.url, 320).then(previewUrl => {
+          if (previewUrl && this.selectedItem && this.selectedItem.id === item.id) {
+            item.thumbnail = previewUrl;
+            item.medium = previewUrl;
+            item.has_preview = true;
+            thumbWrap.innerHTML = `<img src="${previewUrl}" alt="${escapeAttr(item.title)}" class="w-full h-full object-cover" />`;
+          }
+        });
+      }
     }
 
     // Filename & Meta

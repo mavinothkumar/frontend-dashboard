@@ -26,6 +26,7 @@
     "@tiptap/extension-link": "^3.31.3",
     "@tiptap/extension-placeholder": "^3.31.3",
     "@tiptap/starter-kit": "^3.31.3",
-    "editorjs-html": "^4.0.5"
+    "editorjs-html": "^4.0.5",
+    "pdfjs-dist": "^3.11.174"
   }
 }

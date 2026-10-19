@@ -9,9 +9,28 @@
     "isEntry": true
   },
   "assets/js/main.js": {
-    "file": "assets/main-D-mDOwXy.js",
+    "file": "assets/main-uldX8xod.js",
     "name": "main",
     "src": "assets/js/main.js",
-    "isEntry": true
+    "isEntry": true,
+    "dynamicImports": [
+      "assets/js/pdf-preview.js"
+    ]
+  },
+  "assets/js/pdf-preview.js": {
+    "file": "assets/pdf-preview-b4HwI06a.js",
+    "name": "pdf-preview",
+    "src": "assets/js/pdf-preview.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "assets/js/main.js"
+    ],
+    "assets": [
+      "assets/pdf.worker.min-DKQKFyKK.js"
+    ]
+  },
+  "node_modules/pdfjs-dist/build/pdf.worker.min.js": {
+    "file": "assets/pdf.worker.min-DKQKFyKK.js",
+    "src": "node_modules/pdfjs-dist/build/pdf.worker.min.js"
   }
 }
