@@ -104,7 +104,7 @@ class LicenseRegistry {
 			'basename'     => $basename,
 			'doc_url'      => isset( $addon['doc_url'] ) ? esc_url_raw( $addon['doc_url'] ) : 'https://faq.frontenddashboard.com',
 			'purchase_url' => isset( $addon['purchase_url'] ) ? esc_url_raw( $addon['purchase_url'] ) : 'https://buffercode.com',
-			'renew_url'    => isset( $addon['renew_url'] ) ? esc_url_raw( $addon['renew_url'] ) : 'https://buffercode.com',
+			'renew_url'    => ( ! empty( $addon['renew_url'] ) && false === strpos( $addon['renew_url'], '/stripe/renew/' ) && 'https://buffercode.com' !== untrailingslashit( $addon['renew_url'] ) ) ? esc_url_raw( $addon['renew_url'] ) : 'https://buffercode.com/dashboard/dashboard/downloads',
 			'settings_url' => isset( $addon['settings_url'] ) ? esc_url_raw( $addon['settings_url'] ) : '',
 		);
 	}
