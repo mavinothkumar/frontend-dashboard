@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.0.19
+Stable tag: 3.0.20
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -144,6 +144,13 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 
 == Changelog ==
+
+= 3.0.20 (2026-10-21) =
+* Feature: Add-ons Marketplace Pro Extension Catalog: Extended the official Add-ons & Extensions marketplace (`WP-Admin > Frontend Dashboard > Add-ons`) to display official BufferCode Pro extensions (Membership, Pay Per Post, User Management, and Social Connect) alongside free extensions directly from the BufferCode API.
+* Enhancement: Add-ons Marketplace Category Navigation: Added dedicated category tabs for "Monetization" and "User Management" to the Add-ons marketplace filter bar for instant category browsing.
+* Enhancement: Add-ons Marketplace Status Filters: Added "Pro Only" and "Free Only" options to the status filter dropdown, allowing administrators to filter extensions by license tier.
+* Enhancement: Marketplace Pro Badging & Purchase Actions: Added distinct Pro gradient badges on extension cards, live Pro extension metric counters in the executive KPI bar, and interactive purchase buttons (`Life Time`, `Annual`) opening secure checkout in a new window.
+* Enhancement: Add-on Version & Status Detection: Improved local version detection across varied constant naming patterns (`_PLUGIN_FILE`, `_PLUGIN`, `_VERSION`) and plugin file headers, with cross-platform directory normalization.
 
 = 3.0.19 (2026-10-19) =
 * Feature: Centralized Pro Licensing & Automated Updates Engine: Integrated automated package delivery and version metadata inspection connecting Frontend Dashboard Core directly with the Buffercode API (`https://buffercode.com/api/v2/plugin/update/`) via WordPress core `plugins_api` and `pre_set_site_transient_update_plugins` pipelines for active Pro extensions.
