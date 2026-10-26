@@ -34,10 +34,15 @@ Take full control of the user experience by allowing members, authors, and custo
 * **Theme Matching & Custom Styling**: Customize dashboard theme colors and UI options to seamlessly match your site design.
 
 = Official Add-ons & Extensions =
-* [Frontend Dashboard Custom Post and Taxonomies](https://buffercode.com/plugin/frontend-dashboard-custom-post-and-taxonomies) (Free)
-* [Frontend Dashboard Notification](https://buffercode.com/plugin/frontend-dashboard-notification) (Free)
-* [Frontend Dashboard Captcha](https://buffercode.com/plugin/frontend-dashboard-captcha) (Free)
-* [Frontend Dashboard Social Chat](https://buffercode.com/plugin/frontend-dashboard-social-chat) (Free)
+* [Custom Post and Taxonomies](https://buffercode.com/plugin/frontend-dashboard-custom-post-and-taxonomies) (Free)
+* [Notification](https://buffercode.com/plugin/frontend-dashboard-notification) (Free)
+* [Captcha](https://buffercode.com/plugin/frontend-dashboard-captcha) (Free)
+* [Social Chat](https://buffercode.com/plugin/frontend-dashboard-social-chat) (Free)
+* [Frontend Dashboard for WooCommerce](https://buffercode.com/plugin/frontend-dashboard-for-woocommerce) (Free)
+* [Membership](https://buffercode.com/plugin/frontend-dashboard-membership) (Pro)
+* [Pay Per Post](https://buffercode.com/plugin/frontend-dashboard-pay-per-post) (Pro)
+* [User Management](https://buffercode.com/plugin/frontend-dashboard-user-management) (Pro)
+* [Social Connect](https://buffercode.com/plugin/frontend-dashboard-social-connect) (Pro)
 
 *Note: Frontend Dashboard Templates, Extra, and Pages have been merged directly into Core in v3.0.0.*
 
@@ -148,8 +153,6 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 = 3.0.20 (2026-10-21) =
 * Feature: Add-ons Marketplace Pro Extension Catalog: Extended the official Add-ons & Extensions marketplace (`WP-Admin > Frontend Dashboard > Add-ons`) to display official BufferCode Pro extensions (Membership, Pay Per Post, User Management, and Social Connect) alongside free extensions directly from the BufferCode API.
 * Enhancement: Add-ons Marketplace Category Navigation: Added dedicated category tabs for "Monetization" and "User Management" to the Add-ons marketplace filter bar for instant category browsing.
-* Enhancement: Add-ons Marketplace Status Filters: Added "Pro Only" and "Free Only" options to the status filter dropdown, allowing administrators to filter extensions by license tier.
-* Enhancement: Marketplace Pro Badging & Purchase Actions: Added distinct Pro gradient badges on extension cards, live Pro extension metric counters in the executive KPI bar, and interactive purchase buttons (`Life Time`, `Annual`) opening secure checkout in a new window.
 * Enhancement: Add-on Version & Status Detection: Improved local version detection across varied constant naming patterns (`_PLUGIN_FILE`, `_PLUGIN`, `_VERSION`) and plugin file headers, with cross-platform directory normalization.
 
 = 3.0.19 (2026-10-19) =
