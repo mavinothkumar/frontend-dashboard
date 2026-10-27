@@ -4187,8 +4187,9 @@ function fed_show_help_icons() {
 		<style>
 			.fed-floating-hub {
 				position: fixed !important;
-				bottom: 24px !important;
-				right: 24px !important;
+				right: 0 !important;
+				top: 50% !important;
+				transform: translateY(-50%) !important;
 				z-index: 99990 !important;
 				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif !important;
 				box-sizing: border-box !important;
@@ -4196,52 +4197,93 @@ function fed_show_help_icons() {
 			.fed-floating-hub * {
 				box-sizing: border-box !important;
 			}
-			.fed-hub-fab {
-				width: 52px !important;
-				height: 52px !important;
-				border-radius: 50% !important;
-				background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
-				color: #ffffff !important;
-				border: 2px solid #ffffff !important;
-				outline: none !important;
-				cursor: pointer !important;
+			.fed-hub-vertical-tab {
 				display: flex !important;
+				flex-direction: column !important;
 				align-items: center !important;
 				justify-content: center !important;
-				box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.45), 0 8px 10px -6px rgba(37, 99, 235, 0.3) !important;
-				transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+				gap: 8px !important;
+				padding: 14px 10px 14px 8px !important;
+				background: linear-gradient(180deg, #2563eb, #1d4ed8) !important;
+				color: #ffffff !important;
+				border: none !important;
+				border-radius: 12px 0 0 12px !important;
+				box-shadow: -4px 0 20px rgba(37, 99, 235, 0.35), -1px 0 3px rgba(0, 0, 0, 0.1) !important;
+				cursor: pointer !important;
+				outline: none !important;
+				transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
 			}
-			.fed-hub-fab:hover {
-				transform: scale(1.08) !important;
-				box-shadow: 0 14px 28px -5px rgba(37, 99, 235, 0.55), 0 10px 12px -6px rgba(37, 99, 235, 0.35) !important;
+			.fed-hub-vertical-tab:hover {
+				padding-left: 14px !important;
+				background: linear-gradient(180deg, #1d4ed8, #1e40af) !important;
+				box-shadow: -6px 0 24px rgba(37, 99, 235, 0.45) !important;
 			}
-			.fed-hub-fab.is-active {
+			.fed-hub-vertical-tab.is-active {
 				background: #0f172a !important;
-				transform: scale(1.02) !important;
-				box-shadow: 0 10px 20px -5px rgba(15, 23, 42, 0.4) !important;
+				box-shadow: -4px 0 20px rgba(15, 23, 42, 0.4) !important;
+			}
+			.fed-hub-tab-icon {
+				font-size: 18px !important;
+				line-height: 1 !important;
+			}
+			.fed-hub-tab-label {
+				writing-mode: vertical-rl !important;
+				transform: rotate(180deg) !important;
+				font-size: 11px !important;
+				font-weight: 800 !important;
+				letter-spacing: 2.5px !important;
+				text-transform: uppercase !important;
+				line-height: 1 !important;
 			}
 			.fed-hub-menu-panel {
 				position: absolute !important;
-				bottom: 64px !important;
-				right: 0 !important;
-				width: 250px !important;
+				right: calc(100% + 10px) !important;
+				top: 50% !important;
+				transform: translateY(-50%) !important;
+				width: 270px !important;
+				max-height: 85vh !important;
 				background: #ffffff !important;
 				border-radius: 18px !important;
 				border: 1px solid rgba(226, 232, 240, 0.9) !important;
-				box-shadow: 0 20px 35px -10px rgba(15, 23, 42, 0.2), 0 1px 3px 0 rgba(0, 0, 0, 0.05) !important;
+				box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.25), 0 1px 3px 0 rgba(0, 0, 0, 0.05) !important;
 				overflow: hidden !important;
-				transform-origin: bottom right !important;
-				transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+				display: flex !important;
+				flex-direction: column !important;
+				transform-origin: right center !important;
+				transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
 			}
 			.fed-hub-menu-panel.is-hidden {
 				opacity: 0 !important;
-				transform: scale(0.9) translateY(12px) !important;
+				transform: translateY(-50%) translateX(16px) scale(0.95) !important;
 				pointer-events: none !important;
 				display: none !important;
 			}
 			.fed-hub-header {
 				background: linear-gradient(135deg, #1e293b, #0f172a) !important;
 				padding: 12px 14px !important;
+				color: #ffffff !important;
+				display: flex !important;
+				align-items: center !important;
+				justify-content: space-between !important;
+			}
+			.fed-hub-close-btn {
+				background: rgba(255, 255, 255, 0.12) !important;
+				border: none !important;
+				border-radius: 8px !important;
+				color: #cbd5e1 !important;
+				width: 28px !important;
+				height: 28px !important;
+				display: flex !important;
+				align-items: center !important;
+				justify-content: center !important;
+				cursor: pointer !important;
+				font-size: 14px !important;
+				line-height: 1 !important;
+				transition: all 0.15s ease-in-out !important;
+				padding: 0 !important;
+			}
+			.fed-hub-close-btn:hover {
+				background: rgba(255, 255, 255, 0.25) !important;
 				color: #ffffff !important;
 			}
 			.fed-hub-title {
@@ -4259,7 +4301,7 @@ function fed_show_help_icons() {
 			}
 			.fed-hub-items {
 				padding: 6px !important;
-				max-height: 360px !important;
+				max-height: min(380px, calc(80vh - 120px)) !important;
 				overflow-y: auto !important;
 			}
 			.fed-hub-item {
@@ -4299,14 +4341,59 @@ function fed_show_help_icons() {
 				color: #64748b !important;
 				line-height: 1.1 !important;
 			}
+			.fed-hub-footer {
+				border-top: 1px solid #f1f5f9 !important;
+				padding: 8px 12px !important;
+				background: #f8fafc !important;
+				text-align: center !important;
+			}
+			.fed-hub-footer-close-btn {
+				width: 100% !important;
+				padding: 6px 12px !important;
+				background: #ffffff !important;
+				border: 1px solid #e2e8f0 !important;
+				border-radius: 8px !important;
+				color: #64748b !important;
+				font-size: 11px !important;
+				font-weight: 600 !important;
+				cursor: pointer !important;
+				display: flex !important;
+				align-items: center !important;
+				justify-content: center !important;
+				gap: 6px !important;
+				transition: all 0.15s ease-in-out !important;
+			}
+			.fed-hub-footer-close-btn:hover {
+				background: #fee2e2 !important;
+				border-color: #fca5a5 !important;
+				color: #dc2626 !important;
+			}
+			@media screen and (max-width: 600px) {
+				.fed-hub-menu-panel {
+					right: 8px !important;
+					width: calc(100vw - 16px) !important;
+					max-width: 320px !important;
+				}
+			}
 		</style>
 
 		<div class="bc_fed fed-floating-hub" id="fed_floating_hub">
+			<!-- Vertical HELP Trigger Tab -->
+			<button type="button" id="fed_floating_hub_btn" class="fed-hub-vertical-tab" title="<?php esc_attr_e( 'Frontend Dashboard Quick Resources', 'frontend-dashboard' ); ?>" aria-label="<?php esc_attr_e( 'Help & Resources', 'frontend-dashboard' ); ?>">
+				<i id="fed_hub_fab_icon" class="fas fa-question-circle fed-hub-tab-icon"></i>
+				<span class="fed-hub-tab-label"><?php esc_html_e( 'HELP', 'frontend-dashboard' ); ?></span>
+			</button>
+
 			<!-- Collapsible Menu Panel -->
 			<div class="fed-hub-menu-panel is-hidden" id="fed_hub_menu_panel">
 				<div class="fed-hub-header">
-					<span class="fed-hub-title"><?php esc_html_e( 'Quick Resources', 'frontend-dashboard' ); ?></span>
-					<span class="fed-hub-subtitle"><?php esc_html_e( 'Frontend Dashboard Hub', 'frontend-dashboard' ); ?></span>
+					<div>
+						<span class="fed-hub-title"><?php esc_html_e( 'Quick Resources', 'frontend-dashboard' ); ?></span>
+						<span class="fed-hub-subtitle"><?php esc_html_e( 'Frontend Dashboard Hub', 'frontend-dashboard' ); ?></span>
+					</div>
+					<button type="button" id="fed_hub_close_btn_top" class="fed-hub-close-btn" title="<?php esc_attr_e( 'Close', 'frontend-dashboard' ); ?>" aria-label="<?php esc_attr_e( 'Close', 'frontend-dashboard' ); ?>">
+						<i class="fas fa-times"></i>
+					</button>
 				</div>
 				<div class="fed-hub-items">
 					<!-- Demo -->
@@ -4390,12 +4477,12 @@ function fed_show_help_icons() {
 						</div>
 					</a>
 				</div>
+				<div class="fed-hub-footer">
+					<button type="button" id="fed_hub_close_btn_bottom" class="fed-hub-footer-close-btn" title="<?php esc_attr_e( 'Close', 'frontend-dashboard' ); ?>">
+						<i class="fas fa-times"></i> <?php esc_html_e( 'Close', 'frontend-dashboard' ); ?>
+					</button>
+				</div>
 			</div>
-
-			<!-- Circular FAB Trigger -->
-			<button type="button" id="fed_floating_hub_btn" class="fed-hub-fab" title="<?php esc_attr_e( 'Frontend Dashboard Quick Resources', 'frontend-dashboard' ); ?>" aria-label="<?php esc_attr_e( 'Help & Resources', 'frontend-dashboard' ); ?>">
-				<i id="fed_hub_fab_icon" class="fas fa-question text-lg"></i>
-			</button>
 		</div>
 
 		<script>
@@ -4403,6 +4490,8 @@ function fed_show_help_icons() {
 			const hubBtn = document.getElementById('fed_floating_hub_btn');
 			const hubPanel = document.getElementById('fed_hub_menu_panel');
 			const hubIcon = document.getElementById('fed_hub_fab_icon');
+			const closeBtnTop = document.getElementById('fed_hub_close_btn_top');
+			const closeBtnBottom = document.getElementById('fed_hub_close_btn_bottom');
 			const storageKey = 'fed_floating_hub_state';
 
 			if (!hubBtn || !hubPanel) return;
@@ -4411,7 +4500,7 @@ function fed_show_help_icons() {
 				hubPanel.classList.remove('is-hidden');
 				hubBtn.classList.add('is-active');
 				if (hubIcon) {
-					hubIcon.className = 'fas fa-times text-lg';
+					hubIcon.className = 'fas fa-times fed-hub-tab-icon';
 				}
 				if (saveState) {
 					localStorage.setItem(storageKey, 'open');
@@ -4422,7 +4511,7 @@ function fed_show_help_icons() {
 				hubPanel.classList.add('is-hidden');
 				hubBtn.classList.remove('is-active');
 				if (hubIcon) {
-					hubIcon.className = 'fas fa-question text-lg';
+					hubIcon.className = 'fas fa-question-circle fed-hub-tab-icon';
 				}
 				if (saveState) {
 					localStorage.setItem(storageKey, 'closed');
@@ -4446,6 +4535,20 @@ function fed_show_help_icons() {
 					closeHub(true);
 				}
 			});
+
+			// Top & bottom close buttons
+			if (closeBtnTop) {
+				closeBtnTop.addEventListener('click', function(e) {
+					e.stopPropagation();
+					closeHub(true);
+				});
+			}
+			if (closeBtnBottom) {
+				closeBtnBottom.addEventListener('click', function(e) {
+					e.stopPropagation();
+					closeHub(true);
+				});
+			}
 
 			// Close when clicking outside
 			document.addEventListener('click', function(e) {

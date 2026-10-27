@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.0.20
+Stable tag: 3.0.21
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -150,6 +150,10 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 == Changelog ==
 
+= 3.0.21 (2026-10-27) =
+* Enhancement: Floating Help & Quick Resources Redesign: Redesigned the Quick Resources Hub into a sleek right-center floating vertical tab with uppercase "HELP" badge, resolving UI positioning collisions with bottom-corner notification bells, chat widgets, and third-party floating action buttons.
+* Enhancement: Interactive Slide-Out Resource Drawer: Upgraded the Quick Resources menu into an accessible slide-out drawer featuring dual close controls (top-header and bottom-footer close buttons), outside-click dismiss, Escape shortcut, and smooth animated transitions.
+
 = 3.0.20 (2026-10-21) =
 * Feature: Add-ons Marketplace Pro Extension Catalog: Extended the official Add-ons & Extensions marketplace (`WP-Admin > Frontend Dashboard > Add-ons`) to display official BufferCode Pro extensions (Membership, Pay Per Post, User Management, and Social Connect) alongside free extensions directly from the BufferCode API.
 * Enhancement: Add-ons Marketplace Category Navigation: Added dedicated category tabs for "Monetization" and "User Management" to the Add-ons marketplace filter bar for instant category browsing.
@@ -286,6 +290,9 @@ More Changelogs:
 https://faq.frontenddashboard.com/changelog/overview/
 
 == Upgrade Notice ==
+
+= 3.0.21 =
+Redesigns the Quick Resources Help Hub to a floating right-center vertical tab with dedicated close controls, resolving UI conflicts with bottom-corner action buttons and notification widgets.
 
 = 3.0.17 =
 Resolves undefined route query warnings in DashboardRoutes, restores PDF Embedder shortcode insertion compatibility from the custom media picker across all editor modes, and ensures unconfigured or inactive payment gateways are excluded from frontend checkout screens. Fully compatible with GateFuz v1.1.3 and Frontend Dashboard Pay Per Post v3.0.0.
