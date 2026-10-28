@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.0.23
+Stable tag: 3.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -149,6 +149,14 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 
 == Changelog ==
+
+= 3.1.0 (2026-10-28) =
+* Feature: Pluggable Email Driver Architecture: Introduced extensible `MailDriverInterface` supporting native `wp_mail` transport, direct authenticated SMTP relay with STARTTLS/SSL, and extensible third-party drivers via the `fed_email_drivers` filter.
+* Feature: Asynchronous WP-Cron Queue & Exponential Auto-Retries: Added background queueing for sub-50ms user checkout and form submission responses, with automatic exponential backoff retries at 2m, 10m, and 30m intervals.
+* Feature: Deliverability & Audit Logs Subsystem: Introduced database table `wp_fed_email_logs` and interactive admin UI with live recipient search, delivery status filters, attempts counter, and bulk management.
+* Feature: Dedicated Top-Level Email Menu: Created a dedicated admin management page under `WP-Admin > Frontend Dashboard > Email` with responsive controls, enterprise confirmation modals, and toast notifications.
+* Feature: Deliverability Diagnostic Tool: Added real-time test email dispatch tool with immediate SMTP TLS handoff verification and failure detail exposure.
+* Enhancement: Pre-Send Cancellation Hooks: Added `fed_pre_send_mail` and `fed_pre_send_forgot_password_mail` filters allowing developers to inspect or suppress delivery prior to transport.
 
 = 3.0.22 (2026-10-28) =
 * Fix: Safe Payment Settings & Role Pricing Lookup: Resolved PHP 8.x warnings ("Trying to access array offset on false / null") in user-profile.php and function-admin.php when rendering authentication portals without active payment configuration.
