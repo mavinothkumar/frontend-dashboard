@@ -161,6 +161,15 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 		}
 
 		/**
+		 * Email Management & Deliverability.
+		 */
+		public function email_management() {
+			if ( class_exists( 'FEDEmail' ) ) {
+				( new FEDEmail() )->show_page();
+			}
+		}
+
+		/**
 		 * Common Settings.
 		 */
 		/**
@@ -658,14 +667,6 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 						'method' => 'fed_admin_general_tab',
 					),
 				),
-				'email'               => array(
-					'icon_class' => 'fas fa-envelope',
-					'name'       => __( 'Email', 'frontend-dashboard' ),
-					'callable'   => array(
-						'object' => new FEDEmail(),
-						'method' => 'show',
-					),
-				),
 			);
 
 			if ( ! defined( 'FED_CP_PLUGIN_VERSION' ) ) {
@@ -744,6 +745,13 @@ if ( ! class_exists( 'FED_AdminMenu' ) ) {
 					'capability' => 'manage_options',
 					'callback'   => array( $this, 'post_fields' ),
 					'position'   => 25,
+				),
+				'fed_email'          => array(
+					'page_title' => __( 'Email & Deliverability', 'frontend-dashboard' ),
+					'menu_title' => __( 'Email', 'frontend-dashboard' ),
+					'capability' => 'manage_options',
+					'callback'   => array( $this, 'email_management' ),
+					'position'   => 45,
 				),
 				'fed_settings'       => array(
 					'page_title' => __( 'Settings', 'frontend-dashboard' ),

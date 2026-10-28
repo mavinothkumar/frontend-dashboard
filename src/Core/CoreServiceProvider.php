@@ -19,6 +19,8 @@ use FED\Services\Cron\CronManager;
 use FED\Services\Diagnostics\SystemHealthChecker;
 use FED\Services\Fields\FieldFactory;
 use FED\Services\Logging\AuditLogger;
+use FED\Services\Mail\MailDriverManager;
+use FED\Services\Mail\MailQueueManager;
 use FED\Services\Notifications\MailService;
 use FED\Services\Notifications\NotificationManager;
 use FED\Services\Payments\PaymentGatewayManager;
@@ -156,9 +158,21 @@ class CoreServiceProvider extends ServiceProvider {
 
 		// Notifications & Email
 		$this->container->singleton(
-			MailService::class,
+			MailDriverManager::class,
 			function () {
-				return new MailService();
+				return new MailDriverManager();
+			}
+		);
+		$this->container->singleton(
+			MailQueueManager::class,
+			function ( $c ) {
+				return new MailQueueManager( $c->make( MailDriverManager::class ) );
+			}
+		);
+		$this->container->singleton(
+			MailService::class,
+			function ( $c ) {
+				return new MailService( $c->make( MailQueueManager::class ) );
 			}
 		);
 		$this->container->singleton(
@@ -204,5 +218,9 @@ class CoreServiceProvider extends ServiceProvider {
 		// Auto-run pending database migrations if any
 		$migrationManager = $this->container->make( MigrationManager::class );
 		$migrationManager->run();
+
+		// Register mail queue cron worker
+		$mailQueueManager = $this->container->make( MailQueueManager::class );
+		$mailQueueManager->registerHooks();
 	}
 }

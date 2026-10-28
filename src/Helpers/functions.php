@@ -99,3 +99,41 @@ if ( ! function_exists( 'FED\gateways' ) ) {
 		return \FED\Services\Payments\PaymentGatewayManager::getInstance();
 	}
 }
+
+if ( ! function_exists( 'FED\mailer' ) ) {
+	/**
+	 * Get the unified Mail Service instance.
+	 *
+	 * @return \FED\Services\Notifications\MailService
+	 */
+	function mailer(): \FED\Services\Notifications\MailService {
+		return app( \FED\Services\Notifications\MailService::class );
+	}
+}
+
+if ( ! function_exists( 'fed_send_mail' ) ) {
+	/**
+	 * Send an email through the unified Frontend Dashboard mail subsystem.
+	 *
+	 * @param string|array $to
+	 * @param string       $subject
+	 * @param string       $message
+	 * @param array        $headers
+	 * @param array        $attachments
+	 * @param string       $eventName
+	 * @param bool         $forceSync
+	 * @return bool
+	 */
+	function fed_send_mail(
+		$to,
+		string $subject,
+		string $message,
+		array $headers = array(),
+		array $attachments = array(),
+		string $eventName = 'generic',
+		bool $forceSync = false
+	): bool {
+		$service = \FED\app( \FED\Services\Notifications\MailService::class );
+		return $service->send( $to, $subject, $message, $attachments, $headers, $eventName, $forceSync );
+	}
+}

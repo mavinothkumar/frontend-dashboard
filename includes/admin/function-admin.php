@@ -2915,11 +2915,11 @@ function fed_get_current_user_role_key() {
 function fed_get_amount_based_on_user_role() {
 	$current_user_role = fed_get_current_user_role();
 	$settings          = get_option( 'fed_admin_settings_payments' );
-	$role_pricing      = $settings['role_pricing'];
 	$amount            = '0.00';
-	if ( isset( $settings['role_pricing'] ) ) {
-		if ( count( array_intersect( $current_user_role, array_keys( $role_pricing ) ) ) > 0 ) {
-			$amount = $settings['role_pricing'][ $current_user_role[0] ];
+	if ( is_array( $settings ) && isset( $settings['role_pricing'] ) && is_array( $settings['role_pricing'] ) ) {
+		$role_pricing = $settings['role_pricing'];
+		if ( is_array( $current_user_role ) && count( array_intersect( $current_user_role, array_keys( $role_pricing ) ) ) > 0 ) {
+			$amount = isset( $role_pricing[ $current_user_role[0] ] ) ? $role_pricing[ $current_user_role[0] ] : '0.00';
 		}
 	}
 

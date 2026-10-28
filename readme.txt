@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.0.21
+Stable tag: 3.0.23
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -149,6 +149,10 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 
 == Changelog ==
+
+= 3.0.22 (2026-10-28) =
+* Fix: Safe Payment Settings & Role Pricing Lookup: Resolved PHP 8.x warnings ("Trying to access array offset on false / null") in user-profile.php and function-admin.php when rendering authentication portals without active payment configuration.
+* Fix: reCAPTCHA Script Synchronization: Improved frontend callback binding for Google reCAPTCHA v2 checkbox challenge rendering on login and registration pages.
 
 = 3.0.21 (2026-10-27) =
 * Enhancement: Floating Help & Quick Resources Redesign: Redesigned the Quick Resources Hub into a sleek right-center floating vertical tab with uppercase "HELP" badge, resolving UI positioning collisions with bottom-corner notification bells, chat widgets, and third-party floating action buttons.

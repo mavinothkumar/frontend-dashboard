@@ -12,6 +12,10 @@ jQuery(document).ready(function ($) {
       $('[data-toggle="popover"]').popover()
     }
 
+    if ( typeof window.CaptchaCallback === 'function' ) {
+      window.CaptchaCallback()
+    }
+
     function executeFedFormPost($form) {
       var data = $form.serialize()
       var url = frontend_dashboard.fed_login_form_post
@@ -938,7 +942,7 @@ jQuery.fed_generate_random_number = function () {
   return Math.random().toString(36).substring(7)
 }
 
-var CaptchaCallback = function () {
+window.CaptchaCallback = window.CaptchaCallback || function () {
   if (
     typeof frontend_dashboard === 'undefined' ||
     !frontend_dashboard.fed_captcha_details ||
@@ -946,15 +950,34 @@ var CaptchaCallback = function () {
   ) {
     return
   }
-  var fedRegister = document.getElementById('fedRegisterCaptcha')
-  var fedLogin = document.getElementById('fedLoginCaptcha')
-  if (fedRegister !== null) {
-    grecaptcha.render('fedRegisterCaptcha', { 'sitekey': frontend_dashboard.fed_captcha_details.fed_captcha_site_key })
+  function doRender() {
+    if (typeof grecaptcha === 'undefined' || typeof grecaptcha.render !== 'function') {
+      return
+    }
+    var siteKey = frontend_dashboard.fed_captcha_details.fed_captcha_site_key
+    if (!siteKey) {
+      return
+    }
+    var fedRegister = document.getElementById('fedRegisterCaptcha')
+    var fedLogin = document.getElementById('fedLoginCaptcha')
+    if (fedRegister !== null && !fedRegister.hasChildNodes()) {
+      try {
+        grecaptcha.render('fedRegisterCaptcha', { 'sitekey': siteKey })
+      } catch (e) {}
+    }
+    if (fedLogin !== null && !fedLogin.hasChildNodes()) {
+      try {
+        grecaptcha.render('fedLoginCaptcha', { 'sitekey': siteKey })
+      } catch (e) {}
+    }
   }
-  if (fedLogin !== null) {
-    grecaptcha.render('fedLoginCaptcha', { 'sitekey': frontend_dashboard.fed_captcha_details.fed_captcha_site_key })
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', doRender)
+  } else {
+    doRender()
   }
 }
+var CaptchaCallback = window.CaptchaCallback
 
 function fed_check_password_strength ($pass1,
   $pass2,

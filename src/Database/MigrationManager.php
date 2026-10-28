@@ -10,6 +10,7 @@ use FED\Database\Migrations\CreateFedPostTable;
 use FED\Database\Migrations\CreateFedPaymentTables;
 use FED\Database\Migrations\CreateFedLogsTable;
 use FED\Database\Migrations\CreateFedNotificationsTable;
+use FED\Database\Migrations\CreateFedEmailLogsTable;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -37,6 +38,7 @@ class MigrationManager {
 		CreateFedPaymentTables::class,
 		CreateFedLogsTable::class,
 		CreateFedNotificationsTable::class,
+		CreateFedEmailLogsTable::class,
 	);
 
 	/**

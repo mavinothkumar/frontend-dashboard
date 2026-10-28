@@ -244,17 +244,20 @@ function fed_role_with_pricing( $fed_admin_login = '' ) {
 	}
 	$role_pricing = fed_is_role_in_registration( $fed_admin_login );
 	$new_array    = array();
-	if ( $fed_admin_login ) {
+	if ( $fed_admin_login && is_array( $role_pricing ) ) {
 		$fed_payment_options = get_option( 'fed_admin_settings_payments' );
+		if ( ! is_array( $fed_payment_options ) ) {
+			$fed_payment_options = array();
+		}
 		foreach ( $role_pricing as $index => $role ) {
 			$new_array['role'][ $index ] = array(
 				'name'   => $role,
-				'price'  => $fed_payment_options['role_pricing']['payment_details'][ $index ]['role_pricing'],
-				'cycle'  => $fed_payment_options['role_pricing']['payment_details'][ $index ]['payment_cycle'],
-				'custom' => $fed_payment_options['role_pricing']['payment_details'][ $index ]['custom_payment_cycle'],
+				'price'  => isset( $fed_payment_options['role_pricing']['payment_details'][ $index ]['role_pricing'] ) ? $fed_payment_options['role_pricing']['payment_details'][ $index ]['role_pricing'] : null,
+				'cycle'  => isset( $fed_payment_options['role_pricing']['payment_details'][ $index ]['payment_cycle'] ) ? $fed_payment_options['role_pricing']['payment_details'][ $index ]['payment_cycle'] : null,
+				'custom' => isset( $fed_payment_options['role_pricing']['payment_details'][ $index ]['custom_payment_cycle'] ) ? $fed_payment_options['role_pricing']['payment_details'][ $index ]['custom_payment_cycle'] : null,
 			);
 		}
-		$new_array['settings'] = $fed_payment_options['settings'];
+		$new_array['settings'] = isset( $fed_payment_options['settings'] ) && is_array( $fed_payment_options['settings'] ) ? $fed_payment_options['settings'] : array();
 
 		return $new_array;
 	}
@@ -276,13 +279,16 @@ function fed_role_with_pricing_flat( $fed_admin_login = '' ) {
 	$role_pricing = fed_is_role_in_registration( $fed_admin_login );
 
 	$new_array = array();
-	if ( $fed_admin_login && $role_pricing ) {
+	if ( $fed_admin_login && is_array( $role_pricing ) ) {
 		$fed_payment_options = get_option( 'fed_admin_settings_payments' );
+		if ( ! is_array( $fed_payment_options ) ) {
+			$fed_payment_options = array();
+		}
 		foreach ( $role_pricing as $index => $role ) {
-			$price    = $fed_payment_options['role_pricing']['payment_details'][ $index ]['role_pricing'];
-			$cycle    = $fed_payment_options['role_pricing']['payment_details'][ $index ]['payment_cycle'];
-			$custom   = $fed_payment_options['role_pricing']['payment_details'][ $index ]['custom_payment_cycle'];
-			$currency = $fed_payment_options['settings']['currency_type'];
+			$price    = isset( $fed_payment_options['role_pricing']['payment_details'][ $index ]['role_pricing'] ) ? $fed_payment_options['role_pricing']['payment_details'][ $index ]['role_pricing'] : null;
+			$cycle    = isset( $fed_payment_options['role_pricing']['payment_details'][ $index ]['payment_cycle'] ) ? $fed_payment_options['role_pricing']['payment_details'][ $index ]['payment_cycle'] : null;
+			$custom   = isset( $fed_payment_options['role_pricing']['payment_details'][ $index ]['custom_payment_cycle'] ) ? $fed_payment_options['role_pricing']['payment_details'][ $index ]['custom_payment_cycle'] : null;
+			$currency = isset( $fed_payment_options['settings']['currency_type'] ) ? $fed_payment_options['settings']['currency_type'] : null;
 
 			$new_array[ $index ] = ( null !== $price && $currency ) ? $role . ' ' . $currency . ' ' . $price . fed_convert_to_price(
 				$cycle,

@@ -70,12 +70,43 @@ function fed_forgot_form_submit( $post ) {
 
 	$title = __( 'Password Reset - ', 'frontend-dashboard' ) . $blogname;
 
-	// phpcs:ignore
-	if ( $message && ! wp_mail( $user_email, wp_specialchars_decode( $title ), $message, $headers ) ) {
+	/**
+	 * Filter to cancel or intercept password reset email dispatch before transport.
+	 *
+	 * @param bool     $allow_send Whether to proceed with delivery.
+	 * @param \WP_User $user_data  User object.
+	 * @param string   $user_email User email.
+	 */
+	$allow_send = apply_filters( 'fed_pre_send_forgot_password_mail', true, $user_data, $user_email );
+
+	if ( ! $allow_send ) {
+		wp_send_json_error(
+			array(
+				'user'    => __( 'Password reset dispatch was cancelled.', 'frontend-dashboard' ),
+				'message' => '',
+				'url'     => '',
+			)
+		);
+		exit();
+	}
+
+	$sent = fed_send_mail(
+		$user_email,
+		wp_specialchars_decode( $title ),
+		$message,
+		$headers,
+		array(),
+		'forgot_password',
+		true
+	);
+
+	do_action( 'fed_after_forgot_password_mail', $sent, $user_data, $user_email );
+
+	if ( ! $sent ) {
 		wp_send_json_error(
 			array(
 				'user'    => __(
-					'The email could not be sent. Possible reason: your host may have disabled the mail() function.',
+					'The email could not be sent. Possible reason: your host may have disabled the mail() function or SMTP rejected the message.',
 					'frontend-dashboard'
 				),
 				'message' => '',

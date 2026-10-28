@@ -38,10 +38,20 @@ if ( ! class_exists( 'FED_ActionHooks' ) ) {
 				2
 			);
 			add_action( 'phpmailer_init', array( $this, 'send_email_via_smtp' ) );
+
+			// Early sender registration for all wp_mail() invocations
+			$settings = get_option( 'fed_settings_email' );
+			if ( ! empty( $settings['credentials']['email'] ) && is_email( $settings['credentials']['email'] ) ) {
+				$fed_email = new FEDEmail();
+				add_filter( 'wp_mail_from', array( $fed_email, 'sender_email' ) );
+				if ( ! empty( $settings['credentials']['from_name'] ) ) {
+					add_filter( 'wp_mail_from_name', array( $fed_email, 'sender_name' ) );
+				}
+			}
 		}
 
 		/**
-		 * Send Email via SMPT.
+		 * Send Email via SMTP.
 		 *
 		 * @param  object $mailer  Mailer.
 		 */
@@ -51,12 +61,13 @@ if ( ! class_exists( 'FED_ActionHooks' ) ) {
 			if ( $settings ) {
 				$email     = fed_get_data( 'credentials.email', $settings, false );
 				$from_name = fed_get_data( 'credentials.from_name', $settings, false );
-				$fed_email = new FEDEmail();
 				if ( $email && ! empty( $email ) && is_email( $email ) ) {
-					add_filter( 'wp_mail_from', array( $fed_email, 'sender_email' ) );
-				}
-				if ( $from_name && ! empty( $from_name ) ) {
-					add_filter( 'wp_mail_from_name', array( $fed_email, 'sender_name' ) );
+					try {
+						$mailer->setFrom( $email, ! empty( $from_name ) ? $from_name : '' );
+						$mailer->Sender = $email;
+					} catch ( \Exception $e ) {
+						// Fallback silently if setFrom throws.
+					}
 				}
 				if ( 'SMTP' === $is_enable ) {
 					$mailer->isSMTP();
@@ -69,7 +80,7 @@ if ( ! class_exists( 'FED_ActionHooks' ) ) {
 					if ( 'none' === $encryption ) {
 						$mailer->SMTPSecure  = '';
 						$mailer->SMTPAutoTLS = false;
-					} elseif ( 'starttls' === $encryption ) {
+					} elseif ( 'starttls' === $encryption || 'tls' === $encryption ) {
 						$mailer->SMTPSecure = 'tls';
 					} else {
 						$mailer->SMTPSecure = $encryption;
