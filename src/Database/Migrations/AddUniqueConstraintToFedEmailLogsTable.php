@@ -44,36 +44,52 @@ class AddUniqueConstraintToFedEmailLogsTable implements MigrationInterface {
 			WHERE t1.id > t2.id AND t1.uuid = t2.uuid AND t1.uuid != ''" // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		);
 
-		// Check index status
+		// Check all existing indexes on the table
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$indexes = $wpdb->get_results(
-			$wpdb->prepare( "SHOW INDEX FROM `$table` WHERE Column_name = %s", 'uuid' ), // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			"SHOW INDEX FROM `$table`", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			ARRAY_A
 		);
 
-		$has_unique  = false;
-		$index_names = array();
+		$has_unique_uuid      = false;
+		$uuid_indexes_to_drop = array();
 
 		if ( ! empty( $indexes ) ) {
 			foreach ( $indexes as $idx ) {
-				$index_names[] = $idx['Key_name'];
-				if ( 0 === (int) $idx['Non_unique'] ) {
-					$has_unique = true;
+				if ( 'uuid' === $idx['Column_name'] ) {
+					if ( 0 === (int) $idx['Non_unique'] ) {
+						$has_unique_uuid = true;
+					} else {
+						$uuid_indexes_to_drop[] = $idx['Key_name'];
+					}
 				}
 			}
 		}
 
-		if ( ! $has_unique ) {
-			// Drop non-unique index if exists
-			foreach ( array_unique( $index_names ) as $name ) {
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				$wpdb->query( "ALTER TABLE `$table` DROP INDEX `$name`" );
-			}
-
-			// Add unique index
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			$wpdb->query( "ALTER TABLE `$table` ADD UNIQUE KEY `uuid` (`uuid`)" );
+		if ( $has_unique_uuid ) {
+			return;
 		}
+
+		// Drop non-unique indexes on uuid
+		foreach ( array_unique( $uuid_indexes_to_drop ) as $index_name ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$wpdb->query( "ALTER TABLE `$table` DROP INDEX `$index_name`" );
+		}
+
+		// Double-check if key name 'uuid' still exists before adding
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$key_exists = $wpdb->get_var(
+			$wpdb->prepare( "SHOW INDEX FROM `$table` WHERE Key_name = %s", 'uuid' ) // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		);
+
+		if ( ! empty( $key_exists ) ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$wpdb->query( "ALTER TABLE `$table` DROP INDEX `uuid`" );
+		}
+
+		// Add unique index
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$wpdb->query( "ALTER TABLE `$table` ADD UNIQUE KEY `uuid` (`uuid`)" );
 	}
 
 	/**
