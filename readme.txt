@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.1.0
+Stable tag: 3.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -149,6 +149,12 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 
 == Changelog ==
+
+= 3.1.1 (2026-10-29) =
+* Fix: Background Email Queue Idempotency: Enforced pending-UUID short-circuit guard in MailQueueManager::dispatch() to guarantee multiple calls with an identical UUID prior to processing do not insert duplicate queued records.
+* Fix: Email Deliverability Logs Table Constraint: Enforced database-level UNIQUE KEY uuid (uuid) constraint via migration AddUniqueConstraintToFedEmailLogsTable to eliminate race conditions and duplicate key collisions at the storage layer.
+* Fix: Concurrency & Worker Claim Guard: Implemented an atomic conditional transition (UPDATE wp_fed_email_logs SET status = 'processing' ... WHERE status IN ('queued', 'failed')) before driver execution in MailQueueManager::processQueue(), preventing double-dispatch across concurrent WP-Cron executions.
+* Enhancement: In-Batch Deduplication & Stale Recovery: Added in-memory UUID tracking during queue runner batch loops, along with automated reclamation for orphaned in-flight tasks exceeding 15 minutes.
 
 = 3.1.0 (2026-10-28) =
 * Feature: Pluggable Email Driver Architecture: Introduced extensible `MailDriverInterface` supporting native `wp_mail` transport, direct authenticated SMTP relay with STARTTLS/SSL, and extensible third-party drivers via the `fed_email_drivers` filter.
