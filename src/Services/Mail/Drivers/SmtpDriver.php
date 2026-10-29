@@ -101,16 +101,18 @@ class SmtpDriver implements MailDriverInterface {
 
 		add_action( 'wp_mail_failed', $failed_handler );
 
-		$sent = wp_mail(
-			$message->getTo(),
-			$message->getSubject(),
-			$message->getBody(),
-			$headers,
-			$message->getAttachments()
-		);
-
-		remove_action( 'wp_mail_failed', $failed_handler );
-		remove_action( 'phpmailer_init', $phpmailer_configurator, 999 );
+		try {
+			$sent = wp_mail(
+				$message->getTo(),
+				$message->getSubject(),
+				$message->getBody(),
+				$headers,
+				$message->getAttachments()
+			);
+		} finally {
+			remove_action( 'wp_mail_failed', $failed_handler );
+			remove_action( 'phpmailer_init', $phpmailer_configurator, 999 );
+		}
 
 		if ( $sent ) {
 			return MailResult::success( $message->getUuid() );

@@ -54,15 +54,17 @@ class WpMailDriver implements MailDriverInterface {
 
 		add_action( 'wp_mail_failed', $failed_handler );
 
-		$sent = wp_mail(
-			$message->getTo(),
-			$message->getSubject(),
-			$message->getBody(),
-			$headers,
-			$message->getAttachments()
-		);
-
-		remove_action( 'wp_mail_failed', $failed_handler );
+		try {
+			$sent = wp_mail(
+				$message->getTo(),
+				$message->getSubject(),
+				$message->getBody(),
+				$headers,
+				$message->getAttachments()
+			);
+		} finally {
+			remove_action( 'wp_mail_failed', $failed_handler );
+		}
 
 		if ( $sent ) {
 			return MailResult::success( $message->getUuid() );

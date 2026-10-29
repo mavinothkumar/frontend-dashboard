@@ -16,7 +16,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class MailQueueManager {
 
-	const CRON_HOOK = 'fed_process_email_queue';
+	const CRON_HOOK        = 'fed_process_email_queue';
+	const SINGLE_CRON_HOOK = 'fed_process_email_queue_single';
 
 	protected MailDriverManager $driverManager;
 
@@ -29,9 +30,23 @@ class MailQueueManager {
 	 */
 	public function registerHooks(): void {
 		add_action( self::CRON_HOOK, array( $this, 'processQueue' ) );
+		add_action( self::SINGLE_CRON_HOOK, array( $this, 'processQueue' ) );
+
+		add_filter(
+			'cron_schedules',
+			function ( $schedules ) {
+				if ( ! isset( $schedules['fed_every_five_minutes'] ) ) {
+					$schedules['fed_every_five_minutes'] = array(
+						'interval' => 300,
+						'display'  => __( 'Every 5 Minutes (Frontend Dashboard)', 'frontend-dashboard' ),
+					);
+				}
+				return $schedules;
+			}
+		);
 
 		if ( ! wp_next_scheduled( self::CRON_HOOK ) ) {
-			wp_schedule_event( time(), 'hourly', self::CRON_HOOK );
+			wp_schedule_event( time(), 'fed_every_five_minutes', self::CRON_HOOK );
 		}
 	}
 
@@ -108,9 +123,9 @@ class MailQueueManager {
 		if ( $should_queue ) {
 			$log_id = $this->recordLog( $message, $driver->getId(), 'queued', 0 );
 
-			// Spawn immediate background spawn if supported
-			if ( ! wp_next_scheduled( self::CRON_HOOK ) ) {
-				wp_schedule_single_event( time() + 5, self::CRON_HOOK );
+			// Spawn prompt background runner if not already scheduled
+			if ( ! wp_next_scheduled( self::SINGLE_CRON_HOOK ) ) {
+				wp_schedule_single_event( time() + 2, self::SINGLE_CRON_HOOK );
 			}
 
 			return MailResult::success(
@@ -260,8 +275,12 @@ class MailQueueManager {
 
 				if ( $attempts < $max_attempts ) {
 					// Exponential backoff: attempt 1 -> 2m, attempt 2 -> 10m, attempt 3 -> 30m
-					$delay_minutes = ( 1 === $attempts ) ? 2 : ( ( 2 === $attempts ) ? 10 : 30 );
-					$retry_after   = gmdate( 'Y-m-d H:i:s', time() + ( $delay_minutes * MINUTE_IN_SECONDS ) );
+					$delay_minutes   = ( 1 === $attempts ) ? 2 : ( ( 2 === $attempts ) ? 10 : 30 );
+					$retry_timestamp = time() + ( $delay_minutes * MINUTE_IN_SECONDS );
+					$retry_after     = gmdate( 'Y-m-d H:i:s', $retry_timestamp );
+
+					// Precisely schedule wake-up cron single event at the retry backoff timestamp
+					wp_schedule_single_event( $retry_timestamp, self::SINGLE_CRON_HOOK );
 				}
 
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
@@ -281,6 +300,11 @@ class MailQueueManager {
 			}
 
 			++$processed;
+		}
+
+		// If batch limit was reached, schedule another single runner in 2 seconds to drain remaining queue
+		if ( count( $items ) >= $limit && ! wp_next_scheduled( self::SINGLE_CRON_HOOK ) ) {
+			wp_schedule_single_event( time() + 2, self::SINGLE_CRON_HOOK );
 		}
 
 		return $processed;

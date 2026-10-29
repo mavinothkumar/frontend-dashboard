@@ -249,12 +249,35 @@ if ( ! class_exists( 'FEDEmail' ) ) {
 												</div>
 											</div>
 
+											<div class="p-3 bg-white border border-slate-200 rounded-xl flex items-center justify-between flex-wrap gap-2.5">
+												<div class="flex items-center gap-2">
+													<i class="fa fa-magic text-indigo-500 text-xs"></i>
+													<span class="text-xs font-semibold text-slate-700"><?php esc_html_e( 'Quick SMTP Presets:', 'frontend-dashboard' ); ?></span>
+												</div>
+												<div class="flex items-center gap-2 flex-wrap">
+													<button type="button" class="fed-smtp-preset-btn px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 text-slate-700 hover:text-indigo-600 transition-all cursor-pointer" data-host="relay.mailsenpai.com" data-port="587" data-enc="STARTTLS" data-auth="yes" data-tip="<?php echo esc_attr__( 'MailSenpai preset applied (relay.mailsenpai.com:587 STARTTLS). Get credentials from en.mailsenpai.com/smtp-api', 'frontend-dashboard' ); ?>">
+														MailSenpai (EU)
+													</button>
+													<button type="button" class="fed-smtp-preset-btn px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 text-slate-700 hover:text-indigo-600 transition-all cursor-pointer" data-host="smtp.sendgrid.net" data-port="587" data-enc="TLS" data-auth="yes" data-tip="<?php echo esc_attr__( 'SendGrid preset applied (smtp.sendgrid.net:587 TLS).', 'frontend-dashboard' ); ?>">
+														SendGrid
+													</button>
+													<button type="button" class="fed-smtp-preset-btn px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 text-slate-700 hover:text-indigo-600 transition-all cursor-pointer" data-host="email-smtp.us-east-1.amazonaws.com" data-port="587" data-enc="STARTTLS" data-auth="yes" data-tip="<?php echo esc_attr__( 'Amazon SES preset applied (email-smtp.us-east-1.amazonaws.com:587 STARTTLS).', 'frontend-dashboard' ); ?>">
+														Amazon SES
+													</button>
+												</div>
+											</div>
+
+											<div id="fed_smtp_preset_alert" class="hidden text-[11px] font-medium text-indigo-700 bg-indigo-50/80 p-2.5 rounded-lg border border-indigo-100 flex items-center gap-2">
+												<i class="fa fa-check-circle text-indigo-600"></i>
+												<span id="fed_smtp_preset_alert_text"></span>
+											</div>
+
 											<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
 												<div class="sm:col-span-2">
 													<label for="fed_smtp_host" class="block text-xs font-semibold text-slate-700 mb-1.5">
 														<?php esc_html_e( 'SMTP Host / Server', 'frontend-dashboard' ); ?> <span class="text-rose-500">*</span>
 													</label>
-													<input type="text" id="fed_smtp_host" name="smtp[host_name]" value="<?php echo esc_attr( $host ); ?>" placeholder="mail.mailsenpai.com or smtp.sendgrid.net" class="w-full text-xs text-slate-800 bg-white border border-slate-200 rounded-xl focus:border-indigo-500 transition-all outline-none font-mono" style="min-height: 42px !important; height: 42px !important;" />
+													<input type="text" id="fed_smtp_host" name="smtp[host_name]" value="<?php echo esc_attr( $host ); ?>" placeholder="relay.mailsenpai.com or smtp.sendgrid.net" class="w-full text-xs text-slate-800 bg-white border border-slate-200 rounded-xl focus:border-indigo-500 transition-all outline-none font-mono" style="min-height: 42px !important; height: 42px !important;" />
 												</div>
 
 												<div>
@@ -695,6 +718,26 @@ if ( ! class_exists( 'FEDEmail' ) ) {
 							} else {
 								$input.attr('type', 'password');
 								$icon.removeClass('fa-eye-slash').addClass('fa-eye');
+							}
+						});
+
+						// Quick SMTP Preset Buttons
+						$(document).on('click', '.fed-smtp-preset-btn', function(e) {
+							e.preventDefault();
+							var host = $(this).data('host');
+							var port = $(this).data('port');
+							var enc  = $(this).data('enc');
+							var auth = $(this).data('auth');
+							var tip  = $(this).data('tip');
+
+							$('#fed_smtp_host').val(host);
+							$('#fed_smtp_port').val(port);
+							$('#fed_smtp_encryption').val(enc);
+							$('#fed_smtp_auth').val(auth);
+
+							if (tip) {
+								$('#fed_smtp_preset_alert_text').text(tip);
+								$('#fed_smtp_preset_alert').removeClass('hidden').hide().fadeIn(200);
 							}
 						});
 
