@@ -54,7 +54,7 @@ class CreateFedEmailLogsTable implements MigrationInterface {
 			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 			updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 			PRIMARY KEY  (id),
-			KEY uuid (uuid),
+			UNIQUE KEY uuid (uuid),
 			KEY to_email (to_email),
 			KEY provider (provider),
 			KEY status (status),

@@ -11,6 +11,7 @@ use FED\Database\Migrations\CreateFedPaymentTables;
 use FED\Database\Migrations\CreateFedLogsTable;
 use FED\Database\Migrations\CreateFedNotificationsTable;
 use FED\Database\Migrations\CreateFedEmailLogsTable;
+use FED\Database\Migrations\AddUniqueConstraintToFedEmailLogsTable;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -39,6 +40,7 @@ class MigrationManager {
 		CreateFedLogsTable::class,
 		CreateFedNotificationsTable::class,
 		CreateFedEmailLogsTable::class,
+		AddUniqueConstraintToFedEmailLogsTable::class,
 	);
 
 	/**

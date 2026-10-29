@@ -48,7 +48,7 @@ class MailQueueManager {
 		$settings = get_option( 'fed_settings_email', array() );
 		$driver   = $this->driverManager->getActiveDriver();
 
-		// Idempotency: Check if this exact UUID was already processed successfully
+		// Idempotency: Check if this exact UUID was already processed, queued, or in flight
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$existing = $wpdb->get_row(
 			$wpdb->prepare(
@@ -58,8 +58,25 @@ class MailQueueManager {
 			ARRAY_A
 		);
 
-		if ( $existing && 'sent' === $existing['status'] ) {
-			return MailResult::success( $message->getUuid(), array( 'idempotent_duplicate' => true ) );
+		if ( $existing ) {
+			$existing_status = $existing['status'];
+
+			// If already sent, queued, or actively processing, short-circuit to prevent duplicate dispatches
+			if ( in_array( $existing_status, array( 'sent', 'queued', 'processing' ), true ) ) {
+				return MailResult::success(
+					$message->getUuid(),
+					array(
+						'idempotent_duplicate' => true,
+						'status'               => $existing_status,
+						'log_id'               => (int) $existing['id'],
+					)
+				);
+			}
+
+			// If explicitly cancelled previously, maintain cancellation
+			if ( 'cancelled' === $existing_status ) {
+				return MailResult::failure( __( 'Email delivery was cancelled by filter.', 'frontend-dashboard' ) );
+			}
 		}
 
 		/**
@@ -140,6 +157,19 @@ class MailQueueManager {
 		$table = $wpdb->prefix . ( defined( 'BC_FED_TABLE_EMAIL_LOGS' ) ? BC_FED_TABLE_EMAIL_LOGS : 'fed_email_logs' );
 		$now   = current_time( 'mysql' );
 
+		// Stale in-flight recovery: recover items left in 'processing' for > 15 minutes (e.g. killed process or server restart)
+		$stale_time = gmdate( 'Y-m-d H:i:s', time() - ( 15 * MINUTE_IN_SECONDS ) );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$wpdb->query(
+			$wpdb->prepare(
+				"UPDATE `$table` 
+				SET status = 'queued', updated_at = %s 
+				WHERE status = 'processing' AND updated_at < %s", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$now,
+				$stale_time
+			)
+		);
+
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$items = $wpdb->get_results(
 			$wpdb->prepare(
@@ -157,10 +187,40 @@ class MailQueueManager {
 			return 0;
 		}
 
-		$processed = 0;
-		$driver    = $this->driverManager->getActiveDriver();
+		$processed     = 0;
+		$driver        = $this->driverManager->getActiveDriver();
+		$claimed_uuids = array();
 
 		foreach ( $items as $row ) {
+			$uuid = $row['uuid'];
+
+			// In-batch deduplication guard
+			if ( ! empty( $uuid ) && isset( $claimed_uuids[ $uuid ] ) ) {
+				continue;
+			}
+
+			// Atomic claim guard: transition status to 'processing' before dispatching.
+			// Guarantees that concurrent workers or simultaneous processQueue calls do not double-process rows.
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$claimed = $wpdb->query(
+				$wpdb->prepare(
+					"UPDATE `$table` 
+					SET status = 'processing', updated_at = %s 
+					WHERE id = %d AND status IN ('queued', 'failed')", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					$now,
+					(int) $row['id']
+				)
+			);
+
+			if ( ! $claimed ) {
+				// Record was already claimed or processed by another concurrent process
+				continue;
+			}
+
+			if ( ! empty( $uuid ) ) {
+				$claimed_uuids[ $uuid ] = true;
+			}
+
 			$headers     = ! empty( $row['headers'] ) ? (array) json_decode( $row['headers'], true ) : array();
 			$attachments = ! empty( $row['attachments'] ) ? (array) json_decode( $row['attachments'], true ) : array();
 
@@ -173,7 +233,7 @@ class MailQueueManager {
 				$row['event_name'],
 				true,
 				array(),
-				$row['uuid']
+				$uuid
 			);
 
 			$attempts = (int) $row['attempts'] + 1;
@@ -309,6 +369,19 @@ class MailQueueManager {
 		global $wpdb;
 		$table = $wpdb->prefix . ( defined( 'BC_FED_TABLE_EMAIL_LOGS' ) ? BC_FED_TABLE_EMAIL_LOGS : 'fed_email_logs' );
 
+		// Fast lookup: if a record with this UUID already exists, return its ID
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$existing_id = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT id FROM `$table` WHERE uuid = %s LIMIT 1", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$message->getUuid()
+			)
+		);
+
+		if ( ! empty( $existing_id ) ) {
+			return (int) $existing_id;
+		}
+
 		$data = array(
 			'uuid'          => $message->getUuid(),
 			'event_name'    => $message->getEventName(),
@@ -329,7 +402,21 @@ class MailQueueManager {
 		);
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$wpdb->insert( $table, $data );
+		$inserted = $wpdb->insert( $table, $data );
+
+		if ( false === $inserted || empty( $wpdb->insert_id ) ) {
+			// Catch race condition: if another process just inserted this UUID, return existing ID
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$collided_id = $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT id FROM `$table` WHERE uuid = %s LIMIT 1", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					$message->getUuid()
+				)
+			);
+			if ( ! empty( $collided_id ) ) {
+				return (int) $collided_id;
+			}
+		}
 
 		return (int) $wpdb->insert_id;
 	}
