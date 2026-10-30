@@ -150,7 +150,7 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 == Changelog ==
 
-= 3.1.1 (2026-10-29) =
+= 3.1.1 (2026-10-30) =
 * Fix: Background Email Queue Idempotency: Enforced pending-UUID short-circuit guard in MailQueueManager::dispatch() to guarantee multiple calls with an identical UUID prior to processing do not insert duplicate queued records.
 * Fix: Email Deliverability Logs Table Constraint: Enforced database-level UNIQUE KEY uuid (uuid) constraint via migration AddUniqueConstraintToFedEmailLogsTable to eliminate race conditions and duplicate key collisions at the storage layer.
 * Fix: Concurrency & Worker Claim Guard: Implemented an atomic conditional transition (UPDATE wp_fed_email_logs SET status = 'processing' ... WHERE status IN ('queued', 'failed')) before driver execution in MailQueueManager::processQueue(), preventing double-dispatch across concurrent WP-Cron executions.
