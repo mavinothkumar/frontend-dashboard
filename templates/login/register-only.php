@@ -49,7 +49,11 @@ do_action( 'fed_before_register_only_form' );
 										<?php
 										//phpcs:ignore
 										echo( $content['input'] );
-
+										?>
+										<?php if ( ! empty( $content['tooltip_body'] ) ) : ?>
+											<p class="text-xs text-slate-500 mt-0.5 m-0"><?php echo esc_html( $content['tooltip_body'] ); ?></p>
+										<?php endif; ?>
+										<?php
 										do_action( 'fed_register_below_form_field', $content['input_meta'], $content );
 										?>
 									</div>

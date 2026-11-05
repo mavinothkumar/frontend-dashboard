@@ -418,6 +418,7 @@ function fed_display_dashboard_edit_post_by_id( $post ) {
 		<div class="col-md-9">
 			<div class="fed_header_font_color">' . esc_html( $item['label_name'] ) . '</div>
 			' . fed_get_input_details( $temp ) . '
+			' . ( ! empty( $item['tooltip_body'] ) ? '<p class="text-xs text-slate-400 mt-1">' . esc_html( $item['tooltip_body'] ) . '</p>' : '' ) . '
 		</div>
 	</div>
 	';

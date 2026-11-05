@@ -308,6 +308,7 @@ function fed_get_add_profile_post_fields() {
 				<button type="button" class="fed-header-save-btn fed-btn-primary h-11 inline-flex items-center justify-center gap-2 px-7 rounded-2xl font-bold text-xs transition-all active:scale-95 cursor-pointer shadow-sm">
 					<i class="fas fa-save text-xs" style="color: #ffffff !important;"></i>
 					<span style="color: #ffffff !important;"><?php esc_html_e( 'Save Field Changes', 'frontend-dashboard' ); ?></span>
+					<kbd class="hidden sm:inline-block ml-1 px-1.5 py-0.5 text-[10px] font-semibold bg-white/20 text-white rounded border border-white/30">Ctrl+S</kbd>
 				</button>
 			</div>
 		</div>
@@ -634,12 +635,13 @@ function fed_get_add_profile_post_fields() {
 				var type = $(this).data('button');
 				if (!type) return;
 
-				// Sync common values (Label, Meta, Required, Menu) from current form to newly selected form
+				// Sync common values (Label, Meta, Required, Menu, Help) from current form to newly selected form
 				var $currentVisible = $('.fed_input_type_container:visible');
 				var currentLabel = $currentVisible.find('input[name="label_name"]').val();
 				var currentMeta  = $currentVisible.find('input[name="input_meta"]').val();
 				var currentOrder = $currentVisible.find('input[name="input_order"]').val();
 				var currentMenu  = $currentVisible.find('select[name="menu"]').val();
+				var currentHelp  = $currentVisible.find('input[name="tooltip_body"]').val();
 
 				activateFieldType(type);
 
@@ -656,6 +658,9 @@ function fed_get_add_profile_post_fields() {
 					}
 					if (currentMenu) {
 						$newVisible.find('select[name="menu"]').val(currentMenu);
+					}
+					if (currentHelp && !$newVisible.find('input[name="tooltip_body"]').val()) {
+						$newVisible.find('input[name="tooltip_body"]').val(currentHelp);
 					}
 				}
 			});
@@ -787,6 +792,35 @@ function fed_get_add_profile_post_fields() {
 					$metaInput.removeData('fed-manual');
 				} else {
 					$metaInput.data('fed-manual', true);
+				}
+			});
+
+			// Manual slug re-generation trigger button
+			$(document).on('click', '.fed-btn-sync-slug', function(e) {
+				e.preventDefault();
+				var $form = $(this).closest('form');
+				var $labelInput = $form.find('input[name="label_name"]');
+				var $metaInput = $form.find('input[name="input_meta"]');
+				if ($metaInput.length && !$metaInput.prop('readonly')) {
+					var slug = fedSlugifyMeta($labelInput.val());
+					$metaInput.val(slug).removeData('fed-manual').focus();
+				}
+			});
+
+			// Keyboard shortcut: Ctrl + S / Cmd + S to save
+			$(document).on('keydown.fed_builder_shortcut', function(e) {
+				if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.keyCode === 83)) {
+					e.preventDefault();
+					e.stopPropagation();
+					var $modal = $('#fed_field_builder_modal');
+					if ($modal.length && $modal.is(':visible')) {
+						var $activeModalForm = $modal.find('.fed_input_type_container:visible form');
+						if ($activeModalForm.length) {
+							$activeModalForm.submit();
+						}
+					} else {
+						$('.fed-header-save-btn').trigger('click');
+					}
 				}
 			});
 

@@ -555,6 +555,8 @@ function fed_get_empty_value_for_user_profile( $action ) {
 		'input_max'      => '',
 		'input_step'     => '',
 		'input_row'      => '',
+		'tooltip_body'   => '',
+		'is_tooltip'     => 'no',
 		'post_type'      => 'post',
 		'user_role'      => array_keys( fed_get_user_roles() ),
 	);
@@ -605,6 +607,8 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 		'input_max'      => isset( $row['input_max'] ) ? sanitize_text_field( $row['input_max'] ) : '',
 		'input_step'     => isset( $row['input_step'] ) ? sanitize_text_field( $row['input_step'] ) : '',
 		'input_row'      => isset( $row['input_row'] ) ? sanitize_text_field( $row['input_row'] ) : '',
+		'tooltip_body'   => isset( $row['tooltip_body'] ) ? sanitize_textarea_field( $row['tooltip_body'] ) : '',
+		'is_tooltip'     => ! empty( $row['tooltip_body'] ) ? 'yes' : ( isset( $row['is_tooltip'] ) ? sanitize_text_field( $row['is_tooltip'] ) : 'no' ),
 		'input_type'     => isset( $row['input_type'] ) ? sanitize_text_field( $row['input_type'] ) : '',
 		'input_meta'     => isset( $row['input_meta'] ) ? sanitize_text_field( $row['input_meta'] ) : '',
 

@@ -53,6 +53,9 @@ function fed_add_meta_boxes_display() {
 						<?php
 						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo fed_get_input_details( $temp );
+						if ( ! empty( $item['tooltip_body'] ) ) {
+							echo '<p class="description text-xs text-slate-500 mt-1">' . esc_html( $item['tooltip_body'] ) . '</p>';
+						}
 						?>
 					</div>
 				</div>

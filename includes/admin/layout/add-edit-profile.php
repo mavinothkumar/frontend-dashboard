@@ -353,6 +353,10 @@ function fed_get_admin_up_input_meta( $row ) {
 				<span class="inline-flex items-center gap-1 text-[10px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
 					<i class="fas fa-lock text-[9px]"></i> <?php esc_html_e( 'Locked Key', 'frontend-dashboard' ); ?>
 				</span>
+			<?php else : ?>
+				<button type="button" class="fed-btn-sync-slug text-[10px] font-semibold text-indigo-600 hover:text-indigo-800 inline-flex items-center gap-1 cursor-pointer transition-colors bg-transparent border-0 p-0" title="<?php esc_attr_e( 'Auto-generate slug from Label Name', 'frontend-dashboard' ); ?>">
+					<i class="fas fa-magic text-[9px]"></i> <?php esc_html_e( 'Auto-Generate', 'frontend-dashboard' ); ?>
+				</button>
 			<?php endif; ?>
 		</div>
 
@@ -436,6 +440,7 @@ function fed_get_input_type_and_submit_btn( $input_type, $action, $row = array()
 			<button type="submit" class="fed-btn-primary h-11 inline-flex items-center justify-center gap-2 px-7 rounded-2xl font-bold text-xs transition-all active:scale-95 cursor-pointer shadow-sm">
 				<i class="fas fa-save text-xs" style="color: #ffffff !important;"></i>
 				<span style="color: #ffffff !important;"><?php esc_html_e( 'Save Field Changes', 'frontend-dashboard' ); ?></span>
+				<kbd class="hidden sm:inline-block ml-1 px-1.5 py-0.5 text-[10px] font-semibold bg-white/20 text-white rounded border border-white/30">Ctrl+S</kbd>
 			</button>
 		</div>
 	</div>

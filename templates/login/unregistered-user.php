@@ -133,6 +133,9 @@ if ( $menu ) {
 										// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 										echo null !== $label ? fed_show_form_label( $content ) : '';
 										?>
+										<?php if ( ! empty( $content['tooltip_body'] ) ) : ?>
+											<p class="text-xs text-slate-500 mt-0.5 m-0"><?php echo esc_html( $content['tooltip_body'] ); ?></p>
+										<?php endif; ?>
 									</div>
 									<?php
 								}

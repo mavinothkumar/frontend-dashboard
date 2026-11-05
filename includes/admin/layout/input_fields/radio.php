@@ -45,9 +45,10 @@ function fed_admin_input_fields_radio( $row, $action, $menu_options ) {
 					<?php fed_get_admin_up_label_input_order( $row ); ?>
 					<div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
 						<?php fed_get_admin_up_input_meta( $row ); ?>
-						<?php fed_get_class_field( $row ); ?>
+						<?php fed_get_help_text_field( $row ); ?>
 					</div>
 					<div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+						<?php fed_get_class_field( $row ); ?>
 						<?php fed_get_id_field( $row ); ?>
 					</div>
 				</div>

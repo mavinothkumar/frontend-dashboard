@@ -124,8 +124,8 @@ function fed_get_registration_content_fields() {
 			unset( $extended['disable_user_access'] );
 		}
 		$registration[ $detail['input_meta'] ] = array(
-			'name'        => $detail['label_name'],
-			'input'       => fed_get_input_details(
+			'name'         => $detail['label_name'],
+			'input'        => fed_get_input_details(
 				array(
 					'input_meta'  => $detail['input_meta'],
 					'placeholder' => $detail['placeholder'],
@@ -143,10 +143,11 @@ function fed_get_registration_content_fields() {
 					'is_register' => true,
 				)
 			),
-			'input_order' => $detail['input_order'],
-			'extended'    => $extended,
-			'input_type'  => $detail['input_type'],
-			'input_meta'  => $detail['input_meta'],
+			'input_order'  => $detail['input_order'],
+			'extended'     => $extended,
+			'input_type'   => $detail['input_type'],
+			'input_meta'   => $detail['input_meta'],
+			'tooltip_body' => ! empty( $detail['tooltip_body'] ) ? $detail['tooltip_body'] : '',
 		);
 	}
 

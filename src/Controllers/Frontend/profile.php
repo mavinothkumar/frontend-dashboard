@@ -189,17 +189,21 @@ function fed_display_dashboard_profile( $menu_item ) {
 											<div class="mt-1">
 												<?php echo fed_get_input_details( $field ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 											</div>
-											<p class="text-xs text-slate-400 mt-1.5">
-												<?php
-												if ( $is_login ) {
-													esc_html_e( 'Usernames are unique across the platform and cannot be modified.', 'frontend-dashboard' );
-												} elseif ( $is_email ) {
-													esc_html_e( 'Used for account notifications and security alerts.', 'frontend-dashboard' );
-												} elseif ( 'url' === ( $field['input_type'] ?? '' ) || 'user_url' === ( $field['input_meta'] ?? '' ) ) {
-													esc_html_e( 'Please include http:// or https:// (e.g. https://example.com)', 'frontend-dashboard' );
-												}
-												?>
-											</p>
+											<?php if ( ! empty( $field['tooltip_body'] ) ) : ?>
+												<p class="text-xs text-slate-400 mt-1.5"><?php echo esc_html( $field['tooltip_body'] ); ?></p>
+											<?php else : ?>
+												<p class="text-xs text-slate-400 mt-1.5">
+													<?php
+													if ( $is_login ) {
+														esc_html_e( 'Usernames are unique across the platform and cannot be modified.', 'frontend-dashboard' );
+													} elseif ( $is_email ) {
+														esc_html_e( 'Used for account notifications and security alerts.', 'frontend-dashboard' );
+													} elseif ( 'url' === ( $field['input_type'] ?? '' ) || 'user_url' === ( $field['input_meta'] ?? '' ) ) {
+														esc_html_e( 'Please include http:// or https:// (e.g. https://example.com)', 'frontend-dashboard' );
+													}
+													?>
+												</p>
+											<?php endif; ?>
 										</div>
 									<?php endforeach; ?>
 								</div>
@@ -278,7 +282,9 @@ function fed_display_dashboard_profile( $menu_item ) {
 											<div class="mt-1">
 												<?php echo fed_get_input_details( $single_item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 											</div>
-											<?php if ( $isUrl ) : ?>
+											<?php if ( ! empty( $single_item['tooltip_body'] ) ) : ?>
+												<p class="text-xs text-slate-400 mt-1.5"><?php echo esc_html( $single_item['tooltip_body'] ); ?></p>
+											<?php elseif ( $isUrl ) : ?>
 												<p class="text-xs text-slate-400 mt-1.5 flex items-center gap-1">
 													<svg class="w-3.5 h-3.5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
 													<?php esc_html_e( 'Please include http:// or https:// (e.g. https://example.com)', 'frontend-dashboard' ); ?>

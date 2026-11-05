@@ -37,6 +37,34 @@ function fed_get_placeholder_field( array $row ) {
 }
 
 /**
+ * Get Help / Description Text Field.
+ *
+ * @param array $row Row.
+ */
+function fed_get_help_text_field( array $row ) {
+	$val = isset( $row['tooltip_body'] ) ? $row['tooltip_body'] : '';
+	?>
+	<div class="space-y-1.5">
+		<label class="block text-xs font-bold text-slate-700">
+			<?php esc_html_e( 'Help / Description Text', 'frontend-dashboard' ); ?>
+		</label>
+		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo fed_input_box(
+			'tooltip_body',
+			array(
+				'value' => $val,
+				'class' => 'fed-live-preview-help-text',
+			),
+			'single_line'
+		);
+		?>
+		<p class="text-[11px] text-slate-400 m-0"><?php esc_html_e( 'Instructions or hint text displayed directly below the field for end users.', 'frontend-dashboard' ); ?></p>
+	</div>
+	<?php
+}
+
+/**
  * Get Class Field.
  *
  * @param  array $row  Row.

@@ -54,6 +54,7 @@ function fed_admin_input_fields_checkbox( $row, $action, $menu_options ) {
 							<p class="text-[11px] text-slate-400 m-0"><?php esc_html_e( 'Rendered directly next to the checkbox input.', 'frontend-dashboard' ); ?></p>
 						</div>
 					</div>
+					<?php fed_get_help_text_field( $row ); ?>
 					<div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
 						<?php fed_get_class_field( $row ); ?>
 						<?php fed_get_id_field( $row ); ?>
