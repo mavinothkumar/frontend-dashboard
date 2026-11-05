@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.2.0
+Stable tag: 3.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -149,6 +149,12 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 
 == Changelog ==
+
+= 3.3.0 (2026-11-05) =
+* Feature: Responsive Grid & Field Layout Controls: Added flexible field width selection (100% Full Width, 50% Half Width, 33% One-Third Width, and 25% One-Quarter Width) to the Form Field Builder across all 15 input field types.
+* Feature: Multi-Column Form Layout Engine: Upgraded frontend user profile forms, registration cards, frontend post authoring screens, and WordPress admin metaboxes to support modern multi-column responsive grid alignment (Tailwind and Bootstrap 12-column grids).
+* Enhancement: Palette Width Memory: Switching field types in the builder palette dynamically preserves and synchronizes the selected layout width across forms.
+* Compatibility: Seamless Backward Compatibility: Existing fields gracefully default to intuitive proportions (100% for multiline textareas, code editors, and tables; 50% for standard single-line inputs) without requiring database migrations.
 
 = 3.2.0 (2026-11-05) =
 * Feature: Smart Auto-Slugify for Meta Keys: Added real-time automatic slug generation from the Label Name to Input Meta Key (supporting up to 32 characters conforming to database schema) with an "Auto-Generate" trigger button.

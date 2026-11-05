@@ -49,9 +49,11 @@ function fed_admin_input_fields_multi_line( $row, $action, $menu_options ) {
 						<?php fed_get_placeholder_field( $row ); ?>
 					</div>
 					<?php fed_get_help_text_field( $row ); ?>
-					<div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
 						<?php fed_get_class_field( $row ); ?>
 						<?php fed_get_id_field( $row ); ?>
+					</div>
+					<div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
 						<div class="space-y-2">
 							<label class="block text-xs font-bold text-slate-700"><?php esc_html_e( 'Textarea Height (Rows)', 'frontend-dashboard' ); ?></label>
 							<?php
@@ -66,6 +68,7 @@ function fed_admin_input_fields_multi_line( $row, $action, $menu_options ) {
 							?>
 							<p class="text-[11px] text-slate-400 m-0"><?php esc_html_e( 'Visible row height of the textarea.', 'frontend-dashboard' ); ?></p>
 						</div>
+						<?php fed_get_field_width_field( $row ); ?>
 					</div>
 				</div>
 			</div>

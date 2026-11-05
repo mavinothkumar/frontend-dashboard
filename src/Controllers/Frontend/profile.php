@@ -164,14 +164,15 @@ function fed_display_dashboard_profile( $menu_item ) {
 										</div>
 									</div>
 								</div>
-								<div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+								<div class="p-6 grid grid-cols-12 gap-6">
 									<?php foreach ( $account_fields as $field ) : ?>
 										<?php
 										$is_readonly = ! empty( $field['readonly'] );
 										$is_login    = 'user_login' === $field['input_meta'];
 										$is_email    = 'user_email' === $field['input_meta'];
+										$width_class = fed_get_field_width_class( $field );
 										?>
-										<div class="fed_dashboard_item_field">
+										<div class="fed_dashboard_item_field <?php echo esc_attr( $width_class ); ?>">
 											<div class="flex items-center justify-between mb-2">
 												<label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
 													<?php echo wp_kses_post( $field['label_name'] ); ?>
@@ -224,12 +225,13 @@ function fed_display_dashboard_profile( $menu_item ) {
 										</div>
 									</div>
 								</div>
-								<div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+								<div class="p-6 grid grid-cols-12 gap-6">
 									<?php foreach ( $security_fields as $field ) : ?>
 										<?php
-										$is_pass = 'user_pass' === $field['input_meta'];
+										$is_pass     = 'user_pass' === $field['input_meta'];
+										$width_class = fed_get_field_width_class( $field );
 										?>
-										<div class="fed_dashboard_item_field">
+										<div class="fed_dashboard_item_field <?php echo esc_attr( $width_class ); ?>">
 											<label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
 												<?php echo wp_kses_post( $field['label_name'] ); ?>
 											</label>
@@ -265,14 +267,14 @@ function fed_display_dashboard_profile( $menu_item ) {
 										</div>
 									</div>
 								</div>
-								<div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+								<div class="p-6 grid grid-cols-12 gap-6">
 									<?php
 									foreach ( $extra_fields as $single_item ) {
-										$isFullWidth = in_array( $single_item['input_type'] ?? '', array( 'multi_line', 'textarea', 'multiline', 'address' ), true );
+										$width_class = fed_get_field_width_class( $single_item );
 										$isUrl       = ( 'url' === ( $single_item['input_type'] ?? '' ) || 'user_url' === ( $single_item['input_meta'] ?? '' ) );
 										$isEmail     = ( 'email' === ( $single_item['input_type'] ?? '' ) || 'user_email' === ( $single_item['input_meta'] ?? '' ) );
 										?>
-										<div class="fed_dashboard_item_field <?php echo $isFullWidth ? 'md:col-span-2' : ''; ?>">
+										<div class="fed_dashboard_item_field <?php echo esc_attr( $width_class ); ?>">
 											<label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
 												<?php echo wp_kses_post( $single_item['label_name'] ); ?>
 												<?php if ( ! empty( $single_item['is_required'] ) && 'Enable' === $single_item['is_required'] ) : ?>

@@ -119,6 +119,42 @@ function fed_get_id_field( array $row ) {
 }
 
 /**
+ * Get Field Width / Column Span Field.
+ *
+ * @param array $row Row.
+ */
+function fed_get_field_width_field( array $row ) {
+	$extended   = isset( $row['extended'] ) ? ( is_string( $row['extended'] ) ? maybe_unserialize( $row['extended'] ) : $row['extended'] ) : array();
+	$width_val  = isset( $extended['field_width'] ) ? $extended['field_width'] : '100';
+	$width_opts = array(
+		'100' => __( '100% (Full Width - 1 Col)', 'frontend-dashboard' ),
+		'50'  => __( '50% (Half Width - 2 Cols)', 'frontend-dashboard' ),
+		'33'  => __( '33% (One-Third - 3 Cols)', 'frontend-dashboard' ),
+		'25'  => __( '25% (One-Quarter - 4 Cols)', 'frontend-dashboard' ),
+	);
+	?>
+	<div class="space-y-1.5">
+		<label class="block text-xs font-bold text-slate-700">
+			<?php esc_html_e( 'Field Width (Column Span)', 'frontend-dashboard' ); ?>
+		</label>
+		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo fed_input_box(
+			'extended[field_width]',
+			array(
+				'value'   => $width_val,
+				'options' => $width_opts,
+				'class'   => 'fed-live-preview-width',
+			),
+			'select'
+		);
+		?>
+		<p class="text-[11px] text-slate-400 m-0"><?php esc_html_e( 'Controls the responsive column width on frontend forms.', 'frontend-dashboard' ); ?></p>
+	</div>
+	<?php
+}
+
+/**
  * Render Interactive Choices & Options Repeater Builder.
  *
  * @param  mixed  $input_val    Raw option values (legacy string, JSON, array).

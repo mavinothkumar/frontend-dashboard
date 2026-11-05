@@ -75,7 +75,7 @@ if ( $menu ) {
 		?>
 		
 		<div class="flex justify-center">
-			<div class="w-full max-w-md">
+			<div class="w-full max-w-md <?php echo 'register' === $page_name ? 'sm:max-w-xl' : ''; ?>">
 				<?php
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo fed_get_brand_logo_html( array( 'context' => 'login_tabs' ) );
@@ -108,6 +108,7 @@ if ( $menu ) {
 						<div class="fed_tab_content">
 							<form method="post" class="fed_form_post space-y-4">
 								<?php fed_wp_nonce_field( 'fed_nonce', 'fed_nonce' ); ?>
+								<div class="grid grid-cols-12 gap-4">
 								<?php
 								$contents = $menu['content'];
 								uasort( $contents, 'fed_sort_by_order' );
@@ -119,8 +120,9 @@ if ( $menu ) {
 											$label = $extended['label'];
 										}
 									}
+									$width_class = fed_get_field_width_class( $content );
 									?>
-									<div class="form-group flex flex-col gap-1">
+									<div class="form-group flex flex-col gap-1 <?php echo esc_attr( $width_class ); ?>">
 										<?php
 										$content_name = ! empty( $content['name'] ) && ( null === $label ) ? fed_show_form_label( $content ) : '';
 										echo wp_kses_post( $content_name );
@@ -140,6 +142,7 @@ if ( $menu ) {
 									<?php
 								}
 								?>
+								</div>
 								<div class="pt-2 text-center">
 									<input type="hidden" name="submit" value="<?php echo esc_attr( $page_name ); ?>"/>
 									<button class="w-full inline-flex justify-center items-center py-2.5 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-150" type="submit">

@@ -19,7 +19,7 @@ do_action( 'fed_before_register_only_form' );
 		echo fed_loader();
 		?>
 		<div class="flex justify-center">
-			<div class="w-full max-w-md">
+			<div class="w-full max-w-md sm:max-w-xl">
 				<?php
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo fed_get_brand_logo_html( array( 'context' => 'register_only' ) );
@@ -35,13 +35,15 @@ do_action( 'fed_before_register_only_form' );
 					<div class="p-6">
 						<div class="fed_tab_content" data-id="<?php echo esc_attr( $details['menu']['id'] ); ?>">
 							<form method="post" class="fed_form_post space-y-5">
+								<div class="grid grid-cols-12 gap-4">
 								<?php
 								$contents = $details['content'];
 								uasort( $contents, 'fed_sort_by_order' );
 
 								foreach ( $contents as $content ) {
+									$width_class = fed_get_field_width_class( $content );
 									?>
-									<div class="form-group flex flex-col gap-1">
+									<div class="form-group flex flex-col gap-1 <?php echo esc_attr( $width_class ); ?>">
 										<?php
 										//phpcs:ignore
 										echo fed_show_form_label( $content );
@@ -60,6 +62,7 @@ do_action( 'fed_before_register_only_form' );
 									<?php
 								}
 								?>
+								</div>
 								
 								<div class="pt-4 text-center">
 									<input type="hidden" name="submit" value="register"/>

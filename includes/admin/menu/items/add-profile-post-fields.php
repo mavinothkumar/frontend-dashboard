@@ -635,13 +635,14 @@ function fed_get_add_profile_post_fields() {
 				var type = $(this).data('button');
 				if (!type) return;
 
-				// Sync common values (Label, Meta, Required, Menu, Help) from current form to newly selected form
+				// Sync common values (Label, Meta, Required, Menu, Help, Width) from current form to newly selected form
 				var $currentVisible = $('.fed_input_type_container:visible');
 				var currentLabel = $currentVisible.find('input[name="label_name"]').val();
 				var currentMeta  = $currentVisible.find('input[name="input_meta"]').val();
 				var currentOrder = $currentVisible.find('input[name="input_order"]').val();
 				var currentMenu  = $currentVisible.find('select[name="menu"]').val();
 				var currentHelp  = $currentVisible.find('input[name="tooltip_body"]').val();
+				var currentWidth = $currentVisible.find('select[name="extended[field_width]"]').val();
 
 				activateFieldType(type);
 
@@ -661,6 +662,9 @@ function fed_get_add_profile_post_fields() {
 					}
 					if (currentHelp && !$newVisible.find('input[name="tooltip_body"]').val()) {
 						$newVisible.find('input[name="tooltip_body"]').val(currentHelp);
+					}
+					if (currentWidth) {
+						$newVisible.find('select[name="extended[field_width]"]').val(currentWidth);
 					}
 				}
 			});

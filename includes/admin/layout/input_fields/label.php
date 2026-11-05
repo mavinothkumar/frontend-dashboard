@@ -51,6 +51,7 @@ function fed_admin_input_fields_label( $row, $action, $menu_options ) {
 					</div>
 					<div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
 						<?php fed_get_id_field( $row ); ?>
+						<?php fed_get_field_width_field( $row ); ?>
 					</div>
 				</div>
 			</div>

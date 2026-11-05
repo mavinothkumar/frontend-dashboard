@@ -409,20 +409,28 @@ function fed_display_dashboard_edit_post_by_id( $post ) {
 	/**
 	 * Extra Fields
 	 */
+	$has_extra_fields  = false;
+	$extra_fields_html = '';
 	foreach ( $post_table as $item ) {
 		$temp               = $item;
-		$temp['user_value'] = $post_meta[ $item['input_meta'] ][0];
+		$temp['user_value'] = isset( $post_meta[ $item['input_meta'] ][0] ) ? $post_meta[ $item['input_meta'] ][0] : '';
 		if ( $post->post_type === $item['post_type'] ) {
-			$html .= '
-	<div class="row fed_dashboard_item_field">
-		<div class="col-md-9">
+			$has_extra_fields   = true;
+			$col_class          = fed_get_field_bootstrap_col_class( $item );
+			$extra_fields_html .= '
+		<div class="' . esc_attr( $col_class ) . ' fed_dashboard_item_field p-b-20">
 			<div class="fed_header_font_color">' . esc_html( $item['label_name'] ) . '</div>
 			' . fed_get_input_details( $temp ) . '
 			' . ( ! empty( $item['tooltip_body'] ) ? '<p class="text-xs text-slate-400 mt-1">' . esc_html( $item['tooltip_body'] ) . '</p>' : '' ) . '
-		</div>
+		</div>';
+		}
+	}
+	if ( $has_extra_fields ) {
+		$html .= '
+	<div class="row fed_extra_fields_container">
+		' . $extra_fields_html . '
 	</div>
 	';
-		}
 	}
 	$html .= '
 	<div class="row fed_dashboard_item_field">

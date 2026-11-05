@@ -39,6 +39,7 @@ function fed_add_meta_boxes_display() {
 	$post_meta = fed_get_all_post_meta_key( $post->ID );
 	?>
 	<div class="bc_fed">
+		<div class="row">
 		<?php
 		foreach ( $extra_fields as $item ) {
 			$temp               = $item;
@@ -46,23 +47,23 @@ function fed_add_meta_boxes_display() {
 			$temp['input_meta'] = 'fed_meta[' . $item['input_meta'] . ']';
 
 			if ( fed_get_current_screen_id() === $item['post_type'] ) {
+				$col_class = fed_get_field_bootstrap_col_class( $item );
 				?>
-				<div class="row fed_dashboard_item_field p-b-20">
-					<div class="col-md-6">
-						<div class="fed_header_font_color"><?php echo esc_html( $temp['label_name'] ); ?></div>
-						<?php
-						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-						echo fed_get_input_details( $temp );
-						if ( ! empty( $item['tooltip_body'] ) ) {
-							echo '<p class="description text-xs text-slate-500 mt-1">' . esc_html( $item['tooltip_body'] ) . '</p>';
-						}
-						?>
-					</div>
+				<div class="<?php echo esc_attr( $col_class ); ?> fed_dashboard_item_field p-b-20">
+					<div class="fed_header_font_color"><?php echo esc_html( $temp['label_name'] ); ?></div>
+					<?php
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					echo fed_get_input_details( $temp );
+					if ( ! empty( $item['tooltip_body'] ) ) {
+						echo '<p class="description text-xs text-slate-500 mt-1">' . esc_html( $item['tooltip_body'] ) . '</p>';
+					}
+					?>
 				</div>
 				<?php
 			}
 		}
 		?>
+		</div>
 	</div>
 	<?php
 }

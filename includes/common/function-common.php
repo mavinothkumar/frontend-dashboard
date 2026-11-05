@@ -1327,3 +1327,71 @@ if ( ! function_exists( 'fed_get_brand_logo_html' ) ) {
 	}
 }
 
+if ( ! function_exists( 'fed_get_field_width_class' ) ) {
+	/**
+	 * Convert field width setting into responsive Tailwind / CSS grid column span classes.
+	 *
+	 * @param array $field Field data array.
+	 * @return string CSS class string.
+	 */
+	function fed_get_field_width_class( $field ) {
+		$extended = isset( $field['extended'] ) ? ( is_string( $field['extended'] ) ? maybe_unserialize( $field['extended'] ) : $field['extended'] ) : array();
+		$width    = ( is_array( $extended ) && isset( $extended['field_width'] ) ) ? (string) $extended['field_width'] : '';
+
+		if ( empty( $width ) ) {
+			$type = isset( $field['input_type'] ) ? $field['input_type'] : '';
+			if ( in_array( $type, array( 'multi_line', 'textarea', 'wp_editor', 'table' ), true ) ) {
+				$width = '100';
+			} else {
+				$width = '50';
+			}
+		}
+
+		switch ( $width ) {
+			case '25':
+				return 'col-span-12 sm:col-span-6 md:col-span-3';
+			case '33':
+				return 'col-span-12 sm:col-span-6 md:col-span-4';
+			case '50':
+				return 'col-span-12 md:col-span-6';
+			case '100':
+			default:
+				return 'col-span-12';
+		}
+	}
+}
+
+if ( ! function_exists( 'fed_get_field_bootstrap_col_class' ) ) {
+	/**
+	 * Convert field width setting into Bootstrap grid column classes.
+	 *
+	 * @param array $field Field data array.
+	 * @return string CSS class string.
+	 */
+	function fed_get_field_bootstrap_col_class( $field ) {
+		$extended = isset( $field['extended'] ) ? ( is_string( $field['extended'] ) ? maybe_unserialize( $field['extended'] ) : $field['extended'] ) : array();
+		$width    = ( is_array( $extended ) && isset( $extended['field_width'] ) ) ? (string) $extended['field_width'] : '';
+
+		if ( empty( $width ) ) {
+			$type = isset( $field['input_type'] ) ? $field['input_type'] : '';
+			if ( in_array( $type, array( 'multi_line', 'textarea', 'wp_editor', 'table' ), true ) ) {
+				$width = '100';
+			} else {
+				$width = '50';
+			}
+		}
+
+		switch ( $width ) {
+			case '25':
+				return 'col-md-3 col-sm-6 col-xs-12';
+			case '33':
+				return 'col-md-4 col-sm-6 col-xs-12';
+			case '50':
+				return 'col-md-6 col-sm-12 col-xs-12';
+			case '100':
+			default:
+				return 'col-md-12';
+		}
+	}
+}
+
