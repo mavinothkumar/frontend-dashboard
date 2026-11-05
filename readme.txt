@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.1.1
+Stable tag: 3.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -149,6 +149,12 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 
 == Changelog ==
+
+= 3.2.0 (2026-11-05) =
+* Feature: Smart Auto-Slugify for Meta Keys: Added real-time automatic slug generation from the Label Name to Input Meta Key (supporting up to 32 characters conforming to database schema) with an "Auto-Generate" trigger button.
+* Feature: Dedicated Field Help & Description Text: Added a dedicated "Help / Description Text" configuration across all 15 field types in the Form Field Builder, rendered directly beneath form inputs on user profile forms, registration forms, post submission forms, and WordPress admin metaboxes.
+* Feature: Keyboard Productivity Save Shortcut: Added instant keyboard saving via Ctrl+S (Cmd+S on macOS) anywhere inside the form field builder with animated toast notification and visual badge.
+* Enhancement: Multi-Type Value Persistence: Seamlessly preserved typed labels, meta keys, sort orders, and help text across field type changes in the left-hand palette.
 
 = 3.1.1 (2026-10-30) =
 * Fix: Background Email Queue Idempotency: Enforced pending-UUID short-circuit guard in MailQueueManager::dispatch() to guarantee multiple calls with an identical UUID prior to processing do not insert duplicate queued records.
