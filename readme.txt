@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.3.0
+Stable tag: 3.3.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -149,6 +149,9 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 
 == Changelog ==
+
+= 3.3.1 (2026-11-06) =
+* Fix: Target Page Post Context & Shortcode Compatibility: Resolved shortcode execution issues (including Groups plugin [groups_member] and [groups_user_groups]) on pages displayed in the frontend dashboard via "Menu Content & Target Link" by ensuring global $post is properly bound to the target page via setup_postdata() and restored with wp_reset_postdata().
 
 = 3.3.0 (2026-11-05) =
 * Feature: Responsive Grid & Field Layout Controls: Added flexible field width selection (100% Full Width, 50% Half Width, 33% One-Third Width, and 25% One-Quarter Width) to the Form Field Builder across all 15 input field types.

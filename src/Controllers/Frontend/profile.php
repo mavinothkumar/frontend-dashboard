@@ -422,14 +422,22 @@ if ( ! function_exists( 'fed_core_override_default_page' ) ) {
 			$post    = get_post( $page_id );
 
 			if ( $post instanceof \WP_Post ) {
-				// WPBakery Page Builder Custom CSS support
+				// Setup global post context for the assigned page so shortcodes (e.g. Groups, WooCommerce)
+				// and template tags correctly resolve $post, get_the_ID(), and content validation.
+				global $post;
+				$original_post = $post;
+				// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- Context switch to target post for accurate shortcode validation and rendering.
+				$post = get_post( $page_id );
+				setup_postdata( $post );
+
+				// WPBakery Page Builder Custom CSS support.
 				$wpb_css = get_post_meta( $post->ID, '_wpb_shortcodes_custom_css', true );
 				if ( $wpb_css ) {
 					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					echo '<style type="text/css" data-type="vc_shortcodes-custom-css">' . wp_strip_all_tags( $wpb_css ) . '</style>';
 				}
 
-				// Elementor page content support if Elementor is active
+				// Elementor page content support if Elementor is active.
 				if ( class_exists( '\Elementor\Plugin' ) && \Elementor\Plugin::$instance->documents->get( $post->ID ) && \Elementor\Plugin::$instance->documents->get( $post->ID )->is_built_with_elementor() ) {
 					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					echo \Elementor\Plugin::$instance->frontend->get_builder_content_for_display( $post->ID );
@@ -437,6 +445,11 @@ if ( ! function_exists( 'fed_core_override_default_page' ) ) {
 					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					echo '<div class="fed-page-content prose max-w-none">' . apply_filters( 'the_content', $post->post_content ) . '</div>';
 				}
+
+				// Restore original global post context.
+				// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- Restore original global post context after rendering target post.
+				$post = $original_post;
+				wp_reset_postdata();
 			} else {
 				?>
 				<div class="bg-white rounded-2xl border border-slate-200/80 p-8 text-center text-slate-500">
