@@ -63,6 +63,17 @@ abstract class BaseField {
 		}
 		$this->extended = is_array( $extended ) ? $extended : array();
 
+		// Resolve default value and evaluate dynamic smart tags when user_value is blank.
+		if ( '' === $this->value || null === $this->value ) {
+			$default_val = isset( $this->extended['default_value'] ) ? $this->extended['default_value'] : '';
+			if ( empty( $default_val ) && isset( $attributes['default_value'] ) && ! empty( $attributes['default_value'] ) && 'yes' !== $attributes['default_value'] ) {
+				$default_val = $attributes['default_value'];
+			}
+			if ( '' !== $default_val && null !== $default_val ) {
+				$this->value = function_exists( 'fed_resolve_smart_tags' ) ? fed_resolve_smart_tags( (string) $default_val, $attributes ) : $default_val;
+			}
+		}
+
 		// Handle user permission access check (only applies to profile/post editing, never during registration).
 		$is_register         = ! empty( $attributes['is_register'] );
 		$disable_user_access = isset( $this->extended['disable_user_access'] ) ? $this->extended['disable_user_access'] : null;

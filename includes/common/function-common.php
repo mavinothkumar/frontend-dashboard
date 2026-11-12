@@ -1395,3 +1395,160 @@ if ( ! function_exists( 'fed_get_field_bootstrap_col_class' ) ) {
 	}
 }
 
+if ( ! function_exists( 'fed_get_smart_tags_list' ) ) {
+	/**
+	 * Get categorized list of supported dynamic smart tags for builder UI and documentation.
+	 *
+	 * @return array Grouped smart tags list.
+	 */
+	function fed_get_smart_tags_list() {
+		$tags = array(
+			'user'     => array(
+				'title' => __( 'User Information', 'frontend-dashboard' ),
+				'tags'  => array(
+					'{current_user_name}'         => __( 'User Login / Username', 'frontend-dashboard' ),
+					'{current_user_email}'        => __( 'User Email Address', 'frontend-dashboard' ),
+					'{current_user_display_name}' => __( 'User Display Name', 'frontend-dashboard' ),
+					'{current_user_first_name}'   => __( 'User First Name', 'frontend-dashboard' ),
+					'{current_user_last_name}'    => __( 'User Last Name', 'frontend-dashboard' ),
+					'{current_user_id}'           => __( 'User ID', 'frontend-dashboard' ),
+					'{current_user_role}'         => __( 'Primary User Role Slug', 'frontend-dashboard' ),
+				),
+			),
+			'datetime' => array(
+				'title' => __( 'Date & Time', 'frontend-dashboard' ),
+				'tags'  => array(
+					'{current_date}'  => __( 'Current Date (WP Date Format)', 'frontend-dashboard' ),
+					'{current_time}'  => __( 'Current Time (WP Time Format)', 'frontend-dashboard' ),
+					'{current_year}'  => __( 'Current 4-digit Year (e.g. 2026)', 'frontend-dashboard' ),
+					'{current_month}' => __( 'Current Month Name (e.g. November)', 'frontend-dashboard' ),
+					'{current_day}'   => __( 'Current Day of Month (1-31)', 'frontend-dashboard' ),
+				),
+			),
+			'site'     => array(
+				'title' => __( 'Site & System', 'frontend-dashboard' ),
+				'tags'  => array(
+					'{site_title}'  => __( 'Site Title / Name', 'frontend-dashboard' ),
+					'{site_url}'    => __( 'Home Site URL', 'frontend-dashboard' ),
+					'{admin_email}' => __( 'Administrator Email', 'frontend-dashboard' ),
+				),
+			),
+			'post'     => array(
+				'title' => __( 'Post Context (Post Forms)', 'frontend-dashboard' ),
+				'tags'  => array(
+					'{post_id}'     => __( 'Current Post ID', 'frontend-dashboard' ),
+					'{post_title}'  => __( 'Current Post Title', 'frontend-dashboard' ),
+					'{post_type}'   => __( 'Post Type Slug', 'frontend-dashboard' ),
+					'{post_author}' => __( 'Author Display Name', 'frontend-dashboard' ),
+				),
+			),
+			'query'    => array(
+				'title' => __( 'URL Query Parameter', 'frontend-dashboard' ),
+				'tags'  => array(
+					'{query_param:key}' => __( 'URL Query Param (e.g. {query_param:ref} or {query_param:source})', 'frontend-dashboard' ),
+				),
+			),
+		);
+
+		return apply_filters( 'fed_smart_tags_list', $tags );
+	}
+}
+
+if ( ! function_exists( 'fed_resolve_smart_tags' ) ) {
+	/**
+	 * Parse and replace dynamic smart tags with contextual values.
+	 *
+	 * @param string $string Raw template string containing optional {tag} placeholders.
+	 * @param array  $context Optional metadata context.
+	 * @return string Processed string with all matching tags substituted.
+	 */
+	function fed_resolve_smart_tags( $string, array $context = array() ) {
+		if ( empty( $string ) || ! is_string( $string ) || strpos( $string, '{' ) === false ) {
+			return $string;
+		}
+
+		$current_user = wp_get_current_user();
+		$is_logged_in = ( $current_user && $current_user->exists() );
+
+		// User Replacements
+		$user_id           = $is_logged_in ? (string) $current_user->ID : '';
+		$user_login        = $is_logged_in ? $current_user->user_login : '';
+		$user_email        = $is_logged_in ? $current_user->user_email : '';
+		$user_first_name   = $is_logged_in ? $current_user->first_name : '';
+		$user_last_name    = $is_logged_in ? $current_user->last_name : '';
+		$user_display_name = $is_logged_in ? $current_user->display_name : '';
+		$user_role         = ( $is_logged_in && ! empty( $current_user->roles ) ) ? reset( $current_user->roles ) : '';
+
+		// Date & Time Replacements (respecting WordPress timezone settings)
+		$date_format   = get_option( 'date_format', 'Y-m-d' );
+		$time_format   = get_option( 'time_format', 'H:i' );
+		$current_date  = function_exists( 'wp_date' ) ? wp_date( $date_format ) : date_i18n( $date_format );
+		$current_time  = function_exists( 'wp_date' ) ? wp_date( $time_format ) : date_i18n( $time_format );
+		$current_year  = function_exists( 'wp_date' ) ? wp_date( 'Y' ) : date( 'Y' );
+		$current_month = function_exists( 'wp_date' ) ? wp_date( 'F' ) : date( 'F' );
+		$current_day   = function_exists( 'wp_date' ) ? wp_date( 'j' ) : date( 'j' );
+
+		// Site Replacements
+		$site_title  = get_bloginfo( 'name' );
+		$site_url    = home_url();
+		$admin_email = get_bloginfo( 'admin_email' );
+
+		// Post Context Replacements
+		global $post;
+		$target_post = isset( $context['post'] ) && $context['post'] instanceof \WP_Post ? $context['post'] : ( $post instanceof \WP_Post ? $post : null );
+		$post_id     = $target_post ? (string) $target_post->ID : '';
+		$post_title  = $target_post ? $target_post->post_title : '';
+		$post_type   = $target_post ? $target_post->post_type : '';
+		$post_author = '';
+		if ( $target_post && ! empty( $target_post->post_author ) ) {
+			$author_user = get_userdata( $target_post->post_author );
+			$post_author = $author_user ? $author_user->display_name : '';
+		}
+
+		$replacements = array(
+			'{current_user_id}'           => $user_id,
+			'{current_user_name}'         => $user_login,
+			'{current_user_login}'        => $user_login,
+			'{current_user_email}'        => $user_email,
+			'{current_user_first_name}'   => $user_first_name,
+			'{current_user_last_name}'    => $user_last_name,
+			'{current_user_display_name}' => $user_display_name,
+			'{current_user_role}'         => $user_role,
+			'{current_date}'              => $current_date,
+			'{current_time}'              => $current_time,
+			'{current_year}'              => $current_year,
+			'{current_month}'             => $current_month,
+			'{current_day}'               => $current_day,
+			'{site_title}'                => $site_title,
+			'{site_url}'                  => $site_url,
+			'{admin_email}'               => $admin_email,
+			'{post_id}'                   => $post_id,
+			'{post_title}'                => $post_title,
+			'{post_type}'                 => $post_type,
+			'{post_author}'               => $post_author,
+		);
+
+		// Allow developers to register custom tags
+		$replacements = apply_filters( 'fed_smart_tags_replacements', $replacements, $string, $context );
+
+		$resolved = str_replace( array_keys( $replacements ), array_values( $replacements ), $string );
+
+		// Dynamic Query Parameter Replacements: {query_param:key}
+		if ( strpos( $resolved, '{query_param:' ) !== false ) {
+			$resolved = preg_replace_callback(
+				'/\{query_param:([a-zA-Z0-9_\-]+)\}/',
+				function ( $matches ) {
+					$key = $matches[1];
+					if ( isset( $_GET[ $key ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+						return sanitize_text_field( wp_unslash( $_GET[ $key ] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+					}
+					return '';
+				},
+				$resolved
+			);
+		}
+
+		return apply_filters( 'fed_resolve_smart_tags', $resolved, $string, $context );
+	}
+}
+

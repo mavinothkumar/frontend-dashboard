@@ -618,13 +618,24 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 	);
 
 	$field_width = '100';
+	$default_val = '';
 	if ( isset( $row['extended'] ) ) {
-		if ( is_array( $row['extended'] ) && isset( $row['extended']['field_width'] ) ) {
-			$field_width = sanitize_text_field( $row['extended']['field_width'] );
+		if ( is_array( $row['extended'] ) ) {
+			if ( isset( $row['extended']['field_width'] ) ) {
+				$field_width = sanitize_text_field( $row['extended']['field_width'] );
+			}
+			if ( isset( $row['extended']['default_value'] ) ) {
+				$default_val = sanitize_text_field( $row['extended']['default_value'] );
+			}
 		} elseif ( is_string( $row['extended'] ) ) {
 			$tmp_ext = maybe_unserialize( $row['extended'] );
-			if ( is_array( $tmp_ext ) && isset( $tmp_ext['field_width'] ) ) {
-				$field_width = sanitize_text_field( $tmp_ext['field_width'] );
+			if ( is_array( $tmp_ext ) ) {
+				if ( isset( $tmp_ext['field_width'] ) ) {
+					$field_width = sanitize_text_field( $tmp_ext['field_width'] );
+				}
+				if ( isset( $tmp_ext['default_value'] ) ) {
+					$default_val = sanitize_text_field( $tmp_ext['default_value'] );
+				}
 			}
 		}
 	}
@@ -633,6 +644,7 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 		$extended            = array(
 			'disable_user_access' => isset( $row['extended']['disable_user_access'] ) ? wp_kses_post( $row['extended']['disable_user_access'] ) : '',
 			'field_width'         => $field_width,
+			'default_value'       => $default_val,
 		);
 		$default['extended'] = serialize( $extended );
 	} else {
@@ -640,8 +652,13 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 		if ( is_string( $row['extended'] ) ) {
 			$default['extended'] = unserialize( $row['extended'] );
 		}
-		if ( is_array( $default['extended'] ) && ! isset( $default['extended']['field_width'] ) ) {
-			$default['extended']['field_width'] = $field_width;
+		if ( is_array( $default['extended'] ) ) {
+			if ( ! isset( $default['extended']['field_width'] ) ) {
+				$default['extended']['field_width'] = $field_width;
+			}
+			if ( ! isset( $default['extended']['default_value'] ) ) {
+				$default['extended']['default_value'] = $default_val;
+			}
 		}
 	}
 
@@ -658,6 +675,7 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 				) : 'no',
 				'disable_user_access' => isset( $row['extended']['disable_user_access'] ) ? wp_kses_post( $row['extended']['disable_user_access'] ) : '',
 				'field_width'         => $field_width,
+				'default_value'       => $default_val,
 			);
 			$default['extended'] = serialize( $extended );
 		} else {
@@ -665,8 +683,13 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 			if ( is_string( $row['extended'] ) ) {
 				$default['extended'] = unserialize( $row['extended'] );
 			}
-			if ( is_array( $default['extended'] ) && ! isset( $default['extended']['field_width'] ) ) {
-				$default['extended']['field_width'] = $field_width;
+			if ( is_array( $default['extended'] ) ) {
+				if ( ! isset( $default['extended']['field_width'] ) ) {
+					$default['extended']['field_width'] = $field_width;
+				}
+				if ( ! isset( $default['extended']['default_value'] ) ) {
+					$default['extended']['default_value'] = $default_val;
+				}
 			}
 		}
 	}
@@ -677,6 +700,7 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 				'label'               => isset( $row['extended']['label'] ) ? wp_kses_post( $row['extended']['label'] ) : '',
 				'disable_user_access' => isset( $row['extended']['disable_user_access'] ) ? wp_kses_post( $row['extended']['disable_user_access'] ) : '',
 				'field_width'         => $field_width,
+				'default_value'       => $default_val,
 			);
 			$default['extended'] = serialize( $extended );
 		} else {
@@ -684,8 +708,13 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 			if ( is_string( $row['extended'] ) ) {
 				$default['extended'] = unserialize( $row['extended'] );
 			}
-			if ( is_array( $default['extended'] ) && ! isset( $default['extended']['field_width'] ) ) {
-				$default['extended']['field_width'] = $field_width;
+			if ( is_array( $default['extended'] ) ) {
+				if ( ! isset( $default['extended']['field_width'] ) ) {
+					$default['extended']['field_width'] = $field_width;
+				}
+				if ( ! isset( $default['extended']['default_value'] ) ) {
+					$default['extended']['default_value'] = $default_val;
+				}
 			}
 		}
 	}
@@ -703,6 +732,7 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 					'max_date'            => isset( $row['extended']['max_date'] ) ? sanitize_text_field( $row['extended']['max_date'] ) : '',
 					'disable_user_access' => isset( $row['extended']['disable_user_access'] ) ? wp_kses_post( $row['extended']['disable_user_access'] ) : '',
 					'field_width'         => $field_width,
+					'default_value'       => $default_val,
 				);
 				$default['extended'] = serialize( $extended );
 			} else {
@@ -712,8 +742,13 @@ function fed_process_user_profile( $row, $action, $update = 'no' ) {
 				if ( is_array( $row['extended'] ) ) {
 					$default['extended'] = $row['extended'];
 				}
-				if ( is_array( $default['extended'] ) && ! isset( $default['extended']['field_width'] ) ) {
-					$default['extended']['field_width'] = $field_width;
+				if ( is_array( $default['extended'] ) ) {
+					if ( ! isset( $default['extended']['field_width'] ) ) {
+						$default['extended']['field_width'] = $field_width;
+					}
+					if ( ! isset( $default['extended']['default_value'] ) ) {
+						$default['extended']['default_value'] = $default_val;
+					}
 				}
 			}
 		} else {
@@ -2984,11 +3019,12 @@ function fed_default_extended_fields() {
 	return apply_filters(
 		'fed_default_extended_fields',
 		array(
-			'field_width' => '100',
-			'date_format' => 'd-m-Y',
-			'enable_time' => 'no',
-			'date_mode'   => 'single',
-			'time_24hr'   => '24_hours',
+			'field_width'   => '100',
+			'default_value' => '',
+			'date_format'   => 'd-m-Y',
+			'enable_time'   => 'no',
+			'date_mode'     => 'single',
+			'time_24hr'     => '24_hours',
 		)
 	);
 }
@@ -5200,13 +5236,24 @@ function fed_core_process_extended_form_fields( $default, $row, $action, $update
 	$type = isset( $row['input_type'] ) ? $row['input_type'] : '';
 
 	$field_width = '100';
+	$default_val = '';
 	if ( isset( $row['extended'] ) ) {
-		if ( is_array( $row['extended'] ) && isset( $row['extended']['field_width'] ) ) {
-			$field_width = sanitize_text_field( $row['extended']['field_width'] );
+		if ( is_array( $row['extended'] ) ) {
+			if ( isset( $row['extended']['field_width'] ) ) {
+				$field_width = sanitize_text_field( $row['extended']['field_width'] );
+			}
+			if ( isset( $row['extended']['default_value'] ) ) {
+				$default_val = sanitize_text_field( $row['extended']['default_value'] );
+			}
 		} elseif ( is_string( $row['extended'] ) ) {
 			$tmp_ext = maybe_unserialize( $row['extended'] );
-			if ( is_array( $tmp_ext ) && isset( $tmp_ext['field_width'] ) ) {
-				$field_width = sanitize_text_field( $tmp_ext['field_width'] );
+			if ( is_array( $tmp_ext ) ) {
+				if ( isset( $tmp_ext['field_width'] ) ) {
+					$field_width = sanitize_text_field( $tmp_ext['field_width'] );
+				}
+				if ( isset( $tmp_ext['default_value'] ) ) {
+					$default_val = sanitize_text_field( $tmp_ext['default_value'] );
+				}
 			}
 		}
 	}
@@ -5217,6 +5264,7 @@ function fed_core_process_extended_form_fields( $default, $row, $action, $update
 				array(
 					'disable_user_access' => isset( $row['extended']['disable_user_access'] ) ? wp_kses_post( $row['extended']['disable_user_access'] ) : '',
 					'field_width'         => $field_width,
+					'default_value'       => $default_val,
 					'settings'            => array(
 						'textarea_name' => fed_get_data( 'input_meta', $row ),
 						'media_buttons' => fed_get_data( 'extended.settings.media_buttons', $row, 'true' ),
@@ -5239,6 +5287,7 @@ function fed_core_process_extended_form_fields( $default, $row, $action, $update
 					'table_template'      => isset( $row['extended']['table_template'] ) ? sanitize_text_field( $row['extended']['table_template'] ) : 'bordered',
 					'disable_user_access' => isset( $row['extended']['disable_user_access'] ) ? wp_kses_post( $row['extended']['disable_user_access'] ) : '',
 					'field_width'         => $field_width,
+					'default_value'       => $default_val,
 				)
 			);
 			return $default;
@@ -5258,6 +5307,7 @@ function fed_core_process_extended_form_fields( $default, $row, $action, $update
 					'max_date'            => isset( $row['extended']['max_date'] ) ? sanitize_text_field( $row['extended']['max_date'] ) : '',
 					'disable_user_access' => isset( $row['extended']['disable_user_access'] ) ? wp_kses_post( $row['extended']['disable_user_access'] ) : '',
 					'field_width'         => $field_width,
+					'default_value'       => $default_val,
 				)
 			);
 			return $default;

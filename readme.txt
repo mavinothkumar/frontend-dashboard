@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.3.1
+Stable tag: 3.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -149,6 +149,17 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 
 == Changelog ==
+
+= 3.4.0 (2026-11-12) =
+* Feature: Default Values & Dynamic Smart Tags Engine: Added dedicated Default Value configuration across all Form Field Builder types with support for both static defaults and dynamic smart tags.
+* Feature: Rich Contextual Smart Tags: Seamlessly pre-fill fields on profile, registration, and post forms using smart tags:
+  - User: {current_user_name}, {current_user_email}, {current_user_display_name}, {current_user_first_name}, {current_user_last_name}, {current_user_id}, {current_user_role}.
+  - Date & Time: {current_date}, {current_time}, {current_year}, {current_month}, {current_day}.
+  - Site & System: {site_title}, {site_url}, {admin_email}.
+  - Post Context: {post_id}, {post_title}, {post_type}, {post_author}.
+  - URL Parameters: {query_param:key} to pre-fill incoming marketing queries or referral codes (e.g. {query_param:ref}).
+* Feature: Interactive Smart Tags Insertion Menu: Added quick-insert categorized dropdown menu directly inside the Form Field Builder for one-click tag insertion at cursor position.
+* Enhancement: Multi-Type Builder Value Memory: Switching field types in the palette seamlessly preserves and synchronizes configured default values.
 
 = 3.3.1 (2026-11-06) =
 * Fix: Target Page Post Context & Shortcode Compatibility: Resolved shortcode execution issues (including Groups plugin [groups_member] and [groups_user_groups]) on pages displayed in the frontend dashboard via "Menu Content & Target Link" by ensuring global $post is properly bound to the target page via setup_postdata() and restored with wp_reset_postdata().

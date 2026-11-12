@@ -635,14 +635,15 @@ function fed_get_add_profile_post_fields() {
 				var type = $(this).data('button');
 				if (!type) return;
 
-				// Sync common values (Label, Meta, Required, Menu, Help, Width) from current form to newly selected form
+				// Sync common values (Label, Meta, Required, Menu, Help, Width, Default Value) from current form to newly selected form
 				var $currentVisible = $('.fed_input_type_container:visible');
-				var currentLabel = $currentVisible.find('input[name="label_name"]').val();
-				var currentMeta  = $currentVisible.find('input[name="input_meta"]').val();
-				var currentOrder = $currentVisible.find('input[name="input_order"]').val();
-				var currentMenu  = $currentVisible.find('select[name="menu"]').val();
-				var currentHelp  = $currentVisible.find('input[name="tooltip_body"]').val();
-				var currentWidth = $currentVisible.find('select[name="extended[field_width]"]').val();
+				var currentLabel   = $currentVisible.find('input[name="label_name"]').val();
+				var currentMeta    = $currentVisible.find('input[name="input_meta"]').val();
+				var currentOrder   = $currentVisible.find('input[name="input_order"]').val();
+				var currentMenu    = $currentVisible.find('select[name="menu"]').val();
+				var currentHelp    = $currentVisible.find('input[name="tooltip_body"]').val();
+				var currentWidth   = $currentVisible.find('select[name="extended[field_width]"]').val();
+				var currentDefault = $currentVisible.find('input[name="extended[default_value]"]').val();
 
 				activateFieldType(type);
 
@@ -666,7 +667,50 @@ function fed_get_add_profile_post_fields() {
 					if (currentWidth) {
 						$newVisible.find('select[name="extended[field_width]"]').val(currentWidth);
 					}
+					if (currentDefault && !$newVisible.find('input[name="extended[default_value]"]').val()) {
+						$newVisible.find('input[name="extended[default_value]"]').val(currentDefault);
+					}
 				}
+			});
+
+			// Smart Tags Dropdown Toggle
+			$(document).on('click', '.fed-btn-insert-smart-tag', function(e) {
+				e.preventDefault();
+				e.stopPropagation();
+				var $dropdown = $(this).siblings('.fed-smart-tags-dropdown');
+				$('.fed-smart-tags-dropdown').not($dropdown).addClass('hidden');
+				$dropdown.toggleClass('hidden');
+			});
+
+			// Close Smart Tags Dropdown on Outside Click
+			$(document).on('click', function(e) {
+				if (!$(e.target).closest('.fed-smart-tags-dropdown-container').length) {
+					$('.fed-smart-tags-dropdown').addClass('hidden');
+				}
+			});
+
+			// Insert Smart Tag into Default Value input
+			$(document).on('click', '.fed-smart-tag-item', function(e) {
+				e.preventDefault();
+				e.stopPropagation();
+				var tag = $(this).data('tag');
+				var $container = $(this).closest('.fed-default-value-field-wrap');
+				var $input = $container.find('.fed-default-value-input');
+
+				if ($input.length && tag) {
+					var inputElem = $input[0];
+					var startPos = inputElem.selectionStart || 0;
+					var endPos = inputElem.selectionEnd || 0;
+					var oldVal = $input.val();
+					var newVal = oldVal.substring(0, startPos) + tag + oldVal.substring(endPos);
+					$input.val(newVal);
+					inputElem.focus();
+					var newPos = startPos + tag.length;
+					inputElem.setSelectionRange(newPos, newPos);
+					$input.trigger('input').trigger('change');
+				}
+
+				$('.fed-smart-tags-dropdown').addClass('hidden');
 			});
 
 			// Field Types Search Filter

@@ -65,6 +65,55 @@ function fed_get_help_text_field( array $row ) {
 }
 
 /**
+ * Get Default Value Field with Dynamic Smart Tags insertion menu.
+ *
+ * @param array $row Row data.
+ */
+function fed_get_default_value_field( array $row ) {
+	$extended    = isset( $row['extended'] ) ? ( is_string( $row['extended'] ) ? maybe_unserialize( $row['extended'] ) : $row['extended'] ) : array();
+	$default_val = isset( $extended['default_value'] ) ? $extended['default_value'] : '';
+	$smart_tags  = function_exists( 'fed_get_smart_tags_list' ) ? fed_get_smart_tags_list() : array();
+	?>
+	<div class="space-y-1.5 fed-default-value-field-wrap">
+		<div class="flex items-center justify-between">
+			<label class="block text-xs font-bold text-slate-700">
+				<?php esc_html_e( 'Default Value', 'frontend-dashboard' ); ?>
+			</label>
+			<div class="relative inline-block text-left fed-smart-tags-dropdown-container">
+				<button type="button" class="fed-btn-insert-smart-tag text-[11px] font-semibold text-indigo-600 hover:text-indigo-800 inline-flex items-center gap-1.5 cursor-pointer transition-colors bg-transparent border-0 p-0" title="<?php esc_attr_e( 'Insert dynamic smart tag into default value', 'frontend-dashboard' ); ?>">
+					<i class="fas fa-magic text-[10px]"></i>
+					<span><?php esc_html_e( 'Insert Smart Tag', 'frontend-dashboard' ); ?></span>
+					<i class="fas fa-chevron-down text-[8px] opacity-70"></i>
+				</button>
+				<div class="fed-smart-tags-dropdown hidden absolute right-0 mt-2 w-72 bg-white rounded-2xl shadow-xl border border-slate-200 z-50 p-2.5 max-h-80 overflow-y-auto space-y-3">
+					<?php foreach ( $smart_tags as $group ) : ?>
+						<div class="space-y-1">
+							<div class="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-2 py-0.5"><?php echo esc_html( $group['title'] ); ?></div>
+							<div class="space-y-0.5">
+								<?php foreach ( $group['tags'] as $tag => $label ) : ?>
+									<button type="button" class="fed-smart-tag-item w-full text-left px-2.5 py-1.5 rounded-lg text-xs hover:bg-indigo-50 hover:text-indigo-700 flex flex-col gap-0.5 transition-colors cursor-pointer border-0 bg-transparent" data-tag="<?php echo esc_attr( $tag ); ?>">
+										<span class="font-mono font-semibold text-indigo-600 text-[11px]"><?php echo esc_html( $tag ); ?></span>
+										<span class="text-[10px] text-slate-500 leading-tight"><?php echo esc_html( $label ); ?></span>
+									</button>
+								<?php endforeach; ?>
+							</div>
+						</div>
+					<?php endforeach; ?>
+				</div>
+			</div>
+		</div>
+		<input type="text"
+			name="extended[default_value]"
+			value="<?php echo esc_attr( $default_val ); ?>"
+			placeholder="<?php esc_attr_e( 'e.g. {current_user_name} or Initial Value', 'frontend-dashboard' ); ?>"
+			class="fed-default-value-input w-full text-xs font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-3.5 outline-none focus:border-indigo-500 focus:bg-white transition-all font-mono"
+			style="min-height:38px;" />
+		<p class="text-[11px] text-slate-400 m-0"><?php esc_html_e( 'Pre-filled value on empty forms. Supports static text and dynamic smart tags.', 'frontend-dashboard' ); ?></p>
+	</div>
+	<?php
+}
+
+/**
  * Get Class Field.
  *
  * @param  array $row  Row.
