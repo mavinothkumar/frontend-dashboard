@@ -158,7 +158,7 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
   - Site & System: {site_title}, {site_url}, {admin_email}.
   - Post Context: {post_id}, {post_title}, {post_type}, {post_author}.
   - URL Parameters: {query_param:key} to pre-fill incoming marketing queries or referral codes (e.g. {query_param:ref}).
-* Feature: Interactive Smart Tags Insertion Menu: Added quick-insert categorized dropdown menu directly inside the Form Field Builder for one-click tag insertion at cursor position.
+* Feature: Searchable Smart Tags Dropdown: Added searchable, categorized dropdown menu directly inside the Form Field Builder with real-time query filtering, scroll-constrained layout, keyboard navigation (Escape to close, Enter to select), and one-click tag insertion at cursor position.
 * Enhancement: Multi-Type Builder Value Memory: Switching field types in the palette seamlessly preserves and synchronizes configured default values.
 
 = 3.3.1 (2026-11-06) =

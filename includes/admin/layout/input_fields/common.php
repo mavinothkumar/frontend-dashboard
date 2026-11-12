@@ -85,20 +85,48 @@ function fed_get_default_value_field( array $row ) {
 					<span><?php esc_html_e( 'Insert Smart Tag', 'frontend-dashboard' ); ?></span>
 					<i class="fas fa-chevron-down text-[8px] opacity-70"></i>
 				</button>
-				<div class="fed-smart-tags-dropdown hidden absolute right-0 mt-2 w-72 bg-white rounded-2xl shadow-xl border border-slate-200 z-50 p-2.5 max-h-80 overflow-y-auto space-y-3">
-					<?php foreach ( $smart_tags as $group ) : ?>
-						<div class="space-y-1">
-							<div class="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-2 py-0.5"><?php echo esc_html( $group['title'] ); ?></div>
-							<div class="space-y-0.5">
-								<?php foreach ( $group['tags'] as $tag => $label ) : ?>
-									<button type="button" class="fed-smart-tag-item w-full text-left px-2.5 py-1.5 rounded-lg text-xs hover:bg-indigo-50 hover:text-indigo-700 flex flex-col gap-0.5 transition-colors cursor-pointer border-0 bg-transparent" data-tag="<?php echo esc_attr( $tag ); ?>">
-										<span class="font-mono font-semibold text-indigo-600 text-[11px]"><?php echo esc_html( $tag ); ?></span>
-										<span class="text-[10px] text-slate-500 leading-tight"><?php echo esc_html( $label ); ?></span>
-									</button>
-								<?php endforeach; ?>
-							</div>
+				<div class="fed-smart-tags-dropdown hidden absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-2xl border border-slate-200 z-50 overflow-hidden" style="box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);">
+					<!-- Search Header -->
+					<div class="p-2.5 border-b border-slate-100 bg-slate-50/80">
+						<div class="relative flex items-center">
+							<i class="fas fa-search absolute left-2.5 text-slate-400 text-[11px] pointer-events-none"></i>
+							<input type="text"
+								class="fed-smart-tag-search-input w-full pl-7 pr-7 py-1.5 text-xs text-slate-700 bg-white border border-slate-200 rounded-lg outline-none focus:border-indigo-500 transition-colors placeholder:text-slate-400"
+								placeholder="<?php esc_attr_e( 'Search tags (e.g. email, user, date)...', 'frontend-dashboard' ); ?>"
+								autocomplete="off" />
+							<button type="button" class="fed-smart-tag-search-clear hidden absolute right-2 text-slate-400 hover:text-slate-600 border-0 bg-transparent p-0 cursor-pointer text-xs" title="<?php esc_attr_e( 'Clear search', 'frontend-dashboard' ); ?>">
+								<i class="fas fa-times-circle"></i>
+							</button>
 						</div>
-					<?php endforeach; ?>
+					</div>
+					<!-- Scrollable Tags List -->
+					<div class="fed-smart-tags-list p-2 space-y-2.5" style="max-height: 240px; overflow-y: auto; overflow-x: hidden;">
+						<?php foreach ( $smart_tags as $group ) : ?>
+							<div class="fed-smart-tag-group space-y-1">
+								<div class="fed-smart-tag-group-title text-[10px] font-bold uppercase tracking-wider text-slate-400 px-2 py-0.5"><?php echo esc_html( $group['title'] ); ?></div>
+								<div class="space-y-0.5">
+									<?php foreach ( $group['tags'] as $tag => $label ) : ?>
+										<button type="button"
+											class="fed-smart-tag-item w-full text-left px-2.5 py-1.5 rounded-lg text-xs hover:bg-indigo-50 hover:text-indigo-700 flex flex-col gap-0.5 transition-colors cursor-pointer border-0 bg-transparent"
+											data-tag="<?php echo esc_attr( $tag ); ?>"
+											data-label="<?php echo esc_attr( $label ); ?>">
+											<span class="font-mono font-semibold text-indigo-600 text-[11px]"><?php echo esc_html( $tag ); ?></span>
+											<span class="text-[10px] text-slate-500 leading-tight"><?php echo esc_html( $label ); ?></span>
+										</button>
+									<?php endforeach; ?>
+								</div>
+							</div>
+						<?php endforeach; ?>
+						<div class="fed-smart-tags-no-results hidden py-6 px-3 text-center">
+							<i class="fas fa-search text-slate-300 text-sm mb-1 block"></i>
+							<span class="text-xs text-slate-400 font-medium"><?php esc_html_e( 'No matching smart tags found', 'frontend-dashboard' ); ?></span>
+						</div>
+					</div>
+					<!-- Dropdown Footer -->
+					<div class="px-3 py-1.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400">
+						<span><?php esc_html_e( 'Click or press Enter to insert', 'frontend-dashboard' ); ?></span>
+						<span class="font-mono text-[9px] bg-slate-200/60 px-1.5 py-0.5 rounded text-slate-500">ESC</span>
+					</div>
 				</div>
 			</div>
 		</div>

@@ -679,7 +679,99 @@ function fed_get_add_profile_post_fields() {
 				e.stopPropagation();
 				var $dropdown = $(this).siblings('.fed-smart-tags-dropdown');
 				$('.fed-smart-tags-dropdown').not($dropdown).addClass('hidden');
-				$dropdown.toggleClass('hidden');
+
+				var willOpen = $dropdown.hasClass('hidden');
+				if (willOpen) {
+					$dropdown.removeClass('hidden');
+					var $searchInput = $dropdown.find('.fed-smart-tag-search-input');
+					$searchInput.val('');
+					$dropdown.find('.fed-smart-tag-search-clear').addClass('hidden');
+					$dropdown.find('.fed-smart-tag-item').show();
+					$dropdown.find('.fed-smart-tag-group').show();
+					$dropdown.find('.fed-smart-tags-no-results').addClass('hidden');
+					setTimeout(function() {
+						$searchInput.focus();
+					}, 50);
+				} else {
+					$dropdown.addClass('hidden');
+				}
+			});
+
+			// Prevent clicks inside Smart Tags Dropdown from closing it
+			$(document).on('click', '.fed-smart-tags-dropdown', function(e) {
+				e.stopPropagation();
+			});
+
+			// Smart Tags Search Filtering
+			$(document).on('input', '.fed-smart-tag-search-input', function() {
+				var query = $.trim($(this).val()).toLowerCase();
+				var $dropdown = $(this).closest('.fed-smart-tags-dropdown');
+				var $clearBtn = $dropdown.find('.fed-smart-tag-search-clear');
+				var totalMatches = 0;
+
+				if (query.length > 0) {
+					$clearBtn.removeClass('hidden');
+				} else {
+					$clearBtn.addClass('hidden');
+				}
+
+				$dropdown.find('.fed-smart-tag-group').each(function() {
+					var $group = $(this);
+					var groupTitle = $group.find('.fed-smart-tag-group-title').text().toLowerCase();
+					var groupMatches = 0;
+
+					$group.find('.fed-smart-tag-item').each(function() {
+						var $item = $(this);
+						var tag = ($item.data('tag') || '').toString().toLowerCase();
+						var label = ($item.data('label') || '').toString().toLowerCase();
+
+						if (!query || tag.indexOf(query) !== -1 || label.indexOf(query) !== -1 || groupTitle.indexOf(query) !== -1) {
+							$item.show();
+							groupMatches++;
+						} else {
+							$item.hide();
+						}
+					});
+
+					if (groupMatches > 0) {
+						$group.show();
+						totalMatches += groupMatches;
+					} else {
+						$group.hide();
+					}
+				});
+
+				if (totalMatches === 0) {
+					$dropdown.find('.fed-smart-tags-no-results').removeClass('hidden');
+				} else {
+					$dropdown.find('.fed-smart-tags-no-results').addClass('hidden');
+				}
+			});
+
+			// Clear Search button
+			$(document).on('click', '.fed-smart-tag-search-clear', function(e) {
+				e.preventDefault();
+				e.stopPropagation();
+				var $dropdown = $(this).closest('.fed-smart-tags-dropdown');
+				var $searchInput = $dropdown.find('.fed-smart-tag-search-input');
+				$searchInput.val('').trigger('input').focus();
+			});
+
+			// Keyboard Navigation in Smart Tags Search
+			$(document).on('keydown', '.fed-smart-tag-search-input', function(e) {
+				var $dropdown = $(this).closest('.fed-smart-tags-dropdown');
+				if (e.which === 27) { // Escape
+					e.preventDefault();
+					$dropdown.addClass('hidden');
+					var $container = $dropdown.closest('.fed-default-value-field-wrap');
+					$container.find('.fed-default-value-input').focus();
+				} else if (e.which === 13) { // Enter
+					e.preventDefault();
+					var $firstVisible = $dropdown.find('.fed-smart-tag-item:visible').first();
+					if ($firstVisible.length) {
+						$firstVisible.trigger('click');
+					}
+				}
 			});
 
 			// Close Smart Tags Dropdown on Outside Click
