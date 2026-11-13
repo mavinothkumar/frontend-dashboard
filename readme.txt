@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.4.0
+Stable tag: 3.4.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -149,6 +149,14 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 
 == Changelog ==
+
+= 3.4.2 (2026-11-13) =
+* Fix: Dashboard Menu Restrictive Slug Validation on Updates: Resolved an issue where updating default or system dashboard menus (such as "Posts" with default slug `post`, or `profile`, `payment`, `logout`) triggered a false-positive restrictive slug validation error ("Sorry, You cannot use the restrictive slug name 'post'"). Menu updates now verify whether the existing menu slug is unchanged, preserving system slug protection while allowing label, icon, sort order, and role permission updates.
+
+= 3.4.1 (2026-11-12) =
+* Fix: Dashboard Menu External URL & Role Access Persistence: Resolved an issue where serialized form bracket syntax (`%5B`, `%5D`) in AJAX menu submissions was prematurely stripped during raw query ingestion, preventing External URLs (`fed_menu_value_url`) and specific Role Access permissions (`user_role`) from persisting upon menu creation or update.
+* Fix: External URL Direct Redirect & Link Attributes: Added `target` and `rel="noopener noreferrer"` attributes to frontend dashboard menu anchor tags and implemented automatic server-side redirection (`wp_redirect()`) when accessing routes assigned to an external destination.
+* Enhancement: Menu Configuration Validation & Visibility: Added real-time client- and server-side validation ensuring valid URLs are provided when the external URL toggle is active, and enhanced admin menu cards with inline External URL badge previews.
 
 = 3.4.0 (2026-11-12) =
 * Feature: Default Values & Dynamic Smart Tags Engine: Added dedicated Default Value configuration across all Form Field Builder types with support for both static defaults and dynamic smart tags.

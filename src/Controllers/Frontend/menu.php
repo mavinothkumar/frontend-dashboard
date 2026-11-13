@@ -173,6 +173,8 @@ function fed_display_dashboard_menu( $menus ) {
 				<div id="sub_<?php echo esc_attr( $index . $random_number ); ?>"
 						class="pl-7 pr-2 py-1 space-y-1 <?php echo $isParentActive ? 'block' : 'hidden'; ?>">
 					<a href="<?php echo esc_url( $menu_format['menu_url'] ); ?>"
+							target="<?php echo esc_attr( $menu_format['target'] ?? '_self' ); ?>"
+							<?php echo ( isset( $menu_format['target'] ) && '_blank' === $menu_format['target'] ) ? 'rel="noopener noreferrer"' : ''; ?>
 							class="block px-3 py-1.5 rounded-md text-xs font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors">
 						<?php echo esc_html( $menu_format['menu_name'] ); ?> (Overview)
 					</a>
@@ -182,6 +184,8 @@ function fed_display_dashboard_menu( $menus ) {
 						$isSubActive     = ! empty( $sub_menu_format['active'] );
 						?>
 						<a href="<?php echo esc_url( $sub_menu_format['menu_url'] ); ?>"
+								target="<?php echo esc_attr( $sub_menu_format['target'] ?? '_self' ); ?>"
+								<?php echo ( isset( $sub_menu_format['target'] ) && '_blank' === $sub_menu_format['target'] ) ? 'rel="noopener noreferrer"' : ''; ?>
 								class="block px-3 py-1.5 rounded-md text-xs font-medium transition-colors <?php echo $isSubActive ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'; ?>">
 							<?php echo esc_html( $sub_menu_format['menu_name'] ); ?>
 						</a>
@@ -193,6 +197,8 @@ function fed_display_dashboard_menu( $menus ) {
 			?>
 			<div class="fed_menu_item mb-1">
 				<a href="<?php echo esc_url( $menu_format['menu_url'] ); ?>"
+						target="<?php echo esc_attr( $menu_format['target'] ?? '_self' ); ?>"
+						<?php echo ( isset( $menu_format['target'] ) && '_blank' === $menu_format['target'] ) ? 'rel="noopener noreferrer"' : ''; ?>
 						class="flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 <?php echo $isActive ? 'bg-indigo-50 text-indigo-700 font-semibold shadow-xs' : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'; ?>">
 					<span class="w-5 text-center text-base <?php echo esc_attr( $menu_icon ); ?> <?php echo $isActive ? 'text-indigo-600' : 'text-gray-400'; ?>"></span>
 					<span><?php echo esc_html( $menu_format['menu_name'] ); ?></span>
@@ -335,19 +341,22 @@ if ( ! function_exists( 'fed_core_convert_dashboard_menu_url' ) ) {
 		if ( isset( $menu['menu_key'] ) && 'url' === $menu['menu_key'] && ! empty( $menu['menu_value'] ) ) {
 			$menu_value = maybe_unserialize( $menu['menu_value'] );
 			if ( is_array( $menu_value ) ) {
-				$url    = isset( $menu_value['url'] ) ? esc_url( $menu_value['url'] ) : null;
-				$target = isset( $menu_value['target'] ) && ! empty( $menu_value['target'] ) ? $menu_value['target'] : '_self';
-				if ( $url !== null ) {
+				$url    = isset( $menu_value['url'] ) ? esc_url( $menu_value['url'] ) : '';
+				$target = isset( $menu_value['target'] ) && in_array( $menu_value['target'], array( '_blank', '_self' ), true ) ? $menu_value['target'] : '_self';
+				if ( ! empty( $url ) ) {
 					return array(
 						'url'    => $url,
 						'target' => $target,
 					);
 				}
 			} elseif ( is_string( $menu_value ) && ! empty( $menu_value ) ) {
-				return array(
-					'url'    => esc_url( $menu_value ),
-					'target' => '_self',
-				);
+				$url = esc_url( $menu_value );
+				if ( ! empty( $url ) ) {
+					return array(
+						'url'    => $url,
+						'target' => '_self',
+					);
+				}
 			}
 		}
 

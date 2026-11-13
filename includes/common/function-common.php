@@ -1032,7 +1032,7 @@ function fed_get_menu_url_by_slug( $menu_slug, $menu_type ) {
 		if ( $menu && isset( $menu['menu_items'] ) && is_array( $menu ) && count( $menu ) ) {
 			foreach ( $menu['menu_items'] as $key => $item ) {
 				if ( $item['menu_slug'] === $menu_slug ) {
-					return add_query_arg(
+					$url       = add_query_arg(
 						array(
 							'menu_type' => $menu_type,
 							'menu_slug' => $menu_slug,
@@ -1044,6 +1044,8 @@ function fed_get_menu_url_by_slug( $menu_slug, $menu_type ) {
 						),
 						$dashboard_url
 					);
+					$converted = apply_filters( 'fed_convert_dashboard_menu_url', $url, $item );
+					return is_array( $converted ) && isset( $converted['url'] ) ? $converted['url'] : $converted;
 				}
 			}
 
@@ -1056,7 +1058,7 @@ function fed_get_menu_url_by_slug( $menu_slug, $menu_type ) {
 
 			foreach ( $menu['menu_items'] as $key => $item ) {
 				if ( $item['menu_slug'] === $menu_slug ) {
-					return add_query_arg(
+					$url       = add_query_arg(
 						array(
 							'menu_type' => $menu_type,
 							'menu_slug' => $menu_slug,
@@ -1068,6 +1070,8 @@ function fed_get_menu_url_by_slug( $menu_slug, $menu_type ) {
 						),
 						$dashboard_url
 					);
+					$converted = apply_filters( 'fed_convert_dashboard_menu_url', $url, $item );
+					return is_array( $converted ) && isset( $converted['url'] ) ? $converted['url'] : $converted;
 				}
 			}
 

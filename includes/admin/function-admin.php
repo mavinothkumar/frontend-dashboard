@@ -827,8 +827,43 @@ function fed_process_menu( $row ) {
 
 	if ( isset( $row['fed_menu_key'] ) && 'yes' === $row['fed_menu_key'] && isset( $row['fed_menu_value'] ) ) {
 		$default_value['menu_value'] = sanitize_text_field( $row['fed_menu_value'] );
-	} elseif ( isset( $row['fed_menu_key'] ) && 'url' === $row['fed_menu_key'] && isset( $row['fed_menu_value_url'] ) ) {
-		$default_value['menu_value'] = serialize( $row['fed_menu_value_url'] );
+	} elseif ( isset( $row['fed_menu_key'] ) && 'url' === $row['fed_menu_key'] ) {
+		if ( isset( $row['fed_menu_value_url'] ) && is_array( $row['fed_menu_value_url'] ) ) {
+			$target                      = isset( $row['fed_menu_value_url']['target'] ) && in_array( $row['fed_menu_value_url']['target'], array( '_blank', '_self' ), true )
+				? $row['fed_menu_value_url']['target']
+				: '_self';
+			$url                         = isset( $row['fed_menu_value_url']['url'] ) ? esc_url_raw( trim( $row['fed_menu_value_url']['url'] ) ) : '';
+			$default_value['menu_value'] = serialize(
+				array(
+					'target' => $target,
+					'url'    => $url,
+				)
+			);
+		} elseif ( isset( $row['fed_menu_value_url'] ) && is_string( $row['fed_menu_value_url'] ) ) {
+			$default_value['menu_value'] = serialize(
+				array(
+					'target' => '_self',
+					'url'    => esc_url_raw( trim( $row['fed_menu_value_url'] ) ),
+				)
+			);
+		} elseif ( isset( $row['fed_menu_value'] ) && ! empty( $row['fed_menu_value'] ) ) {
+			$unserialized = maybe_unserialize( $row['fed_menu_value'] );
+			if ( is_array( $unserialized ) && isset( $unserialized['url'] ) ) {
+				$default_value['menu_value'] = serialize(
+					array(
+						'target' => isset( $unserialized['target'] ) && in_array( $unserialized['target'], array( '_blank', '_self' ), true ) ? $unserialized['target'] : '_self',
+						'url'    => esc_url_raw( trim( $unserialized['url'] ) ),
+					)
+				);
+			} elseif ( is_string( $row['fed_menu_value'] ) ) {
+				$default_value['menu_value'] = serialize(
+					array(
+						'target' => '_self',
+						'url'    => esc_url_raw( trim( $row['fed_menu_value'] ) ),
+					)
+				);
+			}
+		}
 	}
 
 	return apply_filters( 'fed_process_menu', $default_value, $row );

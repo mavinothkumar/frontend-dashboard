@@ -363,9 +363,16 @@ function fed_get_dashboard_menu_items() {
 
 					$url_data_json = '';
 					if ( 'url' === $menu_key && ! empty( $menu_value ) ) {
-						$url_data = @unserialize( $menu_value );
+						$url_data = maybe_unserialize( $menu_value );
 						if ( is_array( $url_data ) ) {
 							$url_data_json = wp_json_encode( $url_data );
+						} elseif ( is_string( $url_data ) ) {
+							$url_data_json = wp_json_encode(
+								array(
+									'url'    => $url_data,
+									'target' => '_self',
+								)
+							);
 						}
 					}
 					?>
@@ -428,11 +435,11 @@ function fed_get_dashboard_menu_items() {
 									</span>
 								<?php elseif ( 'url' === $menu_key ) : ?>
 									<?php
-									$url_arr = @unserialize( $menu_value );
-									$ext_url = is_array( $url_arr ) && ! empty( $url_arr['url'] ) ? $url_arr['url'] : '';
+									$url_arr = maybe_unserialize( $menu_value );
+									$ext_url = is_array( $url_arr ) && ! empty( $url_arr['url'] ) ? $url_arr['url'] : ( is_string( $url_arr ) ? $url_arr : '' );
 									?>
 									<span class="fed-badge-item inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-cyan-50 text-cyan-700 border border-cyan-100 shrink-0 whitespace-nowrap" title="<?php echo esc_attr( $ext_url ); ?>">
-										<i class="fas fa-external-link-alt text-[9px]"></i> <?php esc_html_e( 'External URL', 'frontend-dashboard' ); ?>
+										<i class="fas fa-external-link-alt text-[9px]"></i> <?php esc_html_e( 'External URL', 'frontend-dashboard' ); ?><?php echo ! empty( $ext_url ) ? ': <span class="max-w-[150px] truncate inline-block align-bottom">' . esc_html( $ext_url ) . '</span>' : ''; ?>
 									</span>
 								<?php endif; ?>
 
@@ -1342,6 +1349,28 @@ function fed_get_dashboard_menu_items() {
 				showToast('Please enter a Menu Slug.', true);
 				$('#fed_form_menu_slug').focus();
 				return;
+			}
+
+			if ($('#fed_checkbox_external_url').is(':checked')) {
+				var extUrl = $('#fed_form_url_input').val().trim();
+				if (!extUrl) {
+					$('#fed_modal_error_msg').text('Please enter a valid External URL.');
+					$('#fed_modal_error_box').removeClass('hidden');
+					showToast('Please enter a valid External URL.', true);
+					$('#fed_form_url_input').focus();
+					return;
+				}
+			}
+
+			if ($('#fed_checkbox_show_page').is(':checked')) {
+				var pageId = $('#fed_form_menu_page_id').val();
+				if (!pageId || parseInt(pageId, 10) <= 0) {
+					$('#fed_modal_error_msg').text('Please select a WordPress page.');
+					$('#fed_modal_error_box').removeClass('hidden');
+					showToast('Please select a WordPress page.', true);
+					$('#fed_page_search_input').focus();
+					return;
+				}
 			}
 
 			// If All Roles mode is selected, ensure all checkboxes are checked before serialization

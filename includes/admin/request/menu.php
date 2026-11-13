@@ -28,55 +28,94 @@ function fed_admin_menu_save( $request, $post_id = '' ) {
 	 */
 	$table_name = $wpdb->get_blog_prefix() . BC_FED_TABLE_MENU;
 
-	fed_admin_menu_restrictive_words_check( $request['menu_slug'] );
-
 	// Update.
-	if ( '' != $post_id ) {
-		/**
-		 * Check for input meta already exist
-		 */
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$duplicate = $wpdb->get_row(
-			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				"SELECT * FROM {$table_name} WHERE menu_slug = %s AND id != %d",
-				$menu_slug,
-				(int) $post_id
-			)
-		);
+	if ( '' !== $post_id && 0 !== (int) $post_id ) {
+		$existing = fed_fetch_table_row_by_id( BC_FED_TABLE_MENU, (int) $post_id );
 
-		if ( null !== $duplicate ) {
-			wp_send_json_error(
-				array(
-					'message' => 'Sorry, you have previously added ' . strtoupper(
-						$duplicate->menu
-					) . ' with order ' . strtoupper( $duplicate->menu_order ),
-				)
-			);
-			exit();
+		if ( is_wp_error( $existing ) || ! is_array( $existing ) ) {
+			wp_send_json_error( array( 'message' => __( 'Sorry, no record found to update your new details', 'frontend-dashboard' ) ) );
 		}
 
-		/**
-		 * No duplicate found, so we can update the record.
-		 */
-		unset( $request['menu_slug'] );
+		$existing_slug = isset( $existing['menu_slug'] ) ? $existing['menu_slug'] : '';
+		$slug_changed  = ( $existing_slug !== $menu_slug );
+
+		if ( $slug_changed ) {
+			$is_extra     = ( isset( $existing['extra'] ) && 'no' === $existing['extra'] ) ? 'no' : 'yes';
+			$locked_slugs = array( 'profile', 'logout', 'post' );
+			if ( defined( 'FED_MEMBERSHIPS_VERSION' ) || defined( 'FED_MEMBERSHIP_VERSION' ) ) {
+				$locked_slugs[] = 'my-membership';
+			}
+			if ( defined( 'FED_PAY_PER_POST_VERSION' ) ) {
+				$locked_slugs[] = 'my-submissions';
+			}
+			$is_system_core = ( 'no' === $is_extra || in_array( $existing_slug, $locked_slugs, true ) );
+			$is_system_core = (bool) apply_filters( 'fed_is_system_menu', $is_system_core, $existing, $existing_slug );
+
+			if ( $is_system_core ) {
+				wp_send_json_error( array( 'message' => __( 'System menu slugs are protected and cannot be modified.', 'frontend-dashboard' ) ) );
+			}
+
+			fed_admin_menu_restrictive_words_check( $menu_slug );
+
+			/**
+			 * Check for input meta already exist
+			 */
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$duplicate = $wpdb->get_row(
+				$wpdb->prepare(
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					"SELECT * FROM {$table_name} WHERE menu_slug = %s AND id != %d",
+					$menu_slug,
+					(int) $post_id
+				)
+			);
+
+			if ( null !== $duplicate ) {
+				wp_send_json_error(
+					array(
+						'message' => sprintf(
+							/* translators: 1: Menu title, 2: Menu order */
+							__( 'Sorry, you have previously added %1$s with order %2$s', 'frontend-dashboard' ),
+							strtoupper( $duplicate->menu ),
+							strtoupper( $duplicate->menu_order )
+						),
+					)
+				);
+			}
+
+			$user_profile_table = $wpdb->prefix . BC_FED_TABLE_USER_PROFILE;
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$wpdb->update(
+				$user_profile_table,
+				array( 'menu' => $menu_slug ),
+				array( 'menu' => $existing_slug )
+			);
+		} else {
+			// Slug is unchanged - protect system slugs and ensure menu_slug is not modified.
+			unset( $request['menu_slug'] );
+		}
+
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$status = $wpdb->update( $table_name, $request, array( 'id' => (int) $post_id ) );
 
 		if ( false === $status ) {
-			wp_send_json_error( array( 'message' => 'Sorry no record found to update your new details' ) );
+			wp_send_json_error( array( 'message' => __( 'Sorry, something went wrong in updating values in DB, please try again later or contact support', 'frontend-dashboard' ) ) );
 		}
+
+		$menu_title = isset( $request['menu'] ) ? $request['menu'] : ( isset( $request['menu_name'] ) ? $request['menu_name'] : '' );
 
 		wp_send_json_success(
 			array(
-				'message' => $request['menu'] . ' has been successfully updated',
+				/* translators: %s: Menu title */
+				'message' => sprintf( __( '%s has been successfully updated', 'frontend-dashboard' ), $menu_title ),
 			)
 		);
 	} else {
+		fed_admin_menu_restrictive_words_check( $menu_slug );
+
 		/**
 		 * Check for input meta already exist
 		 */
-
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$duplicate = $wpdb->get_row(
 			$wpdb->prepare(
@@ -89,12 +128,14 @@ function fed_admin_menu_save( $request, $post_id = '' ) {
 		if ( null !== $duplicate ) {
 			wp_send_json_error(
 				array(
-					'message' => 'Sorry, you have previously added ' . strtoupper(
-						$duplicate->menu
-					) . ' with order ' . strtoupper( $duplicate->menu_order ),
+					'message' => sprintf(
+						/* translators: 1: Menu title, 2: Menu order */
+						__( 'Sorry, you have previously added %1$s with order %2$s', 'frontend-dashboard' ),
+						strtoupper( $duplicate->menu ),
+						strtoupper( $duplicate->menu_order )
+					),
 				)
 			);
-			exit();
 		}
 
 		/**
@@ -108,13 +149,16 @@ function fed_admin_menu_save( $request, $post_id = '' ) {
 
 		if ( false === $status ) {
 			wp_send_json_error(
-				array( 'message' => 'Sorry, Something went wrong in storing values in DB, please try again later or contact support' )
+				array( 'message' => __( 'Sorry, Something went wrong in storing values in DB, please try again later or contact support', 'frontend-dashboard' ) )
 			);
 		}
 
+		$menu_title = isset( $request['menu'] ) ? $request['menu'] : ( isset( $request['menu_name'] ) ? $request['menu_name'] : '' );
+
 		wp_send_json_success(
 			array(
-				'message' => $request['menu'] . ' has been Successfully added',
+				/* translators: %s: Menu title */
+				'message' => sprintf( __( '%s has been Successfully added', 'frontend-dashboard' ), $menu_title ),
 				'reload'  => admin_url() . 'admin.php?page=fed_dashboard_menu',
 			)
 		);
@@ -135,8 +179,13 @@ function fed_admin_menu_restrictive_words_check( $slug ) {
 
 	$restrictive_menu = apply_filters( 'fed_restrictive_menu_names', $restrictive_menu );
 
-	if ( in_array( $slug, $restrictive_menu, false ) ) {
-		wp_send_json_error( array( 'message' => 'Sorry, You cannot use the restrictive slug name "' . $slug . '"' ) );
+	if ( in_array( $slug, $restrictive_menu, true ) ) {
+		wp_send_json_error(
+			array(
+				/* translators: %s: Restrictive slug name */
+				'message' => sprintf( __( 'Sorry, You cannot use the restrictive slug name "%s"', 'frontend-dashboard' ), esc_html( $slug ) ),
+			)
+		);
 	}
 }
 

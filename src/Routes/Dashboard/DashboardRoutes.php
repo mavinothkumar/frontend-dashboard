@@ -110,11 +110,12 @@ class DashboardRoutes {
 			return new WP_Error( 'no_menus', __( 'No dashboard menus available.', 'frontend-dashboard' ) );
 		}
 
-		// Exclude hidden or disabled menus when resolving default landing tab
+		// Exclude hidden or disabled menus and external URLs when resolving default landing tab
 		$visible_menus = array();
 		foreach ( $menu as $k => $item ) {
 			if ( ( ! isset( $item['show_user_profile'] ) || 'Disable' !== $item['show_user_profile'] ) &&
-				( ! isset( $item['status'] ) || 'inactive' !== $item['status'] ) ) {
+				( ! isset( $item['status'] ) || 'inactive' !== $item['status'] ) &&
+				( ! isset( $item['menu_key'] ) || 'url' !== $item['menu_key'] ) ) {
 				$visible_menus[ $k ] = $item;
 			}
 		}
@@ -157,6 +158,16 @@ class DashboardRoutes {
 		}
 
 		if ( $matched_menu ) {
+			// Direct redirect if accessing a menu configured as an External URL.
+			if ( isset( $matched_menu['menu_key'] ) && 'url' === $matched_menu['menu_key'] && ! empty( $matched_menu['menu_value'] ) ) {
+				$ext_data = maybe_unserialize( $matched_menu['menu_value'] );
+				$ext_url  = is_array( $ext_data ) ? ( isset( $ext_data['url'] ) ? $ext_data['url'] : '' ) : ( is_string( $ext_data ) ? $ext_data : '' );
+				if ( ! empty( $ext_url ) ) {
+					wp_redirect( esc_url_raw( $ext_url ) );
+					exit;
+				}
+			}
+
 			$matched_id = isset( $matched_menu['id'] ) ? $matched_menu['id'] : ( isset( $this->request['menu_id'] ) ? sanitize_key( $this->request['menu_id'] ) : 0 );
 			$menu_items = array(
 				'menu_request' => array(

@@ -249,9 +249,13 @@ function fed_admin_setting_form_dashboard_menu_function() {
 	}
 
 	// phpcs:ignore WordPress.Security.NonceVerification.Missing
-	$post_all = isset( $_POST ) ? fed_sanitize_text_field( wp_unslash( $_POST ) ) : array();
-	parse_str( $post_all['data'], $post );
-	$action  = $post_all['fed_action'];
+	$post_all = isset( $_POST ) ? wp_unslash( $_POST ) : array();
+	$action   = isset( $post_all['fed_action'] ) ? sanitize_text_field( $post_all['fed_action'] ) : '';
+	$raw_data = isset( $post_all['data'] ) && is_string( $post_all['data'] ) ? $post_all['data'] : '';
+	$post     = array();
+	if ( ! empty( $raw_data ) ) {
+		parse_str( $raw_data, $post );
+	}
 	$post_id = ( isset( $post['menu_id'] ) && ! empty( $post['menu_id'] ) ) ? (int) $post['menu_id'] : '';
 	/**
 	 * Check for Nonce
@@ -268,6 +272,22 @@ function fed_admin_setting_form_dashboard_menu_function() {
 
 			wp_send_json_error( array( 'message' => __( 'Please fill required fields', 'frontend-dashboard' ) ) );
 			exit();
+		}
+
+		if ( isset( $post['fed_menu_key'] ) && 'url' === $post['fed_menu_key'] ) {
+			$submitted_url = '';
+			if ( isset( $post['fed_menu_value_url'] ) && is_array( $post['fed_menu_value_url'] ) ) {
+				$submitted_url = isset( $post['fed_menu_value_url']['url'] ) ? trim( $post['fed_menu_value_url']['url'] ) : '';
+			} elseif ( isset( $post['fed_menu_value_url'] ) && is_string( $post['fed_menu_value_url'] ) ) {
+				$submitted_url = trim( $post['fed_menu_value_url'] );
+			} elseif ( isset( $post['fed_menu_value'] ) && is_string( $post['fed_menu_value'] ) ) {
+				$submitted_url = trim( $post['fed_menu_value'] );
+			}
+
+			if ( empty( $submitted_url ) ) {
+				wp_send_json_error( array( 'message' => __( 'Please enter a valid External URL.', 'frontend-dashboard' ) ) );
+				exit();
+			}
 		}
 
 		$values = fed_process_menu( $post );
