@@ -635,15 +635,23 @@ function fed_get_add_profile_post_fields() {
 				var type = $(this).data('button');
 				if (!type) return;
 
-				// Sync common values (Label, Meta, Required, Menu, Help, Width, Default Value) from current form to newly selected form
+				// Sync common values (Label, Meta, Required, Menu, Help, Width, Default Value, Validation) from current form to newly selected form
 				var $currentVisible = $('.fed_input_type_container:visible');
-				var currentLabel   = $currentVisible.find('input[name="label_name"]').val();
-				var currentMeta    = $currentVisible.find('input[name="input_meta"]').val();
-				var currentOrder   = $currentVisible.find('input[name="input_order"]').val();
-				var currentMenu    = $currentVisible.find('select[name="menu"]').val();
-				var currentHelp    = $currentVisible.find('input[name="tooltip_body"]').val();
-				var currentWidth   = $currentVisible.find('select[name="extended[field_width]"]').val();
-				var currentDefault = $currentVisible.find('input[name="extended[default_value]"]').val();
+				var currentLabel        = $currentVisible.find('input[name="label_name"]').val();
+				var currentMeta         = $currentVisible.find('input[name="input_meta"]').val();
+				var currentOrder        = $currentVisible.find('input[name="input_order"]').val();
+				var currentMenu         = $currentVisible.find('select[name="menu"]').val();
+				var currentHelp         = $currentVisible.find('input[name="tooltip_body"]').val();
+				var currentWidth        = $currentVisible.find('select[name="extended[field_width]"]').val();
+				var currentDefault      = $currentVisible.find('input[name="extended[default_value]"]').val();
+				var currentPattern      = $currentVisible.find('.fed-validation-pattern-input').val();
+				var currentPatternError = $currentVisible.find('.fed-validation-error-input').val();
+				var currentMinLength    = $currentVisible.find('.fed-validation-minlength-input').val();
+				var currentMaxLength    = $currentVisible.find('.fed-validation-maxlength-input').val();
+				var currentMin          = $currentVisible.find('.fed-validation-min-input').val();
+				var currentMax          = $currentVisible.find('.fed-validation-max-input').val();
+				var currentStep         = $currentVisible.find('.fed-validation-step-input').val();
+				var currentPreset       = $currentVisible.find('.fed-validation-preset-select').val();
 
 				activateFieldType(type);
 
@@ -670,7 +678,60 @@ function fed_get_add_profile_post_fields() {
 					if (currentDefault && !$newVisible.find('input[name="extended[default_value]"]').val()) {
 						$newVisible.find('input[name="extended[default_value]"]').val(currentDefault);
 					}
+					if (currentPattern && !$newVisible.find('.fed-validation-pattern-input').val()) {
+						$newVisible.find('.fed-validation-pattern-input').val(currentPattern);
+					}
+					if (currentPatternError && !$newVisible.find('.fed-validation-error-input').val()) {
+						$newVisible.find('.fed-validation-error-input').val(currentPatternError);
+					}
+					if (currentMinLength && !$newVisible.find('.fed-validation-minlength-input').val()) {
+						$newVisible.find('.fed-validation-minlength-input').val(currentMinLength);
+					}
+					if (currentMaxLength && !$newVisible.find('.fed-validation-maxlength-input').val()) {
+						$newVisible.find('.fed-validation-maxlength-input').val(currentMaxLength);
+					}
+					if (currentMin && !$newVisible.find('.fed-validation-min-input').val()) {
+						$newVisible.find('.fed-validation-min-input').val(currentMin);
+					}
+					if (currentMax && !$newVisible.find('.fed-validation-max-input').val()) {
+						$newVisible.find('.fed-validation-max-input').val(currentMax);
+					}
+					if (currentStep && !$newVisible.find('.fed-validation-step-input').val()) {
+						$newVisible.find('.fed-validation-step-input').val(currentStep);
+					}
+					if (currentPreset && !$newVisible.find('.fed-validation-preset-select').val()) {
+						$newVisible.find('.fed-validation-preset-select').val(currentPreset);
+					}
 				}
+			});
+
+			// Validation Preset Selection
+			$(document).on('change', '.fed-validation-preset-select', function() {
+				var $opt = $(this).find('option:selected');
+				var pattern = $opt.data('pattern') || '';
+				var error = $opt.data('error') || '';
+				var $card = $(this).closest('.fed-validation-card');
+
+				if (pattern) {
+					$card.find('.fed-validation-pattern-input').val(pattern).trigger('input').trigger('change');
+				}
+				if (error && !$card.find('.fed-validation-error-input').val()) {
+					$card.find('.fed-validation-error-input').val(error).trigger('input').trigger('change');
+				}
+			});
+
+			// Auto-sync preset dropdown if pattern is edited manually
+			$(document).on('input', '.fed-validation-pattern-input', function() {
+				var val = $(this).val();
+				var $card = $(this).closest('.fed-validation-card');
+				var $select = $card.find('.fed-validation-preset-select');
+				var matchedPreset = '';
+				$select.find('option').each(function() {
+					if ($(this).data('pattern') && $(this).data('pattern') === val) {
+						matchedPreset = $(this).val();
+					}
+				});
+				$select.val(matchedPreset);
 			});
 
 			// Smart Tags Dropdown Toggle

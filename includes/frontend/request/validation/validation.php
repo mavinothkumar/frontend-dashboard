@@ -114,6 +114,11 @@ function fed_validate_user_profile_form( $post ) {
 					);
 				}
 			}
+
+			// Custom Constraints (minlength, maxlength, regex pattern, number bounds)
+			if ( function_exists( 'fed_validate_field_constraints' ) ) {
+				$fed_error = fed_validate_field_constraints( $val, $field, $fed_error );
+			}
 		}
 	}
 

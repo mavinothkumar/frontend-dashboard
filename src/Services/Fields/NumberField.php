@@ -17,18 +17,27 @@ class NumberField extends TextField {
 
 	public function render() {
 		$min = $this->get_data( 'input_min', $this->attributes );
-		if ( '' === $min ) {
+		if ( '' === $min || null === $min ) {
 			$min = $this->get_data( 'min', $this->attributes, null );
+		}
+		if ( '' === $min || null === $min ) {
+			$min = isset( $this->extended['validation']['min'] ) && '' !== $this->extended['validation']['min'] ? $this->extended['validation']['min'] : null;
 		}
 
 		$max = $this->get_data( 'input_max', $this->attributes );
-		if ( '' === $max ) {
+		if ( '' === $max || null === $max ) {
 			$max = $this->get_data( 'max', $this->attributes, null );
+		}
+		if ( '' === $max || null === $max ) {
+			$max = isset( $this->extended['validation']['max'] ) && '' !== $this->extended['validation']['max'] ? $this->extended['validation']['max'] : null;
 		}
 
 		$step = $this->get_data( 'input_step', $this->attributes );
-		if ( '' === $step ) {
-			$step = $this->get_data( 'step', $this->attributes, 'any' );
+		if ( '' === $step || null === $step ) {
+			$step = $this->get_data( 'step', $this->attributes, null );
+		}
+		if ( '' === $step || null === $step ) {
+			$step = isset( $this->extended['validation']['step'] ) && '' !== $this->extended['validation']['step'] ? $this->extended['validation']['step'] : 'any';
 		}
 
 		$extra = array(

@@ -1556,3 +1556,188 @@ if ( ! function_exists( 'fed_resolve_smart_tags' ) ) {
 	}
 }
 
+if ( ! function_exists( 'fed_get_validation_presets_list' ) ) {
+	/**
+	 * Get list of standard regex validation presets.
+	 *
+	 * @return array
+	 */
+	function fed_get_validation_presets_list() {
+		$presets = array(
+			'alpha'        => array(
+				'label'   => __( 'Letters Only (Alphabetic & spaces)', 'frontend-dashboard' ),
+				'pattern' => '^[a-zA-Z\s]+$',
+				'error'   => __( 'Only alphabetic letters and spaces are allowed.', 'frontend-dashboard' ),
+			),
+			'alphanumeric' => array(
+				'label'   => __( 'Alphanumeric (Letters, numbers & spaces)', 'frontend-dashboard' ),
+				'pattern' => '^[a-zA-Z0-9\s]+$',
+				'error'   => __( 'Only letters, numbers, and spaces are allowed.', 'frontend-dashboard' ),
+			),
+			'numeric'      => array(
+				'label'   => __( 'Digits Only (Numbers)', 'frontend-dashboard' ),
+				'pattern' => '^[0-9]+$',
+				'error'   => __( 'Only numerical digits are allowed.', 'frontend-dashboard' ),
+			),
+			'phone'        => array(
+				'label'   => __( 'Phone Number (International format)', 'frontend-dashboard' ),
+				'pattern' => '^\+?[0-9\s\-\(\)]{7,20}$',
+				'error'   => __( 'Please enter a valid phone number (e.g. +1 555-0199).', 'frontend-dashboard' ),
+			),
+			'hex_color'    => array(
+				'label'   => __( 'Hex Color Code (#RRGGBB / #RGB)', 'frontend-dashboard' ),
+				'pattern' => '^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',
+				'error'   => __( 'Please enter a valid hex color code (e.g. #3b82f6).', 'frontend-dashboard' ),
+			),
+			'us_zip'       => array(
+				'label'   => __( 'US ZIP Code (5-digit or 5+4)', 'frontend-dashboard' ),
+				'pattern' => '^\d{5}(-\d{4})?$',
+				'error'   => __( 'Please enter a valid 5-digit US ZIP code.', 'frontend-dashboard' ),
+			),
+			'uk_postcode'  => array(
+				'label'   => __( 'UK Postcode', 'frontend-dashboard' ),
+				'pattern' => '^[A-Z]{1,2}[0-9R][0-9A-Z]?\s?[0-9][A-Z]{2}$',
+				'error'   => __( 'Please enter a valid UK postcode.', 'frontend-dashboard' ),
+			),
+			'slug'         => array(
+				'label'   => __( 'Slug / Lowercase Alphanumeric with Hyphens', 'frontend-dashboard' ),
+				'pattern' => '^[a-z0-9_-]+$',
+				'error'   => __( 'Only lowercase letters, numbers, hyphens, and underscores are allowed.', 'frontend-dashboard' ),
+			),
+		);
+
+		return apply_filters( 'fed_validation_presets_list', $presets );
+	}
+}
+
+if ( ! function_exists( 'fed_validate_field_constraints' ) ) {
+	/**
+	 * Validate a field value against configured constraints (minlength, maxlength, regex pattern, number bounds).
+	 *
+	 * @param mixed          $val Submitted value.
+	 * @param array          $field Field metadata configuration row.
+	 * @param \WP_Error|null $error_collector Optional WP_Error instance.
+	 * @return \WP_Error
+	 */
+	function fed_validate_field_constraints( $val, array $field, \WP_Error $error_collector = null ) {
+		$error = ( $error_collector instanceof \WP_Error ) ? $error_collector : new \WP_Error();
+
+		$meta_key   = isset( $field['input_meta'] ) ? $field['input_meta'] : '';
+		$label      = ! empty( $field['label_name'] ) ? $field['label_name'] : $meta_key;
+		$input_type = isset( $field['input_type'] ) ? $field['input_type'] : '';
+
+		if ( empty( $meta_key ) ) {
+			return $error;
+		}
+
+		$is_required = isset( $field['is_required'] ) && ( 'true' === $field['is_required'] || true === $field['is_required'] || 'Enable' === $field['is_required'] || 'yes' === $field['is_required'] );
+
+		// Check required constraint
+		$is_empty = is_null( $val ) || '' === $val || ( is_string( $val ) && '' === trim( $val ) );
+		if ( $is_required && $is_empty ) {
+			/* translators: %s: Field label */
+			$error->add( $meta_key . '_required', sprintf( __( '%s is required.', 'frontend-dashboard' ), $label ) );
+			return $error;
+		}
+
+		// If value is empty and not required, skip further format constraints
+		if ( $is_empty ) {
+			return $error;
+		}
+
+		$str_val = is_string( $val ) ? trim( $val ) : ( is_scalar( $val ) ? (string) $val : '' );
+
+		// Extract extended validation rules
+		$extended   = isset( $field['extended'] ) ? ( is_string( $field['extended'] ) ? maybe_unserialize( $field['extended'] ) : $field['extended'] ) : array();
+		$validation = isset( $extended['validation'] ) && is_array( $extended['validation'] ) ? $extended['validation'] : array();
+
+		$minlength     = isset( $validation['minlength'] ) && '' !== $validation['minlength'] ? absint( $validation['minlength'] ) : null;
+		$maxlength     = isset( $validation['maxlength'] ) && '' !== $validation['maxlength'] ? absint( $validation['maxlength'] ) : null;
+		$pattern       = isset( $validation['pattern'] ) ? trim( (string) $validation['pattern'] ) : '';
+		$pattern_error = isset( $validation['pattern_error'] ) && '' !== trim( (string) $validation['pattern_error'] ) ? trim( (string) $validation['pattern_error'] ) : '';
+
+		// Min Length constraint
+		if ( null !== $minlength && $minlength > 0 && '' !== $str_val ) {
+			$actual_len = function_exists( 'mb_strlen' ) ? mb_strlen( $str_val ) : strlen( $str_val );
+			if ( $actual_len < $minlength ) {
+				$msg = $pattern_error ? $pattern_error : sprintf(
+					/* translators: 1: Field label, 2: Minimum character length */
+					__( '%1$s must be at least %2$d characters long.', 'frontend-dashboard' ),
+					$label,
+					$minlength
+				);
+				$error->add( $meta_key . '_minlength', $msg );
+			}
+		}
+
+		// Max Length constraint
+		if ( null !== $maxlength && $maxlength > 0 && '' !== $str_val ) {
+			$actual_len = function_exists( 'mb_strlen' ) ? mb_strlen( $str_val ) : strlen( $str_val );
+			if ( $actual_len > $maxlength ) {
+				$msg = $pattern_error ? $pattern_error : sprintf(
+					/* translators: 1: Field label, 2: Maximum character length */
+					__( '%1$s cannot exceed %2$d characters.', 'frontend-dashboard' ),
+					$label,
+					$maxlength
+				);
+				$error->add( $meta_key . '_maxlength', $msg );
+			}
+		}
+
+		// Regex Pattern constraint
+		if ( '' !== $pattern && '' !== $str_val ) {
+			// Delimit safely with # and escape internal #
+			$delimited_pattern = '#' . str_replace( '#', '\#', $pattern ) . '#u';
+			// Suppress error in case pattern syntax is malformed
+			$test_compile = @preg_match( $delimited_pattern, '' );
+			if ( false !== $test_compile ) {
+				if ( ! preg_match( $delimited_pattern, $str_val ) ) {
+					$msg = $pattern_error ? $pattern_error : sprintf(
+						/* translators: %s: Field label */
+						__( '%s format is invalid.', 'frontend-dashboard' ),
+						$label
+					);
+					$error->add( $meta_key . '_pattern', $msg );
+				}
+			}
+		}
+
+		// Number bounds (min, max)
+		if ( 'number' === $input_type && is_numeric( $str_val ) ) {
+			$num_val = floatval( $str_val );
+
+			// Check min from validation or input_min
+			$min_bound = ( isset( $validation['min'] ) && '' !== $validation['min'] && is_numeric( $validation['min'] ) )
+				? floatval( $validation['min'] )
+				: ( isset( $field['input_min'] ) && '' !== $field['input_min'] && is_numeric( $field['input_min'] ) ? floatval( $field['input_min'] ) : null );
+
+			if ( null !== $min_bound && $num_val < $min_bound ) {
+				$msg = $pattern_error ? $pattern_error : sprintf(
+					/* translators: 1: Field label, 2: Minimum number value */
+					__( '%1$s must be at least %2$s.', 'frontend-dashboard' ),
+					$label,
+					(string) $min_bound
+				);
+				$error->add( $meta_key . '_min', $msg );
+			}
+
+			// Check max from validation or input_max
+			$max_bound = ( isset( $validation['max'] ) && '' !== $validation['max'] && is_numeric( $validation['max'] ) )
+				? floatval( $validation['max'] )
+				: ( isset( $field['input_max'] ) && '' !== $field['input_max'] && is_numeric( $field['input_max'] ) ? floatval( $field['input_max'] ) : null );
+
+			if ( null !== $max_bound && $num_val > $max_bound ) {
+				$msg = $pattern_error ? $pattern_error : sprintf(
+					/* translators: 1: Field label, 2: Maximum number value */
+					__( '%1$s cannot be greater than %2$s.', 'frontend-dashboard' ),
+					$label,
+					(string) $max_bound
+				);
+				$error->add( $meta_key . '_max', $msg );
+			}
+		}
+
+		return $error;
+	}
+}
+

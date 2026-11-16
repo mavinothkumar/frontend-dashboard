@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.4.2
+Stable tag: 3.5.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -149,6 +149,13 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 
 == Changelog ==
+
+= 3.5.0 (2026-11-16) =
+* Feature: Advanced Validation & Input Constraints Engine: Added a dedicated "Input Validation & Constraints" configuration card to the Form Field Builder supporting custom regex patterns, standard pattern presets, custom error messages, min/max character lengths, and numeric boundaries.
+* Feature: Validation Pattern Presets: Built-in one-click regex presets with matching user-friendly validation messages: Letters Only, Alphanumeric, Digits Only, International Phone, Hex Color Code, US ZIP Code, UK Postcode, and Slug / Lowercase with Hyphens.
+* Feature: Custom Validation Error Messages: Configure custom validation feedback displayed directly to end users upon submission failure, automatically bound to browser HTML5 validation tooltips via the `title` attribute.
+* Feature: End-to-End Server-Side Validation Defense: Enforced tamper-proof validation checks (Rule of 5) across profile update forms, registration forms, and frontend post publishing endpoints, preventing client-side validation bypass.
+* Enhancement: Multi-Type Builder Validation Memory: Switching field types dynamically synchronizes and preserves configured validation constraints and presets across palette forms.
 
 = 3.4.2 (2026-11-13) =
 * Fix: Dashboard Menu Restrictive Slug Validation on Updates: Resolved an issue where updating default or system dashboard menus (such as "Posts" with default slug `post`, or `profile`, `payment`, `logout`) triggered a false-positive restrictive slug validation error ("Sorry, You cannot use the restrictive slug name 'post'"). Menu updates now verify whether the existing menu slug is unchanged, preserving system slug protection while allowing label, icon, sort order, and role permission updates.

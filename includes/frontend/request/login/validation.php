@@ -77,6 +77,22 @@ function fed_validate_registration_form( $post ) {
 		}
 	}
 
+	// Validate custom registration fields constraints (minlength, maxlength, pattern, etc.)
+	if ( function_exists( 'fed_validate_field_constraints' ) && function_exists( 'fed_fetch_rows_by_table' ) ) {
+		$reg_fields = fed_fetch_rows_by_table( BC_FED_TABLE_USER_PROFILE );
+		if ( is_array( $reg_fields ) ) {
+			foreach ( $reg_fields as $reg_field ) {
+				$is_reg = isset( $reg_field['show_register'] ) && ( 'Enable' === $reg_field['show_register'] || 'enable' === $reg_field['show_register'] || 'true' === $reg_field['show_register'] );
+				if ( $is_reg ) {
+					$meta = isset( $reg_field['input_meta'] ) ? $reg_field['input_meta'] : '';
+					if ( ! empty( $meta ) && array_key_exists( $meta, $post ) ) {
+						$fed_error = fed_validate_field_constraints( $post[ $meta ], $reg_field, $fed_error );
+					}
+				}
+			}
+		}
+	}
+
 	if ( $fed_error->get_error_codes() ) {
 		return $fed_error;
 	}

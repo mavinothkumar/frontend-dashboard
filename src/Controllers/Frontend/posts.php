@@ -213,13 +213,25 @@ function fed_process_dashboard_add_new_post( $post ) {
 			$default['tax_input'] = $post['tax_input'];
 		}
 
+		$post_validation_error = new \WP_Error();
 		foreach ( $extras as $index => $extra ) {
 			$input_type = isset( $extra['input_type'] ) ? $extra['input_type'] : '';
-			if ( in_array( $input_type, array( 'textarea', 'multi_line', 'multiline' ), true ) ) {
-				$default['meta_input'][ $index ] = isset( $post[ $index ] ) ? sanitize_textarea_field( $post[ $index ] ) : '';
-			} else {
-				$default['meta_input'][ $index ] = isset( $post[ $index ] ) ? sanitize_text_field( $post[ $index ] ) : '';
+			$field_val  = isset( $post[ $index ] ) ? $post[ $index ] : '';
+
+			if ( function_exists( 'fed_validate_field_constraints' ) ) {
+				$field_row             = array_merge( (array) $extra, array( 'input_meta' => $index ) );
+				$post_validation_error = fed_validate_field_constraints( $field_val, $field_row, $post_validation_error );
 			}
+
+			if ( in_array( $input_type, array( 'textarea', 'multi_line', 'multiline' ), true ) ) {
+				$default['meta_input'][ $index ] = sanitize_textarea_field( $field_val );
+			} else {
+				$default['meta_input'][ $index ] = sanitize_text_field( $field_val );
+			}
+		}
+
+		if ( $post_validation_error->get_error_codes() ) {
+			wp_send_json_error( array( 'message' => $post_validation_error->get_error_messages() ) );
 		}
 
 		$success = wp_insert_post( $default );

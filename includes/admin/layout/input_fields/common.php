@@ -414,3 +414,111 @@ function fed_render_choices_builder( $input_val, $field_type = 'select', $is_mul
 	</div>
 	<?php
 }
+
+/**
+ * Render Input Validation & Constraints card for Form Field Builder.
+ *
+ * @param array  $row        Field configuration data.
+ * @param string $field_type Current field type slug.
+ */
+function fed_get_validation_constraints_card( array $row, $field_type = 'single_line' ) {
+	$extended   = isset( $row['extended'] ) ? ( is_string( $row['extended'] ) ? maybe_unserialize( $row['extended'] ) : $row['extended'] ) : array();
+	$validation = isset( $extended['validation'] ) && is_array( $extended['validation'] ) ? $extended['validation'] : array();
+
+	$pattern       = isset( $validation['pattern'] ) ? $validation['pattern'] : '';
+	$pattern_error = isset( $validation['pattern_error'] ) ? $validation['pattern_error'] : '';
+	$minlength     = isset( $validation['minlength'] ) ? $validation['minlength'] : '';
+	$maxlength     = isset( $validation['maxlength'] ) ? $validation['maxlength'] : '';
+
+	$min_val  = isset( $validation['min'] ) && '' !== $validation['min'] ? $validation['min'] : ( isset( $row['input_min'] ) ? $row['input_min'] : '' );
+	$max_val  = isset( $validation['max'] ) && '' !== $validation['max'] ? $validation['max'] : ( isset( $row['input_max'] ) ? $row['input_max'] : '' );
+	$step_val = isset( $validation['step'] ) && '' !== $validation['step'] ? $validation['step'] : ( isset( $row['input_step'] ) ? $row['input_step'] : '' );
+
+	$presets = function_exists( 'fed_get_validation_presets_list' ) ? fed_get_validation_presets_list() : array();
+	?>
+	<div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-6 sm:space-y-7 fed-validation-card">
+		<div class="flex items-center gap-3.5 pb-5 border-b border-slate-100">
+			<div class="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-base shrink-0 shadow-2xs">
+				<i class="fas fa-check-double"></i>
+			</div>
+			<div>
+				<h3 class="text-sm sm:text-base font-bold text-slate-900 m-0"><?php esc_html_e( 'Input Validation & Constraints', 'frontend-dashboard' ); ?></h3>
+				<p class="text-xs text-slate-500 m-0 mt-0.5"><?php esc_html_e( 'Configure regex pattern validation, character boundaries, and custom error messages.', 'frontend-dashboard' ); ?></p>
+			</div>
+		</div>
+
+		<?php if ( 'number' === $field_type ) : ?>
+			<div class="space-y-5">
+				<div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+					<div class="space-y-1.5">
+						<label class="block text-xs font-bold text-slate-700"><?php esc_html_e( 'Minimum Allowed Value (min)', 'frontend-dashboard' ); ?></label>
+						<input type="number" step="any" name="extended[validation][min]" value="<?php echo esc_attr( $min_val ); ?>" placeholder="<?php esc_attr_e( 'e.g. 0', 'frontend-dashboard' ); ?>" class="fed-validation-min-input w-full text-xs font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-3.5 outline-none focus:border-indigo-500 focus:bg-white transition-all" style="min-height:38px;" />
+						<p class="text-[11px] text-slate-400 m-0"><?php esc_html_e( 'Minimum number allowed.', 'frontend-dashboard' ); ?></p>
+					</div>
+					<div class="space-y-1.5">
+						<label class="block text-xs font-bold text-slate-700"><?php esc_html_e( 'Maximum Allowed Value (max)', 'frontend-dashboard' ); ?></label>
+						<input type="number" step="any" name="extended[validation][max]" value="<?php echo esc_attr( $max_val ); ?>" placeholder="<?php esc_attr_e( 'e.g. 1000', 'frontend-dashboard' ); ?>" class="fed-validation-max-input w-full text-xs font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-3.5 outline-none focus:border-indigo-500 focus:bg-white transition-all" style="min-height:38px;" />
+						<p class="text-[11px] text-slate-400 m-0"><?php esc_html_e( 'Maximum number allowed.', 'frontend-dashboard' ); ?></p>
+					</div>
+					<div class="space-y-1.5">
+						<label class="block text-xs font-bold text-slate-700"><?php esc_html_e( 'Step Increment (step)', 'frontend-dashboard' ); ?></label>
+						<input type="text" name="extended[validation][step]" value="<?php echo esc_attr( $step_val ); ?>" placeholder="<?php esc_attr_e( 'e.g. 1 or 0.01', 'frontend-dashboard' ); ?>" class="fed-validation-step-input w-full text-xs font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-3.5 outline-none focus:border-indigo-500 focus:bg-white transition-all" style="min-height:38px;" />
+						<p class="text-[11px] text-slate-400 m-0"><?php esc_html_e( 'Step interval or precision.', 'frontend-dashboard' ); ?></p>
+					</div>
+				</div>
+
+				<div class="space-y-1.5">
+					<label class="block text-xs font-bold text-slate-700"><?php esc_html_e( 'Custom Validation Error Message', 'frontend-dashboard' ); ?></label>
+					<input type="text" name="extended[validation][pattern_error]" value="<?php echo esc_attr( $pattern_error ); ?>" placeholder="<?php esc_attr_e( 'e.g. Please enter a valid number within the permitted range', 'frontend-dashboard' ); ?>" class="fed-validation-error-input w-full text-xs font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-3.5 outline-none focus:border-indigo-500 focus:bg-white transition-all" style="min-height:38px;" />
+					<p class="text-[11px] text-slate-400 m-0"><?php esc_html_e( 'Feedback shown to end users when field value violates constraints.', 'frontend-dashboard' ); ?></p>
+				</div>
+			</div>
+		<?php else : ?>
+			<div class="space-y-5">
+				<div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+					<div class="space-y-1.5">
+						<label class="block text-xs font-bold text-slate-700"><?php esc_html_e( 'Validation Pattern Preset', 'frontend-dashboard' ); ?></label>
+						<select class="fed-validation-preset-select w-full text-xs font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-3.5 outline-none focus:border-indigo-500 focus:bg-white transition-all cursor-pointer" style="min-height:38px;">
+							<option value=""><?php esc_html_e( '-- Select a Preset (Optional) --', 'frontend-dashboard' ); ?></option>
+							<?php foreach ( $presets as $pkey => $preset ) : ?>
+								<option value="<?php echo esc_attr( $pkey ); ?>"
+									data-pattern="<?php echo esc_attr( $preset['pattern'] ); ?>"
+									data-error="<?php echo esc_attr( $preset['error'] ); ?>"
+									<?php echo ( $pattern === $preset['pattern'] ) ? 'selected="selected"' : ''; ?>>
+									<?php echo esc_html( $preset['label'] ); ?>
+								</option>
+							<?php endforeach; ?>
+						</select>
+						<p class="text-[11px] text-slate-400 m-0"><?php esc_html_e( 'Pick a standard pattern or write your own custom regex below.', 'frontend-dashboard' ); ?></p>
+					</div>
+
+					<div class="space-y-1.5">
+						<label class="block text-xs font-bold text-slate-700"><?php esc_html_e( 'Regular Expression Pattern (Regex)', 'frontend-dashboard' ); ?></label>
+						<input type="text" name="extended[validation][pattern]" value="<?php echo esc_attr( $pattern ); ?>" placeholder="<?php esc_attr_e( 'e.g. ^[a-zA-Z0-9_-]+$', 'frontend-dashboard' ); ?>" class="fed-validation-pattern-input w-full text-xs font-mono font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-3.5 outline-none focus:border-indigo-500 focus:bg-white transition-all" style="min-height:38px;" />
+						<p class="text-[11px] text-slate-400 m-0"><?php esc_html_e( 'Regular expression without enclosing delimiters (HTML5 & PCRE).', 'frontend-dashboard' ); ?></p>
+					</div>
+				</div>
+
+				<div class="space-y-1.5">
+					<label class="block text-xs font-bold text-slate-700"><?php esc_html_e( 'Custom Validation Error Message', 'frontend-dashboard' ); ?></label>
+					<input type="text" name="extended[validation][pattern_error]" value="<?php echo esc_attr( $pattern_error ); ?>" placeholder="<?php esc_attr_e( 'e.g. Please enter a valid 5-digit postal code', 'frontend-dashboard' ); ?>" class="fed-validation-error-input w-full text-xs font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-3.5 outline-none focus:border-indigo-500 focus:bg-white transition-all" style="min-height:38px;" />
+					<p class="text-[11px] text-slate-400 m-0"><?php esc_html_e( 'Displayed when the input fails validation. Also sets browser HTML5 title tooltip.', 'frontend-dashboard' ); ?></p>
+				</div>
+
+				<div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+					<div class="space-y-1.5">
+						<label class="block text-xs font-bold text-slate-700"><?php esc_html_e( 'Minimum Length (Characters)', 'frontend-dashboard' ); ?></label>
+						<input type="number" min="0" name="extended[validation][minlength]" value="<?php echo esc_attr( $minlength ); ?>" placeholder="<?php esc_attr_e( 'e.g. 5', 'frontend-dashboard' ); ?>" class="fed-validation-minlength-input w-full text-xs font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-3.5 outline-none focus:border-indigo-500 focus:bg-white transition-all" style="min-height:38px;" />
+						<p class="text-[11px] text-slate-400 m-0"><?php esc_html_e( 'Minimum character length required (leave blank for none).', 'frontend-dashboard' ); ?></p>
+					</div>
+					<div class="space-y-1.5">
+						<label class="block text-xs font-bold text-slate-700"><?php esc_html_e( 'Maximum Length (Characters)', 'frontend-dashboard' ); ?></label>
+						<input type="number" min="0" name="extended[validation][maxlength]" value="<?php echo esc_attr( $maxlength ); ?>" placeholder="<?php esc_attr_e( 'e.g. 100', 'frontend-dashboard' ); ?>" class="fed-validation-maxlength-input w-full text-xs font-medium text-slate-800 bg-slate-50 border border-slate-200 rounded-xl px-3.5 outline-none focus:border-indigo-500 focus:bg-white transition-all" style="min-height:38px;" />
+						<p class="text-[11px] text-slate-400 m-0"><?php esc_html_e( 'Maximum character limit allowed (leave blank for none).', 'frontend-dashboard' ); ?></p>
+					</div>
+				</div>
+			</div>
+		<?php endif; ?>
+	</div>
+	<?php
+}

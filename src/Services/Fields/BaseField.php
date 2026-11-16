@@ -146,6 +146,33 @@ abstract class BaseField {
 			$attrs[] = $this->extra;
 		}
 
+		// Validation constraints from extended metadata
+		$validation = isset( $this->extended['validation'] ) && is_array( $this->extended['validation'] )
+			? $this->extended['validation']
+			: array();
+
+		if ( ! empty( $validation['pattern'] ) ) {
+			$attrs[] = sprintf( 'pattern="%s"', esc_attr( $validation['pattern'] ) );
+		}
+		if ( ! empty( $validation['pattern_error'] ) ) {
+			$attrs[] = sprintf( 'title="%s"', esc_attr( $validation['pattern_error'] ) );
+		}
+		if ( isset( $validation['minlength'] ) && '' !== $validation['minlength'] ) {
+			$attrs[] = sprintf( 'minlength="%d"', absint( $validation['minlength'] ) );
+		}
+		if ( isset( $validation['maxlength'] ) && '' !== $validation['maxlength'] ) {
+			$attrs[] = sprintf( 'maxlength="%d"', absint( $validation['maxlength'] ) );
+		}
+		if ( isset( $validation['min'] ) && '' !== $validation['min'] ) {
+			$attrs[] = sprintf( 'min="%s"', esc_attr( $validation['min'] ) );
+		}
+		if ( isset( $validation['max'] ) && '' !== $validation['max'] ) {
+			$attrs[] = sprintf( 'max="%s"', esc_attr( $validation['max'] ) );
+		}
+		if ( isset( $validation['step'] ) && '' !== $validation['step'] ) {
+			$attrs[] = sprintf( 'step="%s"', esc_attr( $validation['step'] ) );
+		}
+
 		foreach ( $extra_attrs as $key => $val ) {
 			if ( is_null( $val ) || false === $val || 'name' === $key ) {
 				continue;

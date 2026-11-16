@@ -77,6 +77,7 @@ function fed_admin_input_fields_multi_line( $row, $action, $menu_options ) {
 			</div>
 
 			<?php
+			fed_get_validation_constraints_card( $row, 'multi_line' );
 			fed_get_admin_up_display_permission( $row, $action );
 			fed_get_admin_up_role_based( $row, $action, $menu_options );
 			fed_get_input_type_and_submit_btn( 'multi_line', $action, $row );
