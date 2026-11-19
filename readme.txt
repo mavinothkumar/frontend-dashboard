@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.5.0
+Stable tag: 3.5.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -149,6 +149,11 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 
 == Changelog ==
+
+= 3.5.1 (2026-11-19) =
+* Fix: Duplicate Dashboard Rendering on Menu Navigation & Page Seed: Resolved an issue where accessing dashboard menu items caused the complete dashboard layout to render doubled, stacked one on top of the other, when the dashboard page contained both the Gutenberg block and shortcode.
+* Fix: Core Page Seeder Clean Content: Corrected the System Tools page creation routine to prevent concatenating `<!-- wp:fed/dashboard /-->` and `[fed_dashboard]` into the same post content.
+* Enhancement: Runtime Dashboard Deduplication Guard: Implemented an active execution guard in the dashboard shortcode and block renderers to ensure the dashboard shell is rendered at most once per HTTP request, auto-healing legacy configurations seamlessly.
 
 = 3.5.0 (2026-11-16) =
 * Feature: Advanced Validation & Input Constraints Engine: Added a dedicated "Input Validation & Constraints" configuration card to the Form Field Builder supporting custom regex patterns, standard pattern presets, custom error messages, min/max character lengths, and numeric boundaries.

@@ -11,10 +11,25 @@ export default defineConfig({
     outDir: resolve(__dirname, 'assets/dist'),
     emptyOutDir: true,
     manifest: true,
+    chunkSizeWarningLimit: 1200,
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'assets/js/main.js'),
         style: resolve(__dirname, 'assets/css/main.css')
+      },
+      onwarn(warning, warn) {
+        // Suppress benign eval warning from pdfjs-dist's Node.js fallback check
+        if (
+          warning.code === 'EVAL' &&
+          (
+            (warning.id && warning.id.includes('pdfjs-dist')) ||
+            (warning.loc && warning.loc.file && warning.loc.file.includes('pdfjs-dist')) ||
+            (warning.message && warning.message.includes('pdfjs-dist'))
+          )
+        ) {
+          return;
+        }
+        warn(warning);
       }
     }
   },

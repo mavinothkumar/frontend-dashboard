@@ -20,6 +20,20 @@ class ShortcodeController {
 	 */
 	protected $templates;
 
+	/**
+	 * Track whether the dashboard shell has already been rendered in the current HTTP request.
+	 *
+	 * @var bool
+	 */
+	protected static $dashboard_rendered = false;
+
+	/**
+	 * Reset dashboard rendered tracker (useful for testing and sub-requests).
+	 */
+	public static function reset_dashboard_rendered_flag() {
+		self::$dashboard_rendered = false;
+	}
+
 	public function __construct( TemplateLoader $templates = null ) {
 		$this->templates = $templates ?: new TemplateLoader();
 	}
@@ -84,6 +98,12 @@ class ShortcodeController {
 	 * @return string
 	 */
 	public function render_dashboard() {
+		// Prevent duplicate dashboard rendering on the same request (e.g. if page has both block and shortcode).
+		if ( self::$dashboard_rendered && ! is_admin() ) {
+			return '';
+		}
+		self::$dashboard_rendered = true;
+
 		ob_start();
 		$this->templates->get_template_part( 'dashboard' );
 		$html = ob_get_clean();

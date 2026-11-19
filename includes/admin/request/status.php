@@ -332,6 +332,15 @@ function fed_status_run_cron() {
 function fed_tools_find_or_create_page( $slug, $title, $content, $template = 'fed-canvas' ) {
 	$page = get_page_by_path( $slug );
 	if ( $page && isset( $page->ID ) && 'trash' !== $page->post_status ) {
+		// Auto-heal legacy duplicate block and shortcode concatenation if present.
+		if ( 'dashboard' === $slug && false !== strpos( $page->post_content, '<!-- wp:fed/dashboard /-->' ) && false !== strpos( $page->post_content, '[fed_dashboard]' ) ) {
+			wp_update_post(
+				array(
+					'ID'           => (int) $page->ID,
+					'post_content' => '[fed_dashboard]',
+				)
+			);
+		}
 		return (int) $page->ID;
 	}
 
@@ -370,7 +379,7 @@ function fed_tools_seed_pages() {
 	fed_verify_nonce( $request );
 
 	// 1. Dashboard Page
-	$dashboard_id = fed_tools_find_or_create_page( 'dashboard', 'Dashboard', '<!-- wp:fed/dashboard /-->[fed_dashboard]', 'fed-canvas-full' );
+	$dashboard_id = fed_tools_find_or_create_page( 'dashboard', 'Dashboard', '[fed_dashboard]', 'fed-canvas-full' );
 
 	// 2. Login Page
 	$login_id = fed_tools_find_or_create_page( 'login', 'Login', '[fed_login]', 'fed-canvas' );
@@ -570,7 +579,7 @@ function fed_tools_seed_all() {
 	}
 
 	// 2. Core Pages & Settings
-	$dashboard_id = fed_tools_find_or_create_page( 'dashboard', 'Dashboard', '<!-- wp:fed/dashboard /-->[fed_dashboard]', 'fed-canvas-full' );
+	$dashboard_id = fed_tools_find_or_create_page( 'dashboard', 'Dashboard', '[fed_dashboard]', 'fed-canvas-full' );
 	$login_id     = fed_tools_find_or_create_page( 'login', 'Login', '[fed_login]', 'fed-canvas' );
 	$register_id  = fed_tools_find_or_create_page( 'register', 'Register', '[fed_register_only]', 'fed-canvas' );
 	$forgot_id    = fed_tools_find_or_create_page( 'forgot-password', 'Forgot Password', '[fed_forgot_password_only]', 'fed-canvas' );

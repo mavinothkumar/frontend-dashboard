@@ -328,8 +328,14 @@ class FED_Blocks {
 	 * @return string
 	 */
 	public function render_dashboard_block( $attributes, $content = '' ) {
-		$align = ! empty( $attributes['align'] ) ? 'align' . sanitize_html_class( $attributes['align'] ) : 'alignfull';
-		return '<div class="fed-block-dashboard-wrapper ' . esc_attr( $align ) . ' w-full">' . do_shortcode( '[fed_dashboard]' ) . '</div>';
+		$align    = ! empty( $attributes['align'] ) ? 'align' . sanitize_html_class( $attributes['align'] ) : 'alignfull';
+		$rendered = do_shortcode( '[fed_dashboard]' );
+
+		if ( '' === trim( (string) $rendered ) ) {
+			return '';
+		}
+
+		return '<div class="fed-block-dashboard-wrapper ' . esc_attr( $align ) . ' w-full">' . $rendered . '</div>';
 	}
 
 	/**
