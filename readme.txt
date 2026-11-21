@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.5.1
+Stable tag: 3.6.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -149,6 +149,14 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 
 == Changelog ==
+
+= 3.6.0 (2026-11-21) =
+* Feature: Live Interactive Form Preview (WYSIWYG): Integrated a real-time interactive preview box directly into the Form Field Builder inspector, rendering live HTML/CSS form inputs as administrators modify labels, placeholders, helper text, and choice options.
+* Feature: Responsive Device Viewport Switcher: Preview and interact with form fields across Desktop (100%), Tablet (640px), and Mobile (380px) viewports with simulated 12-column grid spans.
+* Feature: HTML Markup Inspector & One-Click Copy: Real-time code generator inspecting formatted HTML output for the active field configuration with instant clipboard copy.
+* Feature: Comprehensive 15-Field Type Interactive Support: Full live interactive preview support across Single Line, Multi-Line Textarea, Email, Password (with eye toggle), Number, Website URL, Dropdown Select (single & multi), Radio Buttons, Checkbox, Date Picker, File Upload dropzone, Color Picker with hex swatch, Rich Text WYSIWYG Mock, HTML Label/Notice container, and Dynamic Tables.
+* Feature: Real-Time Choices Repeater Sync: Instant bi-directional live rendering as select options and radio choices are added, deleted, or reordered in the Choices Builder.
+* Enhancement: Persistent Preview State & Controls: Admin preview collapse/expand state is remembered across sessions via local storage, alongside one-click test value reset.
 
 = 3.5.1 (2026-11-19) =
 * Fix: Duplicate Dashboard Rendering on Menu Navigation & Page Seed: Resolved an issue where accessing dashboard menu items caused the complete dashboard layout to render doubled, stacked one on top of the other, when the dashboard page contained both the Gutenberg block and shortcode.

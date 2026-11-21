@@ -484,6 +484,9 @@ function fed_get_add_profile_post_fields() {
 			<!-- ========================================================= -->
 			<div class="w-full min-w-0 space-y-7 fed_all_input_fields_container" id="fed_inspector_view">
 				<?php
+				// Render WYSIWYG Live Interactive Form Preview Panel
+				fed_render_live_preview_panel( $row, $action );
+
 				// Render all input type forms inside the inspector
 				fed_admin_input_fields_single_line( $row, $action, $menu_options );
 				fed_admin_input_fields_multi_line( $row, $action, $menu_options );
@@ -562,6 +565,306 @@ function fed_get_add_profile_post_fields() {
 				}
 			}
 
+			// Helper to escape HTML characters
+			function escapeHtml(str) {
+				if (str === null || str === undefined) return '';
+				return String(str)
+					.replace(/&/g, '&amp;')
+					.replace(/</g, '&lt;')
+					.replace(/>/g, '&gt;')
+					.replace(/"/g, '&quot;')
+					.replace(/'/g, '&#039;');
+			}
+
+			function escapeAttr(str) {
+				return escapeHtml(str);
+			}
+
+			// Extract choice items for select / radio live preview
+			function getChoicesData($container) {
+				var choices = [];
+				var $rows = $container.find('.fed-choice-row');
+				if ($rows.length) {
+					$rows.each(function() {
+						var k = $(this).find('.fed-choice-value, .fed-choice-key').val();
+						var l = $(this).find('.fed-choice-label').val();
+						if (k || l) {
+							choices.push({
+								key: k || l,
+								label: l || k
+							});
+						}
+					});
+				}
+				if (!choices.length) {
+					var rawJson = $container.find('.fed-choices-raw-sync').val();
+					if (rawJson) {
+						try {
+							var parsed = JSON.parse(rawJson);
+							if ($.isArray(parsed)) {
+								$.each(parsed, function(i, item) {
+									choices.push({
+										key: item.key || item.value || ('option_' + (i + 1)),
+										label: item.label || item.name || item.key
+									});
+								});
+							}
+						} catch (e) {}
+					}
+				}
+				return choices;
+			}
+
+			// WYSIWYG Live Interactive Form Preview Engine
+			function updateLivePreview() {
+				var $panel = $('#fed_live_preview_panel');
+				if (!$panel.length) return;
+
+				var $container = $('.fed_input_type_container:visible');
+				if (!$container.length) {
+					$container = $('.fed_input_' + selectedType + '_container');
+				}
+				if (!$container.length) return;
+
+				var type = $container.data('field-type') || selectedType || 'single_line';
+				var label = $container.find('input[name="label_name"]').val();
+				var meta = $container.find('input[name="input_meta"]').val();
+				var placeholder = $container.find('input[name="placeholder"]').val() || '';
+				var help = $container.find('input[name="tooltip_body"]').val() || '';
+				var defaultVal = $container.find('input[name="extended[default_value]"], textarea[name="extended[default_value]"], .fed-default-value-input').first().val() || '';
+				var fieldWidth = $container.find('select[name="extended[field_width]"]').val() || '12';
+
+				var $reqInput = $container.find('input[name="is_required"]');
+				var isRequired = false;
+				if ($reqInput.length) {
+					if ($reqInput.is(':checkbox')) {
+						isRequired = $reqInput.is(':checked');
+					} else {
+						isRequired = ($reqInput.val() === 'true' || $reqInput.val() === 'Enable' || $reqInput.val() === 'yes');
+					}
+				}
+
+				// 1. Label & Required Asterisk
+				$panel.find('.fed-preview-label-text').text(label && $.trim(label) !== '' ? label : 'Field Label');
+				if (isRequired) {
+					$panel.find('.fed-preview-required-star').removeClass('hidden');
+				} else {
+					$panel.find('.fed-preview-required-star').addClass('hidden');
+				}
+
+				// 2. Meta Badge
+				$panel.find('.fed-preview-meta-badge').text(meta && $.trim(meta) !== '' ? meta : 'meta_key');
+
+				// 3. Width Badge & 12-Column Responsive Grid Span
+				var widthMap = { '12': '100%', '6': '50%', '4': '33.33%', '3': '25%', '8': '66.66%', '9': '75%' };
+				var widthPercent = widthMap[fieldWidth] || '100%';
+				$panel.find('.fed-preview-width-badge').text(widthPercent);
+
+				var $fieldWrapper = $('#fed_live_preview_field_wrapper');
+				$fieldWrapper.removeClass('col-span-12 col-span-9 col-span-8 col-span-6 col-span-4 col-span-3').addClass('col-span-' + (fieldWidth || '12'));
+
+				// 4. Help Text
+				var $helpElem = $panel.find('.fed-preview-help-text');
+				if (help && $.trim(help) !== '') {
+					$helpElem.text(help).removeClass('hidden');
+				} else {
+					$helpElem.text('').addClass('hidden');
+				}
+
+				// 5. Field Type Name
+				var typeTitleMap = {
+					'single_line': 'Single Line Text',
+					'multi_line': 'Multi-Line Textarea',
+					'email': 'Email Address',
+					'password': 'Password',
+					'number': 'Number',
+					'url': 'Website URL',
+					'select': 'Dropdown Select',
+					'radio': 'Radio Buttons',
+					'checkbox': 'Checkbox',
+					'date': 'Date Picker',
+					'file': 'File Upload',
+					'color': 'Color Picker',
+					'wp_editor': 'Rich Text Editor',
+					'label': 'HTML Content / Notice',
+					'table': 'Dynamic Table'
+				};
+				$panel.find('.fed-preview-type-name').text(typeTitleMap[type] || type.replace(/_/g, ' '));
+
+				// 6. Validation Badges
+				var badges = [];
+				if (isRequired) {
+					badges.push('<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-rose-50 border border-rose-200 text-rose-700 font-medium"><i class="fas fa-asterisk text-[8px]"></i> Required</span>');
+				}
+				var pattern = $container.find('.fed-validation-pattern-input').val();
+				if (pattern) {
+					badges.push('<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-indigo-50 border border-indigo-200 text-indigo-700 font-mono" title="' + escapeAttr(pattern) + '"><i class="fas fa-code text-[8px]"></i> Pattern</span>');
+				}
+				var minLen = $container.find('.fed-validation-minlength-input').val();
+				if (minLen) {
+					badges.push('<span class="px-2 py-0.5 rounded-md bg-slate-100 border border-slate-200 text-slate-700 font-medium">Min: ' + escapeHtml(minLen) + ' chars</span>');
+				}
+				var maxLen = $container.find('.fed-validation-maxlength-input').val();
+				if (maxLen) {
+					badges.push('<span class="px-2 py-0.5 rounded-md bg-slate-100 border border-slate-200 text-slate-700 font-medium">Max: ' + escapeHtml(maxLen) + ' chars</span>');
+				}
+				var minVal = $container.find('.fed-validation-min-input').val();
+				var maxVal = $container.find('.fed-validation-max-input').val();
+				var stepVal = $container.find('.fed-validation-step-input').val();
+				if (type === 'number') {
+					if (minVal) badges.push('<span class="px-2 py-0.5 rounded-md bg-slate-100 border border-slate-200 text-slate-700 font-medium">Min: ' + escapeHtml(minVal) + '</span>');
+					if (maxVal) badges.push('<span class="px-2 py-0.5 rounded-md bg-slate-100 border border-slate-200 text-slate-700 font-medium">Max: ' + escapeHtml(maxVal) + '</span>');
+					if (stepVal && stepVal !== 'any') badges.push('<span class="px-2 py-0.5 rounded-md bg-slate-100 border border-slate-200 text-slate-700 font-medium">Step: ' + escapeHtml(stepVal) + '</span>');
+				}
+				var $badgesArea = $panel.find('.fed-preview-validation-badges');
+				if (badges.length) {
+					$badgesArea.html(badges.join('')).removeClass('hidden');
+				} else {
+					$badgesArea.html('').addClass('hidden');
+				}
+
+				// 7. Interactive Input Slot Rendering
+				var $slot = $panel.find('.fed-preview-input-slot');
+				var inputHtml = '';
+				var markupCode = '';
+
+				var valAttrs = '';
+				if (isRequired) valAttrs += ' required';
+				if (pattern) valAttrs += ' pattern="' + escapeAttr(pattern) + '"';
+				if (minLen) valAttrs += ' minlength="' + escapeAttr(minLen) + '"';
+				if (maxLen) valAttrs += ' maxlength="' + escapeAttr(maxLen) + '"';
+
+				switch (type) {
+					case 'single_line':
+						inputHtml = '<input type="text" class="fed-preview-active-input w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all placeholder:text-slate-400" placeholder="' + escapeAttr(placeholder) + '" value="' + escapeAttr(defaultVal) + '"' + valAttrs + ' />';
+						markupCode = '<input type="text" name="' + escapeAttr(meta) + '" class="form-control" placeholder="' + escapeAttr(placeholder) + '" value="' + escapeAttr(defaultVal) + '"' + valAttrs + ' />';
+						break;
+
+					case 'multi_line':
+						inputHtml = '<textarea rows="3" class="fed-preview-active-input w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl p-3.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all placeholder:text-slate-400" placeholder="' + escapeAttr(placeholder) + '"' + valAttrs + '>' + escapeHtml(defaultVal) + '</textarea>';
+						markupCode = '<textarea name="' + escapeAttr(meta) + '" rows="3" class="form-control" placeholder="' + escapeAttr(placeholder) + '"' + valAttrs + '>' + escapeHtml(defaultVal) + '</textarea>';
+						break;
+
+					case 'email':
+						inputHtml = '<div class="relative"><div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-xs"><i class="fas fa-envelope"></i></div><input type="email" class="fed-preview-active-input w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all placeholder:text-slate-400" placeholder="' + escapeAttr(placeholder || 'user@example.com') + '" value="' + escapeAttr(defaultVal) + '"' + valAttrs + ' /></div>';
+						markupCode = '<input type="email" name="' + escapeAttr(meta) + '" class="form-control" placeholder="' + escapeAttr(placeholder || 'user@example.com') + '" value="' + escapeAttr(defaultVal) + '"' + valAttrs + ' />';
+						break;
+
+					case 'password':
+						inputHtml = '<div class="relative"><div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-xs"><i class="fas fa-lock"></i></div><input type="password" class="fed-preview-pwd-input fed-preview-active-input w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl pl-9 pr-10 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all placeholder:text-slate-400" placeholder="' + escapeAttr(placeholder || '••••••••') + '" value="' + escapeAttr(defaultVal) + '"' + valAttrs + ' /><button type="button" class="fed-preview-toggle-pwd absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer" title="Toggle visibility"><i class="fas fa-eye text-xs"></i></button></div>';
+						markupCode = '<input type="password" name="' + escapeAttr(meta) + '" class="form-control" placeholder="' + escapeAttr(placeholder || '••••••••') + '"' + valAttrs + ' />';
+						break;
+
+					case 'number':
+						var numAttrs = valAttrs;
+						if (minVal) numAttrs += ' min="' + escapeAttr(minVal) + '"';
+						if (maxVal) numAttrs += ' max="' + escapeAttr(maxVal) + '"';
+						if (stepVal) numAttrs += ' step="' + escapeAttr(stepVal) + '"';
+						inputHtml = '<div class="relative"><div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-xs"><i class="fas fa-hashtag"></i></div><input type="number" class="fed-preview-active-input w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all placeholder:text-slate-400" placeholder="' + escapeAttr(placeholder || '0') + '" value="' + escapeAttr(defaultVal) + '"' + numAttrs + ' /></div>';
+						markupCode = '<input type="number" name="' + escapeAttr(meta) + '" class="form-control" placeholder="' + escapeAttr(placeholder || '0') + '" value="' + escapeAttr(defaultVal) + '"' + numAttrs + ' />';
+						break;
+
+					case 'url':
+						inputHtml = '<div class="relative"><div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-xs"><i class="fas fa-globe"></i></div><input type="url" class="fed-preview-active-input w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all placeholder:text-slate-400" placeholder="' + escapeAttr(placeholder || 'https://example.com') + '" value="' + escapeAttr(defaultVal) + '"' + valAttrs + ' /></div>';
+						markupCode = '<input type="url" name="' + escapeAttr(meta) + '" class="form-control" placeholder="' + escapeAttr(placeholder || 'https://example.com') + '" value="' + escapeAttr(defaultVal) + '"' + valAttrs + ' />';
+						break;
+
+					case 'select':
+						var choices = getChoicesData($container);
+						var isMulti = $container.find('.fed-multi-select-toggle').is(':checked');
+						var selectAttrs = isMulti ? ' multiple size="4"' : '';
+						var optHtml = '';
+						var optCode = '';
+						if (!isMulti) {
+							optHtml += '<option value="">' + escapeHtml(placeholder || '-- Select an option --') + '</option>';
+							optCode += '  <option value="">' + escapeHtml(placeholder || '-- Select an option --') + '</option>\n';
+						}
+						if (choices.length) {
+							$.each(choices, function(i, c) {
+								var isSelected = (defaultVal && c.key === defaultVal) || (i === 0 && !placeholder && !isMulti);
+								optHtml += '<option value="' + escapeAttr(c.key) + '"' + (isSelected ? ' selected' : '') + '>' + escapeHtml(c.label) + '</option>';
+								optCode += '  <option value="' + escapeAttr(c.key) + '"' + (isSelected ? ' selected' : '') + '>' + escapeHtml(c.label) + '</option>\n';
+							});
+						} else {
+							optHtml += '<option value="option_1">Option 1</option><option value="option_2">Option 2</option>';
+							optCode += '  <option value="option_1">Option 1</option>\n  <option value="option_2">Option 2</option>\n';
+						}
+						inputHtml = '<select class="fed-preview-active-input w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all cursor-pointer"' + selectAttrs + valAttrs + '>' + optHtml + '</select>';
+						markupCode = '<select name="' + escapeAttr(meta) + (isMulti ? '[]' : '') + '" class="form-control"' + selectAttrs + valAttrs + '>\n' + optCode + '</select>';
+						break;
+
+					case 'radio':
+						var radioChoices = getChoicesData($container);
+						var rItems = [];
+						var rCodes = [];
+						if (!radioChoices.length) {
+							radioChoices = [{ key: 'option_1', label: 'Option 1' }, { key: 'option_2', label: 'Option 2' }];
+						}
+						$.each(radioChoices, function(i, c) {
+							var isChecked = (defaultVal && c.key === defaultVal) || (i === 0 && !defaultVal);
+							rItems.push('<label class="flex items-center gap-3 p-3 rounded-xl border border-slate-200/90 bg-white hover:bg-slate-50/80 transition-all cursor-pointer shadow-2xs"><input type="radio" name="fed_preview_radio_' + escapeAttr(meta) + '" value="' + escapeAttr(c.key) + '"' + (isChecked ? ' checked' : '') + ' class="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-slate-300" /><span class="text-xs font-semibold text-slate-700">' + escapeHtml(c.label) + '</span><span class="text-[10px] text-slate-400 font-mono ml-auto">' + escapeHtml(c.key) + '</span></label>');
+							rCodes.push('<label class="radio-inline"><input type="radio" name="' + escapeAttr(meta) + '" value="' + escapeAttr(c.key) + '"' + (isChecked ? ' checked' : '') + ' /> ' + escapeHtml(c.label) + '</label>');
+						});
+						inputHtml = '<div class="space-y-2 pt-0.5">' + rItems.join('') + '</div>';
+						markupCode = rCodes.join('\n');
+						break;
+
+					case 'checkbox':
+						inputHtml = '<label class="flex items-center gap-3 p-3.5 rounded-2xl border border-slate-200/90 bg-white hover:bg-slate-50/80 transition-all cursor-pointer shadow-2xs"><input type="checkbox" name="fed_preview_cb_' + escapeAttr(meta) + '" value="1"' + (defaultVal ? ' checked' : '') + ' class="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500 border-slate-300" /><span class="text-xs font-semibold text-slate-800">' + escapeHtml(label || 'Enable Option') + '</span></label>';
+						markupCode = '<label class="checkbox-inline"><input type="checkbox" name="' + escapeAttr(meta) + '" value="1"' + (defaultVal ? ' checked' : '') + ' /> ' + escapeHtml(label || 'Enable Option') + '</label>';
+						break;
+
+					case 'date':
+						inputHtml = '<div class="relative"><div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-xs"><i class="fas fa-calendar-alt"></i></div><input type="date" class="fed-preview-active-input w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all" value="' + escapeAttr(defaultVal) + '"' + valAttrs + ' /></div>';
+						markupCode = '<input type="date" name="' + escapeAttr(meta) + '" class="form-control" value="' + escapeAttr(defaultVal) + '"' + valAttrs + ' />';
+						break;
+
+					case 'file':
+						inputHtml = '<div class="border-2 border-dashed border-slate-200 hover:border-indigo-400 bg-white hover:bg-indigo-50/20 rounded-2xl p-6 text-center transition-all cursor-pointer group shadow-2xs"><div class="w-10 h-10 mx-auto rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-base mb-2 group-hover:scale-110 transition-transform shadow-2xs"><i class="fas fa-cloud-upload-alt"></i></div><p class="text-xs font-semibold text-slate-800 m-0"><span class="text-indigo-600 font-bold">Choose a file</span> or drag & drop</p><p class="text-[11px] text-slate-400 m-0 mt-1">' + escapeHtml(placeholder || 'PDF, PNG, JPG, or DOC (Max 10MB)') + '</p><input type="file" class="hidden fed-preview-real-file-input"' + valAttrs + ' /></div>';
+						markupCode = '<input type="file" name="' + escapeAttr(meta) + '" class="form-control"' + valAttrs + ' />';
+						break;
+
+					case 'color':
+						var colVal = defaultVal || '#4f46e5';
+						inputHtml = '<div class="flex items-center gap-3"><input type="color" class="fed-preview-color-picker w-10 h-10 rounded-xl border border-slate-200 cursor-pointer p-0.5 bg-white shadow-2xs" value="' + escapeAttr(colVal) + '" /><input type="text" class="fed-preview-color-text w-32 text-xs font-mono font-medium text-slate-800 bg-white border border-slate-200 rounded-xl px-3 py-2 outline-none" value="' + escapeAttr(colVal) + '" readonly /><span class="text-xs text-slate-400">Click swatch to pick color</span></div>';
+						markupCode = '<input type="color" name="' + escapeAttr(meta) + '" value="' + escapeAttr(colVal) + '" class="form-control" />';
+						break;
+
+					case 'wp_editor':
+						inputHtml = '<div class="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-2xs"><div class="flex items-center gap-1.5 p-2 bg-slate-50 border-b border-slate-200 text-slate-600 text-xs"><button type="button" class="p-1.5 rounded hover:bg-slate-200" title="Bold"><i class="fas fa-bold"></i></button><button type="button" class="p-1.5 rounded hover:bg-slate-200" title="Italic"><i class="fas fa-italic"></i></button><button type="button" class="p-1.5 rounded hover:bg-slate-200" title="Link"><i class="fas fa-link"></i></button><button type="button" class="p-1.5 rounded hover:bg-slate-200" title="List"><i class="fas fa-list-ul"></i></button><button type="button" class="p-1.5 rounded hover:bg-slate-200" title="Quote"><i class="fas fa-quote-right"></i></button></div><div class="p-4 min-h-[90px] text-xs text-slate-700 outline-none fed-preview-editor-body" contenteditable="true">' + (defaultVal ? escapeHtml(defaultVal) : '<span class="text-slate-400">Enter formatted rich text here...</span>') + '</div></div>';
+						markupCode = '<' + '?php wp_editor( $content, \'' + escapeAttr(meta) + '\' ); ?' + '>';
+						break;
+
+					case 'label':
+						var labelHtmlContent = '';
+						if (typeof tinymce !== 'undefined') {
+							var ed = tinymce.get('fed_label_html_content_editor');
+							if (ed) {
+								try { labelHtmlContent = ed.getContent(); } catch (e) {}
+							}
+						}
+						if (!labelHtmlContent) {
+							labelHtmlContent = $('#fed_label_html_content_editor').val() || '';
+						}
+						inputHtml = '<div class="fed-preview-label-html bg-white p-4 rounded-2xl border border-slate-200 text-xs text-slate-800 leading-relaxed shadow-2xs">' + (labelHtmlContent ? labelHtmlContent : '<span class="text-slate-400 italic">No HTML content configured yet. Edit content below.</span>') + '</div>';
+						markupCode = '<div class="fed-custom-label-content">\n  ' + (labelHtmlContent ? labelHtmlContent : '') + '\n</div>';
+						break;
+
+					case 'table':
+						inputHtml = '<div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-2xs"><table class="w-full text-xs text-left"><thead class="bg-slate-50 text-slate-700 font-semibold border-b border-slate-200"><tr><th class="p-3">Column 1</th><th class="p-3">Column 2</th><th class="p-3">Action</th></tr></thead><tbody class="divide-y divide-slate-100 text-slate-600"><tr><td class="p-3 font-medium text-slate-800">Sample Row 1</td><td class="p-3">Data Value A</td><td class="p-3 text-indigo-600 font-semibold">Edit</td></tr><tr><td class="p-3 font-medium text-slate-800">Sample Row 2</td><td class="p-3">Data Value B</td><td class="p-3 text-indigo-600 font-semibold">Edit</td></tr></tbody></table></div>';
+						markupCode = '<table class="table fed-table">\n  <thead><tr><th>Column 1</th><th>Column 2</th></tr></thead>\n  <tbody><tr><td>Sample</td><td>Data</td></tr></tbody>\n</table>';
+						break;
+
+					default:
+						inputHtml = '<input type="text" class="fed-preview-active-input w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all placeholder:text-slate-400" placeholder="' + escapeAttr(placeholder) + '" value="' + escapeAttr(defaultVal) + '"' + valAttrs + ' />';
+						markupCode = '<input type="text" name="' + escapeAttr(meta) + '" class="form-control" placeholder="' + escapeAttr(placeholder) + '"' + valAttrs + ' />';
+						break;
+				}
+
+				$slot.html(inputHtml);
+				$panel.find('.fed-preview-code-output').text(markupCode);
+			}
+
 			// Activate specific field type in the inspector
 			function activateFieldType(type) {
 				selectedType = type;
@@ -612,11 +915,128 @@ function fed_get_add_profile_post_fields() {
 						}
 					}, 50 );
 				}
+
+				// Update Live Interactive Preview
+				updateLivePreview();
 			}
 
 			// Initialize with selected type
 			activateFieldType( selectedType );
 			initDynamicLabelEditor();
+			updateLivePreview();
+
+			// Viewport Switcher Controls
+			$(document).on('click', '.fed-preview-viewport-btn', function(e) {
+				e.preventDefault();
+				var vp = $(this).data('viewport');
+				$('.fed-preview-viewport-btn').removeClass('is-active bg-white text-indigo-700 shadow-2xs').addClass('text-slate-600 hover:text-slate-900');
+				$(this).addClass('is-active bg-white text-indigo-700 shadow-2xs').removeClass('text-slate-600 hover:text-slate-900');
+				$('.fed-preview-viewport-container').css('max-width', vp);
+			});
+
+			// Toggle Rendered HTML Markup Inspector
+			$(document).on('click', '.fed-preview-code-toggle-btn', function(e) {
+				e.preventDefault();
+				var $drawer = $('.fed-preview-code-drawer');
+				$drawer.toggleClass('hidden');
+				if (!$drawer.hasClass('hidden')) {
+					$(this).addClass('bg-indigo-50 border-indigo-200 text-indigo-700');
+				} else {
+					$(this).removeClass('bg-indigo-50 border-indigo-200 text-indigo-700');
+				}
+			});
+
+			// Copy Rendered HTML Button
+			$(document).on('click', '.fed-preview-copy-html-btn', function(e) {
+				e.preventDefault();
+				var code = $('.fed-preview-code-output').text();
+				if (!code) return;
+				var $btn = $(this);
+				if (navigator.clipboard && navigator.clipboard.writeText) {
+					navigator.clipboard.writeText(code).then(function() {
+						$btn.html('<i class="fas fa-check text-emerald-500 text-[10px]"></i> <span class="text-emerald-600 font-bold">Copied!</span>');
+						setTimeout(function() {
+							$btn.html('<i class="fas fa-copy text-[10px]"></i> <span>Copy HTML</span>');
+						}, 2000);
+					});
+				} else {
+					var $temp = $('<textarea>').val(code).appendTo('body').select();
+					document.execCommand('copy');
+					$temp.remove();
+					$btn.html('<i class="fas fa-check text-emerald-500 text-[10px]"></i> <span class="text-emerald-600 font-bold">Copied!</span>');
+					setTimeout(function() {
+						$btn.html('<i class="fas fa-copy text-[10px]"></i> <span>Copy HTML</span>');
+					}, 2000);
+				}
+			});
+
+			// Reset Test Values to Defaults Button
+			$(document).on('click', '.fed-preview-reset-btn', function(e) {
+				e.preventDefault();
+				updateLivePreview();
+			});
+
+			// Collapse / Expand Preview Panel Toggle
+			$(document).on('click', '.fed-preview-collapse-btn', function(e) {
+				e.preventDefault();
+				var $body = $('.fed-preview-body');
+				var $icon = $(this).find('i');
+				var isCollapsing = !$body.hasClass('hidden');
+				if (isCollapsing) {
+					$body.addClass('hidden');
+					$icon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+					try { localStorage.setItem('fed_preview_collapsed', '1'); } catch (err) {}
+				} else {
+					$body.removeClass('hidden');
+					$icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
+					try { localStorage.setItem('fed_preview_collapsed', '0'); } catch (err) {}
+				}
+			});
+
+			// Restore collapsed preference from localStorage
+			try {
+				if (localStorage.getItem('fed_preview_collapsed') === '1') {
+					$('.fed-preview-body').addClass('hidden');
+					$('.fed-preview-collapse-btn i').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+				}
+			} catch (err) {}
+
+			// Password Preview Eye Toggle Button
+			$(document).on('click', '.fed-preview-toggle-pwd', function(e) {
+				e.preventDefault();
+				var $inp = $(this).siblings('.fed-preview-pwd-input');
+				var $icon = $(this).find('i');
+				if ($inp.attr('type') === 'password') {
+					$inp.attr('type', 'text');
+					$icon.removeClass('fa-eye').addClass('fa-eye-slash');
+				} else {
+					$inp.attr('type', 'password');
+					$icon.removeClass('fa-eye-slash').addClass('fa-eye');
+				}
+			});
+
+			// Color Picker Preview Swatch Sync
+			$(document).on('input change', '.fed-preview-color-picker', function() {
+				var val = $(this).val();
+				$(this).siblings('.fed-preview-color-text').val(val);
+			});
+
+			// File Upload Dropzone Click triggers hidden file input
+			$(document).on('click', '.fed-preview-input-slot .border-dashed', function(e) {
+				if (!$(e.target).is('input[type="file"]')) {
+					$(this).find('.fed-preview-real-file-input').trigger('click');
+				}
+			});
+
+			// Real-time live update across all field settings in the inspector view
+			$(document).on('input keyup change paste', '#fed_inspector_view input, #fed_inspector_view select, #fed_inspector_view textarea', function() {
+				updateLivePreview();
+			});
+
+			// Hook into Choices Builder to trigger Live Preview updates
+			$(document).on('fed_choices_updated', function() {
+				updateLivePreview();
+			});
 
 			// Left Tab Navigation Switching
 			$(document).on('click', '.fed-editor-tab-btn', function(e) {

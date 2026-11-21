@@ -1256,6 +1256,8 @@ jQuery.fed_toggle_loader = function ( show ) {
 			radioHtml += '</div>';
 			$preview.html( radioHtml );
 		}
+
+		$( document ).trigger( 'fed_choices_updated' );
 	}
 
 	window.fedInitChoicesBuilders = function () {
