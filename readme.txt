@@ -153,6 +153,9 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 = 3.6.0 (2026-11-21) =
 * Feature: Live Interactive Form Preview (WYSIWYG): Integrated a real-time interactive preview box directly into the Form Field Builder inspector, rendering live HTML/CSS form inputs as administrators modify labels, placeholders, helper text, and choice options.
 * Feature: Responsive Device Viewport Switcher: Preview and interact with form fields across Desktop (100%), Tablet (640px), and Mobile (380px) viewports with simulated 12-column grid spans.
+* Feature: Interactive Select2 Multi-Select Preview: Added exact frontend visual parity with Select2 tag pills, remove buttons, search, and dynamic sync as options are added/removed.
+* Enhancement: Choices Builder Consolidation & Full-Width Repeater: Removed redundant internal preview cards from Dropdown Choices and Radio Choices, expanding the choices repeater to 100% full width with integrated choice counter badges and auto-slug generation.
+* Enhancement: Responsive Builder Architecture: Adaptive 2-column icon grid on compact/tablet viewports freeing up maximum workspace for live previews and field configuration, with dual-toggle controls and smooth transitions.
 * Feature: HTML Markup Inspector & One-Click Copy: Real-time code generator inspecting formatted HTML output for the active field configuration with instant clipboard copy.
 * Feature: Comprehensive 15-Field Type Interactive Support: Full live interactive preview support across Single Line, Multi-Line Textarea, Email, Password (with eye toggle), Number, Website URL, Dropdown Select (single & multi), Radio Buttons, Checkbox, Date Picker, File Upload dropzone, Color Picker with hex swatch, Rich Text WYSIWYG Mock, HTML Label/Notice container, and Dynamic Tables.
 * Feature: Real-Time Choices Repeater Sync: Instant bi-directional live rendering as select options and radio choices are added, deleted, or reordered in the Choices Builder.
@@ -362,6 +365,9 @@ More Changelogs:
 https://faq.frontenddashboard.com/changelog/overview/
 
 == Upgrade Notice ==
+
+= 3.6.0 =
+Introduces the real-time Live Interactive Form Preview (WYSIWYG) in the Form Field Builder with device viewports (Desktop, Tablet, Mobile), HTML markup inspector, interactive Select2 multi-select preview, and consolidated full-width Choices Repeater layout.
 
 = 3.0.21 =
 Redesigns the Quick Resources Help Hub to a floating right-center vertical tab with dedicated close controls, resolving UI conflicts with bottom-corner action buttons and notification widgets.
