@@ -323,6 +323,48 @@ function fed_get_add_profile_post_fields() {
 			width: 100% !important;
 			box-sizing: border-box !important;
 		}
+		.bc_fed input.fed-has-leading-icon {
+			padding-left: 42px !important;
+		}
+		.bc_fed input.fed-has-trailing-icon {
+			padding-right: 42px !important;
+		}
+		.bc_fed input.fed-has-both-icons {
+			padding-left: 42px !important;
+			padding-right: 42px !important;
+		}
+		.bc_fed .fed-preview-icon-wrapper {
+			position: absolute !important;
+			top: 0 !important;
+			bottom: 0 !important;
+			left: 0 !important;
+			width: 40px !important;
+			display: flex !important;
+			align-items: center !important;
+			justify-content: center !important;
+			pointer-events: none !important;
+			color: #94a3b8 !important;
+			z-index: 5 !important;
+		}
+		.bc_fed .fed-preview-trailing-btn {
+			position: absolute !important;
+			top: 0 !important;
+			bottom: 0 !important;
+			right: 0 !important;
+			width: 40px !important;
+			display: flex !important;
+			align-items: center !important;
+			justify-content: center !important;
+			color: #94a3b8 !important;
+			cursor: pointer !important;
+			z-index: 5 !important;
+			background: transparent !important;
+			border: none !important;
+			padding: 0 !important;
+		}
+		.bc_fed .fed-preview-trailing-btn:hover {
+			color: #475569 !important;
+		}
 		/* Side-by-Side Split Studio Mode */
 		@media (min-width: 1280px) {
 			.bc_fed .fed_all_input_fields_container.fed-studio-split-mode {
@@ -331,16 +373,25 @@ function fed_get_add_profile_post_fields() {
 				gap: 1.75rem !important;
 				align-items: start !important;
 			}
+			.bc_fed .fed_all_input_fields_container.fed-studio-split-mode > :not([hidden]) ~ :not([hidden]) {
+				margin-top: 0 !important;
+			}
 			.bc_fed .fed_all_input_fields_container.fed-studio-split-mode #fed_live_preview_panel {
+				grid-column: 2 !important;
+				grid-row: 1 !important;
 				order: 2 !important;
 				position: sticky !important;
 				top: 1.5rem !important;
 				z-index: 20 !important;
 				max-height: calc(100vh - 3rem) !important;
 				overflow-y: auto !important;
+				margin-top: 0 !important;
 			}
 			.bc_fed .fed_all_input_fields_container.fed-studio-split-mode .fed_input_type_container {
+				grid-column: 1 !important;
+				grid-row: 1 !important;
 				order: 1 !important;
+				margin-top: 0 !important;
 			}
 		}
 	</style>
@@ -846,12 +897,12 @@ function fed_get_add_profile_post_fields() {
 						break;
 
 					case 'email':
-						inputHtml = '<div class="relative"><div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-xs"><i class="fas fa-envelope"></i></div><input type="email" class="fed-preview-active-input w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all placeholder:text-slate-400" placeholder="' + escapeAttr(placeholder || 'user@example.com') + '" value="' + escapeAttr(defaultVal) + '"' + valAttrs + ' /></div>';
+						inputHtml = '<div class="relative"><span class="fed-preview-icon-wrapper text-xs"><i class="fas fa-envelope"></i></span><input type="email" class="fed-preview-active-input fed-has-leading-icon w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all placeholder:text-slate-400" placeholder="' + escapeAttr(placeholder || 'user@example.com') + '" value="' + escapeAttr(defaultVal) + '"' + valAttrs + ' /></div>';
 						markupCode = '<input type="email" name="' + escapeAttr(meta) + '" class="form-control" placeholder="' + escapeAttr(placeholder || 'user@example.com') + '" value="' + escapeAttr(defaultVal) + '"' + valAttrs + ' />';
 						break;
 
 					case 'password':
-						inputHtml = '<div class="relative"><div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-xs"><i class="fas fa-lock"></i></div><input type="password" class="fed-preview-pwd-input fed-preview-active-input w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl pl-9 pr-10 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all placeholder:text-slate-400" placeholder="' + escapeAttr(placeholder || '••••••••') + '" value="' + escapeAttr(defaultVal) + '"' + valAttrs + ' /><button type="button" class="fed-preview-toggle-pwd absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer" title="Toggle visibility"><i class="fas fa-eye text-xs"></i></button></div>';
+						inputHtml = '<div class="relative"><span class="fed-preview-icon-wrapper text-xs"><i class="fas fa-lock"></i></span><input type="password" class="fed-preview-pwd-input fed-preview-active-input fed-has-leading-icon fed-has-trailing-icon w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all placeholder:text-slate-400" placeholder="' + escapeAttr(placeholder || '••••••••') + '" value="' + escapeAttr(defaultVal) + '"' + valAttrs + ' /><button type="button" class="fed-preview-toggle-pwd fed-preview-trailing-btn text-xs" title="Toggle visibility"><i class="fas fa-eye text-xs"></i></button></div>';
 						markupCode = '<input type="password" name="' + escapeAttr(meta) + '" class="form-control" placeholder="' + escapeAttr(placeholder || '••••••••') + '"' + valAttrs + ' />';
 						break;
 
@@ -860,12 +911,12 @@ function fed_get_add_profile_post_fields() {
 						if (minVal) numAttrs += ' min="' + escapeAttr(minVal) + '"';
 						if (maxVal) numAttrs += ' max="' + escapeAttr(maxVal) + '"';
 						if (stepVal) numAttrs += ' step="' + escapeAttr(stepVal) + '"';
-						inputHtml = '<div class="relative"><div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-xs"><i class="fas fa-hashtag"></i></div><input type="number" class="fed-preview-active-input w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all placeholder:text-slate-400" placeholder="' + escapeAttr(placeholder || '0') + '" value="' + escapeAttr(defaultVal) + '"' + numAttrs + ' /></div>';
+						inputHtml = '<div class="relative"><span class="fed-preview-icon-wrapper text-xs"><i class="fas fa-hashtag"></i></span><input type="number" class="fed-preview-active-input fed-has-leading-icon w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all placeholder:text-slate-400" placeholder="' + escapeAttr(placeholder || '0') + '" value="' + escapeAttr(defaultVal) + '"' + numAttrs + ' /></div>';
 						markupCode = '<input type="number" name="' + escapeAttr(meta) + '" class="form-control" placeholder="' + escapeAttr(placeholder || '0') + '" value="' + escapeAttr(defaultVal) + '"' + numAttrs + ' />';
 						break;
 
 					case 'url':
-						inputHtml = '<div class="relative"><div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-xs"><i class="fas fa-globe"></i></div><input type="url" class="fed-preview-active-input w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all placeholder:text-slate-400" placeholder="' + escapeAttr(placeholder || 'https://example.com') + '" value="' + escapeAttr(defaultVal) + '"' + valAttrs + ' /></div>';
+						inputHtml = '<div class="relative"><span class="fed-preview-icon-wrapper text-xs"><i class="fas fa-globe"></i></span><input type="url" class="fed-preview-active-input fed-has-leading-icon w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all placeholder:text-slate-400" placeholder="' + escapeAttr(placeholder || 'https://example.com') + '" value="' + escapeAttr(defaultVal) + '"' + valAttrs + ' /></div>';
 						markupCode = '<input type="url" name="' + escapeAttr(meta) + '" class="form-control" placeholder="' + escapeAttr(placeholder || 'https://example.com') + '" value="' + escapeAttr(defaultVal) + '"' + valAttrs + ' />';
 						break;
 
@@ -915,7 +966,7 @@ function fed_get_add_profile_post_fields() {
 						break;
 
 					case 'date':
-						inputHtml = '<div class="relative"><div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-xs"><i class="fas fa-calendar-alt"></i></div><input type="date" class="fed-preview-active-input w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all" value="' + escapeAttr(defaultVal) + '"' + valAttrs + ' /></div>';
+						inputHtml = '<div class="relative"><span class="fed-preview-icon-wrapper text-xs"><i class="fas fa-calendar-alt"></i></span><input type="date" class="fed-preview-active-input fed-has-leading-icon w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all" value="' + escapeAttr(defaultVal) + '"' + valAttrs + ' /></div>';
 						markupCode = '<input type="date" name="' + escapeAttr(meta) + '" class="form-control" value="' + escapeAttr(defaultVal) + '"' + valAttrs + ' />';
 						break;
 
