@@ -601,65 +601,68 @@ function fed_render_live_preview_panel( array $row, $action = 'profile' ) {
 	<div class="fed-live-preview-card bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-xs space-y-6 transition-all" id="fed_live_preview_panel">
 		<!-- Top Bar: Header, Live Badge, Studio Toggle, Viewport Toggles, Actions -->
 		<div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-100">
-			<div class="flex items-center gap-3">
-				<div class="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-sm shrink-0 shadow-2xs">
+			<div class="flex items-center gap-2.5 min-w-0">
+				<div class="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-xs shrink-0 shadow-2xs">
 					<i class="fas fa-desktop"></i>
 				</div>
-				<div>
+				<div class="min-w-0">
 					<div class="flex items-center gap-2">
-						<h3 class="text-xs sm:text-sm font-bold text-slate-900 m-0">
-							<?php esc_html_e( 'Live Interactive Form Preview', 'frontend-dashboard' ); ?>
+						<h3 class="text-xs sm:text-sm font-bold text-slate-900 m-0 truncate">
+							<?php esc_html_e( 'Live Preview', 'frontend-dashboard' ); ?>
 						</h3>
-						<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+						<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0">
 							<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-							<?php esc_html_e( 'WYSIWYG Live', 'frontend-dashboard' ); ?>
+							<?php esc_html_e( 'WYSIWYG', 'frontend-dashboard' ); ?>
 						</span>
 					</div>
-					<p class="text-[11px] text-slate-400 m-0 mt-0.5">
+					<p class="text-[11px] text-slate-400 m-0 truncate hidden sm:block">
 						<?php esc_html_e( 'Real-time interactive rendering of the frontend input as users see it.', 'frontend-dashboard' ); ?>
 					</p>
 				</div>
 			</div>
 
-			<!-- Action Controls -->
-			<div class="flex items-center gap-2 flex-wrap">
+			<!-- Action Controls Toolbar -->
+			<div class="flex items-center gap-1.5 flex-wrap">
 				<!-- Studio Side-by-Side vs Banner Layout Toggle -->
-				<button type="button" class="fed-preview-layout-toggle-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium transition-all cursor-pointer shadow-2xs" title="<?php esc_attr_e( 'Toggle Split Studio Side-by-Side View on wide screens', 'frontend-dashboard' ); ?>">
+				<button type="button" class="fed-preview-layout-toggle-btn inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium transition-all cursor-pointer shadow-2xs" title="<?php esc_attr_e( 'Toggle Split Studio Side-by-Side View on wide screens', 'frontend-dashboard' ); ?>">
 					<i class="fas fa-columns text-indigo-500 text-xs"></i>
-					<span class="fed-layout-mode-label hidden sm:inline-block"><?php esc_html_e( 'Split Studio', 'frontend-dashboard' ); ?></span>
+					<span class="fed-layout-mode-label hidden md:inline-block"><?php esc_html_e( 'Split Studio', 'frontend-dashboard' ); ?></span>
 				</button>
 
 				<!-- Device Viewport Switcher -->
-				<div class="inline-flex items-center p-1 rounded-xl bg-slate-100/90 border border-slate-200 text-slate-600 text-xs gap-1">
-					<button type="button" class="fed-preview-viewport-btn px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer is-active bg-white text-indigo-700 shadow-2xs" data-viewport="desktop" title="<?php esc_attr_e( 'Desktop View (100% Fluid)', 'frontend-dashboard' ); ?>">
+				<div class="inline-flex items-center p-0.5 rounded-xl bg-slate-100/90 border border-slate-200 text-slate-600 text-xs gap-0.5">
+					<button type="button" class="fed-preview-viewport-btn px-2 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer is-active bg-white text-indigo-700 shadow-2xs" data-viewport="desktop" title="<?php esc_attr_e( 'Desktop View (100% Fluid)', 'frontend-dashboard' ); ?>">
 						<i class="fas fa-desktop text-[11px]"></i>
-						<span class="hidden sm:inline-block ml-1"><?php esc_html_e( 'Desktop', 'frontend-dashboard' ); ?></span>
+						<span class="hidden lg:inline-block ml-1"><?php esc_html_e( 'Desktop', 'frontend-dashboard' ); ?></span>
 					</button>
-					<button type="button" class="fed-preview-viewport-btn px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer text-slate-600 hover:text-slate-900" data-viewport="tablet" title="<?php esc_attr_e( 'Tablet View (640px)', 'frontend-dashboard' ); ?>">
+					<button type="button" class="fed-preview-viewport-btn px-2 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer text-slate-600 hover:text-slate-900" data-viewport="tablet" title="<?php esc_attr_e( 'Tablet View (640px)', 'frontend-dashboard' ); ?>">
 						<i class="fas fa-tablet-alt text-[11px]"></i>
-						<span class="hidden sm:inline-block ml-1"><?php esc_html_e( 'Tablet', 'frontend-dashboard' ); ?></span>
+						<span class="hidden lg:inline-block ml-1"><?php esc_html_e( 'Tablet', 'frontend-dashboard' ); ?></span>
 					</button>
-					<button type="button" class="fed-preview-viewport-btn px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer text-slate-600 hover:text-slate-900" data-viewport="mobile" title="<?php esc_attr_e( 'Mobile View (390px)', 'frontend-dashboard' ); ?>">
+					<button type="button" class="fed-preview-viewport-btn px-2 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer text-slate-600 hover:text-slate-900" data-viewport="mobile" title="<?php esc_attr_e( 'Mobile View (390px)', 'frontend-dashboard' ); ?>">
 						<i class="fas fa-mobile-alt text-[11px]"></i>
-						<span class="hidden sm:inline-block ml-1"><?php esc_html_e( 'Mobile', 'frontend-dashboard' ); ?></span>
+						<span class="hidden lg:inline-block ml-1"><?php esc_html_e( 'Mobile', 'frontend-dashboard' ); ?></span>
 					</button>
 				</div>
 
 				<!-- Toggle HTML Code Inspector -->
-				<button type="button" class="fed-preview-code-toggle-btn inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 text-xs font-medium transition-all cursor-pointer shadow-2xs" title="<?php esc_attr_e( 'View Rendered HTML Markup', 'frontend-dashboard' ); ?>">
+				<button type="button" class="fed-preview-code-toggle-btn p-1.5 w-8 h-8 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 text-xs font-medium transition-all cursor-pointer flex items-center justify-center shadow-2xs" title="<?php esc_attr_e( 'View Rendered HTML Markup', 'frontend-dashboard' ); ?>">
 					<i class="fas fa-code text-[11px] text-indigo-500"></i>
-					<span class="hidden md:inline-block"><?php esc_html_e( 'HTML', 'frontend-dashboard' ); ?></span>
 				</button>
 
 				<!-- Reset Test Values Button -->
-				<button type="button" class="fed-preview-reset-btn inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 text-xs font-medium transition-all cursor-pointer shadow-2xs" title="<?php esc_attr_e( 'Reset test values to defaults', 'frontend-dashboard' ); ?>">
+				<button type="button" class="fed-preview-reset-btn p-1.5 w-8 h-8 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 text-xs font-medium transition-all cursor-pointer flex items-center justify-center shadow-2xs" title="<?php esc_attr_e( 'Reset test values to defaults', 'frontend-dashboard' ); ?>">
 					<i class="fas fa-redo-alt text-[10px]"></i>
-					<span class="hidden md:inline-block"><?php esc_html_e( 'Reset', 'frontend-dashboard' ); ?></span>
 				</button>
 
 				<!-- Collapse / Expand Toggle Button -->
-				<button type="button" class="fed-preview-collapse-btn p-1.5 w-8 h-8 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-500 hover:text-slate-800 transition-all cursor-pointer flex items-center justify-center shadow-2xs" title="<?php esc_attr_e( 'Toggle Preview Visibility', 'frontend-dashboard' ); ?>">
+				<button type="button" class="fed-preview-collapse-btn p-1.5 w-8 h-8 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-500 hover:text-slate-800 transition-all cursor-pointer flex items-center justify-center shadow-2xs" title="<?php esc_attr_e( 'Minimize / Expand Preview Content', 'frontend-dashboard' ); ?>">
 					<i class="fas fa-chevron-up text-xs transition-transform duration-200"></i>
+				</button>
+
+				<!-- Close / Hide Preview Panel Button -->
+				<button type="button" class="fed-preview-close-btn p-1.5 w-8 h-8 rounded-xl border border-slate-200 bg-white hover:bg-rose-50 text-slate-400 hover:text-rose-600 transition-all cursor-pointer flex items-center justify-center shadow-2xs" title="<?php esc_attr_e( 'Hide Live Preview Panel (can be re-opened from top toolbar)', 'frontend-dashboard' ); ?>">
+					<i class="fas fa-times text-xs"></i>
 				</button>
 			</div>
 		</div>

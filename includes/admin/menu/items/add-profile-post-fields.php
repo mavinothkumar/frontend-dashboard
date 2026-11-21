@@ -159,7 +159,7 @@ function fed_get_add_profile_post_fields() {
 		}
 		@media (min-width: 1024px) {
 			.fed-builder-grid {
-				grid-template-columns: minmax(420px, 460px) minmax(0, 1fr) !important;
+				grid-template-columns: minmax(280px, 320px) minmax(0, 1fr) !important;
 			}
 		}
 		.fed-btn-primary,
@@ -365,18 +365,18 @@ function fed_get_add_profile_post_fields() {
 		.bc_fed .fed-preview-trailing-btn:hover {
 			color: #475569 !important;
 		}
-		/* Side-by-Side Split Studio Mode */
-		@media (min-width: 1280px) {
-			.bc_fed .fed_all_input_fields_container.fed-studio-split-mode {
+		/* Side-by-Side Split Studio Mode (on wide desktop screens >= 1536px) */
+		@media (min-width: 1536px) {
+			.bc_fed .fed_all_input_fields_container.fed-studio-split-mode:not(.fed-preview-hidden) {
 				display: grid !important;
 				grid-template-columns: minmax(0, 1fr) minmax(420px, 490px) !important;
 				gap: 1.75rem !important;
 				align-items: start !important;
 			}
-			.bc_fed .fed_all_input_fields_container.fed-studio-split-mode > :not([hidden]) ~ :not([hidden]) {
+			.bc_fed .fed_all_input_fields_container.fed-studio-split-mode:not(.fed-preview-hidden) > :not([hidden]) ~ :not([hidden]) {
 				margin-top: 0 !important;
 			}
-			.bc_fed .fed_all_input_fields_container.fed-studio-split-mode #fed_live_preview_panel {
+			.bc_fed .fed_all_input_fields_container.fed-studio-split-mode:not(.fed-preview-hidden) #fed_live_preview_panel {
 				grid-column: 2 !important;
 				grid-row: 1 !important;
 				order: 2 !important;
@@ -387,12 +387,32 @@ function fed_get_add_profile_post_fields() {
 				overflow-y: auto !important;
 				margin-top: 0 !important;
 			}
-			.bc_fed .fed_all_input_fields_container.fed-studio-split-mode .fed_input_type_container {
+			.bc_fed .fed_all_input_fields_container.fed-studio-split-mode:not(.fed-preview-hidden) .fed_input_type_container {
 				grid-column: 1 !important;
 				grid-row: 1 !important;
 				order: 1 !important;
 				margin-top: 0 !important;
 			}
+		}
+
+		/* Responsive input grid protection: inputs wrap smoothly rather than squishing below 220px */
+		.bc_fed .fed_all_input_fields_container.fed-studio-split-mode .fed_input_type_container .grid.sm\:grid-cols-2 {
+			grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+		}
+		.bc_fed .fed_all_input_fields_container.fed-studio-split-mode .fed_input_type_container .grid.sm\:grid-cols-3 {
+			grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)) !important;
+		}
+
+		/* When live preview is hidden by user toggle */
+		.bc_fed .fed_all_input_fields_container.fed-preview-hidden {
+			display: block !important;
+		}
+		.bc_fed .fed_all_input_fields_container.fed-preview-hidden .fed_input_type_container {
+			grid-column: 1 / -1 !important;
+			width: 100% !important;
+		}
+		.bc_fed .fed_all_input_fields_container.fed-preview-hidden #fed_live_preview_panel {
+			display: none !important;
 		}
 	</style>
 
@@ -434,6 +454,13 @@ function fed_get_add_profile_post_fields() {
 			</div>
 
 			<div class="flex items-center gap-3 shrink-0">
+				<!-- Live Preview Show/Hide Toggle Button -->
+				<button type="button" class="fed-header-toggle-preview-btn fed-btn-secondary h-11 inline-flex items-center justify-center gap-2 px-4 rounded-2xl text-xs font-semibold no-underline transition-all cursor-pointer shadow-2xs" title="<?php esc_attr_e( 'Show or Hide Live Form Preview Panel', 'frontend-dashboard' ); ?>">
+					<i class="fas fa-eye text-xs text-indigo-500"></i>
+					<span class="fed-preview-toggle-text"><?php esc_html_e( 'Live Preview', 'frontend-dashboard' ); ?></span>
+					<span class="fed-preview-toggle-status px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200"><?php esc_html_e( 'ON', 'frontend-dashboard' ); ?></span>
+				</button>
+
 				<a href="<?php echo esc_url( $page_url ); ?>" class="fed-btn-secondary h-11 inline-flex items-center justify-center gap-2 px-5 rounded-2xl text-xs font-semibold no-underline transition-all cursor-pointer">
 					<i class="fas fa-times text-xs"></i>
 					<span><?php esc_html_e( 'Cancel', 'frontend-dashboard' ); ?></span>
@@ -1127,6 +1154,57 @@ function fed_get_add_profile_post_fields() {
 														.find('.fed-layout-mode-label').text('Banner Mode');
 				}
 			} catch (err) {}
+
+			// Toggle Live Preview Visibility (Show / Hide)
+			function setLivePreviewVisibility(show, savePref) {
+				var $panel = $('#fed_live_preview_panel');
+				var $view = $('#fed_inspector_view');
+				var $btn = $('.fed-header-toggle-preview-btn');
+				var $status = $btn.find('.fed-preview-toggle-status');
+
+				if (show) {
+					$view.removeClass('fed-preview-hidden');
+					$panel.removeClass('hidden').slideDown(200);
+					$btn.addClass('is-preview-active');
+					$btn.find('i').removeClass('fa-eye-slash text-slate-400').addClass('fa-eye text-indigo-500');
+					$status.text('ON').removeClass('bg-slate-100 text-slate-600 border-slate-200').addClass('bg-emerald-50 text-emerald-700 border-emerald-200');
+					if (savePref) {
+						try { localStorage.setItem('fed_preview_visibility', '1'); } catch(e) {}
+					}
+				} else {
+					$view.addClass('fed-preview-hidden');
+					$panel.slideUp(200, function() {
+						$(this).addClass('hidden');
+					});
+					$btn.removeClass('is-preview-active');
+					$btn.find('i').removeClass('fa-eye text-indigo-500').addClass('fa-eye-slash text-slate-400');
+					$status.text('OFF').removeClass('bg-emerald-50 text-emerald-700 border-emerald-200').addClass('bg-slate-100 text-slate-600 border-slate-200');
+					if (savePref) {
+						try { localStorage.setItem('fed_preview_visibility', '0'); } catch(e) {}
+					}
+				}
+			}
+
+			// Header button click to toggle preview
+			$(document).on('click', '.fed-header-toggle-preview-btn', function(e) {
+				e.preventDefault();
+				var isHidden = $('#fed_inspector_view').hasClass('fed-preview-hidden') || $('#fed_live_preview_panel').hasClass('hidden') || !$('#fed_live_preview_panel').is(':visible');
+				setLivePreviewVisibility(isHidden, true);
+			});
+
+			// Panel close button click to hide preview
+			$(document).on('click', '.fed-preview-close-btn', function(e) {
+				e.preventDefault();
+				setLivePreviewVisibility(false, true);
+			});
+
+			// Restore preview visibility preference on load
+			try {
+				var savedVisibility = localStorage.getItem('fed_preview_visibility');
+				if (savedVisibility === '0') {
+					setLivePreviewVisibility(false, false);
+				}
+			} catch(e) {}
 
 			// Toggle Rendered HTML Markup Inspector
 			$(document).on('click', '.fed-preview-code-toggle-btn', function(e) {
