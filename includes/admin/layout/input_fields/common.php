@@ -598,7 +598,7 @@ function fed_render_live_preview_panel( array $row, $action = 'profile' ) {
 
 	$url_path = ( 'post' === $action ) ? 'dashboard/new-post' : 'dashboard/profile';
 	?>
-	<div class="fed-live-preview-card bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-xs space-y-6 transition-all" id="fed_live_preview_panel">
+	<div class="fed-live-preview-card bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-xs space-y-5 transition-all" id="fed_live_preview_panel">
 		<!-- Top Bar: Header, Live Badge, Studio Toggle, Viewport Toggles, Actions -->
 		<div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-100">
 			<div class="flex items-center gap-2.5 min-w-0">
@@ -729,7 +729,7 @@ function fed_render_live_preview_panel( array $row, $action = 'profile' ) {
 								</div>
 
 								<!-- Companion Grid Slot Filler for multi-column visualization -->
-								<div class="fed-preview-companion-slot <?php echo ( 'fed-preview-col-100' === $width_class ) ? 'hidden' : ''; ?> border-2 border-dashed border-slate-200/80 rounded-2xl p-4 flex items-center justify-center text-slate-400 text-xs font-medium bg-slate-50/50">
+								<div class="fed-preview-companion-slot <?php echo ( 'fed-preview-col-100' === $width_class ) ? 'hidden' : ''; ?> border-2 border-dashed border-slate-200/80 rounded-2xl p-4 flex items-center justify-center text-slate-400 text-xs font-medium bg-slate-50/50" <?php echo ( 'fed-preview-col-100' === $width_class ) ? 'hidden' : ''; ?>>
 									<div class="flex items-center gap-2 text-slate-400">
 										<i class="fas fa-columns text-slate-300"></i>
 										<span><?php esc_html_e( 'Adjacent Field Column Space', 'frontend-dashboard' ); ?></span>
@@ -753,7 +753,7 @@ function fed_render_live_preview_panel( array $row, $action = 'profile' ) {
 			</div>
 
 			<!-- Collapsible Rendered HTML Markup Inspector (Full Width Outside Device Viewport) -->
-			<div class="fed-preview-code-drawer hidden mt-4 pt-4 border-t border-slate-200/80 space-y-2">
+			<div class="fed-preview-code-drawer hidden mt-4 pt-4 border-t border-slate-200/80 space-y-2" hidden>
 				<div class="flex items-center justify-between">
 					<span class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
 						<i class="fas fa-code text-indigo-500 text-xs"></i>

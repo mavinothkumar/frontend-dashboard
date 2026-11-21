@@ -479,6 +479,24 @@ function fed_get_add_profile_post_fields() {
 		.bc_fed .fed_all_input_fields_container.fed-preview-hidden #fed_live_preview_panel {
 			display: none !important;
 		}
+
+		/* Spacing Reset & Clean Vertical Rhythm between Preview & Settings Inspector */
+		.bc_fed #fed_inspector_view > .fed_input_type_container {
+			margin-top: 1.5rem !important;
+		}
+		.bc_fed #fed_inspector_view.fed-preview-hidden > .fed_input_type_container,
+		.bc_fed #fed_inspector_view.fed-preview-hidden > :not([hidden]) ~ :not([hidden]),
+		.bc_fed #fed_inspector_view > :first-child:not(#fed_live_preview_panel),
+		.bc_fed #fed_inspector_view.fed-studio-split-mode:not(.fed-preview-hidden) .fed_input_type_container {
+			margin-top: 0 !important;
+		}
+		.bc_fed .fed_input_type_container > form.fed_admin_menu {
+			margin-top: 0 !important;
+		}
+		/* Remove the accidental gap before the first card inside the form caused by hidden inputs & loader */
+		.bc_fed .fed_input_type_container > form.fed_admin_menu > div.bg-white:first-of-type {
+			margin-top: 0 !important;
+		}
 	</style>
 
 	<div class="bc_fed fed-admin-wrap w-full max-w-none px-6 sm:px-10 py-8 font-sans text-slate-800 fed_add_edit_input_container" data-nonce="<?php echo esc_attr( $nonce ); ?>" data-ajax-url="<?php echo esc_url( $ajax_url ); ?>">
@@ -494,35 +512,35 @@ function fed_get_add_profile_post_fields() {
 		</div>
 
 		<!-- Top Header & Action Bar -->
-		<div class="bg-white rounded-3xl p-5 sm:p-6 shadow-xs border border-slate-200/80 mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-			<div class="flex items-center gap-3.5">
+		<div class="bg-white rounded-3xl p-5 sm:p-6 shadow-xs border border-slate-200/80 mb-8 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+			<div class="flex items-center gap-3.5 min-w-0">
 				<a href="<?php echo esc_url( $page_url ); ?>" class="w-10 h-10 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-all shrink-0 no-underline" title="<?php esc_attr_e( 'Back to Fields', 'frontend-dashboard' ); ?>">
 					<i class="fas fa-arrow-left text-xs"></i>
 				</a>
-				<div>
-					<div class="flex items-center gap-2.5">
-						<h1 class="text-base sm:text-lg font-bold text-slate-900 m-0 p-0">
+				<div class="min-w-0">
+					<div class="flex flex-wrap items-center gap-2.5">
+						<h1 class="text-base sm:text-lg font-bold text-slate-900 m-0 p-0 whitespace-nowrap">
 							<?php if ( $is_editing ) : ?>
 								<?php echo ( 'post' === $action ) ? esc_html__( 'Edit Post Field', 'frontend-dashboard' ) : esc_html__( 'Edit Form Field', 'frontend-dashboard' ); ?>: <span class="text-indigo-600 font-bold"><?php echo esc_html( $field_label ); ?></span>
 							<?php else : ?>
 								<?php echo ( 'post' === $action ) ? esc_html__( 'Add New Post Field', 'frontend-dashboard' ) : esc_html__( 'Add New Form Field', 'frontend-dashboard' ); ?>
 							<?php endif; ?>
 						</h1>
-						<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100">
+						<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100 shrink-0">
 							<?php echo esc_html( $active_menu_name ); ?>
 						</span>
 					</div>
-					<p class="text-xs text-slate-500 m-0 mt-0.5">
+					<p class="text-xs text-slate-500 m-0 mt-0.5 truncate sm:whitespace-normal">
 						<?php esc_html_e( 'Select field type on the left to configure its label, validation, and role permissions.', 'frontend-dashboard' ); ?>
 					</p>
 				</div>
 			</div>
 
-			<div class="flex items-center gap-2 sm:gap-3 shrink-0 flex-wrap sm:flex-nowrap">
+			<div class="flex items-center gap-2 sm:gap-3 shrink-0 flex-wrap sm:flex-nowrap w-full lg:w-auto justify-start sm:justify-end">
 				<!-- Live Preview Show/Hide Toggle Button -->
 				<button type="button" class="fed-header-toggle-preview-btn fed-btn-secondary h-11 inline-flex items-center justify-center gap-2 px-3 sm:px-4 rounded-2xl text-xs font-semibold no-underline transition-all cursor-pointer shadow-2xs" title="<?php esc_attr_e( 'Show or Hide Live Form Preview Panel', 'frontend-dashboard' ); ?>">
 					<i class="fas fa-eye text-xs text-indigo-500"></i>
-					<span class="fed-preview-toggle-text hidden sm:inline"><?php esc_html_e( 'Live Preview', 'frontend-dashboard' ); ?></span>
+					<span class="fed-preview-toggle-text inline"><?php esc_html_e( 'Live Preview', 'frontend-dashboard' ); ?></span>
 					<span class="fed-preview-toggle-status px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200"><?php esc_html_e( 'ON', 'frontend-dashboard' ); ?></span>
 				</button>
 
@@ -1233,7 +1251,7 @@ function fed_get_add_profile_post_fields() {
 
 				if (show) {
 					$view.removeClass('fed-preview-hidden');
-					$panel.removeClass('hidden').slideDown(200);
+					$panel.removeAttr('hidden').removeClass('hidden').slideDown(200);
 					$btn.addClass('is-preview-active');
 					$btn.find('i').removeClass('fa-eye-slash text-slate-400').addClass('fa-eye text-indigo-500');
 					$status.text('ON').removeClass('bg-slate-100 text-slate-600 border-slate-200').addClass('bg-emerald-50 text-emerald-700 border-emerald-200');
@@ -1243,7 +1261,7 @@ function fed_get_add_profile_post_fields() {
 				} else {
 					$view.addClass('fed-preview-hidden');
 					$panel.slideUp(200, function() {
-						$(this).addClass('hidden');
+						$(this).addClass('hidden').attr('hidden', 'hidden');
 					});
 					$btn.removeClass('is-preview-active');
 					$btn.find('i').removeClass('fa-eye text-indigo-500').addClass('fa-eye-slash text-slate-400');
@@ -1257,7 +1275,7 @@ function fed_get_add_profile_post_fields() {
 			// Header button click to toggle preview
 			$(document).on('click', '.fed-header-toggle-preview-btn', function(e) {
 				e.preventDefault();
-				var isHidden = $('#fed_inspector_view').hasClass('fed-preview-hidden') || $('#fed_live_preview_panel').hasClass('hidden') || !$('#fed_live_preview_panel').is(':visible');
+				var isHidden = $('#fed_inspector_view').hasClass('fed-preview-hidden') || $('#fed_live_preview_panel').hasClass('hidden') || $('#fed_live_preview_panel').is('[hidden]') || !$('#fed_live_preview_panel').is(':visible');
 				setLivePreviewVisibility(isHidden, true);
 			});
 
@@ -1271,7 +1289,12 @@ function fed_get_add_profile_post_fields() {
 			try {
 				var savedVisibility = localStorage.getItem('fed_preview_visibility');
 				if (savedVisibility === '0') {
-					setLivePreviewVisibility(false, false);
+					$('#fed_inspector_view').addClass('fed-preview-hidden');
+					$('#fed_live_preview_panel').addClass('hidden').attr('hidden', 'hidden').hide();
+					$('.fed-header-toggle-preview-btn').removeClass('is-preview-active');
+					$('.fed-header-toggle-preview-btn').find('i').removeClass('fa-eye text-indigo-500').addClass('fa-eye-slash text-slate-400');
+					$('.fed-header-toggle-preview-btn').find('.fed-preview-toggle-status')
+						.text('OFF').removeClass('bg-emerald-50 text-emerald-700 border-emerald-200').addClass('bg-slate-100 text-slate-600 border-slate-200');
 				}
 			} catch (err) {}
 
