@@ -153,14 +153,79 @@ function fed_get_add_profile_post_fields() {
 		.fed-builder-grid {
 			display: grid;
 			grid-template-columns: 1fr;
-			gap: 2rem;
+			gap: 1.5rem;
 			align-items: start;
 			width: 100%;
+			transition: grid-template-columns 0.25s ease;
 		}
-		@media (min-width: 1024px) {
+		@media (min-width: 640px) {
 			.fed-builder-grid {
-				grid-template-columns: minmax(280px, 320px) minmax(0, 1fr) !important;
+				grid-template-columns: 104px minmax(0, 1fr) !important;
+				gap: 1.25rem !important;
 			}
+		}
+		@media (min-width: 1280px) {
+			.fed-builder-grid:not(.is-slim-palette) {
+				grid-template-columns: minmax(280px, 320px) minmax(0, 1fr) !important;
+				gap: 2rem !important;
+			}
+		}
+		.fed-builder-grid.is-slim-palette {
+			grid-template-columns: 104px minmax(0, 1fr) !important;
+			gap: 1.25rem !important;
+		}
+
+		/* Slim Icon-Only Palette Layout */
+		@media (max-width: 1279px) {
+			.bc_fed #fed_editor_pane_fields {
+				padding: 0.875rem 0.625rem !important;
+			}
+			.bc_fed #fed_editor_pane_fields .fed-palette-header-text,
+			.bc_fed #fed_editor_pane_fields .fed-palette-search-wrap,
+			.bc_fed #fed_editor_pane_fields .fed-palette-group-title,
+			.bc_fed #fed_editor_pane_fields .fed-field-tile-label,
+			.bc_fed #fed_editor_pane_fields .fed-field-tile-arrow {
+				display: none !important;
+			}
+			.bc_fed #fed_editor_pane_fields .fed-field-tile {
+				justify-content: center !important;
+				padding: 0.5rem 0.25rem !important;
+				min-height: 42px !important;
+			}
+			.bc_fed #fed_editor_pane_fields .fed-field-tile > div {
+				justify-content: center !important;
+				margin: 0 !important;
+				flex: none !important;
+			}
+			.bc_fed #fed_editor_pane_fields .fed-palette-header-wrap {
+				justify-content: center !important;
+				padding-bottom: 0.5rem !important;
+			}
+		}
+
+		.bc_fed .is-slim-palette #fed_editor_pane_fields {
+			padding: 0.875rem 0.625rem !important;
+		}
+		.bc_fed .is-slim-palette #fed_editor_pane_fields .fed-palette-header-text,
+		.bc_fed .is-slim-palette #fed_editor_pane_fields .fed-palette-search-wrap,
+		.bc_fed .is-slim-palette #fed_editor_pane_fields .fed-palette-group-title,
+		.bc_fed .is-slim-palette #fed_editor_pane_fields .fed-field-tile-label,
+		.bc_fed .is-slim-palette #fed_editor_pane_fields .fed-field-tile-arrow {
+			display: none !important;
+		}
+		.bc_fed .is-slim-palette #fed_editor_pane_fields .fed-field-tile {
+			justify-content: center !important;
+			padding: 0.5rem 0.25rem !important;
+			min-height: 42px !important;
+		}
+		.bc_fed .is-slim-palette #fed_editor_pane_fields .fed-field-tile > div {
+			justify-content: center !important;
+			margin: 0 !important;
+			flex: none !important;
+		}
+		.bc_fed .is-slim-palette #fed_editor_pane_fields .fed-palette-header-wrap {
+			justify-content: center !important;
+			padding-bottom: 0.5rem !important;
 		}
 		.fed-btn-primary,
 		button.fed-btn-primary,
@@ -365,12 +430,12 @@ function fed_get_add_profile_post_fields() {
 		.bc_fed .fed-preview-trailing-btn:hover {
 			color: #475569 !important;
 		}
-		/* Side-by-Side Split Studio Mode (on wide desktop screens >= 1536px) */
-		@media (min-width: 1536px) {
+		/* Side-by-Side Split Studio Mode (on wide desktop screens >= 1536px, and 1200px-1535px with slim palette) */
+		@media (min-width: 1200px) {
 			.bc_fed .fed_all_input_fields_container.fed-studio-split-mode:not(.fed-preview-hidden) {
 				display: grid !important;
-				grid-template-columns: minmax(0, 1fr) minmax(420px, 490px) !important;
-				gap: 1.75rem !important;
+				grid-template-columns: minmax(0, 1fr) minmax(390px, 470px) !important;
+				gap: 1.5rem !important;
 				align-items: start !important;
 			}
 			.bc_fed .fed_all_input_fields_container.fed-studio-split-mode:not(.fed-preview-hidden) > :not([hidden]) ~ :not([hidden]) {
@@ -453,22 +518,23 @@ function fed_get_add_profile_post_fields() {
 				</div>
 			</div>
 
-			<div class="flex items-center gap-3 shrink-0">
+			<div class="flex items-center gap-2 sm:gap-3 shrink-0 flex-wrap sm:flex-nowrap">
 				<!-- Live Preview Show/Hide Toggle Button -->
-				<button type="button" class="fed-header-toggle-preview-btn fed-btn-secondary h-11 inline-flex items-center justify-center gap-2 px-4 rounded-2xl text-xs font-semibold no-underline transition-all cursor-pointer shadow-2xs" title="<?php esc_attr_e( 'Show or Hide Live Form Preview Panel', 'frontend-dashboard' ); ?>">
+				<button type="button" class="fed-header-toggle-preview-btn fed-btn-secondary h-11 inline-flex items-center justify-center gap-2 px-3 sm:px-4 rounded-2xl text-xs font-semibold no-underline transition-all cursor-pointer shadow-2xs" title="<?php esc_attr_e( 'Show or Hide Live Form Preview Panel', 'frontend-dashboard' ); ?>">
 					<i class="fas fa-eye text-xs text-indigo-500"></i>
-					<span class="fed-preview-toggle-text"><?php esc_html_e( 'Live Preview', 'frontend-dashboard' ); ?></span>
+					<span class="fed-preview-toggle-text hidden sm:inline"><?php esc_html_e( 'Live Preview', 'frontend-dashboard' ); ?></span>
 					<span class="fed-preview-toggle-status px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200"><?php esc_html_e( 'ON', 'frontend-dashboard' ); ?></span>
 				</button>
 
-				<a href="<?php echo esc_url( $page_url ); ?>" class="fed-btn-secondary h-11 inline-flex items-center justify-center gap-2 px-5 rounded-2xl text-xs font-semibold no-underline transition-all cursor-pointer">
+				<a href="<?php echo esc_url( $page_url ); ?>" class="fed-btn-secondary h-11 inline-flex items-center justify-center gap-2 px-4 sm:px-5 rounded-2xl text-xs font-semibold no-underline transition-all cursor-pointer">
 					<i class="fas fa-times text-xs"></i>
 					<span><?php esc_html_e( 'Cancel', 'frontend-dashboard' ); ?></span>
 				</a>
-				<button type="button" class="fed-header-save-btn fed-btn-primary h-11 inline-flex items-center justify-center gap-2 px-7 rounded-2xl font-bold text-xs transition-all active:scale-95 cursor-pointer shadow-sm">
+				<button type="button" class="fed-header-save-btn fed-btn-primary h-11 inline-flex items-center justify-center gap-2 px-4 sm:px-7 rounded-2xl font-bold text-xs transition-all active:scale-95 cursor-pointer shadow-sm">
 					<i class="fas fa-save text-xs" style="color: #ffffff !important;"></i>
-					<span style="color: #ffffff !important;"><?php esc_html_e( 'Save Field Changes', 'frontend-dashboard' ); ?></span>
-					<kbd class="hidden sm:inline-block ml-1 px-1.5 py-0.5 text-[10px] font-semibold bg-white/20 text-white rounded border border-white/30">Ctrl+S</kbd>
+					<span style="color: #ffffff !important;"><?php esc_html_e( 'Save', 'frontend-dashboard' ); ?></span>
+					<span class="hidden md:inline" style="color: #ffffff !important;"><?php esc_html_e( 'Field Changes', 'frontend-dashboard' ); ?></span>
+					<kbd class="hidden lg:inline-block ml-1 px-1.5 py-0.5 text-[10px] font-semibold bg-white/20 text-white rounded border border-white/30">Ctrl+S</kbd>
 				</button>
 			</div>
 		</div>
@@ -505,21 +571,24 @@ function fed_get_add_profile_post_fields() {
 				<?php endif; ?>
 
 				<!-- PANE 1: Form Fields Types Palette -->
-				<div id="fed_editor_pane_fields" class="fed-editor-tab-pane bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/80 shadow-xs space-y-5">
-					<div class="flex items-center justify-between pb-3 border-b border-slate-100">
-						<div class="flex items-center gap-2.5">
-							<div class="w-8 h-8 rounded-xl bg-slate-900 text-white flex items-center justify-center text-xs shrink-0">
+				<div id="fed_editor_pane_fields" class="fed-editor-tab-pane bg-white rounded-3xl p-5 sm:p-7 border border-slate-200/80 shadow-xs space-y-4">
+					<div class="flex items-center justify-between pb-3 border-b border-slate-100 fed-palette-header-wrap">
+						<div class="flex items-center gap-2.5 min-w-0">
+							<div class="w-8 h-8 rounded-xl bg-slate-900 text-white flex items-center justify-center text-xs shrink-0 shadow-2xs">
 								<i class="fas fa-cubes"></i>
 							</div>
-							<div>
-								<h2 class="text-xs sm:text-sm font-bold text-slate-900 m-0"><?php esc_html_e( 'Form Fields', 'frontend-dashboard' ); ?></h2>
-								<p class="text-[11px] text-slate-400 m-0"><?php esc_html_e( 'Click any field type to switch.', 'frontend-dashboard' ); ?></p>
+							<div class="fed-palette-header-text min-w-0">
+								<h2 class="text-xs sm:text-sm font-bold text-slate-900 m-0 truncate"><?php esc_html_e( 'Form Fields', 'frontend-dashboard' ); ?></h2>
+								<p class="text-[11px] text-slate-400 m-0 truncate"><?php esc_html_e( 'Click any field type to switch.', 'frontend-dashboard' ); ?></p>
 							</div>
 						</div>
+						<button type="button" class="fed-palette-toggle-btn p-1.5 w-7 h-7 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 text-slate-500 hover:text-slate-800 transition-all cursor-pointer flex items-center justify-center shadow-2xs shrink-0" title="<?php esc_attr_e( 'Toggle Compact Icon-Only Palette', 'frontend-dashboard' ); ?>">
+							<i class="fas fa-columns text-xs"></i>
+						</button>
 					</div>
 
 					<!-- Field Types Live Search Filter -->
-					<div class="relative w-full">
+					<div class="relative w-full fed-palette-search-wrap">
 						<span style="position: absolute !important; left: 14px !important; top: 50% !important; transform: translateY(-50%) !important; pointer-events: none !important; z-index: 5 !important;" class="text-slate-400 text-xs">
 							<i class="fas fa-search"></i>
 						</span>
@@ -531,7 +600,7 @@ function fed_get_add_profile_post_fields() {
 						<!-- Category: Common Fields -->
 						<?php if ( ! empty( $categorized['common'] ) ) : ?>
 							<div class="fed-field-group space-y-2">
-								<span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block px-1 pb-0.5">
+								<span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block px-1 pb-0.5 fed-palette-group-title">
 									<?php esc_html_e( 'Common Fields', 'frontend-dashboard' ); ?>
 								</span>
 								<div class="grid grid-cols-2 gap-2">
@@ -548,9 +617,9 @@ function fed_get_add_profile_post_fields() {
 												<span class="w-6 h-6 rounded-lg bg-slate-700/80 text-sky-400 flex items-center justify-center text-xs shrink-0">
 													<i class="<?php echo esc_attr( $t_icon ); ?>"></i>
 												</span>
-												<span class="text-xs font-semibold text-slate-100 truncate"><?php echo esc_html( $t_data['name'] ); ?></span>
+												<span class="text-xs font-semibold text-slate-100 truncate fed-field-tile-label"><?php echo esc_html( $t_data['name'] ); ?></span>
 											</div>
-											<i class="fas fa-chevron-right text-[9px] text-slate-500 shrink-0"></i>
+											<i class="fas fa-chevron-right text-[9px] text-slate-500 shrink-0 fed-field-tile-arrow"></i>
 										</button>
 									<?php endforeach; ?>
 								</div>
@@ -560,7 +629,7 @@ function fed_get_add_profile_post_fields() {
 						<!-- Category: Choice & Option Fields -->
 						<?php if ( ! empty( $categorized['choice'] ) ) : ?>
 							<div class="fed-field-group space-y-2 pt-2 border-t border-slate-100">
-								<span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block px-1 pb-0.5">
+								<span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block px-1 pb-0.5 fed-palette-group-title">
 									<?php esc_html_e( 'Choice & Option Fields', 'frontend-dashboard' ); ?>
 								</span>
 								<div class="grid grid-cols-2 gap-2">
@@ -577,9 +646,9 @@ function fed_get_add_profile_post_fields() {
 												<span class="w-6 h-6 rounded-lg bg-slate-700/80 text-sky-400 flex items-center justify-center text-xs shrink-0">
 													<i class="<?php echo esc_attr( $t_icon ); ?>"></i>
 												</span>
-												<span class="text-xs font-semibold text-slate-100 truncate"><?php echo esc_html( $t_data['name'] ); ?></span>
+												<span class="text-xs font-semibold text-slate-100 truncate fed-field-tile-label"><?php echo esc_html( $t_data['name'] ); ?></span>
 											</div>
-											<i class="fas fa-chevron-right text-[9px] text-slate-500 shrink-0"></i>
+											<i class="fas fa-chevron-right text-[9px] text-slate-500 shrink-0 fed-field-tile-arrow"></i>
 										</button>
 									<?php endforeach; ?>
 								</div>
@@ -589,7 +658,7 @@ function fed_get_add_profile_post_fields() {
 						<!-- Category: Advanced & Addon Fields -->
 						<?php if ( ! empty( $categorized['advanced'] ) ) : ?>
 							<div class="fed-field-group space-y-2 pt-2 border-t border-slate-100">
-								<span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block px-1 pb-0.5">
+								<span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block px-1 pb-0.5 fed-palette-group-title">
 									<?php esc_html_e( 'Advanced & Addon Fields', 'frontend-dashboard' ); ?>
 								</span>
 								<div class="grid grid-cols-2 gap-2">
@@ -610,9 +679,9 @@ function fed_get_add_profile_post_fields() {
 														<i class="<?php echo esc_attr( $t_icon ); ?>"></i>
 													<?php endif; ?>
 												</span>
-												<span class="text-xs font-semibold text-slate-100 truncate"><?php echo esc_html( $t_data['name'] ); ?></span>
+												<span class="text-xs font-semibold text-slate-100 truncate fed-field-tile-label"><?php echo esc_html( $t_data['name'] ); ?></span>
 											</div>
-											<i class="fas fa-chevron-right text-[9px] text-slate-500 shrink-0"></i>
+											<i class="fas fa-chevron-right text-[9px] text-slate-500 shrink-0 fed-field-tile-arrow"></i>
 										</button>
 									<?php endforeach; ?>
 								</div>
@@ -1204,7 +1273,43 @@ function fed_get_add_profile_post_fields() {
 				if (savedVisibility === '0') {
 					setLivePreviewVisibility(false, false);
 				}
-			} catch(e) {}
+			} catch (err) {}
+
+			// Toggle Slim / Full Palette Mode (Icons Only vs Text)
+			function setPaletteMode(mode, savePref) {
+				var $grid = $('.fed-builder-grid');
+				var $btn = $('.fed-palette-toggle-btn');
+				if (mode === 'slim') {
+					$grid.addClass('is-slim-palette');
+					$btn.attr('title', 'Expand Palette with Text Labels')
+						.html('<i class="fas fa-bars text-xs"></i>');
+					if (savePref) {
+						try { localStorage.setItem('fed_palette_mode', 'slim'); } catch (err) {}
+					}
+				} else {
+					$grid.removeClass('is-slim-palette');
+					$btn.attr('title', 'Collapse Palette to Icons Only')
+						.html('<i class="fas fa-columns text-xs"></i>');
+					if (savePref) {
+						try { localStorage.setItem('fed_palette_mode', 'full'); } catch (err) {}
+					}
+				}
+			}
+
+			// Palette header toggle button click
+			$(document).on('click', '.fed-palette-toggle-btn', function(e) {
+				e.preventDefault();
+				var isSlim = $('.fed-builder-grid').hasClass('is-slim-palette');
+				setPaletteMode(isSlim ? 'full' : 'slim', true);
+			});
+
+			// Restore palette mode preference on load (defaults to slim on < 1280px unless explicitly set to full)
+			try {
+				var savedPaletteMode = localStorage.getItem('fed_palette_mode');
+				if (savedPaletteMode === 'slim' || ($(window).width() < 1280 && savedPaletteMode !== 'full')) {
+					setPaletteMode('slim', false);
+				}
+			} catch (err) {}
 
 			// Toggle Rendered HTML Markup Inspector
 			$(document).on('click', '.fed-preview-code-toggle-btn', function(e) {
