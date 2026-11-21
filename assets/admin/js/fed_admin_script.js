@@ -1198,63 +1198,65 @@ jQuery.fed_toggle_loader = function ( show ) {
 		// Update count badge
 		$builder.find( '.fed-choices-count-badge' ).text( choices.length + ' Choices' );
 
-		// Update Live Preview Area
+		// Update Live Preview Area (if legacy internal preview exists)
 		var $preview = $builder.find( '.fed-preview-render-area' );
-		if ( type === 'select' ) {
-			if ( isMulti ) {
-				var selectHtml = '<div class="w-full space-y-1.5">' +
-					'<select class="w-full rounded-xl border border-slate-200 bg-white text-xs text-slate-800 p-2 outline-none cursor-pointer fed-live-multi-select" multiple="multiple" style="width:100% !important;">';
-				if ( choices.length === 0 ) {
-					selectHtml += '<option disabled class="text-slate-400 italic">No choices configured yet</option>';
-				} else {
-					$.each( choices, function ( i, item ) {
-						var isSelected = ( i === 0 || i === 1 ) ? 'selected="selected"' : '';
-						selectHtml += '<option value="' + escapeHtml( item.key ) + '" ' + isSelected + '>' + escapeHtml( item.label ) + '</option>';
-					} );
-				}
-				selectHtml += '</select>' +
-					'<span class="text-[10px] text-slate-400 block italic">Interactive Select2 preview — click to pick choices & search</span>' +
-				'</div>';
-				$preview.html( selectHtml );
-
-				if ( typeof $.fn.select2 !== 'undefined' ) {
-					try {
-						$preview.find( '.fed-live-multi-select' ).select2( {
-							width: '100%',
-							placeholder: 'Click to select options...',
-							dropdownCssClass: 'bc_fed_select2_dropdown',
-							containerCssClass: 'bc_fed_select2'
+		if ( $preview.length ) {
+			if ( type === 'select' ) {
+				if ( isMulti ) {
+					var selectHtml = '<div class="w-full space-y-1.5">' +
+						'<select class="w-full rounded-xl border border-slate-200 bg-white text-xs text-slate-800 p-2 outline-none cursor-pointer fed-live-multi-select" multiple="multiple" style="width:100% !important;">';
+					if ( choices.length === 0 ) {
+						selectHtml += '<option disabled class="text-slate-400 italic">No choices configured yet</option>';
+					} else {
+						$.each( choices, function ( i, item ) {
+							var isSelected = ( i === 0 || i === 1 ) ? 'selected="selected"' : '';
+							selectHtml += '<option value="' + escapeHtml( item.key ) + '" ' + isSelected + '>' + escapeHtml( item.label ) + '</option>';
 						} );
-					} catch ( err ) {
-						// fallback to native multi-select
 					}
+					selectHtml += '</select>' +
+						'<span class="text-[10px] text-slate-400 block italic">Interactive Select2 preview — click to pick choices & search</span>' +
+					'</div>';
+					$preview.html( selectHtml );
+
+					if ( typeof $.fn.select2 !== 'undefined' ) {
+						try {
+							$preview.find( '.fed-live-multi-select' ).select2( {
+								width: '100%',
+								placeholder: 'Click to select options...',
+								dropdownCssClass: 'bc_fed_select2_dropdown',
+								containerCssClass: 'bc_fed_select2'
+							} );
+						} catch ( err ) {
+							// fallback to native multi-select
+						}
+					}
+				} else {
+					var selectHtml = '<select class="w-full rounded-xl border border-slate-200 bg-white text-xs text-slate-800 p-2.5 outline-none cursor-pointer hover:border-indigo-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all fed-live-preview-select">';
+					selectHtml += '<option value="">-- ' + ( typeof frontend_dashboard !== 'undefined' && frontend_dashboard.select_option ? frontend_dashboard.select_option : 'Select Option' ) + ' --</option>';
+					if ( choices.length === 0 ) {
+						selectHtml += '<option disabled class="text-slate-400 italic">No choices configured yet</option>';
+					} else {
+						$.each( choices, function ( i, item ) {
+							selectHtml += '<option value="' + escapeHtml( item.key ) + '">' + escapeHtml( item.label ) + '</option>';
+						} );
+					}
+					selectHtml += '</select>';
+					$preview.html( selectHtml );
 				}
 			} else {
-				var selectHtml = '<select class="w-full rounded-xl border border-slate-200 bg-white text-xs text-slate-800 p-2.5 outline-none cursor-pointer hover:border-indigo-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all fed-live-preview-select">';
-				selectHtml += '<option value="">-- ' + ( typeof frontend_dashboard !== 'undefined' && frontend_dashboard.select_option ? frontend_dashboard.select_option : 'Select Option' ) + ' --</option>';
+				var radioHtml = '<div class="flex flex-wrap gap-2.5 text-xs text-slate-700">';
 				if ( choices.length === 0 ) {
-					selectHtml += '<option disabled class="text-slate-400 italic">No choices configured yet</option>';
+					radioHtml += '<span class="text-slate-400 italic text-xs">No choices configured yet</span>';
 				} else {
 					$.each( choices, function ( i, item ) {
-						selectHtml += '<option value="' + escapeHtml( item.key ) + '">' + escapeHtml( item.label ) + '</option>';
+						radioHtml += '<label class="inline-flex items-center gap-1.5 p-1.5 px-3 bg-slate-50 hover:bg-slate-100/80 border border-slate-200 rounded-xl cursor-pointer transition-all">';
+						radioHtml += '<input type="radio" name="preview_radio_' + $builder.attr( 'id' ) + '" class="text-indigo-600 cursor-pointer" ' + ( i === 0 ? 'checked' : '' ) + ' />';
+						radioHtml += '<span class="font-medium text-slate-700">' + escapeHtml( item.label ) + '</span></label>';
 					} );
 				}
-				selectHtml += '</select>';
-				$preview.html( selectHtml );
+				radioHtml += '</div>';
+				$preview.html( radioHtml );
 			}
-		} else {
-			var radioHtml = '<div class="flex flex-wrap gap-2.5 text-xs text-slate-700">';
-			if ( choices.length === 0 ) {
-				radioHtml += '<span class="text-slate-400 italic text-xs">No choices configured yet</span>';
-			} else {
-				$.each( choices, function ( i, item ) {
-					radioHtml += '<label class="inline-flex items-center gap-1.5 p-1.5 px-3 bg-slate-50 hover:bg-slate-100/80 border border-slate-200 rounded-xl cursor-pointer transition-all">';
-					radioHtml += '<input type="radio" name="preview_radio_' + $builder.attr( 'id' ) + '" class="text-indigo-600 cursor-pointer" ' + ( i === 0 ? 'checked' : '' ) + ' />';
-					radioHtml += '<span class="font-medium text-slate-700">' + escapeHtml( item.label ) + '</span></label>';
-				} );
-			}
-			radioHtml += '</div>';
-			$preview.html( radioHtml );
 		}
 
 		$( document ).trigger( 'fed_choices_updated' );

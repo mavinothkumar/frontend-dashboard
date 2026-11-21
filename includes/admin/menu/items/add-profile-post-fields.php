@@ -497,6 +497,34 @@ function fed_get_add_profile_post_fields() {
 		.bc_fed .fed_input_type_container > form.fed_admin_menu > div.bg-white:first-of-type {
 			margin-top: 0 !important;
 		}
+
+		/* Live Preview Multi-Select & Select2 Ergonomics */
+		.bc_fed .fed-preview-input-slot .select2-container {
+			width: 100% !important;
+		}
+		.bc_fed .fed-preview-input-slot .select2-container--default .select2-selection--multiple {
+			border: 1px solid #e2e8f0 !important;
+			border-radius: 12px !important;
+			background-color: #ffffff !important;
+			min-height: 42px !important;
+			padding: 4px 6px !important;
+		}
+		.bc_fed .fed-preview-input-slot .select2-container--default .select2-selection--multiple .select2-selection__choice {
+			background-color: #eef2ff !important;
+			border: 1px solid #c7d2fe !important;
+			color: #4338ca !important;
+			font-size: 11px !important;
+			font-weight: 600 !important;
+			border-radius: 8px !important;
+			padding: 2px 8px !important;
+			margin-top: 3px !important;
+			margin-right: 4px !important;
+		}
+		.bc_fed .fed-preview-input-slot .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+			color: #6366f1 !important;
+			margin-right: 4px !important;
+			font-weight: bold !important;
+		}
 	</style>
 
 	<div class="bc_fed fed-admin-wrap w-full max-w-none px-6 sm:px-10 py-8 font-sans text-slate-800 fed_add_edit_input_container" data-nonce="<?php echo esc_attr( $nonce ); ?>" data-ajax-url="<?php echo esc_url( $ajax_url ); ?>">
@@ -1037,7 +1065,6 @@ function fed_get_add_profile_post_fields() {
 					case 'select':
 						var choices = getChoicesData($container);
 						var isMulti = $container.find('.fed-multi-select-toggle').is(':checked');
-						var selectAttrs = isMulti ? ' multiple size="4"' : '';
 						var optHtml = '';
 						var optCode = '';
 						if (!isMulti) {
@@ -1046,16 +1073,21 @@ function fed_get_add_profile_post_fields() {
 						}
 						if (choices.length) {
 							$.each(choices, function(i, c) {
-								var isSelected = (defaultVal && c.key === defaultVal) || (i === 0 && !placeholder && !isMulti);
-								optHtml += '<option value="' + escapeAttr(c.key) + '"' + (isSelected ? ' selected' : '') + '>' + escapeHtml(c.label) + '</option>';
-								optCode += '  <option value="' + escapeAttr(c.key) + '"' + (isSelected ? ' selected' : '') + '>' + escapeHtml(c.label) + '</option>\n';
+								var isSelected = (defaultVal && c.key === defaultVal) || (i === 0 && !placeholder && !isMulti) || (isMulti && (i === 0 || i === 1));
+								optHtml += '<option value="' + escapeAttr(c.key) + '"' + (isSelected ? ' selected="selected"' : '') + '>' + escapeHtml(c.label) + '</option>';
+								optCode += '  <option value="' + escapeAttr(c.key) + '"' + (isSelected ? ' selected="selected"' : '') + '>' + escapeHtml(c.label) + '</option>\n';
 							});
 						} else {
-							optHtml += '<option value="option_1">Option 1</option><option value="option_2">Option 2</option>';
+							optHtml += '<option value="option_1" selected="selected">Option 1</option><option value="option_2" selected="selected">Option 2</option>';
 							optCode += '  <option value="option_1">Option 1</option>\n  <option value="option_2">Option 2</option>\n';
 						}
-						inputHtml = '<select class="fed-preview-active-input w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all cursor-pointer"' + selectAttrs + valAttrs + '>' + optHtml + '</select>';
-						markupCode = '<select name="' + escapeAttr(meta) + (isMulti ? '[]' : '') + '" class="form-control"' + selectAttrs + valAttrs + '>\n' + optCode + '</select>';
+						if (isMulti) {
+							inputHtml = '<div class="fed-preview-select2-wrap w-full space-y-1.5"><select class="fed-preview-active-input fed_multi_select fed-live-preview-multi-select w-full" multiple="multiple" style="width:100% !important;"' + valAttrs + '>' + optHtml + '</select><span class="text-[10px] text-slate-400 block italic">Interactive Select2 preview — click to pick choices & search</span></div>';
+							markupCode = '<select name="' + escapeAttr(meta) + '[]" class="form-control fed_multi_select" multiple="multiple"' + valAttrs + '>\n' + optCode + '</select>';
+						} else {
+							inputHtml = '<select class="fed-preview-active-input w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all cursor-pointer"' + valAttrs + '>' + optHtml + '</select>';
+							markupCode = '<select name="' + escapeAttr(meta) + '" class="form-control"' + valAttrs + '>\n' + optCode + '</select>';
+						}
 						break;
 
 					case 'radio':
@@ -1126,8 +1158,30 @@ function fed_get_add_profile_post_fields() {
 						break;
 				}
 
+				try {
+					var $prevSelect2 = $slot.find('.select2-hidden-accessible');
+					if ($prevSelect2.length && typeof $.fn.select2 !== 'undefined') {
+						$prevSelect2.select2('destroy');
+					}
+				} catch (e) {}
+
 				$slot.html(inputHtml);
 				$panel.find('.fed-preview-code-output').text(markupCode);
+
+				// Initialize Select2 in the live preview slot if Multi-Select is active
+				if (type === 'select' && isMulti) {
+					var $liveMulti = $slot.find('.fed-live-preview-multi-select');
+					if ($liveMulti.length && typeof $.fn.select2 !== 'undefined') {
+						try {
+							$liveMulti.select2({
+								width: '100%',
+								placeholder: placeholder || 'Click to select options...',
+								dropdownCssClass: 'bc_fed_select2_dropdown',
+								containerCssClass: 'bc_fed_select2'
+							});
+						} catch (err) {}
+					}
+				}
 			}
 
 			// Activate specific field type in the inspector

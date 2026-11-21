@@ -266,7 +266,12 @@ function fed_render_choices_builder( $input_val, $field_type = 'select', $is_mul
 					<i class="<?php echo ( 'radio' === $field_type ) ? 'fas fa-dot-circle' : 'fas fa-layer-group'; ?>"></i>
 				</div>
 				<div>
-					<h3 class="text-sm font-bold text-slate-900 m-0"><?php echo esc_html( $title ); ?></h3>
+					<div class="flex items-center gap-2">
+						<h3 class="text-sm font-bold text-slate-900 m-0"><?php echo esc_html( $title ); ?></h3>
+						<span class="fed-choices-count-badge text-[10px] font-bold px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-100">
+							<?php echo count( $options_map ); ?> <?php esc_html_e( 'Choices', 'frontend-dashboard' ); ?>
+						</span>
+					</div>
 					<p class="text-xs text-slate-500 m-0 mt-0.5"><?php echo esc_html( $desc ); ?></p>
 				</div>
 			</div>
@@ -328,86 +333,63 @@ function fed_render_choices_builder( $input_val, $field_type = 'select', $is_mul
 			</div>
 		</div>
 
-		<!-- Main 2-Column Section: Options Table & Live Preview -->
-		<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-			<!-- Column 1: Options Repeater Table -->
-			<div class="lg:col-span-7 space-y-3">
-				<div class="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider px-3 pb-1 border-b border-slate-100">
-					<div class="grid grid-cols-12 gap-2 w-full pr-14">
-						<span class="col-span-6"><?php esc_html_e( 'Option Label (Visible)', 'frontend-dashboard' ); ?></span>
-						<span class="col-span-6"><?php esc_html_e( 'Option Key (Stored)', 'frontend-dashboard' ); ?></span>
-					</div>
-					<span class="w-14 text-right"><?php esc_html_e( 'Action', 'frontend-dashboard' ); ?></span>
+		<!-- Options Repeater Table (Full Width) -->
+		<div class="w-full space-y-3.5">
+			<div class="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider px-3 pb-1 border-b border-slate-100">
+				<div class="grid grid-cols-12 gap-3 w-full pr-14">
+					<span class="col-span-6"><?php esc_html_e( 'Option Label (Visible)', 'frontend-dashboard' ); ?></span>
+					<span class="col-span-6"><?php esc_html_e( 'Option Key (Stored)', 'frontend-dashboard' ); ?></span>
 				</div>
-
-				<div class="fed-choices-list space-y-2.5 max-h-[380px] overflow-y-auto pr-1">
-					<?php
-					$idx = 1;
-					foreach ( $options_map as $key => $label ) :
-						?>
-						<div class="fed-choice-row group flex items-center gap-2 p-2 bg-slate-50/60 hover:bg-slate-50 border border-slate-200/80 rounded-2xl transition-all">
-							<div class="fed-row-num w-6 h-6 rounded-lg bg-white border border-slate-200/90 text-[10px] font-bold text-slate-500 flex items-center justify-center shrink-0 shadow-2xs">
-								<?php echo (int) $idx; ?>
-							</div>
-							<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 flex-1">
-								<div>
-									<input type="text" class="fed-choice-label w-full rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 outline-none transition-all" placeholder="<?php esc_attr_e( 'e.g. Option Label', 'frontend-dashboard' ); ?>" value="<?php echo esc_attr( $label ); ?>" />
-								</div>
-								<div>
-									<input type="text" class="fed-choice-key w-full rounded-xl border border-slate-200 bg-white/80 px-3 py-1.5 text-xs font-mono text-slate-600 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500/10 outline-none transition-all" placeholder="<?php esc_attr_e( 'e.g. option_key', 'frontend-dashboard' ); ?>" value="<?php echo esc_attr( $key ); ?>" />
-								</div>
-							</div>
-							<div class="flex items-center gap-1 shrink-0">
-								<button type="button" class="fed-choice-duplicate-btn p-1.5 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all cursor-pointer" title="<?php esc_attr_e( 'Duplicate', 'frontend-dashboard' ); ?>">
-									<i class="fas fa-copy text-xs"></i>
-								</button>
-								<button type="button" class="fed-choice-delete-btn p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-all cursor-pointer" title="<?php esc_attr_e( 'Delete Option', 'frontend-dashboard' ); ?>">
-									<i class="fas fa-trash-alt text-xs"></i>
-								</button>
-							</div>
-						</div>
-						<?php
-						++$idx;
-					endforeach;
-					?>
-				</div>
-
-				<div class="pt-2">
-					<button type="button" class="fed-btn-add-choice w-full sm:w-auto px-4 py-2 bg-indigo-50 hover:bg-indigo-100/90 text-indigo-700 text-xs font-bold rounded-2xl border border-indigo-200/90 flex items-center justify-center gap-2 cursor-pointer transition-all shadow-2xs">
-						<i class="fas fa-plus text-xs"></i>
-						<span><?php esc_html_e( 'Add Option', 'frontend-dashboard' ); ?></span>
-					</button>
-				</div>
+				<span class="w-14 text-right"><?php esc_html_e( 'Action', 'frontend-dashboard' ); ?></span>
 			</div>
 
-			<!-- Column 2: Live Interactive Preview & Helper Card -->
-			<div class="lg:col-span-5 p-5 rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100/60 border border-slate-200/80 space-y-4">
-				<div class="flex items-center justify-between">
-					<span class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
-						<i class="fas fa-eye text-indigo-600 text-xs"></i>
-						<?php esc_html_e( 'Live Preview', 'frontend-dashboard' ); ?>
-					</span>
-					<span class="fed-choices-count-badge text-[10px] font-bold px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-100">
-						<?php echo count( $options_map ); ?> <?php esc_html_e( 'Choices', 'frontend-dashboard' ); ?>
-					</span>
-				</div>
-
-				<div class="space-y-2 pt-1">
-					<span class="text-[11px] font-semibold text-slate-500 block"><?php esc_html_e( 'Rendered Output on Frontend Form:', 'frontend-dashboard' ); ?></span>
-					<div class="fed-preview-render-area bg-white p-3 rounded-xl border border-slate-200/80 shadow-2xs min-h-[50px] flex items-center">
-						<!-- Preview dynamically populated by JS -->
+			<div class="fed-choices-list space-y-2.5 max-h-[420px] overflow-y-auto pr-1">
+				<?php
+				$idx = 1;
+				foreach ( $options_map as $key => $label ) :
+					?>
+					<div class="fed-choice-row group flex items-center gap-2.5 p-2.5 bg-slate-50/60 hover:bg-slate-50 border border-slate-200/80 rounded-2xl transition-all">
+						<div class="fed-row-num w-6 h-6 rounded-lg bg-white border border-slate-200/90 text-[10px] font-bold text-slate-500 flex items-center justify-center shrink-0 shadow-2xs">
+							<?php echo (int) $idx; ?>
+						</div>
+						<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1">
+							<div>
+								<input type="text" class="fed-choice-label w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-800 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 outline-none transition-all" placeholder="<?php esc_attr_e( 'e.g. Option Label', 'frontend-dashboard' ); ?>" value="<?php echo esc_attr( $label ); ?>" />
+							</div>
+							<div>
+								<input type="text" class="fed-choice-key w-full rounded-xl border border-slate-200 bg-white/80 px-3.5 py-2 text-xs font-mono text-slate-600 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500/10 outline-none transition-all" placeholder="<?php esc_attr_e( 'e.g. option_key', 'frontend-dashboard' ); ?>" value="<?php echo esc_attr( $key ); ?>" />
+							</div>
+						</div>
+						<div class="flex items-center gap-1 shrink-0">
+							<button type="button" class="fed-choice-duplicate-btn p-1.5 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all cursor-pointer" title="<?php esc_attr_e( 'Duplicate', 'frontend-dashboard' ); ?>">
+								<i class="fas fa-copy text-xs"></i>
+							</button>
+							<button type="button" class="fed-choice-delete-btn p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-all cursor-pointer" title="<?php esc_attr_e( 'Delete Option', 'frontend-dashboard' ); ?>">
+								<i class="fas fa-trash-alt text-xs"></i>
+							</button>
+						</div>
 					</div>
-				</div>
+					<?php
+					++$idx;
+				endforeach;
+				?>
+			</div>
 
-				<div class="pt-2 border-t border-slate-200/60 text-[11px] text-slate-500 space-y-1">
-					<p class="m-0 flex items-start gap-1.5">
-						<i class="fas fa-check-circle text-emerald-500 mt-0.5 shrink-0 text-xs"></i>
-						<span><?php esc_html_e( 'Typing a label auto-generates the stored key if left blank.', 'frontend-dashboard' ); ?></span>
-					</p>
-					<p class="m-0 flex items-start gap-1.5">
-						<i class="fas fa-check-circle text-emerald-500 mt-0.5 shrink-0 text-xs"></i>
-						<span><?php esc_html_e( '100% compatible with existing and legacy option values.', 'frontend-dashboard' ); ?></span>
-					</p>
+			<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-slate-100">
+				<button type="button" class="fed-btn-add-choice w-full sm:w-auto px-4 py-2 bg-indigo-50 hover:bg-indigo-100/90 text-indigo-700 text-xs font-bold rounded-2xl border border-indigo-200/90 flex items-center justify-center gap-2 cursor-pointer transition-all shadow-2xs">
+					<i class="fas fa-plus text-xs"></i>
+					<span><?php esc_html_e( 'Add Option', 'frontend-dashboard' ); ?></span>
+				</button>
+				<div class="flex items-center gap-3 text-[11px] text-slate-400 flex-wrap">
+					<span class="flex items-center gap-1.5">
+						<i class="fas fa-check-circle text-emerald-500 text-xs"></i>
+						<span><?php esc_html_e( 'Typing label auto-generates key', 'frontend-dashboard' ); ?></span>
+					</span>
+					<span class="hidden md:inline text-slate-300">•</span>
+					<span class="inline-flex items-center gap-1.5 text-indigo-600 font-medium">
+						<i class="fas fa-desktop text-xs"></i>
+						<span><?php esc_html_e( 'Renders live in preview panel above', 'frontend-dashboard' ); ?></span>
+					</span>
 				</div>
 			</div>
 		</div>
@@ -549,7 +531,28 @@ function fed_get_live_preview_initial_input_html( array $row, $field_type = 'sin
 		case 'url':
 			return '<div class="relative"><span class="fed-preview-icon-wrapper text-xs"><i class="fas fa-globe"></i></span><input type="url" class="fed-preview-active-input fed-has-leading-icon w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all placeholder:text-slate-400" placeholder="' . esc_attr( ! empty( $placeholder ) ? $placeholder : 'https://example.com' ) . '" value="' . esc_attr( $default_val ) . '"' . $req_attr . ' /></div>';
 		case 'select':
-			return '<select class="fed-preview-active-input w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all cursor-pointer"' . $req_attr . '><option value="">' . esc_html( ! empty( $placeholder ) ? $placeholder : __( '-- Select an option --', 'frontend-dashboard' ) ) . '</option><option value="option_1" selected>Option 1</option><option value="option_2">Option 2</option></select>';
+			$is_multi    = isset( $extended['multiple'] ) && ( 'Enable' === $extended['multiple'] || 'true' === $extended['multiple'] || true === $extended['multiple'] );
+			$options_raw = isset( $row['input_value'] ) && function_exists( 'fed_parse_field_options' ) ? fed_parse_field_options( $row['input_value'] ) : array();
+			if ( empty( $options_raw ) ) {
+				$options_raw = array(
+					'option_1' => __( 'Option 1', 'frontend-dashboard' ),
+					'option_2' => __( 'Option 2', 'frontend-dashboard' ),
+				);
+			}
+			$opt_html = '';
+			if ( ! $is_multi ) {
+				$opt_html .= '<option value="">' . esc_html( ! empty( $placeholder ) ? $placeholder : __( '-- Select an option --', 'frontend-dashboard' ) ) . '</option>';
+			}
+			$idx = 0;
+			foreach ( $options_raw as $k => $lbl ) {
+				$sel       = ( $is_multi && $idx < 2 ) || ( ! $is_multi && 0 === $idx ) ? ' selected="selected"' : '';
+				$opt_html .= '<option value="' . esc_attr( $k ) . '"' . $sel . '>' . esc_html( $lbl ) . '</option>';
+				++$idx;
+			}
+			if ( $is_multi ) {
+				return '<div class="fed-preview-select2-wrap w-full space-y-1.5"><select class="fed-preview-active-input fed_multi_select fed-live-preview-multi-select w-full" multiple="multiple" style="width:100% !important;"' . $req_attr . '>' . $opt_html . '</select><span class="text-[10px] text-slate-400 block italic">' . esc_html__( 'Interactive Select2 preview — click to pick choices & search', 'frontend-dashboard' ) . '</span></div>';
+			}
+			return '<select class="fed-preview-active-input w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all cursor-pointer"' . $req_attr . '>' . $opt_html . '</select>';
 		case 'radio':
 			return '<div class="space-y-2 pt-0.5"><label class="flex items-center gap-3 p-3 rounded-xl border border-slate-200/90 bg-white hover:bg-slate-50/80 transition-all cursor-pointer shadow-2xs"><input type="radio" name="preview_radio" value="option_1" checked class="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-slate-300" /><span class="text-xs font-semibold text-slate-700">Option 1</span><span class="text-[10px] text-slate-400 font-mono ml-auto">option_1</span></label><label class="flex items-center gap-3 p-3 rounded-xl border border-slate-200/90 bg-white hover:bg-slate-50/80 transition-all cursor-pointer shadow-2xs"><input type="radio" name="preview_radio" value="option_2" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-slate-300" /><span class="text-xs font-semibold text-slate-700">Option 2</span><span class="text-[10px] text-slate-400 font-mono ml-auto">option_2</span></label></div>';
 		case 'checkbox':
