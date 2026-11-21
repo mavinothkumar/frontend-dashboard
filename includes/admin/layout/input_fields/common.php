@@ -524,6 +524,50 @@ function fed_get_validation_constraints_card( array $row, $field_type = 'single_
 }
 
 /**
+ * Render initial HTML input control inside live preview.
+ *
+ * @param array  $row        Field details.
+ * @param string $field_type Field type slug.
+ * @return string
+ */
+function fed_get_live_preview_initial_input_html( array $row, $field_type = 'single_line' ) {
+	$placeholder = isset( $row['placeholder'] ) ? $row['placeholder'] : '';
+	$extended    = isset( $row['extended'] ) ? ( is_string( $row['extended'] ) ? maybe_unserialize( $row['extended'] ) : $row['extended'] ) : array();
+	$default_val = isset( $extended['default_value'] ) ? $extended['default_value'] : '';
+	$is_req      = isset( $row['is_required'] ) && ( 'true' === $row['is_required'] || true === $row['is_required'] || 'yes' === $row['is_required'] || 'Enable' === $row['is_required'] );
+	$req_attr    = $is_req ? ' required' : '';
+
+	switch ( $field_type ) {
+		case 'multi_line':
+			return '<textarea rows="3" class="fed-preview-active-input w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl p-3.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all placeholder:text-slate-400" placeholder="' . esc_attr( $placeholder ) . '"' . $req_attr . '>' . esc_textarea( $default_val ) . '</textarea>';
+		case 'email':
+			return '<div class="relative"><div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-xs"><i class="fas fa-envelope"></i></div><input type="email" class="fed-preview-active-input w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all placeholder:text-slate-400" placeholder="' . esc_attr( ! empty( $placeholder ) ? $placeholder : 'user@example.com' ) . '" value="' . esc_attr( $default_val ) . '"' . $req_attr . ' /></div>';
+		case 'password':
+			return '<div class="relative"><div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-xs"><i class="fas fa-lock"></i></div><input type="password" class="fed-preview-pwd-input fed-preview-active-input w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl pl-9 pr-10 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all placeholder:text-slate-400" placeholder="' . esc_attr( ! empty( $placeholder ) ? $placeholder : '••••••••' ) . '" value="' . esc_attr( $default_val ) . '"' . $req_attr . ' /><button type="button" class="fed-preview-toggle-pwd absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer" title="Toggle visibility"><i class="fas fa-eye text-xs"></i></button></div>';
+		case 'number':
+			return '<div class="relative"><div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-xs"><i class="fas fa-hashtag"></i></div><input type="number" class="fed-preview-active-input w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all placeholder:text-slate-400" placeholder="' . esc_attr( ! empty( $placeholder ) ? $placeholder : '0' ) . '" value="' . esc_attr( $default_val ) . '"' . $req_attr . ' /></div>';
+		case 'url':
+			return '<div class="relative"><div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-xs"><i class="fas fa-globe"></i></div><input type="url" class="fed-preview-active-input w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all placeholder:text-slate-400" placeholder="' . esc_attr( ! empty( $placeholder ) ? $placeholder : 'https://example.com' ) . '" value="' . esc_attr( $default_val ) . '"' . $req_attr . ' /></div>';
+		case 'select':
+			return '<select class="fed-preview-active-input w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all cursor-pointer"' . $req_attr . '><option value="">' . esc_html( ! empty( $placeholder ) ? $placeholder : __( '-- Select an option --', 'frontend-dashboard' ) ) . '</option><option value="option_1" selected>Option 1</option><option value="option_2">Option 2</option></select>';
+		case 'radio':
+			return '<div class="space-y-2 pt-0.5"><label class="flex items-center gap-3 p-3 rounded-xl border border-slate-200/90 bg-white hover:bg-slate-50/80 transition-all cursor-pointer shadow-2xs"><input type="radio" name="preview_radio" value="option_1" checked class="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-slate-300" /><span class="text-xs font-semibold text-slate-700">Option 1</span><span class="text-[10px] text-slate-400 font-mono ml-auto">option_1</span></label><label class="flex items-center gap-3 p-3 rounded-xl border border-slate-200/90 bg-white hover:bg-slate-50/80 transition-all cursor-pointer shadow-2xs"><input type="radio" name="preview_radio" value="option_2" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500 border-slate-300" /><span class="text-xs font-semibold text-slate-700">Option 2</span><span class="text-[10px] text-slate-400 font-mono ml-auto">option_2</span></label></div>';
+		case 'checkbox':
+			return '<label class="flex items-center gap-3 p-3.5 rounded-2xl border border-slate-200/90 bg-white hover:bg-slate-50/80 transition-all cursor-pointer shadow-2xs"><input type="checkbox" name="preview_cb" value="1" class="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500 border-slate-300" /><span class="text-xs font-semibold text-slate-800">' . esc_html( ! empty( $row['label_name'] ) ? $row['label_name'] : __( 'Enable Option', 'frontend-dashboard' ) ) . '</span></label>';
+		case 'date':
+			return '<div class="relative"><div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-xs"><i class="fas fa-calendar-alt"></i></div><input type="date" class="fed-preview-active-input w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl pl-9 pr-3.5 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all" value="' . esc_attr( $default_val ) . '"' . $req_attr . ' /></div>';
+		case 'file':
+			return '<div class="border-2 border-dashed border-slate-200 hover:border-indigo-400 bg-white hover:bg-indigo-50/20 rounded-2xl p-6 text-center transition-all cursor-pointer group shadow-2xs"><div class="w-10 h-10 mx-auto rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-base mb-2 group-hover:scale-110 transition-transform shadow-2xs"><i class="fas fa-cloud-upload-alt"></i></div><p class="text-xs font-semibold text-slate-800 m-0"><span class="text-indigo-600 font-bold">' . esc_html__( 'Choose a file', 'frontend-dashboard' ) . '</span> ' . esc_html__( 'or drag & drop', 'frontend-dashboard' ) . '</p><p class="text-[11px] text-slate-400 m-0 mt-1">' . esc_html( ! empty( $placeholder ) ? $placeholder : __( 'PDF, PNG, JPG, or DOC (Max 10MB)', 'frontend-dashboard' ) ) . '</p><input type="file" class="hidden fed-preview-real-file-input"' . $req_attr . ' /></div>';
+		case 'color':
+			$col_val = ! empty( $default_val ) ? $default_val : '#4f46e5';
+			return '<div class="flex items-center gap-3"><input type="color" class="fed-preview-color-picker w-10 h-10 rounded-xl border border-slate-200 cursor-pointer p-0.5 bg-white shadow-2xs" value="' . esc_attr( $col_val ) . '" /><input type="text" class="fed-preview-color-text w-32 text-xs font-mono font-medium text-slate-800 bg-white border border-slate-200 rounded-xl px-3 py-2 outline-none" value="' . esc_attr( $col_val ) . '" readonly /><span class="text-xs text-slate-400">' . esc_html__( 'Click swatch to pick color', 'frontend-dashboard' ) . '</span></div>';
+		case 'single_line':
+		default:
+			return '<input type="text" class="fed-preview-active-input w-full text-xs sm:text-sm font-medium text-slate-800 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 transition-all placeholder:text-slate-400" placeholder="' . esc_attr( $placeholder ) . '" value="' . esc_attr( $default_val ) . '"' . $req_attr . ' />';
+	}
+}
+
+/**
  * Render WYSIWYG Live Interactive Form Preview Panel.
  *
  * @param array  $row    Form Field details.
@@ -536,20 +580,37 @@ function fed_render_live_preview_panel( array $row, $action = 'profile' ) {
 	$help_text   = isset( $row['tooltip_body'] ) ? $row['tooltip_body'] : '';
 	$is_req      = isset( $row['is_required'] ) && ( 'true' === $row['is_required'] || true === $row['is_required'] || 'yes' === $row['is_required'] || 'Enable' === $row['is_required'] );
 	$field_type  = isset( $row['input_type'] ) && ! empty( $row['input_type'] ) ? $row['input_type'] : 'single_line';
+	$extended    = isset( $row['extended'] ) ? ( is_string( $row['extended'] ) ? maybe_unserialize( $row['extended'] ) : $row['extended'] ) : array();
+	$width_val   = isset( $extended['field_width'] ) ? (string) $extended['field_width'] : '100';
+
+	$width_percent = '100%';
+	$width_class   = 'fed-preview-col-100';
+	if ( '50' === $width_val || '6' === $width_val ) {
+		$width_percent = '50%';
+		$width_class   = 'fed-preview-col-50';
+	} elseif ( '33' === $width_val || '4' === $width_val ) {
+		$width_percent = '33%';
+		$width_class   = 'fed-preview-col-33';
+	} elseif ( '25' === $width_val || '3' === $width_val ) {
+		$width_percent = '25%';
+		$width_class   = 'fed-preview-col-25';
+	}
+
+	$url_path = ( 'post' === $action ) ? 'dashboard/new-post' : 'dashboard/profile';
 	?>
-	<div class="fed-live-preview-card bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-xs space-y-5 transition-all" id="fed_live_preview_panel">
-		<!-- Header with Live badge, Viewport Toggles, and Action Buttons -->
+	<div class="fed-live-preview-card bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-xs space-y-6 transition-all" id="fed_live_preview_panel">
+		<!-- Top Bar: Header, Live Badge, Studio Toggle, Viewport Toggles, Actions -->
 		<div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-100">
 			<div class="flex items-center gap-3">
-				<div class="w-9 h-9 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-sm shrink-0 shadow-2xs">
-					<i class="fas fa-eye"></i>
+				<div class="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-sm shrink-0 shadow-2xs">
+					<i class="fas fa-desktop"></i>
 				</div>
 				<div>
 					<div class="flex items-center gap-2">
 						<h3 class="text-xs sm:text-sm font-bold text-slate-900 m-0">
 							<?php esc_html_e( 'Live Interactive Form Preview', 'frontend-dashboard' ); ?>
 						</h3>
-						<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+						<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
 							<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
 							<?php esc_html_e( 'WYSIWYG Live', 'frontend-dashboard' ); ?>
 						</span>
@@ -560,19 +621,25 @@ function fed_render_live_preview_panel( array $row, $action = 'profile' ) {
 				</div>
 			</div>
 
-			<!-- Viewport & Action Controls -->
-			<div class="flex items-center gap-2">
-				<!-- Viewport Switcher -->
+			<!-- Action Controls -->
+			<div class="flex items-center gap-2 flex-wrap">
+				<!-- Studio Side-by-Side vs Banner Layout Toggle -->
+				<button type="button" class="fed-preview-layout-toggle-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium transition-all cursor-pointer shadow-2xs" title="<?php esc_attr_e( 'Toggle Split Studio Side-by-Side View on wide screens', 'frontend-dashboard' ); ?>">
+					<i class="fas fa-columns text-indigo-500 text-xs"></i>
+					<span class="fed-layout-mode-label hidden sm:inline-block"><?php esc_html_e( 'Split Studio', 'frontend-dashboard' ); ?></span>
+				</button>
+
+				<!-- Device Viewport Switcher -->
 				<div class="inline-flex items-center p-1 rounded-xl bg-slate-100/90 border border-slate-200 text-slate-600 text-xs gap-1">
-					<button type="button" class="fed-preview-viewport-btn px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer is-active bg-white text-indigo-700 shadow-2xs" data-viewport="100%" title="<?php esc_attr_e( 'Desktop View (100%)', 'frontend-dashboard' ); ?>">
+					<button type="button" class="fed-preview-viewport-btn px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer is-active bg-white text-indigo-700 shadow-2xs" data-viewport="desktop" title="<?php esc_attr_e( 'Desktop View (100% Fluid)', 'frontend-dashboard' ); ?>">
 						<i class="fas fa-desktop text-[11px]"></i>
 						<span class="hidden sm:inline-block ml-1"><?php esc_html_e( 'Desktop', 'frontend-dashboard' ); ?></span>
 					</button>
-					<button type="button" class="fed-preview-viewport-btn px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer text-slate-600 hover:text-slate-900" data-viewport="640px" title="<?php esc_attr_e( 'Tablet View (640px)', 'frontend-dashboard' ); ?>">
+					<button type="button" class="fed-preview-viewport-btn px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer text-slate-600 hover:text-slate-900" data-viewport="tablet" title="<?php esc_attr_e( 'Tablet View (640px)', 'frontend-dashboard' ); ?>">
 						<i class="fas fa-tablet-alt text-[11px]"></i>
 						<span class="hidden sm:inline-block ml-1"><?php esc_html_e( 'Tablet', 'frontend-dashboard' ); ?></span>
 					</button>
-					<button type="button" class="fed-preview-viewport-btn px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer text-slate-600 hover:text-slate-900" data-viewport="380px" title="<?php esc_attr_e( 'Mobile View (380px)', 'frontend-dashboard' ); ?>">
+					<button type="button" class="fed-preview-viewport-btn px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer text-slate-600 hover:text-slate-900" data-viewport="mobile" title="<?php esc_attr_e( 'Mobile View (390px)', 'frontend-dashboard' ); ?>">
 						<i class="fas fa-mobile-alt text-[11px]"></i>
 						<span class="hidden sm:inline-block ml-1"><?php esc_html_e( 'Mobile', 'frontend-dashboard' ); ?></span>
 					</button>
@@ -598,70 +665,103 @@ function fed_render_live_preview_panel( array $row, $action = 'profile' ) {
 		</div>
 
 		<!-- Live Preview Body -->
-		<div class="fed-preview-body transition-all duration-300">
-			<!-- Viewport Container Wrapper -->
-			<div class="fed-preview-viewport-container mx-auto transition-all duration-300 w-full" style="max-width: 100%;">
-				<!-- Simulated Frontend Form Card -->
-				<div class="bg-gradient-to-b from-slate-50/70 to-slate-100/50 rounded-2xl p-5 sm:p-6 border border-slate-200/90 shadow-inner">
-					<!-- 12-Column Grid Simulator -->
-					<div class="grid grid-cols-12 gap-4">
-						<!-- Rendered Field Column (Dynamic Width) -->
-						<div id="fed_live_preview_field_wrapper" class="col-span-12 space-y-1.5 transition-all duration-300">
-							<!-- Label Bar -->
-							<div class="flex items-center justify-between gap-2">
-								<label class="block text-xs sm:text-sm font-semibold text-slate-800 fed-preview-label m-0">
-									<span class="fed-preview-label-text"><?php echo esc_html( $label_name ); ?></span>
-									<span class="text-rose-500 font-bold ml-0.5 fed-preview-required-star <?php echo $is_req ? '' : 'hidden'; ?>">*</span>
-								</label>
-								<!-- Metadata badges -->
-								<div class="flex items-center gap-1.5 text-[10px]">
-									<span class="fed-preview-meta-badge bg-white px-2 py-0.5 rounded-md border border-slate-200 text-slate-600 font-mono font-normal"><?php echo esc_html( $meta_key ); ?></span>
-									<span class="fed-preview-width-badge bg-indigo-50 px-1.5 py-0.5 rounded-md border border-indigo-100 text-indigo-700 font-bold">100%</span>
+		<div class="fed-preview-body transition-all duration-300 space-y-4">
+			<!-- Device Viewport Mockup Wrapper -->
+			<div class="fed-preview-viewport-wrapper is-desktop w-full mx-auto transition-all duration-300">
+				<!-- Realistic Browser Mockup Chrome -->
+				<div class="rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden bg-slate-50/70">
+					<!-- Browser Header Bar -->
+					<div class="flex items-center justify-between px-4 py-2.5 bg-slate-100/90 border-b border-slate-200/80 gap-3">
+						<div class="flex items-center gap-1.5 shrink-0">
+							<span class="w-2.5 h-2.5 rounded-full bg-rose-400"></span>
+							<span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+							<span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+						</div>
+						<div class="flex-1 max-w-sm mx-auto bg-white/90 border border-slate-200/80 rounded-lg px-3 py-1 text-[11px] text-slate-500 font-mono text-center truncate flex items-center justify-center gap-1.5 shadow-2xs">
+							<i class="fas fa-lock text-[9px] text-emerald-600"></i>
+							<span><?php echo esc_html( $url_path ); ?></span>
+						</div>
+						<div class="shrink-0 text-[10px] font-semibold text-slate-400 uppercase font-mono hidden sm:inline-block fed-preview-viewport-label">
+							<?php esc_html_e( 'Desktop (100%)', 'frontend-dashboard' ); ?>
+						</div>
+					</div>
+
+					<!-- Form Canvas Surface -->
+					<div class="p-5 sm:p-7 bg-slate-50/60">
+						<!-- Simulated Frontend Form Card -->
+						<div class="bg-white rounded-2xl p-5 sm:p-7 border border-slate-200/90 shadow-xs">
+							<!-- 12-Column Grid Simulator -->
+							<div class="fed-preview-grid">
+								<!-- Rendered Field Column (Dynamic Width) -->
+								<div id="fed_live_preview_field_wrapper" class="<?php echo esc_attr( $width_class ); ?> space-y-2 transition-all duration-300">
+									<!-- Label Bar -->
+									<div class="flex items-center justify-between gap-2">
+										<label class="block text-xs sm:text-sm font-semibold text-slate-800 fed-preview-label m-0">
+											<span class="fed-preview-label-text"><?php echo esc_html( $label_name ); ?></span>
+											<span class="text-rose-500 font-bold ml-0.5 fed-preview-required-star <?php echo $is_req ? '' : 'hidden'; ?>">*</span>
+										</label>
+										<!-- Metadata badges -->
+										<div class="flex items-center gap-1.5 text-[10px]">
+											<span class="fed-preview-meta-badge bg-white px-2 py-0.5 rounded-md border border-slate-200 text-slate-600 font-mono font-normal"><?php echo esc_html( $meta_key ); ?></span>
+											<span class="fed-preview-width-badge bg-indigo-50 px-1.5 py-0.5 rounded-md border border-indigo-100 text-indigo-700 font-bold"><?php echo esc_html( $width_percent ); ?></span>
+										</div>
+									</div>
+
+									<!-- Rendered Input Slot -->
+									<div class="fed-preview-input-slot relative">
+										<?php
+										// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+										echo fed_get_live_preview_initial_input_html( $row, $field_type );
+										?>
+									</div>
+
+									<!-- Help / Description Text -->
+									<p class="text-xs text-slate-500 m-0 mt-1 fed-preview-help-text leading-relaxed <?php echo empty( $help_text ) ? 'hidden' : ''; ?>">
+										<?php echo esc_html( $help_text ); ?>
+									</p>
+
+									<!-- Dynamic Validation Badges -->
+									<div class="fed-preview-validation-badges flex flex-wrap gap-1.5 pt-1 text-[10px] hidden">
+									</div>
 								</div>
-							</div>
 
-							<!-- Rendered Input Slot -->
-							<div class="fed-preview-input-slot relative">
-								<!-- Populated dynamically via JS -->
-							</div>
-
-							<!-- Help / Description Text -->
-							<p class="text-xs text-slate-500 m-0 mt-1 fed-preview-help-text leading-relaxed <?php echo empty( $help_text ) ? 'hidden' : ''; ?>">
-								<?php echo esc_html( $help_text ); ?>
-							</p>
-
-							<!-- Dynamic Validation Badges -->
-							<div class="fed-preview-validation-badges flex flex-wrap gap-1.5 pt-1 text-[10px] hidden">
+								<!-- Companion Grid Slot Filler for multi-column visualization -->
+								<div class="fed-preview-companion-slot <?php echo ( 'fed-preview-col-100' === $width_class ) ? 'hidden' : ''; ?> border-2 border-dashed border-slate-200/80 rounded-2xl p-4 flex items-center justify-center text-slate-400 text-xs font-medium bg-slate-50/50">
+									<div class="flex items-center gap-2 text-slate-400">
+										<i class="fas fa-columns text-slate-300"></i>
+										<span><?php esc_html_e( 'Adjacent Field Column Space', 'frontend-dashboard' ); ?></span>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
+			</div>
 
-				<!-- Live Preview Status Bar -->
-				<div class="flex flex-wrap items-center justify-between gap-2 pt-2.5 px-1 text-[11px] text-slate-400">
-					<div class="flex items-center gap-1.5">
-						<i class="fas fa-mouse-pointer text-[10px] text-indigo-500"></i>
-						<span><?php esc_html_e( 'Interactive: You can type, select, and test validation right in this preview box.', 'frontend-dashboard' ); ?></span>
-					</div>
-					<div class="fed-preview-status-pill text-[10px] font-mono text-slate-400">
-						<?php esc_html_e( 'Field Type:', 'frontend-dashboard' ); ?> <span class="text-indigo-600 font-bold fed-preview-type-name"><?php echo esc_html( ucfirst( str_replace( '_', ' ', $field_type ) ) ); ?></span>
-					</div>
+			<!-- Live Preview Status Bar (Full Width Outside Device Viewport) -->
+			<div class="flex flex-wrap items-center justify-between gap-2 pt-2 px-1 text-[11px] text-slate-400 border-t border-slate-100">
+				<div class="flex items-center gap-1.5">
+					<i class="fas fa-mouse-pointer text-[10px] text-indigo-500"></i>
+					<span><?php esc_html_e( 'Interactive: You can type, select, and test validation right in this preview box.', 'frontend-dashboard' ); ?></span>
 				</div>
+				<div class="fed-preview-status-pill text-[10px] font-mono text-slate-400">
+					<?php esc_html_e( 'Field Type:', 'frontend-dashboard' ); ?> <span class="text-indigo-600 font-bold fed-preview-type-name"><?php echo esc_html( ucfirst( str_replace( '_', ' ', $field_type ) ) ); ?></span>
+				</div>
+			</div>
 
-				<!-- Collapsible Rendered HTML Markup Inspector -->
-				<div class="fed-preview-code-drawer hidden mt-4 pt-4 border-t border-slate-200/80 space-y-2">
-					<div class="flex items-center justify-between">
-						<span class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-							<i class="fas fa-code text-indigo-500 text-xs"></i>
-							<?php esc_html_e( 'Rendered HTML Output Markup', 'frontend-dashboard' ); ?>
-						</span>
-						<button type="button" class="fed-preview-copy-html-btn inline-flex items-center gap-1 text-[11px] font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer">
-							<i class="fas fa-copy text-[10px]"></i>
-							<span><?php esc_html_e( 'Copy HTML', 'frontend-dashboard' ); ?></span>
-						</button>
-					</div>
-					<pre class="fed-preview-code-output bg-slate-900 text-sky-300 p-4 rounded-2xl text-xs font-mono overflow-x-auto whitespace-pre-wrap select-all border border-slate-800 m-0"></pre>
+			<!-- Collapsible Rendered HTML Markup Inspector (Full Width Outside Device Viewport) -->
+			<div class="fed-preview-code-drawer hidden mt-4 pt-4 border-t border-slate-200/80 space-y-2">
+				<div class="flex items-center justify-between">
+					<span class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+						<i class="fas fa-code text-indigo-500 text-xs"></i>
+						<?php esc_html_e( 'Rendered HTML Output Markup', 'frontend-dashboard' ); ?>
+					</span>
+					<button type="button" class="fed-preview-copy-html-btn inline-flex items-center gap-1 text-[11px] font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer">
+						<i class="fas fa-copy text-[10px]"></i>
+						<span><?php esc_html_e( 'Copy HTML', 'frontend-dashboard' ); ?></span>
+					</button>
 				</div>
+				<pre class="fed-preview-code-output bg-slate-900 text-sky-300 p-4 rounded-2xl text-xs font-mono overflow-x-auto whitespace-pre-wrap select-all border border-slate-800 m-0"></pre>
 			</div>
 		</div>
 	</div>

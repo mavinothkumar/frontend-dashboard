@@ -261,6 +261,88 @@ function fed_get_add_profile_post_fields() {
 		.bc_fed .fed_input_type_container.hidden {
 			display: none !important;
 		}
+
+		/* Enterprise Live Preview & Studio Layout Styles */
+		.fed-preview-grid {
+			display: grid !important;
+			grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+			gap: 1.25rem !important;
+			width: 100% !important;
+			box-sizing: border-box !important;
+		}
+		.fed-preview-col-100 {
+			grid-column: span 12 / span 12 !important;
+			width: 100% !important;
+		}
+		.fed-preview-col-50 {
+			grid-column: span 6 / span 6 !important;
+			width: 100% !important;
+		}
+		.fed-preview-col-66 {
+			grid-column: span 8 / span 8 !important;
+			width: 100% !important;
+		}
+		.fed-preview-col-75 {
+			grid-column: span 9 / span 9 !important;
+			width: 100% !important;
+		}
+		.fed-preview-col-33 {
+			grid-column: span 4 / span 4 !important;
+			width: 100% !important;
+		}
+		.fed-preview-col-25 {
+			grid-column: span 3 / span 3 !important;
+			width: 100% !important;
+		}
+		.fed-preview-viewport-wrapper {
+			transition: max-width 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s ease !important;
+			width: 100% !important;
+		}
+		.fed-preview-viewport-wrapper.is-desktop {
+			max-width: 100% !important;
+		}
+		.fed-preview-viewport-wrapper.is-tablet {
+			max-width: 640px !important;
+			margin-left: auto !important;
+			margin-right: auto !important;
+		}
+		.fed-preview-viewport-wrapper.is-mobile {
+			max-width: 390px !important;
+			margin-left: auto !important;
+			margin-right: auto !important;
+		}
+		.fed-preview-viewport-wrapper.is-mobile .fed-preview-col-50,
+		.fed-preview-viewport-wrapper.is-mobile .fed-preview-col-33,
+		.fed-preview-viewport-wrapper.is-mobile .fed-preview-col-25,
+		.fed-preview-viewport-wrapper.is-mobile .fed-preview-col-66,
+		.fed-preview-viewport-wrapper.is-mobile .fed-preview-col-75 {
+			grid-column: span 12 / span 12 !important;
+		}
+		.fed-preview-active-input {
+			min-height: 42px !important;
+			width: 100% !important;
+			box-sizing: border-box !important;
+		}
+		/* Side-by-Side Split Studio Mode */
+		@media (min-width: 1280px) {
+			.bc_fed .fed_all_input_fields_container.fed-studio-split-mode {
+				display: grid !important;
+				grid-template-columns: minmax(0, 1fr) minmax(420px, 490px) !important;
+				gap: 1.75rem !important;
+				align-items: start !important;
+			}
+			.bc_fed .fed_all_input_fields_container.fed-studio-split-mode #fed_live_preview_panel {
+				order: 2 !important;
+				position: sticky !important;
+				top: 1.5rem !important;
+				z-index: 20 !important;
+				max-height: calc(100vh - 3rem) !important;
+				overflow-y: auto !important;
+			}
+			.bc_fed .fed_all_input_fields_container.fed-studio-split-mode .fed_input_type_container {
+				order: 1 !important;
+			}
+		}
 	</style>
 
 	<div class="bc_fed fed-admin-wrap w-full max-w-none px-6 sm:px-10 py-8 font-sans text-slate-800 fed_add_edit_input_container" data-nonce="<?php echo esc_attr( $nonce ); ?>" data-ajax-url="<?php echo esc_url( $ajax_url ); ?>">
@@ -656,12 +738,30 @@ function fed_get_add_profile_post_fields() {
 				$panel.find('.fed-preview-meta-badge').text(meta && $.trim(meta) !== '' ? meta : 'meta_key');
 
 				// 3. Width Badge & 12-Column Responsive Grid Span
-				var widthMap = { '12': '100%', '6': '50%', '4': '33.33%', '3': '25%', '8': '66.66%', '9': '75%' };
-				var widthPercent = widthMap[fieldWidth] || '100%';
-				$panel.find('.fed-preview-width-badge').text(widthPercent);
+				var widthMap = {
+					'100': { col: 'fed-preview-col-100', span: 12, percent: '100%' },
+					'50':  { col: 'fed-preview-col-50',  span: 6,  percent: '50%' },
+					'33':  { col: 'fed-preview-col-33',  span: 4,  percent: '33%' },
+					'25':  { col: 'fed-preview-col-25',  span: 3,  percent: '25%' },
+					'12':  { col: 'fed-preview-col-100', span: 12, percent: '100%' },
+					'6':   { col: 'fed-preview-col-50',  span: 6,  percent: '50%' },
+					'4':   { col: 'fed-preview-col-33',  span: 4,  percent: '33%' },
+					'3':   { col: 'fed-preview-col-25',  span: 3,  percent: '25%' }
+				};
+				var wInfo = widthMap[fieldWidth] || { col: 'fed-preview-col-100', span: 12, percent: '100%' };
+				$panel.find('.fed-preview-width-badge').text(wInfo.percent);
 
 				var $fieldWrapper = $('#fed_live_preview_field_wrapper');
-				$fieldWrapper.removeClass('col-span-12 col-span-9 col-span-8 col-span-6 col-span-4 col-span-3').addClass('col-span-' + (fieldWidth || '12'));
+				$fieldWrapper.removeClass('fed-preview-col-100 fed-preview-col-50 fed-preview-col-33 fed-preview-col-25 col-span-12 col-span-9 col-span-8 col-span-6 col-span-4 col-span-3')
+							.addClass(wInfo.col);
+
+				var $companion = $panel.find('.fed-preview-companion-slot');
+				if (wInfo.span < 12) {
+					var compCol = (wInfo.span === 6) ? 'fed-preview-col-50' : (wInfo.span === 4 ? 'fed-preview-col-66' : 'fed-preview-col-75');
+					$companion.removeClass('hidden fed-preview-col-50 fed-preview-col-66 fed-preview-col-75').addClass(compCol).show();
+				} else {
+					$companion.addClass('hidden').hide();
+				}
 
 				// 4. Help Text
 				var $helpElem = $panel.find('.fed-preview-help-text');
@@ -925,14 +1025,57 @@ function fed_get_add_profile_post_fields() {
 			initDynamicLabelEditor();
 			updateLivePreview();
 
-			// Viewport Switcher Controls
+			// Device Viewport Switcher Controls
 			$(document).on('click', '.fed-preview-viewport-btn', function(e) {
 				e.preventDefault();
 				var vp = $(this).data('viewport');
 				$('.fed-preview-viewport-btn').removeClass('is-active bg-white text-indigo-700 shadow-2xs').addClass('text-slate-600 hover:text-slate-900');
 				$(this).addClass('is-active bg-white text-indigo-700 shadow-2xs').removeClass('text-slate-600 hover:text-slate-900');
-				$('.fed-preview-viewport-container').css('max-width', vp);
+
+				var $wrap = $('.fed-preview-viewport-wrapper');
+				$wrap.removeClass('is-desktop is-tablet is-mobile');
+				var labelMap = {
+					'desktop': 'Desktop (100%)',
+					'tablet':  'Tablet (640px)',
+					'mobile':  'Mobile (390px)'
+				};
+				if (vp === 'tablet') {
+					$wrap.addClass('is-tablet');
+				} else if (vp === 'mobile') {
+					$wrap.addClass('is-mobile');
+				} else {
+					$wrap.addClass('is-desktop');
+				}
+				$('.fed-preview-viewport-label').text(labelMap[vp] || 'Desktop (100%)');
 			});
+
+			// Split Studio Side-by-Side vs Banner Layout Toggle
+			$(document).on('click', '.fed-preview-layout-toggle-btn', function(e) {
+				e.preventDefault();
+				var $view = $('#fed_inspector_view');
+				var isSplit = $view.hasClass('fed-studio-split-mode');
+				if (isSplit) {
+					$view.removeClass('fed-studio-split-mode');
+					$(this).removeClass('bg-indigo-50 border-indigo-200 text-indigo-700')
+							.find('.fed-layout-mode-label').text('Split Studio');
+					try { localStorage.setItem('fed_preview_layout_mode', 'banner'); } catch (err) {}
+				} else {
+					$view.addClass('fed-studio-split-mode');
+					$(this).addClass('bg-indigo-50 border-indigo-200 text-indigo-700')
+							.find('.fed-layout-mode-label').text('Banner Mode');
+					try { localStorage.setItem('fed_preview_layout_mode', 'split'); } catch (err) {}
+				}
+			});
+
+			// Restore layout preference from localStorage
+			try {
+				var savedLayout = localStorage.getItem('fed_preview_layout_mode');
+				if (savedLayout === 'split') {
+					$('#fed_inspector_view').addClass('fed-studio-split-mode');
+					$('.fed-preview-layout-toggle-btn').addClass('bg-indigo-50 border-indigo-200 text-indigo-700')
+														.find('.fed-layout-mode-label').text('Banner Mode');
+				}
+			} catch (err) {}
 
 			// Toggle Rendered HTML Markup Inspector
 			$(document).on('click', '.fed-preview-code-toggle-btn', function(e) {
