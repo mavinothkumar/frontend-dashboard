@@ -18,6 +18,9 @@ function fed_admin_post_permissions_tab( $fed_admin_options ) {
 	$all_roles             = fed_get_user_roles();
 	$post_permission       = isset( $fed_admin_options['permissions']['post_permission'] ) ? array_keys( $fed_admin_options['permissions']['post_permission'] ) : array();
 	$fed_upload_permission = isset( $fed_admin_options['permissions']['fed_upload_permission'] ) ? array_keys( $fed_admin_options['permissions']['fed_upload_permission'] ) : array();
+	$view_others_posts     = isset( $fed_admin_options['permissions']['view_others_posts'] )
+		? array_keys( $fed_admin_options['permissions']['view_others_posts'] )
+		: array( 'administrator', 'editor' );
 	?>
 
 	<form method="post"
@@ -65,6 +68,21 @@ function fed_admin_post_permissions_tab( $fed_admin_options ) {
 				);
 				?>
 			</div>
+
+			<!-- View Other Authors' Posts Permissions -->
+			<div class="p-5 bg-slate-50/70 border border-slate-200/80 rounded-2xl">
+				<?php
+				fed_render_user_roles_selector(
+					array(
+						'name_prefix' => 'permissions[view_others_posts]',
+						'selected'    => $view_others_posts,
+						'all_roles'   => $all_roles,
+						'title'       => __( 'Allow User Roles to View Other Authors\' Posts', 'frontend-dashboard' ),
+						'description' => __( 'User roles permitted to view posts written by other authors in the frontend dashboard post list (e.g. Editors, Reviewers).', 'frontend-dashboard' ),
+					)
+				);
+				?>
+			</div>
 		</div>
 
 		<div class="pt-4 border-t border-slate-100 flex items-center justify-end">
@@ -89,6 +107,9 @@ function fed_get_default_post_options( $all_roles ) {
 	foreach ( $all_roles as $key => $all_role ) {
 		$default['permissions']['post_permission'][ $key ]       = 'Enable';
 		$default['permissions']['fed_upload_permission'][ $key ] = 'Enable';
+		if ( 'administrator' === $key || 'editor' === $key ) {
+			$default['permissions']['view_others_posts'][ $key ] = 'Enable';
+		}
 	}
 	$default['settings']['fed_post_status'] = 'publish';
 	$default['menu']['rename_post']         = 'Post';

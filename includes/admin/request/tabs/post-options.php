@@ -73,9 +73,32 @@ function fed_admin_setting_post_options_request() {
  * @return array
  */
 function fed_process_admin_settings_post_permissions( $request ) {
+	$post_permission       = array();
+	$fed_upload_permission = array();
+	$view_others_posts     = array();
+
+	if ( isset( $request['post_permission'] ) && is_array( $request['post_permission'] ) ) {
+		foreach ( $request['post_permission'] as $role => $val ) {
+			$post_permission[ sanitize_key( $role ) ] = sanitize_text_field( $val );
+		}
+	}
+
+	if ( isset( $request['fed_upload_permission'] ) && is_array( $request['fed_upload_permission'] ) ) {
+		foreach ( $request['fed_upload_permission'] as $role => $val ) {
+			$fed_upload_permission[ sanitize_key( $role ) ] = sanitize_text_field( $val );
+		}
+	}
+
+	if ( isset( $request['view_others_posts'] ) && is_array( $request['view_others_posts'] ) ) {
+		foreach ( $request['view_others_posts'] as $role => $val ) {
+			$view_others_posts[ sanitize_key( $role ) ] = sanitize_text_field( $val );
+		}
+	}
+
 	return array(
-		'post_permission'       => isset( $request['post_permission'] ) ? $request['post_permission'] : array(),
-		'fed_upload_permission' => isset( $request['fed_upload_permission'] ) ? $request['fed_upload_permission'] : array(),
+		'post_permission'       => $post_permission,
+		'fed_upload_permission' => $fed_upload_permission,
+		'view_others_posts'     => $view_others_posts,
 	);
 }
 

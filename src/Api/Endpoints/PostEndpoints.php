@@ -265,18 +265,26 @@ class PostEndpoints {
 	public function get_posts( WP_REST_Request $request ) {
 		$userId   = get_current_user_id();
 		$postType = $request->get_param( 'post_type' ) ?: 'post';
+		$postType = sanitize_key( $postType );
 		$page     = (int) ( $request->get_param( 'page' ) ?: 1 );
 		$perPage  = (int) ( $request->get_param( 'per_page' ) ?: 10 );
 
-		$query = new \WP_Query(
-			array(
-				'author'         => $userId,
-				'post_type'      => sanitize_key( $postType ),
-				'post_status'    => array( 'publish', 'draft', 'pending' ),
-				'paged'          => $page,
-				'posts_per_page' => $perPage,
-			)
+		$query_args = array(
+			'post_type'      => $postType,
+			'post_status'    => array( 'publish', 'draft', 'pending' ),
+			'paged'          => $page,
+			'posts_per_page' => $perPage,
 		);
+
+		$can_view_all = function_exists( 'fed_can_user_view_all_posts' )
+			? fed_can_user_view_all_posts( $userId, $postType )
+			: ( current_user_can( 'edit_others_posts' ) || current_user_can( 'manage_options' ) );
+
+		if ( ! $can_view_all ) {
+			$query_args['author'] = $userId;
+		}
+
+		$query = new \WP_Query( $query_args );
 
 		$posts = array();
 		foreach ( $query->posts as $post ) {
@@ -306,8 +314,16 @@ class PostEndpoints {
 		$postId = (int) $request->get_param( 'id' );
 		$post   = get_post( $postId );
 
-		if ( ! $post || ( (int) $post->post_author !== $userId && ! current_user_can( 'manage_options' ) ) ) {
-			return new WP_Error( 'not_found', __( 'Post not found or unauthorized.', 'frontend-dashboard' ), array( 'status' => 404 ) );
+		if ( ! $post ) {
+			return new WP_Error( 'not_found', __( 'Post not found.', 'frontend-dashboard' ), array( 'status' => 404 ) );
+		}
+
+		$can_view = ( (int) $post->post_author === $userId )
+			|| current_user_can( 'manage_options' )
+			|| ( function_exists( 'fed_can_user_view_all_posts' ) && fed_can_user_view_all_posts( $userId, $post->post_type ) );
+
+		if ( ! $can_view ) {
+			return new WP_Error( 'unauthorized', __( 'You do not have permission to view this post.', 'frontend-dashboard' ), array( 'status' => 403 ) );
 		}
 
 		return new WP_REST_Response(

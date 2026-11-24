@@ -35,8 +35,12 @@ function fed_process_dashboard_display_post( $post_type = 'post' ) {
 		'post_type'      => $post_type,
 	);
 
-	if ( ! apply_filters( 'fed_show_all_post_to_admin', fed_is_admin() ) ) {
-		$args['author'] = $user->ID;
+	$can_view_all = function_exists( 'fed_can_user_view_all_posts' )
+		? fed_can_user_view_all_posts( $user, $post_type )
+		: apply_filters( 'fed_show_all_post_to_admin', fed_is_admin(), $post_type, $user );
+
+	if ( ! $can_view_all ) {
+		$args['author'] = $user ? $user->ID : 0;
 	}
 
 	return new WP_Query( $args );
@@ -202,7 +206,16 @@ function fed_process_dashboard_add_new_post( $post ) {
 		}
 
 		if ( isset( $post['ID'] ) ) {
-			$default['ID'] = (int) $post['ID'];
+			$post_id_val   = (int) $post['ID'];
+			$existing_post = get_post( $post_id_val );
+			if ( ! $existing_post || ( (int) $existing_post->post_author !== get_current_user_id() && ! current_user_can( 'edit_others_posts' ) && ! fed_is_admin() ) ) {
+				$error = new WP_Error(
+					'fed_action_not_allowed',
+					__( 'Sorry! You are not allowed to edit this item.', 'frontend-dashboard' )
+				);
+				wp_send_json_error( array( 'message' => $error->get_error_messages() ), 403 );
+			}
+			$default['ID'] = $post_id_val;
 		}
 
 		if ( isset( $post['_thumbnail_id'] ) ) {
@@ -284,6 +297,10 @@ function fed_process_dashboard_add_new_post( $post ) {
  * @return string
  */
 function fed_display_dashboard_edit_post_by_id( $post ) {
+	if ( ! $post || ( (int) $post->post_author !== get_current_user_id() && ! current_user_can( 'edit_others_posts' ) && ! fed_is_admin() ) ) {
+		return '<div class="alert alert-danger">' . esc_html__( 'Sorry! You are not allowed to edit this item.', 'frontend-dashboard' ) . '</div>';
+	}
+
 	$post_table    = fed_fetch_rows_by_table( BC_FED_TABLE_POST );
 	$post_meta     = get_post_meta( $post->ID );
 	$post_settings = fed_get_post_settings_by_type( $post->post_type );

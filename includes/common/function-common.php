@@ -420,6 +420,71 @@ if ( ! function_exists( 'fed_is_elevated_role' ) ) {
 	}
 }
 
+if ( ! function_exists( 'fed_can_user_view_all_posts' ) ) {
+	/**
+	 * Check if the user is permitted to view all authors' posts on the frontend.
+	 *
+	 * Evaluates explicit FED role permissions with standard WordPress capability
+	 * fallback (edit_others_posts), filtered by fed_show_all_post_to_admin.
+	 *
+	 * @param WP_User|int|null $user User object or ID. Defaults to current user.
+	 * @param string           $post_type Post type slug.
+	 * @return bool
+	 */
+	function fed_can_user_view_all_posts( $user = null, $post_type = 'post' ) {
+		if ( ! is_user_logged_in() && null === $user ) {
+			return false;
+		}
+
+		if ( null === $user ) {
+			$user = wp_get_current_user();
+		} elseif ( is_numeric( $user ) ) {
+			$user = get_userdata( (int) $user );
+		}
+
+		if ( ! $user instanceof \WP_User || empty( $user->ID ) ) {
+			return false;
+		}
+
+		// Administrators always have full oversight.
+		if ( in_array( 'administrator', (array) $user->roles, true ) ) {
+			return (bool) apply_filters( 'fed_show_all_post_to_admin', true, $post_type, $user );
+		}
+
+		// Check post settings for explicit view_others_posts role permissions.
+		// Check custom post add-on settings first if present, then fallback to core post settings.
+		$post_settings = function_exists( 'fed_get_post_settings_by_type' )
+			? fed_get_post_settings_by_type( $post_type )
+			: array();
+
+		if ( empty( $post_settings ) ) {
+			$cp_settings = get_option( 'fed_cp_admin_settings', array() );
+			if ( is_array( $cp_settings ) && isset( $cp_settings[ $post_type ] ) ) {
+				$post_settings = $cp_settings[ $post_type ];
+			}
+		}
+
+		if ( empty( $post_settings ) ) {
+			$post_settings = get_option( 'fed_admin_settings_post', array() );
+		}
+
+		$allowed_view_roles = isset( $post_settings['permissions']['view_others_posts'] ) && is_array( $post_settings['permissions']['view_others_posts'] )
+			? array_keys( $post_settings['permissions']['view_others_posts'] )
+			: null;
+
+		$can_view_all = false;
+
+		if ( null !== $allowed_view_roles ) {
+			$can_view_all = count( array_intersect( (array) $user->roles, $allowed_view_roles ) ) > 0;
+		} else {
+			// Sensible fallback: users with edit_others_posts capability (e.g. Editor role).
+			$can_view_all = user_can( $user, 'edit_others_posts' );
+		}
+
+		return (bool) apply_filters( 'fed_show_all_post_to_admin', $can_view_all, $post_type, $user );
+	}
+}
+
 if ( ! function_exists( 'fed_get_allowed_action_hooks' ) ) {
 	/**
 	 * Get allowed action hooks map with required capabilities.

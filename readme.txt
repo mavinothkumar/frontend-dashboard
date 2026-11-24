@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.6.0
+Stable tag: 3.7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -149,6 +149,14 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 
 == Changelog ==
+
+= 3.7.0 (2026-11-24) =
+* Feature: Multi-Author Editorial Oversight & Post Permissions: Added configurable role permissions under Post Settings -> Permissions allowing administrators to grant Editors, Reviewers, or custom roles visibility over all authors' posts on the frontend.
+* Feature: Editorial Collision Prevention: Allows editorial teams to review in-progress drafts, pending reviews, and scheduled articles submitted across all authors directly from the frontend dashboard, eliminating duplicate entries and content confusion.
+* Enhancement: Capability-Driven Post Query Engine: Enhanced `fed_process_dashboard_display_post()` and REST API `/fed/v1/posts` endpoints to intelligently respect `edit_others_posts` and configured role permissions while maintaining 100% backward compatibility with `fed_show_all_post_to_admin`.
+* Security: Object-Level Authorization & IDOR Defense: Strictly enforced ownership and capability verification (`edit_others_posts`, `delete_others_posts`) across frontend post save, edit, and deletion handlers, ensuring non-privileged users cannot mutate or delete other authors' content.
+* Enhancement: Action Button Contextual Visibility: Frontend post management tables dynamically adapt edit and delete action buttons based on object ownership and user capabilities.
+* Fix: Admin User Profile Array Warning: Resolved PHP "Warning: Array to string conversion" on the WordPress backend profile page (/wp-admin/profile.php) by type-guarding extended field settings and validation structures before attribute escaping.
 
 = 3.6.0 (2026-11-21) =
 * Feature: Live Interactive Form Preview (WYSIWYG): Integrated a real-time interactive preview box directly into the Form Field Builder inspector, rendering live HTML/CSS form inputs as administrators modify labels, placeholders, helper text, and choice options.
@@ -365,6 +373,9 @@ More Changelogs:
 https://faq.frontenddashboard.com/changelog/overview/
 
 == Upgrade Notice ==
+
+= 3.7.0 =
+Adds role-based visibility control ("Allow User Roles to View Other Authors' Posts") for multi-author editorial teams, IDOR security protections, contextual post action buttons, and resolves the admin user profile array warning.
 
 = 3.6.0 =
 Introduces the real-time Live Interactive Form Preview (WYSIWYG) in the Form Field Builder with device viewports (Desktop, Tablet, Mobile), HTML markup inspector, interactive Select2 multi-select preview, and consolidated full-width Choices Repeater layout.

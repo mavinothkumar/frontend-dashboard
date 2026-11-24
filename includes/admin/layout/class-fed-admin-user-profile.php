@@ -43,7 +43,7 @@ if ( ! class_exists( 'FED_AdminUserProfile' ) ) {
 					make_clickable( menu_page_url( 'fed_user_profile' ) );
 				} else {
 					foreach ( $fields as $field ) {
-						$extended        = isset( $field['extended'] ) ? is_string( $field['extended'] ) ? unserialize( $field['extended'] ) : $field['extended'] : '';
+						$extended        = isset( $field['extended'] ) ? ( is_string( $field['extended'] ) ? maybe_unserialize( $field['extended'] ) : $field['extended'] ) : array();
 						$extended_fields = fed_default_extended_fields();
 						$default_value   = array(
 							'label_name'  => isset( $field['label_name'] ) ? esc_attr( $field['label_name'] ) : '',
@@ -58,11 +58,16 @@ if ( ! class_exists( 'FED_AdminUserProfile' ) ) {
 							'input_max'   => isset( $field['input_max'] ) ? esc_attr( $field['input_max'] ) : '',
 							'input_step'  => isset( $field['input_step'] ) ? esc_attr( $field['input_step'] ) : '',
 							'input_row'   => isset( $field['input_row'] ) ? esc_attr( $field['input_row'] ) : '',
-							'input_value' => isset( $field['input_value'] ) ? esc_attr( $field['input_value'] ) : '',
+							'input_value' => isset( $field['input_value'] ) ? ( is_scalar( $field['input_value'] ) ? esc_attr( (string) $field['input_value'] ) : $field['input_value'] ) : '',
 						);
 
 						foreach ( $extended_fields as $index => $extended_field ) {
-							$default_value['extended'][ $index ] = isset( $extended[ $index ] ) ? esc_attr( $extended[ $index ] ) : '';
+							$default_value['extended'][ $index ] = is_scalar( $extended_field ) ? esc_attr( (string) $extended_field ) : $extended_field;
+						}
+						if ( is_array( $extended ) ) {
+							foreach ( $extended as $index => $val ) {
+								$default_value['extended'][ $index ] = is_scalar( $val ) ? esc_attr( (string) $val ) : $val;
+							}
 						}
 						?>
 						<tr>
@@ -90,7 +95,7 @@ if ( ! class_exists( 'FED_AdminUserProfile' ) ) {
 		/**
 		 * Personal Options to Update on Backend.
 		 *
-		 * @param  string $user_id  User ID
+		 * @param  string $user_id  User ID.
 		 *
 		 * @return bool
 		 */
@@ -114,7 +119,7 @@ if ( ! class_exists( 'FED_AdminUserProfile' ) ) {
 						'input_max'   => isset( $field['input_max'] ) ? esc_attr( $field['input_max'] ) : '',
 						'input_step'  => isset( $field['input_step'] ) ? esc_attr( $field['input_step'] ) : '',
 						'input_row'   => isset( $field['input_row'] ) ? esc_attr( $field['input_row'] ) : '',
-						'input_value' => isset( $field['input_value'] ) ? esc_attr( $field['input_value'] ) : '',
+						'input_value' => isset( $field['input_value'] ) ? ( is_scalar( $field['input_value'] ) ? esc_attr( (string) $field['input_value'] ) : $field['input_value'] ) : '',
 					);
 
 					// phpcs:ignore WordPress.Security.NonceVerification.Missing
