@@ -193,15 +193,15 @@ function fed_process_update_user_profile( $post ) {
 			}
 
 			if ( array_key_exists( $meta_key, $post ) ) {
-				$raw_val = $post[ $meta_key ];
+				$raw_val = wp_unslash( $post[ $meta_key ] );
 				if ( is_array( $raw_val ) ) {
-					$sanitized_val = maybe_serialize( $raw_val );
+					$sanitized_val = maybe_serialize( map_deep( $raw_val, 'sanitize_text_field' ) );
 				} else {
 					$input_type = isset( $field['input_type'] ) ? $field['input_type'] : '';
 					if ( in_array( $input_type, array( 'textarea', 'multi_line', 'multiline' ), true ) ) {
-						$sanitized_val = sanitize_textarea_field( wp_unslash( $raw_val ) );
+						$sanitized_val = sanitize_textarea_field( $raw_val );
 					} else {
-						$sanitized_val = sanitize_text_field( wp_unslash( $raw_val ) );
+						$sanitized_val = sanitize_text_field( $raw_val );
 					}
 				}
 				update_user_meta( $current_user->ID, $meta_key, $sanitized_val );

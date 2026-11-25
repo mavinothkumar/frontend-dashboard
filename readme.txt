@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.7.0
+Stable tag: 3.7.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -149,6 +149,10 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 
 == Changelog ==
+
+= 3.7.1 (2026-11-25) =
+* Security: Hardened User Profile Array Sanitization: Recursively sanitized array-submitted custom profile field values with `map_deep( wp_unslash( ... ), 'sanitize_text_field' )` before serialization across backend profile updates (`FED_AdminUserProfile::fed_personal_options_update()`), frontend profile updates (`fed_process_update_user_profile()`), and `UserProfileModel::prepareProfileData()`.
+* Security: Strict Author Archive Output Escaping: Escaped custom profile field values in `fed_process_author_details()` (handling serialized/array values safely) and enforced `wp_kses()` escaping at the author archive output sink (`function-frontend.php`), preventing Stored XSS via custom profile fields.
 
 = 3.7.0 (2026-11-24) =
 * Feature: Multi-Author Editorial Oversight & Post Permissions: Added configurable role permissions under Post Settings -> Permissions allowing administrators to grant Editors, Reviewers, or custom roles visibility over all authors' posts on the frontend.
@@ -373,6 +377,9 @@ More Changelogs:
 https://faq.frontenddashboard.com/changelog/overview/
 
 == Upgrade Notice ==
+
+= 3.7.1 =
+Security release hardening custom user profile field array sanitization on save and enforcing strict output escaping on public author archive pages.
 
 = 3.7.0 =
 Adds role-based visibility control ("Allow User Roles to View Other Authors' Posts") for multi-author editorial teams, IDOR security protections, contextual post action buttons, and resolves the admin user profile array warning.

@@ -124,14 +124,14 @@ if ( ! class_exists( 'FED_AdminUserProfile' ) ) {
 
 					// phpcs:ignore WordPress.Security.NonceVerification.Missing
 					if ( isset( $_POST[ $default_value['input_meta'] ] ) ) {
-						// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-						$raw_val = $_POST[ $default_value['input_meta'] ];
+						// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+						$raw_val = wp_unslash( $_POST[ $default_value['input_meta'] ] );
 						if ( is_array( $raw_val ) ) {
-							$sanitized = maybe_serialize( $raw_val );
+							$sanitized = maybe_serialize( map_deep( $raw_val, 'sanitize_text_field' ) );
 						} elseif ( in_array( $default_value['input_type'], array( 'multi_line', 'textarea', 'multiline' ), true ) ) {
-							$sanitized = sanitize_textarea_field( wp_unslash( $raw_val ) );
+							$sanitized = sanitize_textarea_field( $raw_val );
 						} else {
-							$sanitized = sanitize_text_field( wp_unslash( $raw_val ) );
+							$sanitized = sanitize_text_field( $raw_val );
 						}
 						update_user_meta( $user_id, $default_value['input_meta'], $sanitized );
 					}

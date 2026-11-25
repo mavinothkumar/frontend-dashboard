@@ -254,7 +254,7 @@ function fed_process_author_details( $user, array $single_item ) {
 	}
 
 	if ( 'url' === $single_item['input_type'] ) {
-		return make_clickable( $user->get( $single_item['input_meta'] ) );
+		return make_clickable( esc_url( (string) $user->get( $single_item['input_meta'] ) ) );
 	}
 
 	if ( 'color' === $single_item['input_type'] ) {
@@ -282,9 +282,9 @@ function fed_process_author_details( $user, array $single_item ) {
 	if ( 'radio' === $single_item['input_type'] ) {
 		$input_value = fed_convert_comma_separated_key_value( $single_item['input_value'] );
 
-		return isset( $input_value[ $user->get( $single_item['input_meta'] ) ] ) ? $input_value[ $user->get(
-			$single_item['input_meta']
-		) ] : '';
+		return isset( $input_value[ $user->get( $single_item['input_meta'] ) ] ) ? esc_html(
+			(string) $input_value[ $user->get( $single_item['input_meta'] ) ]
+		) : '';
 	}
 
 	if ( 'date' === $single_item['input_type'] ) {
@@ -320,6 +320,13 @@ function fed_process_author_details( $user, array $single_item ) {
 	}
 
 	$value = $user->get( $single_item['input_meta'] );
+	if ( is_serialized( $value ) ) {
+		$value = maybe_unserialize( $value );
+	}
+	if ( is_array( $value ) ) {
+		$value = implode( ', ', array_map( 'strval', array_filter( $value, 'is_scalar' ) ) );
+	}
+	$value = esc_html( (string) $value );
 
 	return apply_filters( 'fed_process_author_custom_details', $value, $user, $single_item );
 }
@@ -904,8 +911,18 @@ function fed_show_user_profile_page( $user ) {
 											</div>
 											<div class="col-md-8">
 												<?php
-												// phpcs:ignore
-												echo fed_process_author_details( $user, $single_item );
+												$fed_allowed_author_html          = wp_kses_allowed_html( 'post' );
+												$fed_allowed_author_html['input'] = array(
+													'type' => true,
+													'name' => true,
+													'id'   => true,
+													'class' => true,
+													'value' => true,
+													'disabled' => true,
+													'checked' => true,
+													'readonly' => true,
+												);
+												echo wp_kses( fed_process_author_details( $user, $single_item ), $fed_allowed_author_html );
 												?>
 											</div>
 										</div>
