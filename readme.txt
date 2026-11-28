@@ -5,7 +5,7 @@ Donate link: https://www.paypal.com/paypalme2/buffercode
 Requires at least: 6.1
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 3.7.1
+Stable tag: 3.8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -150,8 +150,15 @@ For more documentation and FAQs, visit [https://faq.frontenddashboard.com](https
 
 == Changelog ==
 
+= 3.8.0 (2026-11-28) =
+* Feature: 1-Click Field Cloning (Duplicate): Instantly duplicate any User Profile or Post Field with 100% of its settings, validation rules, smart tags, choices, column span width, and role permissions under an auto-generated schema-safe unique meta key.
+* Feature: JSON Field Set Export: Export entire field sets (or filtered by menu location or post type) to clean, environment-agnostic JSON files with metadata for seamless portability between staging and production.
+* Feature: JSON Field Set Import & Conflict Resolution: Import field sets from JSON with file inspection, schema validation, and configurable conflict resolution strategies (Skip Existing, Overwrite, or Auto-Rename).
+* Enhancement: Streamlined Field Card Actions: Added responsive Clone action buttons directly on profile and post field rows with instant visual feedback and smooth in-place card insertion.
+* Security: Hardened Field Operations: Enforced strict administrator capability checks (`manage_options`), nonce verification (`fed_nonce`), 32-character key truncation, reserved keyword blocking, and full input sanitization on all cloning and import endpoints.
+
 = 3.7.1 (2026-11-25) =
-* Security: Hardened User Profile Array Sanitization: Recursively sanitized array-submitted custom profile field values with `map_deep( wp_unslash( ... ), 'sanitize_text_field' )` before serialization across backend profile updates (`FED_AdminUserProfile::fed_personal_options_update()`), frontend profile updates (`fed_process_update_user_profile()`), and `UserProfileModel::prepareProfileData()`.
+* Security: Hardened User Profile Array Sanitization: Recursively sanitized array-submitted custom profile field values with `map_deep( wp_unslash( ... ), 'sanitize_text_field' )` before serialization across backend profile updates (`FED_AdminUserProfile::fed_personal_options_update()`), frontend profile updates (`fed_process_update_user_profile()`), and `UserProfileModel::prepareProfileData()`. (Thanks to Zeeshan Tariq)
 * Security: Strict Author Archive Output Escaping: Escaped custom profile field values in `fed_process_author_details()` (handling serialized/array values safely) and enforced `wp_kses()` escaping at the author archive output sink (`function-frontend.php`), preventing Stored XSS via custom profile fields.
 
 = 3.7.0 (2026-11-24) =
@@ -377,6 +384,9 @@ More Changelogs:
 https://faq.frontenddashboard.com/changelog/overview/
 
 == Upgrade Notice ==
+
+= 3.8.0 =
+Introduces 1-click field cloning and portable JSON import/export with conflict resolution across User Profile and Post Fields.
 
 = 3.7.1 =
 Security release hardening custom user profile field array sanitization on save and enforcing strict output escaping on public author archive pages.

@@ -87,6 +87,154 @@ if ( ! function_exists( 'fed_get_profile_field_type_icon' ) ) {
 	}
 }
 
+if ( ! function_exists( 'fed_render_profile_field_card' ) ) {
+	/**
+	 * Render a single User Profile Field card row.
+	 *
+	 * @param array  $field  Field row from database.
+	 * @param string $m_slug Menu slug this card belongs to.
+	 */
+	function fed_render_profile_field_card( $field, $m_slug ) {
+		$field_id    = (int) $field['id'];
+		$field_label = esc_attr( $field['label_name'] );
+		$field_meta  = esc_attr( $field['input_meta'] );
+		$field_type  = esc_attr( $field['input_type'] );
+		$is_extra    = ! fed_check_field_is_belongs_to_extra( $field['input_meta'] );
+		$type_icon   = fed_get_profile_field_type_icon( $field['input_type'] );
+
+		$is_required = ( true === $field['is_required'] || 'true' === $field['is_required'] || 'enable' === strtolower( $field['is_required'] ) );
+
+		$is_reg_active  = ( 'Enable' === $field['show_register'] || 'enable' === $field['show_register'] || 'true' === $field['show_register'] || true === $field['show_register'] );
+		$is_dash_active = ( 'Enable' === $field['show_dashboard'] || 'enable' === $field['show_dashboard'] || 'true' === $field['show_dashboard'] || true === $field['show_dashboard'] );
+		$is_prof_active = ( 'Enable' === $field['show_user_profile'] || 'enable' === $field['show_user_profile'] || 'true' === $field['show_user_profile'] || true === $field['show_user_profile'] );
+
+		$edit_url = add_query_arg(
+			array(
+				'fed_input_id' => $field_id,
+				'fed_action'   => 'profile',
+			),
+			menu_page_url( 'fed_user_profile', false )
+		);
+		?>
+		<div class="fed-field-card bg-white rounded-xl py-3.5 px-4 sm:px-6 border border-slate-200/90 shadow-2xs hover:shadow-xs hover:border-slate-300 transition-all flex flex-col xl:flex-row xl:items-center justify-between gap-3.5 group cursor-default"
+			id="fed_field_row_<?php echo esc_attr( $field_id ); ?>"
+			data-id="<?php echo esc_attr( $field_id ); ?>"
+			data-label="<?php echo esc_attr( strtolower( $field_label ) ); ?>"
+			data-meta="<?php echo esc_attr( strtolower( $field_meta ) ); ?>"
+			data-type="<?php echo esc_attr( $field_type ); ?>">
+
+			<!-- Left: Drag handle + Type Icon + Info (Single Line on Desktop) -->
+			<div class="flex items-center gap-3.5 min-w-0 flex-1">
+				<!-- Drag Handle -->
+				<div class="fed-drag-handle flex items-center justify-center w-7 h-7 rounded-lg text-slate-300 hover:text-indigo-600 hover:bg-indigo-50 cursor-grab active:cursor-grabbing transition-colors shrink-0" title="<?php esc_attr_e( 'Drag to reorder', 'frontend-dashboard' ); ?>">
+					<i class="fas fa-grip-vertical text-sm"></i>
+				</div>
+
+				<!-- Type Icon Box -->
+				<?php
+				/* translators: %s: input field type */
+				$field_type_title = sprintf( __( 'Input Type: %s', 'frontend-dashboard' ), $field_type );
+				?>
+				<div class="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-sm shrink-0 shadow-2xs" title="<?php echo esc_attr( $field_type_title ); ?>">
+					<i class="<?php echo esc_attr( $type_icon ); ?>"></i>
+				</div>
+
+				<!-- Details & Badges (Clean horizontal flow) -->
+				<div class="flex flex-wrap items-center gap-2.5 min-w-0 flex-1">
+					<div class="flex items-center gap-1.5 mr-1 shrink-0">
+						<span class="text-xs sm:text-sm font-bold text-slate-900 truncate">
+							<?php echo esc_html( $field['label_name'] ); ?>
+						</span>
+						<?php if ( $is_required ) : ?>
+							<span class="text-rose-500 font-bold text-xs" title="<?php esc_attr_e( 'Required Field', 'frontend-dashboard' ); ?>">*</span>
+						<?php endif; ?>
+					</div>
+
+					<!-- Meta Badge -->
+					<span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-mono bg-slate-100 text-slate-600 border border-slate-200/70 font-medium shrink-0 whitespace-nowrap">
+						meta: <?php echo esc_html( $field_meta ); ?>
+					</span>
+
+					<!-- Field Type Pill -->
+					<span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-100 text-slate-500 border border-slate-200/60 uppercase shrink-0 whitespace-nowrap">
+						<?php echo esc_html( str_replace( '_', ' ', $field_type ) ); ?>
+					</span>
+
+					<!-- Core vs Custom Pill -->
+					<?php if ( ! $is_extra ) : ?>
+						<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-purple-50 text-purple-700 border border-purple-100 shrink-0 whitespace-nowrap">
+							<i class="fas fa-shield-alt text-[9px]"></i> <?php esc_html_e( 'Core', 'frontend-dashboard' ); ?>
+						</span>
+					<?php else : ?>
+						<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100 shrink-0 whitespace-nowrap">
+							<i class="fas fa-star text-[9px]"></i> <?php esc_html_e( 'Custom', 'frontend-dashboard' ); ?>
+						</span>
+					<?php endif; ?>
+
+					<!-- User Roles Summary Badge with +N -->
+					<?php echo fed_render_user_roles_badge( isset( $field['user_role'] ) ? $field['user_role'] : array() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				</div>
+			</div>
+
+			<!-- Right: Visibility Badges & Actions (Clean horizontal row) -->
+			<div class="flex items-center justify-between sm:justify-end gap-3.5 shrink-0 pt-2 xl:pt-0 border-t xl:border-t-0 border-slate-100 whitespace-nowrap">
+				<!-- 3 Visibility Status Badges -->
+				<div class="flex items-center gap-1.5 shrink-0">
+					<!-- Register Visibility -->
+					<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-semibold transition-all <?php echo $is_reg_active ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/80' : 'bg-slate-100 text-slate-400 border border-slate-200/50 opacity-60'; ?>" title="<?php echo $is_reg_active ? esc_attr__( 'Enabled on Registration Form', 'frontend-dashboard' ) : esc_attr__( 'Disabled on Registration Form', 'frontend-dashboard' ); ?>">
+						<i class="fas fa-<?php echo $is_reg_active ? 'check' : 'times'; ?> text-[8px]"></i>
+						<span><?php esc_html_e( 'Register', 'frontend-dashboard' ); ?></span>
+					</span>
+
+					<!-- Dashboard Visibility -->
+					<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-semibold transition-all <?php echo $is_dash_active ? 'bg-indigo-50 text-indigo-700 border border-indigo-200/80' : 'bg-slate-100 text-slate-400 border border-slate-200/50 opacity-60'; ?>" title="<?php echo $is_dash_active ? esc_attr__( 'Enabled on User Dashboard', 'frontend-dashboard' ) : esc_attr__( 'Disabled on User Dashboard', 'frontend-dashboard' ); ?>">
+						<i class="fas fa-<?php echo $is_dash_active ? 'check' : 'times'; ?> text-[8px]"></i>
+						<span><?php esc_html_e( 'Dashboard', 'frontend-dashboard' ); ?></span>
+					</span>
+
+					<!-- Profile Visibility -->
+					<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-semibold transition-all <?php echo $is_prof_active ? 'bg-blue-50 text-blue-700 border border-blue-200/80' : 'bg-slate-100 text-slate-400 border border-slate-200/50 opacity-60'; ?>" title="<?php echo $is_prof_active ? esc_attr__( 'Enabled on User Profile', 'frontend-dashboard' ) : esc_attr__( 'Disabled on User Profile', 'frontend-dashboard' ); ?>">
+						<i class="fas fa-<?php echo $is_prof_active ? 'check' : 'times'; ?> text-[8px]"></i>
+						<span><?php esc_html_e( 'Profile', 'frontend-dashboard' ); ?></span>
+					</span>
+				</div>
+
+				<!-- Action Buttons -->
+				<div class="flex items-center gap-2 shrink-0">
+					<!-- Edit Button -->
+					<a href="<?php echo esc_url( $edit_url ); ?>" class="fed-open-edit-field-modal fed-btn-edit h-8.5 inline-flex items-center justify-center gap-1.5 px-3.5 rounded-lg font-semibold text-xs transition-all cursor-pointer no-underline shadow-2xs" data-id="<?php echo esc_attr( $field_id ); ?>" data-menu="<?php echo esc_attr( $m_slug ); ?>">
+						<i class="fas fa-edit text-[11px]"></i>
+						<span><?php esc_html_e( 'Edit', 'frontend-dashboard' ); ?></span>
+					</a>
+
+					<!-- Clone / Duplicate Button -->
+					<button type="button"
+						class="fed-btn-clone fed-trigger-clone-field h-8.5 inline-flex items-center justify-center gap-1.5 px-3 rounded-lg font-semibold text-xs transition-all cursor-pointer shadow-2xs"
+						data-id="<?php echo esc_attr( $field_id ); ?>"
+						data-scope="profile"
+						title="<?php esc_attr_e( 'Duplicate this field with all settings & permissions', 'frontend-dashboard' ); ?>">
+						<i class="fas fa-copy text-[11px]"></i>
+						<span><?php esc_html_e( 'Clone', 'frontend-dashboard' ); ?></span>
+					</button>
+
+					<!-- Delete Button (Only for custom extra fields) -->
+					<?php if ( $is_extra ) : ?>
+						<button type="button"
+							class="fed-btn-delete fed-trigger-delete-field h-8.5 inline-flex items-center justify-center gap-1.5 px-3.5 rounded-lg font-semibold text-xs transition-all cursor-pointer shadow-2xs"
+							data-id="<?php echo esc_attr( $field_id ); ?>"
+							data-name="<?php echo esc_attr( $field['label_name'] ); ?>"
+							title="<?php esc_attr_e( 'Delete this field', 'frontend-dashboard' ); ?>">
+							<i class="fas fa-trash-alt text-[11px]"></i>
+							<span><?php esc_html_e( 'Delete', 'frontend-dashboard' ); ?></span>
+						</button>
+					<?php endif; ?>
+				</div>
+			</div>
+		</div>
+		<?php
+	}
+}
+
 if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 	/**
 	 * Render User Profile Menu Items and Fields UI.
@@ -200,6 +348,18 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 				color: #4f46e5 !important;
 				background-color: #eef2ff !important;
 				border-color: #c7d2fe !important;
+			}
+			.fed-btn-clone,
+			button.fed-btn-clone {
+				color: #334155 !important;
+				background-color: #f8fafc !important;
+				border: 1px solid #e2e8f0 !important;
+			}
+			.fed-btn-clone:hover,
+			button.fed-btn-clone:hover {
+				color: #0284c7 !important;
+				background-color: #f0f9ff !important;
+				border-color: #bae6fd !important;
 			}
 			.fed-btn-delete,
 			button.fed-btn-delete {
@@ -315,7 +475,32 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 					</div>
 
 					<!-- Header Actions -->
-					<div class="flex items-center gap-2.5 shrink-0">
+					<div class="flex flex-wrap items-center gap-2.5 shrink-0">
+						<!-- Export JSON Dropdown -->
+						<div class="relative inline-block fed-export-dropdown-wrap">
+							<button type="button" id="fed_export_dropdown_btn" class="fed-btn-secondary h-10 inline-flex items-center justify-center gap-2 px-4 rounded-xl font-semibold text-xs transition-all cursor-pointer shadow-2xs">
+								<i class="fas fa-file-export text-xs text-indigo-500"></i>
+								<span><?php esc_html_e( 'Export JSON', 'frontend-dashboard' ); ?></span>
+								<i class="fas fa-chevron-down text-[10px] text-slate-400"></i>
+							</button>
+							<div id="fed_export_dropdown_menu" class="hidden absolute right-0 mt-1.5 w-52 bg-white rounded-xl shadow-lg border border-slate-200/90 py-1.5 z-50">
+								<button type="button" class="fed-trigger-export-fields w-full text-left px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-2.5 cursor-pointer transition-colors" data-scope="profile" data-filter="all">
+									<i class="fas fa-layer-group text-indigo-500 w-3.5 text-center"></i>
+									<span><?php esc_html_e( 'Export All Profile Fields', 'frontend-dashboard' ); ?></span>
+								</button>
+								<button type="button" class="fed-trigger-export-fields w-full text-left px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-2.5 cursor-pointer transition-colors" data-scope="profile" data-filter="current">
+									<i class="fas fa-filter text-sky-500 w-3.5 text-center"></i>
+									<span><?php esc_html_e( 'Export Current Menu Tab', 'frontend-dashboard' ); ?></span>
+								</button>
+							</div>
+						</div>
+
+						<!-- Import JSON Button -->
+						<button type="button" id="fed_open_import_modal_btn" class="fed-btn-secondary h-10 inline-flex items-center justify-center gap-2 px-4 rounded-xl font-semibold text-xs transition-all cursor-pointer shadow-2xs">
+							<i class="fas fa-file-import text-xs text-emerald-600"></i>
+							<span><?php esc_html_e( 'Import JSON', 'frontend-dashboard' ); ?></span>
+						</button>
+
 						<a href="<?php echo esc_url( $dashboard_menu_url ); ?>" class="fed-btn-secondary h-10 inline-flex items-center justify-center gap-2 px-4 rounded-xl font-semibold text-xs transition-all cursor-pointer shadow-2xs no-underline">
 							<i class="fas fa-bars text-xs"></i>
 							<span><?php esc_html_e( 'Dashboard Menus', 'frontend-dashboard' ); ?></span>
@@ -484,136 +669,7 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 								<?php
 								if ( ! empty( $m_fields ) ) {
 									foreach ( $m_fields as $field ) {
-										$field_id    = (int) $field['id'];
-										$field_label = esc_attr( $field['label_name'] );
-										$field_meta  = esc_attr( $field['input_meta'] );
-										$field_type  = esc_attr( $field['input_type'] );
-										$field_order = (int) $field['input_order'];
-										$is_extra    = ! fed_check_field_is_belongs_to_extra( $field['input_meta'] );
-										$type_icon   = fed_get_profile_field_type_icon( $field['input_type'] );
-
-										// Required check
-										$is_required = ( true === $field['is_required'] || 'true' === $field['is_required'] || 'enable' === strtolower( $field['is_required'] ) );
-
-										// Visibility conditions
-										$is_reg_active  = ( 'Enable' === $field['show_register'] || 'enable' === $field['show_register'] || 'true' === $field['show_register'] || true === $field['show_register'] );
-										$is_dash_active = ( 'Enable' === $field['show_dashboard'] || 'enable' === $field['show_dashboard'] || 'true' === $field['show_dashboard'] || true === $field['show_dashboard'] );
-										$is_prof_active = ( 'Enable' === $field['show_user_profile'] || 'enable' === $field['show_user_profile'] || 'true' === $field['show_user_profile'] || true === $field['show_user_profile'] );
-
-										$edit_url = add_query_arg(
-											array(
-												'fed_input_id' => $field_id,
-												'fed_action'   => 'profile',
-											),
-											menu_page_url( 'fed_user_profile', false )
-										);
-										?>
-										<div class="fed-field-card bg-white rounded-xl py-3.5 px-4 sm:px-6 border border-slate-200/90 shadow-2xs hover:shadow-xs hover:border-slate-300 transition-all flex flex-col xl:flex-row xl:items-center justify-between gap-3.5 group cursor-default"
-											id="fed_field_row_<?php echo esc_attr( $field_id ); ?>"
-											data-id="<?php echo esc_attr( $field_id ); ?>"
-											data-label="<?php echo esc_attr( strtolower( $field_label ) ); ?>"
-											data-meta="<?php echo esc_attr( strtolower( $field_meta ) ); ?>"
-											data-type="<?php echo esc_attr( $field_type ); ?>">
-
-											<!-- Left: Drag handle + Type Icon + Info (Single Line on Desktop) -->
-											<div class="flex items-center gap-3.5 min-w-0 flex-1">
-												<!-- Drag Handle -->
-												<div class="fed-drag-handle flex items-center justify-center w-7 h-7 rounded-lg text-slate-300 hover:text-indigo-600 hover:bg-indigo-50 cursor-grab active:cursor-grabbing transition-colors shrink-0" title="<?php esc_attr_e( 'Drag to reorder', 'frontend-dashboard' ); ?>">
-													<i class="fas fa-grip-vertical text-sm"></i>
-												</div>
-
-												<!-- Type Icon Box -->
-												<?php
-												/* translators: %s: input field type */
-												$field_type_title = sprintf( __( 'Input Type: %s', 'frontend-dashboard' ), $field_type );
-												?>
-												<div class="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-sm shrink-0 shadow-2xs" title="<?php echo esc_attr( $field_type_title ); ?>">
-													<i class="<?php echo esc_attr( $type_icon ); ?>"></i>
-												</div>
-
-												<!-- Details & Badges (Clean horizontal flow) -->
-												<div class="flex flex-wrap items-center gap-2.5 min-w-0 flex-1">
-													<div class="flex items-center gap-1.5 mr-1 shrink-0">
-														<span class="text-xs sm:text-sm font-bold text-slate-900 truncate">
-															<?php echo esc_html( $field['label_name'] ); ?>
-														</span>
-														<?php if ( $is_required ) : ?>
-															<span class="text-rose-500 font-bold text-xs" title="<?php esc_attr_e( 'Required Field', 'frontend-dashboard' ); ?>">*</span>
-														<?php endif; ?>
-													</div>
-
-													<!-- Meta Badge -->
-													<span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-mono bg-slate-100 text-slate-600 border border-slate-200/70 font-medium shrink-0 whitespace-nowrap">
-														meta: <?php echo esc_html( $field_meta ); ?>
-													</span>
-
-													<!-- Field Type Pill -->
-													<span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-100 text-slate-500 border border-slate-200/60 uppercase shrink-0 whitespace-nowrap">
-														<?php echo esc_html( str_replace( '_', ' ', $field_type ) ); ?>
-													</span>
-
-													<!-- Core vs Custom Pill -->
-													<?php if ( ! $is_extra ) : ?>
-														<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-purple-50 text-purple-700 border border-purple-100 shrink-0 whitespace-nowrap">
-															<i class="fas fa-shield-alt text-[9px]"></i> <?php esc_html_e( 'Core', 'frontend-dashboard' ); ?>
-														</span>
-													<?php else : ?>
-														<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100 shrink-0 whitespace-nowrap">
-															<i class="fas fa-star text-[9px]"></i> <?php esc_html_e( 'Custom', 'frontend-dashboard' ); ?>
-														</span>
-													<?php endif; ?>
-
-													<!-- User Roles Summary Badge with +N -->
-													<?php echo fed_render_user_roles_badge( isset( $field['user_role'] ) ? $field['user_role'] : array() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-												</div>
-											</div>
-
-											<!-- Right: Visibility Badges & Actions (Clean horizontal row) -->
-											<div class="flex items-center justify-between sm:justify-end gap-3.5 shrink-0 pt-2 xl:pt-0 border-t xl:border-t-0 border-slate-100 whitespace-nowrap">
-												<!-- 3 Visibility Status Badges -->
-												<div class="flex items-center gap-1.5 shrink-0">
-													<!-- Register Visibility -->
-													<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-semibold transition-all <?php echo $is_reg_active ? 'bg-emerald-50 text-emerald-700 border border-emerald-200/80' : 'bg-slate-100 text-slate-400 border border-slate-200/50 opacity-60'; ?>" title="<?php echo $is_reg_active ? esc_attr__( 'Enabled on Registration Form', 'frontend-dashboard' ) : esc_attr__( 'Disabled on Registration Form', 'frontend-dashboard' ); ?>">
-														<i class="fas fa-<?php echo $is_reg_active ? 'check' : 'times'; ?> text-[8px]"></i>
-														<span><?php esc_html_e( 'Register', 'frontend-dashboard' ); ?></span>
-													</span>
-
-													<!-- Dashboard Visibility -->
-													<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-semibold transition-all <?php echo $is_dash_active ? 'bg-indigo-50 text-indigo-700 border border-indigo-200/80' : 'bg-slate-100 text-slate-400 border border-slate-200/50 opacity-60'; ?>" title="<?php echo $is_dash_active ? esc_attr__( 'Enabled on User Dashboard', 'frontend-dashboard' ) : esc_attr__( 'Disabled on User Dashboard', 'frontend-dashboard' ); ?>">
-														<i class="fas fa-<?php echo $is_dash_active ? 'check' : 'times'; ?> text-[8px]"></i>
-														<span><?php esc_html_e( 'Dashboard', 'frontend-dashboard' ); ?></span>
-													</span>
-
-													<!-- Profile Visibility -->
-													<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-semibold transition-all <?php echo $is_prof_active ? 'bg-blue-50 text-blue-700 border border-blue-200/80' : 'bg-slate-100 text-slate-400 border border-slate-200/50 opacity-60'; ?>" title="<?php echo $is_prof_active ? esc_attr__( 'Enabled on User Profile', 'frontend-dashboard' ) : esc_attr__( 'Disabled on User Profile', 'frontend-dashboard' ); ?>">
-														<i class="fas fa-<?php echo $is_prof_active ? 'check' : 'times'; ?> text-[8px]"></i>
-														<span><?php esc_html_e( 'Profile', 'frontend-dashboard' ); ?></span>
-													</span>
-												</div>
-
-												<!-- Action Buttons -->
-												<div class="flex items-center gap-2 shrink-0">
-													<!-- Edit Button -->
-													<a href="<?php echo esc_url( $edit_url ); ?>" class="fed-open-edit-field-modal fed-btn-edit h-8.5 inline-flex items-center justify-center gap-1.5 px-3.5 rounded-lg font-semibold text-xs transition-all cursor-pointer no-underline shadow-2xs" data-id="<?php echo esc_attr( $field_id ); ?>" data-menu="<?php echo esc_attr( $m_slug ); ?>">
-														<i class="fas fa-edit text-[11px]"></i>
-														<span><?php esc_html_e( 'Edit', 'frontend-dashboard' ); ?></span>
-													</a>
-
-													<!-- Delete Button (Only for custom extra fields) -->
-													<?php if ( $is_extra ) : ?>
-														<button type="button"
-															class="fed-btn-delete fed-trigger-delete-field h-8.5 inline-flex items-center justify-center gap-1.5 px-3.5 rounded-lg font-semibold text-xs transition-all cursor-pointer shadow-2xs"
-															data-id="<?php echo esc_attr( $field_id ); ?>"
-															data-name="<?php echo esc_attr( $field['label_name'] ); ?>"
-															title="<?php esc_attr_e( 'Delete this field', 'frontend-dashboard' ); ?>">
-															<i class="fas fa-trash-alt text-[11px]"></i>
-															<span><?php esc_html_e( 'Delete', 'frontend-dashboard' ); ?></span>
-														</button>
-													<?php endif; ?>
-												</div>
-											</div>
-										</div>
-										<?php
+										fed_render_profile_field_card( $field, $m_slug );
 									}
 								} else {
 									?>
@@ -693,6 +749,107 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 					</button>
 					<button type="button" id="fed_confirm_delete_field_btn" class="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-sm active:scale-95" style="background-color: #e11d48 !important; color: #ffffff !important;">
 						<?php esc_html_e( 'Yes, Delete Field', 'frontend-dashboard' ); ?>
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- JSON Import Modal -->
+		<div id="fed_import_fields_modal" class="fixed inset-0 z-50 overflow-y-auto hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs transition-opacity duration-200" style="z-index: 999999 !important;">
+			<div class="import-modal-content bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 transform scale-95 opacity-0 transition-all duration-200">
+				<div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
+					<div class="flex items-center gap-3">
+						<div class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center text-base shrink-0">
+							<i class="fas fa-file-import"></i>
+						</div>
+						<div>
+							<h3 class="text-base font-bold text-slate-900 m-0">
+								<?php esc_html_e( 'Import Profile Fields (JSON)', 'frontend-dashboard' ); ?>
+							</h3>
+							<p class="text-xs text-slate-500 m-0 mt-0.5">
+								<?php esc_html_e( 'Upload an exported Frontend Dashboard JSON file to import fields.', 'frontend-dashboard' ); ?>
+							</p>
+						</div>
+					</div>
+					<button type="button" class="fed-close-import-modal w-8 h-8 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 flex items-center justify-center cursor-pointer transition-colors">
+						<i class="fas fa-times text-sm"></i>
+					</button>
+				</div>
+
+				<div class="space-y-4">
+					<!-- File Dropzone -->
+					<div id="fed_import_dropzone" class="border-2 border-dashed border-slate-200 hover:border-indigo-400 bg-slate-50/70 hover:bg-indigo-50/30 rounded-2xl p-6 text-center transition-all cursor-pointer relative">
+						<input type="file" id="fed_import_json_file" accept=".json,application/json" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+						<div class="w-11 h-11 rounded-2xl bg-white border border-slate-200/80 text-indigo-600 flex items-center justify-center mx-auto mb-2.5 shadow-2xs">
+							<i class="fas fa-cloud-upload-alt text-lg"></i>
+						</div>
+						<p class="text-xs font-bold text-slate-800 m-0" id="fed_import_file_name">
+							<?php esc_html_e( 'Click to choose or drag & drop a .json file here', 'frontend-dashboard' ); ?>
+						</p>
+						<p class="text-[11px] text-slate-400 m-0 mt-1">
+							<?php esc_html_e( 'Supports Frontend Dashboard exported field sets (max 500 fields).', 'frontend-dashboard' ); ?>
+						</p>
+					</div>
+
+					<!-- File Inspection Preview -->
+					<div id="fed_import_file_preview" class="hidden p-3.5 rounded-xl bg-indigo-50/70 border border-indigo-100 flex items-center justify-between text-xs">
+						<div class="flex items-center gap-2.5">
+							<i class="fas fa-check-circle text-emerald-600 text-sm"></i>
+							<div>
+								<span class="font-bold text-slate-800 block" id="fed_import_preview_title">0 Fields Ready</span>
+								<span class="text-[11px] text-slate-500" id="fed_import_preview_meta">Source info</span>
+							</div>
+						</div>
+						<span class="px-2 py-0.5 rounded-md bg-white border border-indigo-200 text-indigo-700 font-semibold text-[11px]" id="fed_import_preview_badge">Valid JSON</span>
+					</div>
+
+					<!-- Conflict Resolution Strategy -->
+					<div class="space-y-2">
+						<label class="block text-xs font-bold text-slate-700">
+							<?php esc_html_e( 'If Field Meta Key Already Exists:', 'frontend-dashboard' ); ?>
+						</label>
+						<div class="grid grid-cols-3 gap-2">
+							<label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50/50 hover:border-indigo-300 cursor-pointer text-xs font-semibold text-slate-700">
+								<input type="radio" name="fed_import_conflict_mode" value="skip" checked class="text-indigo-600" />
+								<span><?php esc_html_e( 'Skip', 'frontend-dashboard' ); ?></span>
+							</label>
+							<label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50/50 hover:border-indigo-300 cursor-pointer text-xs font-semibold text-slate-700">
+								<input type="radio" name="fed_import_conflict_mode" value="overwrite" class="text-indigo-600" />
+								<span><?php esc_html_e( 'Overwrite', 'frontend-dashboard' ); ?></span>
+							</label>
+							<label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50/50 hover:border-indigo-300 cursor-pointer text-xs font-semibold text-slate-700">
+								<input type="radio" name="fed_import_conflict_mode" value="rename" class="text-indigo-600" />
+								<span><?php esc_html_e( 'Auto-Rename', 'frontend-dashboard' ); ?></span>
+							</label>
+						</div>
+					</div>
+
+					<!-- Target Menu Assignment -->
+					<div class="space-y-1.5">
+						<label class="block text-xs font-bold text-slate-700" for="fed_import_target_group">
+							<?php esc_html_e( 'Target Menu Location:', 'frontend-dashboard' ); ?>
+						</label>
+						<select id="fed_import_target_group" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-700 outline-none focus:border-indigo-500">
+							<option value="preserve"><?php esc_html_e( 'Preserve Original Menu Mapping from JSON', 'frontend-dashboard' ); ?></option>
+							<?php foreach ( $eligible_menus as $menu_item ) : ?>
+								<option value="<?php echo esc_attr( $menu_item['menu_slug'] ); ?>">
+									<?php
+									/* translators: %s: Menu Name */
+									printf( esc_html__( 'Assign all to: %s', 'frontend-dashboard' ), esc_html( $menu_item['menu'] ) );
+									?>
+								</option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+				</div>
+
+				<div class="flex items-center justify-end gap-2.5 mt-6 pt-4 border-t border-slate-100">
+					<button type="button" class="fed-close-import-modal px-4 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-semibold transition-all cursor-pointer">
+						<?php esc_html_e( 'Cancel', 'frontend-dashboard' ); ?>
+					</button>
+					<button type="button" id="fed_confirm_import_fields_btn" disabled class="fed-btn-primary px-5 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+						<i class="fas fa-file-import text-xs" style="color: #ffffff !important;"></i>
+						<span style="color: #ffffff !important;"><?php esc_html_e( 'Import Fields', 'frontend-dashboard' ); ?></span>
 					</button>
 				</div>
 			</div>
@@ -1219,6 +1376,226 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 								errMsg = xhr.responseJSON.data.message;
 							}
 							showToast(errMsg, true);
+						}
+					});
+				});
+
+				// ----------------------------------------------------
+				// 1-CLICK FIELD CLONING (DUPLICATE)
+				// ----------------------------------------------------
+				$(document).on('click', '.fed-trigger-clone-field', function(e) {
+					e.preventDefault();
+					var $btn = $(this);
+					if ($btn.prop('disabled')) return;
+
+					var fieldId = $btn.data('id');
+					var scope = $btn.data('scope') || 'profile';
+					var $card = $btn.closest('.fed-field-card');
+					var $icon = $btn.find('i');
+					var origIconClass = $icon.attr('class');
+
+					$btn.prop('disabled', true);
+					$icon.attr('class', 'fas fa-spinner fa-spin text-[11px]');
+
+					$.ajax({
+						type: 'POST',
+						url: ajaxUrl,
+						data: {
+							action: 'fed_duplicate_field',
+							field_id: fieldId,
+							field_scope: scope,
+							fed_nonce: nonce
+						},
+						success: function(response) {
+							$btn.prop('disabled', false);
+							$icon.attr('class', origIconClass);
+							if (response && response.success) {
+								if (response.data && response.data.html) {
+									var $newCard = $(response.data.html).hide();
+									$card.after($newCard);
+									$newCard.fadeIn(250);
+									var $pane = $card.closest('.fed-tab-pane');
+									var menuSlug = $pane.data('menu-slug');
+									var totalInPane = $pane.find('.fed-field-card').length;
+									$pane.find('.fed-tab-fields-counter').text(totalInPane);
+									$('.fed-menu-tab-btn[data-menu-slug="' + menuSlug + '"] .fed-tab-count').text(totalInPane);
+								}
+								showToast((response.data && response.data.message) ? response.data.message : 'Field duplicated successfully.', false);
+							} else {
+								showToast((response && response.data && response.data.message) ? response.data.message : 'Could not duplicate field.', true);
+							}
+						},
+						error: function() {
+							$btn.prop('disabled', false);
+							$icon.attr('class', origIconClass);
+							showToast('Server error while duplicating field.', true);
+						}
+					});
+				});
+
+				// ----------------------------------------------------
+				// JSON EXPORT DROPDOWN & DOWNLOAD
+				// ----------------------------------------------------
+				$('#fed_export_dropdown_btn').on('click', function(e) {
+					e.stopPropagation();
+					$('#fed_export_dropdown_menu').toggleClass('hidden');
+				});
+
+				$(document).on('click', function(e) {
+					if (!$(e.target).closest('.fed-export-dropdown-wrap').length) {
+						$('#fed_export_dropdown_menu').addClass('hidden');
+					}
+				});
+
+				$(document).on('click', '.fed-trigger-export-fields', function(e) {
+					e.preventDefault();
+					$('#fed_export_dropdown_menu').addClass('hidden');
+					var $btn = $(this);
+					var scope = $btn.data('scope') || 'profile';
+					var filterMode = $btn.data('filter');
+					var filterKey = 'all';
+
+					if (filterMode === 'current') {
+						filterKey = $('.fed-menu-tab-btn.is-active').data('menu-slug') || 'profile';
+					}
+
+					showLoading('Exporting Fields...', 'Generating portable JSON configuration file.');
+
+					$.ajax({
+						type: 'POST',
+						url: ajaxUrl,
+						data: {
+							action: 'fed_export_fields_json',
+							field_scope: scope,
+							filter_key: filterKey,
+							fed_nonce: nonce
+						},
+						success: function(response) {
+							hideLoading();
+							if (response && response.success && response.data && response.data.payload) {
+								var jsonStr = JSON.stringify(response.data.payload, null, 2);
+								var blob = new Blob([jsonStr], { type: 'application/json' });
+								var url = URL.createObjectURL(blob);
+								var a = document.createElement('a');
+								a.href = url;
+								a.download = response.data.filename || 'frontend-dashboard-fields.json';
+								document.body.appendChild(a);
+								a.click();
+								document.body.removeChild(a);
+								URL.revokeObjectURL(url);
+								showToast(response.data.message || 'Fields exported successfully.', false);
+							} else {
+								showToast((response && response.data && response.data.message) ? response.data.message : 'Export failed.', true);
+							}
+						},
+						error: function() {
+							hideLoading();
+							showToast('Server error while exporting fields.', true);
+						}
+					});
+				});
+
+				// ----------------------------------------------------
+				// JSON IMPORT MODAL & UPLOAD HANDLER
+				// ----------------------------------------------------
+				var parsedImportJson = '';
+
+				function openImportModal() {
+					parsedImportJson = '';
+					$('#fed_import_json_file').val('');
+					$('#fed_import_file_name').text('Click to choose or drag & drop a .json file here');
+					$('#fed_import_file_preview').addClass('hidden');
+					$('#fed_confirm_import_fields_btn').prop('disabled', true);
+					$('#fed_import_fields_modal').removeClass('hidden');
+					setTimeout(function() {
+						$('#fed_import_fields_modal .import-modal-content').removeClass('scale-95 opacity-0').addClass('scale-100 opacity-100');
+					}, 10);
+				}
+
+				function closeImportModal() {
+					$('#fed_import_fields_modal .import-modal-content').removeClass('scale-100 opacity-100').addClass('scale-95 opacity-0');
+					setTimeout(function() {
+						$('#fed_import_fields_modal').addClass('hidden');
+					}, 200);
+				}
+
+				$('#fed_open_import_modal_btn').on('click', function(e) {
+					e.preventDefault();
+					openImportModal();
+				});
+
+				$(document).on('click', '.fed-close-import-modal', function(e) {
+					e.preventDefault();
+					closeImportModal();
+				});
+
+				$('#fed_import_fields_modal').on('click', function(e) {
+					if ($(e.target).is('#fed_import_fields_modal')) {
+						closeImportModal();
+					}
+				});
+
+				$('#fed_import_json_file').on('change', function(e) {
+					var file = e.target.files && e.target.files[0];
+					if (!file) return;
+
+					$('#fed_import_file_name').text(file.name);
+					var reader = new FileReader();
+					reader.onload = function(ev) {
+						try {
+							var data = JSON.parse(ev.target.result);
+							if (!data || !Array.isArray(data.fields) || data.fields.length === 0) {
+								throw new Error('Missing fields array');
+							}
+							parsedImportJson = ev.target.result;
+							$('#fed_import_preview_title').text(data.fields.length + ' Fields Ready to Import');
+							$('#fed_import_preview_meta').text((data.site_url ? 'From: ' + data.site_url : 'JSON File') + (data.exported_at ? ' • ' + data.exported_at : ''));
+							$('#fed_import_file_preview').removeClass('hidden');
+							$('#fed_confirm_import_fields_btn').prop('disabled', false);
+						} catch (err) {
+							parsedImportJson = '';
+							$('#fed_import_file_preview').addClass('hidden');
+							$('#fed_confirm_import_fields_btn').prop('disabled', true);
+							showToast('Invalid JSON file. Please select a valid Frontend Dashboard export.', true);
+						}
+					};
+					reader.readAsText(file);
+				});
+
+				$('#fed_confirm_import_fields_btn').on('click', function() {
+					if (!parsedImportJson) return;
+					var $btn = $(this);
+					var conflictMode = $('input[name="fed_import_conflict_mode"]:checked').val() || 'skip';
+					var targetGroup = $('#fed_import_target_group').val() || 'preserve';
+
+					$btn.prop('disabled', true).find('i').attr('class', 'fas fa-spinner fa-spin text-xs');
+
+					$.ajax({
+						type: 'POST',
+						url: ajaxUrl,
+						data: {
+							action: 'fed_import_fields_json',
+							field_scope: 'profile',
+							conflict_mode: conflictMode,
+							target_group: targetGroup,
+							import_payload: parsedImportJson,
+							fed_nonce: nonce
+						},
+						success: function(response) {
+							$btn.prop('disabled', false).find('i').attr('class', 'fas fa-file-import text-xs');
+							if (response && response.success) {
+								closeImportModal();
+								showToast((response.data && response.data.message) ? response.data.message : 'Fields imported successfully.', false);
+								setTimeout(function() {
+									window.location.reload();
+								}, 800);
+							} else {
+								showToast((response && response.data && response.data.message) ? response.data.message : 'Import failed.', true);
+							}
+						},
+						error: function() {
+							$btn.prop('disabled', false).find('i').attr('class', 'fas fa-file-import text-xs');
+							showToast('Server error while importing fields.', true);
 						}
 					});
 				});

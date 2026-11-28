@@ -101,6 +101,7 @@ $fed_core_files = array(
 	'/includes/admin/menu/items/status.php',
 
 	// Admin Requests
+	'/includes/admin/fields/class-fed-field-operations.php',
 	'/includes/admin/request/menu.php',
 	'/includes/admin/request/admin.php',
 	'/includes/admin/request/function.php',
