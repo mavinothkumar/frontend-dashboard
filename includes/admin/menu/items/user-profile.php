@@ -1198,12 +1198,6 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 						}
 					});
 				});
-						error: function() {
-							$loader.addClass('hidden');
-							showToast('Server error while deleting field.', true);
-						}
-					});
-				});
 
 				// ----------------------------------------------------
 				// FULL-PAGE POPUP / BUILDER MODAL WITH SPINNERS
