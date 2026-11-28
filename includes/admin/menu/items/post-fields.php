@@ -398,7 +398,7 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 			<?php endif; ?>
 
 			<!-- Page Header & Action Bar (Full Width) -->
-			<div class="bg-white rounded-2xl p-5 sm:p-6 shadow-xs border border-slate-200/80 mb-6 relative overflow-hidden">
+			<div class="bg-white rounded-2xl p-5 sm:p-6 shadow-xs border border-slate-200/80 mb-6 relative z-20">
 				<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 relative z-10">
 					<div class="flex items-center gap-3.5">
 						<div class="w-10 h-10 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-xs shrink-0" style="background-color: #4f46e5 !important; color: #ffffff !important;">
@@ -428,12 +428,12 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 								<span><?php esc_html_e( 'Export JSON', 'frontend-dashboard' ); ?></span>
 								<i class="fas fa-chevron-down text-[10px] text-slate-400"></i>
 							</button>
-							<div id="fed_export_dropdown_menu" class="hidden absolute right-0 mt-1.5 w-52 bg-white rounded-xl shadow-lg border border-slate-200/90 py-1.5 z-50">
-								<button type="button" class="fed-trigger-export-fields w-full text-left px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-2.5 cursor-pointer transition-colors" data-scope="post" data-filter="all">
+							<div id="fed_export_dropdown_menu" class="hidden absolute right-0 mt-2 w-60 bg-white rounded-xl shadow-xl border border-slate-200/90 py-1.5 z-50">
+								<button type="button" class="fed-trigger-export-fields w-full text-left px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-2.5 cursor-pointer transition-colors" data-scope="post" data-filter="all">
 									<i class="fas fa-layer-group text-indigo-500 w-3.5 text-center"></i>
 									<span><?php esc_html_e( 'Export All Post Fields', 'frontend-dashboard' ); ?></span>
 								</button>
-								<button type="button" class="fed-trigger-export-fields w-full text-left px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-2.5 cursor-pointer transition-colors" data-scope="post" data-filter="current">
+								<button type="button" class="fed-trigger-export-fields w-full text-left px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-2.5 cursor-pointer transition-colors" data-scope="post" data-filter="current">
 									<i class="fas fa-filter text-sky-500 w-3.5 text-center"></i>
 									<span><?php esc_html_e( 'Export Current Post Type', 'frontend-dashboard' ); ?></span>
 								</button>
@@ -709,6 +709,23 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 				</div>
 
 				<div class="space-y-4">
+					<!-- Sample Template Download Card -->
+					<div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between gap-3">
+						<div class="flex items-center gap-2.5 min-w-0">
+							<div class="w-8 h-8 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-xs shrink-0">
+								<i class="fas fa-file-code"></i>
+							</div>
+							<div class="min-w-0">
+								<span class="text-xs font-bold text-slate-800 block truncate"><?php esc_html_e( 'Need a template structure?', 'frontend-dashboard' ); ?></span>
+								<span class="text-[11px] text-slate-500 block truncate"><?php esc_html_e( 'Download a ready-to-fill JSON template with all supported field types.', 'frontend-dashboard' ); ?></span>
+							</div>
+						</div>
+						<button type="button" class="fed-download-sample-template-btn h-8 inline-flex items-center gap-1.5 px-3 rounded-lg bg-white border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/50 text-indigo-600 hover:text-indigo-700 font-semibold text-xs transition-all shrink-0 cursor-pointer shadow-2xs" data-scope="post">
+							<i class="fas fa-download text-[11px]"></i>
+							<span><?php esc_html_e( 'Sample JSON', 'frontend-dashboard' ); ?></span>
+						</button>
+					</div>
+
 					<!-- File Dropzone -->
 					<div id="fed_import_dropzone" class="border-2 border-dashed border-slate-200 hover:border-indigo-400 bg-slate-50/70 hover:bg-indigo-50/30 rounded-2xl p-6 text-center transition-all cursor-pointer relative">
 						<input type="file" id="fed_import_json_file" accept=".json,application/json" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
@@ -1075,10 +1092,9 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 					var fieldId = pendingDeleteId;
 					var fieldName = pendingDeleteName;
 					var $row = pendingDeleteRow;
-					var $loader = $('.fed_loader');
 
 					closeDeleteModal();
-					$loader.removeClass('hidden');
+					showLoading('Deleting Field...', 'Removing custom post field from database...');
 
 					$.ajax({
 						type: 'POST',
@@ -1089,7 +1105,7 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 							data: 'post_id=' + fieldId + '&profile_name=' + encodeURIComponent(fieldName) + '&fed_nonce=' + nonce
 						},
 						success: function(response) {
-							$loader.addClass('hidden');
+							hideLoading();
 							if (response && response.success) {
 								if ($row && $row.length) {
 									$row.fadeOut(300, function() {
@@ -1109,7 +1125,7 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 							}
 						},
 						error: function() {
-							$loader.addClass('hidden');
+							hideLoading();
 							showToast('Server error while deleting post field.', true);
 						}
 					});
@@ -1328,6 +1344,7 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 
 					$btn.prop('disabled', true);
 					$icon.attr('class', 'fas fa-spinner fa-spin text-[11px]');
+					showLoading('Duplicating Field...', 'Cloning post field settings and generating unique meta key...');
 
 					$.ajax({
 						type: 'POST',
@@ -1339,6 +1356,7 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 							fed_nonce: nonce
 						},
 						success: function(response) {
+							hideLoading();
 							$btn.prop('disabled', false);
 							$icon.attr('class', origIconClass);
 							if (response && response.success) {
@@ -1358,6 +1376,7 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 							}
 						},
 						error: function() {
+							hideLoading();
 							$btn.prop('disabled', false);
 							$icon.attr('class', origIconClass);
 							showToast('Server error while duplicating field.', true);
@@ -1501,6 +1520,7 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 					var targetGroup = $('#fed_import_target_group').val() || 'preserve';
 
 					$btn.prop('disabled', true).find('i').attr('class', 'fas fa-spinner fa-spin text-xs');
+					showLoading('Importing Fields...', 'Validating schema and persisting post fields...');
 
 					$.ajax({
 						type: 'POST',
@@ -1514,6 +1534,7 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 							fed_nonce: nonce
 						},
 						success: function(response) {
+							hideLoading();
 							$btn.prop('disabled', false).find('i').attr('class', 'fas fa-file-import text-xs');
 							if (response && response.success) {
 								closeImportModal();
@@ -1526,10 +1547,102 @@ if ( ! function_exists( 'fed_get_post_fields_menu_item' ) ) {
 							}
 						},
 						error: function() {
+							hideLoading();
 							$btn.prop('disabled', false).find('i').attr('class', 'fas fa-file-import text-xs');
 							showToast('Server error while importing fields.', true);
 						}
 					});
+				});
+
+				// ----------------------------------------------------
+				// SAMPLE TEMPLATE JSON DOWNLOAD
+				// ----------------------------------------------------
+				$(document).on('click', '.fed-download-sample-template-btn', function(e) {
+					e.preventDefault();
+					var samplePayload = {
+						"generator": "Frontend Dashboard",
+						"version": "3.8.0",
+						"export_type": "post_fields",
+						"filter_scope": "all",
+						"exported_at": new Date().toISOString().replace('T', ' ').substring(0, 19),
+						"site_url": window.location.origin,
+						"fields_count": 3,
+						"fields": [
+							{
+								"label_name": "Sample Text Field",
+								"input_meta": "sample_text_field",
+								"input_type": "single_line",
+								"input_order": 1,
+								"placeholder": "Enter short text...",
+								"help_text": "This is a sample single line text field.",
+								"default_value": "",
+								"class_name": "",
+								"id_name": "",
+								"input_width": "col-12",
+								"is_required": "yes",
+								"show_in": "both",
+								"user_role": ["administrator", "editor", "author", "contributor", "subscriber"],
+								"post_type": "post",
+								"input_validation": "none",
+								"regex_pattern": "",
+								"validation_message": "",
+								"min_length": 0,
+								"max_length": 150,
+								"extended": {}
+							},
+							{
+								"label_name": "Sample Dropdown Select",
+								"input_meta": "sample_dropdown_field",
+								"input_type": "select",
+								"input_order": 2,
+								"placeholder": "Choose an option",
+								"help_text": "Select from configured choices.",
+								"default_value": "option_1",
+								"class_name": "",
+								"id_name": "",
+								"input_width": "col-12",
+								"is_required": "no",
+								"show_in": "both",
+								"user_role": ["administrator", "editor", "author", "contributor", "subscriber"],
+								"post_type": "post",
+								"input_value": {
+									"option_1": "Standard Option One",
+									"option_2": "Priority Option Two",
+									"option_3": "Premium Option Three"
+								},
+								"extended": {}
+							},
+							{
+								"label_name": "Sample Number Field",
+								"input_meta": "sample_number_field",
+								"input_type": "number",
+								"input_order": 3,
+								"placeholder": "e.g. 100",
+								"help_text": "Numeric values only.",
+								"default_value": "1",
+								"class_name": "",
+								"id_name": "",
+								"input_width": "col-12",
+								"is_required": "no",
+								"show_in": "both",
+								"user_role": ["administrator", "editor", "author", "contributor", "subscriber"],
+								"post_type": "post",
+								"extended": {}
+							}
+						]
+					};
+
+					var jsonStr = JSON.stringify(samplePayload, null, 2);
+					var blob = new Blob([jsonStr], { type: 'application/json' });
+					var url = URL.createObjectURL(blob);
+					var a = document.createElement('a');
+					a.href = url;
+					a.download = 'frontend-dashboard-sample-post-fields.json';
+					document.body.appendChild(a);
+					a.click();
+					document.body.removeChild(a);
+					URL.revokeObjectURL(url);
+					showToast('Sample template JSON downloaded successfully.', false);
 				});
 
 			});

@@ -453,7 +453,7 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 			<?php endif; ?>
 
 			<!-- Page Header & Action Bar (Full Width) -->
-			<div class="bg-white rounded-2xl p-5 sm:p-6 shadow-xs border border-slate-200/80 mb-6 relative overflow-hidden">
+			<div class="bg-white rounded-2xl p-5 sm:p-6 shadow-xs border border-slate-200/80 mb-6 relative z-20">
 				<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 relative z-10">
 					<div class="flex items-center gap-3.5">
 						<div class="w-10 h-10 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-xs shrink-0" style="background-color: #4f46e5 !important; color: #ffffff !important;">
@@ -483,12 +483,12 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 								<span><?php esc_html_e( 'Export JSON', 'frontend-dashboard' ); ?></span>
 								<i class="fas fa-chevron-down text-[10px] text-slate-400"></i>
 							</button>
-							<div id="fed_export_dropdown_menu" class="hidden absolute right-0 mt-1.5 w-52 bg-white rounded-xl shadow-lg border border-slate-200/90 py-1.5 z-50">
-								<button type="button" class="fed-trigger-export-fields w-full text-left px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-2.5 cursor-pointer transition-colors" data-scope="profile" data-filter="all">
+							<div id="fed_export_dropdown_menu" class="hidden absolute right-0 mt-2 w-60 bg-white rounded-xl shadow-xl border border-slate-200/90 py-1.5 z-50">
+								<button type="button" class="fed-trigger-export-fields w-full text-left px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-2.5 cursor-pointer transition-colors" data-scope="profile" data-filter="all">
 									<i class="fas fa-layer-group text-indigo-500 w-3.5 text-center"></i>
 									<span><?php esc_html_e( 'Export All Profile Fields', 'frontend-dashboard' ); ?></span>
 								</button>
-								<button type="button" class="fed-trigger-export-fields w-full text-left px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-2.5 cursor-pointer transition-colors" data-scope="profile" data-filter="current">
+								<button type="button" class="fed-trigger-export-fields w-full text-left px-4 py-2.5 text-xs font-semibold text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 flex items-center gap-2.5 cursor-pointer transition-colors" data-scope="profile" data-filter="current">
 									<i class="fas fa-filter text-sky-500 w-3.5 text-center"></i>
 									<span><?php esc_html_e( 'Export Current Menu Tab', 'frontend-dashboard' ); ?></span>
 								</button>
@@ -777,6 +777,23 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 				</div>
 
 				<div class="space-y-4">
+					<!-- Sample Template Download Card -->
+					<div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between gap-3">
+						<div class="flex items-center gap-2.5 min-w-0">
+							<div class="w-8 h-8 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-xs shrink-0">
+								<i class="fas fa-file-code"></i>
+							</div>
+							<div class="min-w-0">
+								<span class="text-xs font-bold text-slate-800 block truncate"><?php esc_html_e( 'Need a template structure?', 'frontend-dashboard' ); ?></span>
+								<span class="text-[11px] text-slate-500 block truncate"><?php esc_html_e( 'Download a ready-to-fill JSON template with all supported field types.', 'frontend-dashboard' ); ?></span>
+							</div>
+						</div>
+						<button type="button" class="fed-download-sample-template-btn h-8 inline-flex items-center gap-1.5 px-3 rounded-lg bg-white border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/50 text-indigo-600 hover:text-indigo-700 font-semibold text-xs transition-all shrink-0 cursor-pointer shadow-2xs" data-scope="profile">
+							<i class="fas fa-download text-[11px]"></i>
+							<span><?php esc_html_e( 'Sample JSON', 'frontend-dashboard' ); ?></span>
+						</button>
+					</div>
+
 					<!-- File Dropzone -->
 					<div id="fed_import_dropzone" class="border-2 border-dashed border-slate-200 hover:border-indigo-400 bg-slate-50/70 hover:bg-indigo-50/30 rounded-2xl p-6 text-center transition-all cursor-pointer relative">
 						<input type="file" id="fed_import_json_file" accept=".json,application/json" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
@@ -1143,10 +1160,9 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 					var fieldId = pendingDeleteId;
 					var fieldName = pendingDeleteName;
 					var $row = pendingDeleteRow;
-					var $loader = $('.fed_loader');
 
 					closeDeleteModal();
-					$loader.removeClass('hidden');
+					showLoading('Deleting Field...', 'Removing custom field from database...');
 
 					$.ajax({
 						type: 'POST',
@@ -1157,7 +1173,7 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 							data: 'profile_id=' + fieldId + '&profile_name=' + encodeURIComponent(fieldName) + '&fed_nonce=' + nonce
 						},
 						success: function(response) {
-							$loader.addClass('hidden');
+							hideLoading();
 							if (response && response.success) {
 								if ($row && $row.length) {
 									$row.fadeOut(300, function() {
@@ -1176,6 +1192,12 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 								showToast((response && response.data && response.data.message) ? response.data.message : 'Could not delete field.', true);
 							}
 						},
+						error: function() {
+							hideLoading();
+							showToast('Server error while deleting field.', true);
+						}
+					});
+				});
 						error: function() {
 							$loader.addClass('hidden');
 							showToast('Server error while deleting field.', true);
@@ -1396,6 +1418,7 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 
 					$btn.prop('disabled', true);
 					$icon.attr('class', 'fas fa-spinner fa-spin text-[11px]');
+					showLoading('Duplicating Field...', 'Cloning field settings, rules, and generating unique meta key...');
 
 					$.ajax({
 						type: 'POST',
@@ -1407,6 +1430,7 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 							fed_nonce: nonce
 						},
 						success: function(response) {
+							hideLoading();
 							$btn.prop('disabled', false);
 							$icon.attr('class', origIconClass);
 							if (response && response.success) {
@@ -1426,6 +1450,7 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 							}
 						},
 						error: function() {
+							hideLoading();
 							$btn.prop('disabled', false);
 							$icon.attr('class', origIconClass);
 							showToast('Server error while duplicating field.', true);
@@ -1569,6 +1594,7 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 					var targetGroup = $('#fed_import_target_group').val() || 'preserve';
 
 					$btn.prop('disabled', true).find('i').attr('class', 'fas fa-spinner fa-spin text-xs');
+					showLoading('Importing Fields...', 'Validating schema and persisting profile fields...');
 
 					$.ajax({
 						type: 'POST',
@@ -1582,6 +1608,7 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 							fed_nonce: nonce
 						},
 						success: function(response) {
+							hideLoading();
 							$btn.prop('disabled', false).find('i').attr('class', 'fas fa-file-import text-xs');
 							if (response && response.success) {
 								closeImportModal();
@@ -1594,10 +1621,103 @@ if ( ! function_exists( 'fed_get_user_profile_menu_items' ) ) {
 							}
 						},
 						error: function() {
+							hideLoading();
 							$btn.prop('disabled', false).find('i').attr('class', 'fas fa-file-import text-xs');
 							showToast('Server error while importing fields.', true);
 						}
 					});
+				});
+
+				// ----------------------------------------------------
+				// SAMPLE TEMPLATE JSON DOWNLOAD
+				// ----------------------------------------------------
+				$(document).on('click', '.fed-download-sample-template-btn', function(e) {
+					e.preventDefault();
+					var samplePayload = {
+						"generator": "Frontend Dashboard",
+						"version": "3.8.0",
+						"export_type": "user_profile_fields",
+						"filter_scope": "all",
+						"exported_at": new Date().toISOString().replace('T', ' ').substring(0, 19),
+						"site_url": window.location.origin,
+						"fields_count": 3,
+						"fields": [
+							{
+								"label_name": "Sample Job Title",
+								"input_meta": "sample_job_title",
+								"input_type": "single_line",
+								"input_order": 1,
+								"placeholder": "e.g. Senior Software Engineer",
+								"help_text": "Enter your professional job title.",
+								"default_value": "",
+								"class_name": "",
+								"id_name": "",
+								"input_width": "col-12",
+								"is_required": "yes",
+								"show_in": "both",
+								"user_role": ["administrator", "editor", "subscriber"],
+								"menu": "profile",
+								"input_validation": "none",
+								"regex_pattern": "",
+								"validation_message": "",
+								"min_length": 0,
+								"max_length": 100,
+								"extended": {}
+							},
+							{
+								"label_name": "Sample Department",
+								"input_meta": "sample_department",
+								"input_type": "select",
+								"input_order": 2,
+								"placeholder": "Choose your department",
+								"help_text": "Select your organizational department.",
+								"default_value": "engineering",
+								"class_name": "",
+								"id_name": "",
+								"input_width": "col-12",
+								"is_required": "no",
+								"show_in": "both",
+								"user_role": ["administrator", "editor", "subscriber"],
+								"menu": "profile",
+								"input_value": {
+									"engineering": "Engineering & Technology",
+									"marketing": "Marketing & Communications",
+									"design": "Product Design",
+									"operations": "Operations & HR"
+								},
+								"extended": {}
+							},
+							{
+								"label_name": "Sample Newsletter Opt-in",
+								"input_meta": "sample_newsletter_optin",
+								"input_type": "checkbox",
+								"input_order": 3,
+								"placeholder": "",
+								"help_text": "Opt-in to receiving weekly product updates.",
+								"default_value": "yes",
+								"class_name": "",
+								"id_name": "",
+								"input_width": "col-12",
+								"is_required": "no",
+								"show_in": "both",
+								"user_role": ["administrator", "editor", "subscriber"],
+								"menu": "profile",
+								"extended": {}
+							}
+						]
+					};
+
+					var jsonStr = JSON.stringify(samplePayload, null, 2);
+					var blob = new Blob([jsonStr], { type: 'application/json' });
+					var url = URL.createObjectURL(blob);
+					var a = document.createElement('a');
+					a.href = url;
+					a.download = 'frontend-dashboard-sample-profile-fields.json';
+					document.body.appendChild(a);
+					a.click();
+					document.body.removeChild(a);
+					URL.revokeObjectURL(url);
+					showToast('Sample template JSON downloaded successfully.', false);
 				});
 
 			});
